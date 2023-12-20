@@ -1,0 +1,1 @@
+MixinConnector: com.astralsorcery.gtnh_astralsorcery.MixinConnector

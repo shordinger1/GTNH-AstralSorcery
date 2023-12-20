@@ -1,0 +1,13 @@
+package com.astralsorcery.gtnh_astralsorcery.common.item;
+
+import net.minecraft.creativetab.CreativeTabs;
+
+import com.astralsorcery.gtnh_astralsorcery.lib.AstralItem;
+
+public class ItemShiftingStarVicio extends AstralItem {
+
+    public ItemShiftingStarVicio(String Name, String MetaName, CreativeTabs aCreativeTabs) {
+        super(Name, MetaName, aCreativeTabs);
+    }
+
+}

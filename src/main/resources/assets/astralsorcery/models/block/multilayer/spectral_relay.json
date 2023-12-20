@@ -1,0 +1,15 @@
+{
+  "parent": "block/block",
+  "loader": "forge:multi-layer",
+  "layers": {
+    "solid": {
+      "parent": "astralsorcery:block/spectral_relay_solid"
+    },
+    "translucent": {
+      "parent": "astralsorcery:block/spectral_relay_translucent"
+    }
+  },
+  "textures": {
+    "particle": "astralsorcery:block/spectral_relay"
+  }
+}
