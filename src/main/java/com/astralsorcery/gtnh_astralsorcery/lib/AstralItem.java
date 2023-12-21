@@ -24,14 +24,11 @@ public class AstralItem extends Item {
         super();
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
+        MetaName = MetaName.replace(" ", "_");
         this.setCreativeTab(aCreativeTabs);
         this.unlocalizedName = MetaName;
         TextHandler.texter(MetaName + ".name");
         GameRegistry.registerItem(this, MetaName);
-    }
-
-    public static String generateUnlocalizedName(String MetaName) {
-        return "item." + MetaName;
     }
 
     @Override

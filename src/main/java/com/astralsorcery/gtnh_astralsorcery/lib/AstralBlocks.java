@@ -48,28 +48,19 @@ public class AstralBlocks extends Block {
 
     public AstralBlocks(String name, String[] texture) {
         super(Material.anvil);
-        this.setHardness(15.0F);
-        this.setResistance(30.0F);
-        this.name = name;
-        this.textureNames = texture;
-        this.texture = new IIcon[texture.length];
-        this.setCreativeTab(tabMetaBlock01);
-        // GregTech_API.registerMachineBlock(this, -1);
+        new AstralBlocks(name, texture, tabMetaBlock01, Material.anvil);
+
     }
 
     public AstralBlocks(String name, String[] texture, CreativeTabs tabs) {
         super(Material.anvil);
-        this.setHardness(15.0F);
-        this.setResistance(30.0F);
-        this.name = name;
-        this.textureNames = texture;
-        this.texture = new IIcon[texture.length];
-        this.setCreativeTab(tabs);
+        new AstralBlocks(name, texture, tabs, Material.anvil);
         // GregTech_API.registerMachineBlock(this, -1);
     }
 
     public AstralBlocks(String name, String[] texture, CreativeTabs tabs, Material material) {
         super(material);
+        name = name.replace(' ', '_');
         this.setHardness(15.0F);
         this.setResistance(30.0F);
         this.name = name;
