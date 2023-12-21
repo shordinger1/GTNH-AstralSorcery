@@ -19,4 +19,13 @@ public class ASCreativeTabs {
             return amulet.getItem();
         }
     };
+
+    public static final CreativeTabs tabMetaBlock01 = new CreativeTabs(texter("itemGroup.AstralSorcery Blocks")) {
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return amulet.getItem();
+        }
+    };
 }

@@ -13,34 +13,18 @@
 
 package com.astralsorcery.gtnh_astralsorcery.lib;
 
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
 
-import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
-import com.github.bartimaeusnek.bartworks.API.ITileAddsInformation;
 import com.github.bartimaeusnek.bartworks.MainMod;
-import com.github.bartimaeusnek.bartworks.util.BW_ColorUtil;
-import com.github.bartimaeusnek.bartworks.util.BW_Tooltip_Reference;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.util.GT_LanguageManager;
 
 public class AstralItemBlocks extends ItemBlock {
-
-    private final String mNoMobsToolTip = GT_LanguageManager
-        .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    private final String mNoTileEntityToolTip = GT_LanguageManager
-        .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
 
     public AstralItemBlocks(Block par1) {
         super(par1);
@@ -52,30 +36,6 @@ public class AstralItemBlocks extends ItemBlock {
     @Override
     public int getMetadata(int aMeta) {
         return aMeta;
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack aStack) {
-        return this.field_150939_a.getUnlocalizedName() + "." + this.getDamage(aStack);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
-        byte tier = BorosilicateGlass.getTier(this.field_150939_a, aStack.getItemDamage());
-        if (tier >= 0) {
-            aList.add(
-                StatCollector.translateToLocal("tooltip.glas.0.name") + " "
-                    + BW_ColorUtil.getColorForTier(tier)
-                    + GT_Values.VN[tier]);
-        }
-        if (this.field_150939_a instanceof ITileAddsInformation) {
-            aList.addAll(Arrays.asList(((ITileAddsInformation) this.field_150939_a).getInfoData()));
-        }
-        aList.add(this.mNoMobsToolTip);
-        if (!(this.field_150939_a instanceof ITileEntityProvider)) aList.add(this.mNoTileEntityToolTip);
-
-        aList.add(BW_Tooltip_Reference.ADDED_BY_BARTWORKS.get());
     }
 
     @Override

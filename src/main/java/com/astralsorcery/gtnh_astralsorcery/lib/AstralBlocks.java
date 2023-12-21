@@ -13,6 +13,8 @@
 
 package com.astralsorcery.gtnh_astralsorcery.lib;
 
+import static com.astralsorcery.gtnh_astralsorcery.lib.ASCreativeTabs.tabMetaBlock01;
+
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -25,13 +27,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import com.github.bartimaeusnek.bartworks.MainMod;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTech_API;
 
 public class AstralBlocks extends Block {
 
@@ -41,14 +39,22 @@ public class AstralBlocks extends Block {
     String[] textureNames;
     protected String name;
 
+    public static class innerItemBlock extends AstralItemBlocks {
+
+        public innerItemBlock(Block par1) {
+            super(par1);
+        }
+    }
+
     public AstralBlocks(String name, String[] texture) {
         super(Material.anvil);
         this.setHardness(15.0F);
         this.setResistance(30.0F);
         this.name = name;
         this.textureNames = texture;
-        this.setCreativeTab(MainMod.GT2);
-        GregTech_API.registerMachineBlock(this, -1);
+        this.texture = new IIcon[texture.length];
+        this.setCreativeTab(tabMetaBlock01);
+        // GregTech_API.registerMachineBlock(this, -1);
     }
 
     public AstralBlocks(String name, String[] texture, CreativeTabs tabs) {
@@ -57,8 +63,9 @@ public class AstralBlocks extends Block {
         this.setResistance(30.0F);
         this.name = name;
         this.textureNames = texture;
+        this.texture = new IIcon[texture.length];
         this.setCreativeTab(tabs);
-        GregTech_API.registerMachineBlock(this, -1);
+        // GregTech_API.registerMachineBlock(this, -1);
     }
 
     public AstralBlocks(String name, String[] texture, CreativeTabs tabs, Material material) {
@@ -67,8 +74,9 @@ public class AstralBlocks extends Block {
         this.setResistance(30.0F);
         this.name = name;
         this.textureNames = texture;
+        this.texture = new IIcon[texture.length];
         this.setCreativeTab(tabs);
-        GregTech_API.registerMachineBlock(this, -1);
+        // GregTech_API.registerMachineBlock(this, -1);
     }
 
     @Override
@@ -92,25 +100,10 @@ public class AstralBlocks extends Block {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister par1IconRegister) {
-        this.texture = new IIcon[this.textureNames.length];
-        for (int i = 0; i < this.textureNames.length; i++) {
-            this.texture[i] = par1IconRegister.registerIcon(this.textureNames[i]);
-        }
-    }
-
-    @Override
-    public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
-        }
-    }
-
-    @Override
-    public void breakBlock(World aWorld, int aX, int aY, int aZ, Block aBlock, int aMetaData) {
-        if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
-            GregTech_API.causeMachineUpdate(aWorld, aX, aY, aZ);
-        }
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        super.registerBlockIcons(iconRegister);
+        texture[0] = iconRegister.registerIcon("astralsorcery:" + getUnlocalizedName().replace(' ', '_'));
+        // this.itemIcon = iconRegister.registerIcon("astralsorcery:" + getUnlocalizedName().replace(' ', '_'));
     }
 
     @Override

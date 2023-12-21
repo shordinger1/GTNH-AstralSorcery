@@ -26,8 +26,8 @@ public class AstralItem extends Item {
         this.setMaxDamage(0);
         this.setCreativeTab(aCreativeTabs);
         this.unlocalizedName = MetaName;
-        TextHandler.texter(this.unlocalizedName + ".name");
-        GameRegistry.registerItem(this, this.getUnlocalizedName());
+        TextHandler.texter(MetaName + ".name");
+        GameRegistry.registerItem(this, MetaName);
     }
 
     public static String generateUnlocalizedName(String MetaName) {

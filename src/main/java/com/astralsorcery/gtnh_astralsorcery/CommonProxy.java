@@ -2,6 +2,7 @@ package com.astralsorcery.gtnh_astralsorcery;
 
 import static com.astralsorcery.gtnh_astralsorcery.AstralSorcery.LOG;
 
+import com.astralsorcery.gtnh_astralsorcery.common.block.AstralBlockRegistry;
 import com.astralsorcery.gtnh_astralsorcery.common.item.AstralItemRegistry;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -16,6 +17,7 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         AstralItemRegistry.load();
+        AstralBlockRegistry.load();
         LOG.info(Config.greeting);
         LOG.info("I am " + Tags.MODNAME + " at version " + Tags.VERSION);
     }
