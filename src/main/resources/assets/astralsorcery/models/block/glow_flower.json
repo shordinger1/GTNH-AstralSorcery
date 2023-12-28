@@ -1,6 +1,6 @@
 {
   "parent": "block/cross",
   "textures": {
-    "cross": "astralsorcery:block/glow_flower"
+    "cross": "astralsorcery:blocks/glowflower"
   }
 }

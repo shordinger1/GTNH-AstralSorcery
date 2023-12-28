@@ -1,21 +1,19 @@
-{
-	"modListVersion": 2,
-	"modList": [{
-		"modid": "${modId}",
-		"name": "${modName}",
-		"description": "An example mod for Minecraft 1.7.10 with Forge focused on a stable setup.",
-		"version": "${modVersion}",
-		"mcversion": "${minecraftVersion}",
-		"url": "https://github.com/SinTh0r4s/MyMod",
-		"updateUrl": "",
-		"authorList": ["SinTho0r4s"],
-		"credits": "",
-		"logoFile": "",
-		"screenshots": [],
-		"parent": "",
-		"requiredMods": [],
-		"dependencies": [],
-		"dependants": [],
-		"useDependencyInformation": true
-	}]
-}
+[
+  {
+    "modid": "astralsorcery",
+    "name": "Astral Sorcery",
+    "description": "Magic mod that draws power from stars and their constellations",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://minecraft.curseforge.com/projects/astral-sorcery",
+    "updateUrl": "",
+    "authorList": [
+      "HellFirePvP",
+      "wiiv"
+    ],
+    "credits": "HellFirePvP (code), wiiv (models & textures)",
+    "logoFile": "assets/astralsorcery/textures/logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

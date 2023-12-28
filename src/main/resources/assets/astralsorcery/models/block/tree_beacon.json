@@ -2,10 +2,10 @@
 	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
 	"parent": "block/block",
 	"textures": {
-		"particle": "astralsorcery:block/tree_beacon",
-		"texture": "astralsorcery:block/tree_beacon"
-	},
-	"elements": [ 	 
+    "particle": "astralsorcery:models/treefarm/treefarm",
+    "texture": "astralsorcery:models/treefarm/treefarm"
+  },
+	"elements": [
 		{
 			"from": [ 11, 10, 5 ],
 			"to": [ 13, 12, 11 ],

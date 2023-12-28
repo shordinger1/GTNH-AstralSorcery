@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "machine=telescope": {
+      "model": "astralsorcery:telescope"
+    },
+    "machine=grindstone": {
+      "model": "astralsorcery:grindstone"
+    }
+  }
+}

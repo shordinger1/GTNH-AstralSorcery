@@ -1,0 +1,369 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package shordinger.astralsorcery.common.tile;
+
+import java.awt.*;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.client.effect.EffectHandler;
+import shordinger.astralsorcery.client.effect.EffectHelper;
+import shordinger.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
+import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import shordinger.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
+import shordinger.astralsorcery.common.base.WellLiquefaction;
+import shordinger.astralsorcery.common.block.fluid.FluidLiquidStarlight;
+import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import shordinger.astralsorcery.common.constellation.IWeakConstellation;
+import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import shordinger.astralsorcery.common.data.config.Config;
+import shordinger.astralsorcery.common.entities.EntityFlare;
+import shordinger.astralsorcery.common.network.PacketChannel;
+import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
+import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
+import shordinger.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
+import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.astralsorcery.common.util.SkyCollectionHelper;
+import shordinger.astralsorcery.common.util.SoundHelper;
+import shordinger.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
+import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.Capability;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: TileWell
+ * Created by HellFirePvP
+ * Date: 18.10.2016 / 12:28
+ */
+public class TileWell extends TileReceiverBaseInventory {
+
+    private static final Random rand = new Random();
+    private static final int MAX_CAPACITY = 2000;
+
+    private WellLiquefaction.LiquefactionEntry running = null;
+
+    private PrecisionSingleFluidCapabilityTank tank;
+    private double starlightBuffer = 0;
+    private float posDistribution = -1;
+
+    public TileWell() {
+        super(1, EnumFacing.DOWN);
+        this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
+        this.tank.setAllowInput(false);
+        this.tank.setOnUpdate(this::markForUpdate);
+    }
+
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new CatalystItemHandler(this);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (!this.worldObj.isRemote) {
+            if (MiscUtils.canSeeSky(this.worldObj, this.getPos(), true, false)) {
+                double sbDayDistribution = ConstellationSkyHandler.getInstance()
+                    .getCurrentDaytimeDistribution(worldObj);
+                sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
+                int yLevel = getPos().getY();
+                float dstr;
+                if (yLevel > 120) {
+                    dstr = 1F;
+                } else {
+                    dstr = yLevel / 120F;
+                }
+                if (posDistribution == -1) {
+                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
+                }
+
+                sbDayDistribution *= dstr;
+                sbDayDistribution *= 1 + (1.2 * posDistribution);
+                starlightBuffer += Math.max(0.0001, sbDayDistribution);
+            }
+
+            ItemStack stack = getInventoryHandler().getStackInSlot(0);
+            if (!stack.isEmpty()) {
+                if (!worldObj.isAirBlock(getPos().up())) {
+                    breakCatalyst();
+                } else {
+                    running = WellLiquefaction.getLiquefactionEntry(stack);
+
+                    if (running != null) {
+                        double gain = Math.sqrt(starlightBuffer) * running.productionMultiplier;
+                        if (gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
+                            if (tank.getFluidAmount() <= MAX_CAPACITY) {
+                                markForUpdate();
+                            }
+                            fillAndDiscardRest(running, gain);
+                            if (rand.nextInt(2000) == 0) {
+                                EntityFlare.spawnAmbient(
+                                    worldObj,
+                                    new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            }
+                        }
+                        starlightBuffer = 0;
+                        if (rand.nextInt(1 + (int) (1000 * running.shatterMultiplier)) == 0) {
+                            breakCatalyst();
+                            EntityFlare.spawnAmbient(
+                                worldObj,
+                                new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                        }
+                    }
+                }
+                starlightBuffer = 0;
+            } else {
+                starlightBuffer = 0;
+            }
+
+            if ((ticksExisted % 100 == 0) && getHeldFluid() != null && getFluidAmount() > 100) {
+                int mb = Math.min(400, getFluidAmount());
+                FluidStack fluidStack = new FluidStack(getHeldFluid(), mb);
+                java.util.List<TileChalice> out = LiquidStarlightChaliceHandler
+                    .findNearbyChalicesWithSpaceFor(this, fluidStack);
+                if (!out.isEmpty()) {
+                    TileChalice target = out.get(rand.nextInt(out.size()));
+                    LiquidStarlightChaliceHandler.doFluidTransfer(this, target, fluidStack.copy());
+                    this.tank.drain(mb, true);
+                    markForUpdate();
+                }
+            }
+        } else {
+            ItemStack stack = getInventoryHandler().getStackInSlot(0);
+            if (!stack.isEmpty()) {
+                running = WellLiquefaction.getLiquefactionEntry(stack);
+
+                if (running != null) {
+                    Color color = Color.WHITE;
+                    if (running.catalystColor != null) {
+                        color = running.catalystColor;
+                    }
+                    doCatalystEffect(color);
+                }
+            }
+            if (tank.getFluidAmount() > 0 && tank.getTankFluid() != null
+                && tank.getTankFluid() instanceof FluidLiquidStarlight) {
+                doStarlightEffect();
+            }
+        }
+    }
+
+    public void breakCatalyst() {
+        getInventoryHandler().setStackInSlot(0, null);
+        PktParticleEvent ev = new PktParticleEvent(
+            PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK,
+            getPos().getX(),
+            getPos().getY(),
+            getPos().getZ());
+        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPos(), 32));
+        SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldObj, getPos(), 1F, 1F);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void doStarlightEffect() {
+        if (rand.nextInt(3) == 0) {
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.4, getPos().getZ() + 0.5);
+            p.offset(0, getPercFilled() * 0.5, 0);
+            p.offset(
+                rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1),
+                0,
+                rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.16F)
+                .gravity(0.006)
+                .setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void doCatalystEffect(Color color) {
+        if (rand.nextInt(6) == 0) {
+            Entity rView = Minecraft.getMinecraft()
+                .getRenderViewEntity();
+            if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
+            if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5);
+            p.offset(
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1,
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.2F)
+                .gravity(-0.004)
+                .setAlphaMultiplier(1F)
+                .setColor(color);
+        }
+    }
+
+    private void receiveStarlight(double amount) {
+        this.starlightBuffer += amount;
+    }
+
+    private void fillAndDiscardRest(WellLiquefaction.LiquefactionEntry entry, double gain) {
+        if (tank.getTankFluid() == null) {
+            tank.setFluid(entry.producing);
+        } else if (!entry.producing.equals(tank.getTankFluid())) {
+            tank.drain(tank.getFluidAmount());
+            tank.setFluid(entry.producing);
+        }
+        tank.addAmount(gain);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void catalystBurst(PktParticleEvent event) {
+        BlockPos at = event.getVec()
+            .toBlockPos();
+        EffectHandler.getInstance()
+            .registerFX(
+                new EntityFXCrystalBurst(rand.nextInt(), at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
+    }
+
+    @Nullable
+    @Override
+    public String getUnLocalizedDisplayName() {
+        return "tile.blockwell.name";
+    }
+
+    @Override
+    @Nonnull
+    public ITransmissionReceiver provideEndpoint(BlockPos at) {
+        return new TransmissionReceiverWell(at);
+    }
+
+    public int getFluidAmount() {
+        return tank.getFluidAmount();
+    }
+
+    @Nullable
+    public Fluid getHeldFluid() {
+        return tank.getTankFluid();
+    }
+
+    public float getPercFilled() {
+        return tank.getPercentageFilled();
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+        compound.setTag("tank", tank.writeNBT());
+    }
+
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+        this.tank = PrecisionSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
+        if (!tank.hasCapability(EnumFacing.DOWN)) {
+            tank.accessibleSides.add(EnumFacing.DOWN);
+        }
+        this.tank.setOnUpdate(this::markForUpdate);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing))
+            || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (!this.hasCapability(capability, facing)) {
+            return null;
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T) tank.getCapability(facing);
+        }
+        T cap;
+        if ((cap = super.getCapability(capability, facing)) != null) {
+            return cap;
+        }
+        return null;
+    }
+
+    public static class CatalystItemHandler extends ItemHandlerTileFiltered {
+
+        public CatalystItemHandler(TileReceiverBaseInventory inv) {
+            super(inv);
+        }
+
+        @Override
+        public int getStackLimit(int slot, ItemStack stack) {
+            return 1;
+        }
+
+        @Override
+        public boolean canInsertItem(int slot, @Nonnull ItemStack toAdd, @Nonnull ItemStack existing) {
+            if (toAdd.isEmpty()) return true;
+            return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing.isEmpty();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return null;
+        }
+    }
+
+    public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {
+
+        public TransmissionReceiverWell(BlockPos thisPos) {
+            super(thisPos);
+        }
+
+        @Override
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+            if (isChunkLoaded) {
+                TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
+                if (tw != null) {
+                    tw.receiveStarlight(amount);
+                }
+            }
+        }
+
+        @Override
+        public TransmissionClassRegistry.TransmissionProvider getProvider() {
+            return new WellReceiverProvider();
+        }
+
+    }
+
+    public static class WellReceiverProvider implements TransmissionClassRegistry.TransmissionProvider {
+
+        @Override
+        public TransmissionReceiverWell provideEmptyNode() {
+            return new TransmissionReceiverWell(null);
+        }
+
+        @Override
+        public String getIdentifier() {
+            return AstralSorcery.MODID + ":TransmissionReceiverWell";
+        }
+
+    }
+
+}

@@ -1,0 +1,197 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2019
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package shordinger.astralsorcery.common.constellation.distribution;
+
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.astralsorcery.common.data.config.Config;
+import shordinger.astralsorcery.common.network.PacketChannel;
+import shordinger.astralsorcery.common.network.packet.client.PktRequestSeed;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: ConstellationSkyHandler
+ * Created by HellFirePvP
+ * Date: 16.11.2016 / 20:47
+ */
+public class ConstellationSkyHandler implements ITickHandler {
+
+    private static final ConstellationSkyHandler instance = new ConstellationSkyHandler();
+    private static int activeSession = 0;
+
+    private Map<Integer, Long> cacheSeedLookup = new HashMap<>();
+
+    private Map<Integer, WorldSkyHandler> worldHandlersServer = new HashMap<>();
+    private Map<Integer, WorldSkyHandler> worldHandlersClient = new HashMap<>();
+
+    private Map<Integer, Boolean> skyRevertMap = new HashMap<>();
+
+    private ConstellationSkyHandler() {
+    }
+
+    public static ConstellationSkyHandler getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void tick(TickEvent.Type type, Object... context) {
+        if (type == TickEvent.Type.WORLD) {
+            World w = (World) context[0];
+            if (!w.isRemote) {
+                skyRevertMap.put(w.provider.dimensionId, false);
+                WorldSkyHandler handle = worldHandlersServer.get(w.provider.dimensionId);
+                if (handle == null) {
+                    handle = new WorldSkyHandler(new Random(w.getSeed()).nextLong());
+                    worldHandlersServer.put(w.provider.dimensionId, handle);
+                }
+                handle.tick(w);
+            }
+        } else {
+            handleClientTick();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void handleClientTick() {
+        World w = Minecraft.getMinecraft().world;
+        if (w != null) {
+            WorldSkyHandler handle = worldHandlersClient.get(w.provider.dimensionId);
+            if (handle == null) {
+                Integer dim = w.provider.dimensionId;
+                long seed;
+                if (cacheSeedLookup.containsKey(dim)) {
+                    try {
+                        seed = cacheSeedLookup.get(dim);
+                    } catch (Exception exc) { // lulwut
+                        cacheSeedLookup.remove(dim);
+                        PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+                        PacketChannel.CHANNEL.sendToServer(req);
+                        return;
+                    }
+                } else {
+                    PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+                    PacketChannel.CHANNEL.sendToServer(req);
+                    return;
+                }
+                handle = new WorldSkyHandler(seed);
+                worldHandlersClient.put(dim, handle);
+            }
+            handle.tick(w);
+        }
+    }
+
+    public void updateSeedCache(int dimId, int session, long seed) {
+        if (activeSession == session) {
+            cacheSeedLookup.put(dimId, seed);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Optional<Long> getSeedIfPresent(World world) {
+        if (world == null) return Optional.empty();
+        return getSeedIfPresent(world.provider.dimensionId);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Optional<Long> getSeedIfPresent(int dim) {
+        if (!cacheSeedLookup.containsKey(dim)) {
+            PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+            PacketChannel.CHANNEL.sendToServer(req);
+            return Optional.empty();
+        }
+        return Optional.of(cacheSeedLookup.get(dim));
+    }
+
+    // Convenience method
+
+    public float getCurrentDaytimeDistribution(World world) {
+        int dLength = Config.dayLength;
+        float dayPart = ((world.getWorldTime() % dLength) + dLength) % dLength;
+        if (dayPart < (dLength / 2F)) return 0F;
+        float part = dLength / 7F;
+        if (dayPart < ((dLength / 2F) + part)) return ((dayPart - ((dLength / 2F) + part)) / part) + 1F;
+        if (dayPart > (dLength - part)) return 1F - (dayPart - (dLength - part)) / part;
+        return 1F;
+    }
+
+    public boolean isNight(World world) {
+        return getCurrentDaytimeDistribution(world) >= 0.6;
+    }
+
+    public boolean isDay(World world) {
+        return getCurrentDaytimeDistribution(world) <= 0.4;
+    }
+
+    // For effect purposes to determine how long those events are/last
+    public static int getSolarEclipseHalfDuration() {
+        return Config.dayLength / 10;
+    }
+
+    public static int getLunarEclipseHalfDuration() {
+        return Config.dayLength / 10;
+    }
+
+    @Nullable
+    public WorldSkyHandler getWorldHandler(World world) {
+        Map<Integer, WorldSkyHandler> handlerMap;
+        if (world.isRemote) {
+            handlerMap = worldHandlersClient;
+        } else {
+            handlerMap = worldHandlersServer;
+        }
+        return handlerMap.get(world.provider.dimensionId);
+    }
+
+    public void revertWorldTimeTick(World world) {
+        int dimId = world.provider.dimensionId;
+        Boolean state = skyRevertMap.get(dimId);
+        if (!world.isRemote && state != null && !state) {
+            skyRevertMap.put(dimId, true);
+            world.setWorldTime(world.getWorldTime() - 1);
+        }
+    }
+
+    public void clientClearCache() {
+        activeSession++;
+        cacheSeedLookup.clear();
+        worldHandlersClient.clear();
+    }
+
+    public void informWorldUnload(World world) {
+        worldHandlersServer.remove(world.provider.dimensionId);
+        worldHandlersClient.remove(world.provider.dimensionId);
+        cacheSeedLookup.remove(world.provider.dimensionId);
+    }
+
+    @Override
+    public EnumSet<TickEvent.Type> getHandledTypes() {
+        return EnumSet.of(TickEvent.Type.WORLD, TickEvent.Type.CLIENT);
+    }
+
+    @Override
+    public boolean canFire(TickEvent.Phase phase) {
+        return phase == TickEvent.Phase.END;
+    }
+
+    @Override
+    public String getName() {
+        return "ConstellationSkyhandler";
+    }
+
+}

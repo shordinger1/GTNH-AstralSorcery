@@ -1,32 +1,152 @@
 {
+  "Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+  "parent": "block/block",
   "textures": {
-    "particle": "astralsorcery:block/wood_column_top",
-    "side": "astralsorcery:block/wood_column_top",
-    "end": "astralsorcery:block/wood_column_inner",
-    "top": "astralsorcery:block/wood_column_updown"
+    "texture": "astralsorcery:blocks/wood_column_top",
+    "texture1": "astralsorcery:blocks/wood_column_inner",
+    "texture2": "astralsorcery:blocks/wood_column_bottom",
+    "texture3": "astralsorcery:blocks/wood_column",
+    "texture4": "astralsorcery:blocks/wood_column_updown",
+    "texture5": "astralsorcery:blocks/wood_engraved",
+    "particle": "astralsorcery:blocks/wood_raw"
   },
   "elements": [
     {
-      "from": [ 2, 14, 2 ],
-      "to": [ 14, 16, 14 ],
+      "comment": "top",
+      "from": [
+        2,
+        12,
+        2
+      ],
+      "to": [
+        14,
+        16,
+        14
+      ],
       "faces": {
-        "down": { "texture": "#end" },
-        "up": { "texture": "#top", "cullface": "up" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#texture5"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#texture4"
+        },
+        "north": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#texture"
+        }
       }
     },
     {
-      "from": [ 4, 0, 4 ],
-      "to": [ 12, 14, 12 ],
+      "comment": "column_t",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        14,
+        12
+      ],
       "faces": {
-        "down": { "texture": "#end", "cullface": "down" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#texture1"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#texture1"
+        },
+        "north": {
+          "uv": [
+            4,
+            0,
+            12,
+            14
+          ],
+          "texture": "#texture"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            12,
+            14
+          ],
+          "texture": "#texture"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            14
+          ],
+          "texture": "#texture"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            14
+          ],
+          "texture": "#texture"
+        }
       }
     }
   ]
