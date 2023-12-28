@@ -8,26 +8,23 @@
 
 package shordinger.astralsorcery.common.util;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
+import shordinger.astralsorcery.common.util.data.WorldBlockPos;
+import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

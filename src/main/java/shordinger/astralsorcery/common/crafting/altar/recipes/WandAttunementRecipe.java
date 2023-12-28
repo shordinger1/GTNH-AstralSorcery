@@ -8,10 +8,7 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
@@ -21,6 +18,8 @@ import shordinger.astralsorcery.common.item.tool.wand.WandAugment;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,14 +8,8 @@
 
 package shordinger.astralsorcery.client.util.obj;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -23,11 +17,15 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * HellFirePvP@Admin
@@ -572,7 +570,7 @@ public class WavefrontObject {
      *
      * @param line the line being validated
      * @return true if the line is a valid face that matches the format "f v1/vt1/vn1 ..." (with a minimum of 3 points
-     * in the face, and a maximum of 4), false otherwise
+     *         in the face, and a maximum of 4), false otherwise
      */
     private static boolean isValidFace_V_VT_VN_Line(String line) {
         if (face_V_VT_VN_Matcher != null) {
@@ -589,7 +587,7 @@ public class WavefrontObject {
      *
      * @param line the line being validated
      * @return true if the line is a valid face that matches the format "f v1/vt1 ..." (with a minimum of 3 points in
-     * the face, and a maximum of 4), false otherwise
+     *         the face, and a maximum of 4), false otherwise
      */
     private static boolean isValidFace_V_VT_Line(String line) {
         if (face_V_VT_Matcher != null) {
@@ -605,7 +603,7 @@ public class WavefrontObject {
      *
      * @param line the line being validated
      * @return true if the line is a valid face that matches the format "f v1//vn1 ..." (with a minimum of 3 points in
-     * the face, and a maximum of 4), false otherwise
+     *         the face, and a maximum of 4), false otherwise
      */
     private static boolean isValidFace_V_VN_Line(String line) {
         if (face_V_VN_Matcher != null) {
@@ -621,7 +619,7 @@ public class WavefrontObject {
      *
      * @param line the line being validated
      * @return true if the line is a valid face that matches the format "f v1 ..." (with a minimum of 3 points in the
-     * face, and a maximum of 4), false otherwise
+     *         face, and a maximum of 4), false otherwise
      */
     private static boolean isValidFace_V_Line(String line) {
         if (face_V_Matcher != null) {

@@ -8,18 +8,16 @@
 
 package shordinger.astralsorcery.client.gui.base;
 
-import java.awt.*;
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-
 import org.lwjgl.input.Mouse;
-
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -106,7 +104,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     /**
      * @return false if rightclick is not handled any other way and allow for close. true to deny rightclick close and
-     * handle otherwise;
+     *         handle otherwise;
      */
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
         return false;

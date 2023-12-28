@@ -8,23 +8,20 @@
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod

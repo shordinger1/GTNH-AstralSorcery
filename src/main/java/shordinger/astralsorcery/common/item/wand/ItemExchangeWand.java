@@ -8,31 +8,26 @@
 
 package shordinger.astralsorcery.common.item.wand;
 
-import java.util.*;
-
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.gtnewhorizons.modularui.api.GlStateManager;
 import com.gtnewhorizons.modularui.api.forge.InvWrapper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.event.ClientRenderEventHandler;
 import shordinger.astralsorcery.client.util.AirBlockRenderWorld;
 import shordinger.astralsorcery.client.util.Blending;
@@ -56,6 +51,13 @@ import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,20 +83,20 @@ public class ItemExchangeWand extends ItemBlockStorage
         return ct == ChargeType.TEMP;
     }
 
-//    @Override
-//    public float getDestroySpeed(ItemStack stack, IBlockState state) {
-//        return 0;
-//    }
-//
-//    @Override
-//    public boolean canHarvestBlock(IBlockState blockIn) {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
-//        return true;
-//    }
+    // @Override
+    // public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    // return 0;
+    // }
+    //
+    // @Override
+    // public boolean canHarvestBlock(IBlockState blockIn) {
+    // return true;
+    // }
+    //
+    // @Override
+    // public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+    // return true;
+    // }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -111,8 +113,10 @@ public class ItemExchangeWand extends ItemBlockStorage
                     lastCacheInstance,
                     ItemUtils.createBlockState(stack));
             } else {
-                Collection<ItemStack> stacks = ItemUtils
-                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory), stack, false);
+                Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(
+                    new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory),
+                    stack,
+                    false);
                 for (ItemStack foundStack : stacks) {
                     found += foundStack.stackSize;
                 }
@@ -224,7 +228,8 @@ public class ItemExchangeWand extends ItemBlockStorage
                 amountStr = "∞";
             }
             GlStateManager.pushMatrix();
-            GlStateManager.translate((float) -Minecraft.getMinecraft().fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
+            GlStateManager
+                .translate((float) -Minecraft.getMinecraft().fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
             GlStateManager.scale(0.7, 0.7, 0.7);
             if (amountStr.length() > 3) {
                 GlStateManager.scale(0.9, 0.9, 0.9);
@@ -283,8 +288,10 @@ public class ItemExchangeWand extends ItemBlockStorage
         for (Map.Entry<IBlockState, ItemStack> entry : storedStates.entrySet()) {
             int found = 0;
             if (Mods.BOTANIA.isPresent()) {
-                found = ModIntegrationBotania
-                    .getItemCount(Minecraft.getMinecraft().thePlayer, stack, ItemUtils.createBlockState(entry.getValue()));
+                found = ModIntegrationBotania.getItemCount(
+                    Minecraft.getMinecraft().thePlayer,
+                    stack,
+                    ItemUtils.createBlockState(entry.getValue()));
             } else {
                 Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(
                     new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory),

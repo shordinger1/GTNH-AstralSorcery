@@ -8,14 +8,12 @@
 
 package shordinger.astralsorcery.common.auxiliary.link;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -91,7 +89,7 @@ public interface ILinkableTile {
      * @param player the player trying to undo the link.
      * @param other  the other block this tile has a link to.
      * @return true, if the link got removed, which, in case this is actually linked to the given block, should always
-     * happen
+     *         happen
      */
     public boolean tryUnlink(EntityPlayer player, BlockPos other);
 

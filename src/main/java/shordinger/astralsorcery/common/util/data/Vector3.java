@@ -8,16 +8,15 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import java.util.Random;
-
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

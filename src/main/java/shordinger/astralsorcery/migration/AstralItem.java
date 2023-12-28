@@ -1,35 +1,23 @@
 package shordinger.astralsorcery.migration;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.resources.I18n;
+import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import shordinger.astralsorcery.client.effect.EffectHandler;
-import shordinger.astralsorcery.common.base.FluidRarityRegistry;
-import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import shordinger.astralsorcery.common.item.tool.ItemSkyResonator;
-import shordinger.astralsorcery.common.network.PacketChannel;
-import shordinger.astralsorcery.common.network.packet.server.PktPlayLiquidSpring;
-import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
-import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.util.data.Vector3;
 
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
-
-import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AstralItem extends Item {
 
@@ -46,8 +34,8 @@ public abstract class AstralItem extends Item {
     }
 
     @SideOnly(Side.CLIENT)
-    public abstract void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn);
-
+    public abstract void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip,
+                                        ITooltipFlag flagIn);
 
     @Override
     public final ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
@@ -55,19 +43,16 @@ public abstract class AstralItem extends Item {
         return result.getResult();
     }
 
-    //@Override
+    // @Override
     public abstract ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player);
 
-
-//TODO ???
-//    @Override
-//    public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
-//    }
-
+    // TODO ???
+    // @Override
+    // public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
+    // }
 
     public abstract boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side,
                                          ItemStack stack);
-
 
     @Override
     public boolean onEntityItemUpdate(EntityItem entityItem) {
@@ -79,9 +64,7 @@ public abstract class AstralItem extends Item {
         return super.onEntityItemUpdate(entityItem);
     }
 
-
     public abstract void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected);
-
 
     public abstract ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation defaultModelPath);
 
@@ -89,10 +72,12 @@ public abstract class AstralItem extends Item {
 }
 
 interface ITooltipFlag {
+
     boolean isAdvanced();
 
     @SideOnly(Side.CLIENT)
     public static enum TooltipFlags implements ITooltipFlag {
+
         NORMAL(false),
         ADVANCED(true);
 

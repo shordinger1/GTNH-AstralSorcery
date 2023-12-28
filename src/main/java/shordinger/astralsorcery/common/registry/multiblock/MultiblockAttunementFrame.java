@@ -8,13 +8,9 @@
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
-import java.util.Map;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockMarble;
@@ -22,6 +18,8 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

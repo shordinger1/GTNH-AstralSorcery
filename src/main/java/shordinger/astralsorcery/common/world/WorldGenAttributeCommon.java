@@ -8,14 +8,9 @@
 
 package shordinger.astralsorcery.common.world;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
-
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.entry.WorldGenEntry;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
@@ -23,6 +18,9 @@ import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 import shordinger.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

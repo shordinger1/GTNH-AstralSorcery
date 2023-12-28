@@ -1,6 +1,5 @@
 package shordinger.astralsorcery.migration;
 
-
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Floats;
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +21,7 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class BufferBuilder {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private ByteBuffer byteBuffer;
     private IntBuffer rawIntBuffer;
@@ -46,7 +46,8 @@ public class BufferBuilder {
     }
 
     private void growBuffer(int p_181670_1_) {
-        if (MathHelper.roundUp(p_181670_1_, 4) / 4 > this.rawIntBuffer.remaining() || this.vertexCount * this.vertexFormat.getSize() + p_181670_1_ > this.byteBuffer.capacity()) {
+        if (MathHelper.roundUp(p_181670_1_, 4) / 4 > this.rawIntBuffer.remaining()
+            || this.vertexCount * this.vertexFormat.getSize() + p_181670_1_ > this.byteBuffer.capacity()) {
             int i = this.byteBuffer.capacity();
             int j = i + MathHelper.roundUp(p_181670_1_, 2097152);
             LOGGER.debug("Needed to grow BufferBuilder buffer: Old size {} bytes, new size {} bytes.", i, j);
@@ -56,7 +57,8 @@ public class BufferBuilder {
             bytebuffer.put(this.byteBuffer);
             bytebuffer.rewind();
             this.byteBuffer = bytebuffer;
-            this.rawFloatBuffer = this.byteBuffer.asFloatBuffer().asReadOnlyBuffer();
+            this.rawFloatBuffer = this.byteBuffer.asFloatBuffer()
+                .asReadOnlyBuffer();
             this.rawIntBuffer = this.byteBuffer.asIntBuffer();
             this.rawIntBuffer.position(k);
             this.rawShortBuffer = this.byteBuffer.asShortBuffer();
@@ -70,7 +72,13 @@ public class BufferBuilder {
         final float[] afloat = new float[i];
 
         for (int j = 0; j < i; ++j) {
-            afloat[j] = getDistanceSq(this.rawFloatBuffer, (float) ((double) p_181674_1_ + this.xOffset), (float) ((double) p_181674_2_ + this.yOffset), (float) ((double) p_181674_3_ + this.zOffset), this.vertexFormat.getIntegerSize(), j * this.vertexFormat.getSize());
+            afloat[j] = getDistanceSq(
+                this.rawFloatBuffer,
+                (float) ((double) p_181674_1_ + this.xOffset),
+                (float) ((double) p_181674_2_ + this.yOffset),
+                (float) ((double) p_181674_3_ + this.zOffset),
+                this.vertexFormat.getIntegerSize(),
+                j * this.vertexFormat.getSize());
         }
 
         Integer[] ainteger = new Integer[i];
@@ -80,6 +88,7 @@ public class BufferBuilder {
         }
 
         Arrays.sort(ainteger, new Comparator<Integer>() {
+
             public int compare(Integer p_compare_1_, Integer p_compare_2_) {
                 return Floats.compare(afloat[p_compare_2_], afloat[p_compare_1_]);
             }
@@ -134,7 +143,8 @@ public class BufferBuilder {
         return this.vertexCount * this.vertexFormat.getIntegerSize();
     }
 
-    private static float getDistanceSq(FloatBuffer p_181665_0_, float p_181665_1_, float p_181665_2_, float p_181665_3_, int p_181665_4_, int p_181665_5_) {
+    private static float getDistanceSq(FloatBuffer p_181665_0_, float p_181665_1_, float p_181665_2_, float p_181665_3_,
+                                       int p_181665_4_, int p_181665_5_) {
         float f = p_181665_0_.get(p_181665_5_ + p_181665_4_ * 0 + 0);
         float f1 = p_181665_0_.get(p_181665_5_ + p_181665_4_ * 0 + 1);
         float f2 = p_181665_0_.get(p_181665_5_ + p_181665_4_ * 0 + 2);
@@ -252,15 +262,22 @@ public class BufferBuilder {
             int l = j + k * i;
             int i1 = l + 1;
             int j1 = i1 + 1;
-            this.rawIntBuffer.put(l, Float.floatToRawIntBits((float) (x + this.xOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(l))));
-            this.rawIntBuffer.put(i1, Float.floatToRawIntBits((float) (y + this.yOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(i1))));
-            this.rawIntBuffer.put(j1, Float.floatToRawIntBits((float) (z + this.zOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(j1))));
+            this.rawIntBuffer.put(
+                l,
+                Float.floatToRawIntBits((float) (x + this.xOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(l))));
+            this.rawIntBuffer.put(
+                i1,
+                Float.floatToRawIntBits((float) (y + this.yOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(i1))));
+            this.rawIntBuffer.put(
+                j1,
+                Float.floatToRawIntBits((float) (z + this.zOffset) + Float.intBitsToFloat(this.rawIntBuffer.get(j1))));
         }
 
     }
 
     public int getColorIndex(int vertexIndex) {
-        return ((this.vertexCount - vertexIndex) * this.vertexFormat.getSize() + this.vertexFormat.getColorOffset()) / 4;
+        return ((this.vertexCount - vertexIndex) * this.vertexFormat.getSize() + this.vertexFormat.getColorOffset())
+            / 4;
     }
 
     public void putColorMultiplier(float red, float green, float blue, int vertexIndex) {
@@ -326,7 +343,8 @@ public class BufferBuilder {
         if (this.noColor) {
             return this;
         } else {
-            int i = this.vertexCount * this.vertexFormat.getSize() + this.vertexFormat.getOffset(this.vertexFormatIndex);
+            int i = this.vertexCount * this.vertexFormat.getSize()
+                + this.vertexFormat.getOffset(this.vertexFormatIndex);
             switch (this.vertexFormatElement.getType()) {
                 case FLOAT:
                     this.byteBuffer.putFloat(i, (float) red / 255.0F);
@@ -531,6 +549,7 @@ public class BufferBuilder {
 
     @SideOnly(Side.CLIENT)
     public class State {
+
         private final int[] stateRawBuffer;
         private final VertexFormat stateVertexFormat;
 
@@ -555,6 +574,7 @@ public class BufferBuilder {
 
 @SideOnly(Side.CLIENT)
 class VertexFormatElement {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private final EnumType type;
     private final EnumUsage usage;
@@ -565,7 +585,8 @@ class VertexFormatElement {
         if (this.isFirstOrUV(indexIn, usageIn)) {
             this.usage = usageIn;
         } else {
-            LOGGER.warn("Multiple vertex elements of the same type other than UVs are not supported. Forcing type to UV.");
+            LOGGER.warn(
+                "Multiple vertex elements of the same type other than UVs are not supported. Forcing type to UV.");
             this.usage = VertexFormatElement.EnumUsage.UV;
         }
 
@@ -635,6 +656,7 @@ class VertexFormatElement {
 
     @SideOnly(Side.CLIENT)
     public static enum EnumUsage {
+
         POSITION("Position"),
         NORMAL("Normal"),
         COLOR("Vertex Color"),
@@ -673,6 +695,7 @@ class VertexFormatElement {
 
     @SideOnly(Side.CLIENT)
     public static enum EnumType {
+
         FLOAT(4, "Float", 5126),
         UBYTE(1, "Unsigned Byte", 5121),
         BYTE(1, "Byte", 5120),
@@ -707,6 +730,7 @@ class VertexFormatElement {
 
 @SideOnly(Side.CLIENT)
 class VertexFormat {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private final List<VertexFormatElement> elements;
     private final List<Integer> offsets;
@@ -746,7 +770,8 @@ class VertexFormat {
 
     public VertexFormat addElement(VertexFormatElement element) {
         if (element.isPositionElement() && this.hasPosition()) {
-            LOGGER.warn("VertexFormat error: Trying to add a position VertexFormatElement when one already exists, ignoring.");
+            LOGGER.warn(
+                "VertexFormat error: Trying to add a position VertexFormatElement when one already exists, ignoring.");
             return this;
         } else {
             this.elements.add(element);

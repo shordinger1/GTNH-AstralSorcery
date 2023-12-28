@@ -10,8 +10,6 @@ package shordinger.astralsorcery.common.registry.multiblock;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
-
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockMarble;

@@ -8,14 +8,9 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,16 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -58,6 +49,13 @@ import shordinger.astralsorcery.migration.ActionResult;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.EnumActionResult;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -120,7 +118,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         return super.onItemRightClick(itemStackIn, worldIn, player);
     }
 
-    //@Override
+    // @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player) {
         if (!worldIn.isRemote && player.isSneaking()) {
             if (cycleUpgrade(player, player.getHeldItem())) {

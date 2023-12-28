@@ -1,6 +1,7 @@
 package shordinger.astralsorcery.migration;
 
 public class ActionResult<T> {
+
     private final EnumActionResult type;
     private final T result;
 

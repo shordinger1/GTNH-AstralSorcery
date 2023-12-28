@@ -8,11 +8,10 @@
 
 package shordinger.astralsorcery.common.registry.internal;
 
+import com.google.common.collect.Lists;
+
 import java.util.HashMap;
 import java.util.List;
-
-
-import com.google.common.collect.Lists;
 
 /**
  * This class is part of the Astral Sorcery Mod

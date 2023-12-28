@@ -8,18 +8,17 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
-import static crafttweaker.api.minecraft.CraftTweakerMC.getItemStack;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.mc1120.item.MCItemStack;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import static crafttweaker.api.minecraft.CraftTweakerMC.getItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

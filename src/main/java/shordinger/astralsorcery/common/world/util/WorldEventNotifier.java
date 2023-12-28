@@ -8,8 +8,6 @@
 
 package shordinger.astralsorcery.common.world.util;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
@@ -17,10 +15,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
 import shordinger.astralsorcery.common.event.BlockModifyEvent;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

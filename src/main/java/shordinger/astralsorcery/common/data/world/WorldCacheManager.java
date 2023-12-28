@@ -8,30 +8,26 @@
 
 package shordinger.astralsorcery.common.data.world;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
+import com.google.common.io.Files;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import com.google.common.io.Files;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.astralsorcery.common.data.world.data.*;
 import shordinger.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import shordinger.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

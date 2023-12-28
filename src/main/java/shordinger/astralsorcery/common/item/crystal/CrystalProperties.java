@@ -8,13 +8,8 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -22,13 +17,16 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.research.EnumGatedKnowledge;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -182,10 +180,10 @@ public class CrystalProperties {
      * Adds the property tooltip to the given item, depending on the properties.
      *
      * @return Optional boolean.
-     * <p>
-     * Missing value = no significant information was added
-     * False = The player misses some knowledge.
-     * True = Everything has been displayed.
+     *         <p>
+     *         Missing value = no significant information was added
+     *         False = The player misses some knowledge.
+     *         True = Everything has been displayed.
      */
     @SideOnly(Side.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended,
