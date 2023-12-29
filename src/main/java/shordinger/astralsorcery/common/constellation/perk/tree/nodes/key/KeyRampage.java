@@ -66,7 +66,7 @@ public class KeyRampage extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.LOWEST) // Monitoring outcome after all other mods might've cancelled this
     public void onEntityDeath(LivingDeathEvent event) {
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;

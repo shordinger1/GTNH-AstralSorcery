@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,8 +35,8 @@ public enum ResearchProgression {
     BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE);
 
     private final int progressId;
-    private List<ResearchProgression> preConditions = new LinkedList<>();
-    private List<ResearchNode> researchNodes = new LinkedList<>();
+    private final List<ResearchProgression> preConditions = new LinkedList<>();
+    private final List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
     private final String unlocName;
 
@@ -50,7 +51,7 @@ public enum ResearchProgression {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
         this.progressId = id;
-        this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
+        this.unlocName = Tags.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
     }
 
     void addResearchToGroup(ResearchNode res) {

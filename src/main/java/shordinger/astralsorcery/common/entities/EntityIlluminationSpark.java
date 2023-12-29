@@ -8,18 +8,16 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +45,7 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     public void onUpdate() {
         super.onUpdate();
 
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             playEffects();
         }
     }
@@ -76,17 +74,11 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     @SideOnly(Side.CLIENT)
     private void randomizeColor(EntityFXFacingParticle particle) {
         switch (rand.nextInt(3)) {
-            case 0:
-                particle.setColor(Color.WHITE);
-                break;
-            case 1:
-                particle.setColor(new Color(0xFEFF9E));
-                break;
-            case 2:
-                particle.setColor(new Color(0xFFE539));
-                break;
-            default:
-                break;
+            case 0 -> particle.setColor(Color.WHITE);
+            case 1 -> particle.setColor(new Color(0xFEFF9E));
+            case 2 -> particle.setColor(new Color(0xFFE539));
+            default -> {
+            }
         }
     }
 

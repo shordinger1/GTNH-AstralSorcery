@@ -8,12 +8,6 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -29,9 +23,7 @@ import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
@@ -39,7 +31,6 @@ import shordinger.astralsorcery.client.data.PersistentDataManager;
 import shordinger.astralsorcery.client.gui.base.GuiSkyScreen;
 import shordinger.astralsorcery.client.gui.base.GuiTileBase;
 import shordinger.astralsorcery.client.sky.RenderAstralSkybox;
-import shordinger.astralsorcery.client.util.*;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.ClientConstellationGenerator;
 import shordinger.astralsorcery.client.util.ClientUtils;
@@ -69,6 +60,17 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -184,7 +186,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
-        float pitch = Minecraft.getMinecraft().player.rotationPitch;
+        float pitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
         float transparency = 0F;
         if (pitch < 0F) {
             transparency = 1F;
@@ -382,8 +384,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         }
         r.setSeed(lastTracked * 31);
 
-        double playerYaw = (Minecraft.getMinecraft().player.rotationYaw + 180) % 360F;
-        double playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+        double playerYaw = (Minecraft.getMinecraft().thePlayer.rotationYaw + 180) % 360F;
+        double playerPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
         if (playerYaw < 0) {
             playerYaw += 360F;
@@ -739,7 +741,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; // Can't match otherwise anyway.
-            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.getValue();
 

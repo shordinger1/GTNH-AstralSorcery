@@ -54,11 +54,11 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
 
     @SideOnly(Side.CLIENT)
     public void apply(float stepHeight) {
-        if (Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
             AstralSorcery.proxy.scheduleClientside(() -> apply(stepHeight), 4);
             return;
         }
-        Minecraft.getMinecraft().player.stepHeight = stepHeight;
+        Minecraft.getMinecraft().thePlayer.stepHeight = stepHeight;
     }
 
 }

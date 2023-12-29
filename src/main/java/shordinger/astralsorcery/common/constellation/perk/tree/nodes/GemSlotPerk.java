@@ -8,25 +8,22 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -83,7 +80,7 @@ public interface GemSlotPerk {
         if (data == null) {
             return false;
         }
-        NBTTagCompound prev = data.copy();
+        NBTTagCompound prev = (NBTTagCompound) data.copy();
 
         if (stack.isEmpty()) {
             data.removeTag(SOCKET_DATA_KEY);
@@ -118,12 +115,12 @@ public interface GemSlotPerk {
         if (data == null) {
             return;
         }
-        NBTTagCompound prev = data.copy();
+        NBTTagCompound prev = (NBTTagCompound) data.copy();
 
         ItemStack contained = getContainedItem(player, Side.SERVER, data);
         if (!contained.isEmpty()) {
             if (!player.addItemStackToInventory(contained)) {
-                ItemUtils.dropItem(player.world, player.posX, player.posY, player.posZ, contained);
+                ItemUtils.dropItem(player.worldObj, player.posX, player.posY, player.posZ, contained);
             }
         }
         setContainedItem(player, Side.SERVER, data, null);
@@ -138,11 +135,11 @@ public interface GemSlotPerk {
         if (!(this instanceof AbstractPerk)) {
             return;
         }
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (!prog.isValid()) {
             return;
         }
-        ItemStack contained = getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);
+        ItemStack contained = getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (contained.isEmpty()) {
             tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.empty"));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
@@ -150,7 +147,7 @@ public interface GemSlotPerk {
 
                 boolean has = !ItemUtils
                     .findItemsIndexedInPlayerInventory(
-                        Minecraft.getMinecraft().player,
+                        Minecraft.getMinecraft().thePlayer,
                         s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
                             && !ItemPerkGem.getModifiers(s)
                             .isEmpty())

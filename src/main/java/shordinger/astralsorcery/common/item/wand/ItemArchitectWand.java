@@ -107,7 +107,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                     ItemUtils.createBlockState(stack));
             } else {
                 Collection<ItemStack> stacks = ItemUtils
-                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), stack, false);
+                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory), stack, false);
                 for (ItemStack foundStack : stacks) {
                     found += foundStack.stackSize;
                 }
@@ -199,7 +199,7 @@ public class ItemArchitectWand extends ItemBlockStorage
         tempOffsetY = offsetY;
         for (Map.Entry<ItemStack, Integer> entry : amountMap.entrySet()) {
             ri.renderItemAndEffectIntoGUI(
-                Minecraft.getMinecraft().player,
+                Minecraft.getMinecraft().thePlayer,
                 entry.getKey(),
                 offsetX + 5,
                 tempOffsetY + 5);
@@ -246,11 +246,11 @@ public class ItemArchitectWand extends ItemBlockStorage
         Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().world);
 
         Deque<BlockPos> placeable = filterBlocksToPlace(
-            Minecraft.getMinecraft().player,
+            Minecraft.getMinecraft().thePlayer,
             Minecraft.getMinecraft().world,
             architectRange);
         if (!placeable.isEmpty()) {
-            RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().player, false, true, architectRange);
+            RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().thePlayer, false, true, architectRange);
             if (rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) {
                 return;
             }
@@ -282,7 +282,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                             (float) hitVec.z,
                             potentialState.getBlock()
                                 .getMetaFromState(potentialState),
-                            Minecraft.getMinecraft().player,
+                            Minecraft.getMinecraft().thePlayer,
                             hand);
                 } catch (Exception exc) {
                 }
@@ -484,7 +484,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                 iterator.remove();
                 continue;
             }
-            if (!world.isAirBlock(pos) && !world.getBlockState(pos)
+            if (!world.isAirBlock(pos) && !WorldHelper.getBlockState(world, pos)
                 .getBlock()
                 .isReplaceable(world, pos)) {
                 discard = true;

@@ -60,7 +60,7 @@ public class MultiblockComponent {
     }
 
     public boolean matches(World world, BlockPos pos) {
-        return world.getBlockState(pos) == state;
+        return WorldHelper.getBlockState(world, pos) == state;
     }
 
     public ItemStack[] getMaterials() {

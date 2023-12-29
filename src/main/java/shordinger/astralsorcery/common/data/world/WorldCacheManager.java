@@ -12,7 +12,7 @@ import com.google.common.io.Files;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.world.data.ChunkVersionBuffer;
@@ -38,8 +38,8 @@ import java.util.Map;
  */
 public class WorldCacheManager implements ITickHandler {
 
-    private static WorldCacheManager instance = new WorldCacheManager();
-    private static Map<Integer, Map<SaveKey, CachedWorldData>> cachedData = new HashMap<>();
+    private static final WorldCacheManager instance = new WorldCacheManager();
+    private static final Map<Integer, Map<SaveKey, CachedWorldData>> cachedData = new HashMap<>();
     private static File saveDir;
 
     private WorldCacheManager() {

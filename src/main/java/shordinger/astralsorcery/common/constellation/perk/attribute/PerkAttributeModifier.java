@@ -188,14 +188,14 @@ public class PerkAttributeModifier {
     @SideOnly(Side.CLIENT)
     public String getLocalizedAttributeValue() {
         return getMode()
-            .stringifyValue(getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress));
+            .stringifyValue(getValueForDisplay(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress));
     }
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedModifierName() {
         return I18n.format(
             getMode().getUnlocalizedModifierName(
-                getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress)));
+                getValueForDisplay(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)));
     }
 
     @SideOnly(Side.CLIENT)

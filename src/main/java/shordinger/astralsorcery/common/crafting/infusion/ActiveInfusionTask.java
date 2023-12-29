@@ -8,25 +8,23 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidStack;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +39,7 @@ public class ActiveInfusionTask {
     private final UUID playerCraftingUUID;
     private int ticksCrafting = 0;
 
-    private List<TileChalice> supportingChalices = new LinkedList<>();
+    private final List<TileChalice> supportingChalices = new LinkedList<>();
     private List<BlockPos> pendingChalicePositions = new LinkedList<>();
 
     public ActiveInfusionTask(AbstractInfusionRecipe recipeToCraft, UUID playerCraftingUUID) {
@@ -76,7 +74,7 @@ public class ActiveInfusionTask {
         boolean change = this.pendingChalicePositions.size() > 0;
 
         for (BlockPos bp : this.pendingChalicePositions) {
-            TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), bp, TileChalice.class, true);
+            TileChalice test = MiscUtils.getTileAt(infuser.getWorldObj(), bp, TileChalice.class, true);
             if (test != null) {
                 this.supportingChalices.add(test);
             }
@@ -91,7 +89,7 @@ public class ActiveInfusionTask {
                 iterator.remove();
                 change = true;
             } else {
-                TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), tc.getPos(), TileChalice.class, true);
+                TileChalice test = MiscUtils.getTileAt(infuser.getWorldObj(), tc.getPos(), TileChalice.class, true);
                 if (test == null || test.getTank() == null
                     || test.getTank()
                     .getFluid() == null

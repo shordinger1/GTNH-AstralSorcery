@@ -31,7 +31,7 @@ public class ModIntegrationOreStages {
     @SideOnly(Side.CLIENT)
     @Optional.Method(modid = "orestages")
     public static boolean canSeeOreClient(IBlockState test) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null) return false;
         Tuple<String, IBlockState> replacement;
         if ((replacement = OreTiersAPI.getStageInfo(test)) != null) {

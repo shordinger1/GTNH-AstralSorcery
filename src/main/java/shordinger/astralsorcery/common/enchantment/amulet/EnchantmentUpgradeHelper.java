@@ -8,19 +8,14 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import baubles.api.BaubleType;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
@@ -30,15 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
-
-import com.google.common.collect.Maps;
-
-import baubles.api.BaubleType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import shordinger.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import shordinger.astralsorcery.common.event.DynamicEnchantmentEvent;
@@ -48,6 +35,13 @@ import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.core.ASMCallHook;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -91,23 +85,23 @@ public class EnchantmentUpgradeHelper {
         for (DynamicEnchantment mod : modifiers) {
             Enchantment target = mod.getEnchantment();
             switch (mod.getType()) {
-                case ADD_TO_SPECIFIC:
+                case ADD_TO_SPECIFIC -> {
                     if (enchantment.equals(target)) {
                         current += mod.getLevelAddition();
                     }
-                    break;
-                case ADD_TO_EXISTING_SPECIFIC:
+                }
+                case ADD_TO_EXISTING_SPECIFIC -> {
                     if (enchantment.equals(target) && current > 0) {
                         current += mod.getLevelAddition();
                     }
-                    break;
-                case ADD_TO_EXISTING_ALL:
+                }
+                case ADD_TO_EXISTING_ALL -> {
                     if (current > 0) {
                         current += mod.getLevelAddition();
                     }
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
         return current;
@@ -144,7 +138,10 @@ public class EnchantmentUpgradeHelper {
                 if (!AmuletEnchantmentRegistry.canBeInfluenced(ench)) {
                     continue;
                 }
-                EnumEnchantmentType type = ench.type;
+                EnumEnchantmentType type = null;
+                if (ench != null) {
+                    type = ench.type;
+                }
                 if (type != null && !type.canEnchantItem(stack.getItem())) {
                     continue;
                 }
@@ -178,7 +175,10 @@ public class EnchantmentUpgradeHelper {
                 if (!AmuletEnchantmentRegistry.canBeInfluenced(ench)) {
                     continue;
                 }
-                EnumEnchantmentType type = ench.type;
+                EnumEnchantmentType type = null;
+                if (ench != null) {
+                    type = ench.type;
+                }
                 if (type != null && !type.canEnchantItem(stack.getItem())) {
                     continue;
                 }
@@ -207,13 +207,10 @@ public class EnchantmentUpgradeHelper {
                 .getRegistryName();
             if (rl == null) return true; // Yea... no questions asked i guess.
 
-            if (rl.getResourceDomain()
-                .equalsIgnoreCase("draconicevolution")) {
-                // Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
-                // causes infinite feedback loop stacking enchantments higher and higher.
-                return true;
-            }
-            return false;
+            // Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
+            // causes infinite feedback loop stacking enchantments higher and higher.
+            return rl.getResourceDomain()
+                .equalsIgnoreCase("draconicevolution");
         }
         return true;
     }
@@ -236,18 +233,18 @@ public class EnchantmentUpgradeHelper {
 
     public static void removeAmuletTagsAndCleanup(EntityPlayer player, boolean keepEquipped) {
         InventoryPlayer inv = player.inventory;
-        for (int i = 0; i < inv.mainInventory.size(); i++) {
+        for (int i = 0; i < inv.mainInventory.length; i++) {
             if (i == inv.currentItem && keepEquipped) continue;
-            removeAmuletOwner(inv.mainInventory.get(i));
+            removeAmuletOwner(inv.mainInventory[i]);
         }
         removeAmuletOwner(inv.getItemStack());
         if (!keepEquipped) {
-            for (int i = 0; i < inv.armorInventory.size(); i++) {
-                removeAmuletOwner(inv.armorInventory.get(i));
+            for (int i = 0; i < inv.armorInventory.length; i++) {
+                removeAmuletOwner(inv.armorInventory[i]);
             }
-            for (int i = 0; i < inv.offHandInventory.size(); i++) {
-                removeAmuletOwner(inv.offHandInventory.get(i));
-            }
+//            for (int i = 0; i < inv.offHandInventory.size(); i++) {
+//                removeAmuletOwner(inv.offHandInventory.get(i));
+//            }
         }
     }
 

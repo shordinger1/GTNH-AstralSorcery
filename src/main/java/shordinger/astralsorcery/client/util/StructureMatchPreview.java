@@ -51,12 +51,12 @@ public class StructureMatchPreview {
 
     public void tick() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        if (pattern != null && Minecraft.getMinecraft().player != null) {
+        if (pattern != null && Minecraft.getMinecraft().thePlayer != null) {
             BlockPos at = tile.getLocationPos();
             BlockPos v = pattern.getSize();
             int maxDim = Math.max(Math.max(v.getX(), v.getY()), v.getZ());
             maxDim = Math.max(9, maxDim);
-            if (Minecraft.getMinecraft().player.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
+            if (Minecraft.getMinecraft().thePlayer.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
                 resetTimeout();
                 return;
             }
@@ -136,7 +136,7 @@ public class StructureMatchPreview {
                 continue;
             }
 
-            IBlockState state = world.getBlockState(center.add(offset));
+            IBlockState state = WorldHelper.getBlockState(world, center.add(offset));
 
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             GlStateManager.pushMatrix();

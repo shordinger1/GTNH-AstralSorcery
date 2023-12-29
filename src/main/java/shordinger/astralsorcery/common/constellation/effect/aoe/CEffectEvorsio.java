@@ -8,20 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.base.OreTypes;
@@ -36,7 +30,6 @@ import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileRitualLink;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
-import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.BlockBreakAssist;
 import shordinger.astralsorcery.common.util.BlockDropCaptureAssist;
 import shordinger.astralsorcery.common.util.ILocatable;
@@ -45,6 +38,10 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,9 +70,9 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
 
     private static boolean isAllowedToBreak(@Nullable ILocatable origin, World world, BlockPos pos) {
         if (!MiscUtils.isChunkLoaded(world, pos)) return false;
-        float hardness = world.getBlockState(pos)
+        float hardness = WorldHelper.getBlockState(world, pos)
             .getBlockHardness(world, pos);
-        if (world.isAirBlock(pos) || world.getBlockState(pos)
+        if (world.isAirBlock(pos) || WorldHelper.getBlockState(world, pos)
             .getBlock() instanceof BlockRitualLink || hardness < 0 || hardness > 75) {
             return false;
         }
@@ -113,7 +110,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
 
     @Override
     public BlockBreakAssist.BreakEntry newElement(World world, BlockPos at) {
-        return new BlockBreakAssist.BreakEntry(0F, world, at, world.getBlockState(at));
+        return new BlockBreakAssist.BreakEntry(0F, world, at, WorldHelper.getBlockState(world, at));
     }
 
     @Override
@@ -163,7 +160,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             BlockPos at = pos.add(offX, offY, offZ);
-            if (!world.isAirBlock(at) && !world.getBlockState(at)
+            if (!world.isAirBlock(at) && !WorldHelper.getBlockState(world, at)
                 .getBlock()
                 .isReplaceable(world, at)) {
                 return false;
@@ -223,7 +220,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                         broken = MiscUtils.breakBlockWithoutPlayer(
                             (WorldServer) world,
                             be.pos(),
-                            world.getBlockState(be.pos()),
+                            WorldHelper.getBlockState(world, be.pos()),
                             true,
                             true,
                             true);

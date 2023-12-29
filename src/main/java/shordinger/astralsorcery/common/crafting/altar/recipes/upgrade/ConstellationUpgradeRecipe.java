@@ -13,7 +13,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;

@@ -65,7 +65,9 @@ public class LensRecipe extends AttunementRecipe {
             centralGridMap.get(ShapedRecipeSlot.CENTER)
                 .getApplicableItems()
                 .get(0));
-        CrystalProperties.applyCrystalProperties(lens, crystalProp);
+        if (crystalProp != null) {
+            CrystalProperties.applyCrystalProperties(lens, crystalProp);
+        }
         lens.setCount(Math.max(1, crystalProp.getSize() / 80));
         return lens;
     }

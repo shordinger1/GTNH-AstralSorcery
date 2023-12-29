@@ -8,21 +8,19 @@
 
 package shordinger.astralsorcery.common.data;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,9 +32,9 @@ import shordinger.astralsorcery.migration.MathHelper;
 public class DataTimeFreezeEffects extends AbstractData {
 
     private Map<Integer, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
-    private Map<Integer, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
+    private final Map<Integer, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
 
-    private List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
+    private final List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 

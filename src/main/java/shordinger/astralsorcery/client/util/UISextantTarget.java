@@ -42,7 +42,7 @@ import shordinger.astralsorcery.migration.MathHelper;
 public class UISextantTarget {
 
     public static void renderTargets(float pTicks) {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
+        EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
         World w = Minecraft.getMinecraft().world;
         if (pl == null || w == null) {
             return;
@@ -76,7 +76,7 @@ public class UISextantTarget {
         Entity e = Minecraft.getMinecraft()
             .getRenderViewEntity();
         if (e == null) {
-            e = Minecraft.getMinecraft().player;
+            e = Minecraft.getMinecraft().thePlayer;
         }
         if (e == null) {
             return;

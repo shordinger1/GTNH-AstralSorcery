@@ -8,11 +8,8 @@
 
 package shordinger.astralsorcery.common.item;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,11 +24,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.item.base.render.ItemDynamicColor;
 import shordinger.astralsorcery.common.lib.ItemsAS;
@@ -41,7 +34,6 @@ import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.network.packet.server.PktPlayEffect;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
-import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.BlockBreakAssist;
 import shordinger.astralsorcery.common.util.CropHelper;
 import shordinger.astralsorcery.common.util.DamageUtil;
@@ -51,6 +43,11 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

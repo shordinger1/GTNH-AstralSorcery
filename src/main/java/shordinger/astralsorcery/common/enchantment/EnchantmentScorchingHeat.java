@@ -9,7 +9,7 @@
 package shordinger.astralsorcery.common.enchantment;
 
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,6 +21,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 public class EnchantmentScorchingHeat extends EnchantmentBase {
 
     public EnchantmentScorchingHeat() {
-        super("as.smelting", Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
+        super("as.smelting", EnumRarity.epic, EnumEnchantmentType.digger, EntityEquipmentSlot);
     }
 }

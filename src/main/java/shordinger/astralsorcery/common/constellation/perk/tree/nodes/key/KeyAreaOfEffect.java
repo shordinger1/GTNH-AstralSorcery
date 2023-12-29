@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +18,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -48,19 +47,19 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
             return;
         }
 
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null
             && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                EntityLivingBase attacked = event.getEntityLiving();
+                EntityLivingBase attacked = event.entityLiving;
                 float sweepPerc = EnchantmentHelper.getSweepingDamageRatio(player);
                 if (sweepPerc > 0) {
                     sweepPerc = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
-                    float toApply = event.getAmount() * sweepPerc;
+                    float toApply = event.ammount * sweepPerc;
                     inSweepAttack = true;
                     try {
                         for (EntityLivingBase target : attacked.getEntityWorld()

@@ -13,10 +13,9 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
@@ -58,7 +57,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
                          double scale) {
         ItemStack stack = this.getPerk()
-            .getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);
+            .getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (!stack.isEmpty()) {
             int posX = (int) Math.round(x - (8 * scale));
             int posY = (int) Math.round(y - (8 * scale));

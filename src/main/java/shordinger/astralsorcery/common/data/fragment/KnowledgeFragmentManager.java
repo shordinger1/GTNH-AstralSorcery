@@ -27,8 +27,8 @@ import com.google.common.collect.Maps;
  */
 public class KnowledgeFragmentManager {
 
-    private static KnowledgeFragmentManager INSTANCE = new KnowledgeFragmentManager();
-    private Map<ResourceLocation, KnowledgeFragment> fragments = Maps.newHashMap();
+    private static final KnowledgeFragmentManager INSTANCE = new KnowledgeFragmentManager();
+    private final Map<ResourceLocation, KnowledgeFragment> fragments = Maps.newHashMap();
 
     private KnowledgeFragmentManager() {
     }

@@ -8,10 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -19,13 +17,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.BlockFluidBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
@@ -41,6 +34,9 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,10 +58,10 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
 
     public CEffectOctans(@Nullable ILocatable origin) {
         super(origin, Constellations.octans, "octans", maxFishingGrounds, (world, pos) -> {
-                IBlockState at = world.getBlockState(pos);
+                IBlockState at = WorldHelper.getBlockState(world, pos);
                 return at.getBlock() instanceof BlockLiquid && at.getBlock()
                     .getMaterial(at)
-                    .equals(Material.WATER) && at.getValue(BlockLiquid.LEVEL) == 0 && world.isAirBlock(pos.up());
+                    .equals(Material.water) && at.getValue(BlockLiquid.LEVEL) == 0 && world.isAirBlock(pos.up());
             },
             (pos) -> new GenListEntries.CounterMaxListEntry(
                 pos,
@@ -88,7 +84,7 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
             double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             BlockPos at = pos.add(offX, offY, offZ);
-            IBlockState state = world.getBlockState(at);
+            IBlockState state = WorldHelper.getBlockState(world, at);
             if ((world.isAirBlock(at) || state.getBlock()
                 .isReplaceable(world, at)) && ((Math.abs(offX) > 5 || Math.abs(offZ) > 5) || offY < 0)) {
                 if (world.setBlockState(at, Blocks.WATER.getDefaultState())) {

@@ -8,15 +8,10 @@
 
 package shordinger.astralsorcery.common.block;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -31,14 +26,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.CommonProxy;
@@ -54,6 +46,11 @@ import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -79,7 +76,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(MACHINE_TYPE)) {
             case TELESCOPE:
                 RenderingUtils.playBlockBreakParticles(
@@ -186,15 +183,15 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
-        EntityPlayer player = event.getEntityPlayer();
+        EntityPlayer player = event.entityPlayer;
         if (player instanceof EntityPlayerMP && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             return false;
         }
 
         EnumHand hand = event.getHand();
-        World world = event.getWorld();
+        World world = event.world;
         BlockPos pos = event.getPos();
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         MachineType type = state.getValue(MACHINE_TYPE);
         int posX = pos.getX();
         int posY = pos.getY();
@@ -357,7 +354,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(MACHINE_TYPE)) {
             case TELESCOPE:
                 if (world.isAirBlock(pos.up())) {

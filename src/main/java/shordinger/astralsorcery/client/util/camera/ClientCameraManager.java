@@ -8,14 +8,9 @@
 
 package shordinger.astralsorcery.client.util.camera;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,13 +21,16 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.TreeSet;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -150,7 +148,7 @@ public class ClientCameraManager implements ITickHandler {
             this.viewBobbing = Minecraft.getMinecraft().gameSettings.viewBobbing;
             this.hideGui = Minecraft.getMinecraft().gameSettings.hideGUI;
             this.thirdPersonView = Minecraft.getMinecraft().gameSettings.thirdPersonView;
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             this.flying = player.capabilities.isFlying;
             this.startPosition = new Vector3(player.posX, player.posY, player.posZ);
             this.startYaw = player.rotationYaw;
@@ -166,7 +164,7 @@ public class ClientCameraManager implements ITickHandler {
                 settings.viewBobbing = viewBobbing;
                 settings.hideGUI = hideGui;
                 settings.thirdPersonView = thirdPersonView;
-                EntityPlayer player = Minecraft.getMinecraft().player;
+                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
                 player.capabilities.isFlying = flying;
                 player.setPositionAndRotation(
                     startPosition.getX(),
@@ -186,8 +184,8 @@ public class ClientCameraManager implements ITickHandler {
             settings.hideGUI = true;
             settings.viewBobbing = false;
             settings.thirdPersonView = 0;
-            Minecraft.getMinecraft().player.capabilities.isFlying = true;
-            Minecraft.getMinecraft().player.setVelocity(0, 0, 0);
+            Minecraft.getMinecraft().thePlayer.capabilities.isFlying = true;
+            Minecraft.getMinecraft().thePlayer.setVelocity(0, 0, 0);
         }
 
     }
@@ -209,7 +207,7 @@ public class ClientCameraManager implements ITickHandler {
             super.onStartTransforming(pTicks);
 
             EntityClientReplacement repl = new EntityClientReplacement();
-            repl.readFromNBT(Minecraft.getMinecraft().player.writeToNBT(new NBTTagCompound()));
+            repl.readFromNBT(Minecraft.getMinecraft().thePlayer.writeToNBT(new NBTTagCompound()));
             Minecraft.getMinecraft().world.spawnEntity(repl);
             this.clientEntity = repl;
 
@@ -224,8 +222,8 @@ public class ClientCameraManager implements ITickHandler {
                 Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
             }
 
-            if (Minecraft.getMinecraft().player != null) {
-                EntityPlayer player = Minecraft.getMinecraft().player;
+            if (Minecraft.getMinecraft().thePlayer != null) {
+                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
                 player.setPositionAndRotation(
                     this.clientEntity.posX,
                     this.clientEntity.posY,
@@ -287,9 +285,9 @@ public class ClientCameraManager implements ITickHandler {
             super(
                 Minecraft.getMinecraft(),
                 Minecraft.getMinecraft().world,
-                Minecraft.getMinecraft().player.connection,
-                Minecraft.getMinecraft().player.getStatFileWriter(),
-                Minecraft.getMinecraft().player.getRecipeBook());
+                Minecraft.getMinecraft().thePlayer.connection,
+                Minecraft.getMinecraft().thePlayer.getStatFileWriter(),
+                Minecraft.getMinecraft().thePlayer.getRecipeBook());
             capabilities.allowFlying = true;
             capabilities.isFlying = true;
         }
@@ -379,13 +377,13 @@ public class ClientCameraManager implements ITickHandler {
     public static class EntityClientReplacement extends AbstractClientPlayer {
 
         public EntityClientReplacement() {
-            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
+            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().thePlayer.getGameProfile());
         }
 
         @SideOnly(Side.CLIENT)
         @Override
         public boolean isWearing(EnumPlayerModelParts part) {
-            return Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isWearing(part);
+            return Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.isWearing(part);
         }
 
     }

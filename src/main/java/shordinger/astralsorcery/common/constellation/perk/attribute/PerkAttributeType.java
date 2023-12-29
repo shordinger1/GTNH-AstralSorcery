@@ -34,7 +34,7 @@ public class PerkAttributeType {
     protected static final Random rand = new Random();
 
     // May be used by subclasses to more efficiently track who's got a perk applied
-    private Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
+    private final Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final String type;
     private final boolean isOnlyMultiplicative;

@@ -25,7 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 
 import cpw.mods.fml.relauncher.Side;
@@ -422,7 +422,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
             if (pos.equals(getPos())) continue;
-            IBlockState state = world.getBlockState(pos);
+            IBlockState state = WorldHelper.getBlockState(world, pos);
             if (!state.getBlock()
                 .equals(BlocksAS.attunementRelay)
                 && !(pos.subtract(this.pos)
@@ -461,7 +461,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             boolean valid = true;
             for (BlockPos pos : positions) {
                 if (pos.equals(getPos())) continue;
-                IBlockState state = world.getBlockState(pos);
+                IBlockState state = WorldHelper.getBlockState(world, pos);
                 if (!state.getBlock()
                     .equals(BlocksAS.attunementRelay)
                     && !(pos.subtract(this.pos)
@@ -582,7 +582,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             EntityPlayer.class,
             new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1)
                 .offset(getPos()));
-        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
+        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().thePlayer);
     }
 
     private void checkClientEffectIntegrity() {
@@ -596,7 +596,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void checkCameraClient() {
-        if (mode != 1 || entityIdActive != Minecraft.getMinecraft().player.getEntityId()) {
+        if (mode != 1 || entityIdActive != Minecraft.getMinecraft().thePlayer.getEntityId()) {
             ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
             clientActiveCameraFlight = null;
         }
@@ -609,7 +609,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         }
 
         if (activeFound == null) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             if (player != null && player.getDistanceSq(getPos()) <= 250) {
                 IConstellation held = null;
                 if (!player.getHeldItemMainhand()

@@ -8,27 +8,17 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -47,6 +37,13 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,7 +68,7 @@ public class CEffectMineralis extends CEffectPositionList {
             if (replaceableStates == null) {
                 resolveReplaceableStates();
             }
-            return MiscUtils.getMatchingState(replaceableStates, world.getBlockState(pos)) != null;
+            return MiscUtils.getMatchingState(replaceableStates, WorldHelper.getBlockState(world, pos)) != null;
         });
     }
 
@@ -114,7 +111,7 @@ public class CEffectMineralis extends CEffectPositionList {
                 for (int xx = -1; xx <= 1; xx++) {
                     for (int zz = -1; zz <= 1; zz++) {
                         BlockPos at = center.add(xx, 0, zz);
-                        IBlockState state = world.getBlockState(at);
+                        IBlockState state = WorldHelper.getBlockState(world, at);
                         if (world.isAirBlock(at) || state.getBlock()
                             .isReplaceable(world, at)) {
                             if (rand.nextInt(25) == 0) {

@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.enchantment.dynamic;
 
+import net.minecraft.enchantment.Enchantment;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.enchantment.Enchantment;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,10 +73,13 @@ public class DynamicEnchantment {
     public DynamicEnchantment copy(int level) {
         if (this.getType()
             .hasEnchantmentTag()) {
-            return new DynamicEnchantment(this.getType(), this.getEnchantment(), level);
-        } else {
-            return new DynamicEnchantment(this.type, level);
+            if (this.getEnchantment() != null) {
+                return new DynamicEnchantment(this.getType(), this.getEnchantment(), level);
+            }
         }
+        return new DynamicEnchantment(this.type, level);
+
+
     }
 
     // The ordering in the enum defines the order of how the types of enchantments are applied/calculated!

@@ -8,10 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,11 +21,6 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Configuration;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
@@ -36,6 +30,10 @@ import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,7 +58,7 @@ public class CapeEffectLucerna extends CapeArmorEffect {
 
     @SideOnly(Side.CLIENT)
     public void playClientHighlightTick(EntityPlayer player) {
-        if (player != Minecraft.getMinecraft().player) return;
+        if (player != Minecraft.getMinecraft().thePlayer) return;
 
         World w = player.getEntityWorld();
         List<EntityLivingBase> entities = w.getEntities(

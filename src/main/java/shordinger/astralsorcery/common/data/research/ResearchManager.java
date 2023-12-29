@@ -15,6 +15,7 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,10 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+
 
 import com.google.common.io.Files;
 
@@ -65,7 +63,7 @@ public class ResearchManager {
     public static PlayerProgress clientProgress = new PlayerProgress();
     public static boolean clientInitialized = false;
 
-    private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
+    private static final Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player) {
@@ -798,7 +796,7 @@ public class ResearchManager {
                         "AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.")
                         .setStyle(new Style().setColor(TextFormatting.RED)));
             }
-            String resolvedName = player != null ? player.getName() : pUUID.toString() + " (Not online)";
+            String resolvedName = player != null ? player.getDisplayName() : pUUID.toString() + " (Not online)";
             for (String opName : server.getPlayerList()
                 .getOppedPlayerNames()) {
                 EntityPlayer pl = server.getPlayerList()

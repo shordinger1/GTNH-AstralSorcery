@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import org.lwjgl.opengl.GL11;
 
@@ -76,7 +76,7 @@ public class PtEffectCelestialWings extends PatreonEffectHelper.PatreonEffect im
         if (side == Side.CLIENT && player != null
             && player.getUniqueID()
             .equals(playerUUID)
-            && (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.getUniqueID()
+            && (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getUniqueID()
             .equals(playerUUID) && Minecraft.getMinecraft().gameSettings.thirdPersonView != 0)) {
 
             spawnEffects(player);
@@ -129,7 +129,7 @@ public class PtEffectCelestialWings extends PatreonEffectHelper.PatreonEffect im
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRender(RenderPlayerEvent.Post event) {
-        EntityPlayer player = event.getEntityPlayer();
+        EntityPlayer player = event.entityPlayer;
         if (player == null || !player.getUniqueID()
             .equals(playerUUID)) return;
         if (player.isRiding() || player.isElytraFlying()) return;

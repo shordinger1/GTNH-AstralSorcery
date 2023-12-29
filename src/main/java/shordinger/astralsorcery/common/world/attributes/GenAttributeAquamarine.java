@@ -8,8 +8,7 @@
 
 package shordinger.astralsorcery.common.world.attributes;
 
-import java.util.*;
-
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -17,8 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockCustomSandOre;
 import shordinger.astralsorcery.common.data.config.Config;
@@ -28,6 +25,12 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -101,7 +104,7 @@ public class GenAttributeAquamarine extends WorldGenAttribute {
             int rY = 48 + random.nextInt(19);
             int rZ = (chunkZ * 16) + random.nextInt(16) + 8;
             BlockPos pos = new BlockPos(rX, rY, rZ);
-            IBlockState stateAt = world.getBlockState(pos);
+            IBlockState stateAt = WorldHelper.getBlockState(world, pos);
             if (MiscUtils.getMatchingState(this.replaceableStates, stateAt) == null) {
                 continue;
             }
@@ -109,7 +112,7 @@ public class GenAttributeAquamarine extends WorldGenAttribute {
             boolean foundWater = false;
             for (int yy = 0; yy < 2; yy++) {
                 BlockPos check = pos.offset(EnumFacing.UP, yy);
-                IBlockState bs = world.getBlockState(check);
+                IBlockState bs = WorldHelper.getBlockState(world, check);
                 Block block = bs.getBlock();
                 if ((block instanceof BlockLiquid && bs.getMaterial() == Material.water) || block.equals(Blocks.ice)
                     || block.equals(Blocks.packed_ice)) {

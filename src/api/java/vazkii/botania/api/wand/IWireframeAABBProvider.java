@@ -10,9 +10,8 @@
  */
 package vazkii.botania.api.wand;
 
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.migration.BlockPos;
 
 /**

@@ -8,17 +8,15 @@
 
 package shordinger.astralsorcery.common.data.config.ingame.screen;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.client.config.GuiConfig;
-import net.minecraftforge.fml.client.config.IConfigElement;
-
-import com.google.common.collect.Lists;
-
-import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.data.config.Config;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +31,7 @@ public class GuiConfigOverview extends GuiConfig {
         super(
             parentScreen,
             buildConfigList(),
-            AstralSorcery.MODID,
+            Tags.MODID,
             false,
             false,
             I18n.format("astralsorcery.config.title.overview"));

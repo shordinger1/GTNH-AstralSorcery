@@ -8,20 +8,14 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Predicates;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import com.google.common.base.Predicates;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystal;
@@ -31,6 +25,9 @@ import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalSword;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import shordinger.astralsorcery.common.util.EntityUtils;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -114,8 +111,8 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
     }
 
     private void increaseSize() {
-        world.setBlockToAir(getPosition());
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(
+        worldObj.setBlockToAir(getPosition());
+        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(
             this,
             boxCraft.offset(posX, posY, posZ)
                 .grow(0.1),
@@ -158,7 +155,7 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
     private boolean canCraft() {
         if (!isInLiquidStarlight(this)) return false;
 
-        List<Entity> foundEntities = world
+        List<Entity> foundEntities = worldObj
             .getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
         return foundEntities.size() <= 0;
     }

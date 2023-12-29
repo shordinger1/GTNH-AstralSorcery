@@ -14,8 +14,6 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.BufferBuilder;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
@@ -28,6 +26,7 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +37,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  */
 public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
 
-    private Point offset;
+    private final Point offset;
     private final T perk;
     private int renderSize;
 
@@ -109,36 +108,20 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
     }
 
     protected SpriteSheetResource getFlareSprite(AllocationStatus status) {
-        SpriteSheetResource tex;
-        switch (status) {
-            case ALLOCATED:
-                tex = SpriteLibrary.spritePerkActive;
-                break;
-            case UNLOCKABLE:
-                tex = SpriteLibrary.spritePerkActivateable;
-                break;
-            case UNALLOCATED:
-            default:
-                tex = SpriteLibrary.spritePerkInactive;
-                break;
-        }
+        SpriteSheetResource tex = switch (status) {
+            case ALLOCATED -> SpriteLibrary.spritePerkActive;
+            case UNLOCKABLE -> SpriteLibrary.spritePerkActivateable;
+            default -> SpriteLibrary.spritePerkInactive;
+        };
         return tex;
     }
 
     protected SpriteSheetResource getHaloSprite(AllocationStatus status) {
-        SpriteSheetResource tex;
-        switch (status) {
-            case ALLOCATED:
-                tex = SpriteLibrary.spriteHalo5;
-                break;
-            case UNLOCKABLE:
-                tex = SpriteLibrary.spriteHalo6;
-                break;
-            case UNALLOCATED:
-            default:
-                tex = SpriteLibrary.spriteHalo4;
-                break;
-        }
+        SpriteSheetResource tex = switch (status) {
+            case ALLOCATED -> SpriteLibrary.spriteHalo5;
+            case UNLOCKABLE -> SpriteLibrary.spriteHalo6;
+            default -> SpriteLibrary.spriteHalo4;
+        };
         return tex;
     }
 

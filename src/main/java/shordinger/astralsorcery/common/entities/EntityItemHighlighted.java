@@ -8,16 +8,15 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.item.base.ItemHighlighted;
+import shordinger.astralsorcery.migration.EntityData.DataParameter;
+import shordinger.astralsorcery.migration.EntityData.DataSerializers;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +26,7 @@ import shordinger.astralsorcery.common.item.base.ItemHighlighted;
  * Date: 13.05.2016 / 13:59
  */
 public class EntityItemHighlighted extends EntityItem {
-
+    public EntityDataManager dataManager;
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager
         .createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
 
@@ -62,19 +61,19 @@ public class EntityItemHighlighted extends EntityItem {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.getDataManager()
+        this.dataManager
             .register(DATA_COLOR, 0);
     }
 
     public void applyColor(Color color) {
-        this.getDataManager()
+        this.dataManager
             .set(DATA_COLOR, color.getRGB());
-        this.getDataManager()
+        this.dataManager
             .setDirty(DATA_COLOR);
     }
 
     public Color getHighlightColor() {
-        int colorInt = this.getDataManager()
+        int colorInt = this.dataManager
             .get(DATA_COLOR);
         return new Color(colorInt, false);
     }

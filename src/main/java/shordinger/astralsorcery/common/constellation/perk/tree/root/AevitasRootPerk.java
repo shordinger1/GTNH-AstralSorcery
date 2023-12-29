@@ -8,13 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
-import java.util.*;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.world.BlockEvent;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.world.BlockEvent;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -26,6 +23,14 @@ import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -36,8 +41,8 @@ import shordinger.astralsorcery.migration.IBlockState;
 public class AevitasRootPerk extends RootPerk {
 
     private static final int trackLength = 20;
-    private Map<UUID, Queue<BlockPos>> plInteractMap = new HashMap<>();
-    private Map<UUID, Deque<IBlockState>> plDimReturns = new HashMap<>();
+    private final Map<UUID, Queue<BlockPos>> plInteractMap = new HashMap<>();
+    private final Map<UUID, Deque<IBlockState>> plDimReturns = new HashMap<>();
 
     public AevitasRootPerk(int x, int y) {
         super("aevitas", Constellations.aevitas, x, y);
@@ -65,8 +70,8 @@ public class AevitasRootPerk extends RootPerk {
 
     @SubscribeEvent
     public void onPlace(BlockEvent.PlaceEvent event) {
-        EntityPlayer player = event.getPlayer();
-        Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.player;
+        Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);
@@ -80,7 +85,7 @@ public class AevitasRootPerk extends RootPerk {
         }
         float used = 0;
         for (IBlockState placed : dim) {
-            if (MiscUtils.matchStateExact(event.getPlacedBlock(), placed)) {
+            if (MiscUtils.matchStateExact((IBlockState) event.block, placed)) {
                 used++;
             }
         }
@@ -90,7 +95,7 @@ public class AevitasRootPerk extends RootPerk {
         } else {
             same = 0.4F + (1F - (used / trackLength)) * 0.6F;
         }
-        dim.addFirst(event.getPlacedBlock());
+        dim.addFirst((IBlockState) event.block);
 
         BlockPos pos = event.getPos();
         Queue<BlockPos> tracked = plInteractMap
@@ -100,7 +105,7 @@ public class AevitasRootPerk extends RootPerk {
 
             float xp = Math.max(
                 event.getPlacedBlock()
-                    .getBlockHardness(event.getWorld(), event.getPos()) / 20F,
+                    .getBlockHardness(event.world, event.getPos()) / 20F,
                 1);
             xp *= expMultiplier;
             xp *= same;
@@ -111,7 +116,7 @@ public class AevitasRootPerk extends RootPerk {
             xp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
 
             float expGain = xp;
-            LogCategory.PERKS.info(() -> "Grant " + expGain + " exp to " + player.getName() + " (Aevitas)");
+            LogCategory.PERKS.info(() -> "Grant " + expGain + " exp to " + player.getDisplayName() + " (Aevitas)");
 
             ResearchManager.modifyExp(player, expGain);
         }
@@ -121,7 +126,7 @@ public class AevitasRootPerk extends RootPerk {
     @SubscribeEvent
     public void onBreak(BlockEvent.BreakEvent event) {
         EntityPlayer player = event.getPlayer();
-        Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
+        Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
         if (side != Side.SERVER) return;
 
         PlayerProgress prog = ResearchManager.getProgress(player, side);

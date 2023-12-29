@@ -304,7 +304,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
         renderDefaultCelestials(partialTicks);
 
-        double absPlayerHorizon = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y
+        double absPlayerHorizon = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).y
             - Minecraft.getMinecraft().world.getHorizon();
         if (absPlayerHorizon < 0.0D) {
             GlStateManager.pushMatrix();

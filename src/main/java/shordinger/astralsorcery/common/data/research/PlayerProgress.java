@@ -377,7 +377,7 @@ public class PlayerProgress {
     @Nullable
     public NBTTagCompound getPerkData(AbstractPerk perk) {
         NBTTagCompound tag = appliedPerkData.get(perk);
-        return tag == null ? null : tag.copy();
+        return tag == null ? null : (NBTTagCompound) tag.copy();
     }
 
     public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {

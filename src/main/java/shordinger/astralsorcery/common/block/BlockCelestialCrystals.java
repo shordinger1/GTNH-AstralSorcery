@@ -8,13 +8,8 @@
 
 package shordinger.astralsorcery.common.block;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -25,14 +20,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
@@ -46,6 +39,11 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -129,7 +127,7 @@ public class BlockCelestialCrystals extends BlockContainer
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
                                   EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); // Waila fix. wtf. why waila.
+        return super.getPickBlock(WorldHelper.getBlockState(world, pos), target, world, pos, player); // Waila fix. wtf. why waila.
         // why.
     }
 
@@ -150,7 +148,7 @@ public class BlockCelestialCrystals extends BlockContainer
                     if (fortune > 0 || rand.nextInt(2) == 0) {
                         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
                     }
-                    IBlockState down = world.getBlockState(pos.down());
+                    IBlockState down = WorldHelper.getBlockState(world, pos.down());
                     boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre
                         && down.getValue(BlockCustomOre.ORE_TYPE)
                         .equals(BlockCustomOre.OreType.STARMETAL);
@@ -191,7 +189,7 @@ public class BlockCelestialCrystals extends BlockContainer
         TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
         if (tile != null) {
             tile.tryGrowth(0.5);
-            IBlockState down = world.getBlockState(pos.down());
+            IBlockState down = WorldHelper.getBlockState(world, pos.down());
             if (down.getBlock() instanceof BlockCustomOre
                 && down.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 tile.tryGrowth(0.3);

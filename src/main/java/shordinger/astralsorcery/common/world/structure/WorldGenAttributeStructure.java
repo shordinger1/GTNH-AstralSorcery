@@ -88,7 +88,7 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
         for (BlockPos offset : array.getPattern()
             .keySet()) {
             BlockPos at = offset.add(center);
-            prevStates.put(at, world.getBlockState(at));
+            prevStates.put(at, WorldHelper.getBlockState(world, at));
         }
         Map<BlockPos, IBlockState> placedStates = array.placeInWorld(world, center);
         List<BlockPos> positions = Lists.newLinkedList(prevStates.keySet());

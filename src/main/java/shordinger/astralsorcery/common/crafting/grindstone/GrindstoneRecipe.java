@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,11 +71,11 @@ public class GrindstoneRecipe {
     @Nonnull
     public GrindResult grind(ItemStack stackIn) {
         if (rand.nextInt(chance) == 0) {
-            int out = this.output.getCount();
+            int out = this.output.stackSize;
             if (rand.nextFloat() <= getChanceToDoubleOutput()) {
                 out *= 2;
             }
-            return GrindResult.itemChange(ItemUtils.copyStackWithSize(this.output, out));
+            return GrindResult.itemChange(Objects.requireNonNull(ItemUtils.copyStackWithSize(this.output, out)));
         }
         return GrindResult.failNoOp();
     }

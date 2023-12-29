@@ -98,7 +98,7 @@ public class PlayerActivityManager implements ITickHandler {
             clientInteractMs = System.currentTimeMillis();
             if (!clientActive) {
                 clientActive = true;
-                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), true);
+                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), true);
                 PacketChannel.CHANNEL.sendToServer(pkt);
             }
         }
@@ -110,7 +110,7 @@ public class PlayerActivityManager implements ITickHandler {
 
             clientInteractMs = System.currentTimeMillis();
             clientActive = false;
-            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), false);
+            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), false);
             PacketChannel.CHANNEL.sendToServer(pkt);
         }
     }

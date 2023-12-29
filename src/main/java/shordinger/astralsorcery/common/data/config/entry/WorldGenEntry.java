@@ -31,7 +31,7 @@ public class WorldGenEntry extends ConfigEntry {
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = false;
     private boolean doIgnoreDimensionSpecifications = true;
-    private BiomeDictionary.Type[] defaultBiomeTypes;
+    private final BiomeDictionary.Type[] defaultBiomeTypes;
     private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
     private List<Integer> applicableDimensions = new ArrayList<>();
     private int minY, maxY;

@@ -8,11 +8,8 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
@@ -20,15 +17,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -47,6 +38,12 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryBookLookups;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -96,7 +93,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                     .getRegistryName()
                     .toString();
                 GuiScreen.setClipboardString(recipeName);
-                Minecraft.getMinecraft().player
+                Minecraft.getMinecraft().thePlayer
                     .sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", recipeName));
                 return true;
             }
@@ -104,7 +101,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 if (r.contains(mouseX, mouseZ)) {
                     ItemStack stack = thisFrameStackFrames.get(r);
                     RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
-                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                        .tryGetPage(Minecraft.getMinecraft().thePlayer, Side.CLIENT, stack);
                     if (lookup != null) {
                         RegistryBookLookups.openLookupJournalPage(lookup);
                     }
@@ -211,7 +208,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                     try {
                         tooltip.addAll(
                             stack.getTooltip(
-                                Minecraft.getMinecraft().player,
+                                Minecraft.getMinecraft().thePlayer,
                                 Minecraft.getMinecraft().gameSettings.advancedItemTooltips
                                     ? ITooltipFlag.TooltipFlags.ADVANCED
                                     : ITooltipFlag.TooltipFlags.NORMAL));
@@ -219,7 +216,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }
                     RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
-                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                        .tryGetPage(Minecraft.getMinecraft().thePlayer, Side.CLIENT, stack);
                     if (lookup != null) {
                         tooltip.add("");
                         tooltip.add(I18n.format("misc.craftInformation"));
@@ -232,7 +229,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 try {
                     tooltip.addAll(
                         stack.getTooltip(
-                            Minecraft.getMinecraft().player,
+                            Minecraft.getMinecraft().thePlayer,
                             Minecraft.getMinecraft().gameSettings.advancedItemTooltips
                                 ? ITooltipFlag.TooltipFlags.ADVANCED
                                 : ITooltipFlag.TooltipFlags.NORMAL));
@@ -240,7 +237,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                     tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                 }
                 RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
-                    .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                    .tryGetPage(Minecraft.getMinecraft().thePlayer, Side.CLIENT, stack);
                 if (lookup != null) {
                     tooltip.add("");
                     tooltip.add(I18n.format("misc.craftInformation"));

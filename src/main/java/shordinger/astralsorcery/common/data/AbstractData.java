@@ -8,12 +8,11 @@
 
 package shordinger.astralsorcery.common.data;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 
-import cpw.mods.fml.relauncher.Side;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +50,7 @@ public abstract class AbstractData {
 
     public static class Registry {
 
-        private static Map<Byte, AbstractDataProvider<? extends AbstractData>> registry = new HashMap<Byte, AbstractDataProvider<? extends AbstractData>>();
+        private static final Map<Byte, AbstractDataProvider<? extends AbstractData>> registry = new HashMap<Byte, AbstractDataProvider<? extends AbstractData>>();
 
         public static void register(AbstractDataProvider<? extends AbstractData> provider) {
             registry.put(provider.getProviderId(), provider);
@@ -64,8 +63,8 @@ public abstract class AbstractData {
 
     public abstract static class AbstractDataProvider<T extends AbstractData> {
 
-        private String key;
-        private byte providerId;
+        private final String key;
+        private final byte providerId;
 
         protected AbstractDataProvider(String key, byte providerId) {
             this.key = key;

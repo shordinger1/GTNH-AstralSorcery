@@ -8,9 +8,8 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,19 +17,9 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.Biome;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -38,6 +27,10 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +40,7 @@ import shordinger.astralsorcery.migration.BlockPos;
  * Date: 03.07.2017 / 13:32
  */
 public class EntityNocturnalSpark extends EntityThrowable implements EntityTechnicalAmbient {
-
+    public EntityDataManager dataManager;
     private static final AxisAlignedBB NO_DUPE_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(15);
 
     private static final DataParameter<Boolean> SPAWNING = EntityDataManager
@@ -88,7 +81,7 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
 
         if (isDead) return; // Uhh.......... mojang pls
 
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             playEffects();
         } else {
             if (isSpawning()) {
@@ -102,35 +95,35 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
     }
 
     private void spawnCycle() {
-        List<EntityNocturnalSpark> sparks = world
+        List sparks = worldObj
             .getEntitiesWithinAABB(EntityNocturnalSpark.class, NO_DUPE_BOX.offset(getPosition()));
         for (EntityNocturnalSpark spark : sparks) {
             if (this.equals(spark)) continue;
             if (spark.isDead || !spark.isSpawning()) continue;
             spark.setDead();
         }
-        if (rand.nextInt(12) == 0 && world instanceof WorldServer) {
+        if (rand.nextInt(12) == 0 && worldObj instanceof WorldServer) {
             try {
                 BlockPos pos = getPosition().up();
                 pos.add(
                     rand.nextInt(2) - rand.nextInt(2),
-                    rand.nextInt(1) - rand.nextInt(1),
+                    0,
                     rand.nextInt(2) - rand.nextInt(2));
-                List<Biome.SpawnListEntry> list = ((WorldServer) world).getChunkProvider()
+                List list = ((WorldServer) world).getChunkProvider()
                     .getPossibleCreatures(EnumCreatureType.MONSTER, pos);
                 list = net.minecraftforge.event.ForgeEventFactory
                     .getPotentialSpawns((WorldServer) world, EnumCreatureType.MONSTER, pos, list);
                 if (list == null || list.isEmpty()) return;
                 Biome.SpawnListEntry entry = list.get(rand.nextInt(list.size())); // Intentionally non-weighted.
-                if (world.getGameRules()
+                if (worldObj.getGameRules()
                     .getBoolean("mobGriefing") && EntityCreeper.class.isAssignableFrom(entry.entityClass))
                     return; // No.
 
-                Block down = world.getBlockState(getPosition())
+                Block down = worldObj.getBlockState(getPosition())
                     .getBlock();
                 boolean canAtAll = down != Blocks.BARRIER && down != Blocks.BEDROCK;
-                if (canAtAll && WorldEntitySpawner.isValidEmptySpawnBlock(world.getBlockState(getPosition()))
-                    && WorldEntitySpawner.isValidEmptySpawnBlock(world.getBlockState(pos))) {
+                if (canAtAll && WorldEntitySpawner.isValidEmptySpawnBlock(WorldHelper.getBlockState(world, getPosition()))
+                    && WorldEntitySpawner.isValidEmptySpawnBlock(WorldHelper.getBlockState(world, pos))) {
                     EntityLiving entity = entry.newInstance(world);
                     entity.setPositionAndRotation(
                         pos.getX() + 0.5,
@@ -143,10 +136,10 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
                         entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
                     }
                     if (entity.isNotColliding()) {
-                        world.spawnEntity(entity);
+                        worldObj.spawnEntity(entity);
                     }
                 }
-            } catch (Exception exc) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -171,7 +164,7 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
                 if (rand.nextInt(3) == 0) {
                     Vector3 target = Vector3.atEntityCorner(this);
                     MiscUtils.applyRandomOffset(target, rand, 4);
-                    AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCorner(this), target, Color.BLACK);
+                    AstralSorcery.proxy.fireLightning(worldObj, Vector3.atEntityCorner(this), target, Color.BLACK);
                 }
             }
         } else {
@@ -198,17 +191,11 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
     @SideOnly(Side.CLIENT)
     private void randomizeColor(EntityFXFacingParticle particle) {
         switch (rand.nextInt(3)) {
-            case 0:
-                particle.setColor(Color.BLACK);
-                break;
-            case 1:
-                particle.setColor(new Color(0x4E016D));
-                break;
-            case 2:
-                particle.setColor(new Color(0x0C1576));
-                break;
-            default:
-                break;
+            case 0 -> particle.setColor(Color.BLACK);
+            case 1 -> particle.setColor(new Color(0x4E016D));
+            case 2 -> particle.setColor(new Color(0x0C1576));
+            default -> {
+            }
         }
     }
 

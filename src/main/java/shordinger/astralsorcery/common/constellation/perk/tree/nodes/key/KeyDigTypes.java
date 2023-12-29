@@ -8,13 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -41,8 +40,8 @@ public class KeyDigTypes extends KeyPerk {
             return;
         }
 
-        EntityPlayer player = event.getEntityPlayer();
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.entityPlayer;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             ItemStack heldMainHand = player.getHeldItemMainhand();
@@ -64,8 +63,8 @@ public class KeyDigTypes extends KeyPerk {
     public void onHarvestSpeed(PlayerEvent.BreakSpeed event) {
         if (checkingSpeed) return;
 
-        EntityPlayer player = event.getEntityPlayer();
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.entityPlayer;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             IBlockState broken = event.getState();

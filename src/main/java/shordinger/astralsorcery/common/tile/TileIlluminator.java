@@ -140,7 +140,7 @@ public class TileIlluminator extends TileEntityTick {
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
             if (world.isBlockLoaded(at) && at.getY() >= 0
                 && at.getY() <= 255
-                && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+                && illuminatorCheck.isStateValid(world, at, WorldHelper.getBlockState(world, at))) {
                 EnumDyeColor color = EnumDyeColor.YELLOW;
                 if (this.chosenColor != null) {
                     color = this.chosenColor;

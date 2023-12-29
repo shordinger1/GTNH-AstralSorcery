@@ -91,19 +91,19 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     @SideOnly(Side.CLIENT)
     private void handleClientPerkUpdate(PktSyncPerkActivity pkt) {
         AstralSorcery.proxy.scheduleClientside(() -> {
-            if (Minecraft.getMinecraft().player != null) {
+            if (Minecraft.getMinecraft().thePlayer != null) {
                 if (pkt.type != null) {
                     LogCategory.PERKS.info(() -> "Received perk activity packet on clientside: " + pkt.type);
                     switch (pkt.type) {
                         case CLEARALL:
-                            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
+                            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().thePlayer);
                             break;
                         case UNLOCKALL:
-                            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
+                            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().thePlayer);
                             break;
                         case DATACHANGE:
                             PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(
-                                Minecraft.getMinecraft().player,
+                                Minecraft.getMinecraft().thePlayer,
                                 pkt.perk,
                                 pkt.oldData,
                                 pkt.newData);
@@ -117,7 +117,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                             + " "
                             + (pkt.unlock ? "Application" : "Removal"));
                     PerkEffectHelper.EVENT_INSTANCE
-                        .notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
+                        .notifyPerkChange(Minecraft.getMinecraft().thePlayer, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
             }
         });

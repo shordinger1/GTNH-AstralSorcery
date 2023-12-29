@@ -51,8 +51,8 @@ public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeo
         IBlockState relevantState = ModIntegrationGeolosys.geolosysSample.getDefaultState();
         if (OreTiersAPI.hasReplacement(relevantState)) {
             Tuple<String, IBlockState> info = OreTiersAPI.getStageInfo(relevantState);
-            if (info != null && Minecraft.getMinecraft().player != null
-                && !GameStageHelper.hasStage(Minecraft.getMinecraft().player, info.getFirst())) {
+            if (info != null && Minecraft.getMinecraft().thePlayer != null
+                && !GameStageHelper.hasStage(Minecraft.getMinecraft().thePlayer, info.getFirst())) {
                 return;
             }
         }

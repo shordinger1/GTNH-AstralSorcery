@@ -8,16 +8,13 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.data.config.Config;
@@ -26,6 +23,8 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.EntityUtils;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -67,7 +66,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     }
 
     private void checkMergeConditions() {
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             if (canCraft()) {
                 spawnCraftingParticles();
             }
@@ -84,13 +83,13 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     }
 
     private void buildCelestialCrystals() {
-        if (world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState())) {
+        if (worldObj.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState())) {
             PacketChannel.CHANNEL.sendToAllAround(
                 new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_FORM, posX, posY, posZ),
-                PacketChannel.pointFromPos(world, getPosition(), 64));
+                PacketChannel.pointFromPos(worldObj, getPosition(), 64));
 
             getItem().setCount(getItem().getCount() - 1);
-            List<Entity> foundItems = world.getEntitiesInAABBexcluding(
+            List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(
                 this,
                 boxCraft.offset(posX, posY, posZ)
                     .grow(0.1),
@@ -133,7 +132,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     private boolean canCraft() {
         if (!isInLiquidStarlight(this)) return false;
 
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(
+        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(
             this,
             boxCraft.offset(posX, posY, posZ),
             EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));

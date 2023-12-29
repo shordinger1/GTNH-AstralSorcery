@@ -33,7 +33,7 @@ public class KeyNoKnockBack extends KeyPerk {
 
     @SubscribeEvent
     public void onKnockBack(LivingKnockBackEvent event) {
-        EntityLivingBase attacked = event.getEntityLiving();
+        EntityLivingBase attacked = event.entityLiving;
         if (attacked instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) attacked;
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;

@@ -48,8 +48,8 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
 
         Entity ridden;
         EntityPlayer player;
-        if ((player = Minecraft.getMinecraft().player) != null
-            && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null
+        if ((player = Minecraft.getMinecraft().thePlayer) != null
+            && (ridden = Minecraft.getMinecraft().thePlayer.getRidingEntity()) != null
             && ridden instanceof EntityObservatoryHelper
             && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
             ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(te, player);

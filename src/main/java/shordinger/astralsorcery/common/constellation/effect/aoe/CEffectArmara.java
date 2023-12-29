@@ -8,25 +8,19 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import shordinger.astralsorcery.client.effect.controller.orbital.OrbitalPropertiesRitualArmara;
@@ -45,6 +39,9 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -94,7 +91,7 @@ public class CEffectArmara extends CEffectEntityCollect<EntityMob> {
                 return;
             }
         }
-        List<Entity> projectiles = world.getEntitiesWithinAABB(
+        List projectiles = world.getEntitiesWithinAABB(
             Entity.class,
             new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos)
                 .grow(protectionRange));

@@ -8,13 +8,8 @@
 
 package shordinger.astralsorcery.common.item.tool.wand;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,13 +26,10 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
@@ -65,6 +57,16 @@ import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -442,7 +444,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         }
         dstr = Math.sqrt(dstr);
         dstr = Math.sqrt(dstr);
-        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
+        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer);
         float dst = (float) event.getVec()
             .distance(plVec);
         float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));
@@ -468,7 +470,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand,
                                 ItemStack stack) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         Block b = state.getBlock();
         if (b instanceof IWandInteract) {
             ((IWandInteract) b).onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());

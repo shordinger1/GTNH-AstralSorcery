@@ -23,8 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
+import shordinger.astralsorcery.migration.NonNullList;
+import net.minecraft.util.AxisAlignedBB;
 
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
 import shordinger.astralsorcery.common.network.PacketChannel;

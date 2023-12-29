@@ -421,7 +421,7 @@ public class MiscUtils {
     // Duplicate break functionality without a active player.
     // Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
-        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), true, false, true);
+        return breakBlockWithoutPlayer(world, pos, WorldHelper.getBlockState(world, pos), true, false, true);
     }
 
     public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState suggestedBrokenState,
@@ -526,7 +526,7 @@ public class MiscUtils {
         for (BlockPos blockpos = new BlockPos(at.getX(), chunk.getTopFilledSegment() + 16, at.getZ()); blockpos.getY()
             >= 0; blockpos = downPos) {
             downPos = blockpos.down();
-            IBlockState test = world.getBlockState(downPos);
+            IBlockState test = WorldHelper.getBlockState(world, downPos);
             if (!world.isAirBlock(downPos) && !test.getBlock()
                 .isLeaves(test, world, downPos)
                 && !test.getBlock()
@@ -642,7 +642,7 @@ public class MiscUtils {
 
                         BlockPos pos = center.add(xx, yy, zz);
                         if (isChunkLoaded(world, new ChunkPos(pos))) {
-                            IBlockState state = world.getBlockState(pos);
+                            IBlockState state = WorldHelper.getBlockState(world, pos);
                             if (acceptor.isStateValid(world, pos, state)) {
                                 posList.add(pos);
                             }
@@ -678,7 +678,7 @@ public class MiscUtils {
                 for (int zz = -radius; zz <= radius; zz++) {
                     BlockPos pos = center.add(xx, yy, zz);
                     if (isChunkLoaded(world, new ChunkPos(pos))) {
-                        IBlockState state = world.getBlockState(pos);
+                        IBlockState state = WorldHelper.getBlockState(world, pos);
                         Block b = state.getBlock();
                         if (b.equals(blockToSearch) && b.getMetaFromState(state) == metaToSearch) {
                             found.add(pos);

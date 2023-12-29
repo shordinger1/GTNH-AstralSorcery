@@ -8,20 +8,18 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
+import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
+import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
+import shordinger.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
-
-import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
-import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
-import shordinger.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +41,7 @@ public class AmuletEnchantHelper {
     private static float chanceToNonExisting = 0.35F;
 
     public static void rollAmulet(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.stackSize == 0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
 
@@ -69,8 +67,7 @@ public class AmuletEnchantHelper {
     private static AmuletEnchantment.Type getRollType(List<AmuletEnchantment> existing) {
         int exAll = getAdditionAll(existing);
         switch (existing.size()) {
-            case 0:
-            case 1:
+            case 0, 1 -> {
                 if (rand.nextFloat() < chanceToAll) {
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_ALL;
                 }
@@ -78,7 +75,8 @@ public class AmuletEnchantHelper {
                     return AmuletEnchantment.Type.ADD_TO_SPECIFIC;
                 }
                 return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
-            case 2:
+            }
+            case 2 -> {
                 if (exAll > 1) {
                     return null;
                 } else if (exAll == 1) {
@@ -95,8 +93,9 @@ public class AmuletEnchantHelper {
                     }
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
                 }
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         return null;
     }

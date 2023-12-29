@@ -34,8 +34,8 @@ import shordinger.astralsorcery.common.util.log.LogCategory;
  */
 public class PlayerAttributeMap {
 
-    private Side side;
-    private Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
+    private final Side side;
+    private final Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
     private Map<PerkAttributeType, List<PerkAttributeModifier>> attributes = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 

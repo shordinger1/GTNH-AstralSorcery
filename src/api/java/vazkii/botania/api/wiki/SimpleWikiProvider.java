@@ -50,7 +50,7 @@ public class SimpleWikiProvider implements IWikiProvider {
     @Override
     public String getBlockName(World world, RayTraceResult pos, EntityPlayer player) {
         BlockPos bPos = pos.getBlockPos();
-        IBlockState state = world.getBlockState(bPos);
+        IBlockState state = WorldHelper.getBlockState(world, bPos);
 
         ItemStack stack = state.getBlock()
             .getPickBlock(state, pos, world, bPos, player);

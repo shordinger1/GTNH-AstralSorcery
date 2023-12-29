@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.crafting;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +36,7 @@ public interface IGatedRecipe {
         ResearchProgression getRequiredProgression();
 
         default public boolean hasProgressionServer(EntityPlayer player) {
-            return ResearchManager.getProgress(player, Side.SERVER)
+            return !ResearchManager.getProgress(player, Side.SERVER)
                 .getResearchProgression()
                 .contains(getRequiredProgression());
         }

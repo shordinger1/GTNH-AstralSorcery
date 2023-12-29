@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.ICooldownPerk;
@@ -98,12 +97,12 @@ public class KeyCheatDeath extends KeyPerk implements ICooldownPerk {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(LivingHurtEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this) && side == Side.SERVER) {
-                if (player.getHealth() <= thresholdApplyPerkHealth || event.getAmount() >= thresholdApplyPerkDamage) {
+                if (player.getHealth() <= thresholdApplyPerkHealth || event.ammount >= thresholdApplyPerkDamage) {
                     if (!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {
                         PerkEffectHelper.EVENT_INSTANCE
                             .setCooldownActiveForPlayer(player, this, cooldownPotionApplication);

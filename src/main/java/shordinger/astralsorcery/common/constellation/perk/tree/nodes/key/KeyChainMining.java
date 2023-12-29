@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,9 +21,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
@@ -43,6 +40,8 @@ import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -99,12 +98,12 @@ public class KeyChainMining extends KeyPerk {
             && prog.hasPerkEffect(this)
             && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)
             && !player.isSneaking()
-            && event.getWorld() instanceof WorldServer
+            && event.world instanceof WorldServer
             && !player.isCreative()) {
             if (chainOngoing) return;
             chainOngoing = true;
             try {
-                WorldServer world = (WorldServer) event.getWorld();
+                WorldServer world = (WorldServer) event.world;
                 if (doMiningChain(world, event.getPos(), event.getState(), player, side)) {
                     float doubleChance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
@@ -145,7 +144,7 @@ public class KeyChainMining extends KeyPerk {
                 FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
                 for (BlockPos at : chain.getPattern()
                     .keySet()) {
-                    IBlockState atState = world.getBlockState(at);
+                    IBlockState atState = WorldHelper.getBlockState(world, at);
                     int exp;
                     try {
                         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, atState, fp);

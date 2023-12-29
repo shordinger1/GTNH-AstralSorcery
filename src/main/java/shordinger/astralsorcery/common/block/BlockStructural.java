@@ -8,14 +8,10 @@
 
 package shordinger.astralsorcery.common.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,19 +24,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileStructuralConnector;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,7 +61,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                IBlockState downState = world.getBlockState(pos.down());
+                IBlockState downState = WorldHelper.getBlockState(world, pos.down());
                 return BlockType.TELESCOPE_STRUCT.getSupportedState()
                     .getBlock()
                     .getSoundType(downState, world, pos, entity);
@@ -89,11 +86,11 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         if (effectLoop) return false;
         effectLoop = true;
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 Minecraft.getMinecraft().effectRenderer
-                    .addBlockDestroyEffects(pos.down(), world.getBlockState(pos.down()));
+                    .addBlockDestroyEffects(pos.down(), WorldHelper.getBlockState(world, pos.down()));
                 effectLoop = false;
                 return true;
             default:
@@ -177,7 +174,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState()
@@ -192,7 +189,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
                                   EntityPlayer player) {
-        state = world.getBlockState(pos);
+        state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 return BlockType.TELESCOPE_STRUCT.getSupportedState()
@@ -223,7 +220,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 if (world.isAirBlock(pos.down())) {

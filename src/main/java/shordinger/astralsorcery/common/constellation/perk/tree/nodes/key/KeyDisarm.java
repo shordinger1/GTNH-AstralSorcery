@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,9 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -65,7 +64,7 @@ public class KeyDisarm extends KeyPerk {
 
     @SubscribeEvent
     public void onAttack(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
@@ -78,7 +77,7 @@ public class KeyDisarm extends KeyPerk {
                     if (rand.nextFloat() >= currentChance) {
                         continue;
                     }
-                    EntityLivingBase attacked = event.getEntityLiving();
+                    EntityLivingBase attacked = event.entityLiving;
                     ItemStack stack = attacked.getItemStackFromSlot(slot);
                     if (!stack.isEmpty()) {
                         attacked.setItemStackToSlot(slot, null);

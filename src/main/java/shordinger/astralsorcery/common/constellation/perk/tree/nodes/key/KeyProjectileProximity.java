@@ -36,9 +36,9 @@ public class KeyProjectileProximity extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onProjDamage(LivingHurtEvent event) {
-        if (event.getSource()
+        if (event.source
             .isProjectile()) {
-            DamageSource source = event.getSource();
+            DamageSource source = event.source;
             if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) source.getTrueSource();
                 Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
@@ -49,7 +49,7 @@ public class KeyProjectileProximity extends KeyPerk {
                         .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
 
                     float capDstSq = 100; // 10 * 10
-                    float dst = -(((float) (player.getDistanceSq(event.getEntityLiving()))) - capDstSq);
+                    float dst = -(((float) (player.getDistanceSq(event.entityLiving))) - capDstSq);
                     dst /= capDstSq;
                     if (dst < 0) {
                         dst /= 10; // To make it drop a bit slower though... like. that damage reduction is... not fun
@@ -58,7 +58,7 @@ public class KeyProjectileProximity extends KeyPerk {
                     dst = Math.max(0, 1 + dst);
                     added *= dst;
 
-                    float amt = event.getAmount();
+                    float amt = event.ammount;
                     amt *= Math.max(0, added); // Might become negative if too far away; prevent that :P
                     event.setAmount(amt);
                 }

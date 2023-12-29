@@ -8,12 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -36,22 +35,22 @@ public class AttributeAllElementalResist extends PerkAttributeType {
 
     @SubscribeEvent
     public void onDamageTaken(LivingHurtEvent event) {
-        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+        if (!(event.entityLiving instanceof EntityPlayer)) {
             return;
         }
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-        Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = (EntityPlayer) event.entityLiving;
+        Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
         if (!hasTypeApplied(player, side)) {
             return;
         }
-        DamageSource ds = event.getSource();
+        DamageSource ds = event.source;
         if (isMaybeElementalDamage(ds)) {
             float multiplier = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
             multiplier -= 1F;
             multiplier = AttributeEvent.postProcessModded(player, this, multiplier);
             multiplier = 1F - MathHelper.clamp(multiplier, 0F, 1F);
-            event.setAmount(event.getAmount() * multiplier);
+            event.ammount = (event.ammount * multiplier);
         }
     }
 

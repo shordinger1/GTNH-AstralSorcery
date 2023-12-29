@@ -8,19 +8,13 @@
 
 package shordinger.astralsorcery.client.effect.light;
 
-import java.awt.*;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
-
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.util.Blending;
@@ -28,6 +22,9 @@ import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -130,7 +127,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > distanceCapSq) return;
 
         float tr = alphaFunction.getAlpha(age, maxAge);

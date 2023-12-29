@@ -27,7 +27,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import org.lwjgl.opengl.GL11;
 
@@ -111,11 +111,11 @@ public class ClientRenderEventHandler {
         }
 
         playHandAndHudRenders(
-            Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND),
+            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND),
             EnumHand.MAIN_HAND,
             event.getPartialTicks());
         playHandAndHudRenders(
-            Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND),
+            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND),
             EnumHand.OFF_HAND,
             event.getPartialTicks());
     }
@@ -155,13 +155,13 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
-            if (Minecraft.getMinecraft().player.isCreative()) { // TODO move to a more appropriate handler
+        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null) {
+            if (Minecraft.getMinecraft().thePlayer.isCreative()) { // TODO move to a more appropriate handler
                 PersistentDataManager.INSTANCE.setCreative();
             }
 
-            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
-            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND));
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND));
 
             tickTimeFreezeEffects();
 
@@ -265,7 +265,7 @@ public class ClientRenderEventHandler {
             }
             if (i instanceof ItemSkyResonator) {
                 ItemSkyResonator.ResonatorUpgrade upgrade = ItemSkyResonator
-                    .getCurrentUpgrade(Minecraft.getMinecraft().player, inHand);
+                    .getCurrentUpgrade(Minecraft.getMinecraft().thePlayer, inHand);
                 upgrade.playResonatorEffects();
             }
             if (i instanceof ItemHudRender) {
@@ -312,7 +312,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.disableAlpha();
                 Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
 
-                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F
+                float percFilled = Minecraft.getMinecraft().thePlayer.isCreative() ? 1F
                     : PlayerChargeHandler.INSTANCE.clientCharge;
                 double uLength = ssr.getULength() * percFilled;
 
@@ -361,7 +361,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
-            ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -372,7 +372,7 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
-            inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
+            inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND);
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -388,7 +388,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void renderAlignmentChargeOverlay() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
@@ -501,7 +501,7 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRender(RenderPlayerEvent.Post event) {
-        EntityPlayer player = event.getEntityPlayer();
+        EntityPlayer player = event.entityPlayer;
         if (player == null) return;
         if (obj == null) return;
         if (player.getUniqueID()
@@ -518,7 +518,7 @@ public class ClientRenderEventHandler {
         double ma = f ? 15 : 5;
         double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) + ((65 - ma) * Math.max(
             0,
-            Math.min(1, new Vector3(event.getEntityPlayer().motionX, 0, event.getEntityPlayer().motionZ).length())));
+            Math.min(1, new Vector3(event.entityPlayer.motionX, 0, event.entityPlayer.motionZ).length())));
         float rot = RenderingUtils
             .interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
         GlStateManager.rotate(180F - rot, 0F, 1F, 0F);

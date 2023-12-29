@@ -8,10 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -37,7 +36,7 @@ public class AttributeEnchantmentEffectiveness extends PerkAttributeType {
     public void onDynEnchantmentModify(DynamicEnchantmentEvent.Modify event) {
         if (event.getResolvedPlayer() != null) {
             EntityPlayer player = event.getResolvedPlayer();
-            Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
+            Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
             if (!hasTypeApplied(player, side)) {
                 return;
             }

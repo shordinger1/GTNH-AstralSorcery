@@ -53,7 +53,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 public class TraitUpgradeRecipe extends ConstellationRecipe
     implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
 
-    private static Vector3[] offsetPillars = new Vector3[]{new Vector3(4, 4, 4), new Vector3(-4, 4, 4),
+    private static final Vector3[] offsetPillars = new Vector3[]{new Vector3(4, 4, 4), new Vector3(-4, 4, 4),
         new Vector3(4, 4, -4), new Vector3(-4, 4, -4)};
 
     private static Object sprite;

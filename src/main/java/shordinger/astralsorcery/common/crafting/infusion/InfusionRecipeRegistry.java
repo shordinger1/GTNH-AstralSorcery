@@ -8,19 +8,17 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
 import shordinger.astralsorcery.common.crafting.infusion.recipes.LowConsumptionInfusionRecipe;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemComparator;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +33,7 @@ public class InfusionRecipeRegistry {
     public static List<AbstractInfusionRecipe> recipes = new LinkedList<>();
     private static AbstractInfusionRecipe[] compiledRecipes = null;
 
-    private static List<AbstractInfusionRecipe> localFallbackCache = new LinkedList<>();
+    private static final List<AbstractInfusionRecipe> localFallbackCache = new LinkedList<>();
 
     // NEVER call this. this should only get called once at post init to compile all recipes for fast access on both
     // client and serverside!

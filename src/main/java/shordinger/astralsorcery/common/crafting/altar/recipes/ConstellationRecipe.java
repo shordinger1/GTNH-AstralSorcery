@@ -48,10 +48,10 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  */
 public class ConstellationRecipe extends AttunementRecipe {
 
-    private static Vector3[] offsetPillars = new Vector3[]{new Vector3(4, 3, 4), new Vector3(-4, 3, 4),
+    private static final Vector3[] offsetPillars = new Vector3[]{new Vector3(4, 3, 4), new Vector3(-4, 3, 4),
         new Vector3(4, 3, -4), new Vector3(-4, 3, -4)};
 
-    private Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
+    private final Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);

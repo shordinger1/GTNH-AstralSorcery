@@ -95,8 +95,8 @@ public class PktAttunementAltarState
     private void recClient(PktAttunementAltarState message) {
         World mcWorld = Minecraft.getMinecraft().world;
         if (mcWorld != null && mcWorld.provider.dimensionId == message.worldId
-            && Minecraft.getMinecraft().player != null
-            && Minecraft.getMinecraft().player.getEntityId() == message.entityId) {
+            && Minecraft.getMinecraft().thePlayer != null
+            && Minecraft.getMinecraft().thePlayer.getEntityId() == message.entityId) {
 
             AstralSorcery.proxy.scheduleClientside(() -> {
                 TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, message.at, TileAttunementAltar.class, true);

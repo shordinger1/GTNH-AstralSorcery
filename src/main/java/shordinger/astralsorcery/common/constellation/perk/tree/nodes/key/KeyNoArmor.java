@@ -8,13 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -60,12 +59,12 @@ public class KeyNoArmor extends KeyPerk {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+        if (!(event.entityLiving instanceof EntityPlayer)) {
             return;
         }
 
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = (EntityPlayer) event.entityLiving;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             int eq = 0;
@@ -77,7 +76,7 @@ public class KeyNoArmor extends KeyPerk {
             if (eq < 2) {
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side)
                     .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-                event.setAmount(event.getAmount() * (dmgReductionMultiplier * (1F / effMulti)));
+                event.setAmount(event.ammount * (dmgReductionMultiplier * (1F / effMulti)));
             }
         }
     }

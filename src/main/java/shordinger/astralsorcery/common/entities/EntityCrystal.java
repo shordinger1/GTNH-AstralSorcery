@@ -8,17 +8,13 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.BlockGemCrystals;
@@ -32,6 +28,9 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.EntityUtils;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.OreDictAlias;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -80,7 +79,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     }
 
     private void checkIncreaseConditions() {
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             int mode = getCraftMode();
             if (mode == MODE_GROW) {
                 spawnCraftingParticles();
@@ -109,7 +108,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     }
 
     private void spawnGemCluster() {
-        List<Entity> foundEntities = world.getEntitiesInAABBexcluding(
+        List<Entity> foundEntities = worldObj.getEntitiesInAABBexcluding(
             this,
             boxCraft.offset(getPosition()),
             EntityUtils.selectItemStack(stack -> ItemUtils.hasOreName(stack, OreDictAlias.ITEM_GLOWSTONE_DUST)));
@@ -118,7 +117,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                 .setDead();
             this.setDead();
 
-            world.setBlockState(
+            worldObj.setBlockState(
                 this.getPosition(),
                 BlocksAS.gemCrystals.getDefaultState()
                     .withProperty(BlockGemCrystals.STAGE, BlockGemCrystals.GrowthStageType.STAGE_0));
@@ -126,8 +125,8 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     }
 
     private void increaseSize() {
-        world.setBlockToAir(getPosition());
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(
+        worldObj.setBlockToAir(getPosition());
+        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(
             this,
             boxCraft.offset(posX, posY, posZ)
                 .grow(0.1),
@@ -136,7 +135,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
             ItemStack stack = getItem();
             CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
             int max = CrystalProperties.getMaxSize(stack);
-            if (prop.getFracturation() > 0) {
+            if (prop != null && prop.getFracturation() > 0) {
                 int frac = prop.getFracturation();
                 int cut = prop.getCollectiveCapability();
                 if (frac >= 90 && cut >= 100 && frac >= cut - 10 && rand.nextBoolean()) {
@@ -155,7 +154,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                 CrystalProperties.applyCrystalProperties(stack, newProp);
                 return;
             }
-            if (Config.canCrystalGrowthYieldDuplicates && prop.getSize() >= max && rand.nextInt(6) == 0) {
+            if (prop != null && Config.canCrystalGrowthYieldDuplicates && prop.getSize() >= max && rand.nextInt(6) == 0) {
                 ItemStack newStack = (stack.getItem() instanceof ItemCelestialCrystal
                     || stack.getItem() instanceof ItemTunedCelestialCrystal)
                     ? ItemRockCrystalBase.createRandomCelestialCrystal()
@@ -167,7 +166,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                     0,
                     prop.getSizeOverride());
                 CrystalProperties.applyCrystalProperties(newStack, newProp);
-                ItemUtils.dropItemNaturally(world, posX, posY, posZ, newStack);
+                ItemUtils.dropItemNaturally(worldObj, posX, posY, posZ, newStack);
 
                 CrystalProperties.applyCrystalProperties(
                     stack,
@@ -175,17 +174,6 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                         rand.nextInt(300) + 100,
                         prop.getPurity(),
                         rand.nextInt(40) + 30,
-                        prop.getFracturation(),
-                        prop.getSizeOverride()));
-            } else {
-                int grow = rand.nextInt(90) + 40;
-                max = Math.min(prop.getSize() + grow, max);
-                CrystalProperties.applyCrystalProperties(
-                    stack,
-                    new CrystalProperties(
-                        max,
-                        prop.getPurity(),
-                        prop.getCollectiveCapability(),
                         prop.getFracturation(),
                         prop.getSizeOverride()));
             }

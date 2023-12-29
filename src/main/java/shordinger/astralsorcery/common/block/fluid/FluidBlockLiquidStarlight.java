@@ -8,10 +8,8 @@
 
 package shordinger.astralsorcery.common.block.fluid;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.MapColor;
@@ -25,18 +23,15 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.FluidRegistry;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.BlockCustomSandOre;
@@ -47,6 +42,9 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -112,7 +110,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
 
         for (EnumFacing side : EnumFacing.VALUES) {
             if (side != EnumFacing.DOWN) {
-                IBlockState offset = world.getBlockState(pos.offset(side));
+                IBlockState offset = WorldHelper.getBlockState(world, pos.offset(side));
                 if (offset.getMaterial()
                     .isLiquid() && !(offset.getBlock() instanceof FluidBlockLiquidStarlight)
                     && (offset.getBlock() instanceof BlockFluidBase || offset.getBlock() instanceof BlockLiquid)) {
@@ -172,7 +170,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
 
     @Override
     public boolean displaceIfPossible(World world, BlockPos pos) {
-        return !world.getBlockState(pos)
+        return !WorldHelper.getBlockState(world, pos)
             .getMaterial()
             .isLiquid() && super.displaceIfPossible(world, pos);
     }

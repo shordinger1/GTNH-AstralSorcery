@@ -10,12 +10,17 @@ package shordinger.astralsorcery.common.data.config.ingame.screen;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.client.config.ConfigGuiType;
+import cpw.mods.fml.client.config.DummyConfigElement;
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.GuiConfigEntries;
+import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.config.*;
 
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,7 +36,7 @@ public class ConfigHelper {
             name,
             null,
             ConfigGuiType.CONFIG_CATEGORY,
-            "config." + AstralSorcery.MODID + ".category." + name,
+            "config." + Tags.MODID + ".category." + name,
             cfg) {
 
             {
@@ -65,7 +70,7 @@ public class ConfigHelper {
 
     private static class FileConfigElement extends DummyConfigElement {
 
-        private Configuration cfg;
+        private final Configuration cfg;
 
         FileConfigElement(String name, Object defaultValue, ConfigGuiType type, String langKey, Configuration cfg) {
             super(name, defaultValue, type, langKey);

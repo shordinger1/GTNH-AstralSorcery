@@ -238,7 +238,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                     for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
                         IBlockState setBlock = snapshot.getCurrentBlock();
                         BlockPos at = snapshot.getPos();
-                        IBlockState current = world.getBlockState(at);
+                        IBlockState current = WorldHelper.getBlockState(world, at);
                         if (current.getBlockHardness(world, at) == -1 || world.getTileEntity(at) != null) {
                             continue;
                         }
@@ -280,7 +280,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                     }
                 } else {
                     for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
-                        IBlockState current = world.getBlockState(snapshot.getPos());
+                        IBlockState current = WorldHelper.getBlockState(world, snapshot.getPos());
                         world.notifyBlockUpdate(snapshot.getPos(), current, current, 3);
                     }
                 }

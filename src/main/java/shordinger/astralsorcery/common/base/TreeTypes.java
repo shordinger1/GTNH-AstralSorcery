@@ -186,7 +186,7 @@ public enum TreeTypes {
 
     @Nullable
     public static TreeTypes getTree(World world, BlockPos pos) {
-        return getTree(world, pos, world.getBlockState(pos));
+        return getTree(world, pos, WorldHelper.getBlockState(world, pos));
     }
 
     @Nullable

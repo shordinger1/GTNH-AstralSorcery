@@ -46,8 +46,8 @@ import shordinger.astralsorcery.migration.ChunkPos;
  */
 public class StructureMatchingBuffer extends CachedWorldData {
 
-    private Map<ChunkPos, List<ChangeSubscriber<?>>> subscribers = Maps.newHashMap();
-    private Map<BlockPos, ChangeSubscriber<?>> requestSubscribers = Maps.newHashMap();
+    private final Map<ChunkPos, List<ChangeSubscriber<?>>> subscribers = Maps.newHashMap();
+    private final Map<BlockPos, ChangeSubscriber<?>> requestSubscribers = Maps.newHashMap();
 
     public StructureMatchingBuffer() {
         super(WorldCacheManager.SaveKey.STRUCTURE_MATCH);

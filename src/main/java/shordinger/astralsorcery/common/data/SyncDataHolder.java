@@ -10,9 +10,9 @@ package shordinger.astralsorcery.common.data;
 
 import java.util.*;
 
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
@@ -36,10 +36,10 @@ public class SyncDataHolder implements ITickHandler {
     public static final String DATA_TIME_FREEZE_EFFECTS = "TimeFreezeEffects";
     public static final String DATA_PATREON_FLARES = "PatreonFlares";
 
-    private static Map<String, AbstractData> serverData = new HashMap<>();
-    private static Map<String, AbstractData> clientData = new HashMap<>();
+    private static final Map<String, AbstractData> serverData = new HashMap<>();
+    private static final Map<String, AbstractData> clientData = new HashMap<>();
 
-    private static List<String> dirtyData = new ArrayList<>();
+    private static final List<String> dirtyData = new ArrayList<>();
     private static final Object dirtyLock = new Object();
     private static byte providerCounter = 0;
 
@@ -76,12 +76,14 @@ public class SyncDataHolder implements ITickHandler {
 
     public static <T extends AbstractData> T getData(Side side, String key) {
         switch (side) {
-            case CLIENT:
+            case CLIENT -> {
                 return getDataClient(key);
-            case SERVER:
+            }
+            case SERVER -> {
                 return getDataServer(key);
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         throw new IllegalArgumentException("Side not defined: " + side);
     }

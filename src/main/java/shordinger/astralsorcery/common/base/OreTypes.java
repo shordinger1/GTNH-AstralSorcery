@@ -20,7 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import shordinger.astralsorcery.common.base.sets.OreEntry;

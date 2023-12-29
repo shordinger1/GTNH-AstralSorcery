@@ -8,16 +8,14 @@
 
 package shordinger.astralsorcery.common.event;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.eventhandler.Event;
 import shordinger.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
+
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,7 +29,7 @@ public class DynamicEnchantmentEvent {
     // The event to ADD new dynamic enchantments
     public static class Add extends Event {
 
-        private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
+        private final List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
         private final ItemStack itemStack;
         private final EntityPlayer resolvedPlayer; // If the player could be resolved through this event, pass it down
         // to modify
@@ -58,9 +56,9 @@ public class DynamicEnchantmentEvent {
     // The event to MODIFY or REACT to previously defined/added dynamic enchantments + enchantments
     public static class Modify extends Event {
 
-        private List<DynamicEnchantment> enchantmentsToApply;
+        private final List<DynamicEnchantment> enchantmentsToApply;
         private final ItemStack itemStack;
-        private EntityPlayer resolvedPlayer;
+        private final EntityPlayer resolvedPlayer;
 
         public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply,
                       @Nullable EntityPlayer resolvedPlayer) {

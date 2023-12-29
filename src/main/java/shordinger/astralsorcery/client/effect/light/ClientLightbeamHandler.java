@@ -15,7 +15,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
@@ -45,7 +45,7 @@ public class ClientLightbeamHandler implements ITickHandler {
             ticksExisted = 0;
             Entity rView = Minecraft.getMinecraft()
                 .getRenderViewEntity();
-            if (rView == null) rView = Minecraft.getMinecraft().player;
+            if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
             if (rView != null) {
                 int dimId = rView.getEntityWorld().provider.dimensionId;
                 DataLightConnections connections = SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS);

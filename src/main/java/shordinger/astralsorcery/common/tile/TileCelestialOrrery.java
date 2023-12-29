@@ -10,7 +10,7 @@ package shordinger.astralsorcery.common.tile;
 
 import java.awt.*;
 
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 

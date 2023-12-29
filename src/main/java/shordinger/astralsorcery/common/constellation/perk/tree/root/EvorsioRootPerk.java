@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -52,7 +51,7 @@ public class EvorsioRootPerk extends RootPerk {
             }
 
             IBlockState broken = event.getState();
-            World world = event.getWorld();
+            World world = event.world;
             float gainedExp;
             try {
                 gainedExp = broken.getBlockHardness(world, event.getPos());
@@ -73,7 +72,7 @@ public class EvorsioRootPerk extends RootPerk {
                 .postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
 
             float xpGain = gainedExp;
-            LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Evorsio)");
+            LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getDisplayName() + " (Evorsio)");
 
             ResearchManager.modifyExp(player, xpGain);
         }

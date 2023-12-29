@@ -8,25 +8,18 @@
 
 package shordinger.astralsorcery.common.item.tool.sextant;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.common.CommonProxy;
@@ -41,6 +34,9 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -164,9 +160,9 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
                         && entityPlayer.isCreative()
                         && entityPlayer.isSneaking()
                         && MiscUtils.isChunkLoaded(world, pos)) {
-                        IBlockState current = world.getBlockState(pos);
+                        IBlockState current = WorldHelper.getBlockState(world, pos);
                         struct.placeInWorld(world, pos);
-                        if (!world.getBlockState(pos)
+                        if (!WorldHelper.getBlockState(world, pos)
                             .equals(current)) {
                             world.setBlockState(pos, current);
                         }

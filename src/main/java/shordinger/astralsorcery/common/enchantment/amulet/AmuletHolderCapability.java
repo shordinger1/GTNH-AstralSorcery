@@ -8,21 +8,15 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import java.util.UUID;
-import java.util.concurrent.Callable;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
+import shordinger.astralsorcery.Tags;
 
-import shordinger.astralsorcery.AstralSorcery;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +28,7 @@ import shordinger.astralsorcery.AstralSorcery;
 public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> {
 
     public static final ResourceLocation CAP_AMULETHOLDER_NAME = new ResourceLocation(
-        AstralSorcery.MODID,
+        Tags.MODID,
         "cap_item_amulet_holder");
 
     @CapabilityInject(AmuletHolderCapability.class)

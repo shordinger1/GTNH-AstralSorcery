@@ -49,11 +49,11 @@ import shordinger.astralsorcery.migration.IBlockState;
  */
 public class LightNetworkBuffer extends CachedWorldData {
 
-    private Map<ChunkPos, ChunkNetworkData> chunkSortedData = new HashMap<>();
-    private Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
+    private final Map<ChunkPos, ChunkNetworkData> chunkSortedData = new HashMap<>();
+    private final Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
     private Collection<Tuple<BlockPos, IIndependentStarlightSource>> cachedSourceTuples = null;
 
-    private List<ChunkPos> queueRemoval = new LinkedList<>();
+    private final List<ChunkPos> queueRemoval = new LinkedList<>();
 
     public LightNetworkBuffer() {
         super(WorldCacheManager.SaveKey.LIGHT_NETWORK);
@@ -92,7 +92,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                     } else {
                         AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");
                         AstralSorcery.log.warn("Purging cache entry and removing erroneous block!");
-                        IBlockState there = world.getBlockState(pos);
+                        IBlockState there = WorldHelper.getBlockState(world, pos);
                         AstralSorcery.log.warn(
                             "Block that gets purged: " + there.getBlock()
                                 .getUnlocalizedName()
@@ -127,11 +127,10 @@ public class LightNetworkBuffer extends CachedWorldData {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
                         TileEntity te = world.getTileEntity(node.getLocationPos());
-                        if (te == null || !(te instanceof IStarlightTransmission)) {
+                        if (!(te instanceof IStarlightTransmission ism)) {
                             invalidRemoval.add(node);
                             continue;
                         }
-                        IStarlightTransmission ism = (IStarlightTransmission) te;
                         IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getLocationPos());
                         if (!node.getClass()
                             .isAssignableFrom(newNode.getClass())) {

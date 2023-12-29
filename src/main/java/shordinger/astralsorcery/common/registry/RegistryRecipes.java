@@ -24,7 +24,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.collect.Iterables;

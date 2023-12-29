@@ -8,23 +8,23 @@
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
 import shordinger.astralsorcery.common.util.EntityUtils;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod

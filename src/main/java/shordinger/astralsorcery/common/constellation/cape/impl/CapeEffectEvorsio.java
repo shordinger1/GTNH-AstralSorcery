@@ -8,9 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
-import java.awt.*;
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -20,14 +19,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -42,6 +38,9 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,7 +72,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
     @SideOnly(Side.CLIENT)
     public static void playBlockBreakParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        if (!Minecraft.getMinecraft().player.isCreative() && event.getAdditionalDataLong() != 0) {
+        if (!Minecraft.getMinecraft().thePlayer.isCreative() && event.getAdditionalDataLong() != 0) {
             int stateId = (int) event.getAdditionalDataLong();
             IBlockState state = Block.getStateById(stateId);
             if (state != Blocks.AIR.getDefaultState()) {
@@ -227,9 +226,9 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
                     if (sideBroken.getDirectionVec()
                         .getZ() != 0 && zz != 0) continue;
                     BlockPos other = at.add(xx, yy, zz);
-                    if (world.getTileEntity(other) == null && world.getBlockState(other)
+                    if (world.getTileEntity(other) == null && WorldHelper.getBlockState(world, other)
                         .getBlockHardness(world, other) != -1) {
-                        IBlockState present = world.getBlockState(other);
+                        IBlockState present = WorldHelper.getBlockState(world, other);
                         if (MiscUtils.breakBlockWithPlayer(other, player)) {
                             PktParticleEvent ev = new PktParticleEvent(
                                 PktParticleEvent.ParticleEventType.CAPE_EVORSIO_BREAK,
@@ -251,9 +250,9 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
                 if (sideBroken.getDirectionVec()
                     .getZ() != 0 && zz != 0) continue;
                 BlockPos other = at.add(xx, 0, zz);
-                if (world.getTileEntity(other) == null && world.getBlockState(other)
+                if (world.getTileEntity(other) == null && WorldHelper.getBlockState(world, other)
                     .getBlockHardness(world, other) != -1) {
-                    IBlockState present = world.getBlockState(other);
+                    IBlockState present = WorldHelper.getBlockState(world, other);
                     if (MiscUtils.breakBlockWithPlayer(other, player)) {
                         PktParticleEvent ev = new PktParticleEvent(
                             PktParticleEvent.ParticleEventType.CAPE_EVORSIO_BREAK,

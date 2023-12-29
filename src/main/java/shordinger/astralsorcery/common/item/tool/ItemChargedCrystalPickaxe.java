@@ -8,12 +8,8 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,9 +20,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
@@ -41,6 +34,11 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.OreDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,39 +71,32 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     private boolean scanForOres(World world, EntityPlayer player) {
         if (!world.isRemote && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
-            if (!player.getCooldownTracker()
-                .hasCooldown(ItemsAS.chargedCrystalPickaxe)) {
-                Thread tr = new Thread(() -> {
-                    BlockArray foundOres = OreDiscoverer.startSearch(world, Vector3.atEntityCorner(player), 14);
-                    if (!foundOres.isEmpty()) {
-                        List<BlockPos> positions = new LinkedList<>();
-                        BlockPos plPos = player.getPosition();
-                        for (BlockPos pos : foundOres.getPattern()
-                            .keySet()) {
-                            if (pos.distanceSq(plPos) < 350) {
-                                positions.add(pos);
-                            }
+            Thread tr = new Thread(() -> {
+                BlockArray foundOres = OreDiscoverer.startSearch(world, Vector3.atEntityCorner(player), 14);
+                if (!foundOres.isEmpty()) {
+                    List<BlockPos> positions = new LinkedList<>();
+                    BlockPos plPos = player.getPosition();
+                    for (BlockPos pos : foundOres.getPattern()
+                        .keySet()) {
+                        if (pos.distanceSq(plPos) < 350) {
+                            positions.add(pos);
                         }
-                        PktOreScan scan = new PktOreScan(positions, true);
-                        PacketChannel.CHANNEL.sendTo(scan, (EntityPlayerMP) player);
                     }
-                });
-                tr.setName("Ore Scan " + idx);
-                idx++;
-                tr.start();
-                if (!tryRevertMainHand(player, player.getHeldItemMainhand())) {
-                    player.getCooldownTracker()
-                        .setCooldown(ItemsAS.chargedCrystalPickaxe, 150);
+                    PktOreScan scan = new PktOreScan(positions, true);
+                    PacketChannel.CHANNEL.sendTo(scan, (EntityPlayerMP) player);
                 }
-                return true;
-            }
+            });
+            tr.setName("Ore Scan " + idx);
+            idx++;
+            tr.start();
+            return true;
         }
         return false;
     }
 
     @SideOnly(Side.CLIENT)
     public static void playClientEffects(Collection<BlockPos> positions, boolean tumble) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null) return;
         List<IBlockState> changed = new LinkedList<>();
 
@@ -115,7 +106,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
                 itemRand.nextFloat() - itemRand.nextFloat(),
                 itemRand.nextFloat() - itemRand.nextFloat(),
                 itemRand.nextFloat() - itemRand.nextFloat());
-            IBlockState state = Minecraft.getMinecraft().world.getBlockState(at);
+            IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(at);
             if (Mods.ORESTAGES.isPresent()) {
                 if (changed.contains(state) || !ModIntegrationOreStages.canSeeOreClient(state)) {
                     changed.add(state);

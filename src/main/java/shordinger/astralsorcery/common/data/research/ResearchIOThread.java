@@ -35,8 +35,8 @@ public class ResearchIOThread extends TimerTask {
     private static Timer ioThread;
     private static ResearchIOThread saveTask;
 
-    private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
-    private Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
+    private final Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
+    private final Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
     private boolean inSave = false, skipTick = false;
 
     private ResearchIOThread() {

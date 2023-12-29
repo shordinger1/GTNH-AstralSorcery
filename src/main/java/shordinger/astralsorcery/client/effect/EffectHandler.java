@@ -8,10 +8,8 @@
 
 package shordinger.astralsorcery.client.effect;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
@@ -20,11 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
 import shordinger.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
@@ -55,6 +49,15 @@ import shordinger.astralsorcery.common.util.Counter;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -230,11 +233,11 @@ public final class EffectHandler {
         tick();
 
         /*
-         * if(Minecraft.getMinecraft().player == null) return;
+         * if(Minecraft.getMinecraft().thePlayer == null) return;
          * if(ClientScheduler.getClientTick() % 10 != 0) return;
-         * ItemStack main = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+         * ItemStack main = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
          * if(main != null && main.getItem() instanceof ItemIlluminationWand) {
-         * RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().player, 60);
+         * RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().thePlayer, 60);
          * if(res != null && res.typeOfHit == RayTraceResult.Type.BLOCK) {
          * EffectLightning.buildAndRegisterLightning(new Vector3(res.getBlockPos()).addY(7), new
          * Vector3(res.getBlockPos()));
@@ -363,7 +366,7 @@ public final class EffectHandler {
             influenceSizePreview = null;
         }
 
-        if (Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
 
@@ -398,7 +401,7 @@ public final class EffectHandler {
             }
         }
 
-        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
+        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer);
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
                 fastRenderParticles.remove(null);

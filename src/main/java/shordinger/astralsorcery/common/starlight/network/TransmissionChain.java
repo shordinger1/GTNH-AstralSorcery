@@ -95,7 +95,7 @@ public class TransmissionChain {
     private void resolveLoadedEndpoints(World world) {
         for (BlockPos pos : uncheckedEndpointsBlock) {
             if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
-                IBlockState state = world.getBlockState(pos);
+                IBlockState state = WorldHelper.getBlockState(world, pos);
                 Block b = state.getBlock();
                 if (b instanceof IBlockStarlightRecipient) continue;
                 if (!resolvedNormalBlockPositions.contains(pos)) {

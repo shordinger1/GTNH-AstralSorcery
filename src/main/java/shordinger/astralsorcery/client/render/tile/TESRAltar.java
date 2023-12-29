@@ -14,7 +14,7 @@ import java.util.Collection;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import shordinger.astralsorcery.migration.NonNullList;
 
 import org.lwjgl.opengl.GL11;
 

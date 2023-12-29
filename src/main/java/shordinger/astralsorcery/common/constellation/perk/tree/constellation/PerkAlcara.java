@@ -42,21 +42,22 @@ public class PerkAlcara extends ConstellationPerk {
                 if (modifier.getAttributeType()
                     .equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP)) {
                     switch (modifier.getMode()) {
-                        case ADDITION:
-                        case ADDED_MULTIPLY:
+                        case ADDITION, ADDED_MULTIPLY -> {
                             return modifier.convertModifier(
                                 AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
                                 modifier.getMode(),
                                 modifier.getValue(player, progress) * 0.5F);
-                        case STACKING_MULTIPLY:
+                        }
+                        case STACKING_MULTIPLY -> {
                             float val = modifier.getValue(player, progress) - 1;
                             val *= 0.5F;
                             return modifier.convertModifier(
                                 AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
                                 modifier.getMode(),
                                 val + 1F);
-                        default:
-                            break;
+                        }
+                        default -> {
+                        }
                     }
                 }
                 return modifier;

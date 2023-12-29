@@ -8,19 +8,23 @@
 
 package shordinger.astralsorcery.common.data;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,11 +35,11 @@ import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
  */
 public class DataPatreonFlares extends AbstractData {
 
-    private Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresClient = new HashMap<>();
+    private final Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresClient = new HashMap<>();
 
-    private Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresServer = new HashMap<>();
-    private List<UUID> flareAdditions = new LinkedList<>();
-    private List<UUID> flareRemovals = new LinkedList<>();
+    private final Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresServer = new HashMap<>();
+    private final List<UUID> flareAdditions = new LinkedList<>();
+    private final List<UUID> flareRemovals = new LinkedList<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
@@ -198,7 +202,7 @@ public class DataPatreonFlares extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if (serverData == null || !(serverData instanceof DataPatreonFlares)) return;
+        if (!(serverData instanceof DataPatreonFlares)) return;
 
         NBTTagList add = ((DataPatreonFlares) serverData).clientReadBuffer
             .getTagList("flareAdditions", Constants.NBT.TAG_COMPOUND);

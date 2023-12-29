@@ -136,7 +136,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 added = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
 
                 float xpGain = added;
-                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Vicio)");
+                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getDisplayName() + " (Vicio)");
 
                 ResearchManager.modifyExp(player, xpGain);
             }

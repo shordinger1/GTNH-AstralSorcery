@@ -8,10 +8,11 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.LoaderState;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -20,33 +21,20 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.LoaderState;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
 import shordinger.astralsorcery.common.block.BlockMachine;
@@ -70,12 +58,16 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileFakeTree;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.common.world.util.WorldEventNotifier;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EnumActionResult;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,55 +87,15 @@ public class EventHandlerServer {
         // }
     }
 
-    /*
-     * @SubscribeEvent
-     * public void onHarvestSpeedCheck(net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event) {
-     * EntityPlayer harvester = event.getEntityPlayer();
-     * if (harvester != null) {
-     * PlayerProgress prog = ResearchManager.getProgress(harvester, harvester.getEntityWorld().isRemote ? Side.CLIENT :
-     * Side.SERVER);
-     * if (prog != null) {
-     * Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-     * for (ConstellationPerk perk : perks.keySet()) {
-     * if (!prog.isPerkActive(perk)) continue;
-     * if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_SPEED)) {
-     * BlockPos p = event.getLocationPos();
-     * event.setNewSpeed(perk.onHarvestSpeed(harvester, event.getState(), (p == null || p.getY() < 0) ? null : p,
-     * event.getNewSpeed()));
-     * }
-     * }
-     * }
-     * }
-     * }
-     * @SubscribeEvent
-     * public void onHarvestTypeCheck(net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck event) {
-     * EntityPlayer harvester = event.getEntityPlayer();
-     * if (harvester != null) {
-     * PlayerProgress prog = ResearchManager.getProgress(harvester, harvester.getEntityWorld().isRemote ? Side.CLIENT :
-     * Side.SERVER);
-     * if (prog != null) {
-     * Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-     * for (ConstellationPerk perk : perks.keySet()) {
-     * if (!prog.isPerkActive(perk)) continue;
-     * if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_TYPE)) {
-     * if(perk.onCanHarvest(harvester, harvester.getHeldItemMainhand(), event.getTargetBlock(), event.canHarvest())) {
-     * event.setCanHarvest(true);
-     * }
-     * }
-     * }
-     * }
-     * }
-     * }
-     */
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-        EntityItem ei = event.getItem();
-        if (ei.getItem()
+        EntityItem ei = event.item;
+        if (ei.getEntityItem()
             .getItem() instanceof ItemFragmentCapsule
-            || ei.getItem()
+            || ei.getEntityItem()
             .getItem() instanceof ItemKnowledgeFragment) {
-            EntityPlayer pickingUp = event.getEntityPlayer();
+            EntityPlayer pickingUp = event.entityPlayer;
             if (!pickingUp.getEntityWorld().isRemote) {
                 String playerName = ei.getOwner();
                 if (playerName == null) {
@@ -157,22 +109,23 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onContainerOpen(PlayerContainerEvent.Open event) {
-        if (event.getContainer() instanceof ContainerWorkbench && !event.getEntityPlayer().world.isRemote
-            && event.getEntityPlayer() instanceof EntityPlayerMP) {
+    public void onContainerOpen(PlayerOpenContainerEvent event) {
+//        if (event.getContainer() instanceof ContainerWorkbench && !event.entity.worldObj.isRemote
+//            && event.entityPlayer instanceof EntityPlayerMP) {
+        if (event.canInteractWith) {
             PacketChannel.CHANNEL.sendTo(
                 new PktCraftingTableFix(((ContainerWorkbench) event.getContainer()).pos),
-                (EntityPlayerMP) event.getEntityPlayer());
+                (EntityPlayerMP) event.entity);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
-        if (event.getSource()
+        if (event.source
             .canHarmInCreative()) {
             return;
         }
-        if (phoenixProtect(event.getEntityLiving())) {
+        if (phoenixProtect(event.entityLiving)) {
             event.setCanceled(true);
         }
     }
@@ -213,8 +166,8 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
-        IBlockState at = event.getWorld()
+    public void onRightClick(PlayerInteractEvent event) {
+        IBlockState at = event.world
             .getBlockState(event.getPos());
         if (at.getBlock() instanceof BlockMachine) {
             if (((BlockMachine) at.getBlock()).handleSpecificActivateEvent(event)) {
@@ -228,11 +181,11 @@ public class EventHandlerServer {
         if (hand.isEmpty()) return;
         if (hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
-            if (i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
+            if (i.needsSpecialHandling(event.world, event.getPos(), event.entityPlayer, hand)) {
                 if (i.onRightClick(
-                    event.getWorld(),
+                    event.world,
                     event.getPos(),
-                    event.getEntityPlayer(),
+                    event.entityPlayer,
                     event.getFace(),
                     event.getHand(),
                     hand)) {
@@ -245,12 +198,12 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRightClickLast(PlayerInteractEvent.RightClickBlock event) {
-        if (!event.getWorld().isRemote) {
-            IBlockState interacted = event.getWorld()
+        if (!event.world.isRemote) {
+            IBlockState interacted = event.world
                 .getBlockState(event.getPos());
             if (interacted.getBlock() instanceof BlockWorkbench) {
                 PktCraftingTableFix fix = new PktCraftingTableFix(event.getPos());
-                PacketChannel.CHANNEL.sendTo(fix, (EntityPlayerMP) event.getEntityPlayer());
+                PacketChannel.CHANNEL.sendTo(fix, (EntityPlayerMP) event.entityPlayer);
             }
         }
     }
@@ -279,10 +232,10 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onLoad(WorldEvent.Load event) {
-        event.getWorld()
+        event.world
             .addEventListener(new WorldEventNotifier());
 
-        GameRules rules = event.getWorld()
+        GameRules rules = event.world
             .getGameRules();
         if (!rules.hasRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK)) {
             rules.addGameRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK, "false", GameRules.ValueType.BOOLEAN_VALUE);
@@ -291,28 +244,28 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        if (event.getWorld().isRemote || !event.getChunk()
-            .isTerrainPopulated()) return;
+        if (event.world.isRemote || !event.getChunk()
+            .isTerrainPopulated) return;
         if (!Loader.instance()
             .hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
             return; // Thanks BuildCraft.
         }
         BlockPos at = event.getPos();
-        WorldNetworkHandler.getNetworkHandler(event.getWorld())
+        WorldNetworkHandler.getNetworkHandler(event.world)
             .informBlockChange(at);
         if (event.getNewBlock()
-            .equals(Blocks.CRAFTING_TABLE)) {
+            .equals(Blocks.crafting_table)) {
             if (!event.getOldBlock()
-                .equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld())
+                .equals(Blocks.crafting_table)) {
+                WorldNetworkHandler.getNetworkHandler(event.world)
                     .attemptAutoLinkTo(at);
             }
         }
         if (event.getOldBlock()
-            .equals(Blocks.CRAFTING_TABLE)) {
+            .equals(Blocks.crafting_table)) {
             if (!event.getNewBlock()
-                .equals(Blocks.CRAFTING_TABLE)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld())
+                .equals(Blocks.crafting_table)) {
+                WorldNetworkHandler.getNetworkHandler(event.world)
                     .removeAutoLinkTo(at);
             }
         }
@@ -320,7 +273,7 @@ public class EventHandlerServer {
             .equals(BlocksAS.blockAltar)) {
             if (!event.getOldBlock()
                 .equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld())
+                WorldNetworkHandler.getNetworkHandler(event.world)
                     .attemptAutoLinkTo(at);
             }
         }
@@ -328,7 +281,7 @@ public class EventHandlerServer {
             .equals(BlocksAS.blockAltar)) {
             if (!event.getNewBlock()
                 .equals(BlocksAS.blockAltar)) {
-                WorldNetworkHandler.getNetworkHandler(event.getWorld())
+                WorldNetworkHandler.getNetworkHandler(event.world)
                     .removeAutoLinkTo(at);
             }
         }
@@ -337,21 +290,21 @@ public class EventHandlerServer {
             IBlockState oldState = event.getOldState();
             if (oldState.getValue(BlockCustomOre.ORE_TYPE)
                 .equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
-                RockCrystalHandler.INSTANCE.removeOre(event.getWorld(), event.getPos(), true);
+                RockCrystalHandler.INSTANCE.removeOre(event.world, event.getPos(), true);
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBreak(BlockEvent.BreakEvent event) {
-        if (event.getWorld().isRemote) return;
+        if (event.world.isRemote) return;
         BlockPos at = event.getPos();
 
         Tuple<EnumHand, ItemStack> heldStack = MiscUtils
             .getMainOrOffHand(event.getPlayer(), ItemsAS.wand, stack -> ItemWand.getAugment(stack) != null);
         if (heldStack != null && ItemWand.getAugment(heldStack.value) == WandAugment.EVORSIO) {
             if (rand.nextFloat() < Config.evorsioEffectChance) {
-                World w = event.getWorld();
+                World w = event.world;
                 IBlockState stateAt = w.getBlockState(at);
                 BlockArray foundBlocks = BlockDiscoverer.searchForBlocksAround(
                     w,
@@ -363,7 +316,7 @@ public class EventHandlerServer {
                         && state.getBlockHardness(world, pos) >= 0
                         && world.getTileEntity(pos) == null
                         && !world.isAirBlock(pos)
-                        && world.getBlockState(pos)
+                        && WorldHelper.getBlockState(world, pos)
                         .getBlock()
                         .canHarvestBlock(world, pos, event.getPlayer()))));
                 for (BlockPos pos : foundBlocks.getPattern()
@@ -414,7 +367,7 @@ public class EventHandlerServer {
                         ItemStack furnaced = ItemUtils.copyStackWithSize(out, 1);
                         iterator.remove();
                         newStacks.add(furnaced);
-                        furnaced.onCrafting(event.getWorld(), event.getHarvester(), 1);
+                        furnaced.onCrafting(event.world, event.getHarvester(), 1);
                         FMLCommonHandler.instance()
                             .firePlayerSmeltedEvent(event.getHarvester(), furnaced);
                         if (fortuneLvl > 0 && !(out.getItem() instanceof ItemBlock)) {

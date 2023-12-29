@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
@@ -42,8 +41,7 @@ public class WeightedAmuletEnchantment extends WeightedRandom.Item implements Co
     @Nonnull
     @Override
     public String serialize() {
-        return this.enchantment.getRegistryName()
-            .toString() + ":" + itemWeight;
+        return this.enchantment.getName() + ":" + itemWeight;
     }
 
     @Nullable

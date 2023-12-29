@@ -8,21 +8,18 @@
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

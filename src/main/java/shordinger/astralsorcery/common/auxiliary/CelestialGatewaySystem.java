@@ -8,13 +8,9 @@
 
 package shordinger.astralsorcery.common.auxiliary;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -29,11 +25,6 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
@@ -41,6 +32,13 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktUpdateGateways;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -104,7 +102,7 @@ public class CelestialGatewaySystem {
     public void onWorldInit(WorldEvent.Load event) {
         if (startup) return; // We're already loading up there.
 
-        World world = event.getWorld();
+        World world = event.world;
         if (world.isRemote) return;
 
         loadWorldCache(world);

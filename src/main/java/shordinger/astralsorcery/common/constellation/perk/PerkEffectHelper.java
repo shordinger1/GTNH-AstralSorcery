@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,9 +24,9 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+
+import cpw.mods.fml.common.gameevent.TickEvent;
+
 
 import com.google.common.collect.Lists;
 
@@ -69,7 +71,7 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ServerDisconnectionFromClientEvent event) {
         LogCategory.PERKS.info(
-            () -> ((NetHandlerPlayServer) event.getHandler()).player.getName()
+            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName()
                 + " disconnected from server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(
             () -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, true));
@@ -85,7 +87,7 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
         LogCategory.PERKS.info(
-            () -> ((NetHandlerPlayServer) event.getHandler()).player.getName() + " connected to server on side SERVER");
+            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName() + " connected to server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(
             () -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
     }
@@ -98,8 +100,8 @@ public class PerkEffectHelper implements ITickHandler {
 
             @Override
             public void run() {
-                if (Minecraft.getMinecraft().player != null && ResearchManager.clientInitialized) {
-                    handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, false);
+                if (Minecraft.getMinecraft().thePlayer != null && ResearchManager.clientInitialized) {
+                    handlePerkModification(Minecraft.getMinecraft().thePlayer, Side.CLIENT, false);
                 } else {
                     AstralSorcery.proxy.scheduleClientside(this);
                 }
@@ -110,7 +112,7 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void playerClone(PlayerEvent.Clone event) {
         EntityPlayer oldPlayer = event.getOriginal();
-        EntityPlayer newPlayer = event.getEntityPlayer();
+        EntityPlayer newPlayer = event.entityPlayer;
 
         handlePerkModification(oldPlayer, oldPlayer.world.isRemote ? Side.CLIENT : Side.SERVER, true);
         handlePerkModification(newPlayer, newPlayer.world.isRemote ? Side.CLIENT : Side.SERVER, false);
@@ -131,11 +133,10 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void expRemoval(LivingDeathEvent event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        if (event.entityLiving instanceof EntityPlayer player) {
+            Side side = event.entityLiving.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
             if (side != Side.SERVER) return;
 
-            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.isValid()) {
                 long exp = MathHelper.lfloor(prog.getPerkExp());
@@ -160,7 +161,7 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if (progress.isValid()) {
             LogCategory.PERKS.info(
-                () -> (remove ? "Remove" : "Apply") + " ALL perks for " + player.getName() + " on side " + side.name());
+                () -> (remove ? "Remove" : "Apply") + " ALL perks for " + player.getDisplayName() + " on side " + side.name());
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     handlePerkRemoval(perk, player, side);
@@ -189,7 +190,7 @@ public class PerkEffectHelper implements ITickHandler {
         }
         LogCategory.PERKS.info(
             () -> "Apply perk " + perk
-                .getRegistryName() + " for player " + player.getName() + " on side " + side.name());
+                .getRegistryName() + " for player " + player.getDisplayName() + " on side " + side.name());
         batchApplyConverters(player, side, converters, perk);
     }
 
@@ -200,7 +201,7 @@ public class PerkEffectHelper implements ITickHandler {
         }
         LogCategory.PERKS.info(
             () -> "Remove perk " + perk
-                .getRegistryName() + " for player " + player.getName() + " on side " + side.name());
+                .getRegistryName() + " for player " + player.getDisplayName() + " on side " + side.name());
         batchRemoveConverters(player, side, converters, perk);
     }
 
@@ -353,7 +354,7 @@ public class PerkEffectHelper implements ITickHandler {
         LogCategory.PERKS.info(
             () -> "Set perk cooldown on " + perk.getRegistryName()
                 + " for "
-                + player.getName()
+                + player.getDisplayName()
                 + " on "
                 + (player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
 
@@ -371,7 +372,7 @@ public class PerkEffectHelper implements ITickHandler {
         LogCategory.PERKS.info(
             () -> "Force update perk cooldown on " + perk.getRegistryName()
                 + " for "
-                + player.getName()
+                + player.getDisplayName()
                 + " on "
                 + (player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
 
@@ -438,7 +439,7 @@ public class PerkEffectHelper implements ITickHandler {
                 LogCategory.PERKS.info(
                     () -> "Perk cooldown has finished on " + perk.getRegistryName()
                         + " for "
-                        + plWrapper.player.getName()
+                        + plWrapper.player.getDisplayName()
                         + " on "
                         + (plWrapper.player.getEntityWorld().isRemote ? "CLIENT" : "SERVER"));
 

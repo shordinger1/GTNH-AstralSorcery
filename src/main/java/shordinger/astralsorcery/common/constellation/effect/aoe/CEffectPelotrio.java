@@ -8,23 +8,27 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import crazypants.enderio.entity.EntityWitherSkeleton;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -44,6 +48,10 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -53,7 +61,7 @@ import shordinger.astralsorcery.migration.BlockPos;
  */
 public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.PelotrioSpawnListEntry> {
 
-    private static Tuple<Class<Entity>, Class<Entity>>[] swapTable = new Tuple[]{
+    private static final Tuple[] swapTable = new Tuple[]{
         new Tuple(EntitySkeleton.class, EntityWitherSkeleton.class), new Tuple(EntityVillager.class, EntityWitch.class),
         new Tuple(EntityPig.class, EntityPigZombie.class), new Tuple(EntityCow.class, EntityZombie.class),
         new Tuple(EntityParrot.class, EntityGhast.class), new Tuple(EntityChicken.class, EntityBlaze.class),
@@ -149,7 +157,7 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
             }
         }
 
-        List<EntityLivingBase> entities = world
+        List entities = world
             .getEntitiesWithinAABB(EntityLivingBase.class, proximityCheckBox.offset(pos), e -> e != null && !e.isDead);
         if (entities.size() > proximityAmount) {
             return false; // Flood & lag prevention.
@@ -166,7 +174,7 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
     }
 
     private EntityLivingBase trySwapEntity(World world, EntityLivingBase e) {
-        for (Tuple<Class<Entity>, Class<Entity>> tpl : swapTable) {
+        for (Tuple tpl : swapTable) {
             if (e.getClass()
                 .isAssignableFrom(tpl.key)) {
                 NBTTagCompound cmp = new NBTTagCompound();

@@ -8,16 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
@@ -31,6 +28,8 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -111,7 +110,7 @@ public class CapeEffectMineralis extends CapeArmorEffect {
                 return;
             }
             BlockPos at = blocks.get(index);
-            IBlockState act = pl.world.getBlockState(at);
+            IBlockState act = pl.WorldHelper.getBlockState(world, at);
             EffectTranslucentFallingBlock bl = EffectHandler.getInstance()
                 .translucentFallingBlock(new Vector3(at).add(0.5, 0.5, 0.5), act);
             bl.setDisableDepth(true)

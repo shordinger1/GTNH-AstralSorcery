@@ -52,7 +52,11 @@ public class CoreRootPerk extends KeyPerk {
             if (ResearchManager.grantFreePerkPoint(player, token)) {
                 listTokens.appendTag(new NBTTagString(token));
 
-                LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
+                LogCategory.PERKS.info(() -> {
+                    if (player != null) {
+                        return "Granted perk point " + token + " to " + player.getDisplayName();
+                    }
+                });
             }
         }
         dataStorage.setTag("tokens", listTokens);
@@ -66,7 +70,7 @@ public class CoreRootPerk extends KeyPerk {
         for (int i = 0; i < listTokens.tagCount(); i++) {
             String tk = listTokens.getStringTagAt(i);
             if (ResearchManager.revokeFreePoint(player, tk)) {
-                LogCategory.PERKS.info(() -> "Revoked perk point " + tk + " of " + player.getName());
+                LogCategory.PERKS.info(() -> "Revoked perk point " + tk + " of " + player.getDisplayName());
             }
         }
     }

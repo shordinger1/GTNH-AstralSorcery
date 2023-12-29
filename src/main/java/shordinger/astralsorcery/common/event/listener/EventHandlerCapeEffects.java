@@ -8,9 +8,12 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
-import java.util.*;
-import java.util.function.Predicate;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -20,30 +23,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.base.Plants;
 import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
-import shordinger.astralsorcery.common.constellation.cape.impl.*;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectArmara;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectBootes;
@@ -73,6 +65,13 @@ import shordinger.astralsorcery.core.ASMCallHook;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -85,7 +84,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private static final Random rand = new Random();
     public static EventHandlerCapeEffects INSTANCE = new EventHandlerCapeEffects();
 
-    private static List<UUID> vicioMantleFlightPlayers = Lists.newArrayList();
+    private static final List<UUID> vicioMantleFlightPlayers = Lists.newArrayList();
 
     // Propagate player in tick for octans anti-knockback effect.
     public static EntityPlayer currentPlayerInTick = null;
@@ -103,11 +102,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @SubscribeEvent
     public void breakBlock(BlockEvent.BreakEvent event) {
-        if (event.getWorld().isRemote) return;
+        if (event.world.isRemote) return;
         if (evorsioChainingBreak) return;
 
         EntityPlayer pl = event.getPlayer();
-        if (pl == null || !(pl instanceof EntityPlayerMP)) return;
+        if (!(pl instanceof EntityPlayerMP)) return;
         if (MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
 
         IBlockState state = event.getState();
@@ -130,19 +129,19 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     BlockPos at = pl.getPosition()
                         .up();
                     EntitySpectralTool esp = new EntitySpectralTool(
-                        event.getWorld(),
+                        event.world,
                         at,
                         new ItemStack(Items.DIAMOND_PICKAXE),
                         EntitySpectralTool.ToolTask.createPickaxeTask());
-                    event.getWorld()
+                    event.world
                         .spawnEntity(esp);
                     return;
                 }
             }
             if ((state.getBlock()
-                .isWood(event.getWorld(), event.getPos())
+                .isWood(event.world, event.getPos())
                 || state.getBlock()
-                .isLeaves(state, event.getWorld(), event.getPos()))
+                .isLeaves(state, event.world, event.getPos()))
                 && !pl.getHeldItemMainhand()
                 .isEmpty()
                 && pl.getHeldItemMainhand()
@@ -153,11 +152,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     BlockPos at = pl.getPosition()
                         .up();
                     EntitySpectralTool esp = new EntitySpectralTool(
-                        event.getWorld(),
+                        event.world,
                         at,
                         new ItemStack(Items.DIAMOND_AXE),
                         EntitySpectralTool.ToolTask.createLogTask());
-                    event.getWorld()
+                    event.world
                         .spawnEntity(esp);
                 }
             }
@@ -180,10 +179,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
                             ev.breakBlocksPlaneHorizontal(
                                 (EntityPlayerMP) pl,
                                 faceHit,
-                                event.getWorld(),
+                                event.world,
                                 event.getPos());
                         } else {
-                            ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                            ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.world, event.getPos());
                         }
                     }
                 }
@@ -204,41 +203,41 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onHurt(LivingHurtEvent event) {
-        if (event.getEntityLiving().world.isRemote) return;
+        if (event.entityLiving.worldObj.isRemote) return;
 
-        if (event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer pl = (EntityPlayer) event.getEntityLiving();
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer pl = (EntityPlayer) event.entityLiving;
             CapeEffectDiscidia cd = ItemCape.getCapeEffect(pl, Constellations.discidia);
             if (cd != null) {
-                cd.writeLastAttackDamage(event.getAmount());
+                cd.writeLastAttackDamage(event.ammount);
             }
             CapeEffectArmara ca = ItemCape.getCapeEffect(pl, Constellations.armara);
             if (ca != null) {
-                if (ca.shouldPreventDamage(event.getSource(), false)) {
+                if (ca.shouldPreventDamage(event.source, false)) {
                     event.setCanceled(true);
                     return;
                 }
             }
             CapeEffectBootes bo = ItemCape.getCapeEffect(pl, Constellations.bootes);
-            if (bo != null && event.getSource()
+            if (bo != null && event.source
                 .getTrueSource() != null) {
-                Entity source = event.getSource()
+                Entity source = event.source
                     .getTrueSource();
                 if (source instanceof EntityLivingBase) {
                     bo.onPlayerDamagedByEntity(pl, (EntityLivingBase) source);
                 }
             }
-            if (event.getSource()
+            if (event.source
                 .isFireDamage()) {
                 CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
                 if (cf != null) {
-                    cf.healFor(pl, event.getAmount());
+                    cf.healFor(pl, event.ammount);
                     float mul = cf.getDamageMultiplier();
                     if (mul <= 0) {
                         event.setCanceled(true);
                         return;
                     } else {
-                        event.setAmount(event.getAmount() * mul);
+                        event.setAmount(event.ammount * mul);
                     }
                 }
             } else {
@@ -252,10 +251,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
-        if (event.getEntity()
-            .getEntityWorld().isRemote) return;
+        if (event.entity
+            .worldObj.isRemote) return;
 
-        DamageSource ds = event.getSource();
+        DamageSource ds = event.source;
         if (ds.getTrueSource() != null && ds.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer pl = (EntityPlayer) ds.getTrueSource();
             if (!(pl instanceof EntityPlayerMP)) return;
@@ -263,7 +262,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
             CapeEffectEvorsio ev = ItemCape.getCapeEffect(pl, Constellations.evorsio);
             if (ev != null) {
-                ev.deathAreaDamage(ds, event.getEntityLiving());
+                ev.deathAreaDamage(ds, event.entityLiving);
             }
         }
     }
@@ -271,9 +270,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
     @SubscribeEvent
     public void onAttack(LivingAttackEvent event) {
         if (discidiaChainingAttack) return;
-        if (event.getEntityLiving().world.isRemote) return;
+        if (event.entityLiving.world.isRemote) return;
 
-        DamageSource ds = event.getSource();
+        DamageSource ds = event.source;
         if (ds.getTrueSource() != null && ds.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer attacker = (EntityPlayer) ds.getTrueSource();
             if (!(attacker instanceof EntityPlayerMP)) return;
@@ -286,11 +285,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 discidiaChainingAttack = true;
                 try {
                     DamageUtil.attackEntityFrom(
-                        event.getEntityLiving(),
+                        event.entityLiving,
                         CommonProxy.dmgSourceStellar,
                         (float) (added / 2.0F));
                     DamageUtil.attackEntityFrom(
-                        event.getEntityLiving(),
+                        event.entityLiving,
                         DamageSource.causePlayerDamage(attacker),
                         (float) (added / 2.0F));
                 } finally {
@@ -318,14 +317,14 @@ public class EventHandlerCapeEffects implements ITickHandler {
      */
     @SubscribeEvent
     public void onWaterBreak(PlayerEvent.BreakSpeed event) {
-        EntityPlayer pl = event.getEntityPlayer();
-        if (pl.isInsideOfMaterial(Material.WATER) && !EnchantmentHelper.getAquaAffinityModifier(pl)) {
+        EntityPlayer pl = event.entityPlayer;
+        if (pl.isInsideOfMaterial(Material.water) && !EnchantmentHelper.getAquaAffinityModifier(pl)) {
             // Normally the break speed would be divided by 5 here in the actual logic. See link above
             CapeEffectOctans ceo = ItemCape.getCapeEffect(pl, Constellations.octans);
             if (ceo != null) {
                 // Revert speed back to what we think is original.
                 // Might stack with others that implement it the same way.
-                event.setNewSpeed(event.getOriginalSpeed() * 5);
+                event.newSpeed = (event.originalSpeed * 5);
             }
         }
     }
@@ -359,8 +358,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 World w = pl.getEntityWorld();
                 AxisAlignedBB bb = new AxisAlignedBB(-range, -range, -range, range, range, range);
                 bb = bb.offset(pl.posX, pl.posY, pl.posZ);
-                Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
-                List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
+                Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectorS.IS_ALIVE);
+                List players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {
                     if (rand.nextFloat() <= cd.getFeedChancePerCycle()) {
                         player.heal(cd.getHealPerCycle());
@@ -411,8 +410,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     private void tickVicioClientEffect(EntityPlayer player) {
-        if (player instanceof EntityPlayerSP) {
-            EntityPlayerSP spl = (EntityPlayerSP) player;
+        if (player instanceof EntityPlayerSP spl) {
             boolean hasFlightPerk = ResearchManager.getProgress(spl, Side.CLIENT)
                 .hasPerkEffect(p -> p instanceof KeyMantleFlight);
             if (spl.movementInput.jump && !hasFlightPerk
@@ -420,7 +418,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 && spl.motionY < -0.5
                 && !spl.capabilities.isFlying
                 && !spl.isInWater()
-                && !spl.isInLava()) {
+                && !spl.isInsideOfMaterial(Material.lava)) {
                 if (!spl.isElytraFlying()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
                 }
@@ -441,7 +439,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     private void tickOctansEffect(EntityPlayer pl) {
         CapeEffectOctans ceo = ItemCape.getCapeEffect(pl, Constellations.octans);
-        if (ceo != null && pl.isInsideOfMaterial(Material.WATER)) {
+        if (ceo != null && pl.isInsideOfMaterial(Material.water)) {
             if (pl.getAir() < 300) {
                 pl.setAir(300);
             }
@@ -535,41 +533,37 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        switch (type) {
-            case PLAYER:
-                EntityPlayer pl = (EntityPlayer) context[0];
-                Side side = (Side) context[1];
-                if (side == Side.SERVER) {
-                    if (!(pl instanceof EntityPlayerMP)) return;
-                    if (MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
+        if (Objects.requireNonNull(type) == TickEvent.Type.PLAYER) {
+            EntityPlayer pl = (EntityPlayer) context[0];
+            Side side = (Side) context[1];
+            if (side == Side.SERVER) {
+                if (!(pl instanceof EntityPlayerMP)) return;
+                if (MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
 
-                    tickAevitasEffect(pl);
-                    tickFornaxMelting(pl);
-                    tickArmaraWornEffect(pl);
-                    tickOctansEffect(pl);
-                    tickBootesEffect(pl);
-                    tickVicioEffect(pl);
-                } else if (side == Side.CLIENT) {
-                    CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
-                    if (cae != null) {
-                        cae.playActiveParticleTick(pl);
-                    }
-                    CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
-                    if (vic != null) {
-                        tickVicioClientEffect(pl);
-                    }
-                    CapeEffectLucerna luc = ItemCape.getCapeEffect(pl, Constellations.lucerna);
-                    if (luc != null) {
-                        luc.playClientHighlightTick(pl);
-                    }
-                    CapeEffectMineralis min = ItemCape.getCapeEffect(pl, Constellations.mineralis);
-                    if (min != null) {
-                        min.playClientHighlightTick(pl);
-                    }
+                tickAevitasEffect(pl);
+                tickFornaxMelting(pl);
+                tickArmaraWornEffect(pl);
+                tickOctansEffect(pl);
+                tickBootesEffect(pl);
+                tickVicioEffect(pl);
+            } else if (side == Side.CLIENT) {
+                CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
+                if (cae != null) {
+                    cae.playActiveParticleTick(pl);
                 }
-                break;
-            default:
-                break;
+                CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
+                if (vic != null) {
+                    tickVicioClientEffect(pl);
+                }
+                CapeEffectLucerna luc = ItemCape.getCapeEffect(pl, Constellations.lucerna);
+                if (luc != null) {
+                    luc.playClientHighlightTick(pl);
+                }
+                CapeEffectMineralis min = ItemCape.getCapeEffect(pl, Constellations.mineralis);
+                if (min != null) {
+                    min.playClientHighlightTick(pl);
+                }
+            }
         }
     }
 

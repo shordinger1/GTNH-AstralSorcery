@@ -8,15 +8,9 @@
 
 package shordinger.astralsorcery.common.crafting.altar;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import shordinger.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -27,6 +21,14 @@ import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemComparator;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -36,13 +38,13 @@ import shordinger.astralsorcery.common.util.ItemComparator;
  */
 public class AltarRecipeRegistry {
 
-    private static Map<ItemStack, ISpecialCraftingEffects> effectRecoveryMap = new HashMap<>();
+    private static final Map<ItemStack, ISpecialCraftingEffects> effectRecoveryMap = new HashMap<>();
 
     public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> mtRecipes = new HashMap<>();
     public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> recipes = new HashMap<>();
     private static AbstractAltarRecipe[] compiledRecipeArray = null;
 
-    private static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> localFallbackCache = new HashMap<>();
+    private static final Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> localFallbackCache = new HashMap<>();
 
     // NEVER call this. this should only get called once at post init to compile all recipes for fast access.
     // After this is called, changes to recipe registry might break stuff.
@@ -110,6 +112,7 @@ public class AltarRecipeRegistry {
         for (Collection<AbstractAltarRecipe> recipeList : recipes.values()) {
             for (AbstractAltarRecipe recipe : recipeList) {
                 if (recipe.getNativeRecipe()
+                    .getRegistryName() != null && recipe.getNativeRecipe()
                     .getRegistryName()
                     .equals(id)) {
                     return recipe;
@@ -119,6 +122,7 @@ public class AltarRecipeRegistry {
         for (Collection<AbstractAltarRecipe> recipeList : mtRecipes.values()) {
             for (AbstractAltarRecipe recipe : recipeList) {
                 if (recipe.getNativeRecipe()
+                    .getRegistryName() != null && recipe.getNativeRecipe()
                     .getRegistryName()
                     .equals(id)) {
                     return recipe;

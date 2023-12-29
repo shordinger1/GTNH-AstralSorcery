@@ -8,19 +8,11 @@
 
 package shordinger.astralsorcery.common.data.world.data;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
@@ -29,6 +21,12 @@ import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +37,7 @@ import shordinger.astralsorcery.migration.BlockPos;
  */
 public class GatewayCache extends CachedWorldData {
 
-    private List<GatewayNode> gatewayPositions = new LinkedList<>();
+    private final List<GatewayNode> gatewayPositions = new LinkedList<>();
 
     public GatewayCache() {
         super(WorldCacheManager.SaveKey.GATEWAY_DATA);
@@ -51,7 +49,7 @@ public class GatewayCache extends CachedWorldData {
 
     public void offerPosition(World world, BlockPos pos, @Nonnull String display) {
         TileEntity te = world.getTileEntity(pos);
-        if (te == null || !(te instanceof TileCelestialGateway)) {
+        if (!(te instanceof TileCelestialGateway)) {
             return;
         }
         GatewayNode node = new GatewayNode(pos, display);

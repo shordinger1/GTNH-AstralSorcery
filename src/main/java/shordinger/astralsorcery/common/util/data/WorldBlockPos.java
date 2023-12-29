@@ -47,7 +47,7 @@ public class WorldBlockPos extends BlockPos {
     }
 
     public IBlockState getStateAt() {
-        return world.getBlockState(this);
+        return WorldHelper.getBlockState(world, this);
     }
 
     @Override

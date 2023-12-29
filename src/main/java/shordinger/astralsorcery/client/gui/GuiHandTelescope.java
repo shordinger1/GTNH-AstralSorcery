@@ -8,11 +8,6 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -21,9 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.world.World;
-
 import org.lwjgl.opengl.GL11;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.base.GuiSkyScreen;
@@ -54,6 +47,15 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -112,7 +114,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
             IMajorConstellation bestGuess = (IMajorConstellation) handle
                 .getHighestDistributionConstellation(rand, (c) -> c instanceof IMajorConstellation);
             if (bestGuess != null && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F
-                && bestGuess.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
+                && bestGuess.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) {
                 topFound = bestGuess;
                 selectedYaw = (rand.nextFloat() * 360F) - 180F;
                 selectedPitch = -90F + rand.nextFloat() * 25F;
@@ -162,7 +164,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         handleMouseMovement(partialTicks);
 
         World w = Minecraft.getMinecraft().world;
-        float pitch = Minecraft.getMinecraft().player.rotationPitch;
+        float pitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
         float transparency = 0F;
         if (pitch < -60F) {
             transparency = 1F;
@@ -448,14 +450,14 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         if (topFound != null) {
             zLevel += 1;
 
-            float playerYaw = Minecraft.getMinecraft().player.rotationYaw % 360F;
+            float playerYaw = Minecraft.getMinecraft().thePlayer.rotationYaw % 360F;
             if (playerYaw < 0) {
                 playerYaw += 360F;
             }
             if (playerYaw >= 180F) {
                 playerYaw -= 360F;
             }
-            float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+            float playerPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
             float diffYaw = playerYaw - selectedYaw;
             float diffPitch = playerPitch - selectedPitch;
@@ -526,7 +528,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
     }
 
     private boolean canTelescopeSeeSky(World renderWorld) {
-        BlockPos pos = Minecraft.getMinecraft().player.getPosition();
+        BlockPos pos = Minecraft.getMinecraft().thePlayer.getPosition();
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
@@ -576,7 +578,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
     private boolean canStartDrawing() {
         return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F
             && Minecraft.getMinecraft().world.getRainStrength(1.0F) <= 0.1F
-            && Minecraft.getMinecraft().player.rotationPitch <= -45F;
+            && Minecraft.getMinecraft().thePlayer.rotationPitch <= -45F;
     }
 
     private void clearLines() {
@@ -633,7 +635,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
         List<StarConnection> sc = c.getStarConnections();
         if (sc.size() != drawnLines.size()) return; // Can't match otherwise anyway.
-        if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) return;
+        if (!c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) return;
 
         for (StarConnection connection : sc) {
             Rectangle fromRect = drawnStars.get(connection.from);

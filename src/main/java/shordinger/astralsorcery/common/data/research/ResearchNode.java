@@ -36,7 +36,7 @@ public class ResearchNode {
     private final int id;
     private final RenderType renderType;
     public final int renderPosX, renderPosZ;
-    private String unlocName;
+    private final String unlocName;
     // private boolean special = false;
 
     private ItemStack[] renderItemStacks;
@@ -45,8 +45,8 @@ public class ResearchNode {
 
     private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
-    private List<ResearchNode> connectionsTo = new LinkedList<>();
-    private List<IJournalPage> pages = new LinkedList<>();
+    private final List<ResearchNode> connectionsTo = new LinkedList<>();
+    private final List<IJournalPage> pages = new LinkedList<>();
 
     private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {
         this.id = counter;

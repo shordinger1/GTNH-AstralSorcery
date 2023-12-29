@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -42,8 +42,8 @@ public class StorageNetworkBuffer extends CachedWorldData {
 
     private static final Random rand = new Random();
 
-    private Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
-    private Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
+    private final Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
+    private final Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
 
     public StorageNetworkBuffer() {
         super(WorldCacheManager.SaveKey.STORAGE_BUFFER);
@@ -96,7 +96,9 @@ public class StorageNetworkBuffer extends CachedWorldData {
             if (master == null) {
                 master = MiscUtils.getRandomEntry(net.getCores(), rand);
             }
-            this.rawNetworks.put(master.getPos(), net);
+            if (master != null) {
+                this.rawNetworks.put(master.getPos(), net);
+            }
         }
 
         this.rebuildAccessContext();

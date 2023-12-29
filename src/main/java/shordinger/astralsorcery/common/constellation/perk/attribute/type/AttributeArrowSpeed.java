@@ -8,12 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -36,11 +35,9 @@ public class AttributeArrowSpeed extends PerkAttributeType {
 
     @SubscribeEvent
     public void onArrowFire(EntityJoinWorldEvent event) {
-        if (event.getEntity() instanceof EntityArrow) {
-            EntityArrow arrow = (EntityArrow) event.getEntity();
-            if (arrow.shootingEntity != null && arrow.shootingEntity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) arrow.shootingEntity;
-                Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
+        if (event.entity instanceof EntityArrow arrow) {
+            if (arrow.shootingEntity instanceof EntityPlayer player) {
+                Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
                 if (!hasTypeApplied(player, side)) {
                     return;
                 }

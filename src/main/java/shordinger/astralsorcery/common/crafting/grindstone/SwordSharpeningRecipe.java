@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.util.ItemUtils;
 public class SwordSharpeningRecipe extends GrindstoneRecipe {
 
     public SwordSharpeningRecipe() {
-        super(null, null, 40);
+        super((ItemStack) null, null, 40);
     }
 
     @Override

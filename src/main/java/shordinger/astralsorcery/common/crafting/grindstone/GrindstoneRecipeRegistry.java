@@ -8,17 +8,15 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
+import net.minecraft.item.ItemStack;
+import shordinger.astralsorcery.common.util.ItemComparator;
+
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
-import shordinger.astralsorcery.common.util.ItemComparator;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +32,7 @@ public class GrindstoneRecipeRegistry {
     public static List<GrindstoneRecipe> recipes = new LinkedList<>();
     public static List<GrindstoneRecipe> mtRecipes = new LinkedList<>();
 
-    private static List<GrindstoneRecipe> localFallback = new LinkedList<>();
+    private static final List<GrindstoneRecipe> localFallback = new LinkedList<>();
 
     public static GrindstoneRecipe registerGrindstoneRecipe(ItemStack in, ItemStack out, int chance) {
         return registerGrindstoneRecipe(new GrindstoneRecipe(in, out, chance));

@@ -46,7 +46,7 @@ import shordinger.astralsorcery.migration.IBlockState;
  */
 public class CraftingAccessManager {
 
-    private static List<Object> lastReloadRemovedRecipes = new LinkedList<>();
+    private static final List<Object> lastReloadRemovedRecipes = new LinkedList<>();
 
     private static boolean completed = false;
     public static boolean ignoreJEI = true;

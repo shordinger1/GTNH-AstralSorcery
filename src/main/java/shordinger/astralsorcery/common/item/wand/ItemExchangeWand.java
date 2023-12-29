@@ -257,14 +257,14 @@ public class ItemExchangeWand extends ItemBlockStorage
         Random r = getPreviewRandomFromWorld(world);
 
         EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
-        PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
+        PlayerControllerMP ctrl = Minecraft.getMinecraft().thePlayerController;
         if (ctrl == null || pl == null) return;
         RayTraceResult rtr = getLookBlock(pl, false, true, ctrl.getBlockReachDistance());
         if (rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) return;
 
         IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, world.getWorldType());
         BlockPos origin = rtr.getBlockPos();
-        IBlockState atOrigin = world.getBlockState(origin);
+        IBlockState atOrigin = WorldHelper.getBlockState(world, origin);
         IBlockState match = MiscUtils.getMatchingState(storedStates.keySet(), atOrigin);
         if (match != null && storedStates.keySet()
             .size() <= 1) {
@@ -376,7 +376,7 @@ public class ItemExchangeWand extends ItemBlockStorage
         }
 
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
-        IBlockState atOrigin = world.getBlockState(origin);
+        IBlockState atOrigin = WorldHelper.getBlockState(world, origin);
         IBlockState match = MiscUtils.getMatchingState(storedStates.keySet(), atOrigin);
         if (match != null && storedStates.keySet()
             .size() <= 1) {

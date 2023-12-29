@@ -8,17 +8,13 @@
 
 package shordinger.astralsorcery.common.world.attributes;
 
-import java.util.*;
-
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
-
-import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
@@ -29,6 +25,13 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -189,7 +192,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             int yPos = 2 + random.nextInt(4);
             BlockPos pos = new BlockPos(xPos, yPos, zPos);
             if (!fitsBiome(world, pos) || !isApplicableWorld(world)) return;
-            IBlockState state = world.getBlockState(pos);
+            IBlockState state = WorldHelper.getBlockState(world, pos);
             if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
                 IBlockState newState = BlocksAS.customOre.getDefaultState()
                     .withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
@@ -201,7 +204,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
 
                 if (random.nextInt(4) == 0) {
                     pos = pos.add(random.nextInt(2), random.nextInt(2), random.nextInt(2));
-                    state = world.getBlockState(pos);
+                    state = WorldHelper.getBlockState(world, pos);
                     if (MiscUtils.getMatchingState(replaceableStates, state) != null) {
                         if (world.setBlockState(pos, newState)) {
                             RockCrystalHandler.INSTANCE.addOre(world, pos, true);

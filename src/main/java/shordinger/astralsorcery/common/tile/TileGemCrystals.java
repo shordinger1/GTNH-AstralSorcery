@@ -88,7 +88,7 @@ public class TileGemCrystals extends TileSkybound {
     }
 
     public void grow() {
-        IBlockState current = world.getBlockState(getPos());
+        IBlockState current = WorldHelper.getBlockState(world, getPos());
         if (!(current.getBlock() instanceof BlockGemCrystals)) {
             return;
         }

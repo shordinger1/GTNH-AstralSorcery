@@ -70,7 +70,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
 
     @SideOnly(Side.CLIENT)
     private void playClientEffects() {
-        if (this.linkedTo != null && Minecraft.getMinecraft().player.getDistanceSq(getPos()) < 1024) { // 32 Squared
+        if (this.linkedTo != null && Minecraft.getMinecraft().thePlayer.getDistanceSq(getPos()) < 1024) { // 32 Squared
             if (ticksExisted % 4 == 0) {
                 Collection<Vector3> positions = MiscUtils.getCirclePositions(
                     new Vector3(this).add(0.5, 0.5, 0.5),

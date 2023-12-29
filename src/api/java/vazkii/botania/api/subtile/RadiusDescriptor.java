@@ -10,7 +10,7 @@
  */
 package vazkii.botania.api.subtile;
 
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 
 import shordinger.astralsorcery.migration.BlockPos;
 

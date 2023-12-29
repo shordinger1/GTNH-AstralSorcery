@@ -8,17 +8,15 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.util.Set;
-
+import com.google.common.collect.Sets;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import com.google.common.collect.Sets;
-
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod

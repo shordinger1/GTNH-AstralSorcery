@@ -8,11 +8,10 @@
 
 package shordinger.astralsorcery.common.block;
 
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -23,20 +22,17 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -45,6 +41,8 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,7 +71,7 @@ public class BlockChalice extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         if (state.getValue(ACTIVE)) {
             RenderingUtils.playBlockBreakParticles(pos, getDefaultState());
             RenderingUtils.playBlockBreakParticles(pos.up(), getDefaultState());
@@ -190,7 +188,7 @@ public class BlockChalice extends BlockContainer {
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         if (state.getValue(ACTIVE)) {
             if (world.isAirBlock(pos.up())) {
                 ((World) world).setBlockToAir(pos);

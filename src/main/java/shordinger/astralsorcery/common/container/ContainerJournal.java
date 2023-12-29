@@ -10,14 +10,12 @@ package shordinger.astralsorcery.common.container;
 
 import java.util.LinkedList;
 
+import com.gtnewhorizons.modularui.api.forge.IItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
 import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -83,18 +81,18 @@ public class ContainerJournal extends Container {
 
             if (!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper
                 && ItemConstellationPaper.getConstellation(itemstack1) != null) {
-                if (index >= 0 && index < 36) {
+                if (index < 36) {
                     if (!this.mergeItemStack(itemstack1, 36, 63, false)) {
                         return null;
                     }
                 }
             }
 
-            if (index >= 0 && index < 27) {
+            if (index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
                     return null;
                 }
-            } else if (index >= 27 && index < 36) {
+            } else if (index < 36) {
                 if (!this.mergeItemStack(itemstack1, 0, 27, false)) {
                     return null;
                 }

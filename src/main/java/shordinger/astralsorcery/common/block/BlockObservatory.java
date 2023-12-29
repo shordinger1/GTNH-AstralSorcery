@@ -8,10 +8,7 @@
 
 package shordinger.astralsorcery.common.block;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -23,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -31,6 +27,8 @@ import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,7 +55,7 @@ public class BlockObservatory extends BlockContainer {
             for (int yy = 0; yy <= 3; yy++) {
                 for (int zz = -1; zz <= 1; zz++) {
                     mut.setPos(pos.getX() + xx, pos.getY() + yy, pos.getZ() + zz);
-                    if (!world.isAirBlock(mut) && !world.getBlockState(mut)
+                    if (!world.isAirBlock(mut) && !WorldHelper.getBlockState(world, mut)
                         .getBlock()
                         .isReplaceable(world, mut)) {
                         mut.release();

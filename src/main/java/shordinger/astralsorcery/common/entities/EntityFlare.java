@@ -8,11 +8,8 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,12 +17,8 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.client.event.sound.SoundEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -44,6 +37,10 @@ import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -123,7 +120,7 @@ public class EntityFlare extends EntityFlying {
 
         entityAge++;
 
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             if (texSprite == null) {
                 setupSprite();
             }
@@ -142,7 +139,7 @@ public class EntityFlare extends EntityFlying {
                 if (Config.flareKillsBats && entityAge % 70 == 0 && rand.nextBoolean()) {
                     Entity closest = world
                         .findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().grow(10), this);
-                    if (closest != null && closest instanceof EntityBat
+                    if (closest instanceof EntityBat
                         && ((EntityBat) closest).getHealth() > 0
                         && !closest.isDead) {
                         DamageUtil.attackEntityFrom(closest, CommonProxy.dmgSourceStellar, 40F);
@@ -230,7 +227,7 @@ public class EntityFlare extends EntityFlying {
 
     @Nullable
     public EntityPlayer getFollowingEntity() {
-        Entity e = world.getEntityByID(this.followingEntityId);
+        Entity e = worldObj.getEntityByID(this.followingEntityId);
         if (e == null || e.isDead || !(e instanceof EntityPlayer)) {
             return null;
         }

@@ -78,7 +78,7 @@ public class PerkTreeConnector extends MajorPerk {
                 if (ResearchManager.grantFreePerkPoint(player, token)) {
                     listTokens.appendTag(new NBTTagString(token));
 
-                    LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
+                    LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getDisplayName());
                 }
             }
         }
@@ -93,7 +93,7 @@ public class PerkTreeConnector extends MajorPerk {
         for (int i = 0; i < list.tagCount(); i++) {
             String token = list.getStringTagAt(i);
             if (ResearchManager.revokeFreePoint(player, token)) {
-                LogCategory.PERKS.info(() -> "Revoked perk point " + token + " of " + player.getName());
+                LogCategory.PERKS.info(() -> "Revoked perk point " + token + " of " + player.getDisplayName());
             }
         }
     }

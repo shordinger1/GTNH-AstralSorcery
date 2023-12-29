@@ -169,9 +169,9 @@ public class UIGateway {
     }
 
     public void renderIntoWorld(float pticks) {
-        if (Minecraft.getMinecraft().player == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null) return;
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         double dst = new Vector3(origin).distance(
             Vector3.atEntityCorner(player)
                 .addY(1.5));

@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

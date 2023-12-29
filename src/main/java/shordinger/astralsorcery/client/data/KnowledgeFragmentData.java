@@ -78,7 +78,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
     }
 
     public List<KnowledgeFragment> getDiscoverableFragments() {
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         List<KnowledgeFragment> frag = KnowledgeFragmentManager.getInstance()
             .getAllFragments();
         frag.removeAll(flattenedFragments);
@@ -87,7 +87,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
     }
 
     public Collection<KnowledgeFragment> getFragmentsFor(GuiScreenJournal journal) {
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         return getAllFragments().stream()
             .filter(f -> f.isVisible(journal) && f.canSee(prog) && f.isFullyPresent())
             .collect(Collectors.toList());

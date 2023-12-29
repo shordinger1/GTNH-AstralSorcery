@@ -8,20 +8,18 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidActionResult;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.crafting.IGatedRecipe;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -91,7 +89,10 @@ public abstract class AbstractInfusionRecipe {
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
         if (!stack.isEmpty()) {
-            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            FluidActionResult fas = null;
+            if (input.getFluidTypeAndAmount() != null) {
+                fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            }
             if (fas.isSuccess()) {
                 infuser.setStack(fas.getResult());
             }
@@ -101,17 +102,17 @@ public abstract class AbstractInfusionRecipe {
     @Nonnull
     @SideOnly(Side.CLIENT)
     public ItemStack getOutputForRender() {
-        return ItemUtils.copyStackWithSize(output, output.getCount());
+        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
     }
 
     @Nonnull
     public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
-        return ItemUtils.copyStackWithSize(output, output.getCount());
+        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
     }
 
     @Nonnull
     public ItemStack getOutputForMatching() {
-        return ItemUtils.copyStackWithSize(output, output.getCount());
+        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
     }
 
     @Nonnull

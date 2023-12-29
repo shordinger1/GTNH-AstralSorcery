@@ -116,7 +116,7 @@ public class TransmissionWorldHandler {
 
                 for (BlockPos endPointPos : chain.getUncheckedEndpointsBlock()) {
                     if (MiscUtils.isChunkLoaded(world, new ChunkPos(endPointPos))) {
-                        IBlockState endState = world.getBlockState(endPointPos);
+                        IBlockState endState = WorldHelper.getBlockState(world, endPointPos);
                         Block b = endState.getBlock();
                         if (b instanceof IBlockStarlightRecipient) {
                             Float multiplier = lossMultipliers.get(endPointPos);

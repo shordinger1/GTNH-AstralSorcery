@@ -12,8 +12,6 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
@@ -44,13 +42,13 @@ public class EnchantmentNightVision extends EnchantmentPlayerWornTick {
     }
 
     @Override
-    public boolean canApply(ItemStack stack) {
-        return type.canEnchantItem(stack.getItem());
+    public boolean canApply(ItemStack p_92089_1_) {
+        return super.canApply(p_92089_1_);
     }
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        return super.getMaxLevel();
     }
 
     @Override

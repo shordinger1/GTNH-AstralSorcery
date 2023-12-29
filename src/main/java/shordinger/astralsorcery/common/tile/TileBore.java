@@ -24,7 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -569,7 +569,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         int z = getPos().getZ();
         for (int yy = 0; yy < getPos().getY(); yy++) {
             BlockPos pos = new BlockPos(x, yy, z);
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             if (at.isTranslucent() || at.getBlock()
                 .isAir(at, world, pos)) {
                 for (int i = 0; i < 20; i++) {
@@ -745,7 +745,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = digPosResult.stream()
             .filter(
                 (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
-                    && world.getBlockState(p)
+                    && WorldHelper.getBlockState(world, p)
                     .getBlockHardness(world, p) >= 0)
             .collect(Collectors.toList());
         if (!out.isEmpty()) {
@@ -765,7 +765,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = digPosResult.stream()
             .filter(
                 (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
-                    && world.getBlockState(p)
+                    && WorldHelper.getBlockState(world, p)
                     .getBlockHardness(world, p) >= 0)
             .collect(Collectors.toList());
         if (!out.isEmpty()) {
@@ -790,14 +790,14 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream()
             .filter(
                 (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
-                    && world.getBlockState(p)
+                    && WorldHelper.getBlockState(world, p)
                     .getBlockHardness(world, p) >= 0)
             .collect(Collectors.toList());
         if (!out.isEmpty() && world instanceof WorldServer) {
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
-                    IBlockState state = world.getBlockState(p);
+                    IBlockState state = WorldHelper.getBlockState(world, p);
                     if (!state.getMaterial()
                         .isLiquid()) {
                         MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), p, state, true, true, false);
@@ -824,7 +824,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream()
             .filter(
                 (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
-                    && world.getBlockState(p)
+                    && WorldHelper.getBlockState(world, p)
                     .getBlockHardness(world, p) >= 0)
             .collect(Collectors.toList());
         if (!out.isEmpty() && world instanceof WorldServer) {
@@ -832,7 +832,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
-                    IBlockState state = world.getBlockState(p);
+                    IBlockState state = WorldHelper.getBlockState(world, p);
                     if (!state.getMaterial()
                         .isLiquid()) {
                         MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), p, state, true, true, false);
@@ -939,7 +939,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     @Nullable
     public BoreType getCurrentBoreType() {
-        IBlockState parent = world.getBlockState(pos.down());
+        IBlockState parent = WorldHelper.getBlockState(world, pos.down());
         if (parent.getBlock() instanceof BlockBoreHead) {
             return parent.getValue(BlockBoreHead.BORE_TYPE);
         }

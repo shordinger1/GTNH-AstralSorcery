@@ -407,7 +407,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                 .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
             if (nightPerc >= 0.05) {
                 Color c = new Color(0, 6, 58);
-                BlockPos center = Minecraft.getMinecraft().player.getPosition();
+                BlockPos center = Minecraft.getMinecraft().thePlayer.getPosition();
                 int offsetX = center.getX();
                 int offsetZ = center.getZ();
                 BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain(center);

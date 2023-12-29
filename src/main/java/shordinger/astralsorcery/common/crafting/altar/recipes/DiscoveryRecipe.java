@@ -8,14 +8,9 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
-import net.minecraftforge.items.ItemStackHandler;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.light.EffectLightbeam;
 import shordinger.astralsorcery.common.crafting.IGatedRecipe;
@@ -28,6 +23,9 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +47,7 @@ public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe
 
     @Override
     public int craftingTickTime() {
-        return 100;
+        return super.craftingTickTime();
     }
 
     @Override

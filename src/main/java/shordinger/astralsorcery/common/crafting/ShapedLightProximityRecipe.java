@@ -15,8 +15,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -54,20 +52,18 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
         if (!vanillaMatch(inv)) return false;
 
         Container c = inv.eventHandler;
-        if (!(c instanceof ContainerWorkbench)) return false;
-        ContainerWorkbench workbench = (ContainerWorkbench) c;
+        if (!(c instanceof ContainerWorkbench workbench)) return false;
         BlockPos pos = workbench.pos;
         if (pos == null) return false;
         if (world.isRemote) {
             GuiScreen sc = Minecraft.getMinecraft().currentScreen;
-            if (sc == null || !(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
-            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition)) return false;
+            if (!(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
+            return ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition);
         } else {
-            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                .doesPositionReceiveStarlightServer(world, pos)) return false;
+            return ((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                .doesPositionReceiveStarlightServer(world, pos);
         }
-        return true;
     }
 
     private boolean vanillaMatch(InventoryCrafting inv) {

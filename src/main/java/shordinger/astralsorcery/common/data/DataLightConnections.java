@@ -8,21 +8,19 @@
 
 package shordinger.astralsorcery.common.data;
 
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
+import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
-import cpw.mods.fml.relauncher.Side;
-import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
-import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,29 +34,21 @@ public class DataLightConnections extends AbstractData {
     private final Object lock = new Object();
 
     public boolean clientReceivingData = false;
-    private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
-    private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
+    private final Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
 
     // Boolean flag: true=addition, false=removal
-    private Map<Integer, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
+    private final Map<Integer, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
     public void updateNewConnectionsThreaded(int dimensionId,
                                              List<TransmissionChain.LightConnection> newlyAddedConnections) {
-        Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.get(dimensionId);
-        if (posBufferDim == null) {
-            posBufferDim = new HashMap<>();
-            serverPosBuffer.put(dimensionId, posBufferDim);
-        }
+        Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.computeIfAbsent(dimensionId, k -> new HashMap<>());
         for (TransmissionChain.LightConnection c : newlyAddedConnections) {
             BlockPos start = c.getStart();
             BlockPos end = c.getEnd();
-            List<BlockPos> endpoints = posBufferDim.get(start);
-            if (endpoints == null) {
-                endpoints = new LinkedList<>();
-                posBufferDim.put(start, endpoints);
-            }
+            List<BlockPos> endpoints = posBufferDim.computeIfAbsent(start, k -> new LinkedList<>());
             if (!endpoints.contains(end)) endpoints.add(end);
         }
         notifyConnectionAdd(dimensionId, newlyAddedConnections);

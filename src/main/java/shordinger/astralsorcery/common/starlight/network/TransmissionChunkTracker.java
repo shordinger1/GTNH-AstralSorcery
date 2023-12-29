@@ -55,8 +55,8 @@ public class TransmissionChunkTracker {
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        // StarlightTransmissionHandler.getInstance().informWorldUnload(event.getWorld());
-        // StarlightUpdateHandler.getInstance().informWorldUnload(event.getWorld());
+        // StarlightTransmissionHandler.getInstance().informWorldUnload(event.world);
+        // StarlightUpdateHandler.getInstance().informWorldUnload(event.world);
     }
 
     @SubscribeEvent

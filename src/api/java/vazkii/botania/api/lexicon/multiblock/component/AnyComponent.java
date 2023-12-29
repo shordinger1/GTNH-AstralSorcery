@@ -11,7 +11,6 @@
 package vazkii.botania.api.lexicon.multiblock.component;
 
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 
@@ -26,7 +25,7 @@ public class AnyComponent extends MultiblockComponent {
 
     @Override
     public boolean matches(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         return !state.getBlock()
             .isAir(state, world, pos) && state.getCollisionBoundingBox(world, pos) != null;
     }

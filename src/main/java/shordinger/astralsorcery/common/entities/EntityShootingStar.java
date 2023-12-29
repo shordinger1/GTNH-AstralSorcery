@@ -8,29 +8,18 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.Fluid;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -43,7 +32,13 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EntityData.DataParameter;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the BeeBetterAtBees Mod
@@ -52,7 +47,7 @@ import shordinger.astralsorcery.migration.IBlockState;
  * Date: 13.10.2018 / 12:54
  */
 public class EntityShootingStar extends EntityThrowable implements EntityTechnicalAmbient {
-
+    public EntityDataManager dataManager;
     private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager
         .createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
     private static final DataParameter<Long> EFFECT_SEED = EntityDataManager
@@ -107,14 +102,14 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
 
         long lastTrackedTick = this.dataManager.get(LAST_UPDATE);
 
-        if (!world.isRemote) {
+        if (!worldObj.isRemote) {
             if (removalPending || !ConstellationSkyHandler.getInstance()
-                .isNight(world) || world.getTotalWorldTime() - lastTrackedTick >= 20) {
+                .isNight(worldObj) || worldObj.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;
             }
 
-            this.dataManager.set(LAST_UPDATE, world.getTotalWorldTime());
+            this.dataManager.set(LAST_UPDATE, worldObj.getTotalWorldTime());
 
             if (isInWater() || isInLava()) {
                 RayTraceResult rtr = new RayTraceResult(new BlockPos(0, 0, 0), EnumFacing.UP, this.getPosition());
@@ -126,9 +121,9 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
 
         correctMovement();
 
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             if (!ConstellationSkyHandler.getInstance()
-                .isNight(world) || world.getTotalWorldTime() - lastTrackedTick >= 20) {
+                .isNight(worldObj) || worldObj.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;
             }
@@ -143,7 +138,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         float positionDist = 96F;
 
         EntityComplexFX.RenderOffsetController renderCtrl = (fx, currentRenderPos, currentMotion, pTicks) -> {
-            EntityPlayer pl = Minecraft.getMinecraft().player;
+            EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
             if (pl == null) {
                 return currentRenderPos;
             }
@@ -160,7 +155,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                         .multiply(positionDist));
         };
         EntityComplexFX.ScaleFunction scaleFct = (fx, pos, pTicks, scaleIn) -> {
-            EntityPlayer pl = Minecraft.getMinecraft().player;
+            EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
             if (pl == null) {
                 return scaleIn;
             }
@@ -228,24 +223,24 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
             hit = result.entityHit.getPosition();
         }
-        if (!world.isRemote && MiscUtils.isChunkLoaded(world, hit)) {
+        if (!worldObj.isRemote && MiscUtils.isChunkLoaded(worldObj, hit)) {
 
-            IBlockState state = world.getBlockState(hit);
+            IBlockState state = worldObj.getBlockState(hit);
             boolean eligableForExplosion = true;
             if (MiscUtils.isFluidBlock(state)) {
                 Fluid f = MiscUtils.tryGetFuild(state);
                 if (f != null) {
-                    if (f.getTemperature(world, hit) <= 300) { // About room temp; incl. water
+                    if (f.getTemperature(worldObj, hit) <= 300) { // About room temp; incl. water
                         eligableForExplosion = false;
                     }
                 }
             }
 
             Vector3 v = Vector3.atEntityCenter(this);
-            ShootingStarExplosion.play(world, v, !eligableForExplosion, getEffectSeed());
+            ShootingStarExplosion.play(worldObj, v, !eligableForExplosion, getEffectSeed());
 
             EntityItem generated = new EntityItem(
-                world,
+                worldObj,
                 v.getX(),
                 v.getY(),
                 v.getZ(),
@@ -256,15 +251,15 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             generated.motionY = Math.abs(m.getY());
             generated.motionZ = m.getZ();
             generated.setPickupDelay(20);
-            world.spawnEntity(generated);
+            worldObj.spawnEntity(generated);
 
-            LootTable table = world.getLootTableManager()
+            LootTable table = worldObj.getLootTableManager()
                 .getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
-            if (table != null && world instanceof WorldServer) {
-                LootContext context = new LootContext.Builder((WorldServer) world).build();
+            if (table != null && worldObj instanceof WorldServer) {
+                LootContext context = new LootContext.Builder((WorldServer) worldObj).build();
                 List<ItemStack> stacks = table.generateLootForPools(rand, context);
                 for (ItemStack stack : stacks) {
-                    ItemUtils.dropItemNaturally(world, v.getX(), v.getY(), v.getZ(), stack);
+                    ItemUtils.dropItemNaturally(worldObj, v.getX(), v.getY(), v.getZ(), stack);
                 }
             }
         }

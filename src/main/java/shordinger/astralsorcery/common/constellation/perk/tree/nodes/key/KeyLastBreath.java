@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -70,7 +69,7 @@ public class KeyLastBreath extends KeyPerk {
 
     @SubscribeEvent
     public void onAttack(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
@@ -79,15 +78,15 @@ public class KeyLastBreath extends KeyPerk {
                 float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
                     .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
                 float healthPerc = 1F - (Math.min(player.getHealth(), player.getMaxHealth()) / player.getMaxHealth());
-                event.setAmount(event.getAmount() * (1F + (healthPerc * actIncrease)));
+                event.setAmount(event.ammount * (1F + (healthPerc * actIncrease)));
             }
         }
     }
 
     @SubscribeEvent
     public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        EntityPlayer player = event.getEntityPlayer();
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.entityPlayer;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)

@@ -8,15 +8,7 @@
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.Callable;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -32,10 +24,16 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.Callable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -162,7 +160,7 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
             ChunkFluidEntry entry = event.getChunk()
                 .getCapability(CAPABILITY_CHUNK_FLUID, null);
             if (entry != null && !entry.hadSomeData()) {
-                World w = event.getWorld();
+                World w = event.world;
                 long seed = w.getSeed();
                 long chX = event.getChunk().x;
                 long chZ = event.getChunk().z;

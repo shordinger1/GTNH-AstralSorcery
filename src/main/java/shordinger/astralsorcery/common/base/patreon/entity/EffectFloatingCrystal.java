@@ -8,16 +8,12 @@
 
 package shordinger.astralsorcery.common.base.patreon.entity;
 
-import java.awt.*;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
-
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
@@ -29,6 +25,8 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -78,7 +76,7 @@ public class EffectFloatingCrystal extends EntityComplexFX {
             if (refreshFunction != null) {
                 Entity rView = Minecraft.getMinecraft()
                     .getRenderViewEntity();
-                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
                 if (rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
                     if (refreshFunction.shouldRefresh()) {
                         age = 0;

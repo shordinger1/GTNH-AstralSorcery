@@ -15,20 +15,12 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
-import mezz.jei.api.*;
-import mezz.jei.api.ingredients.IIngredientBlacklist;
-import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.api.recipe.*;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
-import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import mezz.jei.startup.StackHelper;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.block.BlockMachine;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
-import shordinger.astralsorcery.common.container.*;
 import shordinger.astralsorcery.common.container.ContainerAltarAttunement;
 import shordinger.astralsorcery.common.container.ContainerAltarConstellation;
 import shordinger.astralsorcery.common.container.ContainerAltarDiscovery;
@@ -44,7 +36,6 @@ import shordinger.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegis
 import shordinger.astralsorcery.common.crafting.helper.RecipeHelper;
 import shordinger.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import shordinger.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
-import shordinger.astralsorcery.common.integrations.mods.jei.*;
 import shordinger.astralsorcery.common.integrations.mods.jei.ASRecipeWrapper;
 import shordinger.astralsorcery.common.integrations.mods.jei.CategoryGrindstone;
 import shordinger.astralsorcery.common.integrations.mods.jei.CategoryInfuser;
@@ -54,7 +45,6 @@ import shordinger.astralsorcery.common.integrations.mods.jei.GrindstoneRecipeWra
 import shordinger.astralsorcery.common.integrations.mods.jei.InfuserRecipeWrapper;
 import shordinger.astralsorcery.common.integrations.mods.jei.TransmutationRecipeWrapper;
 import shordinger.astralsorcery.common.integrations.mods.jei.WellRecipeWrapper;
-import shordinger.astralsorcery.common.integrations.mods.jei.altar.*;
 import shordinger.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeWrapper;
 import shordinger.astralsorcery.common.integrations.mods.jei.altar.AltarConstellationRecipeWrapper;
 import shordinger.astralsorcery.common.integrations.mods.jei.altar.AltarDiscoveryRecipeWrapper;

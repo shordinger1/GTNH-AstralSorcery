@@ -86,7 +86,7 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
         int dY = world.getTopSolidOrLiquidBlock(pos)
             .getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
-            IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY - 1, pos.getZ()));
+            IBlockState at = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
             return !at.getMaterial()
                 .isLiquid() && at.getMaterial()
                 .isOpaque()

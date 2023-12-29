@@ -16,13 +16,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.data.IStageData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.Optional;
 
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.Optional;
+import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.constellation.effect.ConstellationEffect;
 import shordinger.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -44,10 +41,10 @@ import shordinger.astralsorcery.migration.MathHelper;
  */
 public abstract class ConstellationBase implements IConstellation {
 
-    private List<StarLocation> starLocations = new ArrayList<>(); // 31x31 locations are valid. 0-indexed.
-    private List<StarConnection> connections = new ArrayList<>(); // The connections between 2 tuples/stars in the
+    private final List<StarLocation> starLocations = new ArrayList<>(); // 31x31 locations are valid. 0-indexed.
+    private final List<StarConnection> connections = new ArrayList<>(); // The connections between 2 tuples/stars in the
     // constellation.
-    private List<ItemHandle> signatureItems = new LinkedList<>();
+    private final List<ItemHandle> signatureItems = new LinkedList<>();
 
     private final String name, simpleName;
     private final Color color;

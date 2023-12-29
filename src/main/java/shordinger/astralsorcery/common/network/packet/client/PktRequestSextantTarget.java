@@ -128,7 +128,7 @@ public class PktRequestSextantTarget
     private void handlePacketClient(PktRequestSextantTarget pkt) {
         Minecraft.getMinecraft()
             .addScheduledTask(() -> {
-                if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+                if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
                     return;
                 }
                 SextantFinder.TargetObject to = SextantFinder.getByName(pkt.regNameExpected);

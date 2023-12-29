@@ -8,39 +8,36 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -66,6 +63,11 @@ import shordinger.astralsorcery.common.util.data.TimeoutList;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,13 +97,13 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onTarget(LivingSetAttackTargetEvent event) {
-        EntityLivingBase living = event.getTarget();
+        EntityLivingBase living = event.target;
         if (living != null && !living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
-                event.getEntityLiving()
+                event.entityLiving
                     .setRevengeTarget(null);
-                if (event.getEntityLiving() instanceof EntityLiving) {
-                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+                if (event.entityLiving instanceof EntityLiving) {
+                    ((EntityLiving) event.entityLiving).setAttackTarget(null);
                 }
             }
         }
@@ -111,7 +113,7 @@ public class EventHandlerEntity {
     public void onSleep(PlayerSleepInBedEvent event) {
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
             .getWorldHandler(
-                event.getEntityPlayer()
+                event.entityPlayer
                     .getEntityWorld());
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             if (event.getResultStatus() == null) {
@@ -136,14 +138,14 @@ public class EventHandlerEntity {
         if (event.getEntity()
             .getEntityWorld().isRemote) return;
 
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (source.getTrueSource() != null) {
             EntityLivingBase entitySource = null;
             if (source.getTrueSource() instanceof EntityLivingBase) {
                 entitySource = (EntityLivingBase) source.getTrueSource();
             } else if (source.getTrueSource() instanceof EntityArrow) {
                 Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
-                if (shooter != null && shooter instanceof EntityLivingBase) {
+                if (shooter instanceof EntityLivingBase) {
                     entitySource = (EntityLivingBase) shooter;
                 }
             }
@@ -163,9 +165,9 @@ public class EventHandlerEntity {
                         attack = new EntityAttackStack();
                         attackStack.put(entitySource.getEntityId(), attack);
                     }
-                    EntityLivingBase entity = event.getEntityLiving();
+                    EntityLivingBase entity = event.entityLiving;
                     float multiplier = attack.getAndUpdateMultipler(entity);
-                    event.setAmount(event.getAmount() * (1F + multiplier));
+                    event.setAmount(event.ammount * (1F + multiplier));
                     PktParticleEvent ev = new PktParticleEvent(
                         PktParticleEvent.ParticleEventType.DISCIDIA_ATTACK_STACK,
                         entity.posX,
@@ -193,7 +195,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
-        if (event.getEntityLiving()
+        if (event.entityLiving
             .isPotionActive(RegistryPotions.potionTimeFreeze)) {
             event.setCanceled(true);
         }
@@ -201,13 +203,13 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onDrops(LivingDropsEvent event) {
-        if (event.getEntityLiving().world == null || event.getEntityLiving().world.isRemote
-            || !(event.getEntityLiving().world instanceof WorldServer)) {
+        if (event.entityLiving.world == null || event.entityLiving.world.isRemote
+            || !(event.entityLiving.world instanceof WorldServer)) {
             return;
         }
-        if (event.getEntityLiving() instanceof EntityPlayer || !(event.getEntityLiving() instanceof EntityLiving))
+        if (event.entityLiving instanceof EntityPlayer || !(event.entityLiving instanceof EntityLiving))
             return;
-        EntityLiving el = (EntityLiving) event.getEntityLiving();
+        EntityLiving el = (EntityLiving) event.entityLiving;
         WorldServer ws = (WorldServer) el.world;
 
         PotionEffect pe = el.getActivePotionEffect(RegistryPotions.potionDropModifier);
@@ -220,7 +222,7 @@ public class EventHandlerEntity {
             } else {
                 LootTable lootTableRef = EntityUtils.getLootTable(el);
                 LootContext.Builder builder = new LootContext.Builder(ws).withLootedEntity(el)
-                    .withDamageSource(event.getSource())
+                    .withDamageSource(event.source)
                     .withLuck(0);
                 if (lootTableRef != null) {
                     for (int i = 0; i < ampl; i++) {
@@ -240,37 +242,41 @@ public class EventHandlerEntity {
 
     // Just... do the clear.
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        ItemStack held = event.getItemStack();
-        if (!event.getWorld().isRemote && !held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
-            ItemBlockStorage.tryClearContainerFor(event.getEntityPlayer());
+    public void onLeftClickBlock(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
+            ItemStack held = event.entityLiving.getHeldItem();
+            if (!event.world.isRemote && held != null && held.stackSize > 0 && held.getItem() instanceof ItemBlockStorage) {
+                ItemBlockStorage.tryClearContainerFor(event.entityPlayer);
+            }
         }
     }
 
     // Send clear to server
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onLeftClickAir(PlayerInteractEvent.LeftClickEmpty event) {
-        ItemStack held = event.getItemStack();
-        if (!held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+    public void onLeftClickAir(PlayerInteractEvent event) {
+        ItemStack held = event.entityLiving.getHeldItem();
+        if (held != null && held.stackSize > 0 && held.getItem() instanceof ItemBlockStorage) {
             PacketChannel.CHANNEL.sendToServer(new PktClearBlockStorageStack());
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onRightClickDebug(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getEntityPlayer()
-            .isCreative() && !event.getWorld().isRemote) {
-            if (StarlightNetworkDebugHandler.INSTANCE
-                .beginDebugFor(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
-                event.setCanceled(true);
+    public void onRightClickDebug(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            if (event.entityPlayer
+                .isCreative() && !event.world.isRemote) {
+                if (StarlightNetworkDebugHandler.INSTANCE
+                    .beginDebugFor(event.world, event.getPos(), event.entityPlayer)) {
+                    event.setCanceled(true);
+                }
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
-        EntityLivingBase living = event.getEntityLiving();
-        if (living == null || living.getEntityWorld().isRemote) return;
+        EntityLivingBase living = event.entityLiving;
+        if (living == null || living.worldObj.isRemote) return;
 
         if (!living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
@@ -279,7 +285,7 @@ public class EventHandlerEntity {
             }
         }
 
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         if (Mods.DRACONICEVOLUTION.isPresent()) {
             ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if (!chest.isEmpty() && chest.getItem() instanceof ItemCape
@@ -288,8 +294,8 @@ public class EventHandlerEntity {
                     event.setCanceled(true);
                     return;
                 }
-                event.setAmount(event.getAmount() * (1F - Config.capeChaosResistance));
-                if (event.getAmount() <= 1E-4) {
+                event.setAmount(event.ammount * (1F - Config.capeChaosResistance));
+                if (event.ammount <= 1E-4) {
                     event.setCanceled(true);
                     return;
                 }
@@ -303,7 +309,7 @@ public class EventHandlerEntity {
                 p = (EntityPlayer) source.getTrueSource();
             } else if (source.getTrueSource() instanceof EntityArrow) {
                 Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
-                if (shooter != null && shooter instanceof EntityPlayer) {
+                if (shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
                     break lblIn;
@@ -315,10 +321,10 @@ public class EventHandlerEntity {
             if (SwordSharpenHelper.isSwordSharpened(held)) {
                 // YEEEAAAA i know this flat multiplies all damage.. but w/e..
                 // There's no great way to test for item here.
-                event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
+                event.setAmount(event.ammount * (1 + ((float) Config.swordSharpMultiplier)));
             }
         }
-        EntityLivingBase entity = event.getEntityLiving();
+        EntityLivingBase entity = event.entityLiving;
         if (entity != null) {
             ItemStack active = entity.getActiveItemStack();
             if (!active.isEmpty() && active.getItem() instanceof ItemWand) {
@@ -340,10 +346,10 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
         if (event.getResult() == Event.Result.DENY) return; // Already denied anyway.
-        if (event.getWorld().isRemote) return;
+        if (event.world.isRemote) return;
         if (event.isSpawner()) return; // FINE, i'll allow spawners.
 
-        EntityLivingBase toTest = event.getEntityLiving();
+        EntityLivingBase toTest = event.entityLiving;
         if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {
             return;
         }
@@ -406,7 +412,7 @@ public class EventHandlerEntity {
 
     private static class EntityAttackStack {
 
-        private static long stackMsDuration = 5000;
+        private static final long stackMsDuration = 5000;
 
         private int entityStackId = -1;
         private long lastStackMs = 0;

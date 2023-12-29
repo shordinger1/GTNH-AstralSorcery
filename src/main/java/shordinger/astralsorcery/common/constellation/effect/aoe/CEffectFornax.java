@@ -8,10 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -19,9 +17,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.controller.RenderOffsetControllerFornax;
@@ -41,6 +36,9 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -115,7 +113,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
             double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             BlockPos at = pos.add(offX, offY, offZ);
-            IBlockState state = world.getBlockState(at);
+            IBlockState state = WorldHelper.getBlockState(world, at);
             if (state.getBlock()
                 .equals(Blocks.WATER) && state.getBlock() instanceof BlockStaticLiquid) {
                 if (state.getValue(BlockStaticLiquid.LEVEL) == 0) {
@@ -177,7 +175,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                             bp.getZ());
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
                         MeltInteraction melt = entry.getMeltable(world);
-                        if (melt.isMeltable(world, bp, world.getBlockState(bp))
+                        if (melt.isMeltable(world, bp, WorldHelper.getBlockState(world, bp))
                             && entry.counter >= (melt.getMeltTickDuration() / meltDurationDivisor)) {
                             if (failChance > 0 && rand.nextFloat() <= failChance) {
                                 world.setBlockToAir(bp);

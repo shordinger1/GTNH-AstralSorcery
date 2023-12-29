@@ -83,7 +83,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     public IBlockState getBlockState() {
-        return this.world.getBlockState(this.pos);
+        return this.WorldHelper.getBlockState(world, this.pos);
     }
 
     public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
@@ -93,7 +93,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     public void markForUpdate() {
-        IBlockState thisState = world.getBlockState(pos);
+        IBlockState thisState = WorldHelper.getBlockState(world, pos);
         world.notifyBlockUpdate(pos, thisState, thisState, 3);
         markDirty();
     }

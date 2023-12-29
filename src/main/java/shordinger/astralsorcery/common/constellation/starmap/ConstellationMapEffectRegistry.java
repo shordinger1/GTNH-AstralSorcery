@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
  */
 public class ConstellationMapEffectRegistry {
 
-    private static Map<IConstellation, MapEffect> effectRegistry = new HashMap<>();
+    private static final Map<IConstellation, MapEffect> effectRegistry = new HashMap<>();
 
     @Nullable
     static MapEffect getEffects(IConstellation c) {

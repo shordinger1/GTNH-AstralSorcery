@@ -8,34 +8,31 @@
 
 package shordinger.astralsorcery.common.crafting;
 
-import java.lang.reflect.Constructor;
-import java.util.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.common.crafting.CompoundIngredient;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.OreIngredient;
-
+import appeng.recipes.Ingredient;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.astralsorcery.common.crafting.helper.FluidIngredient;
 import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.astralsorcery.common.util.ItemUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,7 +50,7 @@ public final class ItemHandle {
 
     public final Type handleType;
 
-    private List<ItemStack> applicableItems = new LinkedList<>();
+    private final List<ItemStack> applicableItems = new LinkedList<>();
     private String oreDictName = null;
     private FluidStack fluidTypeAndAmount = null;
 
@@ -197,25 +194,27 @@ public final class ItemHandle {
     // CACHE THIS !!!111ELEVEN11!
     public Ingredient getRecipeIngredient() {
         switch (handleType) {
-            case OREDICT:
+            case OREDICT -> {
                 return new OreIngredient(this.oreDictName);
-            case FLUID:
+            }
+            case FLUID -> {
                 return new FluidIngredient(new FluidStack(fluidTypeAndAmount.getFluid(), 1000));
-            case STACK:
-            default:
+            }
+            default -> {
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (ItemStack stack : this.applicableItems) {
                     if (!stack.isEmpty()) {
                         Ingredient i = new HandleIngredient(stack);
-                        if (i != Ingredient.EMPTY) {
+                        if (!i.equals(Ingredient.EMPTY)) {
                             ingredients.add(i);
                         }
                     }
                 }
                 try {
                     return COMPOUND_CTOR.newInstance(ingredients);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
+            }
         }
         return Ingredient.EMPTY;
     }
@@ -234,7 +233,7 @@ public final class ItemHandle {
         if (stack.isEmpty()) return false;
 
         switch (handleType) {
-            case OREDICT:
+            case OREDICT -> {
                 for (int id : OreDictionary.getOreIDs(stack)) {
                     String name = OreDictionary.getOreName(id);
                     if (name != null && name.equals(oreDictName)) {
@@ -242,7 +241,8 @@ public final class ItemHandle {
                     }
                 }
                 return false;
-            case STACK:
+            }
+            case STACK -> {
                 for (ItemStack applicable : applicableItems) {
                     if (ItemComparator.compare(
                         applicable,
@@ -254,7 +254,8 @@ public final class ItemHandle {
                     }
                 }
                 return false;
-            case FLUID:
+            }
+            case FLUID -> {
                 FluidStack contained = FluidUtil.getFluidContained(stack);
                 if (contained == null || contained.getFluid() == null
                     || !contained.getFluid()
@@ -263,8 +264,9 @@ public final class ItemHandle {
                 }
                 return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false)
                     .isSuccess();
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         return false;
     }
@@ -272,20 +274,16 @@ public final class ItemHandle {
     public void serialize(ByteBuf byteBuf) {
         byteBuf.writeInt(handleType.ordinal());
         switch (handleType) {
-            case OREDICT:
-                ByteBufUtils.writeString(byteBuf, this.oreDictName);
-                break;
-            case STACK:
+            case OREDICT -> ByteBufUtils.writeString(byteBuf, this.oreDictName);
+            case STACK -> {
                 byteBuf.writeInt(this.applicableItems.size());
                 for (ItemStack applicableItem : this.applicableItems) {
                     ByteBufUtils.writeItemStack(byteBuf, applicableItem);
                 }
-                break;
-            case FLUID:
-                ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
-                break;
-            default:
-                break;
+            }
+            case FLUID -> ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
+            default -> {
+            }
         }
     }
 
@@ -293,20 +291,16 @@ public final class ItemHandle {
         Type type = Type.values()[byteBuf.readInt()];
         ItemHandle handle = new ItemHandle(type);
         switch (type) {
-            case OREDICT:
-                handle.oreDictName = ByteBufUtils.readString(byteBuf);
-                break;
-            case STACK:
+            case OREDICT -> handle.oreDictName = ByteBufUtils.readString(byteBuf);
+            case STACK -> {
                 int amt = byteBuf.readInt();
                 for (int i = 0; i < amt; i++) {
                     handle.applicableItems.add(ByteBufUtils.readItemStack(byteBuf));
                 }
-                break;
-            case FLUID:
-                handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
-                break;
-            default:
-                break;
+            }
+            case FLUID -> handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
+            default -> {
+            }
         }
         return handle;
     }

@@ -11,11 +11,9 @@ package shordinger.astralsorcery.common.constellation.perk;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.data.IStageData;
+import cpw.mods.fml.common.Optional;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Optional;
 
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;

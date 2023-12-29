@@ -8,21 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
@@ -39,6 +32,10 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -127,7 +124,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         if (findNewPosition(world, pos, modified)) changed = true;
         if (findNewPosition(world, pos, modified)) changed = true;
 
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(
+        List entities = world.getEntitiesWithinAABB(
             EntityLivingBase.class,
             new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos)
                 .grow(modified.getSize()));

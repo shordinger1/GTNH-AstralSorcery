@@ -8,18 +8,17 @@
 
 package shordinger.astralsorcery.common.data;
 
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
+import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.astralsorcery.migration.BlockPos;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,10 +29,10 @@ import shordinger.astralsorcery.migration.BlockPos;
  */
 public class DataLightBlockEndpoints extends AbstractData {
 
-    private Map<Integer, List<BlockPos>> clientPositions = new HashMap<>();
-    private Map<Integer, List<BlockPos>> serverPositions = new HashMap<>();
+    private final Map<Integer, List<BlockPos>> clientPositions = new HashMap<>();
+    private final Map<Integer, List<BlockPos>> serverPositions = new HashMap<>();
 
-    private Map<Integer, LinkedList<Tuple<BlockPos, Boolean>>> serverChangeBuffer = new HashMap<>();
+    private final Map<Integer, LinkedList<Tuple<BlockPos, Boolean>>> serverChangeBuffer = new HashMap<>();
 
     private final Object lock = new Object();
 
@@ -41,18 +40,10 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void updateNewEndpoint(int dimId, BlockPos pos) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.get(dimId);
-            if (list == null) {
-                list = new LinkedList<>();
-                serverChangeBuffer.put(dimId, list);
-            }
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
             list.add(new Tuple<>(pos, true));
 
-            List<BlockPos> posBuffer = serverPositions.get(dimId);
-            if (posBuffer == null) {
-                posBuffer = new LinkedList<>();
-                serverPositions.put(dimId, posBuffer);
-            }
+            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             posBuffer.add(pos);
         }
         markDirty();
@@ -60,20 +51,12 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void updateNewEndpoints(int dimId, List<BlockPos> newPositions) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.get(dimId);
-            if (list == null) {
-                list = new LinkedList<>();
-                serverChangeBuffer.put(dimId, list);
-            }
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
             for (BlockPos pos : newPositions) {
                 list.add(new Tuple<>(pos, true));
             }
 
-            List<BlockPos> posBuffer = serverPositions.get(dimId);
-            if (posBuffer == null) {
-                posBuffer = new LinkedList<>();
-                serverPositions.put(dimId, posBuffer);
-            }
+            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             posBuffer.addAll(newPositions);
         }
         markDirty();
@@ -81,20 +64,12 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void removeEndpoints(int dimId, List<BlockPos> positions) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.get(dimId);
-            if (list == null) {
-                list = new LinkedList<>();
-                serverChangeBuffer.put(dimId, list);
-            }
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
             for (BlockPos pos : positions) {
                 list.add(new Tuple<>(pos, false));
             }
 
-            List<BlockPos> posBuffer = serverPositions.get(dimId);
-            if (posBuffer == null) {
-                posBuffer = new LinkedList<>();
-                serverPositions.put(dimId, posBuffer);
-            }
+            List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             posBuffer.removeAll(positions);
         }
         markDirty();
@@ -139,7 +114,7 @@ public class DataLightBlockEndpoints extends AbstractData {
                 dataList.appendTag(cmp);
             }
 
-            compound.setTag("" + dimId, dataList);
+            compound.setTag(String.valueOf(dimId), dataList);
         }
     }
 
@@ -165,7 +140,7 @@ public class DataLightBlockEndpoints extends AbstractData {
                         list.appendTag(cmp);
                     }
 
-                    compound.setTag("" + dimId, list);
+                    compound.setTag(String.valueOf(dimId), list);
                 }
             }
             serverChangeBuffer.clear();
@@ -184,11 +159,7 @@ public class DataLightBlockEndpoints extends AbstractData {
         for (String dimStr : ((DataLightBlockEndpoints) serverData).clientReadBuffer.getKeySet()) {
             int dimId = Integer.parseInt(dimStr);
             NBTTagList list = ((DataLightBlockEndpoints) serverData).clientReadBuffer.getTagList(dimStr, 10);
-            List<BlockPos> positions = clientPositions.get(dimId);
-            if (positions == null) {
-                positions = new LinkedList<>();
-                clientPositions.put(dimId, positions);
-            }
+            List<BlockPos> positions = clientPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound connection = list.getCompoundTagAt(i);
                 if (connection.hasKey("clear")) {

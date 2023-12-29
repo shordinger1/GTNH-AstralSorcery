@@ -20,11 +20,8 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
 
 import shordinger.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
-import shordinger.astralsorcery.common.constellation.*;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
@@ -55,14 +52,13 @@ public class CommandAstralSorcery extends CommandBase {
     private static final String[] COMMANDS = new String[]{"help", "constellations", "research", "progress", "reset",
         "exp", "attune", "build", "maximize", "slnetwork", "migrate-data"};
 
-    private List<String> cmdAliases = new ArrayList<>();
+    private final List<String> cmdAliases = new ArrayList<>();
 
     public CommandAstralSorcery() {
         this.cmdAliases.add("astralsorcery");
         this.cmdAliases.add("as");
     }
 
-    @Override
     public String getName() {
         return "astralsorcery";
     }
@@ -80,6 +76,21 @@ public class CommandAstralSorcery extends CommandBase {
     @Override
     public int getRequiredPermissionLevel() {
         return 2;
+    }
+
+    @Override
+    public String getCommandName() {
+        return getName();
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return getUsage(sender);
+    }
+
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
+        execute(MinecraftServer.getServer(), sender, args);
     }
 
     @Override
@@ -109,7 +120,7 @@ public class CommandAstralSorcery extends CommandBase {
                 return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
             } else if (args.length == 3) {
                 switch (identifier) {
-                    case "constellations": {
+                    case "constellations" -> {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
                             names.add(c.getUnlocalizedName());
@@ -117,7 +128,7 @@ public class CommandAstralSorcery extends CommandBase {
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    case "research": {
+                    case "research" -> {
                         List<String> names = new ArrayList<>();
                         for (ResearchProgression r : ResearchProgression.values()) {
                             names.add(r.name());
@@ -125,20 +136,21 @@ public class CommandAstralSorcery extends CommandBase {
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    case "progress":
+                    case "progress" -> {
                         List<String> progressNames = new ArrayList<>();
                         progressNames.add("all");
                         progressNames.add("next");
                         return getListOfStringsMatchingLastWord(args, progressNames);
-                    case "attune": {
+                    }
+                    case "attune" -> {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    default:
-                        break;
+                    default -> {
+                    }
                 }
 
             }
@@ -146,61 +158,59 @@ public class CommandAstralSorcery extends CommandBase {
         return Collections.<String>emptyList();
     }
 
-    @Override
+    //@Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
-            sender.sendMessage(new TextComponentString("§cNot enough arguments."));
-            sender.sendMessage(new TextComponentString("§cType \"/astralsorcery help\" for help"));
+            sender.addChatMessage(new TextComponentString("§cNot enough arguments."));
+            sender.addChatMessage(new TextComponentString("§cType \"/astralsorcery help\" for help"));
             return;
         }
-        if (args.length >= 1) {
-            String identifier = args[0];
-            if ("help".equalsIgnoreCase(identifier)) {
-                displayHelp(sender);
-            } else if ("migrate-data".equalsIgnoreCase(identifier)) {
-                migrateAllLegacyData(sender);
-            } else if ("slnetwork".equalsIgnoreCase(identifier)) {
-                tryEnterSLNetworkDebugMode(sender);
-            } else if ("constellation".equalsIgnoreCase(identifier) || "constellations".equalsIgnoreCase(identifier)) {
-                if (args.length == 1) {
-                    listConstellations(sender);
-                } else if (args.length == 2) {
-                    listConstellations(server, sender, args[1]);
-                } else if (args.length == 3) {
-                    addConstellations(server, sender, args[1], args[2]);
-                }
-            } else if ("research".equalsIgnoreCase(identifier) || "res".equalsIgnoreCase(identifier)) {
-                if (args.length == 3) {
-                    modifyResearch(server, sender, args[1], args[2]);
-                }
-            } else if ("progress".equalsIgnoreCase(identifier) || "prog".equalsIgnoreCase(identifier)) {
-                if (args.length <= 2) {
-                    showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
-                } else if (args.length == 3) {
-                    modifyProgress(server, sender, args[1], args[2]);
-                }
-            } else if ("reset".equalsIgnoreCase(identifier)) {
-                if (args.length == 2) {
-                    wipeProgression(server, sender, args[1]);
-                }
-            } else if ("charge".equalsIgnoreCase(identifier) || "exp".equalsIgnoreCase(identifier)) {
-                if (args.length == 3) {
-                    setExp(server, sender, args[1], args[2]);
-                }
-            } else if ("attune".equalsIgnoreCase(identifier)) {
-                if (args.length == 3) {
-                    attuneToConstellation(server, sender, args[1], args[2]);
-                }
-            } else if ("build".equalsIgnoreCase(identifier)) {
-                if (args.length == 2) {
-                    buildStruct(sender, args[1]);
-                } else {
-                    RegistryStructures.init(); // Reload
-                }
-            } else if ("maximize".equalsIgnoreCase(identifier)) {
-                if (args.length == 2) {
-                    maxAll(server, sender, args[1]);
-                }
+        String identifier = args[0];
+        if ("help".equalsIgnoreCase(identifier)) {
+            displayHelp(sender);
+        } else if ("migrate-data".equalsIgnoreCase(identifier)) {
+            migrateAllLegacyData(sender);
+        } else if ("slnetwork".equalsIgnoreCase(identifier)) {
+            tryEnterSLNetworkDebugMode(sender);
+        } else if ("constellation".equalsIgnoreCase(identifier) || "constellations".equalsIgnoreCase(identifier)) {
+            if (args.length == 1) {
+                listConstellations(sender);
+            } else if (args.length == 2) {
+                listConstellations(server, sender, args[1]);
+            } else if (args.length == 3) {
+                addConstellations(server, sender, args[1], args[2]);
+            }
+        } else if ("research".equalsIgnoreCase(identifier) || "res".equalsIgnoreCase(identifier)) {
+            if (args.length == 3) {
+                modifyResearch(server, sender, args[1], args[2]);
+            }
+        } else if ("progress".equalsIgnoreCase(identifier) || "prog".equalsIgnoreCase(identifier)) {
+            if (args.length <= 2) {
+                showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
+            } else if (args.length == 3) {
+                modifyProgress(server, sender, args[1], args[2]);
+            }
+        } else if ("reset".equalsIgnoreCase(identifier)) {
+            if (args.length == 2) {
+                wipeProgression(server, sender, args[1]);
+            }
+        } else if ("charge".equalsIgnoreCase(identifier) || "exp".equalsIgnoreCase(identifier)) {
+            if (args.length == 3) {
+                setExp(server, sender, args[1], args[2]);
+            }
+        } else if ("attune".equalsIgnoreCase(identifier)) {
+            if (args.length == 3) {
+                attuneToConstellation(server, sender, args[1], args[2]);
+            }
+        } else if ("build".equalsIgnoreCase(identifier)) {
+            if (args.length == 2) {
+                buildStruct(sender, args[1]);
+            } else {
+                RegistryStructures.init(); // Reload
+            }
+        } else if ("maximize".equalsIgnoreCase(identifier)) {
+            if (args.length == 2) {
+                maxAll(server, sender, args[1]);
             }
         }
     }

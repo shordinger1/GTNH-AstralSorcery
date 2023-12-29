@@ -8,30 +8,23 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Iterables;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
-import com.google.common.collect.Iterables;
-
+import net.minecraftforge.client.event.sound.SoundEvent;
 import shordinger.astralsorcery.common.container.ContainerObservatory;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +35,7 @@ import shordinger.astralsorcery.migration.BlockPos;
  */
 public class EntityObservatoryHelper extends Entity {
 
-    private static DataParameter<BlockPos> FIXED = EntityDataManager
+    private static final DataParameter<BlockPos> FIXED = EntityDataManager
         .createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
 
     public EntityObservatoryHelper(World worldIn) {
@@ -69,7 +62,7 @@ public class EntityObservatoryHelper extends Entity {
 
     @Nullable
     public TileObservatory tryGetObservatory() {
-        return MiscUtils.getTileAt(this.world, getFixedObservatoryPos(), TileObservatory.class, false);
+        return MiscUtils.getTileAt(worldObj, getFixedObservatoryPos(), TileObservatory.class, false);
     }
 
     @Override
@@ -80,7 +73,7 @@ public class EntityObservatoryHelper extends Entity {
 
         TileObservatory to;
         if ((to = isOnTelescope()) == null) {
-            if (!world.isRemote) {
+            if (!worldObj.isRemote) {
                 setDead();
             }
             return;
@@ -91,13 +84,13 @@ public class EntityObservatoryHelper extends Entity {
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if (riding != null && riding instanceof EntityPlayer) {
+        if (riding instanceof EntityPlayer) {
             applyObservatoryRotationsFrom(to, (EntityPlayer) riding);
         }
     }
 
     public void applyObservatoryRotationsFrom(TileObservatory to, EntityPlayer riding) {
-        if (riding.openContainer != null && riding.openContainer instanceof ContainerObservatory) {
+        if (riding.openContainer instanceof ContainerObservatory) {
             // Adjust observatory pitch and jaw to player head
             this.rotationYaw = riding.rotationYawHead;
             this.prevRotationYaw = riding.prevRotationYawHead;
@@ -115,7 +108,7 @@ public class EntityObservatoryHelper extends Entity {
     @Nullable
     private TileObservatory isOnTelescope() {
         BlockPos fixed = getFixedObservatoryPos();
-        TileObservatory to = MiscUtils.getTileAt(this.world, fixed, TileObservatory.class, true);
+        TileObservatory to = MiscUtils.getTileAt(worldObj, fixed, TileObservatory.class, true);
         if (to == null) {
             return null;
         }

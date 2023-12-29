@@ -41,7 +41,7 @@ public class CropHelper {
 
     @Nullable
     public static GrowablePlant wrapPlant(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         Block b = state.getBlock();
         if (state.getBlock() instanceof IGrowable) {
             if (b instanceof BlockGrass) return null;
@@ -72,7 +72,7 @@ public class CropHelper {
     public static HarvestablePlant wrapHarvestablePlant(World world, BlockPos pos) {
         GrowablePlant growable = wrapPlant(world, pos);
         if (growable == null) return null; // Every plant has to be growable.
-        IBlockState state = world.getBlockState(growable.pos());
+        IBlockState state = WorldHelper.getBlockState(world, growable.pos());
         if (state.getBlock()
             .equals(Blocks.reeds) && growable instanceof GrowableReedWrapper) {
             return (GrowableReedWrapper) growable;
@@ -92,13 +92,13 @@ public class CropHelper {
     }
 
     private static boolean isReedBase(World world, BlockPos pos) {
-        return !world.getBlockState(pos.down())
+        return !WorldHelper.getBlockState(world, pos.down())
             .getBlock()
             .equals(Blocks.reeds);
     }
 
     private static boolean isCactusBase(World world, BlockPos pos) {
-        return !world.getBlockState(pos.down())
+        return !WorldHelper.getBlockState(world, pos.down())
             .getBlock()
             .equals(Blocks.cactus);
     }
@@ -131,7 +131,7 @@ public class CropHelper {
 
         @Override
         public boolean canHarvest(World world) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             if (!(at.getBlock() instanceof IGrowable)) return false;
             return !((IGrowable) at.getBlock()).canGrow(world, pos, at, false);
         }
@@ -141,7 +141,7 @@ public class CropHelper {
             List<ItemStack> drops = Lists.newLinkedList();
             if (canHarvest(world)) {
                 BlockPos pos = pos();
-                IBlockState at = world.getBlockState(pos());
+                IBlockState at = WorldHelper.getBlockState(world, pos());
                 if (at.getBlock() instanceof IPlantable) {
                     drops.addAll(
                         at.getBlock()
@@ -177,13 +177,13 @@ public class CropHelper {
 
         @Override
         public boolean canGrow(World world) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             return at.getBlock() instanceof IGrowable && ((IGrowable) at.getBlock()).canGrow(world, pos, at, false);
         }
 
         @Override
         public boolean tryGrow(World world, Random rand) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             if (at.getBlock() instanceof IGrowable) {
                 if (((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
                     ((IGrowable) at.getBlock()).grow(world, rand, pos, at);
@@ -201,14 +201,14 @@ public class CropHelper {
         public boolean isValid(World world, boolean forceChunkLoad) {
             if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; // We stall until
             // it's loaded.
-            return world.getBlockState(pos)
+            return WorldHelper.getBlockState(world, pos)
                 .getBlock()
                 .equals(Blocks.NETHER_WART);
         }
 
         @Override
         public boolean canGrow(World world) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             return at.getBlock()
                 .equals(Blocks.NETHER_WART) && at.getValue(BlockNetherWart.AGE) < 3;
         }
@@ -216,7 +216,7 @@ public class CropHelper {
         @Override
         public boolean tryGrow(World world, Random rand) {
             if (rand.nextBoolean()) {
-                IBlockState current = world.getBlockState(pos);
+                IBlockState current = WorldHelper.getBlockState(world, pos);
                 return world.setBlockState(
                     pos,
                     current.withProperty(BlockNetherWart.AGE, (Math.min(3, current.getValue(BlockNetherWart.AGE) + 1))),
@@ -227,14 +227,14 @@ public class CropHelper {
 
         @Override
         public boolean canHarvest(World world) {
-            IBlockState current = world.getBlockState(pos);
+            IBlockState current = WorldHelper.getBlockState(world, pos);
             return current.getBlock()
                 .equals(Blocks.NETHER_WART) && current.getValue(BlockNetherWart.AGE) >= 3;
         }
 
         @Override
         public List<ItemStack> harvestDropsAndReplant(World world, Random rand, int harvestFortune) {
-            IBlockState current = world.getBlockState(pos);
+            IBlockState current = WorldHelper.getBlockState(world, pos);
             List<ItemStack> drops = current.getBlock()
                 .getDrops(world, pos, current, harvestFortune);
             world.setBlockState(
@@ -259,7 +259,7 @@ public class CropHelper {
 
         @Override
         public boolean canHarvest(World world) {
-            return world.getBlockState(pos.up())
+            return WorldHelper.getBlockState(world, pos.up())
                 .getBlock()
                 .equals(Blocks.cactus);
         }
@@ -268,7 +268,7 @@ public class CropHelper {
         public boolean isValid(World world, boolean forceChunkLoad) {
             if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; // We stall until
             // it's loaded.
-            return world.getBlockState(pos)
+            return WorldHelper.getBlockState(world, pos)
                 .getBlock()
                 .equals(Blocks.cactus);
         }
@@ -278,7 +278,7 @@ public class CropHelper {
             List<ItemStack> drops = Lists.newLinkedList();
             for (int i = 2; i > 0; i--) {
                 BlockPos bp = pos.up(i);
-                IBlockState at = world.getBlockState(bp);
+                IBlockState at = WorldHelper.getBlockState(world, bp);
                 if (at.getBlock()
                     .equals(Blocks.cactus)) {
                     MiscUtils.breakBlockWithoutPlayer((WorldServer) world, bp);
@@ -328,7 +328,7 @@ public class CropHelper {
 
         @Override
         public boolean canHarvest(World world) {
-            return world.getBlockState(pos.up())
+            return WorldHelper.getBlockState(world, pos.up())
                 .getBlock()
                 .equals(Blocks.reeds);
         }
@@ -338,7 +338,7 @@ public class CropHelper {
             List<ItemStack> drops = Lists.newLinkedList();
             for (int i = 2; i > 0; i--) {
                 BlockPos bp = pos.up(i);
-                IBlockState at = world.getBlockState(bp);
+                IBlockState at = WorldHelper.getBlockState(world, bp);
                 if (at.getBlock()
                     .equals(Blocks.reeds)) {
                     drops.addAll(
@@ -354,7 +354,7 @@ public class CropHelper {
         public boolean isValid(World world, boolean forceChunkLoad) {
             if (!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; // We stall until
             // it's loaded.
-            return world.getBlockState(pos)
+            return WorldHelper.getBlockState(world, pos)
                 .getBlock()
                 .equals(Blocks.reeds);
         }
@@ -417,14 +417,14 @@ public class CropHelper {
 
         @Override
         public boolean canGrow(World world) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             return at.getBlock() instanceof IGrowable && (((IGrowable) at.getBlock()).canGrow(world, pos, at, false)
                 || (at.getBlock() instanceof BlockStem && !stemHasCrop(world)));
         }
 
         private boolean stemHasCrop(World world) {
             for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
-                Block offset = world.getBlockState(pos.offset(enumfacing))
+                Block offset = WorldHelper.getBlockState(world, pos.offset(enumfacing))
                     .getBlock();
                 if (offset.equals(Blocks.melon_block) || offset.equals(Blocks.pumpkin)) {
                     return true;
@@ -435,7 +435,7 @@ public class CropHelper {
 
         @Override
         public boolean tryGrow(World world, Random rand) {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             if (at.getBlock() instanceof IGrowable) {
                 if (((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
                     if (!((IGrowable) at.getBlock()).canUseBonemeal(world, rand, pos, at)) {

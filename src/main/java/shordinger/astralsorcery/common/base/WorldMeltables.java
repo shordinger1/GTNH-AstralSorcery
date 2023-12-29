@@ -77,7 +77,7 @@ public enum WorldMeltables implements MeltInteraction {
 
     @Nullable
     public static MeltInteraction getMeltable(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+        IBlockState state = WorldHelper.getBlockState(world, pos);
         for (WorldMeltables melt : values()) {
             if (melt.isMeltable(world, pos, state)) return melt;
         }

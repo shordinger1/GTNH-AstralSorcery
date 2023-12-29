@@ -161,7 +161,7 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
             for (int zz = -4; zz <= 4; zz++) {
                 for (int yy = 0; yy <= 8; yy++) {
                     move.setPos(pos.getX() + xx, pos.getY() + yy, pos.getZ() + zz);
-                    IBlockState at = world.getBlockState(move);
+                    IBlockState at = WorldHelper.getBlockState(world, move);
                     if (!at.isFullCube()) {
                         move.release();
                         return null;

@@ -8,15 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import javax.annotation.Nonnull;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
@@ -29,6 +26,8 @@ import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,10 +50,10 @@ public class AttributeThorns extends PerkAttributeType {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+        if (!(event.entityLiving instanceof EntityPlayer)) {
             return;
         }
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        EntityPlayer player = (EntityPlayer) event.entityLiving;
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (!hasTypeApplied(player, side)) {
             return;
@@ -71,7 +70,7 @@ public class AttributeThorns extends PerkAttributeType {
         }
         reflectAmount = MathHelper.clamp(reflectAmount, 0F, 1F);
 
-        DamageSource source = event.getSource();
+        DamageSource source = event.source;
         EntityLivingBase reflectTarget = null;
         if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityLivingBase
             && !source.getImmediateSource().isDead) {
@@ -91,10 +90,10 @@ public class AttributeThorns extends PerkAttributeType {
         }
 
         if (reflectTarget != null) {
-            float dmgReflected = event.getAmount() * reflectAmount;
-            if (dmgReflected > 0 && !event.getEntityLiving()
+            float dmgReflected = event.ammount * reflectAmount;
+            if (dmgReflected > 0 && !event.entityLiving
                 .equals(reflectTarget)) {
-                if (MiscUtils.canPlayerAttackServer(event.getEntityLiving(), reflectTarget)) {
+                if (MiscUtils.canPlayerAttackServer(event.entityLiving, reflectTarget)) {
                     DamageUtil.attackEntityFrom(reflectTarget, CommonProxy.dmgSourceReflect, dmgReflected, player);
                 }
             }

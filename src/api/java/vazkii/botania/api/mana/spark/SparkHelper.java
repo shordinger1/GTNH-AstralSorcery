@@ -13,7 +13,7 @@ package vazkii.botania.api.mana.spark;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.google.common.base.Predicates;

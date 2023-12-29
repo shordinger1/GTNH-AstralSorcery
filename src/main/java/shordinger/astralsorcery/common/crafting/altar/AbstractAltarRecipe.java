@@ -8,23 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.altar;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.gtnewhorizons.modularui.api.forge.IItemHandlerModifiable;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.crafting.IGatedRecipe;
 import shordinger.astralsorcery.common.crafting.INighttimeRecipe;
@@ -39,6 +30,10 @@ import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -191,8 +186,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public boolean mayDecrement(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
-        if (!(this instanceof AttunementRecipe)) return true;
-        AttunementRecipe thisRecipe = (AttunementRecipe) this;
+        if (!(this instanceof AttunementRecipe thisRecipe)) return true;
         return !requiresSpecialConsumption(
             thisRecipe.getAttItemHandle(slot),
             ta.getInventoryHandler()
@@ -200,8 +194,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public boolean mayDecrement(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
-        if (!(this instanceof ConstellationRecipe)) return true;
-        ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
+        if (!(this instanceof ConstellationRecipe thisRecipe)) return true;
         return !requiresSpecialConsumption(
             thisRecipe.getCstItemHandle(slot),
             ta.getInventoryHandler()
@@ -209,8 +202,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public boolean mayDecrement(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
-        if (!(this instanceof TraitRecipe)) return true;
-        TraitRecipe thisRecipe = (TraitRecipe) this;
+        if (!(this instanceof TraitRecipe thisRecipe)) return true;
         return !requiresSpecialConsumption(
             thisRecipe.getInnerTraitItemHandle(slot),
             ta.getInventoryHandler()
@@ -233,8 +225,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public void handleItemConsumption(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
-        if (!(this instanceof AttunementRecipe)) return;
-        AttunementRecipe thisRecipe = (AttunementRecipe) this;
+        if (!(this instanceof AttunementRecipe thisRecipe)) return;
         ItemHandle handle = thisRecipe.getAttItemHandle(slot);
         if (handle == null) return;
 
@@ -242,8 +233,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public void handleItemConsumption(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
-        if (!(this instanceof ConstellationRecipe)) return;
-        ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
+        if (!(this instanceof ConstellationRecipe thisRecipe)) return;
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);
         if (handle == null) return;
 
@@ -264,7 +254,10 @@ public abstract class AbstractAltarRecipe {
         if (!stack.isEmpty()) {
             FluidStack fs = FluidUtil.getFluidContained(stack);
             if (fs != null && handle.handleType == ItemHandle.Type.FLUID) {
-                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                FluidActionResult fas = null;
+                if (handle.getFluidTypeAndAmount() != null) {
+                    fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                }
                 if (fas.isSuccess()) {
                     inv.setStackInSlot(slot, fas.getResult());
                 }

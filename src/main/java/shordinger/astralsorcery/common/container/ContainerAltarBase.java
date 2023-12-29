@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.container;
 
+import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
@@ -56,10 +56,7 @@ public abstract class ContainerAltarBase extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (this instanceof ContainerAltarTrait && index >= 0
-                && index < 36
-                && itemstack1.getItem() instanceof ItemConstellationFocus
-                && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
+            if (this instanceof ContainerAltarTrait && index < 36 && itemstack1.getItem() instanceof ItemConstellationFocus && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
                 if (this.mergeItemStack(
                     itemstack1,
                     ((ContainerAltarTrait) this).focusSlot.slotNumber,
@@ -68,11 +65,11 @@ public abstract class ContainerAltarBase extends Container {
                     return itemstack;
                 }
             }
-            if (index >= 0 && index < 27) {
+            if (index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
                     return null;
                 }
-            } else if (index >= 27 && index < 36) {
+            } else if (index < 36) {
                 if (!this.mergeItemStack(itemstack1, 0, 27, false)) {
                     return null;
                 }

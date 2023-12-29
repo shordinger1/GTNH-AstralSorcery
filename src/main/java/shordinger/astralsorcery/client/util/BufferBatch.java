@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.client.util;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
+
+import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**
  * This class is part of the Astral Sorcery Mod

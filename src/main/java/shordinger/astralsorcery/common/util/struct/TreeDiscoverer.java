@@ -65,7 +65,7 @@ public class TreeDiscoverer {
         while (!offsetPositions.isEmpty()) {
             BlockPos offset = offsetPositions.pop();
 
-            IBlockState atState = world.getBlockState(offset);
+            IBlockState atState = WorldHelper.getBlockState(world, offset);
             boolean successful = false;
             Tuple<BlockStateCheck, BlockStateCheck> atChecks = null;
             if (logCheck == null || leafCheck == null) {
@@ -131,15 +131,15 @@ public class TreeDiscoverer {
         TreeTypes t = TreeTypes.getTree(world, pos);
         if (t != null) {
             if (t.getLogCheck()
-                .isStateValid(world.getBlockState(pos))) {
+                .isStateValid(WorldHelper.getBlockState(world, pos))) {
                 logCheck = t.getLogCheck();
             }
             if (t.getLeavesCheck()
-                .isStateValid(world.getBlockState(pos))) {
+                .isStateValid(WorldHelper.getBlockState(world, pos))) {
                 leafCheck = t.getLeavesCheck();
             }
         } else {
-            IBlockState at = world.getBlockState(pos);
+            IBlockState at = WorldHelper.getBlockState(world, pos);
             if (at.getBlock() instanceof BlockLog) {
                 logCheck = new BlockStateCheck.Block(at.getBlock());
             } else if (at.getBlock()

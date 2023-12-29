@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 
 /**
@@ -103,10 +104,10 @@ public class Config {
     public static List<Integer> worldGenDimWhitelist = Lists.newArrayList();
     public static boolean performNetworkIntegrityCheck = false;
 
-    private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
-    private static List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
+    private static final List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
+    private static final List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
 
-    private static Map<String, Configuration> cachedConfigs = new HashMap<>();
+    private static final Map<String, Configuration> cachedConfigs = new HashMap<>();
 
     private Config() {
     }
@@ -116,14 +117,14 @@ public class Config {
         latestConfig.load();
         loadData();
         latestConfig.save();
-        cachedConfigs.put(AstralSorcery.MODID, latestConfig);
+        cachedConfigs.put(Tags.MODID, latestConfig);
 
         MinecraftForge.EVENT_BUS.register(new Config());
     }
 
     @SubscribeEvent
     public void onCfgChange(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (AstralSorcery.MODID.equals(event.getModID())) {
+        if (Tags.MODID.equals(event.getModID())) {
             Configuration cfg = cachedConfigs.get(event.getConfigID());
             if (cfg != null) {
                 cfg.save();
@@ -166,7 +167,7 @@ public class Config {
     }
 
     public static void loadDataRegistries(File cfgDirectory) {
-        File dirAS = new File(cfgDirectory, AstralSorcery.MODID);
+        File dirAS = new File(cfgDirectory, Tags.MODID);
         if (!dirAS.exists()) {
             dirAS.mkdirs();
         }
@@ -191,7 +192,7 @@ public class Config {
         config.addCustomCategoryComment("data", cfg.getDescription());
         out = config.getStringList("data", "data", out, "");
         for (String str : out) {
-            if (cfg.appendDataSet(str) == null) {
+            if (Objects.requireNonNull(cfg.appendDataSet(str)).isEmpty()) {
                 AstralSorcery.log
                     .warn("Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
             }

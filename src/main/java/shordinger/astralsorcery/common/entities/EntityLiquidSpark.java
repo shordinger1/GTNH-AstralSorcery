@@ -8,35 +8,22 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Predicates;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.SoundEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import com.google.common.base.Predicates;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fluids.IFluidHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
@@ -52,6 +39,13 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EntityData.DataParameter;
+import shordinger.astralsorcery.migration.EntityData.DataSerializers;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,7 +55,7 @@ import shordinger.astralsorcery.migration.BlockPos;
  * Date: 28.10.2017 / 14:39
  */
 public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAmbient {
-
+    public EntityDataManager dataManager;
     private static final DataParameter<Integer> ENTITY_TARGET = EntityDataManager
         .createKey(EntityLiquidSpark.class, DataSerializers.VARINT);
     private static final DataParameter<FluidStack> FLUID_REPRESENTED = EntityDataManager
@@ -75,7 +69,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super(worldIn);
         setSize(0.4F, 0.4F);
         this.noClip = true;
-        this.moveHelper = new EntityFlyHelper(this);
+        //this.moveHelper = new EntityFlyHelper(this);
         this.purpose = null;
     }
 
@@ -84,7 +78,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         setSize(0.4F, 0.4F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
         this.noClip = true;
-        this.moveHelper = new EntityFlyHelper(this);
+        //this.moveHelper = new EntityFlyHelper(this);
         this.purpose = purposeOfLiving;
     }
 
@@ -93,7 +87,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         setSize(0.4F, 0.4F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
         this.noClip = true;
-        this.moveHelper = new EntityFlyHelper(this);
+        //this.moveHelper = new EntityFlyHelper(this);
         this.tileTarget = target;
     }
 
@@ -146,16 +140,16 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.onUpdate();
         if (isDead) return;
 
-        this.noClip = getEntityWorld().getBlockState(this.getPosition())
+        this.noClip = worldObj.getBlockState(this.getPosition())
             .getBlock()
             .equals(BlocksAS.blockChalice);
 
         if (this.resolvableTilePos != null) {
-            this.tileTarget = MiscUtils.getTileAt(world, resolvableTilePos, TileEntity.class, true);
+            this.tileTarget = MiscUtils.getTileAt(worldObj, resolvableTilePos, TileEntity.class, true);
             this.resolvableTilePos = null;
         }
 
-        if (!world.isRemote) {
+        if (!worldObj.isRemote) {
             if (ticksExisted > 800) {
                 setDead();
                 return;
@@ -177,7 +171,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     setDead();
                     return;
                 }
-                Entity e = world.getEntityByID(target);
+                Entity e = worldObj.getEntityByID(target);
                 if (e == null || e.isDead || !(e instanceof EntityLiquidSpark)) {
                     setDead();
                     return;
@@ -190,7 +184,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                         .subtract(Vector3.atEntityCenter(this))
                         .divide(2)
                         .add(Vector3.atEntityCenter(this));
-                    purpose.triggerInteraction(this.world, at);
+                    purpose.triggerInteraction(worldObj, at);
                     PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
                         this.purpose.getComponent1(),
                         this.purpose.getComponent2(),
@@ -198,11 +192,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     PacketChannel.CHANNEL
                         .sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
-                    this.moveHelper.setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
+                    this.getMoveHelper().setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
                 }
             } else if (tileTarget != null) {
                 if (tileTarget.isInvalid()
-                    || MiscUtils.getTileAt(world, tileTarget.getPos(), tileTarget.getClass(), true) == null) {
+                    || MiscUtils.getTileAt(worldObj, tileTarget.getPos(), tileTarget.getClass(), true) == null) {
                     setDead();
                     return;
                 }
@@ -236,7 +230,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     PacketChannel.CHANNEL
                         .sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
-                    this.moveHelper.setMoveTo(target.getX(), target.getY(), target.getZ(), 2.4F);
+                    this.getMoveHelper().setMoveTo(target.getX(), target.getY(), target.getZ(), 2.4F);
                 }
             } else {
                 setDead();
@@ -251,11 +245,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         return false;
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getDeathSound() {
-        return null;
-    }
+//    @Nullable
+//    @Override
+//    protected SoundEvent getDeathSound() {
+//        return null;
+//    }
 
     @Nullable
     @Override

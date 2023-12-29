@@ -98,7 +98,7 @@ public class RaytraceAssist {
 
             if (MiscUtils.isChunkLoaded(world, new ChunkPos(at))) {
                 if (!isStartEnd(at) && !world.isAirBlock(at)) {
-                    IBlockState state = world.getBlockState(at);
+                    IBlockState state = WorldHelper.getBlockState(world, at);
                     if (!isAllowed(state)) {
                         hit = at;
                         return false;
@@ -112,7 +112,7 @@ public class RaytraceAssist {
              * if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
              * BlockPos hit = rtr.getBlockPos();
              * if(!isStartEnd(hit)) {
-             * IBlockState state = world.getBlockState(hit);
+             * IBlockState state = WorldHelper.getBlockState(world,hit);
              * if(!isAllowed(state)) {
              * return false;
              * }

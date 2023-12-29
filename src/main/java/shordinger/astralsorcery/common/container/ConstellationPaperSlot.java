@@ -11,8 +11,6 @@ package shordinger.astralsorcery.common.container;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
 

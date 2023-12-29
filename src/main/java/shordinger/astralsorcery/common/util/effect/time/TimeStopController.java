@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -87,7 +87,7 @@ public class TimeStopController implements ITickHandler {
 
     @SubscribeEvent
     public void onWorldClear(WorldEvent.Unload event) {
-        World w = event.getWorld();
+        World w = event.world;
         if (w != null && w.provider != null) {
             int id = w.provider.dimensionId;
             List<TimeStopZone> freezeAreas = activeTimeStopZones.get(id);
@@ -103,7 +103,7 @@ public class TimeStopController implements ITickHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLivingTickTest(LivingEvent.LivingUpdateEvent event) {
-        EntityLivingBase e = event.getEntityLiving();
+        EntityLivingBase e = event.entityLiving;
         if (e.isPotionActive(RegistryPotions.potionTimeFreeze)) {
             boolean shouldFreeze = true;
             if (e.isDead || e.getHealth() <= 0) {

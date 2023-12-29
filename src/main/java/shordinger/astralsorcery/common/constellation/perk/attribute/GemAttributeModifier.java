@@ -8,24 +8,21 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +36,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     private final UUID uuid;
     private PerkAttributeModifier actualModifier = null;
 
-    private static Map<UUID, Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>>> gemConverterCache = Maps
+    private static final Map<UUID, Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>>> gemConverterCache = Maps
         .newHashMap();
 
     public GemAttributeModifier(UUID uniqueId, String type, Mode mode, float value) {

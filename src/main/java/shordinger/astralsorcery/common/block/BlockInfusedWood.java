@@ -8,11 +8,7 @@
 
 package shordinger.astralsorcery.common.block;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -20,17 +16,19 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -153,7 +151,7 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         WoodType woodType = state.getValue(WOOD_TYPE);
-        IBlockState other = world.getBlockState(pos.offset(face));
+        IBlockState other = WorldHelper.getBlockState(world, pos.offset(face));
         if (MiscUtils.isFluidBlock(other)
             && (woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM || woodType == WoodType.COLUMN_TOP)) {
             return false;

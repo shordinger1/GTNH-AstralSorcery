@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import java.util.UUID;
-
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+
+import java.util.UUID;
+
+import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,17 +36,7 @@ public class AttributeTypeMaxReach extends VanillaAttributeType {
 
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
-        switch (mode) {
-            case ADDITION:
-                return REACH_ADD_ID;
-            case ADDED_MULTIPLY:
-                return REACH_ADD_MULTIPLY_ID;
-            case STACKING_MULTIPLY:
-                return REACH_STACK_MULTIPLY_ID;
-            default:
-                break;
-        }
-        return null;
+        return getUuid(mode, REACH_ADD_ID, REACH_ADD_MULTIPLY_ID, REACH_STACK_MULTIPLY_ID);
     }
 
     @Override

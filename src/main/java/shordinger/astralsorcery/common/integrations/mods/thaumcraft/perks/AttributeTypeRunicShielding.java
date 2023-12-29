@@ -8,10 +8,9 @@
 
 package shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -36,7 +35,7 @@ public class AttributeTypeRunicShielding extends PerkAttributeType {
     @SubscribeEvent
     public void on(RunicShieldingCalculateEvent event) {
         float val = event.getRunicShieldingValue();
-        EntityPlayer player = event.getEntityPlayer();
+        EntityPlayer player = event.entityPlayer;
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         val = PerkAttributeHelper.getOrCreateMap(player, side)

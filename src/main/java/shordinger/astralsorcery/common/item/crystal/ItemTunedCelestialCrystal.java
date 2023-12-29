@@ -8,15 +8,11 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
-import java.awt.*;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
@@ -24,6 +20,9 @@ import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -39,14 +39,14 @@ public class PerkTree {
     public static final int PERK_TREE_VERSION = 1;
     public static final PerkTree PERK_TREE = new PerkTree();
 
-    private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
+    private static final Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
     private boolean frozen = false;
 
-    private List<PerkTreePoint<?>> treePoints = new LinkedList<>();
-    private Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
-    private List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
+    private final List<PerkTreePoint<?>> treePoints = new LinkedList<>();
+    private final Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
+    private final List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
-    private Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
+    private final Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
 
     private PerkTree() {
     }

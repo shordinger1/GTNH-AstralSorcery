@@ -8,11 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -36,9 +35,9 @@ public class AttributePotionDuration extends PerkAttributeType {
 
     @SubscribeEvent
     public void onPotionDurationNew(PotionApplyEvent.New event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
+        if (event.entityLiving instanceof EntityPlayer) {
             modifyPotionDuration(
-                (EntityPlayer) event.getEntityLiving(),
+                (EntityPlayer) event.entityLiving,
                 event.getPotionEffect(),
                 event.getPotionEffect());
         }
@@ -46,9 +45,9 @@ public class AttributePotionDuration extends PerkAttributeType {
 
     @SubscribeEvent
     public void onPotionDurationChanged(PotionApplyEvent.Changed event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
+        if (event.entityLiving instanceof EntityPlayer) {
             modifyPotionDuration(
-                (EntityPlayer) event.getEntityLiving(),
+                (EntityPlayer) event.entityLiving,
                 event.getNewCombinedEffect(),
                 event.getAddedEffect());
         }

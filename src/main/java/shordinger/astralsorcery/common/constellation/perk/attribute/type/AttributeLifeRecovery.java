@@ -8,12 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -35,18 +34,18 @@ public class AttributeLifeRecovery extends PerkAttributeType {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onHeal(LivingHealEvent event) {
-        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+        if (!(event.entityLiving instanceof EntityPlayer)) {
             return;
         }
 
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        EntityPlayer player = (EntityPlayer) event.entityLiving;
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (!hasTypeApplied(player, side)) {
             return;
         }
 
         float heal = PerkAttributeHelper.getOrCreateMap(player, side)
-            .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
+            .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.ammount);
         heal = AttributeEvent.postProcessModded(player, this, heal);
         float val = heal;
         if (val <= 0) {

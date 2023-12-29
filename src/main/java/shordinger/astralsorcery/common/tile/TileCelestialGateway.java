@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IChatComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IWorldNameable;
 
@@ -103,7 +103,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
 
     @Nullable
     @Override
-    public ITextComponent getDisplayName() {
+    public IChatComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(getName()) : new TextComponentString("");
     }
 
@@ -191,7 +191,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                     .registerFX(sphere);
                 clientSphere = sphere;
             }
-            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().player)
+            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().thePlayer)
                 .distance(sphereVec);
             if (clientSphere != null) {
                 if (!((CompoundEffectSphere) clientSphere).getPosition()

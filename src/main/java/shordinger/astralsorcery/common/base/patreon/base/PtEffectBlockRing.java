@@ -76,7 +76,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderLast(RenderWorldLastEvent event) {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
+        EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
         if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && // First person
             pl != null
             && pl.getUniqueID()

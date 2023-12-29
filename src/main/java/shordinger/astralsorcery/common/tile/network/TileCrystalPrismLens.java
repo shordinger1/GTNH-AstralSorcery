@@ -50,7 +50,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     private void playPrismEffects() {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
@@ -64,7 +64,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
 
     @Override
     public EnumFacing getPlacedAgainst() {
-        IBlockState state = world.getBlockState(getPos());
+        IBlockState state = WorldHelper.getBlockState(world, getPos());
         if (!(state.getBlock() instanceof BlockPrism)) {
             return EnumFacing.DOWN;
         }

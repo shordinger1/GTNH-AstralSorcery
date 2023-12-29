@@ -53,7 +53,7 @@ public class TileCelestialCrystals extends TileSkybound {
     }
 
     public int getGrowth() {
-        IBlockState state = world.getBlockState(getPos());
+        IBlockState state = WorldHelper.getBlockState(world, getPos());
         if (!(state.getBlock() instanceof BlockCelestialCrystals)) return 0;
         return state.getValue(BlockCelestialCrystals.STAGE);
     }
@@ -64,7 +64,7 @@ public class TileCelestialCrystals extends TileSkybound {
 
         if (!world.isRemote) {
             double mul = 1;
-            IBlockState downState = world.getBlockState(getPos().down());
+            IBlockState downState = WorldHelper.getBlockState(world, getPos().down());
             if (downState.getBlock() == BlocksAS.customOre
                 && downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 mul *= 0.3;
@@ -75,7 +75,7 @@ public class TileCelestialCrystals extends TileSkybound {
             }
             tryGrowth(mul);
         } else {
-            IBlockState downState = world.getBlockState(getPos().down());
+            IBlockState downState = WorldHelper.getBlockState(world, getPos().down());
             if (downState.getBlock() == BlocksAS.customOre
                 && downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 playStarmetalOreParticles();
@@ -130,7 +130,7 @@ public class TileCelestialCrystals extends TileSkybound {
     }
 
     public void grow() {
-        IBlockState current = world.getBlockState(getPos());
+        IBlockState current = WorldHelper.getBlockState(world, getPos());
         int stage = current.getValue(BlockCelestialCrystals.STAGE);
         if (stage < 4) {
             IBlockState next = BlocksAS.celestialCrystals.getStateFromMeta(stage + 1);

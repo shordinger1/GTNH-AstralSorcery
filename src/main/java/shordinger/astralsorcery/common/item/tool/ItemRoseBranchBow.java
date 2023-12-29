@@ -8,17 +8,16 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.item.base.IOBJItem;
 import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

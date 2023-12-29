@@ -10,13 +10,12 @@
  */
 package vazkii.botania.api.recipe;
 
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import java.util.List;
 
 /**
  * An event fired when an Elven Portal TE updates. The portal's

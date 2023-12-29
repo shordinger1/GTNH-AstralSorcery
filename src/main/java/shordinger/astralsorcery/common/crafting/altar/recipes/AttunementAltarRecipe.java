@@ -8,8 +8,6 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import java.util.Random;
-
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -28,6 +26,8 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.OreDictAlias;
 import shordinger.astralsorcery.common.util.data.Vector3;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -37,9 +37,9 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  */
 public class AttunementAltarRecipe extends AttunementRecipe implements INighttimeRecipe, ISpecialCraftingEffects {
 
-    private static Vector3[] offsetPillarsT2 = new Vector3[]{new Vector3(3, 2, 3), new Vector3(-3, 2, 3),
+    private static final Vector3[] offsetPillarsT2 = new Vector3[]{new Vector3(3, 2, 3), new Vector3(-3, 2, 3),
         new Vector3(3, 2, -3), new Vector3(-3, 2, -3)};
-    private static Vector3[] offsetPillarsT3 = new Vector3[]{new Vector3(4, 3, 4), new Vector3(-4, 3, 4),
+    private static final Vector3[] offsetPillarsT3 = new Vector3[]{new Vector3(4, 3, 4), new Vector3(-4, 3, 4),
         new Vector3(4, 3, -4), new Vector3(-4, 3, -4)};
 
     public AttunementAltarRecipe() {

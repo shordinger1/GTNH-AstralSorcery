@@ -387,7 +387,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
-        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y
+        double d0 = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).y
             - Minecraft.getMinecraft().world.getHorizon();
 
         if (d0 < 0.0D) {

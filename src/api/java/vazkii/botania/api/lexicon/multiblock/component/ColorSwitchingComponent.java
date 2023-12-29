@@ -41,7 +41,7 @@ public class ColorSwitchingComponent extends MultiblockComponent {
 
     @Override
     public boolean matches(World world, BlockPos pos) {
-        return world.getBlockState(pos)
+        return WorldHelper.getBlockState(world, pos)
             .getBlock() == getBlockState().getBlock();
     }
 

@@ -14,17 +14,16 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.util.ItemUtils;
-
+import shordinger.astralsorcery.migration.NonNullList;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -64,7 +63,7 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
         private final NonNullList<ItemHandle> inputs = NonNullList.create();
 
         private Builder(String name, ItemStack output) {
-            this.entry = new ResourceLocation(AstralSorcery.MODID, "shapeless/" + name);
+            this.entry = new ResourceLocation(Tags.MODID, "shapeless/" + name);
             this.output = ItemUtils.copyStackWithSize(output, output.getCount());
         }
 

@@ -69,7 +69,7 @@ public class PtEffectFixedSprite extends PatreonEffectHelper.PatreonEffect {
             spr.setNoRotation(45)
                 .setAlphaMultiplier(1F);
             spr.setRefreshFunc(
-                () -> !owningPlayer.isDead && Minecraft.getMinecraft().player != null
+                () -> !owningPlayer.isDead && Minecraft.getMinecraft().thePlayer != null
                     && Minecraft.getMinecraft().world != null
                     && Minecraft.getMinecraft().world.provider != null);
             spr.setScale(10F);

@@ -299,7 +299,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
         AbstractInfusionRecipe recipe = InfusionRecipeRegistry.findMatchingRecipe(this);
         if (recipe instanceof IGatedRecipe) {
-            if (!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
+            if (((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }
         if (recipe != null) {
             this.craftingTask = new ActiveInfusionTask(recipe, crafter.getUniqueID());

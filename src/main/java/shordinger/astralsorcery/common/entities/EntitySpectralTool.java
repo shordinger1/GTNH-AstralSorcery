@@ -8,27 +8,22 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -41,7 +36,14 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EntityData.DataParameter;
+import shordinger.astralsorcery.migration.EntityData.DataSerializers;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +53,7 @@ import shordinger.astralsorcery.migration.MathHelper;
  * Date: 11.10.2017 / 20:56
  */
 public class EntitySpectralTool extends EntityFlying implements EntityTechnicalAmbient {
-
+    public EntityDataManager dataManager;
     private static final DataParameter<ItemStack> ITEM = EntityDataManager
         .createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
     private AIToolTask aiTask;
@@ -61,7 +63,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     public EntitySpectralTool(World worldIn) {
         super(worldIn);
         setSize(0.6F, 0.8F);
-        this.moveHelper = new EntityFlyHelper(this);
+        //this.moveHelper = new EntityFlyHelper(this);
     }
 
     public EntitySpectralTool(World world, BlockPos spawnPos, ItemStack tool, ToolTask task) {
@@ -72,7 +74,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         this.originalStartPosition = spawnPos;
         this.aiTask.taskTarget = task;
         this.ticksUntilDeath = 100 + rand.nextInt(40);
-        this.moveHelper = new EntityFlyHelper(this);
+        //this.moveHelper = new EntityFlyHelper(this);
     }
 
     @Nullable
@@ -132,7 +134,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     public void onUpdate() {
         super.onUpdate();
 
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             spawnAmbientEffects();
         } else {
             this.ticksUntilDeath--;
@@ -277,9 +279,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                 return true;
             } else {
                 switch (this.taskTarget.type) {
-                    case BREAK_BLOCK:
+                    case BREAK_BLOCK -> {
                         BlockPos validStateStone = MiscUtils.searchAreaForFirst(
-                            parentEntity.world,
+                            parentEntity.worldObj,
                             parentEntity.getPosition(),
                             8,
                             Vector3.atEntityCorner(this.parentEntity),
@@ -293,9 +295,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 state,
                                 new ItemStack(Items.DIAMOND_PICKAXE)));
                         return validStateStone != null;
-                    case BREAK_LOG:
+                    }
+                    case BREAK_LOG -> {
                         BlockPos validStateLog = MiscUtils.searchAreaForFirst(
-                            parentEntity.world,
+                            parentEntity.worldObj,
                             parentEntity.getPosition(),
                             10,
                             Vector3.atEntityCorner(this.parentEntity),
@@ -313,7 +316,8 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 state,
                                 new ItemStack(Items.DIAMOND_AXE)));
                         return validStateLog != null;
-                    case ATTACK_MONSTER:
+                    }
+                    case ATTACK_MONSTER -> {
                         java.util.List<EntityLivingBase> eList = this.parentEntity.world.getEntitiesWithinAABB(
                             EntityLivingBase.class,
                             new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
@@ -321,8 +325,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         EntityLivingBase entity = EntityUtils
                             .selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                         return entity != null;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
                 return false;
             }
@@ -360,8 +365,8 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
             EntityMoveHelper entitymovehelper = this.parentEntity.getMoveHelper();
             boolean resetTimer = false;
             switch (this.taskTarget.type) {
-                case BREAK_BLOCK:
-                    if (this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
+                case BREAK_BLOCK -> {
+                    if (this.parentEntity.worldObj.isAirBlock(this.designatedBreakTarget)) {
                         this.designatedBreakTarget = null;
                         resetTimer = true;
                     } else {
@@ -382,7 +387,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 if (MiscUtils.breakBlockWithoutPlayer(
                                     (WorldServer) this.parentEntity.world,
                                     this.designatedBreakTarget,
-                                    this.parentEntity.world.getBlockState(this.designatedBreakTarget),
+                                    this.parentEntity.WorldHelper.getBlockState(world, this.designatedBreakTarget),
                                     true,
                                     true,
                                     true)) {
@@ -391,9 +396,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             }
                         }
                     }
-                    break;
-                case BREAK_LOG:
-                    if (this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
+                }
+                case BREAK_LOG -> {
+                    if (this.parentEntity.worldObj.isAirBlock(this.designatedBreakTarget)) {
                         this.designatedBreakTarget = null;
                         resetTimer = true;
                     } else {
@@ -410,11 +415,11 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         if (d3 < 3D) {
                             this.actionTicks++;
                             if (this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe()
-                                && this.parentEntity.world instanceof WorldServer) {
+                                && this.parentEntity.worldObj instanceof WorldServer) {
                                 if (MiscUtils.breakBlockWithoutPlayer(
-                                    (WorldServer) this.parentEntity.world,
+                                    (WorldServer) this.parentEntity.worldObj,
                                     this.designatedBreakTarget,
-                                    this.parentEntity.world.getBlockState(this.designatedBreakTarget),
+                                    this.parentEntity.worldObj.getBlockState(this.designatedBreakTarget),
                                     true,
                                     true,
                                     true)) {
@@ -423,8 +428,8 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             }
                         }
                     }
-                    break;
-                case ATTACK_MONSTER:
+                }
+                case ATTACK_MONSTER -> {
                     if (this.designatedAttackTarget.isDead) {
                         this.designatedAttackTarget = null;
                         resetTimer = true;
@@ -464,7 +469,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             }
                         }
                     }
-                    break;
+                }
             }
             if (resetTimer) {
                 this.actionTicks = 0;
@@ -480,9 +485,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
             }
 
             switch (this.taskTarget.type) {
-                case BREAK_BLOCK:
+                case BREAK_BLOCK -> {
                     BlockPos validStateStone = MiscUtils.searchAreaForFirst(
-                        parentEntity.world,
+                        parentEntity.worldObj,
                         parentEntity.getPosition(),
                         8,
                         Vector3.atEntityCorner(this.parentEntity),
@@ -506,10 +511,10 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         this.parentEntity.getMoveHelper()
                             .setMoveTo(d0, d1, d2, 1.5);
                     }
-                    break;
-                case BREAK_LOG:
+                }
+                case BREAK_LOG -> {
                     BlockPos validStateLog = MiscUtils.searchAreaForFirst(
-                        parentEntity.world,
+                        parentEntity.worldObj,
                         parentEntity.getPosition(),
                         10,
                         Vector3.atEntityCorner(this.parentEntity),
@@ -532,9 +537,9 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         this.parentEntity.getMoveHelper()
                             .setMoveTo(d0, d1, d2, 1.5);
                     }
-                    break;
-                case ATTACK_MONSTER:
-                    java.util.List<EntityLivingBase> eList = this.parentEntity.world.getEntitiesWithinAABB(
+                }
+                case ATTACK_MONSTER -> {
+                    List eList = this.parentEntity.worldObj.getEntitiesWithinAABB(
                         EntityLivingBase.class,
                         new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
                         e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
@@ -549,7 +554,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         this.parentEntity.getMoveHelper()
                             .setMoveTo(d0, d1, d2, 1.7);
                     }
-                    break;
+                }
             }
         }
 

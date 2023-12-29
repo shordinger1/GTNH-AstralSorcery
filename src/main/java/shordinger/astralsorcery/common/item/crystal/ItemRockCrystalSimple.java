@@ -10,11 +10,10 @@ package shordinger.astralsorcery.common.item.crystal;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
 import shordinger.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.lib.ItemsAS;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

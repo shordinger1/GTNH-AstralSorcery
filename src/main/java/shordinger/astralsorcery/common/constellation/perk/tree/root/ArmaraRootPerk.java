@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -41,11 +40,10 @@ public class ArmaraRootPerk extends RootPerk {
     // Measure firstmost incoming damage
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHurt(LivingHurtEvent event) {
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (side != Side.SERVER) return;
 
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        if (event.entityLiving instanceof EntityPlayer player) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
 
             if (PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
@@ -53,9 +51,9 @@ public class ArmaraRootPerk extends RootPerk {
             }
 
             if (prog.hasPerkEffect(this)) {
-                float expGain = event.getAmount();
+                float expGain = event.ammount;
                 expGain *= 3F;
-                if (event.getSource()
+                if (event.source
                     .isFireDamage()) {
                     if (player.isInLava()) {
                         expGain *= 0.01F;
@@ -63,16 +61,16 @@ public class ArmaraRootPerk extends RootPerk {
                         expGain *= 0.2F;
                     }
                 }
-                if (event.getSource() == DamageSource.STARVE) {
+                if (event.source == DamageSource.STARVE) {
                     expGain *= 0.1F;
                 }
-                if (event.getSource() == DamageSource.DROWN) {
+                if (event.source == DamageSource.DROWN) {
                     expGain *= 0.05F;
                 }
-                if (event.getSource() == DamageSource.CACTUS) {
+                if (event.source == DamageSource.CACTUS) {
                     expGain *= 0.01F;
                 }
-                if (event.getSource() instanceof EntityDamageSource) {
+                if (event.source instanceof EntityDamageSource) {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
@@ -84,7 +82,7 @@ public class ArmaraRootPerk extends RootPerk {
                     .postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
 
                 float xpGain = expGain;
-                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Armara)");
+                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getDisplayName() + " (Armara)");
 
                 ResearchManager.modifyExp(player, xpGain);
             }

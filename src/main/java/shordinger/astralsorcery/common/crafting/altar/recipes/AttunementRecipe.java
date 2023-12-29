@@ -8,25 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -39,6 +28,14 @@ import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -48,7 +45,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  */
 public class AttunementRecipe extends DiscoveryRecipe {
 
-    private Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
+    private final Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
 
     protected AttunementRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -98,7 +95,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
     public List<ItemStack> getAttItems(AttunementAltarSlot slot) {
         ItemHandle handle = additionalSlots.get(slot);
         if (handle != null) {
-            return handle.getApplicableItems();
+            return Collections.singletonList(handle.getApplicableItems());
         }
         return Lists.newArrayList();
     }

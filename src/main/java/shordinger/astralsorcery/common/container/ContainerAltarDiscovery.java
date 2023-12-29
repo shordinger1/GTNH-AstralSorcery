@@ -10,7 +10,6 @@ package shordinger.astralsorcery.common.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.items.SlotItemHandler;
 
 import shordinger.astralsorcery.common.tile.TileAltar;
 

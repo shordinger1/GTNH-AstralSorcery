@@ -109,17 +109,11 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
         IAttributeInstance attr = player.getAttributeMap()
             .getAttributeInstance(getAttribute());
         switch (mode) {
-            case ADDITION:
-                attr.removeModifier(getID(mode));
-                break;
-            case ADDED_MULTIPLY:
-                attr.removeModifier(getID(mode));
-                break;
-            case STACKING_MULTIPLY:
-                attr.removeModifier(getID(mode));
-                break;
-            default:
-                break;
+            case ADDITION -> attr.removeModifier(getID(mode));
+            case ADDED_MULTIPLY -> attr.removeModifier(getID(mode));
+            case STACKING_MULTIPLY -> attr.removeModifier(getID(mode));
+            default -> {
+            }
         }
     }
 

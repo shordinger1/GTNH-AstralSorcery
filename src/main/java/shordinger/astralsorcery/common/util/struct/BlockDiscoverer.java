@@ -8,21 +8,23 @@
 
 package shordinger.astralsorcery.common.util.struct;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Lists;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,7 +55,7 @@ public class BlockDiscoverer {
                     .containsKey(at)) {
                     continue;
                 }
-                IBlockState test = world.getBlockState(at);
+                IBlockState test = WorldHelper.getBlockState(world, at);
                 if (MiscUtils.matchStateExact(match, test) && addCheck.isStateValid(world, at, test)) {
                     out.addBlock(at.getX(), at.getY(), at.getZ(), test);
                     length--;
@@ -81,7 +83,7 @@ public class BlockDiscoverer {
                 for (int yy = -cubeSize; yy <= cubeSize; yy++) {
                     offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
                     if (world.isBlockLoaded(offset)) {
-                        IBlockState atState = world.getBlockState(offset);
+                        IBlockState atState = WorldHelper.getBlockState(world, offset);
                         if (match.isStateValid(world, offset, atState)) {
                             out.addBlock(new BlockPos(offset), atState);
                         }
@@ -95,7 +97,7 @@ public class BlockDiscoverer {
 
     public static BlockArray discoverBlocksWithSameStateAroundLimited(Map<IBlockState, Integer> stateLimits,
                                                                       World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
-        IBlockState testState = world.getBlockState(origin);
+        IBlockState testState = WorldHelper.getBlockState(world, origin);
 
         BlockArray foundResult = new BlockArray();
         foundResult.addBlock(origin, testState);
@@ -121,7 +123,7 @@ public class BlockDiscoverer {
                                 visited.add(search);
 
                                 if (!onlyExposed || isExposedToAir(world, search)) {
-                                    IBlockState current = world.getBlockState(search);
+                                    IBlockState current = WorldHelper.getBlockState(world, search);
                                     if (MiscUtils.matchStateExact(current, testState)) {
                                         foundResult.addBlock(search, current);
                                         searchNext.add(search);
@@ -140,7 +142,7 @@ public class BlockDiscoverer {
                         visited.add(search);
 
                         if (!onlyExposed || isExposedToAir(world, search)) {
-                            IBlockState current = world.getBlockState(search);
+                            IBlockState current = WorldHelper.getBlockState(world, search);
                             if (MiscUtils.matchStateExact(current, testState)) {
                                 foundResult.addBlock(search, current);
                                 searchNext.add(search);
@@ -157,7 +159,7 @@ public class BlockDiscoverer {
     public static BlockArray discoverBlocksWithSameStateAround(List<IBlockState> states, World world, BlockPos origin,
                                                                boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
         BlockArray foundResult = new BlockArray();
-        foundResult.addBlock(origin, world.getBlockState(origin));
+        foundResult.addBlock(origin, WorldHelper.getBlockState(world, origin));
         List<BlockPos> visited = new LinkedList<>();
 
         Deque<BlockPos> searchNext = new LinkedList<>();
@@ -180,7 +182,7 @@ public class BlockDiscoverer {
                                 visited.add(search);
 
                                 if (!onlyExposed || isExposedToAir(world, search)) {
-                                    IBlockState current = world.getBlockState(search);
+                                    IBlockState current = WorldHelper.getBlockState(world, search);
                                     if (MiscUtils.getMatchingState(states, current) != null) {
                                         foundResult.addBlock(search, current);
                                         searchNext.add(search);
@@ -199,7 +201,7 @@ public class BlockDiscoverer {
                         visited.add(search);
 
                         if (!onlyExposed || isExposedToAir(world, search)) {
-                            IBlockState current = world.getBlockState(search);
+                            IBlockState current = WorldHelper.getBlockState(world, search);
                             if (MiscUtils.getMatchingState(states, current) != null) {
                                 foundResult.addBlock(search, current);
                                 searchNext.add(search);
@@ -215,7 +217,7 @@ public class BlockDiscoverer {
 
     public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed,
                                                                int cubeSize, int limit, boolean searchCorners) {
-        IBlockState toMatch = world.getBlockState(origin);
+        IBlockState toMatch = WorldHelper.getBlockState(world, origin);
         return discoverBlocksWithSameStateAround(
             Lists.newArrayList(toMatch),
             world,
@@ -234,7 +236,7 @@ public class BlockDiscoverer {
     public static boolean isExposedToAir(World world, BlockPos pos) {
         for (EnumFacing face : EnumFacing.values()) {
             BlockPos offset = pos.offset(face);
-            if (world.isAirBlock(offset.getX(), offset.getY(), offset.getZ()) || world.getBlockState(offset)
+            if (world.isAirBlock(offset.getX(), offset.getY(), offset.getZ()) || WorldHelper.getBlockState(world, offset)
                 .getBlock()
                 .isReplaceable(world, offset)) return true;
         }

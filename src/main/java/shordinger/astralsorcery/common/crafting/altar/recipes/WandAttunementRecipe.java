@@ -20,6 +20,7 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,7 +53,7 @@ public class WandAttunementRecipe extends TraitRecipe {
     @Override
     public ItemStack getOutputForRender() {
         ItemStack cPaper = new ItemStack(ItemsAS.wand);
-        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
+        ItemWand.setAugment(cPaper, Objects.requireNonNull(WandAugment.getByConstellation(cst)));
         return cPaper;
     }
 
@@ -60,7 +61,7 @@ public class WandAttunementRecipe extends TraitRecipe {
     @Override
     public ItemStack getOutputForMatching() {
         ItemStack cPaper = new ItemStack(ItemsAS.wand);
-        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
+        ItemWand.setAugment(cPaper, Objects.requireNonNull(WandAugment.getByConstellation(cst)));
         return cPaper;
     }
 

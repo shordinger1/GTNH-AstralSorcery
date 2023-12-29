@@ -8,12 +8,7 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -27,17 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.base.GuiSkyScreen;
 import shordinger.astralsorcery.client.gui.base.GuiWHScreen;
 import shordinger.astralsorcery.client.sky.RenderAstralSkybox;
-import shordinger.astralsorcery.client.util.*;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.ClientUtils;
 import shordinger.astralsorcery.client.util.RenderConstellation;
@@ -60,6 +50,17 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -203,14 +204,14 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
             return;
         }
 
         for (SextantFinder.TargetObject to : this.availableTargets) {
             if (!this.showupTargets.containsKey(to)) {
                 BlockPos target = UISextantCache.queryLocation(
-                    Minecraft.getMinecraft().player.getPosition(),
+                    Minecraft.getMinecraft().thePlayer.getPosition(),
                     Minecraft.getMinecraft().world.provider.dimensionId,
                     to);
                 if (target != null) {
@@ -261,7 +262,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         this.rArrowDown = null;
         this.rArrowUp = null;
 
-        if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
             return;
         }
         GlStateManager.pushMatrix();
@@ -314,7 +315,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     private void drawSkyScreen(float partialTicks, double mouseX, double mouseY) {
         World w = Minecraft.getMinecraft().world;
-        float pitch = Minecraft.getMinecraft().player.rotationPitch;
+        float pitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
         float transparency = 0F;
         if (pitch < -20F) {
             transparency = 1F;
@@ -357,7 +358,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             zLevel -= 1;
         }
 
-        Vector3 iPosPlayer = RenderingUtils.interpolatePosition(Minecraft.getMinecraft().player, partialTicks)
+        Vector3 iPosPlayer = RenderingUtils.interpolatePosition(Minecraft.getMinecraft().thePlayer, partialTicks)
             .setY(0);
 
         zLevel += 10;
@@ -388,14 +389,14 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             double yaw = 180D - polar.getZ();
             double pitch = polar.getX() >= 350D ? -20D : Math.min(-20D, -20D - (70D - (70D * (polar.getX() / 350D))));
 
-            float playerYaw = Minecraft.getMinecraft().player.rotationYaw % 360F;
+            float playerYaw = Minecraft.getMinecraft().thePlayer.rotationYaw % 360F;
             if (playerYaw < 0) {
                 playerYaw += 360F;
             }
             if (playerYaw >= 180F) {
                 playerYaw -= 360F;
             }
-            float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+            float playerPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
             double diffYaw = playerYaw - yaw;
             double diffPitch = playerPitch - pitch;
@@ -597,7 +598,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     }
 
     private boolean canSeeSky(World renderWorld) {
-        BlockPos playerPos = Minecraft.getMinecraft().player.getPosition();
+        BlockPos playerPos = Minecraft.getMinecraft().thePlayer.getPosition();
 
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {

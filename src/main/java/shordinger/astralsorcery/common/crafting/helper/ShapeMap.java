@@ -11,7 +11,7 @@ package shordinger.astralsorcery.common.crafting.helper;
 import java.util.HashMap;
 
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import shordinger.astralsorcery.migration.NonNullList;
 
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 

@@ -13,8 +13,6 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.BufferBuilder;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
@@ -25,6 +23,7 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.MajorPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**
  * This class is part of the Astral Sorcery Mod

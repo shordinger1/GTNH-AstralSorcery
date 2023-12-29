@@ -8,17 +8,9 @@
 
 package shordinger.astralsorcery.common.starlight.network.handlers;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -30,6 +22,12 @@ import shordinger.astralsorcery.common.starlight.network.StarlightNetworkRegistr
 import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,7 +58,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         long ms = System.currentTimeMillis();
 
         if (!runningTransmutations.containsKey(pos)) {
-            IBlockState tryStateIn = world.getBlockState(pos);
+            IBlockState tryStateIn = WorldHelper.getBlockState(world, pos);
             LightOreTransmutations.Transmutation tr = LightOreTransmutations.searchForTransmutation(tryStateIn);
             if (tr != null && (tr.getRequiredType() == null || tr.getRequiredType()
                 .equals(starlightType))) {
@@ -74,7 +72,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
             }
         }
         ActiveTransmutation node = runningTransmutations.get(pos);
-        if (LightOreTransmutations.searchForTransmutation(world.getBlockState(pos)) != node.runningTransmutation) {
+        if (LightOreTransmutations.searchForTransmutation(WorldHelper.getBlockState(world, pos)) != node.runningTransmutation) {
             runningTransmutations.remove(pos);
             return;
         }

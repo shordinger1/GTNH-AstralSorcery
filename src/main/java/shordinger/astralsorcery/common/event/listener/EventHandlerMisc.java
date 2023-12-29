@@ -8,24 +8,23 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.event.ItemEnchantmentTooltipEvent;
 import shordinger.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -109,8 +108,8 @@ public class EventHandlerMisc {
      * }
      * @SubscribeEvent
      * public void onClone(PlayerEvent.Clone event) {
-     * IPlayerCapabilityPerks current = PlayerPerkHelper.getPerks(event.getEntityPlayer());
-     * IPlayerCapabilityPerks cloned = PlayerPerkHelper.getPerks(event.getEntityPlayer());
+     * IPlayerCapabilityPerks current = PlayerPerkHelper.getPerks(event.entityPlayer);
+     * IPlayerCapabilityPerks cloned = PlayerPerkHelper.getPerks(event.entityPlayer);
      * if(cloned != null && current != null) {
      * cloned.updatePerks(current.getAttunedConstellation(), current.getCurrentPlayerPerks());
      * }

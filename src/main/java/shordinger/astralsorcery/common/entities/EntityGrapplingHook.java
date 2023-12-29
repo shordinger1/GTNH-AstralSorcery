@@ -8,37 +8,33 @@
 
 package shordinger.astralsorcery.common.entities;
 
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-
 import com.google.common.collect.Lists;
-
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.EntityData.DataParameter;
+import shordinger.astralsorcery.migration.EntityData.DataSerializers;
+import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,10 +44,10 @@ import shordinger.astralsorcery.migration.MathHelper;
  * Date: 23.06.2017 / 13:12
  */
 public class EntityGrapplingHook extends EntityThrowable implements IEntityAdditionalSpawnData, EntityTechnicalAmbient {
-
-    private static DataParameter<Integer> PULLING_ENTITY = EntityDataManager
+    public EntityDataManager dataManager;
+    private static final DataParameter<Integer> PULLING_ENTITY = EntityDataManager
         .createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
-    private static DataParameter<Boolean> PULLING = EntityDataManager
+    private static final DataParameter<Boolean> PULLING = EntityDataManager
         .createKey(EntityGrapplingHook.class, DataSerializers.BOOLEAN);
 
     private boolean boosted = false;
@@ -87,9 +83,9 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         int id = additionalData.readInt();
         try {
             if (id > 0) {
-                this.throwingEntity = (EntityLivingBase) world.getEntityByID(id);
+                this.throwingEntity = (EntityLivingBase) worldObj.getEntityByID(id);
             }
-        } catch (Exception exc) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -121,8 +117,8 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         int idPull = this.dataManager.get(PULLING_ENTITY);
         if (idPull > 0) {
             try {
-                return (EntityLivingBase) this.world.getEntityByID(idPull);
-            } catch (Exception exc) {
+                return (EntityLivingBase) this.worldObj.getEntityByID(idPull);
+            } catch (Exception ignored) {
             }
         }
         return null;
@@ -197,7 +193,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         } else {
             despawnTick();
         }
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             if (!isPulling()) {
                 this.pullFactor += 0.02F;
             } else {
@@ -324,10 +320,8 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
     protected void onImpact(RayTraceResult result) {
         BlockPos hit = result.hitVec;
         switch (result.typeOfHit) {
-            case BLOCK:
-                setPulling(true, null);
-                break;
-            case ENTITY:
+            case BLOCK -> setPulling(true, null);
+            case ENTITY -> {
                 Entity e = result.entityHit;
                 if (e == null || (getThrower() != null && e.equals(getThrower()))) {
                     return;
@@ -336,9 +330,9 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
                     true,
                     (result.entityHit instanceof EntityLivingBase) ? (EntityLivingBase) result.entityHit : null);
                 hit = new BlockPos(hit.x, hit.y + result.entityHit.height * 3 / 4, hit.z);
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         this.motionX = 0;
         this.motionY = 0;

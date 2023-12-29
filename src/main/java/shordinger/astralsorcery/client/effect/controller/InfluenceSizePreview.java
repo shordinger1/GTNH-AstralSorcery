@@ -8,10 +8,7 @@
 
 package shordinger.astralsorcery.client.effect.controller;
 
-import java.awt.*;
-
 import net.minecraft.client.Minecraft;
-
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
@@ -22,6 +19,8 @@ import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -97,7 +96,7 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     protected boolean needsFadeOut() {
-        if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
             return true;
         }
         IStructureAreaOfInfluence aoe = EffectHandler.getInstance()
@@ -115,7 +114,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             return true;
         }
         BlockPos offset = this.tile.getActualRenderOffsetPos();
-        double dst = Minecraft.getMinecraft().player.getDistance(offset.getX(), offset.getY(), offset.getZ());
+        double dst = Minecraft.getMinecraft().thePlayer.getDistance(offset.getX(), offset.getY(), offset.getZ());
         if (dst <= 4) {
             return false;
         }

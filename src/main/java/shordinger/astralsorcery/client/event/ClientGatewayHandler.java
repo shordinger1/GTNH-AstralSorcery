@@ -8,19 +8,14 @@
 
 package shordinger.astralsorcery.client.event;
 
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -33,6 +28,10 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,12 +60,12 @@ public class ClientGatewayHandler {
                 screenshotCooldown = 0;
             }
         }
-        if (Minecraft.getMinecraft().player == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null) return;
 
         UIGateway ui = EffectHandler.getInstance()
             .getUiGateway();
-        if (ui != null && Minecraft.getMinecraft().player.world != null) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+        if (ui != null && Minecraft.getMinecraft().thePlayer.world != null) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             TileCelestialGateway gate = MiscUtils.getTileAt(
                 player.world,
                 Vector3.atEntityCorner(player)
@@ -92,7 +91,7 @@ public class ClientGatewayHandler {
                     focusTicks = 0;
                 } else {
                     if (!Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()
-                        && !Minecraft.getMinecraft().player.isSneaking()) {
+                        && !Minecraft.getMinecraft().thePlayer.isSneaking()) {
                         focusTicks = 0;
                         focusingEntry = null;
                     } else {
@@ -122,7 +121,7 @@ public class ClientGatewayHandler {
             Vector3 dir = focusingEntry.relativePos.clone()
                 .add(ui.getPos())
                 .subtract(
-                    Vector3.atEntityCorner(Minecraft.getMinecraft().player)
+                    Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer)
                         .addY(1.62));
             Vector3 mov = dir.clone()
                 .normalize()
@@ -236,7 +235,7 @@ public class ClientGatewayHandler {
             }
 
             if (focusTicks > 95) { // Time explained below
-                Minecraft.getMinecraft().player.setSneaking(false);
+                Minecraft.getMinecraft().thePlayer.setSneaking(false);
                 PacketChannel.CHANNEL
                     .sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos));
                 focusTicks = 0;
@@ -249,8 +248,8 @@ public class ClientGatewayHandler {
     private void captureScreenshot(TileCelestialGateway gate) {
         ResourceLocation gatewayScreenshot = ClientScreenshotCache
             .tryQueryTextureFor(gate.getWorld().provider.dimensionId, gate.getPos());
-        if (gatewayScreenshot == null && Minecraft.getMinecraft().player != null
-            && Minecraft.getMinecraft().player.rotationPitch <= 0
+        if (gatewayScreenshot == null && Minecraft.getMinecraft().thePlayer != null
+            && Minecraft.getMinecraft().thePlayer.rotationPitch <= 0
             && Minecraft.getMinecraft().currentScreen == null
             && Minecraft.getMinecraft().renderGlobal.getRenderedChunks() > 200) {
             screenshotCooldown = 10;

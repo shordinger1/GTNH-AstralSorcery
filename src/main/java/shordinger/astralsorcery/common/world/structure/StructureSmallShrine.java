@@ -66,7 +66,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY()
                 && Math.abs(dY - pos.getY()) <= heightThreshold
                 && isApplicableBiome(world, pos)) {
-            IBlockState state = world.getBlockState(new BlockPos(pos.getX(), dY - 1, pos.getZ()));
+            IBlockState state = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
             return !state.getMaterial()
                     .isLiquid() && state.getMaterial()
                     .isOpaque();

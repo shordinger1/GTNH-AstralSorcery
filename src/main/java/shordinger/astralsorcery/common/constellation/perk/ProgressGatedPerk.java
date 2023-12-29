@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -87,7 +86,7 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @SideOnly(Side.CLIENT)
     public final boolean canSeeClient() {
-        return canSee(Minecraft.getMinecraft().player, Side.CLIENT);
+        return canSee(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
     }
 
     public final boolean canSee(EntityPlayer player, Side side) {

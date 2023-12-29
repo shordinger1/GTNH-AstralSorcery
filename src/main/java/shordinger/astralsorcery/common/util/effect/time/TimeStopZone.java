@@ -115,7 +115,7 @@ public class TimeStopZone {
 
     void stopEffect() {
         for (TileEntity cached : cachedTiles) {
-            IBlockState state = world.getBlockState(cached.getPos());
+            IBlockState state = WorldHelper.getBlockState(world, cached.getPos());
             if (state.getBlock()
                 .hasTileEntity(state)) {
                 TileEntity te = state.getBlock()

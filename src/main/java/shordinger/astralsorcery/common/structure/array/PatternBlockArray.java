@@ -45,7 +45,7 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
-            IBlockState state = world.getBlockState(at);
+            IBlockState state = WorldHelper.getBlockState(world, at);
             if (!info.matcher.isStateValid(state)) {
                 return false;
             }
@@ -58,7 +58,7 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
             .entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
-            IBlockState state = world.getBlockState(at);
+            IBlockState state = WorldHelper.getBlockState(world, at);
             if (!info.matcher.isStateValid(state)) {
                 return false;
             }
@@ -76,7 +76,7 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
         if (!pattern.containsKey(offset)) return false;
         BlockInformation info = pattern.get(offset);
         BlockPos at = center.add(offset);
-        IBlockState state = world.getBlockState(at);
+        IBlockState state = WorldHelper.getBlockState(world, at);
         return info.matcher.isStateValid(state);
     }
 

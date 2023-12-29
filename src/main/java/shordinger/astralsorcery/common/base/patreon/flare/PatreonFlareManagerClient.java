@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
@@ -42,7 +42,7 @@ public class PatreonFlareManagerClient implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World clWorld = Minecraft.getMinecraft().world;
-        EntityPlayer thisPlayer = Minecraft.getMinecraft().player;
+        EntityPlayer thisPlayer = Minecraft.getMinecraft().thePlayer;
         if (clWorld == null || thisPlayer == null) return;
         int clDim = clWorld.provider.dimensionId;
         Vector3 thisPlayerPos = Vector3.atEntityCenter(thisPlayer);

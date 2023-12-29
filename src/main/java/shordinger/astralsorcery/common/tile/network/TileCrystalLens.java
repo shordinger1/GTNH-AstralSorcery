@@ -115,7 +115,7 @@ public class TileCrystalLens extends TileTransmissionBase {
     }
 
     public EnumFacing getPlacedAgainst() {
-        IBlockState state = world.getBlockState(getPos());
+        IBlockState state = WorldHelper.getBlockState(world, getPos());
         if (!(state.getBlock() instanceof BlockLens)) {
             return EnumFacing.DOWN;
         }
@@ -159,7 +159,7 @@ public class TileCrystalLens extends TileTransmissionBase {
                 boolean clear = rta.isClear(world);
                 if (!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
-                    IBlockState hitState = world.getBlockState(hit);
+                    IBlockState hitState = WorldHelper.getBlockState(world, hit);
                     if (!hit.equals(to.toBlockPos()) || (!hitState.getBlock()
                         .equals(BlocksAS.lens)
                         && !hitState.getBlock()
@@ -186,7 +186,7 @@ public class TileCrystalLens extends TileTransmissionBase {
     private void playColorEffects() {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());

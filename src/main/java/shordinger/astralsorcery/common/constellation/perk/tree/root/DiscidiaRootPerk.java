@@ -8,13 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -39,10 +37,10 @@ public class DiscidiaRootPerk extends RootPerk {
     // Measure actual outcome of dmg
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDamage(LivingDamageEvent event) {
-        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (side != Side.SERVER) return;
 
-        DamageSource ds = event.getSource();
+        DamageSource ds = event.source;
         EntityPlayer player = null;
         if (ds.getImmediateSource() != null && ds.getImmediateSource() instanceof EntityPlayer) {
             player = (EntityPlayer) ds.getImmediateSource();
@@ -53,7 +51,7 @@ public class DiscidiaRootPerk extends RootPerk {
         if (player != null) {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                float dmgDealt = event.getAmount();
+                float dmgDealt = event.ammount;
                 dmgDealt *= 0.09F;
                 dmgDealt *= expMultiplier;
                 dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side)

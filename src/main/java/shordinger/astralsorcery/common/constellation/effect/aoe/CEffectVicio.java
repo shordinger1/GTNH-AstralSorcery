@@ -8,21 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
@@ -35,6 +28,10 @@ import shordinger.astralsorcery.common.tile.TileRitualPedestal;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -87,7 +84,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
         boolean foundPlayer = false;
         double range = modified.getSize();
         if (modified.isCorrupted()) {
-            List<EntityLivingBase> entities = world.getEntitiesWithinAABB(
+            List entities = world.getEntitiesWithinAABB(
                 EntityLivingBase.class,
                 new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos)
                     .grow(range));
@@ -108,7 +105,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
                 entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 9));
             }
         } else {
-            List<EntityPlayerMP> entities = world.getEntitiesWithinAABB(
+            List entities = world.getEntitiesWithinAABB(
                 EntityPlayerMP.class,
                 new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos)
                     .grow(range));

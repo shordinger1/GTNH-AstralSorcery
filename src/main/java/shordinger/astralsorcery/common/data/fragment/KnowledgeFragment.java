@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.client.gui.GuiJournalConstellationDetails;
 import shordinger.astralsorcery.client.gui.journal.GuiJournalPages;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -47,7 +48,7 @@ public abstract class KnowledgeFragment {
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
 
     private final ResourceLocation name;
-    private String unlocPrefix;
+    private final String unlocPrefix;
     private Predicate<PlayerProgress> canSeeTest = TRUE;
     private Predicate<PlayerProgress> canDiscoverTest = TRUE;
 
@@ -57,7 +58,7 @@ public abstract class KnowledgeFragment {
     }
 
     public static KnowledgeFragment onConstellations(String name, IConstellation... constellations) {
-        return onConstellations(new ResourceLocation(AstralSorcery.MODID, name), constellations);
+        return onConstellations(new ResourceLocation(Tags.MODID, name), constellations);
     }
 
     public static KnowledgeFragment onConstellations(ResourceLocation name, IConstellation... constellations) {
@@ -84,7 +85,7 @@ public abstract class KnowledgeFragment {
     }
 
     public static KnowledgeFragment onResearchNodes(String name, ResearchNode... nodes) {
-        return onResearchNodes(new ResourceLocation(AstralSorcery.MODID, name), nodes);
+        return onResearchNodes(new ResourceLocation(Tags.MODID, name), nodes);
     }
 
     private static KnowledgeFragment onResearchNodes(ResourceLocation name, ResearchNode... nodes) {

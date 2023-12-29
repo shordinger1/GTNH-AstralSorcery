@@ -30,8 +30,8 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
  */
 public class DataActiveCelestials extends AbstractData {
 
-    private Map<Integer, List<IConstellation>> activeConstellations = new HashMap<>();
-    private List<Integer> updateRequested = new LinkedList<>();
+    private final Map<Integer, List<IConstellation>> activeConstellations = new HashMap<>();
+    private final List<Integer> updateRequested = new LinkedList<>();
 
     @Nullable
     public Collection<IConstellation> getActiveConstellations(int dimId) {
@@ -109,9 +109,7 @@ public class DataActiveCelestials extends AbstractData {
         if (!(serverData instanceof DataActiveCelestials)) return;
 
         Map<Integer, List<IConstellation>> update = ((DataActiveCelestials) serverData).activeConstellations;
-        for (Map.Entry<Integer, List<IConstellation>> entry : update.entrySet()) {
-            this.activeConstellations.put(entry.getKey(), entry.getValue());
-        }
+        this.activeConstellations.putAll(update);
     }
 
     public static class Provider extends ProviderAutoAllocate<DataActiveCelestials> {

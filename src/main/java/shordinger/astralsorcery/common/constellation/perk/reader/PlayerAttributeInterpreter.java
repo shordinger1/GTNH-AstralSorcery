@@ -32,10 +32,10 @@ import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttribut
 @SideOnly(Side.CLIENT)
 public class PlayerAttributeInterpreter {
 
-    private Map<String, AttributeReader> attributeReaderOverrides = Maps.newHashMap();
+    private final Map<String, AttributeReader> attributeReaderOverrides = Maps.newHashMap();
 
     private PlayerAttributeMap attributeMap;
-    private EntityPlayer player;
+    private final EntityPlayer player;
 
     private PlayerAttributeInterpreter(PlayerAttributeMap attributeMap, EntityPlayer player) {
         this.attributeMap = attributeMap;

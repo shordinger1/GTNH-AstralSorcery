@@ -8,18 +8,12 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.awt.*;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -33,6 +27,10 @@ import shordinger.astralsorcery.common.util.struct.TreeDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
+import javax.annotation.Nonnull;
+import java.awt.*;
+import java.util.Map;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -45,9 +43,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         World world = player.getEntityWorld();
-        if (!world.isRemote && !player.isSneaking()
-            && !player.getCooldownTracker()
-            .hasCooldown(ItemsAS.chargedCrystalAxe)) {
+        if (!world.isRemote && !player.isSneaking()) {
             BlockArray tree = TreeDiscoverer.tryCaptureTreeAt(world, pos, 9, true);
             if (tree != null) {
                 Map<BlockPos, BlockArray.BlockInformation> pattern = tree.getPattern();
@@ -61,10 +57,6 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
                             world.setBlockState(blocks.getKey(), blocks.getValue().state);
                         }
                     }
-                }
-                if (!tryRevertMainHand(player, itemstack)) {
-                    player.getCooldownTracker()
-                        .setCooldown(ItemsAS.chargedCrystalAxe, 150);
                 }
                 return true;
             }

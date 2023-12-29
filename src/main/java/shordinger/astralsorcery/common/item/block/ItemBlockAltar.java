@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -49,7 +48,7 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                 for (int xx = -1; xx <= 1; xx++) {
                     for (int zz = -1; zz <= 1; zz++) {
                         mut.setPos(pos.getX() + xx, pos.getY(), pos.getZ() + zz);
-                        if (!world.isAirBlock(mut) && !world.getBlockState(mut)
+                        if (!world.isAirBlock(mut) && !WorldHelper.getBlockState(world, mut)
                             .getBlock()
                             .isReplaceable(world, mut)) {
                             mut.release();

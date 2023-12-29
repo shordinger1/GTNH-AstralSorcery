@@ -8,18 +8,13 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.world.World;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
-
 import com.google.common.collect.Lists;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import shordinger.astralsorcery.common.auxiliary.StorageNetworkHandler;
@@ -28,6 +23,9 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.tile.TileOreGenerator;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +40,7 @@ public class EventHandlerIO {
 
     @SubscribeEvent
     public void onUnload(WorldEvent.Unload event) {
-        World w = event.getWorld();
+        World w = event.world;
         ConstellationSkyHandler.getInstance()
             .informWorldUnload(w);
         StorageNetworkHandler.clearHandler(w);
@@ -59,12 +57,12 @@ public class EventHandlerIO {
     @SubscribeEvent
     public void onSave(WorldEvent.Save event) {
         WorldCacheManager.getInstance()
-            .doSave(event.getWorld());
+            .doSave(event.world);
     }
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        if (!event.getWorld().isRemote) {
+        if (!event.world.isRemote) {
             Iterator<TileOreGenerator> iterator = generatorQueue.iterator();
             while (iterator.hasNext()) {
                 TileOreGenerator gen = iterator.next();

@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -62,7 +62,6 @@ import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.PatternMatchHelper;
@@ -512,7 +511,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this, false);
         if (recipe instanceof IGatedRecipe) {
-            if (!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
+            if (((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }
         if (recipe != null) {
             int divisor = Math.max(
