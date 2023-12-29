@@ -20,8 +20,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class DataSerializers {
+
     private static final IntIdentityHashBiMap<DataSerializer<?>> REGISTRY = new IntIdentityHashBiMap(16);
     public static final DataSerializer<Byte> BYTE = new DataSerializer<Byte>() {
+
         public void write(PacketBuffer buf, Byte value) {
             buf.writeByte(value);
         }
@@ -39,6 +41,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Integer> VARINT = new DataSerializer<Integer>() {
+
         public void write(PacketBuffer buf, Integer value) {
             buf.writeVarInt(value);
         }
@@ -56,6 +59,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Float> FLOAT = new DataSerializer<Float>() {
+
         public void write(PacketBuffer buf, Float value) {
             buf.writeFloat(value);
         }
@@ -73,6 +77,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<String> STRING = new DataSerializer<String>() {
+
         public void write(PacketBuffer buf, String value) {
             buf.writeString(value);
         }
@@ -90,6 +95,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<IChatComponent> TEXT_COMPONENT = new DataSerializer<IChatComponent>() {
+
         public void write(PacketBuffer buf, IChatComponent value) {
             buf.writeTextComponent(value);
         }
@@ -107,6 +113,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<ItemStack> ITEM_STACK = new DataSerializer<ItemStack>() {
+
         public void write(PacketBuffer buf, ItemStack value) {
             buf.writeItemStack(value);
         }
@@ -124,6 +131,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Optional<IBlockState>> OPTIONAL_BLOCK_STATE = new DataSerializer<>() {
+
         public void write(PacketBuffer buf, Optional<IBlockState> value) {
             if (value.isPresent()) {
                 buf.writeVarInt(Block.getStateId((IBlockState) value.get()));
@@ -147,6 +155,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Boolean> BOOLEAN = new DataSerializer<Boolean>() {
+
         public void write(PacketBuffer buf, Boolean value) {
             buf.writeBoolean(value);
         }
@@ -164,6 +173,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Rotations> ROTATIONS = new DataSerializer<Rotations>() {
+
         public void write(PacketBuffer buf, Rotations value) {
             buf.writeFloat(value.getX());
             buf.writeFloat(value.getY());
@@ -183,6 +193,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<BlockPos> BLOCK_POS = new DataSerializer<BlockPos>() {
+
         public void write(PacketBuffer buf, BlockPos value) {
             buf.writeBlockPos(value);
         }
@@ -200,6 +211,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Optional<BlockPos>> OPTIONAL_BLOCK_POS = new DataSerializer<Optional<BlockPos>>() {
+
         public void write(PacketBuffer buf, Optional<BlockPos> value) {
             buf.writeBoolean(value.isPresent());
             if (value.isPresent()) {
@@ -221,6 +233,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<EnumFacing> FACING = new DataSerializer<EnumFacing>() {
+
         public void write(PacketBuffer buf, EnumFacing value) {
             buf.writeEnumValue(value);
         }
@@ -238,6 +251,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<Optional<UUID>> OPTIONAL_UNIQUE_ID = new DataSerializer<Optional<UUID>>() {
+
         public void write(PacketBuffer buf, Optional<UUID> value) {
             buf.writeBoolean(value.isPresent());
             if (value.isPresent()) {
@@ -259,6 +273,7 @@ public class DataSerializers {
         }
     };
     public static final DataSerializer<NBTTagCompound> COMPOUND_TAG = new DataSerializer<NBTTagCompound>() {
+
         public void write(PacketBuffer buf, NBTTagCompound value) {
             buf.writeCompoundTag(value);
         }

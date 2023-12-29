@@ -8,8 +8,10 @@
 
 package shordinger.astralsorcery.common.item.tool.sextant;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +22,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.common.CommonProxy;
@@ -34,9 +39,6 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

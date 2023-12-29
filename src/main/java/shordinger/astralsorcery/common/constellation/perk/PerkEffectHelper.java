@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,12 +23,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-import cpw.mods.fml.common.gameevent.TickEvent;
-
-
 import com.google.common.collect.Lists;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
@@ -87,7 +85,8 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
         LogCategory.PERKS.info(
-            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName() + " connected to server on side SERVER");
+            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName()
+                + " connected to server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(
             () -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
     }
@@ -161,7 +160,10 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if (progress.isValid()) {
             LogCategory.PERKS.info(
-                () -> (remove ? "Remove" : "Apply") + " ALL perks for " + player.getDisplayName() + " on side " + side.name());
+                () -> (remove ? "Remove" : "Apply") + " ALL perks for "
+                    + player.getDisplayName()
+                    + " on side "
+                    + side.name());
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     handlePerkRemoval(perk, player, side);

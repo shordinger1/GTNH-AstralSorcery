@@ -8,15 +8,17 @@
 
 package shordinger.astralsorcery.common.data.config.entry;
 
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.config.Configuration;
-import shordinger.astralsorcery.AstralSorcery;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.config.Configuration;
+
+import com.google.common.collect.Lists;
+
+import shordinger.astralsorcery.AstralSorcery;
 
 /**
  * This class is part of the Astral Sorcery Mod

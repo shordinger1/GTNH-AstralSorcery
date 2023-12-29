@@ -26,6 +26,7 @@ import java.awt.*;
  * Date: 13.05.2016 / 13:59
  */
 public class EntityItemHighlighted extends EntityItem {
+
     public EntityDataManager dataManager;
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager
         .createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
@@ -61,20 +62,16 @@ public class EntityItemHighlighted extends EntityItem {
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager
-            .register(DATA_COLOR, 0);
+        this.dataManager.register(DATA_COLOR, 0);
     }
 
     public void applyColor(Color color) {
-        this.dataManager
-            .set(DATA_COLOR, color.getRGB());
-        this.dataManager
-            .setDirty(DATA_COLOR);
+        this.dataManager.set(DATA_COLOR, color.getRGB());
+        this.dataManager.setDirty(DATA_COLOR);
     }
 
     public Color getHighlightColor() {
-        int colorInt = this.dataManager
-            .get(DATA_COLOR);
+        int colorInt = this.dataManager.get(DATA_COLOR);
         return new Color(colorInt, false);
     }
 

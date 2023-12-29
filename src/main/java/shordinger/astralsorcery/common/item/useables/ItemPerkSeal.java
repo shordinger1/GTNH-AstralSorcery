@@ -8,12 +8,14 @@
 
 package shordinger.astralsorcery.common.item.useables;
 
-import com.gtnewhorizons.modularui.api.forge.IItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import com.gtnewhorizons.modularui.api.forge.IItemHandler;
+
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;

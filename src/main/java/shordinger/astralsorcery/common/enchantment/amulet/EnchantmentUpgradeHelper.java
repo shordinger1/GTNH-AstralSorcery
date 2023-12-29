@@ -242,9 +242,9 @@ public class EnchantmentUpgradeHelper {
             for (int i = 0; i < inv.armorInventory.length; i++) {
                 removeAmuletOwner(inv.armorInventory[i]);
             }
-//            for (int i = 0; i < inv.offHandInventory.size(); i++) {
-//                removeAmuletOwner(inv.offHandInventory.get(i));
-//            }
+            // for (int i = 0; i < inv.offHandInventory.size(); i++) {
+            // removeAmuletOwner(inv.offHandInventory.get(i));
+            // }
         }
     }
 

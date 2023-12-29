@@ -8,15 +8,22 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -29,10 +36,6 @@ import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.registry.RegistryBookLookups;
 import shordinger.astralsorcery.migration.NonNullList;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

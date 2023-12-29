@@ -8,15 +8,6 @@
 
 package shordinger.astralsorcery.common.constellation;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Optional;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +22,13 @@ import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -133,8 +133,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         at,
                         new ItemStack(Items.DIAMOND_PICKAXE),
                         EntitySpectralTool.ToolTask.createPickaxeTask());
-                    event.world
-                        .spawnEntity(esp);
+                    event.world.spawnEntity(esp);
                     return;
                 }
             }
@@ -156,8 +155,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         at,
                         new ItemStack(Items.DIAMOND_AXE),
                         EntitySpectralTool.ToolTask.createLogTask());
-                    event.world
-                        .spawnEntity(esp);
+                    event.world.spawnEntity(esp);
                 }
             }
         }
@@ -176,11 +174,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     EnumFacing faceHit = rtr.sideHit;
                     if (faceHit != null) {
                         if (faceHit.getAxis() == EnumFacing.Axis.Y) {
-                            ev.breakBlocksPlaneHorizontal(
-                                (EntityPlayerMP) pl,
-                                faceHit,
-                                event.world,
-                                event.getPos());
+                            ev.breakBlocksPlaneHorizontal((EntityPlayerMP) pl, faceHit, event.world, event.getPos());
                         } else {
                             ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.world, event.getPos());
                         }
@@ -219,16 +213,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 }
             }
             CapeEffectBootes bo = ItemCape.getCapeEffect(pl, Constellations.bootes);
-            if (bo != null && event.source
-                .getTrueSource() != null) {
-                Entity source = event.source
-                    .getTrueSource();
+            if (bo != null && event.source.getTrueSource() != null) {
+                Entity source = event.source.getTrueSource();
                 if (source instanceof EntityLivingBase) {
                     bo.onPlayerDamagedByEntity(pl, (EntityLivingBase) source);
                 }
             }
-            if (event.source
-                .isFireDamage()) {
+            if (event.source.isFireDamage()) {
                 CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
                 if (cf != null) {
                     cf.healFor(pl, event.ammount);
@@ -251,8 +242,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
-        if (event.entity
-            .worldObj.isRemote) return;
+        if (event.entity.worldObj.isRemote) return;
 
         DamageSource ds = event.source;
         if (ds.getTrueSource() != null && ds.getTrueSource() instanceof EntityPlayer) {
@@ -284,10 +274,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
                 discidiaChainingAttack = true;
                 try {
-                    DamageUtil.attackEntityFrom(
-                        event.entityLiving,
-                        CommonProxy.dmgSourceStellar,
-                        (float) (added / 2.0F));
+                    DamageUtil
+                        .attackEntityFrom(event.entityLiving, CommonProxy.dmgSourceStellar, (float) (added / 2.0F));
                     DamageUtil.attackEntityFrom(
                         event.entityLiving,
                         DamageSource.causePlayerDamage(attacker),

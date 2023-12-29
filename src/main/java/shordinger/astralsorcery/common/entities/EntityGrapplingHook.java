@@ -44,6 +44,7 @@ import java.util.List;
  * Date: 23.06.2017 / 13:12
  */
 public class EntityGrapplingHook extends EntityThrowable implements IEntityAdditionalSpawnData, EntityTechnicalAmbient {
+
     public EntityDataManager dataManager;
     private static final DataParameter<Integer> PULLING_ENTITY = EntityDataManager
         .createKey(EntityGrapplingHook.class, DataSerializers.VARINT);

@@ -8,15 +8,24 @@
 
 package shordinger.astralsorcery.client.gui.journal.overlay;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import shordinger.astralsorcery.client.util.Blending;
@@ -36,12 +45,6 @@ import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
 import shordinger.astralsorcery.common.constellation.perk.reader.PlayerAttributeInterpreter;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

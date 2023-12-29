@@ -14,7 +14,6 @@ import java.util.Collection;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import shordinger.astralsorcery.migration.NonNullList;
 
 import org.lwjgl.opengl.GL11;
 
@@ -32,6 +31,7 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

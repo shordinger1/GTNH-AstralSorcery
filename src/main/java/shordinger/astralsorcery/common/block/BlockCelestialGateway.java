@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -21,6 +23,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -29,8 +32,6 @@ import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

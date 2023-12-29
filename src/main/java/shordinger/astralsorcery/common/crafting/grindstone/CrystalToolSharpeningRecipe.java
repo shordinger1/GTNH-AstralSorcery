@@ -8,13 +8,12 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalSword;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalToolBase;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +31,7 @@ public class CrystalToolSharpeningRecipe extends GrindstoneRecipe {
     @Override
     public boolean matches(ItemStack stackIn) {
         return !stackIn.isEmpty()
-                && (stackIn.getItem() instanceof ItemCrystalToolBase || stackIn.getItem() instanceof ItemCrystalSword);
+            && (stackIn.getItem() instanceof ItemCrystalToolBase || stackIn.getItem() instanceof ItemCrystalSword);
     }
 
     @Override

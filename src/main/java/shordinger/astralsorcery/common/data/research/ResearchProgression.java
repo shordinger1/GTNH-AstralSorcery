@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 
 /**

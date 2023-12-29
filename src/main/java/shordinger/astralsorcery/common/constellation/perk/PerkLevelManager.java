@@ -11,10 +11,10 @@ package shordinger.astralsorcery.common.constellation.perk;
 import java.util.HashMap;
 import java.util.Map;
 
-import cpw.mods.fml.common.Optional;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
+import cpw.mods.fml.common.Optional;
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;

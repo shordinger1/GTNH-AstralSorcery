@@ -8,10 +8,15 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
@@ -20,9 +25,6 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import javax.annotation.Nonnull;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

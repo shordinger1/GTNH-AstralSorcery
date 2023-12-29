@@ -72,7 +72,8 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
             }
         }
         ActiveTransmutation node = runningTransmutations.get(pos);
-        if (LightOreTransmutations.searchForTransmutation(WorldHelper.getBlockState(world, pos)) != node.runningTransmutation) {
+        if (LightOreTransmutations.searchForTransmutation(WorldHelper.getBlockState(world, pos))
+            != node.runningTransmutation) {
             runningTransmutations.remove(pos);
             return;
         }

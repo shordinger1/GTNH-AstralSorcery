@@ -8,13 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import java.util.UUID;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
+
 import org.jetbrains.annotations.Nullable;
+
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +41,8 @@ public class AttributeTypeAttackSpeed extends VanillaAttributeType {
     }
 
     @Nullable
-    static UUID getUuid(PerkAttributeModifier.Mode mode, UUID attackSpeedAddId, UUID attackSpeedAddMultiplyId, UUID attackSpeedStackMultiplyId) {
+    static UUID getUuid(PerkAttributeModifier.Mode mode, UUID attackSpeedAddId, UUID attackSpeedAddMultiplyId,
+                        UUID attackSpeedStackMultiplyId) {
         switch (mode) {
             case ADDITION -> {
                 return attackSpeedAddId;

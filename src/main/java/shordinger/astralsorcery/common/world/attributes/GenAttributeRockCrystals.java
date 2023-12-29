@@ -8,13 +8,22 @@
 
 package shordinger.astralsorcery.common.world.attributes;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
+
+import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
@@ -25,13 +34,6 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

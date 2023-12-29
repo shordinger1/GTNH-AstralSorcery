@@ -11,6 +11,7 @@
 package vazkii.botania.api.lexicon.multiblock.component;
 
 import net.minecraft.world.World;
+
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 

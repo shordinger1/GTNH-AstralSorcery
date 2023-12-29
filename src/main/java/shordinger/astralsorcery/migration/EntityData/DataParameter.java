@@ -1,6 +1,7 @@
 package shordinger.astralsorcery.migration.EntityData;
 
 public class DataParameter<T> {
+
     private final int id;
     private final DataSerializer<T> serializer;
 

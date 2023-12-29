@@ -8,7 +8,6 @@
 
 package shordinger.astralsorcery.client.util;
 
-
 import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**

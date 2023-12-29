@@ -1,7 +1,11 @@
 package shordinger.astralsorcery.migration;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -12,20 +16,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AstralItem extends Item {
 
-//    public boolean isEmpty(){
-//
-//    }
-@Override
-public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List p_150895_3_) {
-    getSubItems(p_150895_2_, p_150895_3_);
-}
+    // public boolean isEmpty(){
+    //
+    // }
+    @Override
+    public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List p_150895_3_) {
+        getSubItems(p_150895_2_, p_150895_3_);
+    }
 
     public abstract void getSubItems(CreativeTabs tab, List<ItemStack> items);
 

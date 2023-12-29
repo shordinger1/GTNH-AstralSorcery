@@ -8,7 +8,10 @@
 
 package shordinger.astralsorcery.client.effect.controller;
 
+import java.awt.*;
+
 import net.minecraft.client.Minecraft;
+
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
@@ -19,8 +22,6 @@ import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

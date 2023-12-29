@@ -84,7 +84,7 @@ public abstract class ItemBlockStorage extends Item {
         ItemStack used = player.getHeldItem(EnumHand.MAIN_HAND);
         if (!used.isEmpty() && used.getItem() instanceof ItemBlockStorage) {
             NBTHelper.getPersistentData(used)
-                    .removeTag("storedStates");
+                .removeTag("storedStates");
         }
     }
 

@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.CelestialStrike;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

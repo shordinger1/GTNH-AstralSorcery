@@ -8,20 +8,22 @@
 
 package shordinger.astralsorcery.common.constellation.distribution;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.World;
 import cpw.mods.fml.common.gameevent.TickEvent;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktRequestSeed;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

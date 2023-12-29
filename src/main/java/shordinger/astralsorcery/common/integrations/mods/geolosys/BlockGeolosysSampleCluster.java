@@ -107,7 +107,8 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
                                   EntityPlayer player) {
-        return super.getPickBlock(WorldHelper.getBlockState(world, pos), target, world, pos, player); // Waila fix. wtf. why waila.
+        return super.getPickBlock(WorldHelper.getBlockState(world, pos), target, world, pos, player); // Waila fix. wtf.
+        // why waila.
         // why.
     }
 

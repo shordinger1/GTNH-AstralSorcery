@@ -53,6 +53,7 @@ import java.util.List;
  * Date: 11.10.2017 / 20:56
  */
 public class EntitySpectralTool extends EntityFlying implements EntityTechnicalAmbient {
+
     public EntityDataManager dataManager;
     private static final DataParameter<ItemStack> ITEM = EntityDataManager
         .createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
@@ -63,7 +64,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     public EntitySpectralTool(World worldIn) {
         super(worldIn);
         setSize(0.6F, 0.8F);
-        //this.moveHelper = new EntityFlyHelper(this);
+        // this.moveHelper = new EntityFlyHelper(this);
     }
 
     public EntitySpectralTool(World world, BlockPos spawnPos, ItemStack tool, ToolTask task) {
@@ -74,7 +75,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         this.originalStartPosition = spawnPos;
         this.aiTask.taskTarget = task;
         this.ticksUntilDeath = 100 + rand.nextInt(40);
-        //this.moveHelper = new EntityFlyHelper(this);
+        // this.moveHelper = new EntityFlyHelper(this);
     }
 
     @Nullable

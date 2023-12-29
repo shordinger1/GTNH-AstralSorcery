@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.item.wand;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import com.gtnewhorizons.modularui.api.forge.InvWrapper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -27,7 +28,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.gtnewhorizons.modularui.api.GlStateManager;
+import com.gtnewhorizons.modularui.api.forge.InvWrapper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.event.ClientRenderEventHandler;
 import shordinger.astralsorcery.client.util.AirBlockRenderWorld;
 import shordinger.astralsorcery.client.util.Blending;
@@ -51,13 +61,6 @@ import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,9 +8,14 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +33,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -49,13 +59,6 @@ import shordinger.astralsorcery.migration.ActionResult;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.EnumActionResult;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,16 +8,18 @@
 
 package shordinger.astralsorcery.client.gui.base;
 
+import java.awt.*;
+import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.input.Mouse;
-import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 
-import java.awt.*;
-import java.io.IOException;
+import org.lwjgl.input.Mouse;
+
+import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 
 /**
  * This class is part of the Astral Sorcery Mod

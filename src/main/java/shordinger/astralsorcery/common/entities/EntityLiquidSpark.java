@@ -55,6 +55,7 @@ import java.util.List;
  * Date: 28.10.2017 / 14:39
  */
 public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAmbient {
+
     public EntityDataManager dataManager;
     private static final DataParameter<Integer> ENTITY_TARGET = EntityDataManager
         .createKey(EntityLiquidSpark.class, DataSerializers.VARINT);
@@ -69,7 +70,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super(worldIn);
         setSize(0.4F, 0.4F);
         this.noClip = true;
-        //this.moveHelper = new EntityFlyHelper(this);
+        // this.moveHelper = new EntityFlyHelper(this);
         this.purpose = null;
     }
 
@@ -78,7 +79,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         setSize(0.4F, 0.4F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
         this.noClip = true;
-        //this.moveHelper = new EntityFlyHelper(this);
+        // this.moveHelper = new EntityFlyHelper(this);
         this.purpose = purposeOfLiving;
     }
 
@@ -87,7 +88,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         setSize(0.4F, 0.4F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
         this.noClip = true;
-        //this.moveHelper = new EntityFlyHelper(this);
+        // this.moveHelper = new EntityFlyHelper(this);
         this.tileTarget = target;
     }
 
@@ -192,7 +193,8 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     PacketChannel.CHANNEL
                         .sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
-                    this.getMoveHelper().setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
+                    this.getMoveHelper()
+                        .setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
                 }
             } else if (tileTarget != null) {
                 if (tileTarget.isInvalid()
@@ -230,7 +232,8 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     PacketChannel.CHANNEL
                         .sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
                 } else {
-                    this.getMoveHelper().setMoveTo(target.getX(), target.getY(), target.getZ(), 2.4F);
+                    this.getMoveHelper()
+                        .setMoveTo(target.getX(), target.getY(), target.getZ(), 2.4F);
                 }
             } else {
                 setDead();
@@ -245,11 +248,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         return false;
     }
 
-//    @Nullable
-//    @Override
-//    protected SoundEvent getDeathSound() {
-//        return null;
-//    }
+    // @Nullable
+    // @Override
+    // protected SoundEvent getDeathSound() {
+    // return null;
+    // }
 
     @Nullable
     @Override

@@ -13,11 +13,12 @@ import java.util.Iterator;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

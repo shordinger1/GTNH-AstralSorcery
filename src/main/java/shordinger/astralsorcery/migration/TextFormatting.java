@@ -5,35 +5,25 @@
 
 package shordinger.astralsorcery.migration;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.IChatComponent;
-
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.IChatComponent;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 public enum TextFormatting {
+
     BLACK("BLACK", '0', 0),
     DARK_BLUE("DARK_BLUE", '1', 1),
     DARK_GREEN("DARK_GREEN", '2', 2),
@@ -65,7 +55,8 @@ public enum TextFormatting {
     private final int colorIndex;
 
     private static String lowercaseAlpha(String p_175745_0_) {
-        return p_175745_0_.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
+        return p_175745_0_.toLowerCase(Locale.ROOT)
+            .replaceAll("[^a-z]", "");
     }
 
     private TextFormatting(String formattingName, char formattingCodeIn, int colorIndex) {
@@ -96,7 +87,8 @@ public enum TextFormatting {
     }
 
     public String getFriendlyName() {
-        return this.name().toLowerCase(Locale.ROOT);
+        return this.name()
+            .toLowerCase(Locale.ROOT);
     }
 
     public String toString() {
@@ -105,7 +97,9 @@ public enum TextFormatting {
 
     @Nullable
     public static String getTextWithoutFormattingCodes(@Nullable String text) {
-        return text == null ? null : FORMATTING_CODE_PATTERN.matcher(text).replaceAll("");
+        return text == null ? null
+            : FORMATTING_CODE_PATTERN.matcher(text)
+            .replaceAll("");
     }
 
     @Nullable
@@ -157,6 +151,7 @@ public enum TextFormatting {
 }
 
 public class TextComponentString extends TextComponentBase {
+
     private final String text;
 
     public TextComponentString(String msg) {
@@ -188,7 +183,9 @@ public class TextComponentString extends TextComponentBase {
 
     public TextComponentString createCopy() {
         TextComponentString textcomponentstring = new TextComponentString(this.text);
-        textcomponentstring.setStyle(this.getStyle().createShallowCopy());
+        textcomponentstring.setStyle(
+            this.getStyle()
+                .createShallowCopy());
 
         for (IChatComponent itextcomponent : this.getSiblings()) {
             textcomponentstring.appendSibling(itextcomponent.createCopy());
@@ -208,11 +205,18 @@ public class TextComponentString extends TextComponentBase {
     }
 
     public String toString() {
-        return "TextComponent{text='" + this.text + '\'' + ", siblings=" + this.siblings + ", style=" + this.getStyle() + '}';
+        return "TextComponent{text='" + this.text
+            + '\''
+            + ", siblings="
+            + this.siblings
+            + ", style="
+            + this.getStyle()
+            + '}';
     }
 }
 
 public abstract class TextComponentBase implements IChatComponent {
+
     protected List<IChatComponent> siblings = Lists.newArrayList();
     private ChatStyle style;
 
@@ -220,7 +224,8 @@ public abstract class TextComponentBase implements IChatComponent {
     }
 
     public IChatComponent appendSibling(IChatComponent component) {
-        component.getStyle().setParentStyle(this.getStyle());
+        component.getStyle()
+            .setParentStyle(this.getStyle());
         this.siblings.add(component);
         return this;
     }
@@ -237,7 +242,8 @@ public abstract class TextComponentBase implements IChatComponent {
         this.style = style;
 
         for (IChatComponent itextcomponent : this.siblings) {
-            itextcomponent.getStyle().setParentStyle(this.getStyle());
+            itextcomponent.getStyle()
+                .setParentStyle(this.getStyle());
         }
 
         return this;
@@ -248,7 +254,8 @@ public abstract class TextComponentBase implements IChatComponent {
             this.style = new Style();
 
             for (IChatComponent itextcomponent : this.siblings) {
-                itextcomponent.getStyle().setParentStyle(this.style);
+                itextcomponent.getStyle()
+                    .setParentStyle(this.style);
             }
         }
 
@@ -256,7 +263,8 @@ public abstract class TextComponentBase implements IChatComponent {
     }
 
     public Iterator<IChatComponent> iterator() {
-        return Iterators.concat(Iterators.forArray(new TextComponentBase[]{this}), createDeepCopyIterator(this.siblings));
+        return Iterators
+            .concat(Iterators.forArray(new TextComponentBase[]{this}), createDeepCopyIterator(this.siblings));
     }
 
     public final String getUnformattedText() {
@@ -275,7 +283,9 @@ public abstract class TextComponentBase implements IChatComponent {
         for (IChatComponent iChatComponent : (Iterable<IChatComponent>) this) {
             String s = ((IChatComponent) iChatComponent).getUnformattedComponentText();
             if (!s.isEmpty()) {
-                stringbuilder.append(((IChatComponent) iChatComponent).getStyle().getFormattingCode());
+                stringbuilder.append(
+                    ((IChatComponent) iChatComponent).getStyle()
+                        .getFormattingCode());
                 stringbuilder.append(s);
                 stringbuilder.append(TextFormatting.RESET);
             }
@@ -285,15 +295,20 @@ public abstract class TextComponentBase implements IChatComponent {
     }
 
     public static Iterator<IChatComponent> createDeepCopyIterator(Iterable<IChatComponent> components) {
-        Iterator<IChatComponent> iterator = Iterators.concat(Iterators.transform(components.iterator(), new Function<IChatComponent, Iterator<IChatComponent>>() {
-            public Iterator<IChatComponent> apply(@Nullable IChatComponent p_apply_1_) {
-                return p_apply_1_.iterator();
-            }
-        }));
+        Iterator<IChatComponent> iterator = Iterators.concat(
+            Iterators.transform(components.iterator(), new Function<IChatComponent, Iterator<IChatComponent>>() {
+
+                public Iterator<IChatComponent> apply(@Nullable IChatComponent p_apply_1_) {
+                    return p_apply_1_.iterator();
+                }
+            }));
         iterator = Iterators.transform(iterator, new Function<IChatComponent, IChatComponent>() {
+
             public IChatComponent apply(@Nullable IChatComponent p_apply_1_) {
                 IChatComponent itextcomponent = p_apply_1_.createCopy();
-                itextcomponent.setStyle(itextcomponent.getStyle().createDeepCopy());
+                itextcomponent.setStyle(
+                    itextcomponent.getStyle()
+                        .createDeepCopy());
                 return itextcomponent;
             }
         });
@@ -307,7 +322,8 @@ public abstract class TextComponentBase implements IChatComponent {
             return false;
         } else {
             TextComponentBase textcomponentbase = (TextComponentBase) p_equals_1_;
-            return this.siblings.equals(textcomponentbase.siblings) && this.getStyle().equals(textcomponentbase.getStyle());
+            return this.siblings.equals(textcomponentbase.siblings) && this.getStyle()
+                .equals(textcomponentbase.getStyle());
         }
     }
 

@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.gameevent.TickEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.common.event.ClientInitializedEvent;
 
 /**

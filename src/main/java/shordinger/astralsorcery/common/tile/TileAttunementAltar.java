@@ -24,8 +24,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.config.Configuration;
 
 import cpw.mods.fml.relauncher.Side;

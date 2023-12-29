@@ -61,11 +61,11 @@ import java.util.List;
  */
 public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.PelotrioSpawnListEntry> {
 
-    private static final Tuple[] swapTable = new Tuple[]{
-        new Tuple(EntitySkeleton.class, EntityWitherSkeleton.class), new Tuple(EntityVillager.class, EntityWitch.class),
-        new Tuple(EntityPig.class, EntityPigZombie.class), new Tuple(EntityCow.class, EntityZombie.class),
-        new Tuple(EntityParrot.class, EntityGhast.class), new Tuple(EntityChicken.class, EntityBlaze.class),
-        new Tuple(EntitySheep.class, EntityStray.class), new Tuple(EntityHorse.class, EntitySkeletonHorse.class)};
+    private static final Tuple[] swapTable = new Tuple[]{new Tuple(EntitySkeleton.class, EntityWitherSkeleton.class),
+        new Tuple(EntityVillager.class, EntityWitch.class), new Tuple(EntityPig.class, EntityPigZombie.class),
+        new Tuple(EntityCow.class, EntityZombie.class), new Tuple(EntityParrot.class, EntityGhast.class),
+        new Tuple(EntityChicken.class, EntityBlaze.class), new Tuple(EntitySheep.class, EntityStray.class),
+        new Tuple(EntityHorse.class, EntitySkeletonHorse.class)};
 
     private static AxisAlignedBB proximityCheckBox = new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(24);
 

@@ -40,6 +40,7 @@ import java.util.List;
  * Date: 03.07.2017 / 13:32
  */
 public class EntityNocturnalSpark extends EntityThrowable implements EntityTechnicalAmbient {
+
     public EntityDataManager dataManager;
     private static final AxisAlignedBB NO_DUPE_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(15);
 
@@ -95,8 +96,7 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
     }
 
     private void spawnCycle() {
-        List sparks = worldObj
-            .getEntitiesWithinAABB(EntityNocturnalSpark.class, NO_DUPE_BOX.offset(getPosition()));
+        List sparks = worldObj.getEntitiesWithinAABB(EntityNocturnalSpark.class, NO_DUPE_BOX.offset(getPosition()));
         for (EntityNocturnalSpark spark : sparks) {
             if (this.equals(spark)) continue;
             if (spark.isDead || !spark.isSpawning()) continue;
@@ -105,10 +105,7 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
         if (rand.nextInt(12) == 0 && worldObj instanceof WorldServer) {
             try {
                 BlockPos pos = getPosition().up();
-                pos.add(
-                    rand.nextInt(2) - rand.nextInt(2),
-                    0,
-                    rand.nextInt(2) - rand.nextInt(2));
+                pos.add(rand.nextInt(2) - rand.nextInt(2), 0, rand.nextInt(2) - rand.nextInt(2));
                 List list = ((WorldServer) world).getChunkProvider()
                     .getPossibleCreatures(EnumCreatureType.MONSTER, pos);
                 list = net.minecraftforge.event.ForgeEventFactory
@@ -122,7 +119,8 @@ public class EntityNocturnalSpark extends EntityThrowable implements EntityTechn
                 Block down = worldObj.getBlockState(getPosition())
                     .getBlock();
                 boolean canAtAll = down != Blocks.BARRIER && down != Blocks.BEDROCK;
-                if (canAtAll && WorldEntitySpawner.isValidEmptySpawnBlock(WorldHelper.getBlockState(world, getPosition()))
+                if (canAtAll
+                    && WorldEntitySpawner.isValidEmptySpawnBlock(WorldHelper.getBlockState(world, getPosition()))
                     && WorldEntitySpawner.isValidEmptySpawnBlock(WorldHelper.getBlockState(world, pos))) {
                     EntityLiving entity = entry.newInstance(world);
                     entity.setPositionAndRotation(

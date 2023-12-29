@@ -8,10 +8,13 @@
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
+import java.util.Random;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
+
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -23,8 +26,6 @@ import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

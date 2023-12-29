@@ -25,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
@@ -62,6 +61,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

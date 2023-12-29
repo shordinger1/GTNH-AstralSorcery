@@ -36,8 +36,7 @@ public class KeyProjectileProximity extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onProjDamage(LivingHurtEvent event) {
-        if (event.source
-            .isProjectile()) {
+        if (event.source.isProjectile()) {
             DamageSource source = event.source;
             if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) source.getTrueSource();

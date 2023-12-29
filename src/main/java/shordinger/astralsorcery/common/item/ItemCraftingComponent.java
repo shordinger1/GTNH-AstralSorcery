@@ -8,20 +8,22 @@
 
 package shordinger.astralsorcery.common.item;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import shordinger.astralsorcery.common.entities.EntityItemStardust;
 import shordinger.astralsorcery.common.item.base.IItemVariants;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod

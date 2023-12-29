@@ -8,14 +8,16 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
+import java.util.Objects;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
+
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nonnull;
-import java.util.Objects;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

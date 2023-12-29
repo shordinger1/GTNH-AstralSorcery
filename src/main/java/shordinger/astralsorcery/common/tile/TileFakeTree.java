@@ -23,7 +23,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraft.util.AxisAlignedBB;
 
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
@@ -38,6 +37,7 @@ import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

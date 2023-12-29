@@ -10,12 +10,12 @@ package shordinger.astralsorcery.common.enchantment.amulet;
 
 import java.util.EnumSet;
 
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import shordinger.astralsorcery.common.event.DynamicEnchantmentEvent;

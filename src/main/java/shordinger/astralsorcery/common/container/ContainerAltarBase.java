@@ -14,7 +14,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.migration.BlockPos;
@@ -56,7 +55,9 @@ public abstract class ContainerAltarBase extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (this instanceof ContainerAltarTrait && index < 36 && itemstack1.getItem() instanceof ItemConstellationFocus && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
+            if (this instanceof ContainerAltarTrait && index < 36
+                && itemstack1.getItem() instanceof ItemConstellationFocus
+                && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
                 if (this.mergeItemStack(
                     itemstack1,
                     ((ContainerAltarTrait) this).focusSlot.slotNumber,

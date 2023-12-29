@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.common.container;
 
-import javax.annotation.Nonnull;
-
 import com.gtnewhorizons.modularui.api.forge.IItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

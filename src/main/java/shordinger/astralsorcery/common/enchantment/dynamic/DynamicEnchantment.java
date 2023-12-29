@@ -79,7 +79,6 @@ public class DynamicEnchantment {
         }
         return new DynamicEnchantment(this.type, level);
 
-
     }
 
     // The ordering in the enum defines the order of how the types of enchantments are applied/calculated!

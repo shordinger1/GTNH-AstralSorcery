@@ -61,8 +61,7 @@ public class EntityStarburst extends EntityThrowable {
         } else {
             if (targetId == -1) {
                 AxisAlignedBB box = searchBox.offset(posX, posY, posZ);
-                List entities = worldObj
-                    .getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_ALIVE);
+                List entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_ALIVE);
                 if (getThrower() != null) {
                     entities.remove(getThrower());
                 }

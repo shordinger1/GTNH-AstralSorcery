@@ -183,7 +183,7 @@ public class Injector {
     public static Method findMethod(Class clazz, Class returnType, Class[] paramTypes) {
         for (Method m : clazz.getDeclaredMethods()) {
             if (Arrays.equals(m.getParameterTypes(), paramTypes) && m.getReturnType()
-                    .equals(returnType)) {
+                .equals(returnType)) {
                 return m;
             }
         }
@@ -202,7 +202,7 @@ public class Injector {
     public static Field findField(Class clazz, Class type) {
         for (Field f : clazz.getDeclaredFields()) {
             if (f.getType()
-                    .equals(type)) {
+                .equals(type)) {
                 return f;
             }
         }

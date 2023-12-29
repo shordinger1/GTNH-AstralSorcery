@@ -20,12 +20,12 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import shordinger.astralsorcery.common.base.sets.OreEntry;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

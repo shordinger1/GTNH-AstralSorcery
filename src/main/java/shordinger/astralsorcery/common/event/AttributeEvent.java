@@ -8,18 +8,20 @@
 
 package shordinger.astralsorcery.common.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
+import java.lang.reflect.Field;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
+
+import cpw.mods.fml.common.eventhandler.Event;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.core.ASMCallHook;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 
 /**
  * This class is part of the Astral Sorcery Mod

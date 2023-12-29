@@ -49,11 +49,11 @@ public class SextantFinder {
     public static void register(TargetObject object) {
         for (TargetObject to : selectableTargets) {
             if (to.getRegistryName()
-                    .equalsIgnoreCase(object.getRegistryName())) {
+                .equalsIgnoreCase(object.getRegistryName())) {
                 throw new IllegalArgumentException(
-                        "Duplicate Sextant Target: " + to.getRegistryName()
-                                + " - tried to add: "
-                                + object.getRegistryName());
+                    "Duplicate Sextant Target: " + to.getRegistryName()
+                        + " - tried to add: "
+                        + object.getRegistryName());
             }
         }
         selectableTargets.add(object);
@@ -99,7 +99,7 @@ public class SextantFinder {
     public static TargetObject getByName(String registryName) {
         for (TargetObject to : selectableTargets) {
             if (to.getRegistryName()
-                    .equalsIgnoreCase(registryName)) {
+                .equalsIgnoreCase(registryName)) {
                 return to;
             }
         }
@@ -187,9 +187,9 @@ public class SextantFinder {
         public boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress) {
             if (progress == null) return false;
             return (!advanced && progress.getTierReached()
-                    .isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT))
-                    || (ItemSextant.isAdvanced(stack) && progress.getTierReached()
-                    .isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
+                .isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT))
+                || (ItemSextant.isAdvanced(stack) && progress.getTierReached()
+                .isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
         }
 
         @Nonnull
@@ -219,15 +219,15 @@ public class SextantFinder {
                            boolean advanced, StructureGenBuffer.StructureType type, double iconUOffset, double iconVOffset,
                            double iconULength, double iconVLength) {
             super(
-                    texLocation,
-                    iconName,
-                    targetName,
-                    advanced,
-                    color,
-                    iconUOffset,
-                    iconVOffset,
-                    iconULength,
-                    iconVLength);
+                texLocation,
+                iconName,
+                targetName,
+                advanced,
+                color,
+                iconUOffset,
+                iconVOffset,
+                iconULength,
+                iconVLength);
             this.structureType = type;
         }
 
@@ -252,15 +252,15 @@ public class SextantFinder {
                          boolean advanced, String structureName, double iconUOffset, double iconVOffset, double iconULength,
                          double iconVLength) {
             super(
-                    texLocation,
-                    iconName,
-                    targetName,
-                    advanced,
-                    color,
-                    iconUOffset,
-                    iconVOffset,
-                    iconULength,
-                    iconVLength);
+                texLocation,
+                iconName,
+                targetName,
+                advanced,
+                color,
+                iconUOffset,
+                iconVOffset,
+                iconULength,
+                iconVLength);
             this.structureName = structureName;
         }
 
@@ -285,15 +285,15 @@ public class SextantFinder {
                      boolean advanced, BiomeDictionary.Type biomeType, double iconUOffset, double iconVOffset,
                      double iconULength, double iconVLength) {
             super(
-                    texLocation,
-                    iconName,
-                    targetName,
-                    advanced,
-                    color,
-                    iconUOffset,
-                    iconVOffset,
-                    iconULength,
-                    iconVLength);
+                texLocation,
+                iconName,
+                targetName,
+                advanced,
+                color,
+                iconUOffset,
+                iconVOffset,
+                iconULength,
+                iconVLength);
             this.biomeType = biomeType;
         }
 

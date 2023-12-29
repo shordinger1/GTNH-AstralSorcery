@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;

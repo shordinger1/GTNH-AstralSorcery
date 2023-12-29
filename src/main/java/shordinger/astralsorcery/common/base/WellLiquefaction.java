@@ -8,23 +8,25 @@
 
 package shordinger.astralsorcery.common.base;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.ItemComparator;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -236,9 +236,11 @@ public class BlockDiscoverer {
     public static boolean isExposedToAir(World world, BlockPos pos) {
         for (EnumFacing face : EnumFacing.values()) {
             BlockPos offset = pos.offset(face);
-            if (world.isAirBlock(offset.getX(), offset.getY(), offset.getZ()) || WorldHelper.getBlockState(world, offset)
+            if (world.isAirBlock(offset.getX(), offset.getY(), offset.getZ())
+                || WorldHelper.getBlockState(world, offset)
                 .getBlock()
-                .isReplaceable(world, offset)) return true;
+                .isReplaceable(world, offset))
+                return true;
         }
         return false;
     }

@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -35,8 +36,7 @@ public class AttributeProjectileAttackDamage extends PerkAttributeType {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onProjDamage(LivingHurtEvent event) {
-        if (event.source
-            .isProjectile()) {
+        if (event.source.isProjectile()) {
             DamageSource source = event.source;
             if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) source.getTrueSource();

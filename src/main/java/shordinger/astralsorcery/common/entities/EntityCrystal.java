@@ -154,7 +154,9 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                 CrystalProperties.applyCrystalProperties(stack, newProp);
                 return;
             }
-            if (prop != null && Config.canCrystalGrowthYieldDuplicates && prop.getSize() >= max && rand.nextInt(6) == 0) {
+            if (prop != null && Config.canCrystalGrowthYieldDuplicates
+                && prop.getSize() >= max
+                && rand.nextInt(6) == 0) {
                 ItemStack newStack = (stack.getItem() instanceof ItemCelestialCrystal
                     || stack.getItem() instanceof ItemTunedCelestialCrystal)
                     ? ItemRockCrystalBase.createRandomCelestialCrystal()

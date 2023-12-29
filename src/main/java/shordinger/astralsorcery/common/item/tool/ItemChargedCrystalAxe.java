@@ -8,12 +8,18 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.*;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -26,10 +32,6 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.TreeDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

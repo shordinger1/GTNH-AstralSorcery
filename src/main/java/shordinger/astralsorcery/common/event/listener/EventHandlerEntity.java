@@ -100,8 +100,7 @@ public class EventHandlerEntity {
         EntityLivingBase living = event.target;
         if (living != null && !living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
-                event.entityLiving
-                    .setRevengeTarget(null);
+                event.entityLiving.setRevengeTarget(null);
                 if (event.entityLiving instanceof EntityLiving) {
                     ((EntityLiving) event.entityLiving).setAttackTarget(null);
                 }
@@ -112,9 +111,7 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onSleep(PlayerSleepInBedEvent event) {
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(
-                event.entityPlayer
-                    .getEntityWorld());
+            .getWorldHandler(event.entityPlayer.getEntityWorld());
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             if (event.getResultStatus() == null) {
                 event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
@@ -195,8 +192,7 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
-        if (event.entityLiving
-            .isPotionActive(RegistryPotions.potionTimeFreeze)) {
+        if (event.entityLiving.isPotionActive(RegistryPotions.potionTimeFreeze)) {
             event.setCanceled(true);
         }
     }
@@ -207,8 +203,7 @@ public class EventHandlerEntity {
             || !(event.entityLiving.world instanceof WorldServer)) {
             return;
         }
-        if (event.entityLiving instanceof EntityPlayer || !(event.entityLiving instanceof EntityLiving))
-            return;
+        if (event.entityLiving instanceof EntityPlayer || !(event.entityLiving instanceof EntityLiving)) return;
         EntityLiving el = (EntityLiving) event.entityLiving;
         WorldServer ws = (WorldServer) el.world;
 
@@ -245,7 +240,9 @@ public class EventHandlerEntity {
     public void onLeftClickBlock(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
             ItemStack held = event.entityLiving.getHeldItem();
-            if (!event.world.isRemote && held != null && held.stackSize > 0 && held.getItem() instanceof ItemBlockStorage) {
+            if (!event.world.isRemote && held != null
+                && held.stackSize > 0
+                && held.getItem() instanceof ItemBlockStorage) {
                 ItemBlockStorage.tryClearContainerFor(event.entityPlayer);
             }
         }
@@ -263,8 +260,7 @@ public class EventHandlerEntity {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onRightClickDebug(PlayerInteractEvent event) {
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            if (event.entityPlayer
-                .isCreative() && !event.world.isRemote) {
+            if (event.entityPlayer.isCreative() && !event.world.isRemote) {
                 if (StarlightNetworkDebugHandler.INSTANCE
                     .beginDebugFor(event.world, event.getPos(), event.entityPlayer)) {
                     event.setCanceled(true);

@@ -24,7 +24,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.collect.Iterables;
@@ -90,6 +89,7 @@ import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.lib.RecipesAS;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.OreDictAlias;
+import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod

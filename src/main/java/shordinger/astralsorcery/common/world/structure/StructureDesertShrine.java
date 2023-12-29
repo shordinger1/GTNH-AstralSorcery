@@ -33,12 +33,12 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     public StructureDesertShrine() {
         super(
-                0,
-                "desertStructure",
-                () -> MultiBlockArrays.desertShrine,
-                StructureGenBuffer.StructureType.DESERT,
-                false,
-                BiomeDictionary.Type.SANDY);
+            0,
+            "desertStructure",
+            () -> MultiBlockArrays.desertShrine,
+            StructureGenBuffer.StructureType.DESERT,
+            false,
+            BiomeDictionary.Type.SANDY);
         this.idealDistance = 1024F;
     }
 
@@ -64,20 +64,20 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         int rX = (chX * 16) + rand.nextInt(16) + 8;
         int rZ = (chZ * 16) + rand.nextInt(16) + 8;
         int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ))
-                .getY();
+            .getY();
         return new BlockPos(rX, rY, rZ);
     }
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos)
-                .getY();
+            .getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY()
-                && Math.abs(dY - pos.getY()) <= heightThreshold
-                && isDesertBiome(world, pos)) {
+            && Math.abs(dY - pos.getY()) <= heightThreshold
+            && isDesertBiome(world, pos)) {
             IBlockState state = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
             return !state.getMaterial()
-                    .isLiquid() && state.getMaterial()
-                    .isOpaque();
+                .isLiquid() && state.getMaterial()
+                .isOpaque();
         }
         return false;
     }
@@ -87,7 +87,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
         Integer dimId = world.provider.dimensionId;
         if (cfgEntry.getApplicableDimensions()
-                .isEmpty()) return false;
+            .isEmpty()) return false;
         for (Integer dim : cfgEntry.getApplicableDimensions()) {
             if (dim.equals(dimId)) return true;
         }
@@ -103,7 +103,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes()
-                    .contains(t)) applicable = true;
+                .contains(t)) applicable = true;
         }
         return applicable;
     }
@@ -113,12 +113,12 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         super.loadAdditionalConfigEntries(cfg);
 
         heightThreshold = cfg.getInt(
-                "heightThreshold",
-                cfgEntry.getConfigurationSection(),
-                heightThreshold,
-                1,
-                32,
-                "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
+            "heightThreshold",
+            cfgEntry.getConfigurationSection(),
+            heightThreshold,
+            1,
+            32,
+            "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
     }
 
 }

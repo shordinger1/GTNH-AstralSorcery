@@ -8,7 +8,17 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import com.google.common.collect.Lists;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -22,8 +32,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.base.GuiSkyScreen;
 import shordinger.astralsorcery.client.gui.base.GuiWHScreen;
@@ -50,17 +64,6 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

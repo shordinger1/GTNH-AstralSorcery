@@ -87,7 +87,6 @@ public class EventHandlerServer {
         // }
     }
 
-
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
         EntityItem ei = event.item;
@@ -110,8 +109,8 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onContainerOpen(PlayerOpenContainerEvent event) {
-//        if (event.getContainer() instanceof ContainerWorkbench && !event.entity.worldObj.isRemote
-//            && event.entityPlayer instanceof EntityPlayerMP) {
+        // if (event.getContainer() instanceof ContainerWorkbench && !event.entity.worldObj.isRemote
+        // && event.entityPlayer instanceof EntityPlayerMP) {
         if (event.canInteractWith) {
             PacketChannel.CHANNEL.sendTo(
                 new PktCraftingTableFix(((ContainerWorkbench) event.getContainer()).pos),
@@ -121,8 +120,7 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
-        if (event.source
-            .canHarmInCreative()) {
+        if (event.source.canHarmInCreative()) {
             return;
         }
         if (phoenixProtect(event.entityLiving)) {
@@ -167,8 +165,7 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent event) {
-        IBlockState at = event.world
-            .getBlockState(event.getPos());
+        IBlockState at = event.world.getBlockState(event.getPos());
         if (at.getBlock() instanceof BlockMachine) {
             if (((BlockMachine) at.getBlock()).handleSpecificActivateEvent(event)) {
                 event.setCancellationResult(EnumActionResult.SUCCESS);
@@ -199,8 +196,7 @@ public class EventHandlerServer {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRightClickLast(PlayerInteractEvent.RightClickBlock event) {
         if (!event.world.isRemote) {
-            IBlockState interacted = event.world
-                .getBlockState(event.getPos());
+            IBlockState interacted = event.world.getBlockState(event.getPos());
             if (interacted.getBlock() instanceof BlockWorkbench) {
                 PktCraftingTableFix fix = new PktCraftingTableFix(event.getPos());
                 PacketChannel.CHANNEL.sendTo(fix, (EntityPlayerMP) event.entityPlayer);
@@ -232,11 +228,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onLoad(WorldEvent.Load event) {
-        event.world
-            .addEventListener(new WorldEventNotifier());
+        event.world.addEventListener(new WorldEventNotifier());
 
-        GameRules rules = event.world
-            .getGameRules();
+        GameRules rules = event.world.getGameRules();
         if (!rules.hasRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK)) {
             rules.addGameRule(MiscUtils.GAMERULE_SKIP_SKYLIGHT_CHECK, "false", GameRules.ValueType.BOOLEAN_VALUE);
         }
@@ -244,8 +238,7 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        if (event.world.isRemote || !event.getChunk()
-            .isTerrainPopulated) return;
+        if (event.world.isRemote || !event.getChunk().isTerrainPopulated) return;
         if (!Loader.instance()
             .hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
             return; // Thanks BuildCraft.

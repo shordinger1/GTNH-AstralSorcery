@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.*;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +20,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
@@ -36,9 +41,6 @@ import shordinger.astralsorcery.common.util.EntityUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -120,13 +122,8 @@ public class KeyLightningArc extends KeyPerk {
                 if (rand.nextFloat() < chance) {
                     float dmg = event.ammount;
                     dmg = Math.max(MathHelper.sqrt(dmg), 1.5F);
-                    new RepetitiveArcEffect(
-                        player.world,
-                        player,
-                        arcTicks,
-                        event.entityLiving
-                            .getEntityId(),
-                        dmg).fire();
+                    new RepetitiveArcEffect(player.world, player, arcTicks, event.entityLiving.getEntityId(), dmg)
+                        .fire();
                 }
             }
         }

@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.client.event;
 
-import java.util.*;
-import java.util.zip.GZIPInputStream;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -25,15 +26,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.gameevent.TickEvent;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -66,6 +66,13 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -516,9 +523,8 @@ public class ClientRenderEventHandler {
         Minecraft.getMinecraft().renderEngine.bindTexture(tex);
         boolean f = player.capabilities.isFlying;
         double ma = f ? 15 : 5;
-        double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) + ((65 - ma) * Math.max(
-            0,
-            Math.min(1, new Vector3(event.entityPlayer.motionX, 0, event.entityPlayer.motionZ).length())));
+        double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) + ((65 - ma) * Math
+            .max(0, Math.min(1, new Vector3(event.entityPlayer.motionX, 0, event.entityPlayer.motionZ).length())));
         float rot = RenderingUtils
             .interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, event.getPartialRenderTick());
         GlStateManager.rotate(180F - rot, 0F, 1F, 0F);

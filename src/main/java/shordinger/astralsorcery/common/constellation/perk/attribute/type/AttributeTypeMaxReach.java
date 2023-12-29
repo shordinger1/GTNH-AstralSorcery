@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.player.EntityPlayer;
-import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
-import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
 
 import java.util.UUID;
 
-import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.player.EntityPlayer;
+
+import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,8 +8,11 @@
 
 package shordinger.astralsorcery.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.*;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,6 +28,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.item.base.render.ItemDynamicColor;
 import shordinger.astralsorcery.common.lib.ItemsAS;
@@ -44,10 +50,6 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -29,6 +29,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EntityDataManager {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Class<? extends Entity>, Integer> NEXT_ID_MAP = Maps.newHashMap();
     private final Entity entity;
@@ -43,7 +44,9 @@ public class EntityDataManager {
 
     public static <T> DataParameter<T> createKey(Class<? extends Entity> clazz, DataSerializer<T> serializer) {
         try {
-            Class<?> oclass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+            Class<?> oclass = Class.forName(
+                Thread.currentThread()
+                    .getStackTrace()[2].getClassName());
             if (!oclass.equals(clazz)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.warn("defineId called for: {} from {}", clazz, oclass, new RuntimeException());
@@ -95,14 +98,17 @@ public class EntityDataManager {
 
     private <T> void setEntry(DataParameter<T> key, T value) {
         DataEntry<T> dataentry = new DataEntry(key, value);
-        this.lock.writeLock().lock();
+        this.lock.writeLock()
+            .lock();
         this.entries.put(key.getId(), dataentry);
         this.empty = false;
-        this.lock.writeLock().unlock();
+        this.lock.writeLock()
+            .unlock();
     }
 
     private <T> DataEntry<T> getEntry(DataParameter<T> key) {
-        this.lock.readLock().lock();
+        this.lock.readLock()
+            .lock();
 
         DataEntry dataentry;
         try {
@@ -114,12 +120,14 @@ public class EntityDataManager {
             throw new ReportedException(crashreport);
         }
 
-        this.lock.readLock().unlock();
+        this.lock.readLock()
+            .unlock();
         return dataentry;
     }
 
     public <T> T get(DataParameter<T> key) {
-        return this.getEntry(key).getValue();
+        return this.getEntry(key)
+            .getValue();
     }
 
     public <T> void set(DataParameter<T> key, T value) {
@@ -159,7 +167,8 @@ public class EntityDataManager {
     public List<DataEntry<?>> getDirty() {
         List<DataEntry<?>> list = null;
         if (this.dirty) {
-            this.lock.readLock().lock();
+            this.lock.readLock()
+                .lock();
 
             for (DataEntry<?> dataEntry : this.entries.values()) {
                 if (((DataEntry<?>) dataEntry).isDirty()) {
@@ -172,7 +181,8 @@ public class EntityDataManager {
                 }
             }
 
-            this.lock.readLock().unlock();
+            this.lock.readLock()
+                .unlock();
         }
 
         this.dirty = false;
@@ -180,30 +190,35 @@ public class EntityDataManager {
     }
 
     public void writeEntries(PacketBuffer buf) throws IOException {
-        this.lock.readLock().lock();
+        this.lock.readLock()
+            .lock();
 
         for (DataEntry<?> dataEntry : this.entries.values()) {
             writeEntry(buf, (DataEntry) dataEntry);
         }
 
-        this.lock.readLock().unlock();
+        this.lock.readLock()
+            .unlock();
         buf.writeByte(255);
     }
 
     @Nullable
     public List<DataEntry<?>> getAll() {
         List<DataEntry<?>> list = null;
-        this.lock.readLock().lock();
+        this.lock.readLock()
+            .lock();
 
         DataEntry dataentry;
-        for (Iterator<DataEntry<?>> var2 = this.entries.values().iterator(); var2.hasNext(); list.add(dataentry.copy())) {
+        for (Iterator<DataEntry<?>> var2 = this.entries.values()
+            .iterator(); var2.hasNext(); list.add(dataentry.copy())) {
             dataentry = (DataEntry) var2.next();
             if (list == null) {
                 list = Lists.newArrayList();
             }
         }
 
-        this.lock.readLock().unlock();
+        this.lock.readLock()
+            .unlock();
         return list;
     }
 
@@ -215,7 +230,8 @@ public class EntityDataManager {
         } else {
             buf.writeByte(dataparameter.getId());
             buf.writeVarInt(i);
-            dataparameter.getSerializer().write(buf, entry.getValue());
+            dataparameter.getSerializer()
+                .write(buf, entry.getValue());
         }
     }
 
@@ -243,18 +259,22 @@ public class EntityDataManager {
 
     @SideOnly(Side.CLIENT)
     public void setEntryValues(List<DataEntry<?>> entriesIn) {
-        this.lock.writeLock().lock();
+        this.lock.writeLock()
+            .lock();
 
         for (DataEntry<?> dataEntry : entriesIn) {
             DataEntry<?> dataentry = dataEntry;
-            DataEntry<?> dataentry1 = this.entries.get(dataentry.getKey().getId());
+            DataEntry<?> dataentry1 = this.entries.get(
+                dataentry.getKey()
+                    .getId());
             if (dataentry1 != null) {
                 this.setEntryValue(dataentry1, dataentry);
                 this.entity.notifyDataManagerChange(dataentry.getKey());
             }
         }
 
-        this.lock.writeLock().unlock();
+        this.lock.writeLock()
+            .unlock();
         this.dirty = true;
     }
 
@@ -269,17 +289,20 @@ public class EntityDataManager {
 
     public void setClean() {
         this.dirty = false;
-        this.lock.readLock().lock();
+        this.lock.readLock()
+            .lock();
 
         for (DataEntry<?> dataEntry : this.entries.values()) {
             DataEntry<?> dataentry = dataEntry;
             dataentry.setDirty(false);
         }
 
-        this.lock.readLock().unlock();
+        this.lock.readLock()
+            .unlock();
     }
 
     public static class DataEntry<T> {
+
         private final DataParameter<T> key;
         private T value;
         private boolean dirty;
@@ -311,7 +334,10 @@ public class EntityDataManager {
         }
 
         public DataEntry<T> copy() {
-            return new DataEntry(this.key, this.key.getSerializer().copyValue(this.value));
+            return new DataEntry(
+                this.key,
+                this.key.getSerializer()
+                    .copyValue(this.value));
         }
     }
 }

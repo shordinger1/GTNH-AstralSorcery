@@ -8,13 +8,19 @@
 
 package shordinger.astralsorcery.common.util;
 
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
 import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListGen;
@@ -23,10 +29,6 @@ import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -101,7 +103,13 @@ public class BlockBreakAssist {
 
             IBlockState nowAt = WorldHelper.getBlockState(world, pos);
             if (MiscUtils.matchStateExact(expected, nowAt)) {
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, WorldHelper.getBlockState(world, pos), true, true, true);
+                MiscUtils.breakBlockWithoutPlayer(
+                    (WorldServer) world,
+                    pos,
+                    WorldHelper.getBlockState(world, pos),
+                    true,
+                    true,
+                    true);
             }
         }
 

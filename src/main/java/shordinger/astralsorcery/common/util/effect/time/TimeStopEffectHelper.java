@@ -19,9 +19,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.chunk.Chunk;
 
 import cpw.mods.fml.relauncher.Side;

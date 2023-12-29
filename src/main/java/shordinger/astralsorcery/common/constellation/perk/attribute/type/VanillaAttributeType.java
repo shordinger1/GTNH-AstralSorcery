@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.relauncher.Side;
+import java.util.UUID;
+
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod

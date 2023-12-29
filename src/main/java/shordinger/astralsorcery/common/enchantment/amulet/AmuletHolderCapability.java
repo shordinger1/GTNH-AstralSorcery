@@ -8,15 +8,17 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import shordinger.astralsorcery.Tags;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.UUID;
-import java.util.concurrent.Callable;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import shordinger.astralsorcery.Tags;
 
 /**
  * This class is part of the Astral Sorcery Mod

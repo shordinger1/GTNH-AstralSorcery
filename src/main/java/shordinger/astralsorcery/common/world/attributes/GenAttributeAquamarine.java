@@ -8,7 +8,12 @@
 
 package shordinger.astralsorcery.common.world.attributes;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -16,6 +21,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockCustomSandOre;
 import shordinger.astralsorcery.common.data.config.Config;
@@ -25,12 +32,6 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

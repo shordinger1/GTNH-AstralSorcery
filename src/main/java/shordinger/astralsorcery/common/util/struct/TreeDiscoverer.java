@@ -8,20 +8,22 @@
 
 package shordinger.astralsorcery.common.util.struct;
 
+import java.util.Stack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
 import shordinger.astralsorcery.common.base.TreeTypes;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Stack;
 
 /**
  * This class is part of the Astral Sorcery Mod

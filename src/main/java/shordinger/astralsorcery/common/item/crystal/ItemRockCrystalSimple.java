@@ -10,6 +10,7 @@ package shordinger.astralsorcery.common.item.crystal;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+
 import shordinger.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.lib.ItemsAS;

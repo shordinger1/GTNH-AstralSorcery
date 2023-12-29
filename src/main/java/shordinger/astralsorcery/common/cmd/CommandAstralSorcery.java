@@ -8,11 +8,6 @@
 
 package shordinger.astralsorcery.common.cmd;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -20,7 +15,6 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-
 import shordinger.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -39,6 +33,13 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -158,7 +159,7 @@ public class CommandAstralSorcery extends CommandBase {
         return Collections.<String>emptyList();
     }
 
-    //@Override
+    // @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
             sender.addChatMessage(new TextComponentString("§cNot enough arguments."));

@@ -8,9 +8,20 @@
 
 package shordinger.astralsorcery.common.crafting.altar;
 
-import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import shordinger.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -20,14 +31,6 @@ import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemComparator;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -32,13 +32,13 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     public StructureAncientShrine() {
         super(
-                0,
-                "ancientShrine",
-                () -> MultiBlockArrays.ancientShrine,
-                StructureGenBuffer.StructureType.MOUNTAIN,
-                false,
-                BiomeDictionary.Type.MOUNTAIN,
-                BiomeDictionary.Type.SNOWY);
+            0,
+            "ancientShrine",
+            () -> MultiBlockArrays.ancientShrine,
+            StructureGenBuffer.StructureType.MOUNTAIN,
+            false,
+            BiomeDictionary.Type.MOUNTAIN,
+            BiomeDictionary.Type.SNOWY);
         this.idealDistance = 768F;
     }
 
@@ -69,14 +69,14 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos)
-                .getY();
+            .getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY()
-                && Math.abs(dY - pos.getY()) <= heightThreshold
-                && isApplicableBiome(world, pos)) {
+            && Math.abs(dY - pos.getY()) <= heightThreshold
+            && isApplicableBiome(world, pos)) {
             IBlockState state = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
             return !state.getMaterial()
-                    .isLiquid() && state.getMaterial()
-                    .isOpaque();
+                .isLiquid() && state.getMaterial()
+                .isOpaque();
         }
         return false;
     }
@@ -86,7 +86,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
         Integer dimId = world.provider.dimensionId;
         if (cfgEntry.getApplicableDimensions()
-                .isEmpty()) return false;
+            .isEmpty()) return false;
         for (Integer dim : cfgEntry.getApplicableDimensions()) {
             if (dim.equals(dimId)) return true;
         }
@@ -102,7 +102,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes()
-                    .contains(t)) applicable = true;
+                .contains(t)) applicable = true;
         }
         return applicable;
     }
@@ -112,11 +112,11 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
         super.loadAdditionalConfigEntries(cfg);
 
         heightThreshold = cfg.getInt(
-                "heightThreshold",
-                cfgEntry.getConfigurationSection(),
-                heightThreshold,
-                1,
-                32,
-                "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
+            "heightThreshold",
+            cfgEntry.getConfigurationSection(),
+            heightThreshold,
+            1,
+            32,
+            "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
     }
 }

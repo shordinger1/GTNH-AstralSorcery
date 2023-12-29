@@ -8,6 +8,17 @@
 
 package shordinger.astralsorcery.client.gui;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -23,7 +34,9 @@ import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
 import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
@@ -60,17 +73,6 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

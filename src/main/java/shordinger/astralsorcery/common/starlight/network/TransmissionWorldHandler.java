@@ -8,9 +8,19 @@
 
 package shordinger.astralsorcery.common.starlight.network;
 
-import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+
+import com.google.common.collect.ImmutableList;
+
 import shordinger.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.data.DataLightBlockEndpoints;
@@ -25,14 +35,6 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

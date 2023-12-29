@@ -8,14 +8,28 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import com.google.common.collect.Lists;
+import java.awt.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.input.Mouse;
+
+import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.gui.base.GuiTileBase;
@@ -43,16 +57,6 @@ import shordinger.astralsorcery.common.network.packet.client.PktEngraveGlass;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -40,7 +40,8 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void updateNewEndpoint(int dimId, BlockPos pos) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer
+                .computeIfAbsent(dimId, k -> new LinkedList<>());
             list.add(new Tuple<>(pos, true));
 
             List<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
@@ -51,7 +52,8 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void updateNewEndpoints(int dimId, List<BlockPos> newPositions) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer
+                .computeIfAbsent(dimId, k -> new LinkedList<>());
             for (BlockPos pos : newPositions) {
                 list.add(new Tuple<>(pos, true));
             }
@@ -64,7 +66,8 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     public void removeEndpoints(int dimId, List<BlockPos> positions) {
         synchronized (lock) {
-            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer.computeIfAbsent(dimId, k -> new LinkedList<>());
+            LinkedList<Tuple<BlockPos, Boolean>> list = serverChangeBuffer
+                .computeIfAbsent(dimId, k -> new LinkedList<>());
             for (BlockPos pos : positions) {
                 list.add(new Tuple<>(pos, false));
             }

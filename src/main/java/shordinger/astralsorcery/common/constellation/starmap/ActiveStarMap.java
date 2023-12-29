@@ -8,7 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.starmap;
 
-import com.google.common.collect.Lists;
+import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,21 +27,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.Constants;
+
+import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.DrawnConstellation;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +49,8 @@ public class ActiveStarMap {
     private static final Random rand = new Random();
 
     private Map<IConstellation, Float> starProportions = new HashMap<>();
-    private final Map<IConstellation, List<Point>> mapOffsets = new HashMap<>(); // Just kept here for drawing reasons...
+    private final Map<IConstellation, List<Point>> mapOffsets = new HashMap<>(); // Just kept here for drawing
+    // reasons...
 
     public static ActiveStarMap compile(List<DrawnConstellation> constellations) {
         ActiveStarMap asm = new ActiveStarMap();

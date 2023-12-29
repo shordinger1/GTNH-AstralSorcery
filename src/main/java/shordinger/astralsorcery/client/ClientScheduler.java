@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.client;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import cpw.mods.fml.common.gameevent.TickEvent;
-
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.util.Counter;
 import shordinger.astralsorcery.common.util.data.Tuple;
+
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod

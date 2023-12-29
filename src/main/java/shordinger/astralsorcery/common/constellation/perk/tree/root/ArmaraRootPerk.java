@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -53,8 +54,7 @@ public class ArmaraRootPerk extends RootPerk {
             if (prog.hasPerkEffect(this)) {
                 float expGain = event.ammount;
                 expGain *= 3F;
-                if (event.source
-                    .isFireDamage()) {
+                if (event.source.isFireDamage()) {
                     if (player.isInLava()) {
                         expGain *= 0.01F;
                     } else {

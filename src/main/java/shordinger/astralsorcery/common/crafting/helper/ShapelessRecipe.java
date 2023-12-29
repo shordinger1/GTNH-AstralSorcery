@@ -18,12 +18,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.migration.NonNullList;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

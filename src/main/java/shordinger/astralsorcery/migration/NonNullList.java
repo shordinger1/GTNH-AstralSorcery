@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.Validate;
 
 public class NonNullList<E> extends AbstractList<E> {
+
     private final List<E> delegate;
     private final E defaultElement;
 

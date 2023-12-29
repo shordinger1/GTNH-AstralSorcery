@@ -47,6 +47,7 @@ import java.util.Random;
  * Date: 13.10.2018 / 12:54
  */
 public class EntityShootingStar extends EntityThrowable implements EntityTechnicalAmbient {
+
     public EntityDataManager dataManager;
     private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager
         .createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);

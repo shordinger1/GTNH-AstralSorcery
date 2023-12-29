@@ -8,19 +8,18 @@
 
 package shordinger.astralsorcery.common.container;
 
-import java.util.LinkedList;
-
 import com.gtnewhorizons.modularui.api.forge.IItemHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
 import shordinger.astralsorcery.common.item.ItemJournal;
+
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod

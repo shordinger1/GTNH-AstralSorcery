@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
+import java.awt.*;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -15,7 +17,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
@@ -23,8 +27,6 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

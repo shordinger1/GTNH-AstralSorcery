@@ -22,7 +22,6 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.client.gui.GuiJournalConstellationDetails;
 import shordinger.astralsorcery.client.gui.journal.GuiJournalPages;

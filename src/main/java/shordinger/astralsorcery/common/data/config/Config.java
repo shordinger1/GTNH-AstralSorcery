@@ -8,20 +8,24 @@
 
 package shordinger.astralsorcery.common.data.config;
 
-import java.io.File;
-import java.util.*;
-
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -192,7 +196,8 @@ public class Config {
         config.addCustomCategoryComment("data", cfg.getDescription());
         out = config.getStringList("data", "data", out, "");
         for (String str : out) {
-            if (Objects.requireNonNull(cfg.appendDataSet(str)).isEmpty()) {
+            if (Objects.requireNonNull(cfg.appendDataSet(str))
+                .isEmpty()) {
                 AstralSorcery.log
                     .warn("Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
             }

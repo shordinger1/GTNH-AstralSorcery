@@ -8,10 +8,7 @@
 
 package shordinger.astralsorcery.client;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -26,7 +23,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import shordinger.astralsorcery.migration.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -37,8 +33,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -55,7 +49,6 @@ import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.client.gui.journal.bookmark.BookmarkProvider;
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
-import shordinger.astralsorcery.client.render.entity.*;
 import shordinger.astralsorcery.client.render.entity.RenderEntityFlare;
 import shordinger.astralsorcery.client.render.entity.RenderEntityHook;
 import shordinger.astralsorcery.client.render.entity.RenderEntityItemHighlight;
@@ -64,7 +57,6 @@ import shordinger.astralsorcery.client.render.entity.RenderEntityShootingStar;
 import shordinger.astralsorcery.client.render.entity.RenderEntityStarburst;
 import shordinger.astralsorcery.client.render.entity.RenderLiquidSpark;
 import shordinger.astralsorcery.client.render.entity.RenderSpectralTool;
-import shordinger.astralsorcery.client.render.tile.*;
 import shordinger.astralsorcery.client.render.tile.TESRAltar;
 import shordinger.astralsorcery.client.render.tile.TESRAttunementAltar;
 import shordinger.astralsorcery.client.render.tile.TESRAttunementRelay;
@@ -104,7 +96,6 @@ import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.common.entities.*;
 import shordinger.astralsorcery.common.entities.EntityFlare;
 import shordinger.astralsorcery.common.entities.EntityGrapplingHook;
 import shordinger.astralsorcery.common.entities.EntityIlluminationSpark;
@@ -123,7 +114,6 @@ import shordinger.astralsorcery.common.item.base.render.ItemDynamicColor;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryBlocks;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.common.tile.*;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.tile.TileAttunementRelay;
@@ -142,6 +132,11 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.NonNullList;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

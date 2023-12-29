@@ -8,12 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.base.MeltInteraction;
 import shordinger.astralsorcery.common.base.WorldMeltables;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -58,7 +57,7 @@ public class CapeEffectFornax extends CapeArmorEffect {
     public void attemptMelt(EntityPlayer pl) {
         if (burningMelt && pl.isBurning()) {
             BlockPos at = pl.getPosition()
-                    .down();
+                .down();
             MeltInteraction mi = WorldMeltables.getMeltable(pl.getEntityWorld(), at);
             if (mi != null) {
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, at);
@@ -81,24 +80,24 @@ public class CapeEffectFornax extends CapeArmorEffect {
     @Override
     public void loadFromConfig(Configuration cfg) {
         burningMelt = cfg.getBoolean(
-                getKey() + "BurningMelt",
-                getConfigurationSection(),
-                burningMelt,
-                "If a player burns while wearing the cape, this toggles if blocks below him then melt (true) or not. (false)");
+            getKey() + "BurningMelt",
+            getConfigurationSection(),
+            burningMelt,
+            "If a player burns while wearing the cape, this toggles if blocks below him then melt (true) or not. (false)");
         fireMultiplier = cfg.getFloat(
-                getKey() + "FireDmgMultiplier",
-                getConfigurationSection(),
-                fireMultiplier,
-                0,
-                1,
-                "Sets the multiplier for how much damage you take from fire damage while wearing a fornax cape");
+            getKey() + "FireDmgMultiplier",
+            getConfigurationSection(),
+            fireMultiplier,
+            0,
+            1,
+            "Sets the multiplier for how much damage you take from fire damage while wearing a fornax cape");
         healMultiplier = cfg.getFloat(
-                getKey() + "FireHealMultiplier",
-                getConfigurationSection(),
-                healMultiplier,
-                0,
-                5,
-                "Sets the multiplier for how much healing the player receives from the original damage when being hit by fire damage.");
+            getKey() + "FireHealMultiplier",
+            getConfigurationSection(),
+            healMultiplier,
+            0,
+            5,
+            "Sets the multiplier for how much healing the player receives from the original damage when being hit by fire damage.");
     }
 
 }

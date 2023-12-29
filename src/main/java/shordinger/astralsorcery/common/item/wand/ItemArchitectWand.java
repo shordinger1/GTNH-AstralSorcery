@@ -8,11 +8,17 @@
 
 package shordinger.astralsorcery.common.item.wand;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
@@ -30,7 +36,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.gtnewhorizons.modularui.api.GlStateManager;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -55,17 +69,6 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.IBlockState;
-
-import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -106,8 +109,10 @@ public class ItemArchitectWand extends ItemBlockStorage
                     lastCacheInstance,
                     ItemUtils.createBlockState(stack));
             } else {
-                Collection<ItemStack> stacks = ItemUtils
-                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory), stack, false);
+                Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(
+                    new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory),
+                    stack,
+                    false);
                 for (ItemStack foundStack : stacks) {
                     found += foundStack.stackSize;
                 }

@@ -8,9 +8,15 @@
 
 package shordinger.astralsorcery.client.gui;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,9 +33,15 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.journal.GuiRenderBoundingBox;
@@ -75,14 +87,6 @@ import shordinger.astralsorcery.common.util.data.NonDuplicateArrayList;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.MathHelper;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

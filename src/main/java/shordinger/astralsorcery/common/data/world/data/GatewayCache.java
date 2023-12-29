@@ -67,7 +67,7 @@ public class GatewayCache extends CachedWorldData {
             markDirty();
             CelestialGatewaySystem.instance.removePosition(world, pos);
             AstralSorcery.log
-                    .info("Removed gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
+                .info("Removed gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
         }
     }
 
@@ -93,10 +93,10 @@ public class GatewayCache extends CachedWorldData {
         }
 
         AstralSorcery.log.info(
-                "GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart)
-                        + "ms! Collected and checked "
-                        + gatewayPositions.size()
-                        + " gateway nodes!");
+            "GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart)
+                + "ms! Collected and checked "
+                + gatewayPositions.size()
+                + " gateway nodes!");
     }
 
     @Override

@@ -13,10 +13,11 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
+
+import com.gtnewhorizons.modularui.api.GlStateManager;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

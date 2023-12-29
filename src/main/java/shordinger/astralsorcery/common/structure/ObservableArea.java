@@ -34,12 +34,12 @@ public interface ObservableArea {
 
     default Collection<ChunkPos> calculateAffectedChunks(AxisAlignedBB box, BlockPos offset) {
         return calculateAffectedChunks(
-                Vector3.getMin(box)
-                        .toBlockPos()
-                        .add(offset),
-                Vector3.getMax(box)
-                        .toBlockPos()
-                        .add(offset));
+            Vector3.getMin(box)
+                .toBlockPos()
+                .add(offset),
+            Vector3.getMax(box)
+                .toBlockPos()
+                .add(offset));
     }
 
     default Collection<ChunkPos> calculateAffectedChunks(BlockPos min, BlockPos max) {

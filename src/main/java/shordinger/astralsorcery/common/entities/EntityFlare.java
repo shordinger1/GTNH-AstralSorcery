@@ -139,9 +139,7 @@ public class EntityFlare extends EntityFlying {
                 if (Config.flareKillsBats && entityAge % 70 == 0 && rand.nextBoolean()) {
                     Entity closest = world
                         .findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().grow(10), this);
-                    if (closest instanceof EntityBat
-                        && ((EntityBat) closest).getHealth() > 0
-                        && !closest.isDead) {
+                    if (closest instanceof EntityBat && ((EntityBat) closest).getHealth() > 0 && !closest.isDead) {
                         DamageUtil.attackEntityFrom(closest, CommonProxy.dmgSourceStellar, 40F);
                         PktParticleEvent ev = new PktParticleEvent(
                             PktParticleEvent.ParticleEventType.FLARE_PROC,

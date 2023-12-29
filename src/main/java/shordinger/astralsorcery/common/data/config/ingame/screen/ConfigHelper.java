@@ -8,8 +8,6 @@
 
 package shordinger.astralsorcery.common.data.config.ingame.screen;
 
-import java.util.ArrayList;
-
 import cpw.mods.fml.client.config.ConfigGuiType;
 import cpw.mods.fml.client.config.DummyConfigElement;
 import cpw.mods.fml.client.config.GuiConfig;
@@ -18,9 +16,9 @@ import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
-
-import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.Tags;
+
+import java.util.ArrayList;
 
 /**
  * This class is part of the Astral Sorcery Mod

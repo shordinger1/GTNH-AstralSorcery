@@ -8,15 +8,9 @@
 
 package shordinger.astralsorcery.client.effect.light;
 
-import java.awt.*;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import cpw.mods.fml.common.gameevent.TickEvent;
-
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.DataLightConnections;
@@ -26,6 +20,11 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+
+import java.awt.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,18 +8,19 @@
 
 package shordinger.astralsorcery.common.world.attributes;
 
+import java.util.Collection;
+import java.util.Random;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
+
 import shordinger.astralsorcery.common.block.BlockCustomFlower;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.world.WorldGenAttributeCommon;
 import shordinger.astralsorcery.migration.BlockPos;
-
-import java.util.Collection;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

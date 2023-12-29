@@ -8,31 +8,33 @@
 
 package shordinger.astralsorcery.common.crafting;
 
-import appeng.recipes.Ingredient;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import shordinger.astralsorcery.common.crafting.helper.FluidIngredient;
-import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
-import shordinger.astralsorcery.common.lib.ItemsAS;
-import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.astralsorcery.common.util.ItemComparator;
-import shordinger.astralsorcery.common.util.ItemUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+import appeng.recipes.Ingredient;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import shordinger.astralsorcery.common.crafting.helper.FluidIngredient;
+import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
+import shordinger.astralsorcery.common.lib.ItemsAS;
+import shordinger.astralsorcery.common.util.ByteBufUtils;
+import shordinger.astralsorcery.common.util.ItemComparator;
+import shordinger.astralsorcery.common.util.ItemUtils;
 
 /**
  * This class is part of the Astral Sorcery Mod

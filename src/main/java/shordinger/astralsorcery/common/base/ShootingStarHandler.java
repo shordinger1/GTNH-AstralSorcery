@@ -13,11 +13,11 @@ import java.util.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-import cpw.mods.fml.common.gameevent.TickEvent;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.config.Config;
