@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -93,7 +93,7 @@ public class PktAttunementAltarState
 
     @SideOnly(Side.CLIENT)
     private void recClient(PktAttunementAltarState message) {
-        World mcWorld = Minecraft.getMinecraft().world;
+        World mcWorld = Minecraft.getMinecraft().theWorld;
         if (mcWorld != null && mcWorld.provider.dimensionId == message.worldId
             && Minecraft.getMinecraft().thePlayer != null
             && Minecraft.getMinecraft().thePlayer.getEntityId() == message.entityId) {

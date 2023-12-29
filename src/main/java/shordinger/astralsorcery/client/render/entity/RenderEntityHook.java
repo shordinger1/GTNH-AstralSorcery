@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -12,12 +12,12 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -67,7 +67,7 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
             return;
         }
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder bb = tes.getBuffer();
 
         GlStateManager.disableAlpha();

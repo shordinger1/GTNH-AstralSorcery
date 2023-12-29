@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -32,7 +32,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,7 +84,7 @@ public class RenderingUtils {
                     double d2 = (double) pos.getZ() + ((double) l + 0.5D) / 4D;
                     Particle digging = diggingFactory.createParticle(
                         0,
-                        Minecraft.getMinecraft().world,
+                        Minecraft.getMinecraft().theWorld,
                         d0,
                         d1,
                         d2,
@@ -99,7 +99,7 @@ public class RenderingUtils {
     }
 
     public static void renderItemAsEntity(ItemStack stack, double x, double y, double z, float pTicks, int age) {
-        EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, stack);
+        EntityItem ei = new EntityItem(Minecraft.getMinecraft().theWorld, 0, 0, 0, stack);
         ei.age = age;
         ei.hoverStart = 0;
         if (itemPhysics_fieldSkipRenderHook != null) {
@@ -168,7 +168,7 @@ public class RenderingUtils {
 
     public static Particle spawnBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
         Particle digging = diggingFactory
-            .createParticle(0, Minecraft.getMinecraft().world, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
+            .createParticle(0, Minecraft.getMinecraft().theWorld, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
         Minecraft.getMinecraft().effectRenderer.addEffect(digging);
         digging.setParticleTexture(tas);
         return digging;
@@ -233,7 +233,7 @@ public class RenderingUtils {
 
     public static void renderTexturedCubeCentral(Vector3 offset, double size, double u, double v, double uLength,
                                                  double vLength) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         double half = size / 2D;
 
@@ -322,7 +322,7 @@ public class RenderingUtils {
 
     public static void renderTexturedCubeCentralWithColor(Vector3 offset, double size, double u, double v,
                                                           double uLength, double vLength, float cR, float cG, float cB, float cA) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         double half = size / 2D;
 
@@ -435,7 +435,7 @@ public class RenderingUtils {
 
     public static void renderTexturedCubeCentralWithLightAndColor(Vector3 offset, double size, double u, double v,
                                                                   double uLength, double vLength, int lX, int lY, float cR, float cG, float cB, float cA) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         double half = size / 2D;
 
@@ -597,7 +597,7 @@ public class RenderingUtils {
             color.getGreen(),
             color.getBlue(),
             MathHelper.clamp(Math.round(alpha * 255F), 0, 255));
-        Tessellator tessellator = Tessellator.getInstance();
+        Tessellator tessellator = Tessellator.instance;
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
         for (EnumFacing enumfacing : EnumFacing.values()) {
@@ -795,7 +795,7 @@ public class RenderingUtils {
         int fancy_count = !FMLClientHandler.instance()
             .getClient().gameSettings.fancyGraphics ? countNormal : countFancy;
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         RenderHelper.disableStandardItemLighting();
@@ -1118,7 +1118,7 @@ public class RenderingUtils {
             .perpendicular()
             .rotate(angleRad, axis)
             .normalize();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder buf = tes.getBuffer();
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -1169,7 +1169,7 @@ public class RenderingUtils {
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         vb.pos(toX, y, z)
@@ -1299,7 +1299,7 @@ public class RenderingUtils {
             q.rotateWithMagnitude(v3);
             q.rotateWithMagnitude(v4);
         }
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ)
@@ -1358,7 +1358,7 @@ public class RenderingUtils {
             q.rotateWithMagnitude(v3);
             q.rotateWithMagnitude(v4);
         }
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ)

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,17 +8,15 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet.registry;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.util.WeightedRandom;
+import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
+
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.util.WeightedRandom;
-
-import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
 
 /**
  * This class is part of the Astral Sorcery Mod

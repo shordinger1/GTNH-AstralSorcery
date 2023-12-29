@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -43,7 +43,7 @@ public class OrbitalPropertiesIlluminator
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         return w.provider.dimensionId == dim && w.getBlockState(thisPos)
             .getBlock()
             .equals(BlocksAS.blockIlluminator);
@@ -55,17 +55,11 @@ public class OrbitalPropertiesIlluminator
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
         p.setMaxAge(25);
         switch (rand.nextInt(3)) {
-            case 0:
-                p.setColor(Color.WHITE);
-                break;
-            case 1:
-                p.setColor(new Color(0xFEFF9E));
-                break;
-            case 2:
-                p.setColor(new Color(0xFFE539));
-                break;
-            default:
-                break;
+            case 0 -> p.setColor(Color.WHITE);
+            case 1 -> p.setColor(new Color(0xFEFF9E));
+            case 2 -> p.setColor(new Color(0xFFE539));
+            default -> {
+            }
         }
         p.scale(0.1F)
             .gravity(0.004);
@@ -77,14 +71,10 @@ public class OrbitalPropertiesIlluminator
                 (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
             p.setMaxAge(35);
             switch (rand.nextInt(2)) {
-                case 0:
-                    p.setColor(new Color(0xFEFF9E));
-                    break;
-                case 1:
-                    p.setColor(new Color(0xFFE539));
-                    break;
-                default:
-                    break;
+                case 0 -> p.setColor(new Color(0xFEFF9E));
+                case 1 -> p.setColor(new Color(0xFFE539));
+                default -> {
+                }
             }
             p.scale(0.15F);
         }

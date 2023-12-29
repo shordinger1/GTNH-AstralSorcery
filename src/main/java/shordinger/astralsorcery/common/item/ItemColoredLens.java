@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -90,10 +90,10 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            ItemStack inHand = playerIn.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack inHand = playerIn.getHeldItem();
             ColorType type = null;
             if (!inHand.isEmpty() && inHand.getItem() instanceof ItemColoredLens) {
                 int dmg = inHand.getItemDamage();
@@ -108,7 +108,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     if (!playerIn.isCreative()) {
                         inHand.setCount(inHand.getCount() - 1);
                         if (inHand.getCount() <= 0) {
-                            playerIn.setHeldItem(EnumHand.MAIN_HAND, null);
+                            playerIn.setHeldItem(, null);
                         }
                     }
                     SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);

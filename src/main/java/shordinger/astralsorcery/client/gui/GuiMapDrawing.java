@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,9 +19,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -168,7 +169,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
             @Override
             public float getBrightness() {
                 return ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             }
         };
         if (hasLens) {
@@ -179,7 +180,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                 if (f.getBrightness() > 1E-4) {
                     DataActiveCelestials dac = SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS);
                     Collection<IConstellation> cst = dac
-                        .getActiveConstellations(Minecraft.getMinecraft().world.provider.dimensionId);
+                        .getActiveConstellations(Minecraft.getMinecraft().theWorld.provider.dimensionId);
 
                     if (cst != null) {
                         List<IConstellation> filtered = cst.stream()
@@ -336,7 +337,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                 false);
 
             if (ConstellationSkyHandler.getInstance()
-                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world) <= 1E-4) {
+                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld) <= 1E-4) {
                 dragging = null;
             }
         }
@@ -468,10 +469,10 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                     1,
                     MathHelper.ceil(
                         7 * ConstellationSkyHandler.getInstance()
-                            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world))))
+                            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld))))
                 == 0) {
                 PktBurnParchment pkt = new PktBurnParchment(
-                    Minecraft.getMinecraft().world.provider.dimensionId,
+                    Minecraft.getMinecraft().theWorld.provider.dimensionId,
                     getOwningTileEntity().getPos());
                 PacketChannel.CHANNEL.sendToServer(pkt);
                 return true;

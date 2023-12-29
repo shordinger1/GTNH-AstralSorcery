@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -22,6 +22,7 @@ import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,11 +49,11 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
         if (!isApplicableWorld(world)) return false;
-        if (!isApplicableBiome(world, pos)) return false;
-        if (!canSpawnPosition(world, pos.add(-1, 0, 5))) return false;
-        if (!canSpawnPosition(world, pos.add(1, 0, -5))) return false;
-        if (!canSpawnPosition(world, pos.add(1, 0, 5))) return false;
-        if (!canSpawnPosition(world, pos.add(-1, 0, -5))) return false;
+        if (isApplicableBiome(world, pos)) return false;
+        if (canSpawnPosition(world, pos.add(-1, 0, 5))) return false;
+        if (canSpawnPosition(world, pos.add(1, 0, -5))) return false;
+        if (canSpawnPosition(world, pos.add(1, 0, 5))) return false;
+        if (canSpawnPosition(world, pos.add(-1, 0, -5))) return false;
         return true;
     }
 
@@ -69,17 +70,17 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {
-        if (cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+        if (cfgEntry.shouldIgnoreBiomeSpecifications()) return false;
 
         SextantFinder.Biome b = world.getBiomeGenForCoords(pos.getX(), pos.getZ());
         Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
-        if (types.isEmpty()) return false;
+        if (types.isEmpty()) return true;
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes()
                 .contains(t)) applicable = true;
         }
-        return applicable;
+        return !applicable;
     }
 
     private boolean canSpawnPosition(World world, BlockPos pos) {
@@ -87,12 +88,12 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
             .getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
             IBlockState at = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
-            return !at.getMaterial()
-                .isLiquid() && at.getMaterial()
+            return at.getMaterial()
+                .isLiquid() || !at.getMaterial()
                 .isOpaque()
-                && isApplicableBiome(world, pos);
+                || isApplicableBiome(world, pos);
         }
-        return false;
+        return true;
     }
 
     @Nullable
@@ -100,8 +101,7 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         int rX = (chX * 16) + rand.nextInt(16) + 8;
         int rZ = (chZ * 16) + rand.nextInt(16) + 8;
-        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ))
-            .getY();
+        int rY = world.getTopSolidOrLiquidBlock(rX,  rZ);
         return new BlockPos(rX, rY - 1, rZ);
     }
 

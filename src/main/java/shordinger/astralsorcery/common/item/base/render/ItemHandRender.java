@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -30,7 +30,7 @@ import shordinger.astralsorcery.migration.MathHelper;
 public interface ItemHandRender {
 
     @SideOnly(Side.CLIENT)
-    public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks);
+    public void onRenderWhileInHand(ItemStack stack, float pTicks);
 
     @Nullable
     default public RayTraceResult getLookBlock(Entity e, boolean stopTraceOnLiquids,

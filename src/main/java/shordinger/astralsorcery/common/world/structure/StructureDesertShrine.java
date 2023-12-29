@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,6 +19,7 @@ import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,14 +64,12 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         int rX = (chX * 16) + rand.nextInt(16) + 8;
         int rZ = (chZ * 16) + rand.nextInt(16) + 8;
-        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ))
-            .getY();
+        int rY = world.getTopSolidOrLiquidBlock(rX,  rZ);
         return new BlockPos(rX, rY, rZ);
     }
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
-        int dY = world.getTopSolidOrLiquidBlock(pos)
-            .getY();
+        int dY = world.getTopSolidOrLiquidBlock(pos.getX(),pos.getZ());
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY()
             && Math.abs(dY - pos.getY()) <= heightThreshold
             && isDesertBiome(world, pos)) {

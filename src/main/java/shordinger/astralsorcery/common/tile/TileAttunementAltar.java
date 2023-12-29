@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -674,7 +674,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             spawnAmbientParticles();
             if (highlight != null && highlightActive > 0) {
                 float night = ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
                 List<BlockPos> positions = translateConstellationPositions(highlight);
                 for (BlockPos pos : positions) {
                     if (rand.nextBoolean()) continue;

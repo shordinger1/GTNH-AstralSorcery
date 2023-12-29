@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -18,10 +18,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -199,7 +199,7 @@ public class UIGateway {
         GlStateManager.color(1F, 1F, 1F, 1F);
         RenderAstralSkybox.TEX_STAR_1.bind();
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         for (int i = 0; i < 300; i++) {
@@ -295,7 +295,7 @@ public class UIGateway {
             GlStateManager.enableBlend();
             Blending.DEFAULT.applyStateManager();
             GlStateManager.disableAlpha();
-            Tessellator tes = Tessellator.getInstance();
+            Tessellator tes = Tessellator.instance;
             BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 

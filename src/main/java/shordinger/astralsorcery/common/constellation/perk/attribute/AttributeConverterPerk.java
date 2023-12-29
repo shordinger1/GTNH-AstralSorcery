@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,19 +8,17 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.IConverterProvider;
+
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

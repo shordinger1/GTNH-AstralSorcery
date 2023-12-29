@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,12 +8,9 @@
 
 package shordinger.astralsorcery.common.event;
 
-import java.util.function.Function;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
@@ -26,6 +23,8 @@ import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader
 import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
 import shordinger.astralsorcery.common.util.ILocatable;
+
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod

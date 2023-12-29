@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -38,7 +38,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     /*
      * @Override
      * public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
-     * EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+     * EnumFacing side, float hitX, float hitY, float hitZ) {
      * if(!world.isRemote) {
      * LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
      * LinkHandler.propagateClick(result, player, world, pos);
@@ -56,7 +56,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
                                 ItemStack stack) {
         if (!world.isRemote) {
             LinkHandler.RightClickResult result = LinkHandler

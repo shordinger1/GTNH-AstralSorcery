@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -36,7 +36,7 @@ public class GuiTileBase<T extends TileEntity> extends GuiWHScreen {
         super.updateScreen();
 
         if (te.isInvalid()
-            || te.getWorld().provider.dimensionId != Minecraft.getMinecraft().world.provider.dimensionId) {
+            || te.getWorldObj().provider.dimensionId != Minecraft.getMinecraft().theWorld.provider.dimensionId) {
             Minecraft.getMinecraft()
                 .displayGuiScreen(null);
         }

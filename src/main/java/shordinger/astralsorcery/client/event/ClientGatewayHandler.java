@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.client.event;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -15,7 +16,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -142,17 +142,11 @@ public class ClientGatewayHandler {
                         .scale(0.1F)
                         .motion(m.getX(), m.getY(), m.getZ());
                     switch (EffectHandler.STATIC_EFFECT_RAND.nextInt(4)) {
-                        case 0:
-                            p.setColor(Color.WHITE);
-                            break;
-                        case 1:
-                            p.setColor(new Color(0x69B5FF));
-                            break;
-                        case 2:
-                            p.setColor(new Color(0x0078FF));
-                            break;
-                        default:
-                            break;
+                        case 0 -> p.setColor(Color.WHITE);
+                        case 1 -> p.setColor(new Color(0x69B5FF));
+                        case 2 -> p.setColor(new Color(0x0078FF));
+                        default -> {
+                        }
                     }
                 }
             } else {
@@ -183,17 +177,11 @@ public class ClientGatewayHandler {
                             .setAlphaMultiplier(0.1F);
                     }
                     switch (EffectHandler.STATIC_EFFECT_RAND.nextInt(4)) {
-                        case 0:
-                            p.setColor(Color.WHITE);
-                            break;
-                        case 1:
-                            p.setColor(new Color(0x69B5FF));
-                            break;
-                        case 2:
-                            p.setColor(new Color(0x0078FF));
-                            break;
-                        default:
-                            break;
+                        case 0 -> p.setColor(Color.WHITE);
+                        case 1 -> p.setColor(new Color(0x69B5FF));
+                        case 2 -> p.setColor(new Color(0x0078FF));
+                        default -> {
+                        }
                     }
                 }
                 positions = MiscUtils.getCirclePositions(
@@ -219,17 +207,11 @@ public class ClientGatewayHandler {
                             .setAlphaMultiplier(0.1F);
                     }
                     switch (EffectHandler.STATIC_EFFECT_RAND.nextInt(4)) {
-                        case 0:
-                            p.setColor(Color.WHITE);
-                            break;
-                        case 1:
-                            p.setColor(new Color(0x69B5FF));
-                            break;
-                        case 2:
-                            p.setColor(new Color(0x0078FF));
-                            break;
-                        default:
-                            break;
+                        case 0 -> p.setColor(Color.WHITE);
+                        case 1 -> p.setColor(new Color(0x69B5FF));
+                        case 2 -> p.setColor(new Color(0x0078FF));
+                        default -> {
+                        }
                     }
                 }
             }

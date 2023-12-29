@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;

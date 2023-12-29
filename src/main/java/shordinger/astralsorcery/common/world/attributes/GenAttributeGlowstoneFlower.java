@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -21,6 +21,7 @@ import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.world.WorldGenAttributeCommon;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +48,10 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes()
-                .contains(t)) applicable = true;
+                .contains(t)) {
+                applicable = true;
+                break;
+            }
         }
         return applicable;
     }
@@ -87,7 +91,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
             try {
                 for (int i = 0; i < 8; i++) {
                     if (rand.nextInt(4) == 0) {
-                        tryGenerateAtPosition(randomOffset(world, pos, rand, 7), world, rand);
+                        tryGenerateAtPosition(randomOffset(world, pos, rand), world, rand);
                     }
                 }
             } finally {
@@ -96,9 +100,9 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
         }
     }
 
-    private BlockPos randomOffset(World world, BlockPos origin, Random random, int offsetRand) {
-        int rX = origin.getX() - offsetRand + random.nextInt(offsetRand * 2 + 1);
-        int rZ = origin.getZ() - offsetRand + random.nextInt(offsetRand * 2 + 1);
+    private BlockPos randomOffset(World world, BlockPos origin, Random random) {
+        int rX = origin.getX() - 7 + random.nextInt(7 * 2 + 1);
+        int rZ = origin.getZ() - 7 + random.nextInt(7 * 2 + 1);
         int rY = world.getPrecipitationHeight(rX, rZ);
         return new BlockPos(rX, rY, rZ);
     }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,15 +8,10 @@
 
 package shordinger.astralsorcery.common.world;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import cpw.mods.fml.common.IWorldGenerator;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.world.attributes.GenAttributeAquamarine;
 import shordinger.astralsorcery.common.world.attributes.GenAttributeGlowstoneFlower;
@@ -28,6 +23,11 @@ import shordinger.astralsorcery.common.world.structure.StructureDesertShrine;
 import shordinger.astralsorcery.common.world.structure.StructureSmallRuin;
 import shordinger.astralsorcery.common.world.structure.StructureSmallShrine;
 import shordinger.astralsorcery.common.world.structure.StructureTreasureShrine;
+import shordinger.astralsorcery.migration.ChunkPos;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

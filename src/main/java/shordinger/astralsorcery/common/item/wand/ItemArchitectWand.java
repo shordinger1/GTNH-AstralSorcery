@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -24,7 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -133,7 +133,7 @@ public class ItemArchitectWand extends ItemBlockStorage
         Blending.DEFAULT.apply();
         GlStateManager.color(1F, 1F, 1F, fadeAlpha * 0.9F);
         GL11.glColor4f(1F, 1F, 1F, fadeAlpha * 0.9F);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         int tempOffsetY = offsetY;
@@ -245,14 +245,14 @@ public class ItemArchitectWand extends ItemBlockStorage
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
+    public void onRenderWhileInHand(ItemStack stack, float pTicks) {
         List<IBlockState> storedStates = Lists.newArrayList(getMappedStoredStates(stack).keySet());
         if (storedStates.isEmpty()) return;
-        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().world);
+        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().theWorld);
 
         Deque<BlockPos> placeable = filterBlocksToPlace(
             Minecraft.getMinecraft().thePlayer,
-            Minecraft.getMinecraft().world,
+            Minecraft.getMinecraft().theWorld,
             architectRange);
         if (!placeable.isEmpty()) {
             RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().thePlayer, false, true, architectRange);
@@ -267,10 +267,10 @@ public class ItemArchitectWand extends ItemBlockStorage
             Blending.ADDITIVEDARK.applyStateManager();
             GlStateManager.disableAlpha();
             RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
-            World w = Minecraft.getMinecraft().world;
+            World w = Minecraft.getMinecraft().theWorld;
 
             TextureHelper.setActiveTextureToAtlasSprite();
-            Tessellator tes = Tessellator.getInstance();
+            Tessellator tes = Tessellator.instance;
             BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             for (BlockPos pos : placeable) {
@@ -279,7 +279,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                 try {
                     potentialState = potentialState.getBlock()
                         .getStateForPlacement(
-                            Minecraft.getMinecraft().world,
+                            Minecraft.getMinecraft().theWorld,
                             pos,
                             sideHit,
                             (float) hitVec.x,
@@ -306,7 +306,7 @@ public class ItemArchitectWand extends ItemBlockStorage
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if (stack.isEmpty()) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
         if (world.isRemote) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -378,7 +378,7 @@ public class ItemArchitectWand extends ItemBlockStorage
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
         if (stack.isEmpty()) return EnumActionResult.SUCCESS;

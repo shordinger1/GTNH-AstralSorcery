@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -14,7 +14,7 @@ import java.util.LinkedList;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.astralsorcery.common.util.Counter;
+
 import shordinger.astralsorcery.common.util.data.Tuple;
 
 /**
@@ -29,7 +29,7 @@ public class CommonScheduler implements ITickHandler {
     private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private final LinkedList<Tuple<Runnable, Counter>> queue = new LinkedList<>();
+    private final LinkedList<Tuple<Runnable, Integer>> queue = new LinkedList<>();
     private final LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
 
     @Override
@@ -37,18 +37,18 @@ public class CommonScheduler implements ITickHandler {
         inTick = true;
         synchronized (lock) {
             inTick = true;
-            Iterator<Tuple<Runnable, Counter>> iterator = queue.iterator();
+            Iterator<Tuple<Runnable, Integer>> iterator = queue.iterator();
             while (iterator.hasNext()) {
-                Tuple<Runnable, Counter> r = iterator.next();
-                r.value.decrement();
-                if (r.value.value <= 0) {
+                Tuple<Runnable, Integer> r = iterator.next();
+                r.value--;
+                if (r.value <= 0) {
                     r.key.run();
                     iterator.remove();
                 }
             }
             inTick = false;
             for (Tuple<Runnable, Integer> wait : waiting) {
-                queue.addLast(new Tuple<>(wait.key, new Counter(wait.value)));
+                queue.addLast(new Tuple<>(wait.key, wait.value));
             }
         }
         waiting.clear();
@@ -74,7 +74,7 @@ public class CommonScheduler implements ITickHandler {
             if (inTick) {
                 waiting.addLast(new Tuple<>(r, tickDelay));
             } else {
-                queue.addLast(new Tuple<>(r, new Counter(tickDelay)));
+                queue.addLast(new Tuple<>(r, tickDelay));
             }
         }
     }

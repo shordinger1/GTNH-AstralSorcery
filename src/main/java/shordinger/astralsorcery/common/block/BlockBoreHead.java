@@ -1,14 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
-
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -22,13 +20,14 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileBore;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 import shordinger.astralsorcery.migration.NonNullList;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

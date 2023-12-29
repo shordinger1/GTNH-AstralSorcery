@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -56,7 +56,7 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
                                     EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && hand.equals(EnumHand.MAIN_HAND)) {
+        if (!worldIn.isRemote && hand.equals()) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
             if (infuser != null) {
                 infuser.onInteract(playerIn, hand, playerIn.getHeldItem(hand));

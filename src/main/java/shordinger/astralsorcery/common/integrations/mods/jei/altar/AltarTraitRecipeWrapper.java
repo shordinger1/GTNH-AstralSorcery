@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,17 +8,11 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-
 import com.google.common.collect.Lists;
-
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.client.util.RenderConstellation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -28,6 +22,9 @@ import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
 import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

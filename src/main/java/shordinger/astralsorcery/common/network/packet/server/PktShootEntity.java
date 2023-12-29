@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -89,7 +89,7 @@ public class PktShootEntity implements IMessage, IMessageHandler<PktShootEntity,
 
     @SideOnly(Side.CLIENT)
     private static void shootEntity(PktShootEntity pkt) {
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         Entity entity = world.getEntityByID(pkt.entityId);
         if (entity != null) {
             entity.motionX = pkt.motionVector.getX();

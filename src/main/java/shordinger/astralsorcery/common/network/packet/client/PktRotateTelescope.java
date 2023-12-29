@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -95,8 +95,8 @@ public class PktRotateTelescope
 
     @SideOnly(Side.CLIENT)
     private void applyRotation(PktRotateTelescope pkt) {
-        if (Minecraft.getMinecraft().world.provider.dimensionId == pkt.dimId) {
-            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pkt.pos, TileTelescope.class, false);
+        if (Minecraft.getMinecraft().theWorld.provider.dimensionId == pkt.dimId) {
+            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, pkt.pos, TileTelescope.class, false);
             if (tt != null) {
                 tt.setRotation(
                     pkt.isClockwise ? tt.getRotation()

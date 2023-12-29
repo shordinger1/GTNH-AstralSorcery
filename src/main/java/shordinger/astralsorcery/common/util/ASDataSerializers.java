@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,13 +8,12 @@
 
 package shordinger.astralsorcery.common.util;
 
-import java.io.IOException;
-
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidStack;
-
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import java.io.IOException;
 
 /**
  * This class is part of the Astral Sorcery Mod

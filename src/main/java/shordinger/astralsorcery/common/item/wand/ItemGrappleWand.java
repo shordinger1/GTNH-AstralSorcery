@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -51,7 +51,7 @@ public class ItemGrappleWand extends Item implements ItemAlignmentChargeConsumer
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);

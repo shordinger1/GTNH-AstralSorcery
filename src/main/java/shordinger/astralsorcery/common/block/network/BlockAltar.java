@@ -1,18 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block.network;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -30,7 +24,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.block.BlockAttunementRelay;
@@ -48,6 +41,11 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -234,7 +232,7 @@ public class BlockAltar extends BlockStarlightNetwork
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-                                            float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+                                            float hitZ, int meta, EntityLivingBase placer) {
         return getStateFromMeta(meta);
     }
 

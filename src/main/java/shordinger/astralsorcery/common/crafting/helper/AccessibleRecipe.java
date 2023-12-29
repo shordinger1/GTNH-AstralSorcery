@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.migration.NonNullList;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

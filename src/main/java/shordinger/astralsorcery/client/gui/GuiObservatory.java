@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,20 +19,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketCloseWindow;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -72,6 +67,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -110,14 +106,14 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         this.owningPlayer = owningPlayer;
 
         Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-            .getSeedIfPresent(Minecraft.getMinecraft().world);
+            .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
         currSeed.ifPresent(this::setupInitialStars);
     }
 
     private void setupInitialStars(long seed) {
         Random rand = new Random(seed);
 
-        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / Config.dayLength);
+        int day = (int) (Minecraft.getMinecraft().theWorld.getWorldTime() / Config.dayLength);
         for (int i = 0; i < Math.abs(day); i++) {
             rand.nextLong(); // Flush
         }
@@ -137,9 +133,9 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
-        mc.player.openContainer = mc.player.inventoryContainer;
-        mc.player.inventoryContainer.windowId = 0; // Don't question it. This is not a GUIContainer and thus mc
+        mc.thePlayer.connection.sendPacket(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
+        mc.thePlayer.openContainer = mc.thePlayer.inventoryContainer;
+        mc.thePlayer.inventoryContainer.windowId = 0; // Don't question it. This is not a GUIContainer and thus mc
         // overwrites the ID of the default container.
 
         if (!Minecraft.IS_RUNNING_ON_MAC) {
@@ -148,21 +144,21 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
 
-        mc.player.renderYawOffset = mc.player.rotationYawHead;
-        mc.player.prevRenderYawOffset = mc.player.prevRotationYawHead;
+        mc.thePlayer.renderYawOffset = mc.thePlayer.rotationYawHead;
+        mc.thePlayer.prevRenderYawOffset = mc.thePlayer.prevRotationYawHead;
     }
 
     @Override
     public void initGui() {
         super.initGui();
 
-        this.mc.player.rotationPitch = getOwningTileEntity().observatoryPitch;
-        this.mc.player.prevRotationPitch = getOwningTileEntity().prevObservatoryPitch;
+        this.mc.thePlayer.rotationPitch = getOwningTileEntity().observatoryPitch;
+        this.mc.thePlayer.prevRotationPitch = getOwningTileEntity().prevObservatoryPitch;
 
-        this.mc.player.rotationYaw = getOwningTileEntity().observatoryYaw;
-        this.mc.player.rotationYawHead = getOwningTileEntity().observatoryYaw;
-        this.mc.player.prevRotationYaw = this.mc.player.rotationYaw;
-        this.mc.player.prevRotationYawHead = this.mc.player.rotationYaw;
+        this.mc.thePlayer.rotationYaw = getOwningTileEntity().observatoryYaw;
+        this.mc.thePlayer.rotationYawHead = getOwningTileEntity().observatoryYaw;
+        this.mc.thePlayer.prevRotationYaw = this.mc.thePlayer.rotationYaw;
+        this.mc.thePlayer.prevRotationYawHead = this.mc.thePlayer.rotationYaw;
 
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
@@ -175,7 +171,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w == null) return;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
@@ -220,7 +216,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     private void drawEffectBackground(float partialTicks, boolean canSeeSky, float transparency) {
         if (usedStars.isEmpty()) {
             Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-                .getSeedIfPresent(Minecraft.getMinecraft().world);
+                .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
             if (currSeed.isPresent()) {
                 setupInitialStars(currSeed.get());
 
@@ -237,10 +233,10 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
     private void drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Optional<Long> seed = ConstellationSkyHandler.getInstance()
-            .getSeedIfPresent(Minecraft.getMinecraft().world);
+            .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
         long s = 0;
         if (seed.isPresent()) {
             s = seed.get();
@@ -302,7 +298,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
     private void drawLine(Point start, Point end, RenderConstellation.BrightnessFunction func, float linebreadth,
                           boolean applyFunc) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         float brightness;
@@ -311,7 +307,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         } else {
             brightness = 1F;
         }
-        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
         if (starBr <= 0.0F) {
             return;
         }
@@ -358,7 +354,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GlStateManager.disableAlpha();
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random();
 
@@ -371,8 +367,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
             float brightness = 0.3F
                 + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15)))
                 * 0.6F;
-            brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
-            brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
+            brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * 2 * transparency;
+            brightness *= (1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks));
             GlStateManager.color(brightness, brightness, brightness, brightness);
             int size = r.nextInt(4) + 2;
             drawRect(MathHelper.floor(offsetX + stars.x), MathHelper.floor(offsetY + stars.y), size, size);
@@ -398,7 +394,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         float cstSizeX = 55F;
         float cstSizeY = 35F;
 
-        float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+        float rainBr = 1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
 
         Map<IConstellation, Map<StarLocation, Rectangle>> cstMap = new HashMap<>();
         if (handle != null && transparency > 0) {
@@ -593,13 +589,13 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
                 movementX = f2;
                 movementY = f3 * i;
             }
-            boolean nullify = this.mc.player.rotationPitch <= -89.99F && Math.abs(movementY) == movementY;
-            this.mc.player.turn(movementX, movementY);
-            if (this.mc.player.rotationPitch >= -10F) {
-                this.mc.player.rotationPitch = -10F;
+            boolean nullify = this.mc.thePlayer.rotationPitch <= -89.99F && Math.abs(movementY) == movementY;
+            this.mc.thePlayer.turn(movementX, movementY);
+            if (this.mc.thePlayer.rotationPitch >= -10F) {
+                this.mc.thePlayer.rotationPitch = -10F;
                 nullify = true;
-            } else if (this.mc.player.rotationPitch <= -75F) {
-                this.mc.player.rotationPitch = -75F;
+            } else if (this.mc.thePlayer.rotationPitch <= -75F) {
+                this.mc.thePlayer.rotationPitch = -75F;
                 nullify = true;
             }
             if (nullify) movementY = 0;
@@ -696,8 +692,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     }
 
     private boolean canStartDrawing() {
-        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F
-            && Minecraft.getMinecraft().world.getRainStrength(1.0F) <= 0.1F;
+        return Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) >= 0.35F
+            && Minecraft.getMinecraft().theWorld.getRainStrength(1.0F) <= 0.1F;
     }
 
     private void clearLines() {

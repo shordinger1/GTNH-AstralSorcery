@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -14,12 +14,12 @@ import java.util.*;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.init.Biomes;
 
 import org.lwjgl.opengl.GL11;
@@ -112,14 +112,14 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     private static int batch(Collection<TranslucentBlockState> set, int color) {
         RenderWorldBuffer iba = new RenderWorldBuffer(
             Biomes.PLAINS,
-            Minecraft.getMinecraft().world.getWorldType(),
+            Minecraft.getMinecraft().theWorld.getWorldType(),
             new BlockArray());
         iba.appendAll(MiscUtils.splitMap(set, entry -> new Tuple<>(entry.pos, entry.state)));
         int batchDList = GLAllocation.generateDisplayLists(1);
         GlStateManager.enableBlend();
         Blending.CONSTANT_ALPHA.applyStateManager();
         GlStateManager.glNewList(batchDList, GL11.GL_COMPILE);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (TranslucentBlockState tbs : set) {

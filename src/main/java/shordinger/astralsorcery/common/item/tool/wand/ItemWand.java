@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -189,7 +189,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         if (!itemstack.isEmpty()) {
             WandAugment wa = getAugment(itemstack);
@@ -418,11 +418,11 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @SideOnly(Side.CLIENT)
     public static void highlightEffects(PktParticleEvent event) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
 
         BlockPos orePos = event.getVec()
             .toBlockPos();
-        BlockPos pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(orePos)
+        BlockPos pos = Minecraft.getMinecraft().theWorld.getTopSolidOrLiquidBlock(orePos)
             .up();
         Vector3 display = new Vector3(pos);
         MiscUtils.applyRandomOffset(display, rand, 2);
@@ -430,7 +430,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         double velY = rand.nextFloat() * 0.3F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double dstr = ConstellationSkyHandler.getInstance()
-            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
         for (int i = 0; i < 10; i++) {
             EntityFXFacingParticle particle = EffectHelper
                 .genericFlareParticle(display.getX(), display.getY(), display.getZ());
@@ -470,7 +470,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
                                 ItemStack stack) {
         IBlockState state = WorldHelper.getBlockState(world, pos);
         Block b = state.getBlock();

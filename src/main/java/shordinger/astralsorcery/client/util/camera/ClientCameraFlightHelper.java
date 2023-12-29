@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -181,7 +181,7 @@ public class ClientCameraFlightHelper {
 
         @Override
         public void onStopTransforming() {
-            if (stopDelegate != null && Minecraft.getMinecraft().world != null) {
+            if (stopDelegate != null && Minecraft.getMinecraft().theWorld != null) {
                 stopDelegate.onCameraFlightStop();
             }
         }

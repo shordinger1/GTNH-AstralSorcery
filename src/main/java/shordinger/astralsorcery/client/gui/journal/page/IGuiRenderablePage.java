@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -10,11 +10,14 @@ package shordinger.astralsorcery.client.gui.journal.page;
 
 import java.awt.*;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.entity.RenderItem;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
@@ -109,7 +112,7 @@ public interface IGuiRenderablePage {
         Vector3 uv11 = new Vector3(widthHeight / 2D, widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
         Vector3 uv10 = new Vector3(widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX + uv01.getX(), offsetY + uv01.getY(), zLevel)
@@ -133,7 +136,7 @@ public interface IGuiRenderablePage {
     }
 
     default public void drawRect(double offsetX, double offsetY, double width, double height, double zLevel) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)
@@ -153,7 +156,7 @@ public interface IGuiRenderablePage {
 
     default public void drawRectPart(double offsetX, double offsetY, double width, double height, double zLevel,
                                      double u, double v, double uLength, double vLength) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)

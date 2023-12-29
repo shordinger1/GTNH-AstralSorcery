@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -311,14 +311,14 @@ public class MiscUtils {
     @Nullable
     public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search,
                                                               @Nullable Predicate<ItemStack> acceptorFnc) {
-        EnumHand hand = EnumHand.MAIN_HAND;
+        EnumHand hand = ;
         ItemStack held = entity.getHeldItem(hand);
         if (held.isEmpty() || !search.getClass()
             .isAssignableFrom(
                 held.getItem()
                     .getClass())
             || (acceptorFnc != null && !acceptorFnc.test(held))) {
-            hand = EnumHand.OFF_HAND;
+            hand = ;
             held = entity.getHeldItem(hand);
         }
         if (held.isEmpty() || !search.getClass()

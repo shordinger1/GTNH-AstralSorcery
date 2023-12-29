@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -54,18 +54,18 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
     private static int idx = 0;
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if (hand == EnumHand.MAIN_HAND && !itemStackIn.isEmpty() && scanForOres(worldIn, playerIn)) {
+        if (hand ==  && !itemStackIn.isEmpty() && scanForOres(worldIn, playerIn)) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         }
         return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand == EnumHand.MAIN_HAND && scanForOres(worldIn, playerIn)) {
+        if (hand ==  && scanForOres(worldIn, playerIn)) {
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;

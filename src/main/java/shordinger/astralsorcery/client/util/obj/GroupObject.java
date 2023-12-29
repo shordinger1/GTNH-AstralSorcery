@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -10,7 +10,7 @@ package shordinger.astralsorcery.client.util.obj;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 
@@ -45,11 +45,11 @@ public class GroupObject {
     @SideOnly(Side.CLIENT)
     public void render(VertexFormat vf) {
         if (faces.size() > 0) {
-            BufferBuilder vb = Tessellator.getInstance()
+            BufferBuilder vb = Tessellator.instance
                 .getBuffer();
             vb.begin(glDrawingMode, vf);
             render(vb);
-            Tessellator.getInstance()
+            Tessellator.instance
                 .draw();
         }
     }

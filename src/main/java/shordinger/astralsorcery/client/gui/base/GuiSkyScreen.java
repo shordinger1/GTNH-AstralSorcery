@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -11,7 +11,6 @@ package shordinger.astralsorcery.client.gui.base;
 import java.awt.*;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -36,7 +35,7 @@ public interface GuiSkyScreen {
     static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
 
     public static Tuple<Color, Color> getRBGFromTo(boolean canSeeSky, float angleTransparency, float partialTicks) {
-        World renderWorld = Minecraft.getMinecraft().world;
+        World renderWorld = Minecraft.getMinecraft().theWorld;
         if (renderWorld.provider.getDimensionType() == DimensionType.THE_END) {
             canSeeSky = false; // Only for effect rendering purposes, not functionality.
         }

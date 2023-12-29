@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,16 +8,15 @@
 
 package shordinger.astralsorcery.client.effect;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -45,10 +44,10 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
 import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
-import shordinger.astralsorcery.common.util.Counter;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -235,7 +234,7 @@ public final class EffectHandler {
         /*
          * if(Minecraft.getMinecraft().thePlayer == null) return;
          * if(ClientScheduler.getClientTick() % 10 != 0) return;
-         * ItemStack main = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
+         * ItemStack main = Minecraft.getMinecraft().thePlayer.getHeldItem();
          * if(main != null && main.getItem() instanceof ItemIlluminationWand) {
          * RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().thePlayer, 60);
          * if(res != null && res.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -409,7 +408,7 @@ public final class EffectHandler {
             }
             effect.tick();
             if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition()
-                .distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
+                .distanceSquared(playerPos.toBlockPos()) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderParticles.remove(effect);
             }
@@ -421,7 +420,7 @@ public final class EffectHandler {
             }
             effect.tick();
             if (effect.canRemove() || (effect.isDistanceRemovable() && effect.getPosition()
-                .distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq)) {
+                .distanceSquared(playerPos.toBlockPos()) >= Config.maxEffectRenderDistanceSq)) {
                 effect.flagAsRemoved();
                 fastRenderDepthParticles.remove(effect);
             }

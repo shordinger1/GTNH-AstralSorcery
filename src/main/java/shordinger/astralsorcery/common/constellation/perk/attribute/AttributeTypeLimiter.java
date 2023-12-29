@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,17 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import java.util.Map;
-import java.util.function.Consumer;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Maps;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod

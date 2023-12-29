@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -106,7 +106,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -120,7 +120,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty() || worldIn.isRemote) {

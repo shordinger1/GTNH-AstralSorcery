@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,23 +8,22 @@
 
 package shordinger.astralsorcery.client.event;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -32,7 +31,6 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
@@ -110,7 +108,7 @@ public class ClientRenderEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         if (Config.constellationSkyDimWhitelist.contains(world.provider.dimensionId)) {
             if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
                 world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
@@ -118,12 +116,10 @@ public class ClientRenderEventHandler {
         }
 
         playHandAndHudRenders(
-            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND),
-            EnumHand.MAIN_HAND,
+            Minecraft.getMinecraft().thePlayer.getHeldItem(),
             event.getPartialTicks());
         playHandAndHudRenders(
-            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND),
-            EnumHand.OFF_HAND,
+            Minecraft.getMinecraft().thePlayer.getHeldItem(),
             event.getPartialTicks());
     }
 
@@ -167,8 +163,8 @@ public class ClientRenderEventHandler {
                 PersistentDataManager.INSTANCE.setCreative();
             }
 
-            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND));
-            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND));
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem());
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem());
 
             tickTimeFreezeEffects();
 
@@ -219,7 +215,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void tickTimeFreezeEffects() {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w != null && w.provider != null) {
             List<TimeStopEffectHelper> effects = ((DataTimeFreezeEffects) SyncDataHolder
                 .getData(Side.CLIENT, SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).client_getTimeStopEffects(w);
@@ -233,7 +229,7 @@ public class ClientRenderEventHandler {
     }
 
     @SideOnly(Side.CLIENT)
-    private void playHandAndHudRenders(ItemStack inHand, EnumHand hand, float pTicks) {
+    private void playHandAndHudRenders(ItemStack inHand, float pTicks) {
         if (!inHand.isEmpty()) {
             Item i = inHand.getItem();
             if (i instanceof ItemHandRender) {
@@ -324,7 +320,7 @@ public class ClientRenderEventHandler {
                 double uLength = ssr.getULength() * percFilled;
 
                 GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);
-                Tessellator tes = Tessellator.getInstance();
+                Tessellator tes = Tessellator.instance;
                 BufferBuilder vb = tes.getBuffer();
                 vb.begin(7, DefaultVertexFormats.POSITION_TEX);
                 vb.pos(offsetLeft, offsetTop + 27, 10)
@@ -368,7 +364,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
-            ItemStack inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack inHand = Minecraft.getMinecraft().thePlayer.getHeldItem();
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -379,7 +375,7 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
-            inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND);
+            inHand = Minecraft.getMinecraft().thePlayer.getHeldItem();
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -412,7 +408,7 @@ public class ClientRenderEventHandler {
         GL11.glColor4f(1F, 1F, 1F, visibilityPermCharge * 0.9F);
 
         // Draw hud itself
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, 10)

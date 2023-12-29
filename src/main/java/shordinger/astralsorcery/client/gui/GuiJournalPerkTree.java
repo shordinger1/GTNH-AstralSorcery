@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -21,11 +21,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -700,7 +700,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         GlStateManager.disableAlpha();
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         SpriteLibrary.spritePerkSeal.bindTexture();
@@ -762,7 +762,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
         width *= 2.5;
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         sprite.bindTexture();
@@ -1021,7 +1021,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.color(br, br, br, 1F);
         GlStateManager.disableBlend();
         textureResBack.bindTexture();
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(guiLeft + 10, guiTop - 10 + guiHeight, zLevel)
@@ -1036,7 +1036,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         vb.pos(guiLeft + 10, guiTop + 10, zLevel)
             .tex(0, 0)
             .endVertex();
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
 
         GlStateManager.enableBlend();

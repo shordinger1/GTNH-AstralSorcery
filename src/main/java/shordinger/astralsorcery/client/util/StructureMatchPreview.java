@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -13,10 +13,10 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.init.Biomes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +71,7 @@ public class StructureMatchPreview {
     @Nullable
     public Integer getPreviewSlice() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         if (pattern == null || world == null) {
             return null;
         }
@@ -88,11 +88,11 @@ public class StructureMatchPreview {
 
     public boolean shouldBeRemoved() {
         return timeout <= 0 || tile.getRequiredStructure() == null
-            || Minecraft.getMinecraft().world == null
-            || Minecraft.getMinecraft().world.provider.dimensionId
+            || Minecraft.getMinecraft().theWorld == null
+            || Minecraft.getMinecraft().theWorld.provider.dimensionId
             != ((TileEntity) tile).getWorld().provider.dimensionId
             || tile.getRequiredStructure()
-            .matches(Minecraft.getMinecraft().world, ((TileEntity) tile).getPos())
+            .matches(Minecraft.getMinecraft().theWorld, ((TileEntity) tile).getPos())
             || ((TileEntity) tile).isInvalid();
     }
 
@@ -105,7 +105,7 @@ public class StructureMatchPreview {
 
     public void renderPreview(float partialTicks) {
         PatternBlockArray pba = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         Integer slice = getPreviewSlice();
         if (shouldBeRemoved() || pba == null || slice == null || world == null) {
             return;
@@ -114,7 +114,7 @@ public class StructureMatchPreview {
         BlockPos center = tile.getLocationPos();
 
         IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, WorldType.DEBUG_ALL_BLOCK_STATES);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         TextureHelper.setActiveTextureToAtlasSprite();

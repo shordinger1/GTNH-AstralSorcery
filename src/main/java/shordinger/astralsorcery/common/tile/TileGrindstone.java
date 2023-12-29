@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -68,7 +68,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
     @SideOnly(Side.CLIENT)
     public static void playWheelAnimation(PktPlayEffect pktPlayEffect) {
         TileGrindstone tgr = MiscUtils
-            .getTileAt(Minecraft.getMinecraft().world, pktPlayEffect.pos, TileGrindstone.class, false);
+            .getTileAt(Minecraft.getMinecraft().theWorld, pktPlayEffect.pos, TileGrindstone.class, false);
         if (tgr != null) {
             if (tgr.tickWheelAnimation == 0) {
                 tgr.tickWheelAnimation = TICKS_WHEEL_ROTATION;

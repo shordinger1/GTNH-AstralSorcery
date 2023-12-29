@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -51,8 +51,8 @@ public class InfluenceSizePreview implements IComplexEffect {
 
     @Override
     public boolean canRemove() {
-        return fadeOutTicks <= 0 || Minecraft.getMinecraft().world == null
-            || Minecraft.getMinecraft().world.provider.dimensionId != tile.getDimensionId();
+        return fadeOutTicks <= 0 || Minecraft.getMinecraft().theWorld == null
+            || Minecraft.getMinecraft().theWorld.provider.dimensionId != tile.getDimensionId();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     protected boolean needsFadeOut() {
-        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
             return true;
         }
         IStructureAreaOfInfluence aoe = EffectHandler.getInstance()
@@ -106,7 +106,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             return true;
         }
         if (MiscUtils
-            .getTileAt(Minecraft.getMinecraft().world, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false)
+            .getTileAt(Minecraft.getMinecraft().theWorld, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false)
             == null) {
             return true;
         }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -86,7 +86,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleDataEvent message) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 

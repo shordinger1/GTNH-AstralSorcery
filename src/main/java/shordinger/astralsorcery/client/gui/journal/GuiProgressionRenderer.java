@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -18,10 +18,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.opengl.GL11;
@@ -430,7 +429,7 @@ public class GuiProgressionRenderer {
             MathHelper.floor(height));
         clusterRectMap.put(r, p);
 
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         cluster.cloudTexture.bind();
 
@@ -485,7 +484,7 @@ public class GuiProgressionRenderer {
 
         Blending.ADDITIVEDARK.apply();
 
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(realCoordLowerX, realCoordLowerY + realRenderHeight, zLevel)
@@ -500,7 +499,7 @@ public class GuiProgressionRenderer {
         vb.pos(realCoordLowerX, realCoordLowerY, zLevel)
             .tex(0, 0)
             .endVertex();
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -522,7 +521,7 @@ public class GuiProgressionRenderer {
          * float highV = lowV + (((float) renderHeight) / ((float) sizeHandler.getTotalHeight()));
          */
 
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(realCoordLowerX, realCoordLowerY + realRenderHeight, zLevel)
@@ -537,7 +536,7 @@ public class GuiProgressionRenderer {
         vb.pos(realCoordLowerX, realCoordLowerY, zLevel)
             .tex(0, 0)
             .endVertex();
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
 
         GL11.glEnable(GL11.GL_BLEND);
@@ -558,7 +557,7 @@ public class GuiProgressionRenderer {
         double lowV = (scalePosY - sizeHandler.heightToBorder) / th;
         double highV = lowV + (((float) realRenderHeight) / th);
 
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0, realRenderHeight, zLevel)
@@ -573,7 +572,7 @@ public class GuiProgressionRenderer {
         vb.pos(0, 0, zLevel)
             .tex(lowU, lowV)
             .endVertex();
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
         GL11.glPopMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);

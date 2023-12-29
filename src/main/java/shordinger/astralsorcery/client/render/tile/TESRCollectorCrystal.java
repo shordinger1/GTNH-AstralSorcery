@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -127,7 +127,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     public static void renderCrystal(@Nullable UUID playerUUID, boolean isCelestial, boolean bounce) {
         GlStateManager.pushMatrix();
         if (bounce) {
-            int t = (int) (Minecraft.getMinecraft().world.getTotalWorldTime() & 255);
+            int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
             float perc = (256 - t) / 256F;
             perc = MathHelper.cos((float) (perc * 2 * Math.PI));
             GlStateManager.translate(0, 0.03 * perc, 0);

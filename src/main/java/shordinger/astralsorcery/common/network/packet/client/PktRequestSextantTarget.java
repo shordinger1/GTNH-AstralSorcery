@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -128,7 +128,7 @@ public class PktRequestSextantTarget
     private void handlePacketClient(PktRequestSextantTarget pkt) {
         Minecraft.getMinecraft()
             .addScheduledTask(() -> {
-                if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
+                if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
                     return;
                 }
                 SextantFinder.TargetObject to = SextantFinder.getByName(pkt.regNameExpected);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -9,6 +9,7 @@
 package shordinger.astralsorcery.common.world.retrogen;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
@@ -56,13 +57,10 @@ public class ChunkVersionController {
             versionBuffer.put(cp, tag.getInteger(AS_VERSION_KEY));
         } else {
             ChunkVersionBuffer buf = WorldCacheManager
-                .getOrLoadData(ev.getWorld(), WorldCacheManager.SaveKey.CHUNK_VERSIONING);
+                .getOrLoadData(ev.world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
             Integer savedVersion = buf.getGenerationVersion(cp);
-            if (savedVersion != null) {
-                versionBuffer.put(cp, savedVersion);
-            } else {
-                versionBuffer.put(cp, -1); // Can't grab any data...
-            }
+            // Can't grab any data...
+            versionBuffer.put(cp, Objects.requireNonNullElse(savedVersion, -1));
         }
     }
 
@@ -71,13 +69,9 @@ public class ChunkVersionController {
         ChunkPos cp = ev.getChunk()
             .getPos();
         Integer buf = versionBuffer.get(cp);
-        if (buf != null) {
-            ev.getData()
-                .setInteger(AS_VERSION_KEY, buf);
-        } else {
-            ev.getData()
-                .setInteger(AS_VERSION_KEY, -1); // So at least we don't have to look it up somewhere else later.
-        }
+        // So at least we don't have to look it up somewhere else later.
+        ev.getData()
+            .setInteger(AS_VERSION_KEY, Objects.requireNonNullElse(buf, -1));
     }
 
 }

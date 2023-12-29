@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -131,7 +131,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
         ItemStack held = player.getHeldItem(handIn);
         if (worldIn.isRemote && ResearchManager.clientProgress.getTierReached()
             .isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) {
@@ -151,7 +151,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
                                 ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof IMultiblockDependantTile) {

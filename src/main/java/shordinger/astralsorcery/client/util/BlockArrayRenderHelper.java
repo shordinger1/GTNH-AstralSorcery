@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,38 +8,39 @@
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
+import com.gtnewhorizons.modularui.api.GlStateManager;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import shordinger.astralsorcery.migration.IBlockState;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -128,7 +129,7 @@ public class BlockArrayRenderHelper {
         VertexFormat blockFormat = DefaultVertexFormats.BLOCK;
 
         TextureHelper.setActiveTextureToAtlasSprite();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         Set<Map.Entry<BlockPos, BakedBlockData>> renderArray = renderAccess.blockRenderData.entrySet();
@@ -145,7 +146,7 @@ public class BlockArrayRenderHelper {
             }
             BakedBlockData renderData = data.getValue();
             if (renderData.tileEntity != null) {
-                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().theWorld);
                 renderData.tileEntity.setPos(offset);
             }
             if (renderData.type != Blocks.AIR) {
@@ -163,7 +164,7 @@ public class BlockArrayRenderHelper {
             }
             BakedBlockData renderData = data.getValue();
             if (renderData.tileEntity != null && renderData.tesr != null) {
-                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().theWorld);
                 renderData.tileEntity.setPos(offset);
                 renderData.tesr
                     .render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
@@ -201,7 +202,7 @@ public class BlockArrayRenderHelper {
                 BlockPos offset = entry.getKey();
                 BlockArray.BlockInformation info = entry.getValue();
                 if (info.type.hasTileEntity(info.state)) {
-                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().world, info.state);
+                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().theWorld, info.state);
                     BlockArray.TileEntityCallback callback = array.getTileCallbacks()
                         .get(offset);
                     if (te != null && callback != null) {
@@ -256,7 +257,7 @@ public class BlockArrayRenderHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public WorldType getWorldType() {
-            return Minecraft.getMinecraft().world.getWorldType();
+            return Minecraft.getMinecraft().theWorld.getWorldType();
         }
 
         @Override

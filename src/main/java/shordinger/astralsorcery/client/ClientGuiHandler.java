@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -93,7 +93,7 @@ public class ClientGuiHandler {
             case JOURNAL:
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:
-                ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
+                ItemStack held = player.getHeldItem();
                 if (!held.isEmpty()) {
                     if (held.getItem() instanceof ItemJournal) {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);

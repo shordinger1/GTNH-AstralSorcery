@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,16 +8,14 @@
 
 package shordinger.astralsorcery.common.util;
 
-import java.util.List;
-import java.util.function.Predicate;
-
+import baubles.api.BaubleType;
+import baubles.api.BaublesApi;
+import com.google.common.collect.Iterables;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import com.google.common.collect.Iterables;
-
-import baubles.api.BaubleType;
-import baubles.api.BaublesApi;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod

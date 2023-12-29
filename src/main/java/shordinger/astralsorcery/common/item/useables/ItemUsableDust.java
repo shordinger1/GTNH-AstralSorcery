@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -57,7 +57,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         DustType type = DustType.fromMeta(stack.getItemDamage());
@@ -69,7 +69,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         DustType type = DustType.fromMeta(stack.getItemDamage());
         if (stack.isEmpty() || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {

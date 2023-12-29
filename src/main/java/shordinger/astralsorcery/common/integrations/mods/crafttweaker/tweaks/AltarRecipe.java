@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,19 +8,15 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.*;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeAttunement;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeConstellation;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeDiscovery;
@@ -29,6 +25,8 @@ import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.Al
 import shordinger.astralsorcery.common.tile.TileAltar;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,13 +19,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
@@ -63,7 +64,9 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -148,7 +151,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     private List<SextantFinder.TargetObject> availableTargets = new LinkedList<>();
     private SextantFinder.TargetObject selectedTarget = null;
     private int selectionOffset;
-    private final EnumHand usedHand;
+    //private final EnumHand usedHand;
 
     private Rectangle.Double rArrowDown, rArrowUp;
     private Map<Rectangle.Double, SextantFinder.TargetObject> selectMap = new HashMap<>();
@@ -158,17 +161,17 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     private boolean grabCursor = false;
 
-    public GuiSextantSelector(ItemStack sextant, EnumHand hand) {
+    public GuiSextantSelector(ItemStack sextant) {
         super(280, 280);
-        this.usedHand = hand;
+        //this.usedHand = hand;
 
         Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-            .getSeedIfPresent(Minecraft.getMinecraft().world);
+            .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
         currSeed.ifPresent(this::setupInitialStars);
 
         Tuple<BlockPos, Integer> target = ItemSextant.getCurrentTargetInformation(sextant);
-        if (target != null && Minecraft.getMinecraft().world != null
-            && target.value == Minecraft.getMinecraft().world.provider.dimensionId) {
+        if (target != null && Minecraft.getMinecraft().theWorld != null
+            && target.value == Minecraft.getMinecraft().theWorld.provider.dimensionId) {
             SextantFinder.TargetObject selectedTarget = ItemSextant.getTarget(sextant);
             if (selectedTarget != null) {
                 this.selectedTarget = selectedTarget;
@@ -193,7 +196,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         int width = guiWidth - 6, height = guiHeight - 6;
         Random rand = new Random(seed);
 
-        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / Config.dayLength);
+        int day = (int) (Minecraft.getMinecraft().theWorld.getWorldTime() / Config.dayLength);
         for (int i = 0; i < Math.abs(day); i++) {
             rand.nextLong(); // Flush
         }
@@ -207,7 +210,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
             return;
         }
 
@@ -215,7 +218,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             if (!this.showupTargets.containsKey(to)) {
                 BlockPos target = UISextantCache.queryLocation(
                     Minecraft.getMinecraft().thePlayer.getPosition(),
-                    Minecraft.getMinecraft().world.provider.dimensionId,
+                    Minecraft.getMinecraft().theWorld.provider.dimensionId,
                     to);
                 if (target != null) {
                     this.showupTargets.put(to, new Tuple<>(target, 0));
@@ -265,7 +268,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         this.rArrowDown = null;
         this.rArrowUp = null;
 
-        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
             return;
         }
         GlStateManager.pushMatrix();
@@ -317,7 +320,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     }
 
     private void drawSkyScreen(float partialTicks, double mouseX, double mouseY) {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         float pitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
         float transparency = 0F;
         if (pitch < -20F) {
@@ -339,7 +342,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
                                       double mouseY) {
         if (usedStars.isEmpty()) {
             Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-                .getSeedIfPresent(Minecraft.getMinecraft().world);
+                .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
             if (!currSeed.isPresent()) {
                 return;
             }
@@ -370,7 +373,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         for (Map.Entry<SextantFinder.TargetObject, Tuple<BlockPos, Integer>> visibleTarget : this.showupTargets
             .entrySet()) {
             float dayMultiplier = ConstellationSkyHandler.getInstance()
-                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             if (dayMultiplier <= 0.1F) {
                 continue;
             }
@@ -460,7 +463,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     private void drawCellEffect(int offsetX, int offsetY, float partialTicks, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random();
 
@@ -473,8 +476,8 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             float brightness = 0.3F
                 + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15)))
                 * 0.6F;
-            brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
-            brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
+            brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * 2 * transparency;
+            brightness *= (1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks));
             GlStateManager.color(brightness, brightness, brightness, brightness);
             int size = r.nextInt(4) + 3;
             drawRect(MathHelper.floor(offsetX + stars.x), MathHelper.floor(offsetY + stars.y), size, size);
@@ -661,8 +664,8 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
                 movementX = f2;
                 movementY = f3 * i;
             }
-            boolean nullify = this.mc.player.rotationPitch <= -89.99F && Math.abs(movementY) == movementY;
-            this.mc.player.turn(movementX, movementY);
+            boolean nullify = this.mc.thePlayer.rotationPitch <= -89.99F && Math.abs(movementY) == movementY;
+            this.mc.thePlayer.turn(movementX, movementY);
             if (nullify) movementY = 0;
             handleHandMovement(MathHelper.floor(movementX), MathHelper.floor(movementY));
         }
@@ -716,7 +719,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         Vector3 uv11 = new Vector3(widthHeight / 2D, widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
         Vector3 uv10 = new Vector3(widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX + uv01.getX(), offsetY + uv01.getY(), zLevel)

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -14,10 +14,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 
 import org.lwjgl.opengl.GL11;
 
@@ -155,7 +155,7 @@ public class EntityFXFacingParticle extends EntityComplexFX {
 
         staticFlareTex.bind();
 
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 

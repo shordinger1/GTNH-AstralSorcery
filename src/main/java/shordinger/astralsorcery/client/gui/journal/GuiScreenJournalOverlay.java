@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -76,7 +76,7 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) {
         super.keyTyped(typedChar, keyCode);
 
         if (Minecraft.getMinecraft().currentScreen != this && Minecraft.getMinecraft().currentScreen != origin) { // Something

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -59,7 +59,7 @@ public class RenderSkybox extends IRenderHandler {
                 if (world.provider.getDimensionType()
                     .getId() == 1) {
                     rg.renderSkyEnd();
-                } else if (Minecraft.getMinecraft().world.provider.isSurfaceWorld()) {
+                } else if (Minecraft.getMinecraft().theWorld.provider.isSurfaceWorld()) {
                     IRenderHandler render = world.provider.getSkyRenderer();
                     world.provider.setSkyRenderer(null);
 

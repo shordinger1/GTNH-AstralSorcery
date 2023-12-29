@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * <p>
+ * Shordinger / GTNH AstralSorcery 2024 <p>
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,22 +8,20 @@
 
 package shordinger.astralsorcery.core.transform;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.ClassPath;
+import org.objectweb.asm.tree.ClassNode;
+import shordinger.astralsorcery.core.ASMTransformationException;
+import shordinger.astralsorcery.core.AstralCore;
+import shordinger.astralsorcery.core.ClassPatch;
+import shordinger.astralsorcery.core.SubClassTransformer;
+
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.objectweb.asm.tree.ClassNode;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
-
-import shordinger.astralsorcery.core.ASMTransformationException;
-import shordinger.astralsorcery.core.AstralCore;
-import shordinger.astralsorcery.core.ClassPatch;
-import shordinger.astralsorcery.core.SubClassTransformer;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -77,7 +77,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
             IBlockState state = Block.getStateById(stateId);
             if (state != Blocks.AIR.getDefaultState()) {
                 ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-                World world = Minecraft.getMinecraft().world;
+                World world = Minecraft.getMinecraft().theWorld;
                 try {
                     if (!state.getBlock()
                         .addDestroyEffects(world, at.toBlockPos(), pm)) {

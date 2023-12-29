@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.client.effect.compound;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 
 import org.lwjgl.opengl.GL11;
 
@@ -30,7 +30,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
     @Override
     public final void render(float pTicks) {
         GlStateManager.pushMatrix();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         getGroup().beginDrawing(vb);
         render(vb, pTicks);
@@ -47,39 +47,27 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         SOLID_COLOR_SPHERE;
 
         public void beginDrawing(BufferBuilder vb) {
-            switch (this) {
-                case SOLID_COLOR_SPHERE:
-                    vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-                    break;
-                default:
-                    break;
+            if (this == ObjectGroup.SOLID_COLOR_SPHERE) {
+                vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
             }
         }
 
         public void prepareGLContext() {
-            switch (this) {
-                case SOLID_COLOR_SPHERE:
-                    GlStateManager.enableBlend();
-                    Blending.DEFAULT.apply();
-                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
-                    GlStateManager.disableTexture2D();
-                    GlStateManager.depthMask(false);
-                    break;
-                default:
-                    break;
+            if (this == ObjectGroup.SOLID_COLOR_SPHERE) {
+                GlStateManager.enableBlend();
+                Blending.DEFAULT.apply();
+                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
+                GlStateManager.disableTexture2D();
+                GlStateManager.depthMask(false);
             }
         }
 
         public void revertGLContext() {
-            switch (this) {
-                case SOLID_COLOR_SPHERE:
-                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-                    GlStateManager.depthMask(true);
-                    GlStateManager.disableBlend();
-                    GlStateManager.enableTexture2D();
-                    break;
-                default:
-                    break;
+            if (this == ObjectGroup.SOLID_COLOR_SPHERE) {
+                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+                GlStateManager.depthMask(true);
+                GlStateManager.disableBlend();
+                GlStateManager.enableTexture2D();
             }
         }
 

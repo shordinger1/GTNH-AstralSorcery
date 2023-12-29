@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,10 +19,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.opengl.GL11;
@@ -38,6 +36,7 @@ import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -125,7 +124,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     private void drawCstBackground() {
         texBlack.bind();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder bb = tes.getBuffer();
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         bb.pos(guiLeft + 15, guiTop + guiHeight - 10, zLevel)

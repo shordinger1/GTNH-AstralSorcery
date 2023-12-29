@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -17,10 +17,10 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.opengl.GL11;
@@ -229,9 +229,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testActivePhases() {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
         WorldSkyHandler handler = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         if (handler == null) return;
         for (MoonPhase phase : this.phases) {
             List<IConstellation> active = handler.getConstellationsForMoonPhase(phase);
@@ -398,7 +398,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void drawCstBackground() {
         texBlack.bind();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder bb = tes.getBuffer();
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         bb.pos(guiLeft + 15, guiTop + 240, zLevel)

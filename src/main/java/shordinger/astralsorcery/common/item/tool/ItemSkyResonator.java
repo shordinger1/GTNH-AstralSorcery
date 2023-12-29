@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -139,7 +139,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side, EnumHand hand,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side,
                                 ItemStack stack) {
         ResonatorUpgrade upgr = getCurrentUpgrade(player, stack);
         if (upgr == ResonatorUpgrade.AREA_SIZE) {
@@ -403,11 +403,11 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         @SideOnly(Side.CLIENT)
         private void playStarlightFieldEffect() {
             if (!ConstellationSkyHandler.getInstance()
-                .getSeedIfPresent(Minecraft.getMinecraft().world)
+                .getSeedIfPresent(Minecraft.getMinecraft().theWorld)
                 .isPresent()) return;
 
             float nightPerc = ConstellationSkyHandler.getInstance()
-                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             if (nightPerc >= 0.05) {
                 Color c = new Color(0, 6, 58);
                 BlockPos center = Minecraft.getMinecraft().thePlayer.getPosition();
@@ -418,11 +418,11 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                 for (int xx = -30; xx <= 30; xx++) {
                     for (int zz = -30; zz <= 30; zz++) {
 
-                        BlockPos top = Minecraft.getMinecraft().world
+                        BlockPos top = Minecraft.getMinecraft().theWorld
                             .getTopSolidOrLiquidBlock(pos.setPos(offsetX + xx, 0, offsetZ + zz));
                         // Can be force unwrapped since statement 2nd Line prevents non-present values.
                         Float opF = SkyCollectionHelper
-                            .getSkyNoiseDistributionClient(Minecraft.getMinecraft().world, top)
+                            .getSkyNoiseDistributionClient(Minecraft.getMinecraft().theWorld, top)
                             .get();
 
                         float fPerc = (float) Math.pow((opF - 0.4F) * 1.65F, 2);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -17,9 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -158,7 +158,7 @@ public class WavefrontObject {
 
     @SideOnly(Side.CLIENT)
     public void renderAll(boolean expectTexture) {
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
 
         VertexFormat vf;
@@ -174,13 +174,13 @@ public class WavefrontObject {
         }
         tessellateAll(vb);
 
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
     }
 
     @SideOnly(Side.CLIENT)
     public void renderOnly(boolean expectTexture, String... groupNames) {
-        BufferBuilder vb = Tessellator.getInstance()
+        BufferBuilder vb = Tessellator.instance
             .getBuffer();
 
         VertexFormat vf;
@@ -203,7 +203,7 @@ public class WavefrontObject {
             }
         }
 
-        Tessellator.getInstance()
+        Tessellator.instance
             .draw();
     }
 

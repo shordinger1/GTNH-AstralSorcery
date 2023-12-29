@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,15 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
+import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 
 import java.util.UUID;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
-
-import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
-import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
 
 /**
  * This class is part of the Astral Sorcery Mod

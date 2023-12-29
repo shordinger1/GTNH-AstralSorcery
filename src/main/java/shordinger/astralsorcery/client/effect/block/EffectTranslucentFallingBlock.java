@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -9,10 +9,9 @@
 package shordinger.astralsorcery.client.effect.block;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Biomes;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -214,10 +213,10 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         GL11.glRotated(rotation.getZ(), 0, 0, 1);
         GL11.glTranslated(-0.5, -0.5, -0.5);
 
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
+        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().theWorld.getWorldType());
         RenderingUtils.renderBlockSafely(world, BlockPos.ORIGIN, this.blockState, vb);
         tes.draw();
 

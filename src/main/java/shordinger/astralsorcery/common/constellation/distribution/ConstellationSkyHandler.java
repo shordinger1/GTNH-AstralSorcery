@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -71,7 +71,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     private void handleClientTick() {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w != null) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.dimensionId);
             if (handle == null) {

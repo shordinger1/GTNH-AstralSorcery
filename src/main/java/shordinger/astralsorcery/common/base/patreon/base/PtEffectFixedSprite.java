@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -70,8 +70,8 @@ public class PtEffectFixedSprite extends PatreonEffectHelper.PatreonEffect {
                 .setAlphaMultiplier(1F);
             spr.setRefreshFunc(
                 () -> !owningPlayer.isDead && Minecraft.getMinecraft().thePlayer != null
-                    && Minecraft.getMinecraft().world != null
-                    && Minecraft.getMinecraft().world.provider != null);
+                    && Minecraft.getMinecraft().theWorld != null
+                    && Minecraft.getMinecraft().theWorld.provider != null);
             spr.setScale(10F);
             activeSprite = spr;
         }

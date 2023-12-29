@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -170,7 +170,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player,
                                     EnumFacing facing, float hitX, float hitY, float hitZ) {
         MachineType type = state.getValue(MACHINE_TYPE);
         if (type == MachineType.TELESCOPE) {

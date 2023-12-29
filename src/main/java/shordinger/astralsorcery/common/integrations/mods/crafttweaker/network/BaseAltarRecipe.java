@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,13 +8,9 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
 import com.google.common.collect.Lists;
-
 import io.netty.buffer.ByteBuf;
+import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -27,6 +23,8 @@ import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.migration.MathHelper;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

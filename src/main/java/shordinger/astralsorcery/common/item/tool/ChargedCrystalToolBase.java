@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -71,7 +71,7 @@ public interface ChargedCrystalToolBase {
         if (shouldRevert(stack)) {
             ItemStack inert = getAsInertVariant(stack);
             removeChargeRevertCounter(inert);
-            player.setHeldItem(EnumHand.MAIN_HAND, inert);
+            player.setHeldItem(, inert);
             return false;
         }
         return true;

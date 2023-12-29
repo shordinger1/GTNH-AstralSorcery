@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -18,14 +18,10 @@ import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -65,7 +61,10 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.TextComponentString;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -254,10 +253,10 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             .getWorldHandler(guiOwner.getWorld());
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random(
-            guiOwner.getWorld()
-                .getSeed() * 31 + lastTracked * 31
+            guiOwner.getWorldObj()
+                .getSeed() * 31 + lastTracked * 31L
                 + rotation.ordinal());
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
         /*
@@ -305,8 +304,8 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 float innerOffsetY = starSize + r.nextInt(MathHelper.floor(guiHeight - starSize));
                 float brightness = 0.3F + (RenderConstellation
                     .stdFlicker(ClientScheduler.getClientTick(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
-                brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
-                brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
+                brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) * 2;
+                brightness *= (1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks));
                 GL11.glColor4f(brightness, brightness, brightness, brightness);
                 drawRectDetailed(
                     guiLeft + innerOffsetX - starSize,
@@ -322,7 +321,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 currentInformation.informationMap.get(rotation).informations.clear();
                 for (Map.Entry<Point, IConstellation> entry : info.constellations.entrySet()) {
 
-                    float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+                    float rainBr = 1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
                     float widthHeight = SkyConstellationDistribution.constellationWH;
 
                     Point offset = entry.getKey();
@@ -406,7 +405,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
     private void drawLine(Point start, Point end, RenderConstellation.BrightnessFunction func, float linebreadth,
                           boolean applyFunc) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         float brightness;
@@ -415,7 +414,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         } else {
             brightness = 1F;
         }
-        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
         if (starBr <= 0.0F) {
             return;
         }
@@ -580,7 +579,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
     }
 
     private boolean canStartDrawing() {
-        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F;
+        return Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) >= 0.35F;
     }
 
     private void clearLines() {

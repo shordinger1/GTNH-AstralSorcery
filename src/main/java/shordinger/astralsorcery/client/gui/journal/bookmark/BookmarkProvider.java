@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -30,7 +30,7 @@ public class BookmarkProvider {
     private final Provider<GuiScreen> provider;
     private final int index;
     private final String unlocName;
-    private Provider<Boolean> canSeeTest;
+    private final Provider<Boolean> canSeeTest;
 
     public BookmarkProvider(String unlocName, int bookmarkIndex, Provider<GuiScreen> guiProvider,
                             Provider<Boolean> canSeeTest) {

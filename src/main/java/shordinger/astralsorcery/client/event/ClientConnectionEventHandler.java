@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -10,11 +10,11 @@ package shordinger.astralsorcery.client.event;
 
 import java.util.HashMap;
 
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -33,7 +33,6 @@ import shordinger.astralsorcery.common.constellation.distribution.ConstellationS
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
-import shordinger.astralsorcery.common.data.*;
 import shordinger.astralsorcery.common.data.DataLightBlockEndpoints;
 import shordinger.astralsorcery.common.data.DataLightConnections;
 import shordinger.astralsorcery.common.data.DataPatreonFlares;

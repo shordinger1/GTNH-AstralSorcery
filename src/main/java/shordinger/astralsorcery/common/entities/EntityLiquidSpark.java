@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -307,7 +307,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(at, tas);
         cube.setTextureSubSizePercentage(1F / 16F)
             .setMaxAge(20 + rand.nextInt(20));
-        cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+        cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, at.toBlockPos());
         cube.setColorHandler(
             cb -> new Color(
                 stack.getFluid()

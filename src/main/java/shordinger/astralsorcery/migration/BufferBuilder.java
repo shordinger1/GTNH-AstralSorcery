@@ -446,7 +446,7 @@ public class BufferBuilder {
         ++this.vertexFormatIndex;
         this.vertexFormatIndex %= this.vertexFormat.getElementCount();
         this.vertexFormatElement = this.vertexFormat.getElement(this.vertexFormatIndex);
-        if (this.vertexFormatElement.getUsage() == EnumUsage.PADDING) {
+        if (this.vertexFormatElement.getUsage() == VertexFormatElement.EnumUsage.PADDING) {
             this.nextVertexFormatIndex();
         }
 
@@ -548,7 +548,7 @@ public class BufferBuilder {
     }
 
     @SideOnly(Side.CLIENT)
-    public class State {
+    public static class State {
 
         private final int[] stateRawBuffer;
         private final VertexFormat stateVertexFormat;
@@ -677,11 +677,12 @@ class VertexFormatElement {
         private final String displayName;
 
         public void preDraw(VertexFormat format, int element, int stride, ByteBuffer buffer) {
-            ForgeHooksClient.preDraw(this, format, element, stride, buffer);
+            //ForgeHooksClient.onPreRenderWorld();
+            //ForgeHooksClient.preDraw(this, format, element, stride, buffer);
         }
 
         public void postDraw(VertexFormat format, int element, int stride, ByteBuffer buffer) {
-            ForgeHooksClient.postDraw(this, format, element, stride, buffer);
+            //ForgeHooksClient.postDraw(this, format, element, stride, buffer);
         }
 
         private EnumUsage(String displayNameIn) {

@@ -1,11 +1,7 @@
 package shordinger.astralsorcery.migration;
 
-import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
-
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -16,8 +12,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.annotation.Nullable;
+import java.util.List;
+
+import static shordinger.astralsorcery.migration.ITooltipFlag.TooltipFlags.trans;
 
 public abstract class AstralItem extends Item {
 
@@ -74,28 +72,3 @@ public abstract class AstralItem extends Item {
     public abstract List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation);
 }
 
-public interface ITooltipFlag {
-
-    boolean isAdvanced();
-
-    @SideOnly(Side.CLIENT)
-    public static enum TooltipFlags implements ITooltipFlag {
-
-        NORMAL(false),
-        ADVANCED(true);
-
-        final boolean isAdvanced;
-
-        private TooltipFlags(boolean advanced) {
-            this.isAdvanced = advanced;
-        }
-
-        public boolean isAdvanced() {
-            return this.isAdvanced;
-        }
-
-        public static TooltipFlags trans(boolean flag) {
-            return flag ? ADVANCED : NORMAL;
-        }
-    }
-}

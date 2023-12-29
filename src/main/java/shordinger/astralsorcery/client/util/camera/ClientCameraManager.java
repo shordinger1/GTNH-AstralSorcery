@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -208,7 +208,7 @@ public class ClientCameraManager implements ITickHandler {
 
             EntityClientReplacement repl = new EntityClientReplacement();
             repl.readFromNBT(Minecraft.getMinecraft().thePlayer.writeToNBT(new NBTTagCompound()));
-            Minecraft.getMinecraft().world.spawnEntity(repl);
+            Minecraft.getMinecraft().theWorld.spawnEntity(repl);
             this.clientEntity = repl;
 
             entity.setAsRenderViewEntity();
@@ -218,8 +218,8 @@ public class ClientCameraManager implements ITickHandler {
         public void onStopTransforming(float pTicks) {
             super.onStopTransforming(pTicks);
 
-            if (Minecraft.getMinecraft().world != null) {
-                Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
+            if (Minecraft.getMinecraft().theWorld != null) {
+                Minecraft.getMinecraft().theWorld.removeEntity(this.clientEntity);
             }
 
             if (Minecraft.getMinecraft().thePlayer != null) {
@@ -235,7 +235,7 @@ public class ClientCameraManager implements ITickHandler {
 
             RenderingUtils.unsafe_resetCamera();
 
-            if (Minecraft.getMinecraft().world != null) {
+            if (Minecraft.getMinecraft().theWorld != null) {
                 entity.onStopTransforming();
             }
         }
@@ -284,7 +284,7 @@ public class ClientCameraManager implements ITickHandler {
         public EntityRenderViewReplacement() {
             super(
                 Minecraft.getMinecraft(),
-                Minecraft.getMinecraft().world,
+                Minecraft.getMinecraft().theWorld,
                 Minecraft.getMinecraft().thePlayer.connection,
                 Minecraft.getMinecraft().thePlayer.getStatFileWriter(),
                 Minecraft.getMinecraft().thePlayer.getRecipeBook());
@@ -377,7 +377,7 @@ public class ClientCameraManager implements ITickHandler {
     public static class EntityClientReplacement extends AbstractClientPlayer {
 
         public EntityClientReplacement() {
-            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().thePlayer.getGameProfile());
+            super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().thePlayer.getGameProfile());
         }
 
         @SideOnly(Side.CLIENT)

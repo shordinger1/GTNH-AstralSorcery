@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -136,7 +136,7 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
         for (int i = 0; i < split.size(); i++) {
             String s = split.get(i);
 
-            double offsetLeft = width / 2 - (fr.getStringWidth(s) * 1.4) / 2;
+            double offsetLeft = (double) width / 2 - (fr.getStringWidth(s) * 1.4) / 2;
             GlStateManager.pushMatrix();
             GlStateManager.translate(offsetLeft, i * step, 0);
             GlStateManager.scale(1.4, 1.4, 1.4);

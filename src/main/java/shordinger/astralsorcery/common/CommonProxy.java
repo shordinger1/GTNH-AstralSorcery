@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -158,7 +158,7 @@ public class CommonProxy implements IGuiHandler {
     public static InternalRegistryPrimer registryPrimer;
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
-    private CommonScheduler commonScheduler = new CommonScheduler();
+    private final CommonScheduler commonScheduler = new CommonScheduler();
 
     public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
@@ -498,7 +498,7 @@ public class CommonProxy implements IGuiHandler {
         player.openGui(AstralSorcery.instance, guiId.ordinal(), world, x, y, z);
     }
 
-    public static enum EnumGuiId {
+    public enum EnumGuiId {
 
         TELESCOPE(TileTelescope.class),
         HAND_TELESCOPE,

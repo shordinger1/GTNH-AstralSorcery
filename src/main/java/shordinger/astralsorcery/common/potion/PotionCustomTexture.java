@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -12,9 +12,9 @@ import java.awt.*;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -51,7 +51,7 @@ public abstract class PotionCustomTexture extends Potion {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         double wh = 18;
         double offsetX = 6;
         double offsetY = 7;
@@ -88,7 +88,7 @@ public abstract class PotionCustomTexture extends Potion {
     @Override
     @SideOnly(Side.CLIENT)
     public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         double wh = 18;
         double offsetX = 3;
         double offsetY = 3;

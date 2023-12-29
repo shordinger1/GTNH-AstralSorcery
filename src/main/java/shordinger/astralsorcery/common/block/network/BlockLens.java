@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -147,7 +147,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-                                            float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+                                            float hitZ, int meta, EntityLivingBase placer) {
         return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
     }
 

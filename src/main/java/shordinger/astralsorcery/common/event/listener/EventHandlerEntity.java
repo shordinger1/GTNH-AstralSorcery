@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -371,7 +371,7 @@ public class EventHandlerEntity {
     @SideOnly(Side.CLIENT)
     public static void playDiscidiaStackAttackEffects(PktParticleEvent pkt) {
         Vector3 at = pkt.getVec();
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         EntityLivingBase found = null;
         if (w != null) {
             EntityLivingBase e = EntityUtils.selectClosest(

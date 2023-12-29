@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
@@ -150,82 +152,17 @@ public enum TextFormatting {
     }
 }
 
-public class TextComponentString extends TextComponentBase {
-
-    private final String text;
-
-    public TextComponentString(String msg) {
-        this.text = msg;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public String getUnformattedComponentText() {
-        return this.text;
-    }
-
-    @Override
-    public IChatComponent setChatStyle(ChatStyle style) {
-        return setStyle(style);
-    }
-
-    @Override
-    public ChatStyle getChatStyle() {
-        return null;
-    }
-
-    @Override
-    public String getUnformattedTextForChat() {
-        return null;
-    }
-
-    public TextComponentString createCopy() {
-        TextComponentString textcomponentstring = new TextComponentString(this.text);
-        textcomponentstring.setStyle(
-            this.getStyle()
-                .createShallowCopy());
-
-        for (IChatComponent itextcomponent : this.getSiblings()) {
-            textcomponentstring.appendSibling(itextcomponent.createCopy());
-        }
-
-        return textcomponentstring;
-    }
-
-    public boolean equals(Object p_equals_1_) {
-        if (this == p_equals_1_) {
-            return true;
-        } else if (!(p_equals_1_ instanceof TextComponentString textcomponentstring)) {
-            return false;
-        } else {
-            return this.text.equals(textcomponentstring.getText()) && super.equals(p_equals_1_);
-        }
-    }
-
-    public String toString() {
-        return "TextComponent{text='" + this.text
-            + '\''
-            + ", siblings="
-            + this.siblings
-            + ", style="
-            + this.getStyle()
-            + '}';
-    }
-}
-
 public abstract class TextComponentBase implements IChatComponent {
 
     protected List<IChatComponent> siblings = Lists.newArrayList();
-    private ChatStyle style;
+    private ChatStyle ChatStyle;
 
     public TextComponentBase() {
     }
 
     public IChatComponent appendSibling(IChatComponent component) {
-        component.getStyle()
-            .setParentStyle(this.getStyle());
+        component.getChatStyle()
+            .setParentStyle(this.getChatStyle());
         this.siblings.add(component);
         return this;
     }
@@ -238,33 +175,33 @@ public abstract class TextComponentBase implements IChatComponent {
         return this.appendSibling(new TextComponentString(text));
     }
 
-    public IChatComponent setStyle(Style style) {
-        this.style = style;
+    public IChatComponent setChatStyle(ChatStyle ChatStyle) {
+        this.ChatStyle = ChatStyle;
 
         for (IChatComponent itextcomponent : this.siblings) {
-            itextcomponent.getStyle()
-                .setParentStyle(this.getStyle());
+            itextcomponent.getChatStyle()
+                .setParentStyle(this.getChatStyle());
         }
 
         return this;
     }
 
-    public Style getStyle() {
-        if (this.style == null) {
-            this.style = new Style();
+    public ChatStyle getChatStyle() {
+        if (this.ChatStyle == null) {
+            this.ChatStyle = new ChatStyle();
 
             for (IChatComponent itextcomponent : this.siblings) {
-                itextcomponent.getStyle()
-                    .setParentStyle(this.style);
+                itextcomponent.getChatStyle()
+                    .setParentStyle(this.ChatStyle);
             }
         }
 
-        return this.style;
+        return this.ChatStyle;
     }
 
     public Iterator<IChatComponent> iterator() {
         return Iterators
-            .concat(Iterators.forArray(new TextComponentBase[]{this}), createDeepCopyIterator(this.siblings));
+            .concat(Iterators.forArray(this), createDeepCopyIterator(this.siblings));
     }
 
     public final String getUnformattedText() {
@@ -284,7 +221,7 @@ public abstract class TextComponentBase implements IChatComponent {
             String s = ((IChatComponent) iChatComponent).getUnformattedComponentText();
             if (!s.isEmpty()) {
                 stringbuilder.append(
-                    ((IChatComponent) iChatComponent).getStyle()
+                    ((IChatComponent) iChatComponent).getChatStyle()
                         .getFormattingCode());
                 stringbuilder.append(s);
                 stringbuilder.append(TextFormatting.RESET);
@@ -306,8 +243,8 @@ public abstract class TextComponentBase implements IChatComponent {
 
             public IChatComponent apply(@Nullable IChatComponent p_apply_1_) {
                 IChatComponent itextcomponent = p_apply_1_.createCopy();
-                itextcomponent.setStyle(
-                    itextcomponent.getStyle()
+                itextcomponent.setChatStyle(
+                    itextcomponent.getChatStyle()
                         .createDeepCopy());
                 return itextcomponent;
             }
@@ -322,16 +259,17 @@ public abstract class TextComponentBase implements IChatComponent {
             return false;
         } else {
             TextComponentBase textcomponentbase = (TextComponentBase) p_equals_1_;
-            return this.siblings.equals(textcomponentbase.siblings) && this.getStyle()
-                .equals(textcomponentbase.getStyle());
+            return this.siblings.equals(textcomponentbase.siblings) && this.getChatStyle()
+                .equals(textcomponentbase.getChatStyle());
         }
     }
 
     public int hashCode() {
-        return 31 * this.style.hashCode() + this.siblings.hashCode();
+        return 31 * this.ChatStyle.hashCode() + this.siblings.hashCode();
     }
 
     public String toString() {
-        return "BaseComponent{style=" + this.style + ", siblings=" + this.siblings + '}';
+        return "BaseComponent{ChatStyle=" + this.ChatStyle + ", siblings=" + this.siblings + '}';
     }
 }
+

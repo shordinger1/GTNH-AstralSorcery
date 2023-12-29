@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,20 +8,16 @@
 
 package shordinger.astralsorcery.client.gui.perk;
 
-import java.util.Objects;
-import java.util.TreeMap;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.client.util.BufferBatch;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.common.util.MiscUtils;
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * This class is part of the Astral Sorcery Mod

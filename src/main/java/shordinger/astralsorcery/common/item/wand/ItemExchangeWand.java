@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -253,7 +253,7 @@ public class ItemExchangeWand extends ItemBlockStorage
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
+    public void onRenderWhileInHand(ItemStack stack, float pTicks) {
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
         if (storedStates.isEmpty()) return;
         World world = Minecraft.getMinecraft().theWorld;
@@ -367,7 +367,7 @@ public class ItemExchangeWand extends ItemBlockStorage
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos origin, EnumHand hand,
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos origin,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return EnumActionResult.SUCCESS;
         ItemStack stack = playerIn.getHeldItem(hand);

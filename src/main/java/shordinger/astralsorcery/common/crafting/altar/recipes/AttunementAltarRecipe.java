@@ -1,14 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
-
-import java.util.Random;
 
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -27,6 +25,8 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.OreDictAlias;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

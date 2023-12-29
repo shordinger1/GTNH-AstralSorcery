@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -17,12 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
@@ -47,6 +43,7 @@ import shordinger.astralsorcery.common.registry.RegistryBookLookups;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -212,9 +209,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                         tooltip.addAll(
                             stack.getTooltip(
                                 Minecraft.getMinecraft().thePlayer,
-                                Minecraft.getMinecraft().gameSettings.advancedItemTooltips
-                                    ? ITooltipFlag.TooltipFlags.ADVANCED
-                                    : ITooltipFlag.TooltipFlags.NORMAL));
+                                Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
                     } catch (Throwable tr) {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }
@@ -233,9 +228,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                     tooltip.addAll(
                         stack.getTooltip(
                             Minecraft.getMinecraft().thePlayer,
-                            Minecraft.getMinecraft().gameSettings.advancedItemTooltips
-                                ? ITooltipFlag.TooltipFlags.ADVANCED
-                                : ITooltipFlag.TooltipFlags.NORMAL));
+                            Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
                 } catch (Throwable tr) {
                     tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                 }
@@ -247,12 +240,15 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 }
                 if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                     tooltip.add("");
-                    tooltip.add(
-                        TextFormatting.DARK_GRAY + I18n.format(
-                            "misc.recipename",
-                            recipe.getNativeRecipe()
-                                .getRegistryName()
-                                .toString()));
+                    if (recipe.getNativeRecipe()
+                        .getRegistryName() != null) {
+                        tooltip.add(
+                            TextFormatting.DARK_GRAY + I18n.format(
+                                "misc.recipename",
+                                recipe.getNativeRecipe()
+                                    .getRegistryName()
+                                    .toString()));
+                    }
                     tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.ctrlcopy"));
                 }
             }

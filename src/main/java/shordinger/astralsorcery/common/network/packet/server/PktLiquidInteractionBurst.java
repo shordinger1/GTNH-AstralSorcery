@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -72,7 +72,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
     @SideOnly(Side.CLIENT)
     private void playClientEffect(PktLiquidInteractionBurst message) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
 
         TextureAtlasSprite tas1 = RenderingUtils.tryGetFlowingTextureOfFluidStack(message.comp1);
 
@@ -80,7 +80,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas1);
             cube.setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     message.comp1.getFluid()
@@ -99,7 +99,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas2);
             cube.setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     message.comp2.getFluid()

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,10 +8,9 @@
 
 package shordinger.astralsorcery.client.util.resource;
 
-import net.minecraft.util.ResourceLocation;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.util.obj.WavefrontObject;
 

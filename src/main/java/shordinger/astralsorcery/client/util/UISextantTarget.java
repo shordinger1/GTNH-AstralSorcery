@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -11,7 +11,7 @@ package shordinger.astralsorcery.client.util;
 import java.awt.*;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -43,11 +43,11 @@ public class UISextantTarget {
 
     public static void renderTargets(float pTicks) {
         EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (pl == null || w == null) {
             return;
         }
-        ItemStack held = pl.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack held = pl.getHeldItem();
         Tuple<BlockPos, Integer> info;
         SextantFinder.TargetObject target;
 
@@ -59,7 +59,7 @@ public class UISextantTarget {
             renderStar(info.key, target, pTicks);
         }
 
-        held = pl.getHeldItem(EnumHand.OFF_HAND);
+        held = pl.getHeldItem();
         if (!held.isEmpty() && held.getItem() instanceof ItemSextant
             && (info = ItemSextant.getCurrentTargetInformation(held)) != null
             && (target = ItemSextant.getTarget(held)) != null
@@ -70,7 +70,7 @@ public class UISextantTarget {
     }
 
     private static void renderStar(BlockPos actPos, SextantFinder.TargetObject target, float pTicks) {
-        if (Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().theWorld == null) {
             return;
         }
         Entity e = Minecraft.getMinecraft()
@@ -82,7 +82,7 @@ public class UISextantTarget {
             return;
         }
         float dayMultiplier = ConstellationSkyHandler.getInstance()
-            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
         if (dayMultiplier <= 0.1F) {
             return;
         }

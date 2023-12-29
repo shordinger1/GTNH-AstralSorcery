@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -13,7 +13,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
@@ -53,7 +53,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         vertexBufferFormat.addElement(
             new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3));
 
-        Tessellator tessellator = Tessellator.getInstance();
+        Tessellator tessellator = Tessellator.instance;
         BufferBuilder vb = tessellator.getBuffer();
 
         setupStars(vb);
@@ -79,7 +79,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             glSkyList2 = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(glSkyList2, GL11.GL_COMPILE);
             setupSkyVertices(vb, -16.0F, true);
-            Tessellator.getInstance()
+            Tessellator.instance
                 .draw();
             GL11.glEndList();
         }
@@ -103,7 +103,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             glSkyList = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(glSkyList, GL11.GL_COMPILE);
             setupSkyVertices(vb, 16.0F, false);
-            Tessellator.getInstance()
+            Tessellator.instance
                 .draw();
             GL11.glEndList();
         }
@@ -128,7 +128,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             GlStateManager.pushMatrix();
             GL11.glNewList(starGLCallList, GL11.GL_COMPILE);
             setupStarVertices(vb);
-            Tessellator.getInstance()
+            Tessellator.instance
                 .draw();
             GL11.glEndList();
             GlStateManager.popMatrix();
@@ -227,7 +227,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
     private static void renderDefaultSkybox(float partialTicks) {
         GlStateManager.disableTexture2D();
-        BlockPos vec3 = Minecraft.getMinecraft().world.getSkyColor(
+        BlockPos vec3 = Minecraft.getMinecraft().theWorld.getSkyColor(
             Minecraft.getMinecraft()
                 .getRenderViewEntity(),
             partialTicks);
@@ -245,7 +245,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
 
         GlStateManager.color(f, f1, f2);
-        Tessellator tessellator = Tessellator.getInstance();
+        Tessellator tessellator = Tessellator.instance;
         BufferBuilder vb = tessellator.getBuffer();
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
@@ -267,8 +267,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.disableStandardItemLighting();
-        float[] afloat = Minecraft.getMinecraft().world.provider
-            .calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
+        float[] afloat = Minecraft.getMinecraft().theWorld.provider
+            .calcSunriseSunsetColors(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks), partialTicks);
 
         if (afloat != null) {
             GlStateManager.disableTexture2D();
@@ -276,7 +276,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             GlStateManager.pushMatrix();
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(
-                MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
+                MathHelper.sin(Minecraft.getMinecraft().theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
                     : 0.0F,
                 0.0F,
                 0.0F,
@@ -318,11 +318,11 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.enableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
         GlStateManager.pushMatrix();
-        float f16 = 1.0F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+        float f16 = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, f16);
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager
-            .rotate(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+            .rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
         float f17 = 30.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -341,7 +341,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         tessellator.draw();
         f17 = 20.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
-        int i = Minecraft.getMinecraft().world.getMoonPhase();
+        int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
         float f22 = (float) (k) / 4.0F;
@@ -363,7 +363,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             .endVertex();
         tessellator.draw();
         GlStateManager.disableTexture2D();
-        float f15 = Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * f16;
+        float f15 = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * f16;
 
         if (f15 > 0.0F) {
             GlStateManager.color(f15, f15, f15, f15);
@@ -388,7 +388,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
         double d0 = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).y
-            - Minecraft.getMinecraft().world.getHorizon();
+            - Minecraft.getMinecraft().theWorld.getHorizon();
 
         if (d0 < 0.0D) {
             GlStateManager.pushMatrix();
@@ -473,7 +473,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             tessellator.draw();
         }
 
-        if (Minecraft.getMinecraft().world.provider.isSkyColored()) {
+        if (Minecraft.getMinecraft().theWorld.provider.isSkyColored()) {
             GlStateManager.color(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F);
         } else {
             GlStateManager.color(f, f1, f2);

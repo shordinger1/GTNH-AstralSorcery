@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 
 import org.lwjgl.opengl.GL11;
 
@@ -47,7 +47,7 @@ public class RenderConstellation {
     @SideOnly(Side.CLIENT)
     public static void renderConstellation(IConstellation c,
                                            ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
-        Tessellator tessellator = Tessellator.getInstance();
+        Tessellator tessellator = Tessellator.instance;
         BufferBuilder vb = tessellator.getBuffer();
 
         Vector3 renderOffset = renderPos.offset;
@@ -154,7 +154,7 @@ public class RenderConstellation {
     public static void renderConstellationIntoWorldFlat(IConstellation c, Color rC, Vector3 offsetPos, double scale,
                                                         double lineBreadth, float br) {
         GlStateManager.pushMatrix();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         double s = 1D / ((double) IConstellation.STAR_GRID_SIZE) * scale;
@@ -308,7 +308,7 @@ public class RenderConstellation {
     public static void renderConstellationIntoWorld(IConstellation c, Color rC, Vector3 offsetPos, double lineBreadth,
                                                     BrightnessFunction func) {
         GL11.glPushMatrix();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
 
         Vector3 dirV = new Vector3(0, 0, 1);
@@ -434,7 +434,7 @@ public class RenderConstellation {
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX,
                                                                           int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown,
                                                                           boolean applyStarBrightness) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         double ulength = ((double) width) / IConstellation.STAR_GRID_SIZE;
         double vlength = ((double) height) / IConstellation.STAR_GRID_SIZE;
@@ -454,7 +454,7 @@ public class RenderConstellation {
                 for (StarConnection sc : c.getStarConnections()) {
                     float brightness = func.getBrightness();
                     if (applyStarBrightness) {
-                        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+                        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
                         if (starBr <= 0.23F) {
                             continue;
                         }
@@ -515,7 +515,7 @@ public class RenderConstellation {
 
             float brightness = func.getBrightness();
             if (applyStarBrightness) {
-                float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+                float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
                 if (starBr <= 0.23F) {
                     continue;
                 }

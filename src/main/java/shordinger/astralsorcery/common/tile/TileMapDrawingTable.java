@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -371,10 +371,10 @@ public class TileMapDrawingTable extends TileSkybound {
 
     @SideOnly(Side.CLIENT)
     public static void burnParchmentEffects(PktParticleEvent pktParticleEvent) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
 
         Vector3 offset = pktParticleEvent.getVec();
-        Minecraft.getMinecraft().world.playSound(
+        Minecraft.getMinecraft().theWorld.playSound(
             offset.getX(),
             offset.getY(),
             offset.getZ(),
@@ -388,7 +388,7 @@ public class TileMapDrawingTable extends TileSkybound {
         for (int i = 0; i < 50; i++) {
             Vector3 at = offset.clone()
                 .add(rand.nextFloat() * 1.4, 0, rand.nextFloat() * 1.4);
-            Minecraft.getMinecraft().world.spawnParticle(
+            Minecraft.getMinecraft().theWorld.spawnParticle(
                 EnumParticleTypes.FLAME,
                 at.getX(),
                 at.getY(),

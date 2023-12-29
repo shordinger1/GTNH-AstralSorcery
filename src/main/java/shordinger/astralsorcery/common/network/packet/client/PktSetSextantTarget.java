@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -35,26 +36,26 @@ import shordinger.astralsorcery.migration.BlockPos;
 public class PktSetSextantTarget implements IMessage, IMessageHandler<PktSetSextantTarget, IMessage> {
 
     private String target;
-    private EnumHand hand;
+    //private EnumHand hand;
 
     public PktSetSextantTarget() {
     }
 
-    public PktSetSextantTarget(SextantFinder.TargetObject target, EnumHand hand) {
+    public PktSetSextantTarget(SextantFinder.TargetObject target) {
         this.target = target.getRegistryName();
-        this.hand = hand;
+        //this.hand = hand;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.target = ByteBufUtils.readString(buf);
-        this.hand = EnumHand.values()[buf.readInt()];
+        //this.hand = EnumHand.values()[buf.readInt()];
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeString(buf, this.target);
-        buf.writeInt(hand.ordinal());
+        //buf.writeInt(hand.ordinal());
     }
 
     @Override

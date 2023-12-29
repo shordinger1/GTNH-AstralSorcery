@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -81,7 +81,7 @@ public abstract class ItemBlockStorage extends Item {
     }
 
     public static void tryClearContainerFor(EntityPlayer player) {
-        ItemStack used = player.getHeldItem(EnumHand.MAIN_HAND);
+        ItemStack used = player.getHeldItem();
         if (!used.isEmpty() && used.getItem() instanceof ItemBlockStorage) {
             NBTHelper.getPersistentData(used)
                 .removeTag("storedStates");

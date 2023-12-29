@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -13,13 +13,14 @@ import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
+import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 
 import org.lwjgl.input.Mouse;
 
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
+import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,7 +76,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) {
         super.keyTyped(typedChar, keyCode);
 
         if (closeWithInventoryKey && keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
@@ -90,7 +91,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         if (mouseButton == 1 && !handleRightClickClose(mouseX, mouseY)) {
@@ -125,7 +126,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, float uFrom,
                                     float vFrom, float uWidth, float vWidth) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)
@@ -146,7 +147,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     protected void drawTexturedRect(double offsetX, double offsetY, double width, double height,
                                     AbstractRenderableTexture tex) {
         Point.Double off = tex.getUVOffset();
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)
@@ -166,7 +167,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawTexturedRectAtCurrentPos(double width, double height, float uFrom, float vFrom, float uWidth,
                                                 float vWidth) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0, 0 + height, zLevel)
@@ -185,7 +186,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     }
 
     protected void drawTexturedRectAtCurrentPos(double width, double height) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0, 0 + height, zLevel)
@@ -204,7 +205,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     }
 
     protected void drawRectDetailed(float offsetX, float offsetY, float width, float height) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)
@@ -223,7 +224,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     }
 
     protected void drawRect(int offsetX, int offsetY, int width, int height) {
-        Tessellator tes = Tessellator.getInstance();
+        Tessellator tes = Tessellator.instance;
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX, offsetY + height, zLevel)

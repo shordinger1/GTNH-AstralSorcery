@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -19,6 +19,7 @@ import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,11 +54,10 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
         if (!isApplicableWorld(world)) return false;
         if (!isApplicableBiome(world, pos)) return false;
-        if (!canSpawnShrineCorner(world, pos.add(-4, 0, 4))) return false;
-        if (!canSpawnShrineCorner(world, pos.add(4, 0, -4))) return false;
-        if (!canSpawnShrineCorner(world, pos.add(4, 0, 4))) return false;
-        if (!canSpawnShrineCorner(world, pos.add(-4, 0, -4))) return false;
-        return true;
+        if (canSpawnShrineCorner(world, pos.add(-4, 0, 4))) return false;
+        if (canSpawnShrineCorner(world, pos.add(4, 0, -4))) return false;
+        if (canSpawnShrineCorner(world, pos.add(4, 0, 4))) return false;
+        return !canSpawnShrineCorner(world, pos.add(-4, 0, -4));
     }
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
@@ -67,11 +67,11 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
             && Math.abs(dY - pos.getY()) <= heightThreshold
             && isApplicableBiome(world, pos)) {
             IBlockState state = WorldHelper.getBlockState(world, new BlockPos(pos.getX(), dY - 1, pos.getZ()));
-            return !state.getMaterial()
-                .isLiquid() && state.getMaterial()
+            return state.getMaterial()
+                .isLiquid() || !state.getMaterial()
                 .isOpaque();
         }
-        return false;
+        return true;
     }
 
     private boolean isApplicableWorld(World world) {
@@ -95,7 +95,10 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes()
-                .contains(t)) applicable = true;
+                .contains(t)) {
+                applicable = true;
+                break;
+            }
         }
         return applicable;
     }

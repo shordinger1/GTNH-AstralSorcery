@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -41,7 +41,7 @@ public class PatreonFlareManagerClient implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        World clWorld = Minecraft.getMinecraft().world;
+        World clWorld = Minecraft.getMinecraft().theWorld;
         EntityPlayer thisPlayer = Minecraft.getMinecraft().thePlayer;
         if (clWorld == null || thisPlayer == null) return;
         int clDim = clWorld.provider.dimensionId;

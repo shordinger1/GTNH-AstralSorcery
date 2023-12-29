@@ -1,6 +1,6 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- *
+ * Shordinger / GTNH AstralSorcery 2024
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
@@ -12,9 +12,10 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.opengl.GL11;
@@ -36,6 +37,8 @@ import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BufferBuilder;
+import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -251,7 +254,7 @@ public class GuiProgressionClusterRenderer {
 
         RenderItem ri = Minecraft.getMinecraft()
             .getRenderItem();
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         switch (node.getRenderType()) {
             case ITEMSTACK:
@@ -413,7 +416,7 @@ public class GuiProgressionClusterRenderer {
         hy += renderOffsetY;
         brightness *= renderLoopBrFactor;
         GL11.glColor4f(brightness, brightness, brightness, 0.5F * renderLoopBrFactor);
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
         vb.pos(lx, ly, zLevel)
@@ -431,7 +434,7 @@ public class GuiProgressionClusterRenderer {
 
     private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
         GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
-        Tessellator t = Tessellator.getInstance();
+        Tessellator t = Tessellator.instance;
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(renderOffsetX + xAdd, renderOffsetY + yAdd + zoomedWH, zLevel)
