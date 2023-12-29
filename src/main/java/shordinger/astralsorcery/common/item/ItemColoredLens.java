@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,9 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -49,6 +46,7 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import shordinger.astralsorcery.migration.NonNullList;
 
 /**
@@ -173,7 +171,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
         public void onEntityInBeam(Vector3 beamOrigin, Vector3 beamTarget, Entity entity, float percStrength) {
             switch (this) {
-                case FIRE:
+                case FIRE -> {
                     if (itemRand.nextFloat() > percStrength) return;
                     if (entity instanceof EntityItem) {
                         ItemStack current = ((EntityItem) entity).getItem();
@@ -197,8 +195,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     } else if (entity instanceof EntityLivingBase) {
                         entity.setFire(1);
                     }
-                    break;
-                case DAMAGE:
+                }
+                case DAMAGE -> {
                     if (!(entity instanceof EntityLivingBase)) return;
                     if (itemRand.nextFloat() > percStrength) return;
                     if (entity instanceof EntityPlayer && entity.getServer() != null
@@ -206,13 +204,13 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         .isPVPEnabled())
                         return;
                     DamageUtil.attackEntityFrom(entity, CommonProxy.dmgSourceStellar, 6.5F);
-                    break;
-                case REGEN:
+                }
+                case REGEN -> {
                     if (!(entity instanceof EntityLivingBase)) return;
                     if (itemRand.nextFloat() > percStrength) return;
                     ((EntityLivingBase) entity).heal(3.5F);
-                    break;
-                case PUSH:
+                }
+                case PUSH -> {
                     if (entity instanceof EntityPlayer || itemRand.nextFloat() > percStrength) return;
                     Vector3 dir = beamTarget.clone()
                         .subtract(beamOrigin)
@@ -221,15 +219,15 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     entity.motionX = Math.min(1F, entity.motionZ + dir.getX());
                     entity.motionY = Math.min(1F, entity.motionY + dir.getY());
                     entity.motionZ = Math.min(1F, entity.motionZ + dir.getZ());
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
 
         public void onBlockOccupyingBeam(World world, BlockPos at, IBlockState state, float percStrength) {
             switch (this) {
-                case BREAK:
+                case BREAK -> {
                     float hardness = state.getBlockHardness(world, at);
                     if (hardness < 0) return;
                     hardness *= 1.5F;
@@ -237,8 +235,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, at);
                     pkt.data = Block.getStateId(state);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at, 16));
-                    break;
-                case GROW:
+                }
+                case GROW -> {
                     if (world.rand.nextFloat() > percStrength) return;
                     CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, at);
                     if (plant != null) {
@@ -248,16 +246,14 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                             at);
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
-                    break;
-                case FIRE:
+                }
+                case FIRE -> {
                     if (world.rand.nextFloat() > percStrength) return;
-
                     ItemStack blockStack = ItemUtils.createBlockStack(state);
                     if (blockStack.isEmpty()) return;
                     ItemStack result = FurnaceRecipes.instance()
                         .getSmeltingResult(blockStack);
                     if (result.isEmpty()) return;
-
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, at);
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
                     if (world.rand.nextInt(20) != 0) {
@@ -267,7 +263,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     if (resState != null) {
                         world.setBlockState(at, resState);
                     }
-                    break;
+                }
                 /*
                  * case HARVEST:
                  * if(world.rand.nextFloat() > percStrength) return;
@@ -286,8 +282,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                  * }
                  * break;
                  */
-                default:
-                    break;
+                default -> {
+                }
             }
         }
 
