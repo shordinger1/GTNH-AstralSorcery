@@ -13,14 +13,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.astralsorcery.migration.Capability;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,18 +57,18 @@ public class TileInventoryBase extends TileEntityTick {
         return handle;
     }
 
-    private boolean hasHandlerForSide(EnumFacing facing) {
+    private boolean hasHandlerForSide(ForgeDirection facing) {
         return facing == null || applicableSides.contains(facing);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, ForgeDirection facing) {
         return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
             : super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, ForgeDirection facing) {
         if (hasHandlerForSide(facing)) {
             if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handle);
@@ -106,6 +106,11 @@ public class TileInventoryBase extends TileEntityTick {
     }
 
     protected void onInventoryChanged(int slotChanged) {
+    }
+
+    @Override
+    public void tick() {
+
     }
 
     public static class ItemHandlerTileFiltered extends ItemHandlerTile {

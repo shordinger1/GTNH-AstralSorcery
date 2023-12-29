@@ -182,7 +182,7 @@ public final class ItemHandle {
         Iterator<ItemStack> iterator = applicable.iterator();
         while (iterator.hasNext()) {
             ItemStack stack = iterator.next();
-            if (stack.isEmpty()) continue;
+            if (stack.stackSize==0) continue;
             Item i = stack.getItem();
             if (!ignoreGatingRequirement && i instanceof ItemGatedVisibility) {
                 if (!((ItemGatedVisibility) i).isSupposedToSeeInRender(stack)) {
@@ -205,7 +205,7 @@ public final class ItemHandle {
             default -> {
                 List<Ingredient> ingredients = new ArrayList<>();
                 for (ItemStack stack : this.applicableItems) {
-                    if (!stack.isEmpty()) {
+                    if (stack.stackSize!=0) {
                         Ingredient i = new HandleIngredient(stack);
                         if (!i.equals(Ingredient.EMPTY)) {
                             ingredients.add(i);
@@ -232,7 +232,7 @@ public final class ItemHandle {
     }
 
     public boolean matchCrafting(ItemStack stack) {
-        if (stack.isEmpty()) return false;
+        if (stack.stackSize==0) return false;
 
         switch (handleType) {
             case OREDICT -> {

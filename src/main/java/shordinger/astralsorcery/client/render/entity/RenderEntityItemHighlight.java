@@ -48,7 +48,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
         GlStateManager.pushMatrix();
         ItemStack stack = entity.getItem();
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             EntityItem ei = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
             ei.age = entity.getAge();
             ei.hoverStart = entity.hoverStart;

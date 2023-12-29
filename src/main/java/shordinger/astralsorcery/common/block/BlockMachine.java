@@ -242,7 +242,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                         } else {
                             ItemStack stack = player.getHeldItem(hand);
 
-                            if (!stack.isEmpty()) {
+                            if (stack.stackSize!=0) {
                                 GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
                                 if (recipe != null) {
                                     ItemStack toSet = stack.copy();

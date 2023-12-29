@@ -65,9 +65,7 @@ public class DataLightConnections extends AbstractData {
                 BlockPos start = c.getStart();
                 List<BlockPos> ends = posBufferDim.get(start);
                 if (ends == null) continue;
-                if (ends.contains(c.getEnd())) {
-                    ends.remove(c.getEnd());
-                }
+                ends.remove(c.getEnd());
                 if (ends.isEmpty()) posBufferDim.remove(start);
             }
         }
@@ -86,11 +84,7 @@ public class DataLightConnections extends AbstractData {
 
     private void setDimClearFlag(int dim) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dim);
-            if (ch == null) {
-                ch = new LinkedList<>();
-                serverChangeBuffer.put(dim, ch);
-            }
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dim, k -> new LinkedList<>());
             ch.clear();
             ch.add(new Tuple<>(null, false)); // null, false -> clear
         }
@@ -98,11 +92,7 @@ public class DataLightConnections extends AbstractData {
 
     private void notifyConnectionAdd(int dimid, List<TransmissionChain.LightConnection> added) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dimid);
-            if (ch == null) {
-                ch = new LinkedList<>();
-                serverChangeBuffer.put(dimid, ch);
-            }
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
             for (TransmissionChain.LightConnection l : added) {
                 ch.add(new Tuple<>(l, true));
             }
@@ -111,11 +101,7 @@ public class DataLightConnections extends AbstractData {
 
     private void notifyConnectionRemoval(int dimid, List<TransmissionChain.LightConnection> removal) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dimid);
-            if (ch == null) {
-                ch = new LinkedList<>();
-                serverChangeBuffer.put(dimid, ch);
-            }
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
             for (TransmissionChain.LightConnection l : removal) {
                 ch.add(new Tuple<>(l, false));
             }
@@ -148,7 +134,7 @@ public class DataLightConnections extends AbstractData {
                 }
             }
 
-            compound.setTag("" + dimId, dataList);
+            compound.setTag(String.valueOf(dimId), dataList);
         }
     }
 
@@ -181,7 +167,7 @@ public class DataLightConnections extends AbstractData {
                         list.appendTag(cmp);
                     }
 
-                    compound.setTag("" + dimId, list);
+                    compound.setTag(String.valueOf(dimId), list);
                 }
             }
             serverChangeBuffer.clear();
@@ -199,9 +185,9 @@ public class DataLightConnections extends AbstractData {
 
         clientReceivingData = true;
         try {
-            for (String dimStr : ((DataLightConnections) serverData).clientReadBuffer.getKeySet()) {
-                int dimId = Integer.parseInt(dimStr);
-                NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList(dimStr, 10);
+            for (Object dimStr : ((DataLightConnections) serverData).clientReadBuffer.func_150296_c()) {
+                int dimId = Integer.parseInt((String) dimStr);
+                NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList((String) dimStr, 10);
                 Map<BlockPos, List<BlockPos>> connectionMap = clientPosBuffer.get(dimId);
                 if (connectionMap == null) {
                     connectionMap = new ConcurrentHashMap<>();

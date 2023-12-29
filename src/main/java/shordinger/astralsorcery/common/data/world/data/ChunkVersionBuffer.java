@@ -54,7 +54,7 @@ public class ChunkVersionBuffer extends CachedWorldData {
     public void readFromNBT(NBTTagCompound compound) {
         chunkVersions.clear();
 
-        for (String key : compound.getKeySet()) {
+        for (String key : compound.func_150296_c()) {
             String[] chunkCoords = key.split(";");
             ChunkPos pos = new ChunkPos(Integer.parseInt(chunkCoords[0]), Integer.parseInt(chunkCoords[1]));
             chunkVersions.put(pos, compound.getInteger(key));

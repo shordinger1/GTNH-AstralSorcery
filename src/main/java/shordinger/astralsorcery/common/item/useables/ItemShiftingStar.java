@@ -252,7 +252,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
     }
 
     public static void setAttunement(ItemStack stack, IMajorConstellation cst) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemShiftingStar)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemShiftingStar)) {
             return;
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
@@ -261,7 +261,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
 
     @Nullable
     public static IMajorConstellation getAttunement(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemShiftingStar)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemShiftingStar)) {
             return null;
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);

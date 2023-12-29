@@ -136,7 +136,7 @@ public class ByteBufUtils {
     }
 
     public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {
-        boolean defined = !stack.isEmpty();
+        boolean defined = stack.stackSize!=0;
         byteBuf.writeBoolean(defined);
         if (defined) {
             NBTTagCompound tag = new NBTTagCompound();

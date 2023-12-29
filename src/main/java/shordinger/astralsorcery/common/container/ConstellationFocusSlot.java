@@ -35,7 +35,7 @@ public class ConstellationFocusSlot extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationFocus
+        return stack.stackSize!=0 && stack.getItem() instanceof ItemConstellationFocus
             && ((ItemConstellationFocus) stack.getItem()).getFocusConstellation(stack) != null;
     }
 

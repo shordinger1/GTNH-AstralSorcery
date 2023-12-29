@@ -159,9 +159,9 @@ public class DataLightBlockEndpoints extends AbstractData {
     public void handleIncomingData(AbstractData serverData) {
         if (!(serverData instanceof DataLightBlockEndpoints)) return;
 
-        for (String dimStr : ((DataLightBlockEndpoints) serverData).clientReadBuffer.getKeySet()) {
-            int dimId = Integer.parseInt(dimStr);
-            NBTTagList list = ((DataLightBlockEndpoints) serverData).clientReadBuffer.getTagList(dimStr, 10);
+        for (Object dimStr : ((DataLightBlockEndpoints) serverData).clientReadBuffer.func_150296_c()) {
+            int dimId = Integer.parseInt((String) dimStr);
+            NBTTagList list = ((DataLightBlockEndpoints) serverData).clientReadBuffer.getTagList((String) dimStr, 10);
             List<BlockPos> positions = clientPositions.computeIfAbsent(dimId, k -> new LinkedList<>());
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound connection = list.getCompoundTagAt(i);

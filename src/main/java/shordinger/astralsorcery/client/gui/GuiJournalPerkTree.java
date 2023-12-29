@@ -299,7 +299,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             AbstractPerk sMenuPerk = (AbstractPerk) socketMenu;
             Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(
                 Minecraft.getMinecraft().thePlayer,
-                s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
+                s -> s.stackSize!=0 && s.getItem() instanceof ItemPerkGem
                     && !ItemPerkGem.getModifiers(s)
                     .isEmpty());
             if (found.isEmpty()) { // Close then.

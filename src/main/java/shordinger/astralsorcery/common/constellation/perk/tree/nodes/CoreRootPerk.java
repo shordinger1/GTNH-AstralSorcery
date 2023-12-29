@@ -56,6 +56,7 @@ public class CoreRootPerk extends KeyPerk {
                     if (player != null) {
                         return "Granted perk point " + token + " to " + player.getDisplayName();
                     }
+                    return null;
                 });
             }
         }

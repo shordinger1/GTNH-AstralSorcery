@@ -57,7 +57,7 @@ public abstract class ItemBlockStorage extends Item {
         Map<IBlockState, ItemStack> map = new LinkedHashMap<>();
         for (IBlockState state : blockStates) {
             ItemStack stack = ItemUtils.createBlockStack(state);
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 map.put(state, stack);
             }
         }

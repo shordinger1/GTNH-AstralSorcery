@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.config.Configuration;
 
 import cpw.mods.fml.relauncher.Side;
@@ -85,6 +85,7 @@ import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -223,7 +224,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                         || EntityUtils.selectItemStack(traitAcceptor)
                         .apply(activeEntity))
                         || !ConstellationSkyHandler.getInstance()
-                        .isNight(world)) {
+                        .isNight(worldObj)) {
                         setAttunementState(0, null);
                     } else {
                         // Sync up with the clients so everyone "has the same effects"
@@ -244,18 +245,20 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                             if (EntityUtils.selectItemStack(crystalAcceptor)
                                 .apply(activeEntity) && activeFound instanceof IWeakConstellation) {
                                 ItemStack current = ((EntityItem) activeEntity).getItem();
-                                Item tuned = ((ItemRockCrystalBase) current.getItem()).getTunedItemVariant();
+                                Item tuned = ((ItemRockCrystalBase) Objects.requireNonNull(current.getItem())).getTunedItemVariant();
                                 tunedStack = new ItemStack(tuned);
                                 ItemTunedCrystalBase
                                     .applyMainConstellation(tunedStack, (IWeakConstellation) activeFound);
                                 CrystalProperties.applyCrystalProperties(
                                     tunedStack,
-                                    CrystalProperties.getCrystalProperties(current));
+                                    Objects.requireNonNull(CrystalProperties.getCrystalProperties(current)));
                             } else if (EntityUtils.selectItemStack(traitAcceptor)
                                 .apply(activeEntity) && activeFound instanceof IMinorConstellation) {
-                                ItemStack current = ((EntityItem) activeEntity).getItem();
+                                ItemStack current = ((EntityItem) activeEntity).getEntityItem();
                                 tunedStack = ItemUtils.copyStackWithSize(current, 1);
-                                ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
+                                if (tunedStack != null) {
+                                    ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
+                                }
                             } else {
                                 activeEntity.setDead();
                                 setAttunementState(0, null);
@@ -265,7 +268,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                             String thrower = ((EntityItem) activeEntity).getThrower();
                             if (thrower != null && !thrower.isEmpty()) {
                                 EntityPlayer player = this.world.getPlayerEntityByName(thrower);
-                                if (player != null && player instanceof EntityPlayerMP) {
+                                if (player instanceof EntityPlayerMP) {
                                     AdvancementTriggers.ATTUNE_CRYSTAL.trigger((EntityPlayerMP) player, activeFound);
                                 }
                             }
@@ -273,17 +276,17 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                             activeEntity.setDead();
 
                             ItemUtils.dropItem(
-                                world,
+                                worldObj,
                                 crystalHoverPos.getX(),
                                 crystalHoverPos.getY(),
                                 crystalHoverPos.getZ(),
                                 tunedStack);
                             setAttunementState(0, null);
                             EntityFlare.spawnAmbient(
-                                world,
+                                worldObj,
                                 new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             EntityFlare.spawnAmbient(
-                                world,
+                                worldObj,
                                 new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             SoundHelper.playSoundAround(Sounds.craftFinish, world, pos, 2.5F, 1.6F);
                         }
@@ -317,7 +320,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
         if (activeFound instanceof IMajorConstellation) {
             Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
-            List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+            List players = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, box);
             if (!players.isEmpty()) {
                 EntityPlayerMP pl = EntityUtils
                     .selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
@@ -366,8 +369,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         for (int xx = -7; xx <= 7; xx++) {
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
-                if (MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
-                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
+                if (MiscUtils.isChunkLoaded(worldObj, new ChunkPos(other))) {
+                    boolean see = MiscUtils.canSeeSky(worldObj, other, true, false);
                     unloadCache.put(other, see);
                     if (!see) {
                         seesSky = false;
@@ -422,7 +425,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
             if (pos.equals(getPos())) continue;
-            IBlockState state = WorldHelper.getBlockState(world, pos);
+            IBlockState state = WorldHelper.getBlockState(worldObj, pos);
             if (!state.getBlock()
                 .equals(BlocksAS.attunementRelay)
                 && !(pos.subtract(this.pos)
@@ -433,12 +436,12 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             }
             if (state.getBlock()
                 .equals(BlocksAS.attunementRelay)) {
-                TileAttunementRelay tar = MiscUtils.getTileAt(world, pos, TileAttunementRelay.class, true);
+                TileAttunementRelay tar = MiscUtils.getTileAt(worldObj, pos, TileAttunementRelay.class, true);
                 if (tar != null) {
                     ItemStack in = tar.getInventoryHandler()
                         .getStackInSlot(0);
                     if (!in.isEmpty()) {
-                        ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, in);
+                        ItemUtils.dropItemNaturally(worldObj, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, in);
                         tar.getInventoryHandler()
                             .setStackInSlot(0, null);
                     }
@@ -453,7 +456,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     private void searchForConstellation() {
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(world);
+            .getWorldHandler(worldObj);
         if (wsh == null) return;
         IConstellation match = null;
         for (IConstellation attuneable : ConstellationRegistry.getAllConstellations()) {
@@ -461,7 +464,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             boolean valid = true;
             for (BlockPos pos : positions) {
                 if (pos.equals(getPos())) continue;
-                IBlockState state = WorldHelper.getBlockState(world, pos);
+                IBlockState state = WorldHelper.getBlockState(worldObj, pos);
                 if (!state.getBlock()
                     .equals(BlocksAS.attunementRelay)
                     && !(pos.subtract(this.pos)
@@ -522,17 +525,16 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         this.playerAttunementWaitTick = -1;
         this.mode = mode;
         switch (mode) {
-            case 0:
+            case 0 -> {
                 this.entityIdActive = -1;
                 this.activeEntity = null;
-                break;
-            case 1:
-            case 2:
+            }
+            case 1, 2 -> {
                 this.entityIdActive = trigger.getEntityId();
                 this.activeEntity = trigger;
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
         markForUpdate();
     }
@@ -699,7 +701,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                         0.8F,
                         () -> isInvalid() || activeFound == null
                             || !ConstellationSkyHandler.getInstance()
-                            .isNight(world)
+                            .isNight(worldObj)
                             || Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
                 }
             }
@@ -786,7 +788,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                     PacketChannel.CHANNEL.sendToServer(
                         new PktAttuneConstellation(
                             (IMajorConstellation) activeFound,
-                            world.provider.dimensionId,
+                            worldObj.provider.dimensionId,
                             getPos()));
                     SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }
@@ -999,7 +1001,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
         if (runTick >= 225) {
             if (spriteCrystalAttunement == null) {
-                Entity ee = world.getEntityByID(entityIdActive);
+                Entity ee = worldObj.getEntityByID(entityIdActive);
                 if (ee != null) {
                     Vector3 posV = Vector3.atEntityCorner(ee);
                     EntityFXFacingSprite sprite = EntityFXFacingSprite
@@ -1019,7 +1021,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                     });
                     sprite.setPositionUpdateFunction((fx, v, m) -> {
                         if (isInvalid() || mode != 2 || entityIdActive == -1) return v;
-                        Entity ent = world.getEntityByID(entityIdActive);
+                        Entity ent = worldObj.getEntityByID(entityIdActive);
                         if (ent == null || ent.isDead) return v;
                         return Vector3.atEntityCorner(ent)
                             .addY(ent.height * 2);
@@ -1191,13 +1193,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         this.doesSeeSky = compound.getBoolean("skState");
 
         IConstellation prev = activeFound;
-        IConstellation found = IConstellation.readFromNBT(compound);
-        if (found == null) {
-            activeFound = null;
-        } else {
-            activeFound = found;
-        }
-        if (prev == null ? activeFound != null : !prev.equals(activeFound)) {
+        activeFound = IConstellation.readFromNBT(compound);
+        if (!Objects.equals(prev, activeFound)) {
             starSprites.clear();
         }
     }

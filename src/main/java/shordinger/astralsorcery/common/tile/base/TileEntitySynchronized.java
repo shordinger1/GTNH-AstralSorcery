@@ -10,12 +10,14 @@ package shordinger.astralsorcery.common.tile.base;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
+import shordinger.astralsorcery.migration.BlockPos;
 import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,6 +29,12 @@ import shordinger.astralsorcery.migration.IBlockState;
 public abstract class TileEntitySynchronized extends TileEntity {
 
     protected static final Random rand = new Random();
+    public BlockPos pos;
+
+
+    public BlockPos getPos() {
+        return pos;
+    }
 
     public final void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
@@ -46,11 +54,11 @@ public abstract class TileEntitySynchronized extends TileEntity {
     public void readSaveNBT(NBTTagCompound compound) {
     }
 
-    public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
+    public final void writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
         writeCustomNBT(compound);
         writeSaveNBT(compound);
-        return compound;
+        //return compound;
     }
 
     // Both Network & Chunk-saving
@@ -83,7 +91,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     public IBlockState getBlockState() {
-        return this.WorldHelper.getBlockState(world, this.pos);
+        return WorldHelper.getBlockState(worldObj, this.pos);
     }
 
     public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
@@ -93,7 +101,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     public void markForUpdate() {
-        IBlockState thisState = WorldHelper.getBlockState(world, pos);
+        IBlockState thisState = WorldHelper.getBlockState(worldObj, pos);
         world.notifyBlockUpdate(pos, thisState, thisState, 3);
         markDirty();
     }

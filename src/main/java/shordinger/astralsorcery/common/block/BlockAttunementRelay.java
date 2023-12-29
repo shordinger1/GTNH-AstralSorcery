@@ -160,7 +160,7 @@ public class BlockAttunementRelay extends BlockContainer {
                                     EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack held = playerIn.getHeldItem(hand);
-            if (!held.isEmpty()) {
+            if (!held.stackSize==0) {
                 TileAttunementRelay tar = MiscUtils.getTileAt(worldIn, pos, TileAttunementRelay.class, true);
                 if (tar != null) {
                     TileInventoryBase.ItemHandlerTile mod = tar.getInventoryHandler();

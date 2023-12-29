@@ -38,6 +38,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -49,8 +50,12 @@ import shordinger.astralsorcery.common.util.data.NonDuplicateArrayList;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.astralsorcery.migration.EnumDyeColor;
 import shordinger.astralsorcery.migration.IBlockState;
 import shordinger.astralsorcery.migration.IProperty;
+import shordinger.astralsorcery.migration.TextFormatting;
+import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -291,10 +296,10 @@ public class MiscUtils {
         return !ev.isCanceled();
     }
 
-    public static boolean canPlayerPlaceBlockPos(EntityPlayer player, EnumHand withHand, IBlockState tryPlace,
-                                                 BlockPos pos, EnumFacing againstSide) {
-        BlockSnapshot snapshot = new BlockSnapshot(player.getEntityWorld(), pos, tryPlace);
-        BlockEvent.PlaceEvent ev = ForgeEventFactory.onPlayerBlockPlace(player, snapshot, againstSide, withHand);
+    public static boolean canPlayerPlaceBlockPos(EntityPlayer player, Block tryPlace,
+                                                 BlockPos pos, ForgeDirection againstSide) {
+        BlockSnapshot snapshot = new BlockSnapshot(player.worldObj, pos.getX(), pos.getY(), pos.getZ(),tryPlace,player.getEntityWorld().getBlockMetadata(pos.getX(), pos.getY(), pos.getZ()));
+        BlockEvent.PlaceEvent ev = ForgeEventFactory.onPlayerBlockPlace(player, snapshot, againstSide);
         return !ev.isCanceled();
     }
 
@@ -304,31 +309,22 @@ public class MiscUtils {
     }
 
     @Nullable
-    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search) {
+    public static  ItemStack getMainOrOffHand(EntityLivingBase entity, Item search) {
         return getMainOrOffHand(entity, search, null);
     }
 
     @Nullable
-    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search,
+    public static ItemStack getMainOrOffHand(EntityLivingBase entity, Item search,
                                                               @Nullable Predicate<ItemStack> acceptorFnc) {
-        EnumHand hand = ;
-        ItemStack held = entity.getHeldItem(hand);
-        if (held.isEmpty() || !search.getClass()
+        ItemStack held = entity.getHeldItem();
+        if (held.stackSize==0 || !search.getClass()
             .isAssignableFrom(
                 held.getItem()
                     .getClass())
             || (acceptorFnc != null && !acceptorFnc.test(held))) {
-            hand = ;
-            held = entity.getHeldItem(hand);
+            held = entity.getHeldItem();
         }
-        if (held.isEmpty() || !search.getClass()
-            .isAssignableFrom(
-                held.getItem()
-                    .getClass())
-            || (acceptorFnc != null && !acceptorFnc.test(held))) {
-            return null;
-        }
-        return new Tuple<>(hand, held);
+        return held;
     }
 
     @Nonnull
@@ -340,42 +336,22 @@ public class MiscUtils {
 
     @Nonnull
     public static TextFormatting textFormattingForDye(EnumDyeColor color) {
-        switch (color) {
-            case WHITE:
-                return TextFormatting.WHITE;
-            case ORANGE:
-                return TextFormatting.GOLD;
-            case MAGENTA:
-                return TextFormatting.DARK_PURPLE;
-            case LIGHT_BLUE:
-                return TextFormatting.DARK_AQUA;
-            case YELLOW:
-                return TextFormatting.YELLOW;
-            case LIME:
-                return TextFormatting.GREEN;
-            case PINK:
-                return TextFormatting.LIGHT_PURPLE;
-            case GRAY:
-                return TextFormatting.DARK_GRAY;
-            case SILVER:
-                return TextFormatting.GRAY;
-            case CYAN:
-                return TextFormatting.BLUE;
-            case PURPLE:
-                return TextFormatting.DARK_PURPLE;
-            case BLUE:
-                return TextFormatting.DARK_BLUE;
-            case BROWN:
-                return TextFormatting.GOLD;
-            case GREEN:
-                return TextFormatting.DARK_GREEN;
-            case RED:
-                return TextFormatting.DARK_RED;
-            case BLACK:
-                return TextFormatting.DARK_GRAY; // Black is unreadable. fck that.
-            default:
-                return TextFormatting.WHITE;
-        }
+        return switch (color) {
+            case ORANGE, BROWN -> TextFormatting.GOLD;
+            case MAGENTA, PURPLE -> TextFormatting.DARK_PURPLE;
+            case LIGHT_BLUE -> TextFormatting.DARK_AQUA;
+            case YELLOW -> TextFormatting.YELLOW;
+            case LIME -> TextFormatting.GREEN;
+            case PINK -> TextFormatting.LIGHT_PURPLE;
+            case GRAY -> TextFormatting.DARK_GRAY;
+            case SILVER -> TextFormatting.GRAY;
+            case CYAN -> TextFormatting.BLUE;
+            case BLUE -> TextFormatting.DARK_BLUE;
+            case GREEN -> TextFormatting.DARK_GREEN;
+            case RED -> TextFormatting.DARK_RED;
+            case BLACK -> TextFormatting.DARK_GRAY; // Black is unreadable. fck that.
+            default -> TextFormatting.WHITE;
+        };
     }
 
     public static String capitalizeFirst(String str) {
@@ -397,7 +373,7 @@ public class MiscUtils {
 
         String tool = state.getBlock()
             .getHarvestTool(state);
-        if (stack.isEmpty() || tool == null) {
+        if (stack.stackSize == 0 || tool == null) {
             return state.getMaterial()
                 .isToolNotRequired() || stack.canHarvestBlock(state);
         }
@@ -588,11 +564,12 @@ public class MiscUtils {
     }
 
     public static boolean isChunkLoaded(World world, BlockPos pos) {
-        return world.isBlockLoaded(pos);
+        //return world.isBlockLoaded(pos);
+        return world.blockExists(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public static boolean isChunkLoaded(World world, ChunkPos pos) {
-        return world.isBlockLoaded(new BlockPos(pos.x * 16, 0, pos.z * 16));
+        return world.blockExists(pos.x * 16, 0, pos.z * 16);
     }
 
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {

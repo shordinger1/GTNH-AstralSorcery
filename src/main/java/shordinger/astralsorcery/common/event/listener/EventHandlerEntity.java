@@ -149,11 +149,11 @@ public class EventHandlerEntity {
             if (entitySource != null) {
                 WandAugment foundAugment = null;
                 ItemStack stack = entitySource.getHeldItemMainhand();
-                if (!stack.isEmpty() && stack.getItem() instanceof ItemWand) {
+                if (stack.stackSize!=0 && stack.getItem() instanceof ItemWand) {
                     foundAugment = ItemWand.getAugment(stack);
                 }
                 stack = entitySource.getHeldItemOffhand();
-                if (foundAugment == null && !stack.isEmpty() && stack.getItem() instanceof ItemWand) {
+                if (foundAugment == null && stack.stackSize!=0 && stack.getItem() instanceof ItemWand) {
                     foundAugment = ItemWand.getAugment(stack);
                 }
                 if (foundAugment != null && foundAugment.equals(WandAugment.DISCIDIA)) {
@@ -222,7 +222,7 @@ public class EventHandlerEntity {
                 if (lootTableRef != null) {
                     for (int i = 0; i < ampl; i++) {
                         for (ItemStack stack : lootTableRef.generateLootForPools(rand, builder.build())) {
-                            if (stack.isEmpty()) continue;
+                            if (stack.stackSize==0) continue;
 
                             EntityItem ei = new EntityItem(ws, el.posX, el.posY, el.posZ, stack);
                             ei.setDefaultPickupDelay();

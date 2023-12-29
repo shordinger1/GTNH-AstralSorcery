@@ -371,7 +371,7 @@ public class ItemExchangeWand extends ItemBlockStorage
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return EnumActionResult.SUCCESS;
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.isEmpty()) return EnumActionResult.SUCCESS;
+        if (stack.stackSize==0) return EnumActionResult.SUCCESS;
 
         if (playerIn.isSneaking()) {
             tryStoreBlock(stack, world, origin);

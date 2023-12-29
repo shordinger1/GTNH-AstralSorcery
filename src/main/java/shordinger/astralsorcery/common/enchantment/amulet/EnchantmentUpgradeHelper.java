@@ -191,7 +191,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     public static boolean isItemBlacklisted(ItemStack stack) {
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                 return true; // We're not gonna apply enchantments to items used for querying matches
             }
@@ -267,7 +267,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     private static void removeAmuletOwner(ItemStack stack) {
-        if (stack.isEmpty() || !stack.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
+        if (stack.stackSize==0 || !stack.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
             return;
         }
         AmuletHolderCapability cap = stack.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
@@ -325,7 +325,7 @@ public class EnchantmentUpgradeHelper {
         if (BaublesHelper.doesPlayerWearBauble(
             player,
             BaubleType.AMULET,
-            (stack) -> !stack.isEmpty() && stack.getItem() instanceof ItemEnchantmentAmulet)) {
+            (stack) -> stack.stackSize!=0 && stack.getItem() instanceof ItemEnchantmentAmulet)) {
             ItemStack stack = BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
             return new Tuple<>(stack, player);
         }

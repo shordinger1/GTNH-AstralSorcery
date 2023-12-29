@@ -124,7 +124,7 @@ public class KeyVoidTrash extends KeyPerk {
         Iterator<ItemStack> iterator = drops.iterator();
         while (iterator.hasNext()) {
             ItemStack stack = iterator.next();
-            if (stack.isEmpty()) {
+            if (stack.stackSize==0) {
                 continue;
             }
             if (MiscUtils.matchesAny(stack, dropFilter)) {

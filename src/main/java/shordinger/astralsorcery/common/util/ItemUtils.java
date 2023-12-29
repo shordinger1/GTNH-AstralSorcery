@@ -97,7 +97,7 @@ public class ItemUtils {
         List<ItemStack> out = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (!s.isEmpty() && s.getItem() == i) out.add(copyStackWithSize(s, s.stackSize));
+            if (s.stackSize!=0 && s.getItem() == i) out.add(copyStackWithSize(s, s.stackSize));
         }
         return out;
     }

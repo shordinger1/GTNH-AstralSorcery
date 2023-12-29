@@ -76,7 +76,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (!stack.isEmpty() && stack.getItem() instanceof ItemColoredLens) {
+        if (stack.stackSize!=0 && stack.getItem() instanceof ItemColoredLens) {
             int dmg = stack.getItemDamage();
             if (dmg >= 0 && dmg < ColorType.values().length) {
                 tooltip.add(

@@ -56,7 +56,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
     private void setupRegistry() {
         List<ItemStack> collect = collectNecessaryItemStacks();
         for (ItemStack stack : collect) {
-            if (stack.isEmpty()) continue;
+            if (stack.stackSize==0) continue;
             resolveColor(stack);
         }
     }
@@ -77,7 +77,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
 
     @Nullable
     public static Color getDominantColorFromItemStack(ItemStack stack) {
-        if (stack.isEmpty()) return null;
+        if (stack.stackSize==0) return null;
         int dmg = getMeta(stack);
         Color c = instance.colorizationMap.get(stack.getItem(), dmg);
         if (c == null) {
@@ -151,7 +151,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
     }
 
     private int getOverlayColor(ItemStack stack) {
-        if (stack.isEmpty()) return -1;
+        if (stack.stackSize==0) return -1;
         if (stack.getItem() instanceof ItemBlock) {
             IBlockState state = ItemUtils.createBlockState(stack);
             if (state == null) return -1;

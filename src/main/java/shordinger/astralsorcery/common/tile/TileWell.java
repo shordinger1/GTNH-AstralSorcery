@@ -108,7 +108,7 @@ public class TileWell extends TileReceiverBaseInventory {
             }
 
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 if (!worldObj.isAirBlock(getPos().up())) {
                     breakCatalyst();
                 } else {
@@ -155,7 +155,7 @@ public class TileWell extends TileReceiverBaseInventory {
             }
         } else {
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 running = WellLiquefaction.getLiquefactionEntry(stack);
 
                 if (running != null) {

@@ -63,7 +63,7 @@ public class ItemJournal extends Item {
 
     @Nullable
     public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack, int journalIndex) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemJournal)) return null;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemJournal)) return null;
         return new ContainerJournal(playerInv, stack, journalIndex);
     }
 

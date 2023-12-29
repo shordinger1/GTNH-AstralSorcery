@@ -21,6 +21,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public interface GemSlotPerk {
     }
 
     default public boolean hasItem(EntityPlayer player, Side side, @Nullable NBTTagCompound data) {
-        return !getContainedItem(player, side, data).isEmpty();
+        return getContainedItem(player, side, data).stackSize != 0;
     }
 
     default public ItemStack getContainedItem(EntityPlayer player, Side side) {
@@ -82,7 +83,7 @@ public interface GemSlotPerk {
         }
         NBTTagCompound prev = (NBTTagCompound) data.copy();
 
-        if (stack.isEmpty()) {
+        if (stack.stackSize == 0) {
             data.removeTag(SOCKET_DATA_KEY);
         } else {
             NBTHelper.setStack(data, SOCKET_DATA_KEY, stack);
@@ -118,7 +119,7 @@ public interface GemSlotPerk {
         NBTTagCompound prev = (NBTTagCompound) data.copy();
 
         ItemStack contained = getContainedItem(player, Side.SERVER, data);
-        if (!contained.isEmpty()) {
+        if (contained.stackSize!=0) {
             if (!player.addItemStackToInventory(contained)) {
                 ItemUtils.dropItem(player.worldObj, player.posX, player.posY, player.posZ, contained);
             }
@@ -140,7 +141,7 @@ public interface GemSlotPerk {
             return;
         }
         ItemStack contained = getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
-        if (contained.isEmpty()) {
+        if (contained.stackSize==0) {
             tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.empty"));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.empty"));
@@ -148,7 +149,7 @@ public interface GemSlotPerk {
                 boolean has = !ItemUtils
                     .findItemsIndexedInPlayerInventory(
                         Minecraft.getMinecraft().thePlayer,
-                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
+                        s -> s.stackSize!=0 && s.getItem() instanceof ItemPerkGem
                             && !ItemPerkGem.getModifiers(s)
                             .isEmpty())
                     .isEmpty();

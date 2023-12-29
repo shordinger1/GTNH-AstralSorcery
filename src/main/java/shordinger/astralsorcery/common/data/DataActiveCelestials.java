@@ -77,17 +77,17 @@ public class DataActiveCelestials extends AbstractData {
 
     @Override
     public void readRawFromPacket(NBTTagCompound compound) {
-        for (String dimIdStr : compound.getKeySet()) {
+        for (Object dimIdStr : compound.func_150296_c()) {
             int dimId;
             try {
-                dimId = Integer.parseInt(dimIdStr);
+                dimId = Integer.parseInt((String) dimIdStr);
             } catch (Exception exc) {
                 AstralSorcery.log
                     .warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
                 AstralSorcery.log.warn("Skipping...");
                 continue;
             }
-            NBTTagList list = compound.getTagList(dimIdStr, 8);
+            NBTTagList list = compound.getTagList((String) dimIdStr, 8);
             List<IConstellation> toUpdate = new LinkedList<>();
             if (list.tagCount() != 0) {
                 for (int i = 0; i < list.tagCount(); i++) {

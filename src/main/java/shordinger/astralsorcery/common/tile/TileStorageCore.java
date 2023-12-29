@@ -100,7 +100,7 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     }
 
     public boolean insertIntoStorage(ItemStack stack) {
-        return !stack.isEmpty() && this.storageCache.add(stack);
+        return stack.stackSize!=0 && this.storageCache.add(stack);
     }
 
     @Override

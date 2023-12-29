@@ -88,7 +88,7 @@ public abstract class AbstractInfusionRecipe {
 
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             FluidActionResult fas = null;
             if (input.getFluidTypeAndAmount() != null) {
                 fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);

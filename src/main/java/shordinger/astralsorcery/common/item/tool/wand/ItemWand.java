@@ -191,7 +191,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if (!itemstack.isEmpty()) {
+        if (!itemstack.stackSize==0) {
             WandAugment wa = getAugment(itemstack);
             if (wa != null && (wa == WandAugment.ARMARA || wa == WandAugment.VICIO)) {
                 playerIn.setActiveHand(handIn);
@@ -204,7 +204,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
         World world = player.getEntityWorld();
-        if (stack.isEmpty()) return;
+        if (stack.stackSize==0) return;
 
         WandAugment wa = getAugment(stack);
         if (wa != null) {

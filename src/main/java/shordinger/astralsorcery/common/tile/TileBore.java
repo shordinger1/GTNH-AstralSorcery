@@ -24,8 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Configuration;
@@ -235,16 +233,14 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                     case PRE_RUN:
                     case PRODUCTION:
                         switch (getCurrentBoreType()) {
-                            case LIQUID:
-                                playLightbeam();
-                                break;
-                            case VORTEX:
+                            case LIQUID -> playLightbeam();
+                            case VORTEX -> {
                                 playVortex(0.5F);
                                 playLowVortex();
                                 updateNoisePlane();
-                                break;
-                            default:
-                                break;
+                            }
+                            default -> {
+                            }
                         }
                         playArcs(1);
                         break;

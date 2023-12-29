@@ -45,7 +45,7 @@ public class SwordSharpenHelper {
     }
 
     public static boolean canBeSharpened(@Nonnull ItemStack stack) {
-        if (stack.isEmpty()) return false;
+        if (stack.stackSize==0) return false;
         Item i = stack.getItem();
         if (blacklistedSharpenableSwordClassNames.contains(
             i.getClass()
@@ -64,7 +64,7 @@ public class SwordSharpenHelper {
     }
 
     public static boolean isSharpenableItem(ItemStack stack) {
-        return !stack.isEmpty() && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe);
+        return stack.stackSize!=0 && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe);
     }
 
 }

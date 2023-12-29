@@ -9,6 +9,7 @@
 package shordinger.astralsorcery.common.tile;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -139,10 +140,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.update();
 
         if ((ticksExisted & 15) == 0) {
-            updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
+            updateSkyState(MiscUtils.canSeeSky(worldObj, this.getPos(), true, this.doesSeeSky));
         }
 
-        if (!world.isRemote) {
+        if (!worldObj.isRemote) {
             boolean needUpdate = false;
 
             matchStructure();
@@ -219,8 +220,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public void onBreak() {
         super.onBreak();
 
-        if (!world.isRemote && !focusItem.isEmpty()) {
-            ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, focusItem);
+        if (!worldObj.isRemote && !focusItem.isEmpty()) {
+            ItemUtils.dropItemNaturally(worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, focusItem);
             this.focusItem = null;
         }
     }
@@ -245,11 +246,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         PatternBlockArray structure = this.getRequiredStructure();
         if (structure != null) {
             if (this.structureMatch == null) {
-                this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), structure);
+                this.structureMatch = PatternMatchHelper.getOrCreateMatcher(worldObj, getPos(), structure);
             }
         }
 
-        boolean matches = structure == null || this.structureMatch.matches(this.getWorld());
+        boolean matches = structure == null || this.structureMatch.matches(this.worldObj);
         if (matches != this.multiblockMatches) {
             LogCategory.STRUCTURE_MATCH.info(
                 () -> "Structure match updated: " + this.getClass()
@@ -316,7 +317,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         if (!out.isEmpty() && !(out.getItem() instanceof ItemBlockAltar)) {
             if (out.getCount() > 0) {
-                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out)
+                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out)
                     .setNoDespawn();
             }
         }
@@ -332,7 +333,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                     pos.getX(),
                     pos.getY() + 0.05,
                     pos.getZ());
-                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
+                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(worldObj, getPos(), 32));
             }
             craftingTask.getRecipeToCraft()
                 .onCraftServerFinish(this, rand);
@@ -347,9 +348,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
             }
             ResearchManager.informCraftingAltarCompletion(this, craftingTask);
-            SoundHelper.playSoundAround(Sounds.craftFinish, world, getPos(), 1F, 1.7F);
+            SoundHelper.playSoundAround(Sounds.craftFinish, worldObj, getPos(), 1F, 1.7F);
             EntityFlare
-                .spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                .spawnAmbient(worldObj, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
             craftingTask = null;
         }
         markForUpdate();
@@ -360,8 +361,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         for (int i = 0; i < 9; i++) {
             ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
             ItemStack stack = getInventoryHandler().getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                current.put(slot, new ItemHandle(ItemUtils.copyStackWithSize(stack, 1)));
+            if (stack.stackSize!=0) {
+                current.put(slot, new ItemHandle(Objects.requireNonNull(ItemUtils.copyStackWithSize(stack, 1))));
             }
         }
         return current;
@@ -401,7 +402,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         starlightStored *= 0.95;
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(getWorld());
+            .getWorldHandler(worldObj);
         if (doesSeeSky() && handle != null) {
             int yLevel = getPos().getY();
             if (yLevel > 40) {
@@ -421,7 +422,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 collect *= dstr;
                 collect *= (0.6 + (0.4 * posDistribution));
                 collect *= 0.2 + (0.8 * ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(getWorld()));
+                    .getCurrentDaytimeDistribution(worldObj));
 
                 starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + collect));
                 return true;
@@ -499,7 +500,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         for (int i = getAltarLevel().ordinal(); i >= levelDownTo.ordinal(); i--) {
             AltarLevel al = AltarLevel.values()[i];
             PatternBlockArray pattern = al.getPattern();
-            if (pattern == null || pattern.matches(this.getWorld(), this.getPos())) {
+            if (pattern == null || pattern.matches(this.worldObj, this.getPos())) {
                 return al;
             }
         }

@@ -176,7 +176,7 @@ public class BlockWell extends BlockStarlightNetwork {
         if (tw != null && !worldIn.isRemote) {
             ItemStack stack = tw.getInventoryHandler()
                 .getStackInSlot(0);
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 tw.breakCatalyst();
             }
         }

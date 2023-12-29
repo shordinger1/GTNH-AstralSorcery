@@ -9,6 +9,7 @@
 package shordinger.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;

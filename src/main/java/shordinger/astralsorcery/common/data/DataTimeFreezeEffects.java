@@ -132,16 +132,16 @@ public class DataTimeFreezeEffects extends AbstractData {
         NBTTagCompound buf = ((DataTimeFreezeEffects) serverData).clientReadBuffer;
         if (buf.getBoolean("sync_all")) {
             NBTTagCompound dims = buf.getCompoundTag("dimensions");
-            for (String key : dims.getKeySet()) {
+            for (Object key : dims.func_150296_c()) {
                 int dimId;
                 try {
-                    dimId = Integer.parseInt(key);
+                    dimId = Integer.parseInt((String) key);
                 } catch (Exception exc) {
                     continue;
                 }
                 List<TimeStopEffectHelper> effectList = new LinkedList<>();
                 clientActiveFreezeZones.put(dimId, effectList);
-                NBTTagList effects = dims.getTagList(key, Constants.NBT.TAG_COMPOUND);
+                NBTTagList effects = dims.getTagList((String) key, Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < effects.tagCount(); i++) {
                     NBTTagCompound cmp = effects.getCompoundTagAt(i);
                     effectList.add(TimeStopEffectHelper.deserializeNBT(cmp));
@@ -166,7 +166,7 @@ public class DataTimeFreezeEffects extends AbstractData {
         private final ActionType type;
 
         private final int dimId;
-        private TimeStopEffectHelper involvedEffect;
+        private final TimeStopEffectHelper involvedEffect;
 
         private ServerSyncAction(ActionType type, int dimId, TimeStopEffectHelper involvedEffect) {
             this.type = type;
@@ -179,12 +179,9 @@ public class DataTimeFreezeEffects extends AbstractData {
             out.setInteger("type", type.ordinal());
             out.setInteger("dimId", dimId);
             switch (type) {
-                case ADD:
-                case REMOVE:
-                    out.setTag("effectTag", involvedEffect.serializeNBT());
-                    break;
-                default:
-                    break;
+                case ADD, REMOVE -> out.setTag("effectTag", involvedEffect.serializeNBT());
+                default -> {
+                }
             }
             return out;
         }
@@ -195,12 +192,9 @@ public class DataTimeFreezeEffects extends AbstractData {
             int dimId = cmp.getInteger("dimId");
             TimeStopEffectHelper helper = null;
             switch (type) {
-                case ADD:
-                case REMOVE:
-                    helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompoundTag("effectTag"));
-                    break;
-                default:
-                    break;
+                case ADD, REMOVE -> helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompoundTag("effectTag"));
+                default -> {
+                }
             }
             return new ServerSyncAction(type, dimId, helper);
         }

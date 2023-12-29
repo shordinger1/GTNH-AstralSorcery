@@ -16,12 +16,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.IChatComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IWorldNameable;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.IChatComponent;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -40,6 +38,7 @@ import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.TextComponentString;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -289,4 +288,8 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         }
     }
 
+    @Override
+    public void tick() {
+
+    }
 }

@@ -151,7 +151,7 @@ public class ActiveStarMap {
     }
 
     public boolean tryApplyEnchantments(ItemStack stack) {
-        if (stack.isEmpty()) return false;
+        if (stack.stackSize==0) return false;
         Map<IConstellation, List<ConstellationMapEffectRegistry.EnchantmentMapEffect>> effectMap = new HashMap<>();
 
         for (IConstellation c : starProportions.keySet()) {
@@ -204,7 +204,7 @@ public class ActiveStarMap {
     }
 
     public void tryApplyPotionEffects(ItemStack stack) {
-        if (stack.isEmpty()) return;
+        if (stack.stackSize==0) return;
 
         List<PotionEffect> applicableEffects = new LinkedList<>();
         for (IConstellation c : starProportions.keySet()) {

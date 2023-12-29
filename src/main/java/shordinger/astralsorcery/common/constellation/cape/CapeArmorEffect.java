@@ -63,7 +63,7 @@ public abstract class CapeArmorEffect extends ConfigEntry {
     }
 
     public final void flush(NBTTagCompound out) {
-        for (String key : this.data.getKeySet()) {
+        for (String key : this.data.func_150296_c()) {
             out.setTag(key, out.getTag(key));
         }
     }

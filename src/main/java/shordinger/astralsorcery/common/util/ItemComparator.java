@@ -100,7 +100,7 @@ public class ItemComparator {
     }
 
     private static boolean isTagEmpty(NBTTagCompound compound) {
-        for (String key : compound.getKeySet()) {
+        for (String key : compound.func_150296_c()) {
             NBTBase value = compound.getTag(key);
             if (value instanceof NBTTagCompound) {
                 if (isTagEmpty((NBTTagCompound) value)) {

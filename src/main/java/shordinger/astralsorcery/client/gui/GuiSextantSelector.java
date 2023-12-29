@@ -24,14 +24,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
-import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -64,7 +60,6 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
 import shordinger.astralsorcery.migration.TextFormatting;
 
@@ -238,9 +233,9 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        if (!Minecraft.IS_RUNNING_ON_MAC) {
-            KeyBinding.updateKeyBindState();
-        }
+//        if (!Minecraft.IS_RUNNING_ON_MAC) {
+//            KeyBinding.updateKeyBindState();
+//        }
         ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
@@ -249,9 +244,9 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     public void initGui() {
         super.initGui();
 
-        if (!Minecraft.IS_RUNNING_ON_MAC) {
-            KeyBinding.updateKeyBindState();
-        }
+//        if (!Minecraft.IS_RUNNING_ON_MAC) {
+//            KeyBinding.updateKeyBindState();
+//        }
         ClientUtils.grabMouseCursor();
         mc.inGameHasFocus = true;
     }
@@ -420,14 +415,14 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             double offsetX = guiLeft + wPart - MathHelper.floor((diffYaw / xsFactor) * width);
             double offsetY = guiTop + hPart - MathHelper.floor((diffPitch / ysFactor) * height);
 
-            if (this.selectedTarget != null && target.equals(this.selectedTarget)) {
+            if (target.equals(this.selectedTarget)) {
                 float alpha = RenderConstellation
                     .conCFlicker(ClientScheduler.getClientTick() + actualPos.getX(), partialTicks, 8);
                 alpha = (0.6F + 0.4F * alpha) * dayMultiplier * alphaShowup * transparency;
                 Color c = new Color(target.getColorTheme(), false);
                 GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
 
-                drawInfoStar(((float) offsetX + 8), ((float) offsetY + 8), zLevel, 24, partialTicks);
+                drawInfoStar(((float) offsetX + 8), ((float) offsetY + 8), zLevel, partialTicks);
             } else {
                 float alpha = RenderConstellation
                     .conCFlicker(ClientScheduler.getClientTick() + actualPos.getX(), partialTicks, 8);
@@ -621,9 +616,9 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         boolean ctrl = isShiftKeyDown();
 
         if (grabCursor && !ctrl) {
-            if (!Minecraft.IS_RUNNING_ON_MAC) {
-                KeyBinding.updateKeyBindState();
-            }
+//            if (!Minecraft.IS_RUNNING_ON_MAC) {
+//                KeyBinding.updateKeyBindState();
+//            }
             ClientUtils.grabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
@@ -692,23 +687,23 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         }
     }
 
-    private Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+    private Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float pTicks) {
         float tick = ClientScheduler.getClientTick() + pTicks;
         float deg = (tick * 2) % 360F;
-        float wh = widthHeightBase
-            - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
+        float wh = (float) 24
+            - ((float) 24 / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
         drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
 
         deg = ((tick + 22.5F) * 2) % 360F;
-        wh = widthHeightBase
-            - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
+        wh = (float) 24
+            - ((float) 24 / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
         drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
 
         return new Rectangle(
-            MathHelper.floor(offsetX - widthHeightBase / 2F),
-            MathHelper.floor(offsetY - widthHeightBase / 2F),
-            MathHelper.floor(widthHeightBase),
-            MathHelper.floor(widthHeightBase));
+            MathHelper.floor(offsetX - (float) 24 / 2F),
+            MathHelper.floor(offsetY - (float) 24 / 2F),
+            MathHelper.floor((float) 24),
+            MathHelper.floor((float) 24));
     }
 
     private void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {

@@ -106,7 +106,7 @@ public class StoredItemStack {
     @Nullable
     public static StoredItemStack deserialize(NBTTagCompound cmp) {
         ItemStack stack = new ItemStack(cmp.getCompoundTag("item"));
-        if (stack.isEmpty()) {
+        if (stack.stackSize==0) {
             return null;
         }
         int amount = cmp.getInteger("amount");

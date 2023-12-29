@@ -227,13 +227,13 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     public static boolean isEnhanced(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return false;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return false;
         return NBTHelper.getPersistentData(stack)
             .getBoolean("enhanced");
     }
 
     public static ItemStack setEnhanced(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
         NBTHelper.getPersistentData(stack)
             .setBoolean("enhanced", true);
         setUpgradeUnlocked(stack, ResonatorUpgrade.STARLIGHT);
@@ -249,7 +249,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
     @Nullable
     public static ResonatorUpgrade getNextSelectableUpgrade(@Nonnull EntityPlayer viewing, ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return null;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return null;
         if (!isEnhanced(stack)) return null;
         ResonatorUpgrade current = getCurrentUpgrade(viewing, stack);
         int currentOrd = current.ordinal();
@@ -266,7 +266,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     public static boolean setCurrentUpgrade(EntityPlayer setting, ItemStack stack, ResonatorUpgrade upgrade) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return false;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return false;
         if (upgrade.obtainable() && upgrade.canSwitchTo(setting, stack)) {
             NBTHelper.getPersistentData(stack)
                 .setInteger("selected_upgrade", upgrade.ordinal());
@@ -276,7 +276,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     public static ItemStack setCurrentUpgradeUnsafe(ItemStack stack, ResonatorUpgrade upgrade) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator) || !upgrade.obtainable()) return stack;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator) || !upgrade.obtainable()) return stack;
         NBTHelper.getPersistentData(stack)
             .setInteger("selected_upgrade", upgrade.ordinal());
         return stack;
@@ -284,7 +284,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
     @Nonnull
     public static ResonatorUpgrade getCurrentUpgrade(@Nullable EntityPlayer viewing, ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator))
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator))
             return ResonatorUpgrade.STARLIGHT; // Fallback
         if (!isEnhanced(stack)) return ResonatorUpgrade.STARLIGHT;
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
@@ -303,7 +303,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     public static ItemStack setUpgradeUnlocked(ItemStack stack, ResonatorUpgrade upgrade) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
         if (!isEnhanced(stack)) return stack;
         if (upgrade.obtainable()) {
             upgrade.applyUpgrade(stack);
@@ -312,14 +312,14 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     public static boolean hasUpgrade(ItemStack stack, ResonatorUpgrade upgrade) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return false;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return false;
         if (!isEnhanced(stack)) return false;
         if (!upgrade.obtainable()) return false;
         return upgrade.hasUpgrade(stack);
     }
 
     public static List<ResonatorUpgrade> getUpgrades(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return Lists.newArrayList();
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemSkyResonator)) return Lists.newArrayList();
         if (!isEnhanced(stack)) return Lists.newArrayList(ResonatorUpgrade.STARLIGHT);
         List<ResonatorUpgrade> upgrades = Lists.newLinkedList();
         for (ResonatorUpgrade ru : ResonatorUpgrade.values()) {

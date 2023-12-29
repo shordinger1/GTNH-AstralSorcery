@@ -69,10 +69,10 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ServerDisconnectionFromClientEvent event) {
         LogCategory.PERKS.info(
-            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName()
+            () -> ((NetHandlerPlayServer) event.handler).playerEntity.getDisplayName()
                 + " disconnected from server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(
-            () -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, true));
+            () -> handlePerkModification(((NetHandlerPlayServer) event.handler).playerEntity, Side.SERVER, true));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -85,10 +85,10 @@ public class PerkEffectHelper implements ITickHandler {
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
         LogCategory.PERKS.info(
-            () -> ((NetHandlerPlayServer) event.getHandler()).player.getDisplayName()
+            () -> ((NetHandlerPlayServer) event.handler).playerEntity.getDisplayName()
                 + " connected to server on side SERVER");
         AstralSorcery.proxy.scheduleDelayed(
-            () -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
+            () -> handlePerkModification(((NetHandlerPlayServer) event.handler).playerEntity, Side.SERVER, false));
     }
 
     @SubscribeEvent
@@ -110,11 +110,11 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SubscribeEvent
     public void playerClone(PlayerEvent.Clone event) {
-        EntityPlayer oldPlayer = event.getOriginal();
+        EntityPlayer oldPlayer = event.original;
         EntityPlayer newPlayer = event.entityPlayer;
 
-        handlePerkModification(oldPlayer, oldPlayer.world.isRemote ? Side.CLIENT : Side.SERVER, true);
-        handlePerkModification(newPlayer, newPlayer.world.isRemote ? Side.CLIENT : Side.SERVER, false);
+        handlePerkModification(oldPlayer, oldPlayer.worldObj.isRemote ? Side.CLIENT : Side.SERVER, true);
+        handlePerkModification(newPlayer, newPlayer.worldObj.isRemote ? Side.CLIENT : Side.SERVER, false);
 
         PlayerWrapperContainer container = new PlayerWrapperContainer(oldPlayer);
         if (perkCooldowns.hasList(container)) {

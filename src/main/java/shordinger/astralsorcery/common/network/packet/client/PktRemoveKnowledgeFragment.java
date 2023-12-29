@@ -54,7 +54,7 @@ public class PktRemoveKnowledgeFragment implements IMessage, IMessageHandler<Pkt
                 EntityPlayer pl = ctx.getServerHandler().player;
                 if (pl != null) {
                     ItemStack stack = pl.inventory.getStackInSlot(pkt.index);
-                    if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
+                    if (stack.stackSize!=0 && stack.getItem() instanceof ItemKnowledgeFragment) {
                         pl.inventory.setInventorySlotContents(pkt.index, null); // Remove that fragment.
                     }
                 }

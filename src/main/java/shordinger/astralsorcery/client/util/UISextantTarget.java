@@ -51,7 +51,7 @@ public class UISextantTarget {
         Tuple<BlockPos, Integer> info;
         SextantFinder.TargetObject target;
 
-        if (!held.isEmpty() && held.getItem() instanceof ItemSextant
+        if (!held.stackSize==0 && held.getItem() instanceof ItemSextant
             && (info = ItemSextant.getCurrentTargetInformation(held)) != null
             && (target = ItemSextant.getTarget(held)) != null
             && target.isSelectable(held, ResearchManager.clientProgress)
@@ -60,7 +60,7 @@ public class UISextantTarget {
         }
 
         held = pl.getHeldItem();
-        if (!held.isEmpty() && held.getItem() instanceof ItemSextant
+        if (!held.stackSize==0 && held.getItem() instanceof ItemSextant
             && (info = ItemSextant.getCurrentTargetInformation(held)) != null
             && (target = ItemSextant.getTarget(held)) != null
             && target.isSelectable(held, ResearchManager.clientProgress)

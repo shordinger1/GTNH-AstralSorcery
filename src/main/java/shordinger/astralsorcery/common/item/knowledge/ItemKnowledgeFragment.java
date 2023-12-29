@@ -95,7 +95,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote && !stack.isEmpty()
+        if (!worldIn.isRemote && stack.stackSize!=0
             && stack.getItem() instanceof ItemKnowledgeFragment
             && !getSeed(stack).isPresent()) {
             stack.setCount(0);
@@ -143,7 +143,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     public boolean onEntityItemUpdate(EntityItem entityItem) {
         if (!entityItem.world.isRemote) {
             ItemStack stack = entityItem.getItem();
-            if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment && !getSeed(stack).isPresent()) {
+            if (stack.stackSize!=0 && stack.getItem() instanceof ItemKnowledgeFragment && !getSeed(stack).isPresent()) {
                 entityItem.setDead();
                 stack.setCount(0);
                 entityItem.setItem(stack);
@@ -153,7 +153,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     }
 
     static void generateSeed(EntityPlayer player, ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
+        if (stack.stackSize!=0 && stack.getItem() instanceof ItemKnowledgeFragment) {
             long baseRand = (((player.getEntityId() << 6) | (System.currentTimeMillis() & 223)) << 16)
                 | player.getEntityWorld()
                 .getTotalWorldTime();
@@ -234,7 +234,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
             false);
         List<ItemStack> frags = new LinkedList<>();
         for (ItemStack stack : fragItems) {
-            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
+            if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
             if (fr != null) {
                 frags.add(stack);
@@ -251,7 +251,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
             false);
         for (Map.Entry<Integer, ItemStack> entry : fragItems.entrySet()) {
             ItemStack stack = entry.getValue();
-            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
+            if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
             if (fr != null && fr.equals(frag)) {
                 PacketChannel.CHANNEL.sendToServer(new PktRemoveKnowledgeFragment(entry.getKey()));
@@ -262,13 +262,13 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     }
 
     public static void setSeed(ItemStack stack, long seed) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
         NBTHelper.getPersistentData(stack)
             .setLong("seed", seed);
     }
 
     public static Optional<Long> getSeed(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) {
             return Optional.empty();
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);

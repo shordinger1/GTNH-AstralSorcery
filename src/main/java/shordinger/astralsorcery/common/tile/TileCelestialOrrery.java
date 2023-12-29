@@ -35,4 +35,8 @@ public class TileCelestialOrrery extends TileEntityTick {
     protected void onFirstTick() {
     }
 
+    @Override
+    public void tick() {
+
+    }
 }

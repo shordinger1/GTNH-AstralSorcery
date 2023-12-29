@@ -149,7 +149,7 @@ public class CrystalProperties {
             return prop.sizeOverride;
         }
 
-        if (stack.isEmpty()) {
+        if (stack.stackSize==0) {
             return MAX_SIZE_ROCK;
         }
 

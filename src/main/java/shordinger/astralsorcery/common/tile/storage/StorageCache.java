@@ -51,7 +51,7 @@ public class StorageCache {
     }
 
     public boolean add(ItemStack stack) {
-        if (stack.isEmpty()) {
+        if (stack.stackSize==0) {
             return false;
         }
         StorageKey key = new StorageKey(stack);
@@ -103,7 +103,7 @@ public class StorageCache {
                     if (!stack.removeAmount(addedCount)) {
                         return false;
                     }
-                    if (stack.isEmpty()) {
+                    if (stack.stackSize==0) {
                         stacks.remove(stack);
                     }
                 }
@@ -141,7 +141,7 @@ public class StorageCache {
                     if (!stack.removeAmount(addedCount)) {
                         return false;
                     }
-                    if (stack.isEmpty()) {
+                    if (stack.stackSize==0) {
                         stacks.remove(stack);
                         continue lblSlots;
                     }

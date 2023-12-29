@@ -40,7 +40,7 @@ public class BreakSpeedAttributeReader extends FlatAttributeReader {
         AttributeBreakSpeed.evaluateBreakSpeedWithoutPerks = true;
         float speed;
         try {
-            speed = player.getDigSpeed(Blocks.COBBLESTONE.getDefaultState(), BlockPos.ORIGIN);
+            speed = player.getBreakSpeed(Blocks.cobblestone.getDefaultState(), BlockPos.ORIGIN);
         } finally {
             AttributeBreakSpeed.evaluateBreakSpeedWithoutPerks = false;
         }
@@ -52,7 +52,7 @@ public class BreakSpeedAttributeReader extends FlatAttributeReader {
         Float limit = AttributeTypeLimiter.INSTANCE.getMaxLimit(this.attribute);
         String limitStr = limit == null ? "" : I18n.format("perk.reader.limit.percent", MathHelper.floor(limit * 100F));
 
-        double value = player.getDigSpeed(Blocks.COBBLESTONE.getDefaultState(), BlockPos.ORIGIN);
+        double value = player.getBreakSpeed(Blocks.cobblestone.getDefaultState(), BlockPos.ORIGIN);
 
         String postProcess = "";
         double post = AttributeEvent.postProcessModded(player, this.attribute, value);

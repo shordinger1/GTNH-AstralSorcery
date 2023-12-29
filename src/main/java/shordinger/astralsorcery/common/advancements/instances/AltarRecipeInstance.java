@@ -11,7 +11,6 @@ package shordinger.astralsorcery.common.advancements.instances;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.crafting.altar.AbstractAltarRecipe;

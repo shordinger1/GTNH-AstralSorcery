@@ -37,12 +37,12 @@ public class TileVanishing extends TileEntityTick {
             List players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, topBox.offset(pos));
             for (EntityPlayer player : players) {
                 ItemStack held = player.getHeldItemMainhand();
-                if (!held.isEmpty() && held.getItem() instanceof ItemWand
+                if (!held.stackSize==0 && held.getItem() instanceof ItemWand
                     && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }
                 held = player.getHeldItemOffhand();
-                if (!held.isEmpty() && held.getItem() instanceof ItemWand
+                if (!held.stackSize==0 && held.getItem() instanceof ItemWand
                     && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }

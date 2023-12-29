@@ -31,6 +31,7 @@ import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.GemSlotPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.migration.BufferBuilder;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
                          double scale) {
         ItemStack stack = this.getPerk()
             .getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             int posX = (int) Math.round(x - (8 * scale));
             int posY = (int) Math.round(y - (8 * scale));
             FontRenderer fr = stack.getItem()

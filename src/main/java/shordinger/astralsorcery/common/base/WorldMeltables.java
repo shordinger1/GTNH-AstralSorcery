@@ -82,7 +82,7 @@ public enum WorldMeltables implements MeltInteraction {
             if (melt.isMeltable(world, pos, state)) return melt;
         }
         ItemStack stack = ItemUtils.createBlockStack(state);
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             ItemStack out = FurnaceRecipes.instance()
                 .getSmeltingResult(stack);
             if (!out.isEmpty()) {

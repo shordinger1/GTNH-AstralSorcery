@@ -540,6 +540,10 @@ public class Vector3 {
         return this.x + "," + this.y + "," + this.z;
     }
 
+    public double distance(BlockPos pos) {
+        return pos.getDistance((int) x, (int) y, (int) z);
+    }
+
     public static class Quat {
 
         public double i;

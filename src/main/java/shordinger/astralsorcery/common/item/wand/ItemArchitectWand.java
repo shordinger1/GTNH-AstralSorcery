@@ -308,7 +308,7 @@ public class ItemArchitectWand extends ItemBlockStorage
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.isEmpty()) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
+        if (stack.stackSize==0) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
         if (world.isRemote) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
@@ -381,7 +381,7 @@ public class ItemArchitectWand extends ItemBlockStorage
     public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.isEmpty()) return EnumActionResult.SUCCESS;
+        if (stack.stackSize==0) return EnumActionResult.SUCCESS;
 
         if (playerIn.isSneaking()) {
             tryStoreBlock(stack, world, pos);

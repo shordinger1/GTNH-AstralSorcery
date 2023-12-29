@@ -97,7 +97,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                             markForUpdate();
                         } else if (hasMultiblock && doesSeeSky()) {
                             WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-                                .getWorldHandler(getWorld());
+                                .getWorldHandler(world);
                             int yLevel = getPos().getY();
                             if (handle != null && yLevel > 40) {
                                 double coll = 0.3;
@@ -112,7 +112,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                                 coll *= dstr;
                                 coll *= collectionMultiplier;
                                 coll *= (0.2 + (0.8 * ConstellationSkyHandler.getInstance()
-                                    .getCurrentDaytimeDistribution(getWorld())));
+                                    .getCurrentDaytimeDistribution(world)));
                                 ta.receiveStarlight(null, coll);
                             }
                         }
@@ -172,9 +172,9 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             return;
         }
         if (this.structureMatch == null) {
-            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(world, getPos(), getRequiredStructure());
         }
-        boolean found = this.structureMatch.matches(getWorld());
+        boolean found = this.structureMatch.matches(world);
         if (found != this.hasMultiblock) {
             LogCategory.STRUCTURE_MATCH.info(
                 () -> "Structure match updated: " + this.getClass()
@@ -185,7 +185,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
     }
 
     private void updateSkyState() {
-        boolean seesSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.canSeeSky);
+        boolean seesSky = MiscUtils.canSeeSky(this.world, this.getPos(), true, this.canSeeSky);
         boolean update = canSeeSky != seesSky;
         this.canSeeSky = seesSky;
         if (update) {

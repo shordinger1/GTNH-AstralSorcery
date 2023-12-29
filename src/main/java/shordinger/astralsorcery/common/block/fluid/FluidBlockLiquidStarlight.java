@@ -192,7 +192,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
             ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
         } else if (entityIn instanceof EntityItem) {
             ItemStack contained = ((EntityItem) entityIn).getItem();
-            if (!contained.isEmpty()) {
+            if (contained.stackSize!=0) {
                 if (entityIn.getEntityWorld().isRemote) return;
 
                 if (Config.liquidStarlightInfusedWood) {
@@ -205,7 +205,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
     private void interactInfusedWood(ItemStack contained, Entity entityIn) {
         if (ItemUtils.hasOreName(contained, "logWood")) {
             contained = ItemUtils.copyStackWithSize(contained, contained.getCount() - 1);
-            if (contained.isEmpty()) {
+            if (contained.stackSize==0) {
                 entityIn.setDead();
             } else {
                 ((EntityItem) entityIn).setItem(contained);

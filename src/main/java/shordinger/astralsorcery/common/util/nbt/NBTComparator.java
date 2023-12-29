@@ -27,7 +27,7 @@ import net.minecraft.nbt.NBTTagList;
 public class NBTComparator {
 
     public static boolean contains(@Nonnull NBTTagCompound thisCompound, @Nonnull NBTTagCompound otherCompound) {
-        for (String key : thisCompound.getKeySet()) {
+        for (String key : thisCompound.func_150296_c()) {
             if (!otherCompound.hasKey(key, thisCompound.getTagId(key))) {
                 return false;
             }

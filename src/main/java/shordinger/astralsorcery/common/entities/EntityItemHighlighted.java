@@ -39,7 +39,7 @@ public class EntityItemHighlighted extends EntityItem {
     public EntityItemHighlighted(World worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
         applyColor(
-            (!stack.isEmpty() && stack.getItem() instanceof ItemHighlighted)
+            (stack.stackSize!=0 && stack.getItem() instanceof ItemHighlighted)
                 ? ((ItemHighlighted) stack.getItem()).getHightlightColor(stack)
                 : Color.WHITE);
     }
@@ -54,7 +54,7 @@ public class EntityItemHighlighted extends EntityItem {
         super.setItem(stack);
 
         applyColor(
-            (!stack.isEmpty() && stack.getItem() instanceof ItemHighlighted)
+            (stack.stackSize!=0 && stack.getItem() instanceof ItemHighlighted)
                 ? ((ItemHighlighted) stack.getItem()).getHightlightColor(stack)
                 : Color.WHITE);
     }

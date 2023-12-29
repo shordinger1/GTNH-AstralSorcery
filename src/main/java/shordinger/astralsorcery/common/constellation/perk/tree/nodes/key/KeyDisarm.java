@@ -80,7 +80,7 @@ public class KeyDisarm extends KeyPerk {
                     }
                     EntityLivingBase attacked = event.entityLiving;
                     ItemStack stack = attacked.getItemStackFromSlot(slot);
-                    if (!stack.isEmpty()) {
+                    if (stack.stackSize!=0) {
                         attacked.setItemStackToSlot(slot, null);
                         ItemUtils.dropItemNaturally(attacked.world, attacked.posX, attacked.posY, attacked.posZ, stack);
                         break;

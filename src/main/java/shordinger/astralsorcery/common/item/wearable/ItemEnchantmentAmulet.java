@@ -96,7 +96,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     }
 
     public static Optional<Integer> getAmuletColor(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return Optional.empty();
         }
         NBTTagCompound tag = NBTHelper.getPersistentData(stack);
@@ -107,7 +107,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     }
 
     public static void freezeAmuletColor(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
         NBTTagCompound tag = NBTHelper.getPersistentData(stack);
@@ -126,7 +126,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     }
 
     public static List<AmuletEnchantment> getAmuletEnchantments(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return Lists.newArrayList();
         }
 
@@ -147,7 +147,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     }
 
     public static void setAmuletEnchantments(ItemStack stack, List<AmuletEnchantment> enchantments) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
         enchantments.sort(Comparator.comparing(AmuletEnchantment::getType));

@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Optional;
 import net.minecraft.entity.player.EntityPlayer;

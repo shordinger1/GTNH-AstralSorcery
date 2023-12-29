@@ -229,7 +229,7 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
 
     @Nullable
     public static IConstellation getAttunedConstellation(@Nonnull ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemCape)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemCape)) {
             return null;
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
@@ -237,7 +237,7 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
     }
 
     public static void setAttunedConstellation(@Nonnull ItemStack stack, @Nonnull IConstellation cst) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemCape)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemCape)) {
             return;
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);

@@ -117,7 +117,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemIlluminationWand)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemIlluminationWand)) {
             return EnumActionResult.SUCCESS;
         }
         if (!worldIn.isRemote) {

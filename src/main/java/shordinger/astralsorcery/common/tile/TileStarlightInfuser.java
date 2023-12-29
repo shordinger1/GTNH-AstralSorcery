@@ -412,7 +412,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     public void onInteract(EntityPlayer playerIn, EnumHand heldHand, ItemStack heldItem) {
         if (!playerIn.getEntityWorld().isRemote) {
             if (playerIn.isSneaking()) {
-                if (!stack.isEmpty()) {
+                if (stack.stackSize!=0) {
                     playerIn.inventory.placeItemBackInInventory(world, stack);
                     stack = null;
                     world.playSound(
@@ -428,7 +428,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 }
             } else {
                 if (!heldItem.isEmpty()) {
-                    if (stack.isEmpty()) {
+                    if (stack.stackSize==0) {
                         this.stack = ItemUtils.copyStackWithSize(heldItem, 1);
                         if (!playerIn.isCreative()) {
                             heldItem.setCount(heldItem.getCount() - 1);

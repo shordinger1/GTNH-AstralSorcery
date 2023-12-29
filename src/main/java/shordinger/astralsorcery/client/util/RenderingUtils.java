@@ -128,7 +128,7 @@ public class RenderingUtils {
 
     @Nullable
     public static TextureAtlasSprite tryGetMainTextureOfItemStack(ItemStack stack) {
-        if (stack.isEmpty()) return null;
+        if (stack.stackSize==0) return null;
         ItemModelMesher imm = Minecraft.getMinecraft()
             .getRenderItem()
             .getItemModelMesher();
@@ -576,7 +576,7 @@ public class RenderingUtils {
     }
 
     public static void tryRenderItemWithColor(ItemStack stack, IBakedModel model, Color c, float alpha) {
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(-0.5F, -0.5F, -0.5F);
 
@@ -609,7 +609,7 @@ public class RenderingUtils {
 
     private static void renderColoredQuads(BufferBuilder renderer, List<BakedQuad> quads, Color color,
                                            ItemStack stack) {
-        boolean flag = color.equals(Color.WHITE) && color.getAlpha() == 255 && !stack.isEmpty();
+        boolean flag = color.equals(Color.WHITE) && color.getAlpha() == 255 && stack.stackSize!=0;
         int i = 0;
 
         ItemColors itemColors = Minecraft.getMinecraft()

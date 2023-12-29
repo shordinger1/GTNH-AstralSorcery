@@ -272,7 +272,7 @@ public class TileFakeTree extends TileEntityTick {
             } finally {
                 BlockDropCaptureAssist.getCapturedStacksAndStop()
                     .forEach(stack -> {
-                        if (stack != null && !stack.isEmpty()) {
+                        if (stack != null && stack.stackSize!=0) {
                             out.add(stack);
                         }
                     });

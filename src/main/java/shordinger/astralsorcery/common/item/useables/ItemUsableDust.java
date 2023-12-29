@@ -61,7 +61,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         DustType type = DustType.fromMeta(stack.getItemDamage());
-        if (stack.isEmpty() || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
+        if (stack.stackSize==0 || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
             return EnumActionResult.SUCCESS;
         }
         type.rightClickBlock(player, worldIn, pos, stack, facing);
@@ -72,7 +72,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         DustType type = DustType.fromMeta(stack.getItemDamage());
-        if (stack.isEmpty() || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
+        if (stack.stackSize==0 || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
         type.rightClickAir(worldIn, playerIn, stack);
@@ -117,7 +117,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
     @Override
     public ItemStack dispense(IBlockSource source, ItemStack stack) {
         DustType type = DustType.fromMeta(stack.getItemDamage());
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
             return stack;
         }
         if (type.dispense(source)) {

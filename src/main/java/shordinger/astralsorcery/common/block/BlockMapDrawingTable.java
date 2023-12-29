@@ -156,7 +156,7 @@ public class BlockMapDrawingTable extends BlockContainer {
                         return true;
                     }
                 } else {
-                    if (!held.isEmpty()) {
+                    if (!held.stackSize==0) {
                         if (held.getItem() instanceof ItemCraftingComponent) {
                             if (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
                                 int remaining = tm.addParchment(held.getCount());
@@ -217,7 +217,7 @@ public class BlockMapDrawingTable extends BlockContainer {
         } else {
             if (!playerIn.isSneaking()) {
                 ItemStack held = playerIn.getHeldItem(hand);
-                if (!held.isEmpty()) {
+                if (!held.stackSize==0) {
                     if ((held.getItem() instanceof ItemCraftingComponent
                         && (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()))
                         || held.getItem() instanceof ItemInfusedGlass

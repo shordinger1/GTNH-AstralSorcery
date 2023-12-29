@@ -57,7 +57,7 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
             .isReplaceable(worldIn, pos.down())) {
             TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
             ItemStack held = playerIn.getHeldItem(hand);
-            if (tb != null && !held.isEmpty()
+            if (tb != null && !held.stackSize==0
                 && held.getItem() instanceof ItemBlock
                 && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
                 if (!worldIn.isRemote) {

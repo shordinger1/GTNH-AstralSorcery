@@ -95,7 +95,7 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     @Nonnull
     public static List<GemAttributeModifier> getModifiers(ItemStack stack) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemPerkGem)) {
             return Lists.newArrayList();
         }
         List<GemAttributeModifier> modifiers = Lists.newArrayList();
@@ -109,7 +109,7 @@ public class ItemPerkGem extends Item implements IItemVariants {
     }
 
     public static boolean setModifiers(ItemStack stack, List<GemAttributeModifier> modifiers) {
-        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
+        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemPerkGem)) {
             return false;
         }
         NBTTagList mods = new NBTTagList();

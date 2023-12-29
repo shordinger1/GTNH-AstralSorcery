@@ -349,7 +349,7 @@ public class EventHandlerServer {
                         .iterator();
                     while (iterator.hasNext()) {
                         ItemStack stack = iterator.next();
-                        if (stack.isEmpty()) {
+                        if (stack.stackSize==0) {
                             continue;
                         }
                         ItemStack out = FurnaceRecipes.instance()

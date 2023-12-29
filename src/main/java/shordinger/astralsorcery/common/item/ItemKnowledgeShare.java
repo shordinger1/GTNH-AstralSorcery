@@ -108,7 +108,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (stack.isEmpty() || worldIn.isRemote) {
+        if (stack.stackSize==0 || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
         if (!isCreative(stack) && (playerIn.isSneaking() || getKnowledge(stack) == null)) {
@@ -123,7 +123,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
                                       EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.isEmpty() || worldIn.isRemote) {
+        if (stack.stackSize==0 || worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         }
         if (!isCreative(stack) && (player.isSneaking() || getKnowledge(stack) == null)) {

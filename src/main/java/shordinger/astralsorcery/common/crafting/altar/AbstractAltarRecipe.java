@@ -210,7 +210,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     protected boolean requiresSpecialConsumption(ItemHandle handle, ItemStack stack) {
-        return handle != null && !stack.isEmpty()
+        return handle != null && stack.stackSize!=0
             && (!ForgeHooks.getContainerItem(stack)
             .isEmpty()
             || (handle.handleType == ItemHandle.Type.FLUID && FluidUtil.getFluidContained(stack) != null));
@@ -251,7 +251,7 @@ public abstract class AbstractAltarRecipe {
 
     protected void consumeAndSetResult(IItemHandlerModifiable inv, int slot, ItemHandle handle) {
         ItemStack stack = inv.getStackInSlot(slot);
-        if (!stack.isEmpty()) {
+        if (stack.stackSize!=0) {
             FluidStack fs = FluidUtil.getFluidContained(stack);
             if (fs != null && handle.handleType == ItemHandle.Type.FLUID) {
                 FluidActionResult fas = null;

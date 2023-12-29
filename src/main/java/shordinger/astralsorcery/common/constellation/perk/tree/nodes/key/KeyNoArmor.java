@@ -70,7 +70,7 @@ public class KeyNoArmor extends KeyPerk {
         if (prog.hasPerkEffect(this)) {
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
-                if (!stack.isEmpty()) {
+                if (stack.stackSize!=0) {
                     eq++;
                 }
             }

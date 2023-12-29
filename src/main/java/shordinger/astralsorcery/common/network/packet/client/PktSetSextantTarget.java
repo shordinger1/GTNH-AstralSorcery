@@ -68,7 +68,7 @@ public class PktSetSextantTarget implements IMessage, IMessageHandler<PktSetSext
                     return;
                 }
                 ItemStack held = ctx.getServerHandler().player.getHeldItem(message.hand);
-                if (held.isEmpty() || !(held.getItem() instanceof ItemSextant)) {
+                if (held.stackSize==0 || !(held.getItem() instanceof ItemSextant)) {
                     return;
                 }
                 EntityPlayer player = ctx.getServerHandler().player;

@@ -94,7 +94,7 @@ public class ClientGuiHandler {
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:
                 ItemStack held = player.getHeldItem();
-                if (!held.isEmpty()) {
+                if (held.stackSize!=0) {
                     if (held.getItem() instanceof ItemJournal) {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
@@ -102,14 +102,14 @@ public class ClientGuiHandler {
             case OBSERVATORY:
                 return new GuiObservatory(player, (TileObservatory) t);
             case SEXTANT:
-                Tuple<EnumHand, ItemStack> heldSextant = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant);
+                ItemStack heldSextant = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant);
                 if (heldSextant != null) {
-                    return new GuiSextantSelector(heldSextant.value, heldSextant.key);
+                    return new GuiSextantSelector(heldSextant);
                 }
             case KNOWLEDGE_CONSTELLATION:
-                Tuple<EnumHand, ItemStack> handFragment = MiscUtils.getMainOrOffHand(player, ItemsAS.knowledgeFragment);
+                ItemStack handFragment = MiscUtils.getMainOrOffHand(player, ItemsAS.knowledgeFragment);
                 Tuple<IConstellation, List<MoonPhase>> cstInfo = ItemKnowledgeFragment
-                    .getConstellationInformation(handFragment.value);
+                    .getConstellationInformation(handFragment);
                 if (cstInfo != null) {
                     return new GuiKnowledgeFragment(cstInfo.key, cstInfo.value);
                 }

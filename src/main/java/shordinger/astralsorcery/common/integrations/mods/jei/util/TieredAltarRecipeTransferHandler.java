@@ -122,7 +122,7 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
 
         for (Slot slot : craftingSlots.values()) {
             final ItemStack stack = slot.getStack();
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 if (!slot.canTakeStack(player)) {
                     Log.get()
                         .error(
@@ -139,7 +139,7 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
 
         for (Slot slot : inventorySlots.values()) {
             final ItemStack stack = slot.getStack();
-            if (!stack.isEmpty()) {
+            if (stack.stackSize!=0) {
                 availableItemStacks.put(slot.slotNumber, stack.copy());
             } else {
                 emptySlotCount++;

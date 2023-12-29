@@ -275,7 +275,7 @@ public class BlockArray {
                 if (i == Items.AIR) continue;
                 s = new ItemStack(i, 1, meta);
             }
-            if (!s.isEmpty()) {
+            if (s.stackSize!=0) {
                 boolean found = false;
                 for (ItemStack stack : out) {
                     if (stack.getItem()

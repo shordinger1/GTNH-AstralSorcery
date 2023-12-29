@@ -74,7 +74,7 @@ public class PlayerAmuletHandler implements ITickHandler {
     private void applyAmuletTags(EntityPlayer player) {
         for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if (!stack.isEmpty() && !EnchantmentUpgradeHelper.isItemBlacklisted(stack)) {
+            if (stack.stackSize!=0 && !EnchantmentUpgradeHelper.isItemBlacklisted(stack)) {
                 EnchantmentUpgradeHelper.applyAmuletOwner(player.getItemStackFromSlot(slot), player);
             }
         }

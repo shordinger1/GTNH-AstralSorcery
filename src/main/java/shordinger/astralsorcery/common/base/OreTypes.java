@@ -107,7 +107,7 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
             NonNullList<ItemStack> ores = OreDictionary.getOres(key);
 
             for (ItemStack stack : ores) {
-                if (stack.isEmpty() || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
+                if (stack.stackSize==0 || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
                 Item i = stack.getItem();
                 String regModid = i.getRegistryName()
                     .getResourceDomain();
@@ -137,7 +137,7 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
             NonNullList<ItemStack> ores = OreDictionary.getOres(key);
 
             for (ItemStack stack : ores) {
-                if (stack.isEmpty() || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
+                if (stack.stackSize==0 || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
                 Item i = stack.getItem();
                 String regModid = i.getRegistryName()
                     .getResourceDomain();
