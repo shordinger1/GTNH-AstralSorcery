@@ -18,8 +18,8 @@ import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 import shordinger.astralsorcery.common.tile.TileOreGenerator;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

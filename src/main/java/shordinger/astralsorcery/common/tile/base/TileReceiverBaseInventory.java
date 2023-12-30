@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -33,13 +33,13 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
 
     protected int inventorySize;
     private ItemHandlerTile handle;
-    private List<EnumFacing> applicableSides;
+    private List<ForgeDirection> applicableSides;
 
     public TileReceiverBaseInventory(int inventorySize) {
-        this(inventorySize, EnumFacing.VALUES);
+        this(inventorySize, ForgeDirection.VALUES);
     }
 
-    public TileReceiverBaseInventory(int inventorySize, EnumFacing... applicableSides) {
+    public TileReceiverBaseInventory(int inventorySize, ForgeDirection... applicableSides) {
         this.inventorySize = inventorySize;
         this.handle = createNewItemHandler();
         this.applicableSides = Arrays.asList(applicableSides);
@@ -53,18 +53,18 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
         return handle;
     }
 
-    private boolean hasHandlerForSide(EnumFacing facing) {
+    private boolean hasHandlerForSide(ForgeDirection facing) {
         return facing == null || applicableSides.contains(facing);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, ForgeDirection facing) {
         return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
             : super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, ForgeDirection facing) {
         if (hasHandlerForSide(facing)) {
             if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handle);

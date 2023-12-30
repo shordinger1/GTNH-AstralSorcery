@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.models.base.ASprism_color;
@@ -28,7 +28,7 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystal;
 import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -56,7 +56,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
 
         for (TileCrystalPrismLens prism : coloredPositions) {
             if (prism.getLensColor() == null) continue;
-            EnumFacing against = prism.getPlacedAgainst();
+            ForgeDirection against = prism.getPlacedAgainst();
 
             Color c = prism.getLensColor().wrappedColor;
             GlStateManager.pushMatrix();

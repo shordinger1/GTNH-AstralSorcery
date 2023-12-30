@@ -31,7 +31,7 @@ import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

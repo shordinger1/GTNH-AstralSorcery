@@ -55,7 +55,7 @@ import shordinger.astralsorcery.common.network.packet.client.PktDiscoverConstell
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

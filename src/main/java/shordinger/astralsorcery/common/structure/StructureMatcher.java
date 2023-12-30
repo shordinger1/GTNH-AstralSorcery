@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
 import shordinger.astralsorcery.common.structure.change.BlockStateChangeSet;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

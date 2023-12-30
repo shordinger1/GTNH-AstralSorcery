@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -30,7 +30,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**
@@ -148,13 +148,13 @@ public class RockCrystalHandler {
         private final RockCrystalPositions defaultImpl = new RockCrystalPositions();
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable ForgeDirection facing) {
             return capability.equals(CAPABILITY_CHUNK_ROCK_CRYSTALS);
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable ForgeDirection facing) {
             return hasCapability(capability, facing) ? CAPABILITY_CHUNK_ROCK_CRYSTALS.cast(defaultImpl) : null;
         }
 

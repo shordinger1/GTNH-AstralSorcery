@@ -38,7 +38,7 @@ import shordinger.astralsorcery.common.util.ASDataSerializers;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.EntityData.DataParameter;
 import shordinger.astralsorcery.migration.EntityData.DataSerializers;
 import shordinger.astralsorcery.migration.EntityData.EntityDataManager;

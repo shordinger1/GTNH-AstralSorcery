@@ -52,7 +52,7 @@ public class ItemGrappleWand extends Item implements ItemAlignmentChargeConsumer
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player) {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getHeldItem();
         if (stack.stackSize==0 || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }

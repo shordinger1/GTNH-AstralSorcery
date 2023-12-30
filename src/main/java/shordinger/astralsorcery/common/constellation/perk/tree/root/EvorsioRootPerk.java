@@ -23,7 +23,7 @@ import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

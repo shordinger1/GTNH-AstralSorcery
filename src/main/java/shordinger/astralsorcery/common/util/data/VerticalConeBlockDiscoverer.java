@@ -11,7 +11,7 @@ package shordinger.astralsorcery.common.util.data;
 import java.util.LinkedList;
 import java.util.List;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import shordinger.astralsorcery.common.util.ItemUtils;
@@ -33,13 +33,13 @@ public class TileInventoryBase extends TileEntityTick {
 
     protected int inventorySize;
     private ItemHandlerTile handle;
-    private List<EnumFacing> applicableSides;
+    private List<ForgeDirection> applicableSides;
 
     public TileInventoryBase(int inventorySize) {
-        this(inventorySize, EnumFacing.VALUES);
+        this(inventorySize, ForgeDirection.VALUES);
     }
 
-    public TileInventoryBase(int inventorySize, EnumFacing... applicableSides) {
+    public TileInventoryBase(int inventorySize, ForgeDirection... applicableSides) {
         this.inventorySize = inventorySize;
         this.handle = createNewItemHandler();
         this.applicableSides = Arrays.asList(applicableSides);

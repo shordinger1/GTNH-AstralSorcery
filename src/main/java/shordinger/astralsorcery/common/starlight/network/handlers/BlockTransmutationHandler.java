@@ -20,8 +20,8 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.awt.*;

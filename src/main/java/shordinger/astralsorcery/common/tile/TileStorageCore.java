@@ -23,7 +23,7 @@ import shordinger.astralsorcery.common.tile.storage.IStorageNetworkTile;
 import shordinger.astralsorcery.common.tile.storage.StorageCache;
 import shordinger.astralsorcery.common.tile.storage.StorageKey;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

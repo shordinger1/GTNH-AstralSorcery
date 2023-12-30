@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

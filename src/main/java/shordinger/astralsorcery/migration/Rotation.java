@@ -5,7 +5,7 @@
 
 package shordinger.astralsorcery.migration;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public enum Rotation {
 
@@ -53,7 +53,7 @@ public enum Rotation {
         }
     }
 
-    public EnumFacing rotate(EnumFacing facing) {
+    public ForgeDirection rotate(ForgeDirection facing) {
         if (facing.getAxis() == Axis.Y) {
             return facing;
         } else {

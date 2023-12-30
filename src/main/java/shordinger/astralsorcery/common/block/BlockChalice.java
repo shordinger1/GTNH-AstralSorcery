@@ -11,28 +11,17 @@ package shordinger.astralsorcery.common.block;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,8 +30,14 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockRenderLayer;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -52,12 +47,12 @@ import shordinger.astralsorcery.migration.MathHelper;
  * Created by HellFirePvP
  * Date: 18.10.2017 / 19:58
  */
-public class BlockChalice extends BlockContainer {
+public class BlockChalice extends AstralBlockContainer {
 
     public static PropertyBool ACTIVE = PropertyBool.create("active");
 
     public BlockChalice() {
-        super(Material.IRON, MapColor.GOLD);
+        super(Material.iron);
         setHardness(2.0F);
         setSoundType(SoundType.METAL);
         setResistance(15.0F);
@@ -85,20 +80,19 @@ public class BlockChalice extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!state.getValue(ACTIVE)) {
             return onBlockActivated(
                 worldIn,
                 pos.down(),
                 worldIn.getBlockState(pos.down()),
                 playerIn,
-                hand,
                 facing,
                 hitX,
                 hitY,
                 hitZ);
         }
-        ItemStack interact = playerIn.getHeldItem(hand);
+        ItemStack interact = playerIn.getHeldItem();
         TileChalice tc = MiscUtils.getTileAt(worldIn, pos, TileChalice.class, true);
         if (tc != null) {
             IFluidHandlerItem fhi = FluidUtil.getFluidHandler(interact);
@@ -148,7 +142,7 @@ public class BlockChalice extends BlockContainer {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -189,7 +183,7 @@ public class BlockChalice extends BlockContainer {
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = WorldHelper.getBlockState((World) world, pos);
         if (state.getValue(ACTIVE)) {
             if (world.isAirBlock(pos.up())) {
                 ((World) world).setBlockToAir(pos);

@@ -11,13 +11,10 @@ package shordinger.astralsorcery.common.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.AstralSorcery;
@@ -25,8 +22,12 @@ import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 
@@ -37,7 +38,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 26.05.2018 / 14:32
  */
-public class BlockObservatory extends BlockContainer {
+public class BlockObservatory extends AstralBlockContainer {
 
     public BlockObservatory() {
         super(Material.ROCK, MapColor.GRAY);
@@ -70,7 +71,7 @@ public class BlockObservatory extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
-                                    EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
             if (to != null && to.isUsable() && !player.isSneaking()) {
@@ -101,13 +102,13 @@ public class BlockObservatory extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

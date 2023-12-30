@@ -10,18 +10,14 @@ package shordinger.astralsorcery.common.block;
 
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import java.util.LinkedList;

@@ -8,20 +8,20 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import com.gtnewhorizons.modularui.api.forge.IItemHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import shordinger.astralsorcery.common.tile.base.TileNetwork;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,10 +30,10 @@ import shordinger.astralsorcery.migration.IBlockState;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 21:01
  */
-public abstract class BlockStarlightNetwork extends BlockContainer {
+public abstract class BlockStarlightNetwork extends AstralBlockContainer {
 
     public BlockStarlightNetwork(Material blockMaterialIn, MapColor blockMapColorIn) {
-        super(blockMaterialIn, blockMapColorIn);
+        super(blockMaterialIn);
     }
 
     public BlockStarlightNetwork(Material materialIn) {
@@ -49,7 +49,7 @@ public abstract class BlockStarlightNetwork extends BlockContainer {
 
         TileEntity inv = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
         if (inv != null && !worldIn.isRemote) {
-            for (EnumFacing face : EnumFacing.VALUES) {
+            for (ForgeDirection face : ForgeDirection.values()) {
                 IItemHandler handle = inv.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
                 if (handle != null) {
                     ItemUtils.dropInventory(handle, worldIn, pos);

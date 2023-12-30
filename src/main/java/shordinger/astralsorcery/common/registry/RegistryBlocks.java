@@ -28,7 +28,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.base.Mods;
-import shordinger.astralsorcery.common.block.*;
 import shordinger.astralsorcery.common.block.BlockAttunementRelay;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockBore;
@@ -62,7 +61,6 @@ import shordinger.astralsorcery.common.block.BlockVariants;
 import shordinger.astralsorcery.common.block.BlockWorldIlluminator;
 import shordinger.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import shordinger.astralsorcery.common.block.fluid.FluidLiquidStarlight;
-import shordinger.astralsorcery.common.block.network.*;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.block.network.BlockAttunementAltar;
 import shordinger.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
@@ -73,7 +71,6 @@ import shordinger.astralsorcery.common.block.network.BlockRitualPedestal;
 import shordinger.astralsorcery.common.block.network.BlockWell;
 import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import shordinger.astralsorcery.common.migration.MappingMigrationHandler;
-import shordinger.astralsorcery.common.tile.*;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.tile.TileAttunementRelay;
@@ -101,7 +98,7 @@ import shordinger.astralsorcery.common.tile.TileWell;
 import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

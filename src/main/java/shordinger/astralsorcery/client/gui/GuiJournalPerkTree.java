@@ -27,7 +27,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import shordinger.astralsorcery.migration.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;

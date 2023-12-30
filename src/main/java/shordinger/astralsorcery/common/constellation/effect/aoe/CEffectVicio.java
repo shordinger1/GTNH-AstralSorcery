@@ -27,7 +27,7 @@ import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.awt.*;

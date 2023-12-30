@@ -28,8 +28,8 @@ import shordinger.astralsorcery.common.item.base.IItemVariants;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -58,8 +58,8 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem();
         DustType type = DustType.fromMeta(stack.getItemDamage());
         if (stack.stackSize==0 || worldIn.isRemote || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
             return EnumActionResult.SUCCESS;
@@ -144,7 +144,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                 return false;
             }
             IPosition pos = BlockDispenser.getDispensePosition(source);
-            EnumFacing rotation = sourceState.getValue(BlockDispenser.FACING);
+            ForgeDirection rotation = sourceState.getValue(BlockDispenser.FACING);
             switch (this) {
                 case ILLUMINATION:
                     EntityIlluminationSpark spark = new EntityIlluminationSpark(
@@ -196,7 +196,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
         }
 
         public void rightClickBlock(EntityPlayer playerIn, World worldIn, BlockPos pos, ItemStack dustStack,
-                                    EnumFacing facing) {
+                                    ForgeDirection facing) {
             switch (this) {
                 case ILLUMINATION:
                     IBlockState iblockstate = worldIn.getBlockState(pos);

@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -24,15 +24,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.tile.TileVanishing;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -80,7 +80,7 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -101,7 +101,7 @@ public class BlockVanishing extends BlockContainer {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Items.AIR;
+        return null;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class BlockVanishing extends BlockContainer {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

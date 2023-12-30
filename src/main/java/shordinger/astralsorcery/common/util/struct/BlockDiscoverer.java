@@ -9,13 +9,13 @@
 package shordinger.astralsorcery.common.util.struct;
 
 import com.google.common.collect.Lists;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 import javax.annotation.Nullable;
@@ -36,20 +36,20 @@ import java.util.Map;
 public class BlockDiscoverer {
 
     public static BlockArray discoverBlocksWithSameStateAroundChain(World world, BlockPos origin, IBlockState match,
-                                                                    int length, @Nullable EnumFacing originalBreakDirection, BlockStateCheck.WorldSpecific addCheck) {
+                                                                    int length, @Nullable ForgeDirection originalBreakDirection, BlockStateCheck.WorldSpecific addCheck) {
         BlockArray out = new BlockArray();
 
         BlockPos offset = new BlockPos(origin);
         lbl:
         while (length > 0) {
-            List<EnumFacing> faces = new ArrayList<>();
-            Collections.addAll(faces, EnumFacing.values());
+            List<ForgeDirection> faces = new ArrayList<>();
+            Collections.addAll(faces, ForgeDirection.values());
             if (originalBreakDirection != null && out.isEmpty()) {
                 faces.remove(originalBreakDirection);
                 faces.remove(originalBreakDirection.getOpposite());
             }
             Collections.shuffle(faces);
-            for (EnumFacing face : faces) {
+            for (ForgeDirection face : faces) {
                 BlockPos at = offset.offset(face);
                 if (out.getPattern()
                     .containsKey(at)) {
@@ -133,7 +133,7 @@ public class BlockDiscoverer {
                         }
                     }
                 } else {
-                    for (EnumFacing face : EnumFacing.values()) {
+                    for (ForgeDirection face : ForgeDirection.values()) {
                         BlockPos search = offsetPos.offset(face);
                         if (visited.contains(search)) continue;
                         if (getCubeDistance(search, origin) > cubeSize) continue;
@@ -192,7 +192,7 @@ public class BlockDiscoverer {
                         }
                     }
                 } else {
-                    for (EnumFacing face : EnumFacing.values()) {
+                    for (ForgeDirection face : ForgeDirection.values()) {
                         BlockPos search = offsetPos.offset(face);
                         if (visited.contains(search)) continue;
                         if (getCubeDistance(search, origin) > cubeSize) continue;
@@ -234,7 +234,7 @@ public class BlockDiscoverer {
     }
 
     public static boolean isExposedToAir(World world, BlockPos pos) {
-        for (EnumFacing face : EnumFacing.values()) {
+        for (ForgeDirection face : ForgeDirection.values()) {
             BlockPos offset = pos.offset(face);
             if (world.isAirBlock(offset.getX(), offset.getY(), offset.getZ())
                 || WorldHelper.getBlockState(world, offset)

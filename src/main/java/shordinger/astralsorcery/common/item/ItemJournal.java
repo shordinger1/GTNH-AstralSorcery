@@ -23,9 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.AstralSorcery;
@@ -36,6 +33,8 @@ import shordinger.astralsorcery.common.container.ContainerJournal;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.astralsorcery.migration.ActionResult;
+import shordinger.astralsorcery.migration.EnumActionResult;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,10 +54,10 @@ public class ItemJournal extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
         if (worldIn.isRemote && !playerIn.isSneaking()) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL, playerIn, worldIn, 0, 0, 0);
-        } else if (!worldIn.isRemote && playerIn.isSneaking() && hand == ) {
+        } else if (!worldIn.isRemote && playerIn.isSneaking() ) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL_STORAGE, playerIn, worldIn, 0, 0, 0);
         }
-        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem());
     }
 
     @Nullable

@@ -24,8 +24,8 @@ import shordinger.astralsorcery.common.block.BlockStructural;
 import shordinger.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -272,7 +272,7 @@ public class BlockArray {
                 s = ((ISpecialStackDescriptor) info.type).getDecriptor(info.state);
             } else {
                 Item i = Item.getItemFromBlock(info.type);
-                if (i == Items.AIR) continue;
+                if (i == null) continue;
                 s = new ItemStack(i, 1, meta);
             }
             if (s.stackSize!=0) {

@@ -18,7 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
@@ -30,8 +30,8 @@ import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
@@ -113,7 +113,7 @@ public class GenAttributeAquamarine extends WorldGenAttribute {
 
             boolean foundWater = false;
             for (int yy = 0; yy < 2; yy++) {
-                BlockPos check = pos.offset(EnumFacing.UP, yy);
+                BlockPos check = pos.offset(ForgeDirection.UP, yy);
                 IBlockState bs = WorldHelper.getBlockState(world, check);
                 Block block = bs.getBlock();
                 if ((block instanceof BlockLiquid && bs.getMaterial() == Material.water) || block.equals(Blocks.ice)

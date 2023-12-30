@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

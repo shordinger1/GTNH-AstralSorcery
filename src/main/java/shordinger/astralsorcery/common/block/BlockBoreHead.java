@@ -8,22 +8,19 @@
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileBore;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 import shordinger.astralsorcery.migration.NonNullList;
 
@@ -36,7 +33,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.11.2017 / 20:22
  */
-public class BlockBoreHead extends Block implements BlockCustomName, BlockVariants {
+public class BlockBoreHead extends AstralBlock implements BlockCustomName, BlockVariants {
 
     public static final PropertyEnum<TileBore.BoreType> BORE_TYPE = PropertyEnum
         .create("type", TileBore.BoreType.class);
@@ -60,14 +57,14 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
     }
 
     @Override
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
-        return super.canPlaceBlockAt(worldIn, pos) && side == EnumFacing.DOWN
-            && worldIn.getBlockState(pos.offset(EnumFacing.UP))
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, ForgeDirection side) {
+        return super.canPlaceBlockAt(worldIn, pos) && side == ForgeDirection.DOWN
+            && worldIn.getBlockState(pos.offset(ForgeDirection.UP))
             .getBlock() instanceof BlockBore;
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -88,7 +85,7 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

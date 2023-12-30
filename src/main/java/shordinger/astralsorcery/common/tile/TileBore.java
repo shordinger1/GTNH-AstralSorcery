@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Configuration;
@@ -57,7 +57,6 @@ import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
-import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.BlockDropCaptureAssist;
 import shordinger.astralsorcery.common.util.EntityUtils;
 import shordinger.astralsorcery.common.util.ItemUtils;
@@ -67,8 +66,8 @@ import shordinger.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTan
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -102,8 +101,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private int vortexOffset = CfgEntry.vortexOffset;
 
     public TileBore() {
-        super(1, EnumFacing.UP);
-        tank = new SimpleSingleFluidCapabilityTank(1000, EnumFacing.UP);
+        super(1, ForgeDirection.UP);
+        tank = new SimpleSingleFluidCapabilityTank(1000, ForgeDirection.UP);
         tank.setAllowInput(false);
     }
 
@@ -980,8 +979,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = SimpleSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
-        if (!tank.hasCapability(EnumFacing.UP)) {
-            tank.accessibleSides.add(EnumFacing.UP);
+        if (!tank.hasCapability(ForgeDirection.UP)) {
+            tank.accessibleSides.add(ForgeDirection.UP);
         }
         this.operationTicks = compound.getInteger("operation");
         this.hasMultiblock = compound.getBoolean("multiblockState");

@@ -13,7 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

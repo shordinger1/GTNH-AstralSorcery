@@ -23,7 +23,7 @@ import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

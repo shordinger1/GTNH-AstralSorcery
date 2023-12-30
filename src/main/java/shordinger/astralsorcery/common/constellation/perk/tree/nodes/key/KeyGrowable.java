@@ -26,8 +26,8 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.CropHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

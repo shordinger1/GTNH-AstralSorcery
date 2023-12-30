@@ -24,8 +24,8 @@ import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

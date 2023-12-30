@@ -8,36 +8,31 @@
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
- * Class: BlockInfusedWood
- * Created by HellFirePvP
- * Date: 05.06.2018 / 16:15
- */
-public class BlockInfusedWood extends Block implements BlockCustomName, BlockVariants {
+
+public class BlockInfusedWood extends AstralBlock implements BlockCustomName, BlockVariants {
 
     public static PropertyEnum<WoodType> WOOD_TYPE = PropertyEnum.create("woodtype", WoodType.class);
 
@@ -67,17 +62,11 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
         if (state.getValue(WOOD_TYPE)
             .isColumn()) {
             IBlockState st = worldIn.getBlockState(pos.up());
-            boolean top = false;
-            if (st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
-                .isColumn()) {
-                top = true;
-            }
+            boolean top = st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
+                .isColumn();
             st = worldIn.getBlockState(pos.down());
-            boolean down = false;
-            if (st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
-                .isColumn()) {
-                down = true;
-            }
+            boolean down = st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
+                .isColumn();
             if (top && down) {
                 return state.withProperty(WOOD_TYPE, WoodType.COLUMN);
             } else if (top) {
@@ -94,14 +83,11 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         IBlockState actual = state.getActualState(source, pos);
-        switch (actual.getValue(WOOD_TYPE)) {
-            case COLUMN:
-                return new AxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
-            case COLUMN_TOP:
-            case COLUMN_BOTTOM:
-                return new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875);
-        }
-        return super.getBoundingBox(state, source, pos);
+        return switch (actual.getValue(WOOD_TYPE)) {
+            case COLUMN -> new AxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
+            case COLUMN_TOP, COLUMN_BOTTOM -> new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875);
+            default -> super.getBoundingBox(state, source, pos);
+        };
     }
 
     @Override
@@ -111,7 +97,7 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return p_193383_2_.getValue(WOOD_TYPE)
             .isColumn() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
@@ -149,18 +135,18 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, ForgeDirection face) {
         WoodType woodType = state.getValue(WOOD_TYPE);
-        IBlockState other = WorldHelper.getBlockState(world, pos.offset(face));
+        IBlockState other = WorldHelper.getBlockState((World) world, pos.offset(face));
         if (MiscUtils.isFluidBlock(other)
             && (woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM || woodType == WoodType.COLUMN_TOP)) {
             return false;
         }
         if (woodType == WoodType.COLUMN_TOP) {
-            return face == EnumFacing.UP;
+            return face == ForgeDirection.UP;
         }
         if (woodType == WoodType.COLUMN_BOTTOM) {
-            return face == EnumFacing.DOWN;
+            return face == ForgeDirection.DOWN;
         }
         return state.isOpaqueCube();
     }

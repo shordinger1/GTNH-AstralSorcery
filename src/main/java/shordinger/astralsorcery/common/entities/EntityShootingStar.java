@@ -15,7 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -31,10 +31,10 @@ import shordinger.astralsorcery.common.util.LootTableUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.EntityData.DataParameter;
 import shordinger.astralsorcery.migration.EntityData.EntityDataManager;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.awt.*;
 import java.util.List;
@@ -113,7 +113,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             this.dataManager.set(LAST_UPDATE, worldObj.getTotalWorldTime());
 
             if (isInWater() || isInLava()) {
-                RayTraceResult rtr = new RayTraceResult(new BlockPos(0, 0, 0), EnumFacing.UP, this.getPosition());
+                RayTraceResult rtr = new RayTraceResult(new BlockPos(0, 0, 0), ForgeDirection.UP, this.getPosition());
                 if (!ForgeEventFactory.onProjectileImpact(this, rtr)) {
                     this.onImpact(rtr);
                 }

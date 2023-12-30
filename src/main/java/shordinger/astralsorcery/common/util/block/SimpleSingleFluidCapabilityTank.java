@@ -15,7 +15,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 /**
@@ -34,16 +34,16 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
 
     private boolean allowInput = true, allowOutput = true;
 
-    public List<EnumFacing> accessibleSides = new ArrayList<>();
+    public List<ForgeDirection> accessibleSides = new ArrayList<>();
 
     private SimpleSingleFluidCapabilityTank() {
     }
 
     public SimpleSingleFluidCapabilityTank(int maxCapacity) {
-        this(maxCapacity, EnumFacing.VALUES);
+        this(maxCapacity, ForgeDirection.VALUES);
     }
 
-    public SimpleSingleFluidCapabilityTank(int capacity, EnumFacing... accessibleFrom) {
+    public SimpleSingleFluidCapabilityTank(int capacity, ForgeDirection... accessibleFrom) {
         this.maxCapacity = Math.max(0, capacity);
         this.accessibleSides = Arrays.asList(accessibleFrom);
     }
@@ -215,7 +215,7 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         }
         int[] sides = new int[accessibleSides.size()];
         for (int i = 0; i < accessibleSides.size(); i++) {
-            EnumFacing side = accessibleSides.get(i);
+            ForgeDirection side = accessibleSides.get(i);
             sides[i] = side.ordinal();
         }
         tag.setIntArray("sides", sides);
@@ -234,7 +234,7 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         }
         int[] sides = tag.getIntArray("sides");
         for (int i : sides) {
-            this.accessibleSides.add(EnumFacing.values()[i]);
+            this.accessibleSides.add(ForgeDirection.values()[i]);
         }
     }
 
@@ -244,11 +244,11 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         return tank;
     }
 
-    public boolean hasCapability(EnumFacing facing) {
+    public boolean hasCapability(ForgeDirection facing) {
         return (facing == null) || accessibleSides.contains(facing);
     }
 
-    public IFluidHandler getCapability(EnumFacing facing) {
+    public IFluidHandler getCapability(ForgeDirection facing) {
         if (hasCapability(facing)) {
             return this;
         }

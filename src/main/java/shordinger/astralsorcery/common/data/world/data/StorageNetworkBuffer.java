@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.tile.storage.StorageNetwork;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

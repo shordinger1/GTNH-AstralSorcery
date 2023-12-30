@@ -14,20 +14,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -44,13 +39,19 @@ import shordinger.astralsorcery.common.tile.TileGrindstone;
 import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+
+import static shordinger.astralsorcery.common.block.BlockMachine.MachineType.TELESCOPE;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:11
  */
-public class BlockMachine extends BlockContainer implements BlockCustomName, BlockVariants {
+public class BlockMachine extends AstralBlockContainer implements BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
@@ -77,12 +78,11 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = WorldHelper.getBlockState(world, pos);
-        switch (state.getValue(MACHINE_TYPE)) {
-            case TELESCOPE:
-                RenderingUtils.playBlockBreakParticles(
-                    pos.up(),
-                    BlocksAS.blockMachine.getDefaultState()
-                        .withProperty(MACHINE_TYPE, MachineType.TELESCOPE));
+        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
+            RenderingUtils.playBlockBreakParticles(
+                pos.up(),
+                BlocksAS.blockMachine.getDefaultState()
+                    .withProperty(MACHINE_TYPE, TELESCOPE));
         }
         return false;
     }
@@ -93,13 +93,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
             return super.getHarvestTool(state);
         }
         MachineType t = state.getValue(MACHINE_TYPE);
-        switch (t) {
-            case TELESCOPE:
-                return "axe";
-            case GRINDSTONE:
-                return "pickaxe";
-        }
-        return super.getHarvestTool(state);
+        return switch (t) {
+            case TELESCOPE -> "axe";
+            case GRINDSTONE -> "pickaxe";
+        };
     }
 
     @Override
@@ -108,13 +105,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
             return super.getSoundType(state, world, pos, entity);
         }
         MachineType t = state.getValue(MACHINE_TYPE);
-        switch (t) {
-            case TELESCOPE:
-                return SoundType.WOOD;
-            case GRINDSTONE:
-                return SoundType.STONE;
-        }
-        return super.getSoundType(state, world, pos, entity);
+        return switch (t) {
+            case TELESCOPE -> SoundType.WOOD;
+            case GRINDSTONE -> SoundType.STONE;
+        };
     }
 
     @Override
@@ -171,10 +165,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player,
-                                    EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if (type == MachineType.TELESCOPE) {
-            if (player.world.isRemote) {
+        if (type == TELESCOPE) {
+            if (player.worldObj.isRemote) {
                 AstralSorcery.proxy
                     .openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, pos.getX(), pos.getY(), pos.getZ());
             }
@@ -188,7 +182,6 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
             return false;
         }
 
-        EnumHand hand = event.getHand();
         World world = event.world;
         BlockPos pos = event.getPos();
         IBlockState state = WorldHelper.getBlockState(world, pos);
@@ -196,128 +189,122 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         int posX = pos.getX();
         int posY = pos.getY();
         int posZ = pos.getZ();
-        switch (type) {
-            case GRINDSTONE:
-                TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
-                if (tgr != null) {
-                    if (!world.isRemote) {
-                        ItemStack grind = tgr.getGrindingItem();
-                        if (!grind.isEmpty()) {
-                            if (player.isSneaking()) {
-                                player.inventory.placeItemBackInInventory(world, grind);
+        if (Objects.requireNonNull(type) == MachineType.GRINDSTONE) {
+            TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
+            if (tgr != null) {
+                ItemStack grind = tgr.getGrindingItem();
+                if (!world.isRemote) {
+                    if (!grind.isEmpty()) {
+                        if (player.isSneaking()) {
+                            player.inventory.placeItemBackInInventory(world, grind);
 
-                                tgr.setGrindingItem(null);
-                            } else {
-                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
-                                if (recipe != null) {
-                                    GrindstoneRecipe.GrindResult result = recipe.grind(grind);
-                                    switch (result.getType()) {
-                                        case SUCCESS:
-                                            tgr.setGrindingItem(grind); // Update
-                                            break;
-                                        case ITEMCHANGE:
-                                            tgr.setGrindingItem(result.getStack());
-                                            break;
-                                        case FAIL_BREAK_ITEM:
-                                            tgr.setGrindingItem(null);
-                                            world.playSound(
-                                                null,
-                                                posX,
-                                                posY,
-                                                posZ,
-                                                SoundEvents.ENTITY_ITEM_BREAK,
-                                                SoundCategory.PLAYERS,
-                                                0.5F,
-                                                world.rand.nextFloat() * 0.2F + 0.8F);
-                                            break;
-                                    }
-                                    tgr.playWheelEffect();
-                                } else if (SwordSharpenHelper.canBeSharpened(grind)) {
-                                    if (rand.nextInt(40) == 0) {
-                                        SwordSharpenHelper.setSwordSharpened(grind);
-                                    }
-                                    tgr.playWheelEffect();
-                                }
-                            }
+                            tgr.setGrindingItem(null);
                         } else {
-                            ItemStack stack = player.getHeldItem(hand);
-
-                            if (stack.stackSize!=0) {
-                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
-                                if (recipe != null) {
-                                    ItemStack toSet = stack.copy();
-                                    toSet.setCount(1);
-                                    tgr.setGrindingItem(toSet);
-                                    world.playSound(
-                                        null,
-                                        posX,
-                                        posY,
-                                        posZ,
-                                        SoundEvents.ENTITY_ITEM_PICKUP,
-                                        SoundCategory.PLAYERS,
-                                        0.5F,
-                                        world.rand.nextFloat() * 0.2F + 0.8F);
-
-                                    if (!player.isCreative()) {
-                                        stack.setCount(stack.getCount() - 1);
+                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                            if (recipe != null) {
+                                GrindstoneRecipe.GrindResult result = recipe.grind(grind);
+                                switch (result.getType()) {
+                                    case SUCCESS -> tgr.setGrindingItem(grind); // Update
+                                    case ITEMCHANGE -> tgr.setGrindingItem(result.getStack());
+                                    case FAIL_BREAK_ITEM -> {
+                                        tgr.setGrindingItem(null);
+                                        world.playSound(
+                                            null,
+                                            posX,
+                                            posY,
+                                            posZ,
+                                            SoundEvents.ENTITY_ITEM_BREAK,
+                                            SoundCategory.PLAYERS,
+                                            0.5F,
+                                            world.rand.nextFloat() * 0.2F + 0.8F);
                                     }
-                                } else if (SwordSharpenHelper.canBeSharpened(stack)
-                                    && !SwordSharpenHelper.isSwordSharpened(stack)) {
-                                    ItemStack toSet = stack.copy();
-                                    toSet.setCount(1);
-                                    tgr.setGrindingItem(toSet);
-                                    world.playSound(
-                                        null,
-                                        posX,
-                                        posY,
-                                        posZ,
-                                        SoundEvents.ENTITY_ITEM_PICKUP,
-                                        SoundCategory.PLAYERS,
-                                        0.5F,
-                                        world.rand.nextFloat() * 0.2F + 0.8F);
-
-                                    if (!player.isCreative()) {
-                                        stack.setCount(stack.getCount() - 1);
-                                    }
-                                } else if (player.isSneaking()) {
-                                    return false;
                                 }
+                                tgr.playWheelEffect();
+                            } else if (SwordSharpenHelper.canBeSharpened(grind)) {
+                                if (rand.nextInt(40) == 0) {
+                                    SwordSharpenHelper.setSwordSharpened(grind);
+                                }
+                                tgr.playWheelEffect();
                             }
                         }
                     } else {
-                        ItemStack grind = tgr.getGrindingItem();
-                        if (!grind.isEmpty()) {
-                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                        ItemStack stack = player.getHeldItem();
+
+                        if (stack.stackSize != 0) {
+                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
                             if (recipe != null) {
-                                for (int j = 0; j < 8; j++) {
-                                    world.spawnParticle(
-                                        EnumParticleTypes.CRIT,
-                                        posX + 0.5,
-                                        posY + 0.8,
-                                        posZ + 0.4,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
+                                ItemStack toSet = stack.copy();
+                                toSet.setCount(1);
+                                tgr.setGrindingItem(toSet);
+                                world.playSound(
+                                    null,
+                                    posX,
+                                    posY,
+                                    posZ,
+                                    SoundEvents.ENTITY_ITEM_PICKUP,
+                                    SoundCategory.PLAYERS,
+                                    0.5F,
+                                    world.rand.nextFloat() * 0.2F + 0.8F);
+
+                                if (!player.isCreative()) {
+                                    stack.setCount(stack.getCount() - 1);
                                 }
-                            } else if (SwordSharpenHelper.canBeSharpened(grind)
-                                && !SwordSharpenHelper.isSwordSharpened(grind)) {
-                                for (int j = 0; j < 8; j++) {
-                                    world.spawnParticle(
-                                        EnumParticleTypes.CRIT,
-                                        posX + 0.5,
-                                        posY + 0.8,
-                                        posZ + 0.4,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                        (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
+                            } else if (SwordSharpenHelper.canBeSharpened(stack)
+                                && !SwordSharpenHelper.isSwordSharpened(stack)) {
+                                ItemStack toSet = stack.copy();
+                                toSet.setCount(1);
+                                tgr.setGrindingItem(toSet);
+                                world.playSound(
+                                    null,
+                                    posX,
+                                    posY,
+                                    posZ,
+                                    SoundEvents.ENTITY_ITEM_PICKUP,
+                                    SoundCategory.PLAYERS,
+                                    0.5F,
+                                    world.rand.nextFloat() * 0.2F + 0.8F);
+
+                                if (!player.isCreative()) {
+                                    stack.setCount(stack.getCount() - 1);
                                 }
                             } else if (player.isSneaking()) {
                                 return false;
                             }
                         }
                     }
+                } else {
+                    if (!grind.isEmpty()) {
+                        GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                        if (recipe != null) {
+                            for (int j = 0; j < 8; j++) {
+                                world.spawnParticle(
+                                    EnumParticleTypes.CRIT,
+                                    posX + 0.5,
+                                    posY + 0.8,
+                                    posZ + 0.4,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
+                            }
+                        } else if (SwordSharpenHelper.canBeSharpened(grind)
+                            && !SwordSharpenHelper.isSwordSharpened(grind)) {
+                            for (int j = 0; j < 8; j++) {
+                                world.spawnParticle(
+                                    EnumParticleTypes.CRIT,
+                                    posX + 0.5,
+                                    posY + 0.8,
+                                    posZ + 0.4,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
+                            }
+                        } else if (player.isSneaking()) {
+                            return false;
+                        }
+                    }
                 }
-                return true;
+            }
+            return true;
         }
         return false;
     }
@@ -325,25 +312,21 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
                                 ItemStack stack) {
-        switch (state.getValue(MACHINE_TYPE)) {
-            case TELESCOPE:
-                worldIn.setBlockState(
-                    pos.up(),
-                    BlocksAS.blockStructural.getDefaultState()
-                        .withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE_STRUCT));
-                break;
+        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
+            worldIn.setBlockState(
+                pos.up(),
+                BlocksAS.blockStructural.getDefaultState()
+                    .withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE_STRUCT));
         }
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        switch (state.getValue(MACHINE_TYPE)) {
-            case TELESCOPE:
-                if (world.isAirBlock(pos.up())) {
-                    world.setBlockToAir(pos);
-                }
-                break;
+        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
+            if (world.isAirBlock(pos.up())) {
+                world.setBlockToAir(pos);
+            }
         }
         super.neighborChanged(state, world, pos, blockIn, fromPos);
     }
@@ -355,12 +338,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
             return;
         }
         IBlockState state = WorldHelper.getBlockState(world, pos);
-        switch (state.getValue(MACHINE_TYPE)) {
-            case TELESCOPE:
-                if (world.isAirBlock(pos.up())) {
-                    ((World) world).setBlockToAir(pos);
-                }
-                break;
+        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
+            if (world.isAirBlock(pos.up())) {
+                ((World) world).setBlockToAir(pos);
+            }
         }
     }
 
@@ -378,13 +359,13 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

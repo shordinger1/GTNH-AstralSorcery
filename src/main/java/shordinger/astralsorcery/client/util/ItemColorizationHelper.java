@@ -34,7 +34,7 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.OreDictUniqueStackList;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

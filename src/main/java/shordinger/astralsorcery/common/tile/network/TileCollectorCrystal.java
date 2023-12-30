@@ -61,7 +61,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

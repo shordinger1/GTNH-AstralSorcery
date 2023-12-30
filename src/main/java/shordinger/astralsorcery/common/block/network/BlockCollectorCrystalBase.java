@@ -12,18 +12,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.client.particle.ParticleManager;
+import shordinger.astralsorcery.migration.ITooltipFlag;
+
+import shordinger.astralsorcery.migration.TextFormatting;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.AstralSorcery;
@@ -46,8 +46,8 @@ import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -123,7 +123,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -179,7 +179,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     /*
      * @Override
      * public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand
-     * hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+     * hand, @Nullable ItemStack heldItem, ForgeDirection side, float hitX, float hitY, float hitZ) {
      * if(!worldIn.isRemote) {
      * TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
      * if(te != null) {

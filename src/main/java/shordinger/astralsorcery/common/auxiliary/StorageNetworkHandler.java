@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StorageNetworkBuffer;
 import shordinger.astralsorcery.common.tile.TileStorageCore;
 import shordinger.astralsorcery.common.tile.storage.StorageNetwork;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

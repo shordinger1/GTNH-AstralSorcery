@@ -17,14 +17,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -35,8 +34,9 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.tile.TileTranslucent;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.RayTraceResult;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -96,7 +96,7 @@ public class BlockTranslucentBlock extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         IBlockState fst = getFakedStateTile(worldIn, pos);
         if (fst != null) {
             Block actual = fst.getBlock();
@@ -145,7 +145,7 @@ public class BlockTranslucentBlock extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -156,7 +156,7 @@ public class BlockTranslucentBlock extends BlockContainer {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

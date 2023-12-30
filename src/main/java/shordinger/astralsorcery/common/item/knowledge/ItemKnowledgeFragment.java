@@ -15,7 +15,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -48,7 +48,7 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -105,7 +105,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player) {
         if (world.isRemote) {
-            ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getHeldItem();
             if (hasConstellationInformation(stack)) {
                 player.openGui(
                     AstralSorcery.instance,
@@ -114,7 +114,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
                     0,
                     0,
                     0);
-                return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+                return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem());
             } else {
                 KnowledgeFragment frag = resolveFragment(stack);
                 if (frag != null) {
@@ -130,11 +130,11 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
                 }
             }
         }
-        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem());
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumFacing facing,
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, ForgeDirection facing,
                                       float hitX, float hitY, float hitZ) {
         return EnumActionResult.PASS;
     }

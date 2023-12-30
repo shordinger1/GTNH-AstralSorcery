@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

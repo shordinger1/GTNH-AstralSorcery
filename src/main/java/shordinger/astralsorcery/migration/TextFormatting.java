@@ -219,7 +219,7 @@ public abstract class TextComponentBase implements IChatComponent {
 
         for (IChatComponent iChatComponent : (Iterable<IChatComponent>) this) {
             String s = ((IChatComponent) iChatComponent).getUnformattedComponentText();
-            if (s.stackSize!=0) {
+            if (s.length() != 0) {
                 stringbuilder.append(
                     ((IChatComponent) iChatComponent).getChatStyle()
                         .getFormattingCode());

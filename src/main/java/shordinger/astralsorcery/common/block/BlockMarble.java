@@ -12,35 +12,27 @@ import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-/**
- * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
- * Class: BlockMarble
- * Created by HellFirePvP
- * Date: 22.05.2016 / 16:13
- */
-public class BlockMarble extends Block implements BlockCustomName, BlockVariants, BlockDynamicStateMapper.Festive {
+public class BlockMarble extends AstralBlock implements BlockCustomName, BlockVariants, BlockDynamicStateMapper.Festive {
 
     // private static final int RAND_MOSS_CHANCE = 10;
 
@@ -85,17 +77,11 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
         if (state.getValue(MARBLE_TYPE)
             .isPillar()) {
             IBlockState st = worldIn.getBlockState(pos.up());
-            boolean top = false;
-            if (st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
-                .isPillar()) {
-                top = true;
-            }
+            boolean top = st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
+                .isPillar();
             st = worldIn.getBlockState(pos.down());
-            boolean down = false;
-            if (st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
-                .isPillar()) {
-                down = true;
-            }
+            boolean down = st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
+                .isPillar();
             if (top && down) {
                 return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR);
             } else if (top) {
@@ -111,7 +97,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return p_193383_2_.getValue(MARBLE_TYPE)
             .isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
@@ -153,7 +139,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, ForgeDirection face) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
         IBlockState other = WorldHelper.getBlockState(world, pos.offset(face));
         if (MiscUtils.isFluidBlock(other)
@@ -162,10 +148,10 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
             return false;
         }
         if (marbleType == MarbleBlockType.PILLAR_TOP) {
-            return face == EnumFacing.UP;
+            return face == ForgeDirection.UP;
         }
         if (marbleType == MarbleBlockType.PILLAR_BOTTOM) {
-            return face == EnumFacing.DOWN;
+            return face == ForgeDirection.DOWN;
         }
         return state.isOpaqueCube();
     }

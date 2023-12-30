@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

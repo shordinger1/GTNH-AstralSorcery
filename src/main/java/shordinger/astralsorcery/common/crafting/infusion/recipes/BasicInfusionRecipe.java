@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import java.awt.*;
 import java.util.Random;

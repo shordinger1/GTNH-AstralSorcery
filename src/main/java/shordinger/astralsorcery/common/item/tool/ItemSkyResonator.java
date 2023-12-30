@@ -27,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -56,7 +56,7 @@ import shordinger.astralsorcery.common.util.SkyCollectionHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.astralsorcery.migration.ActionResult;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.EnumActionResult;
 import shordinger.astralsorcery.migration.MathHelper;
 
@@ -139,7 +139,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, ForgeDirection side,
                                 ItemStack stack) {
         ResonatorUpgrade upgr = getCurrentUpgrade(player, stack);
         if (upgr == ResonatorUpgrade.AREA_SIZE) {

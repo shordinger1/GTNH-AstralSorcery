@@ -19,7 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -37,8 +37,8 @@ import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -151,7 +151,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
                                 ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof IMultiblockDependantTile) {

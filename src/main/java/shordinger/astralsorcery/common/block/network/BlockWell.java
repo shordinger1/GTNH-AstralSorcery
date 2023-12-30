@@ -10,7 +10,7 @@ package shordinger.astralsorcery.common.block.network;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.IBlockAccess;
@@ -36,8 +36,8 @@ import shordinger.astralsorcery.common.tile.TileWell;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 import javax.annotation.Nullable;
@@ -88,8 +88,8 @@ public class BlockWell extends BlockStarlightNetwork {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
-        return p_193383_4_ == EnumFacing.UP ? BlockFaceShape.BOWL : BlockFaceShape.UNDEFINED;
+                                            ForgeDirection p_193383_4_) {
+        return p_193383_4_ == ForgeDirection.UP ? BlockFaceShape.BOWL : BlockFaceShape.UNDEFINED;
     }
 
     @Override
@@ -116,10 +116,10 @@ public class BlockWell extends BlockStarlightNetwork {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
 
-            ItemStack heldItem = playerIn.getHeldItem(hand);
+            ItemStack heldItem = playerIn.getHeldItem();
             if (!heldItem.isEmpty() && playerIn instanceof EntityPlayerMP) {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
                 if (tw == null) return false;
@@ -155,7 +155,7 @@ public class BlockWell extends BlockStarlightNetwork {
 
                 FluidActionResult far = FluidUtil.tryFillContainerAndStow(
                     heldItem,
-                    tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN),
+                    tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, ForgeDirection.DOWN),
                     new InvWrapper(playerIn.inventory),
                     Fluid.BUCKET_VOLUME,
                     playerIn,
@@ -185,8 +185,8 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side != EnumFacing.UP;
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+        return side != ForgeDirection.UP;
     }
 
     @Override

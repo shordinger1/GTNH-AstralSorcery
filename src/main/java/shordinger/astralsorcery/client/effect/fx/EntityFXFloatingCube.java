@@ -24,8 +24,8 @@ import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

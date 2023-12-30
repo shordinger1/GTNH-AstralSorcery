@@ -22,7 +22,7 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 import shordinger.astralsorcery.common.world.structure.WorldGenAttributeStructure;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

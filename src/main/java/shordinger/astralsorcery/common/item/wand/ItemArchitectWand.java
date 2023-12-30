@@ -31,9 +31,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.RayTraceResult;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -66,9 +66,9 @@ import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -260,7 +260,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                 return;
             }
             BlockPos hitVec = rtr.hitVec;
-            EnumFacing sideHit = rtr.sideHit;
+            ForgeDirection sideHit = rtr.sideHit;
 
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
@@ -307,8 +307,8 @@ public class ItemArchitectWand extends ItemBlockStorage
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn) {
-        ItemStack stack = playerIn.getHeldItem(hand);
-        if (stack.stackSize==0) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
+        ItemStack stack = playerIn.getHeldItem();
+        if (stack.stackSize==0) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem());
         if (world.isRemote) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
@@ -317,7 +317,7 @@ public class ItemArchitectWand extends ItemBlockStorage
         RayTraceResult rtr = getLookBlock(playerIn, false, true, architectRange);
         if (rtr == null || rtr.sideHit == null || rtr.hitVec == null)
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        EnumFacing sideHit = rtr.sideHit;
+        ForgeDirection sideHit = rtr.sideHit;
         List<Tuple<IBlockState, ItemStack>> shuffleable = MiscUtils.flatten(storedStates, Tuple::new);
 
         Random r = getPreviewRandomFromWorld(world);
@@ -379,8 +379,8 @@ public class ItemArchitectWand extends ItemBlockStorage
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = playerIn.getHeldItem(hand);
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem();
         if (stack.stackSize==0) return EnumActionResult.SUCCESS;
 
         if (playerIn.isSneaking()) {
@@ -505,7 +505,7 @@ public class ItemArchitectWand extends ItemBlockStorage
             return Lists.newLinkedList();
         }
         LinkedList<BlockPos> blocks = Lists.newLinkedList();
-        EnumFacing sideHit = rtr.sideHit;
+        ForgeDirection sideHit = rtr.sideHit;
         BlockPos hitPos = rtr.getBlockPos();
         int length;
         int cmpFrom;

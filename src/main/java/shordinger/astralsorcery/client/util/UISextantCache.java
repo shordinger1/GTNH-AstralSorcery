@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktRequestSextantTarget;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

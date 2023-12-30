@@ -20,7 +20,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -63,7 +63,7 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -453,7 +453,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     @Override
-    public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneak) {
+    public void onInteract(World world, BlockPos pos, EntityPlayer player, ForgeDirection side, boolean sneak) {
         if (!world.isRemote) {
             findRecipe(player);
         }

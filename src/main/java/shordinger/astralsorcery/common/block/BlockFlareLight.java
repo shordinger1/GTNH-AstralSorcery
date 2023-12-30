@@ -10,31 +10,28 @@ package shordinger.astralsorcery.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.EnumDyeColor;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -49,7 +46,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 22.10.2016 / 14:36
  */
-public class BlockFlareLight extends Block {
+public class BlockFlareLight extends AstralBlock {
 
     public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum
         .<EnumDyeColor>create("color", EnumDyeColor.class);
@@ -95,7 +92,7 @@ public class BlockFlareLight extends Block {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Items.AIR;
+        return null;
     }
 
     @Override
@@ -221,13 +218,13 @@ public class BlockFlareLight extends Block {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

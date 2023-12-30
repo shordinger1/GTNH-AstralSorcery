@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.starlight.transmission.ITransmissionSourc
 import shordinger.astralsorcery.common.starlight.transmission.NodeConnection;
 import shordinger.astralsorcery.common.tile.base.TileNetwork;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

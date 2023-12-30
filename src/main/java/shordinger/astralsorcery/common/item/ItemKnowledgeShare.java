@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,7 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -40,7 +40,8 @@ import shordinger.astralsorcery.common.network.packet.server.PktProgressionUpdat
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.TextFormatting;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -121,8 +122,8 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem();
         if (stack.stackSize==0 || worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         }

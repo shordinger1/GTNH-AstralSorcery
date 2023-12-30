@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
 import shordinger.astralsorcery.common.util.EntityUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

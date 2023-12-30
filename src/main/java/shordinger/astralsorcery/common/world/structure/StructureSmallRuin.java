@@ -20,8 +20,8 @@ import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.WorldHelper;
 
 /**

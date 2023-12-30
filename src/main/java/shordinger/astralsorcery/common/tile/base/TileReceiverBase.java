@@ -22,7 +22,7 @@ import shordinger.astralsorcery.common.starlight.IStarlightReceiver;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

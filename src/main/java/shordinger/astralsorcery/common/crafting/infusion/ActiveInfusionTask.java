@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 import javax.annotation.Nullable;

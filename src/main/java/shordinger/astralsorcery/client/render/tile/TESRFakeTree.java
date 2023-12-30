@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import shordinger.astralsorcery.common.tile.TileFakeTree;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

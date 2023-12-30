@@ -36,7 +36,7 @@ public class ItemHandTelescope extends Item {
         if (worldIn.isRemote) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.HAND_TELESCOPE, playerIn, worldIn, 0, 0, 0);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem());
     }
 
 }

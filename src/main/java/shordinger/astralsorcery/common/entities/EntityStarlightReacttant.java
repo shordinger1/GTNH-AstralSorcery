@@ -9,11 +9,11 @@
 package shordinger.astralsorcery.common.entities;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import shordinger.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +36,7 @@ public interface EntityStarlightReacttant {
         }
         state = e.getEntityWorld()
             .getBlockState(at.down());
-        return state.isSideSolid(e.getEntityWorld(), at.down(), EnumFacing.UP);
+        return state.isSideSolid(e.getEntityWorld(), at.down(), ForgeDirection.UP);
     }
 
 }

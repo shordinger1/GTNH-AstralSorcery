@@ -21,7 +21,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -134,7 +134,7 @@ import shordinger.astralsorcery.common.util.log.LogUtil;
 import shordinger.astralsorcery.common.world.AstralWorldGenerator;
 import shordinger.astralsorcery.common.world.retrogen.ChunkVersionController;
 import shordinger.astralsorcery.common.world.retrogen.RetroGenController;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.Capability;
 import shordinger.astralsorcery.migration.CapabilityManager;
 
@@ -233,13 +233,13 @@ public class CommonProxy implements IGuiHandler {
                 @Nullable
                 @Override
                 public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
-                                        FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
+                                        FluidRarityRegistry.ChunkFluidEntry instance, ForgeDirection side) {
                     return instance.serializeNBT();
                 }
 
                 @Override
                 public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
-                                    FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
+                                    FluidRarityRegistry.ChunkFluidEntry instance, ForgeDirection side, NBTBase nbt) {
                     instance.deserializeNBT((NBTTagCompound) nbt);
                 }
             },
@@ -251,13 +251,13 @@ public class CommonProxy implements IGuiHandler {
             @Nullable
             @Override
             public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
-                                    EnumFacing side) {
+                                    ForgeDirection side) {
                 return instance.serializeNBT();
             }
 
             @Override
             public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
-                                EnumFacing side, NBTBase nbt) {
+                                ForgeDirection side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new AmuletHolderCapability.Factory());
@@ -268,13 +268,13 @@ public class CommonProxy implements IGuiHandler {
             @Nullable
             @Override
             public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
-                                    RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
+                                    RockCrystalHandler.RockCrystalPositions instance, ForgeDirection side) {
                 return instance.serializeNBT();
             }
 
             @Override
             public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
-                                RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
+                                RockCrystalHandler.RockCrystalPositions instance, ForgeDirection side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new RockCrystalHandler.ChunkFluidEntryFactory());

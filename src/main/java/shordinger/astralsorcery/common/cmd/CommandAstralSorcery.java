@@ -32,7 +32,7 @@ import shordinger.astralsorcery.common.registry.RegistryStructures;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;

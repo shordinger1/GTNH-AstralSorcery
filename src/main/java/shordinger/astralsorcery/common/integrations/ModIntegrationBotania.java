@@ -24,7 +24,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import vazkii.botania.api.item.IBlockProvider;
 
 /**

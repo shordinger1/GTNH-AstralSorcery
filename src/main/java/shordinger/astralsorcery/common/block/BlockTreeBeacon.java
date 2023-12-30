@@ -28,8 +28,8 @@ import shordinger.astralsorcery.common.block.network.BlockStarlightNetwork;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileTreeBeacon;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.util.List;
 import java.util.Map;

@@ -11,17 +11,13 @@ package shordinger.astralsorcery.common.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -32,8 +28,8 @@ import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -83,7 +79,7 @@ public class BlockAttunementRelay extends BlockContainer {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -92,7 +88,7 @@ public class BlockAttunementRelay extends BlockContainer {
         if (!worldIn.isRemote) {
             TileEntity inv = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
             if (inv != null) {
-                for (EnumFacing face : EnumFacing.VALUES) {
+                for (ForgeDirection face : ForgeDirection.VALUES) {
                     IItemHandler handle = inv.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
                     if (handle != null) {
                         ItemUtils.dropInventory(handle, worldIn, pos);
@@ -157,9 +153,9 @@ public class BlockAttunementRelay extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            ItemStack held = playerIn.getHeldItem(hand);
+            ItemStack held = playerIn.getHeldItem();
             if (!held.stackSize==0) {
                 TileAttunementRelay tar = MiscUtils.getTileAt(worldIn, pos, TileAttunementRelay.class, true);
                 if (tar != null) {

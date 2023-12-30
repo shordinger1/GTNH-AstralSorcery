@@ -21,7 +21,7 @@ import com.google.common.collect.Sets;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 /**

@@ -8,22 +8,20 @@
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import java.util.LinkedList;
@@ -36,17 +34,16 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 21.10.2016 / 23:02
  */
-public class BlockBlackMarble extends Block implements BlockCustomName, BlockVariants {
+public class BlockBlackMarble extends AstralBlock implements BlockCustomName, BlockVariants {
 
     public static PropertyEnum<BlackMarbleBlockType> BLACK_MARBLE_TYPE = PropertyEnum
         .create("marbletype", BlackMarbleBlockType.class);
 
     public BlockBlackMarble() {
-        super(Material.ROCK, MapColor.BLACK);
+        super(Material.rock, MapColor.blackColor);
         setHardness(1.0F);
         setHarvestLevel("pickaxe", 1);
         setResistance(3.0F);
-        setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(
             this.blockState.getBaseState()
@@ -67,17 +64,11 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
         if (state.getValue(BLACK_MARBLE_TYPE)
             .isPillar()) {
             IBlockState st = worldIn.getBlockState(pos.up());
-            boolean top = false;
-            if (st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
-                .isPillar()) {
-                top = true;
-            }
+            boolean top = st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
+                .isPillar();
             st = worldIn.getBlockState(pos.down());
-            boolean down = false;
-            if (st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
-                .isPillar()) {
-                down = true;
-            }
+            boolean down = st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
+                .isPillar();
             if (top && down) {
                 return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR);
             } else if (top) {
@@ -98,7 +89,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return p_193383_2_.getValue(BLACK_MARBLE_TYPE)
             .isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
@@ -135,7 +126,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, ForgeDirection face) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
         IBlockState other = WorldHelper.getBlockState(world, pos.offset(face));
         if (MiscUtils.isFluidBlock(other)
@@ -147,10 +138,10 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
             return false;
         }
         if (marbleType == BlackMarbleBlockType.PILLAR_TOP) {
-            return face == EnumFacing.UP;
+            return face == ForgeDirection.UP;
         }
         if (marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
-            return face == EnumFacing.DOWN;
+            return face == ForgeDirection.DOWN;
         }
         return state.isOpaqueCube();
     }

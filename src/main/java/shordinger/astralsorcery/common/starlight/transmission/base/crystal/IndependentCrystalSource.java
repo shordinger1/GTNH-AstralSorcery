@@ -31,7 +31,7 @@ import shordinger.astralsorcery.common.util.CrystalCalculations;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SkyCollectionHelper;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

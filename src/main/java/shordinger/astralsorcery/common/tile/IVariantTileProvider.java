@@ -11,7 +11,7 @@ package shordinger.astralsorcery.common.tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * HellFirePvP@Admin

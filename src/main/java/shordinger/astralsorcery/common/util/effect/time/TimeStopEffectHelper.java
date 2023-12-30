@@ -33,7 +33,7 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

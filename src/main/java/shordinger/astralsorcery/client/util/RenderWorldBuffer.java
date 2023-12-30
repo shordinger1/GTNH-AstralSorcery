@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
@@ -25,8 +25,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -87,7 +87,7 @@ public class RenderWorldBuffer implements IBlockAccess {
     }
 
     @Override
-    public int getStrongPower(BlockPos pos, EnumFacing direction) {
+    public int getStrongPower(BlockPos pos, ForgeDirection direction) {
         return 0;
     }
 
@@ -99,7 +99,7 @@ public class RenderWorldBuffer implements IBlockAccess {
     }
 
     @Override
-    public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+    public boolean isSideSolid(BlockPos pos, ForgeDirection side, boolean _default) {
         return getBlockState(pos).isSideSolid(this, pos, side);
     }
 

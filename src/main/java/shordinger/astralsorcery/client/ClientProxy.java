@@ -215,7 +215,7 @@ public class ClientProxy extends CommonProxy {
         Block block = f.getBlock();
         if (block != null) {
             Item item = Item.getItemFromBlock(block);
-            if (item != Items.AIR) {
+            if (item != null) {
                 ModelLoader.registerItemVariants(item);
                 ModelLoader.setCustomMeshDefinition(item, mapper);
             } else {

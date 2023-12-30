@@ -10,18 +10,14 @@ package shordinger.astralsorcery.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBook;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.AstralSorcery;
@@ -37,8 +33,10 @@ import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.awt.*;
 import java.util.Random;
@@ -50,7 +48,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 18.03.2017 / 17:32
  */
-public class BlockMapDrawingTable extends BlockContainer {
+public class BlockMapDrawingTable extends AstralBlockContainer {
 
     private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(
         -6.0 / 16.0,
@@ -87,59 +85,35 @@ public class BlockMapDrawingTable extends BlockContainer {
             p.gravity(0.004F)
                 .setMaxAge(rand.nextInt(30) + 35);
             switch (random) {
-                case 0:
-                    p.setColor(new Color(0xFF0800));
-                    break;
-                case 1:
-                    p.setColor(new Color(0xFFCC00));
-                    break;
-                case 2:
-                    p.setColor(new Color(0x6FFF00));
-                    break;
-                case 3:
-                    p.setColor(new Color(0x00FCFF));
-                    break;
-                case 4:
-                    p.setColor(new Color(0x0028FF));
-                    break;
-                case 5:
-                    p.setColor(new Color(0xFF00FE));
-                    break;
-                case 6:
-                    p.setColor(new Color(0xF07800));
-                    break;
-                case 7:
-                    p.setColor(new Color(0xB4F000));
-                    break;
-                case 8:
-                    p.setColor(new Color(0x01F000));
-                    break;
-                case 9:
-                    p.setColor(new Color(0x007AF0));
-                    break;
-                case 10:
-                    p.setColor(new Color(0x3900F0));
-                    break;
-                case 11:
-                    p.setColor(new Color(0xf0007B));
-                    break;
-                default:
-                    break;
+                case 0 -> p.setColor(new Color(0xFF0800));
+                case 1 -> p.setColor(new Color(0xFFCC00));
+                case 2 -> p.setColor(new Color(0x6FFF00));
+                case 3 -> p.setColor(new Color(0x00FCFF));
+                case 4 -> p.setColor(new Color(0x0028FF));
+                case 5 -> p.setColor(new Color(0xFF00FE));
+                case 6 -> p.setColor(new Color(0xF07800));
+                case 7 -> p.setColor(new Color(0xB4F000));
+                case 8 -> p.setColor(new Color(0x01F000));
+                case 9 -> p.setColor(new Color(0x007AF0));
+                case 10 -> p.setColor(new Color(0x3900F0));
+                case 11 -> p.setColor(new Color(0xf0007B));
+                default -> {
+                }
             }
         }
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+                                    ForgeDirection side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            ItemStack held = playerIn.getHeldItem(hand);
+            ItemStack held = playerIn.getHeldItem();
             TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
             if (tm != null) {
                 if (playerIn.isSneaking()) {
@@ -156,7 +130,7 @@ public class BlockMapDrawingTable extends BlockContainer {
                         return true;
                     }
                 } else {
-                    if (!held.stackSize==0) {
+                    if (held.stackSize != 0) {
                         if (held.getItem() instanceof ItemCraftingComponent) {
                             if (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
                                 int remaining = tm.addParchment(held.getCount());
@@ -216,8 +190,8 @@ public class BlockMapDrawingTable extends BlockContainer {
             }
         } else {
             if (!playerIn.isSneaking()) {
-                ItemStack held = playerIn.getHeldItem(hand);
-                if (!held.stackSize==0) {
+                ItemStack held = playerIn.getHeldItem();
+                if (held.stackSize != 0) {
                     if ((held.getItem() instanceof ItemCraftingComponent
                         && (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()))
                         || held.getItem() instanceof ItemInfusedGlass

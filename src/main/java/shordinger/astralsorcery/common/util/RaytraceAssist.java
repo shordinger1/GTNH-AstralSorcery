@@ -22,9 +22,9 @@ import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

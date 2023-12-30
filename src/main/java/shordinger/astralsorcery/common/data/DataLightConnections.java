@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

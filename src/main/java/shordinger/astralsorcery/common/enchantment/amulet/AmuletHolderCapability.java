@@ -9,7 +9,7 @@
 package shordinger.astralsorcery.common.enchantment.amulet;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.Tags;
 
@@ -67,13 +67,13 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
         private final AmuletHolderCapability defaultImpl = new AmuletHolderCapability();
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable ForgeDirection facing) {
             return capability.equals(CAPABILITY_AMULET_HOLDER);
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable ForgeDirection facing) {
             return hasCapability(capability, facing) ? CAPABILITY_AMULET_HOLDER.cast(defaultImpl) : null;
         }
 

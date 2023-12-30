@@ -26,8 +26,8 @@ import net.minecraftforge.common.util.Constants;
 
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +41,7 @@ public abstract class ItemBlockStorage extends Item {
     public static void tryStoreBlock(ItemStack storeIn, World w, BlockPos pos) {
         if (w.getTileEntity(pos) != null) return;
         IBlockState stateToStore = w.getBlockState(pos);
-        if (Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; // Can't charge the player anyway.
+        if (Item.getItemFromBlock(stateToStore.getBlock()) == null) return; // Can't charge the player anyway.
         if (stateToStore.getBlockHardness(w, pos) == -1) return;
         NBTTagCompound stateTag = NBTHelper.getBlockStateNBTTag(stateToStore);
 

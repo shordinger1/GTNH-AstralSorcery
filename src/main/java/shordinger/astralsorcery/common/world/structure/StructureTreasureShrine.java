@@ -13,7 +13,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
@@ -22,8 +22,8 @@ import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -170,7 +170,7 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
             }
         }
         move.release();
-        for (EnumFacing face : EnumFacing.HORIZONTALS) {
+        for (ForgeDirection face : ForgeDirection.HORIZONTALS) {
             BlockPos offsetPos = pos.add(0, 3, 0)
                 .offset(face, 4);
             for (int n = 1; n < 4; n++) {
@@ -185,10 +185,10 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
 
     private static class CaveAdjacencyInformation {
 
-        private final EnumFacing direction;
+        private final ForgeDirection direction;
         private final int tunnelDistance;
 
-        private CaveAdjacencyInformation(EnumFacing direction, int tunnelDistance) {
+        private CaveAdjacencyInformation(ForgeDirection direction, int tunnelDistance) {
             this.direction = direction;
             this.tunnelDistance = tunnelDistance;
         }

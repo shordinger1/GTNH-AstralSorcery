@@ -24,13 +24,13 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -96,7 +96,7 @@ public class BlockModelRenderHelper {
                                         BufferBuilder buffer, boolean checkSides, long rand, int color) {
         BitSet bitset = new BitSet(3);
 
-        for (EnumFacing enumfacing : EnumFacing.values()) {
+        for (ForgeDirection enumfacing : ForgeDirection.values()) {
             List<BakedQuad> sidedQuads = modelIn.getQuads(stateIn, enumfacing, rand);
             if (!sidedQuads.isEmpty() && (!checkSides || stateIn.shouldSideBeRendered(worldIn, posIn, enumfacing))) {
                 int i = stateIn.getPackedLightmapCoords(worldIn, posIn.offset(enumfacing));
@@ -151,7 +151,7 @@ public class BlockModelRenderHelper {
         }
     }
 
-    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, EnumFacing face,
+    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, ForgeDirection face,
                                        @Nullable float[] quadBounds, BitSet boundsFlags) {
         float f = 32.0F;
         float f1 = 32.0F;
@@ -173,19 +173,19 @@ public class BlockModelRenderHelper {
         }
 
         if (quadBounds != null) {
-            quadBounds[EnumFacing.WEST.getIndex()] = f;
-            quadBounds[EnumFacing.EAST.getIndex()] = f3;
-            quadBounds[EnumFacing.DOWN.getIndex()] = f1;
-            quadBounds[EnumFacing.UP.getIndex()] = f4;
-            quadBounds[EnumFacing.NORTH.getIndex()] = f2;
-            quadBounds[EnumFacing.SOUTH.getIndex()] = f5;
-            int j = EnumFacing.values().length;
-            quadBounds[EnumFacing.WEST.getIndex() + j] = 1.0F - f;
-            quadBounds[EnumFacing.EAST.getIndex() + j] = 1.0F - f3;
-            quadBounds[EnumFacing.DOWN.getIndex() + j] = 1.0F - f1;
-            quadBounds[EnumFacing.UP.getIndex() + j] = 1.0F - f4;
-            quadBounds[EnumFacing.NORTH.getIndex() + j] = 1.0F - f2;
-            quadBounds[EnumFacing.SOUTH.getIndex() + j] = 1.0F - f5;
+            quadBounds[ForgeDirection.WEST.getIndex()] = f;
+            quadBounds[ForgeDirection.EAST.getIndex()] = f3;
+            quadBounds[ForgeDirection.DOWN.getIndex()] = f1;
+            quadBounds[ForgeDirection.UP.getIndex()] = f4;
+            quadBounds[ForgeDirection.NORTH.getIndex()] = f2;
+            quadBounds[ForgeDirection.SOUTH.getIndex()] = f5;
+            int j = ForgeDirection.values().length;
+            quadBounds[ForgeDirection.WEST.getIndex() + j] = 1.0F - f;
+            quadBounds[ForgeDirection.EAST.getIndex() + j] = 1.0F - f3;
+            quadBounds[ForgeDirection.DOWN.getIndex() + j] = 1.0F - f1;
+            quadBounds[ForgeDirection.UP.getIndex() + j] = 1.0F - f4;
+            quadBounds[ForgeDirection.NORTH.getIndex() + j] = 1.0F - f2;
+            quadBounds[ForgeDirection.SOUTH.getIndex() + j] = 1.0F - f5;
         }
 
         switch (face) {

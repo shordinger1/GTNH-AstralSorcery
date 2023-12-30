@@ -21,8 +21,8 @@ import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListG
 import shordinger.astralsorcery.common.network.packet.server.PktPlayEffect;
 import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;

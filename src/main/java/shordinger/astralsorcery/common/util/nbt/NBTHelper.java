@@ -29,9 +29,9 @@ import com.google.common.base.Optional;
 import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
-import shordinger.astralsorcery.migration.IProperty;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.astralsorcery.migration.block.IProperty;
 
 /**
  * This class is part of the Astral Sorcery Mod

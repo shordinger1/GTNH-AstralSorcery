@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -46,7 +46,7 @@ import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.awt.*;

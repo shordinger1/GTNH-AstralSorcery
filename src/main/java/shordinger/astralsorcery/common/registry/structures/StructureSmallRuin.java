@@ -10,7 +10,7 @@ package shordinger.astralsorcery.common.registry.structures;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 
 import shordinger.astralsorcery.common.block.BlockMarble;
@@ -18,8 +18,8 @@ import shordinger.astralsorcery.common.block.BlockMarbleStairs;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 import shordinger.astralsorcery.common.tile.TileStructController;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,9 +46,9 @@ public class StructureSmallRuin extends StructureBlockArray {
             .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
 
         IBlockState stairsSouth = BlocksAS.blockMarbleStairs.getDefaultState()
-            .withProperty(BlockMarbleStairs.FACING, EnumFacing.SOUTH);
+            .withProperty(BlockMarbleStairs.FACING, ForgeDirection.SOUTH);
         IBlockState stairsNorth = BlocksAS.blockMarbleStairs.getDefaultState()
-            .withProperty(BlockMarbleStairs.FACING, EnumFacing.NORTH);
+            .withProperty(BlockMarbleStairs.FACING, ForgeDirection.NORTH);
 
         addBlock(0, 3, 0, BlocksAS.blockPortalNode.getDefaultState());
         addTileCallback(new BlockPos(0, 3, 0), new TileEntityCallback() {

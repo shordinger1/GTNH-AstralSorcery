@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.util;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

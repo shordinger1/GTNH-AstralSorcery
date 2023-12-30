@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -72,8 +72,8 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -105,7 +105,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     public TileAltar(AltarLevel level) {
-        super(25, EnumFacing.UP);
+        super(25, ForgeDirection.UP);
         this.level = level;
     }
 
@@ -480,7 +480,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     @Override
-    public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneaking) {
+    public void onInteract(World world, BlockPos pos, EntityPlayer player, ForgeDirection side, boolean sneaking) {
         if (!world.isRemote) {
             if (getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();

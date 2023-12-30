@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

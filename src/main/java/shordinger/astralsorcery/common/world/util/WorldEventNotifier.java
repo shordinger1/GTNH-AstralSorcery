@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import shordinger.astralsorcery.common.event.BlockModifyEvent;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

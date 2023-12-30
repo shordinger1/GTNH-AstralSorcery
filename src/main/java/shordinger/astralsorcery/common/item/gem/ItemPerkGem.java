@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;

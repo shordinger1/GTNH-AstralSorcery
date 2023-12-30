@@ -13,14 +13,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.common.util.ForgeDirection;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -29,8 +29,9 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -118,8 +119,8 @@ public class BlockAttunementAltar extends BlockContainer implements BlockStructu
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
-        return p_193383_4_ == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+                                            ForgeDirection p_193383_4_) {
+        return p_193383_4_ == ForgeDirection.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override

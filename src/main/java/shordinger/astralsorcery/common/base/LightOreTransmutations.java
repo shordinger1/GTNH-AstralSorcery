@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.data.DataLightBlockEndpoints;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

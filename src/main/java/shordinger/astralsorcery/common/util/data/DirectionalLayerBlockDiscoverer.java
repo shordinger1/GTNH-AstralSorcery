@@ -11,9 +11,9 @@ package shordinger.astralsorcery.common.util.data;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,12 +42,12 @@ public class DirectionalLayerBlockDiscoverer {
         BlockPos currentPos = start;
         tryAdd(start, visited);
 
-        EnumFacing dir = EnumFacing.NORTH;
+        ForgeDirection dir = ForgeDirection.NORTH;
         while (Math.abs(currentPos.getX() - xPos) <= rad && Math.abs(currentPos.getY() - yPos) <= rad
             && Math.abs(currentPos.getZ() - zPos) <= rad) {
             currentPos = currentPos.offset(dir, stepWidth);
             tryAdd(currentPos, visited);
-            EnumFacing tryDirNext = dir.rotateY();
+            ForgeDirection tryDirNext = dir.rotateY();
             if (!visited.contains(currentPos.offset(tryDirNext, stepWidth))) {
                 dir = tryDirNext;
             }

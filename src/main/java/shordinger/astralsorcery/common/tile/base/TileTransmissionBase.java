@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.starlight.IStarlightTransmission;
 import shordinger.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

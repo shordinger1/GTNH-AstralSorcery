@@ -36,7 +36,7 @@ import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopController;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopZone;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

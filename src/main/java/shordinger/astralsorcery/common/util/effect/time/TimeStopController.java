@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.DataTimeFreezeEffects;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

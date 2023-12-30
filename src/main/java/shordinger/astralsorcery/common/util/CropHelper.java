@@ -17,7 +17,7 @@ import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
@@ -25,9 +25,9 @@ import net.minecraftforge.common.IPlantable;
 import com.google.common.collect.Lists;
 
 import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListGen;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -423,7 +423,7 @@ public class CropHelper {
         }
 
         private boolean stemHasCrop(World world) {
-            for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
+            for (ForgeDirection enumfacing : ForgeDirection.Plane.HORIZONTAL) {
                 Block offset = WorldHelper.getBlockState(world, pos.offset(enumfacing))
                     .getBlock();
                 if (offset.equals(Blocks.melon_block) || offset.equals(Blocks.pumpkin)) {

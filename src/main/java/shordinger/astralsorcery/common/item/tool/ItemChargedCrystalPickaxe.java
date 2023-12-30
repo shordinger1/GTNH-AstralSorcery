@@ -21,7 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
@@ -39,8 +39,8 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.OreDiscoverer;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,7 +55,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        ItemStack itemStackIn = playerIn.getHeldItem();
         if (hand ==  && !itemStackIn.isEmpty() && scanForOres(worldIn, playerIn)) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         }
@@ -64,7 +64,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (hand ==  && scanForOres(worldIn, playerIn)) {
             return EnumActionResult.SUCCESS;
         }

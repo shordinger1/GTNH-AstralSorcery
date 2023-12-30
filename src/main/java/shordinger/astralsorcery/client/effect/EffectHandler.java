@@ -45,8 +45,8 @@ import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
 import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.TextFormatting;
 
 import javax.annotation.Nullable;

@@ -10,14 +10,14 @@ package shordinger.astralsorcery.common.item.block;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +35,7 @@ public class ItemBlockAltar extends ItemBlockCustomName {
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, ForgeDirection side,
                                 float hitX, float hitY, float hitZ, IBlockState newState) {
         BlockAltar.AltarType type = newState.getValue(BlockAltar.ALTAR_TYPE);
         switch (type) {

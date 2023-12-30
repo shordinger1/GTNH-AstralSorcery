@@ -14,7 +14,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -34,7 +34,7 @@ import shordinger.astralsorcery.common.item.base.ItemHighlighted;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,11 +72,11 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
         if (!world.isRemote) {
             spawnFragment(player, hand);
         }
-        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem());
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumFacing facing,
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, ForgeDirection facing,
                                       float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             spawnFragment(player, hand);

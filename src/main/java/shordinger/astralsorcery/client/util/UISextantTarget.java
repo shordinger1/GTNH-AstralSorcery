@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.item.tool.sextant.ItemSextant;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

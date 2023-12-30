@@ -16,7 +16,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

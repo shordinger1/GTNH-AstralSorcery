@@ -1,4 +1,4 @@
-package shordinger.astralsorcery.migration;
+package shordinger.astralsorcery.migration.item;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -8,9 +8,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import shordinger.astralsorcery.migration.ActionResult;
+import shordinger.astralsorcery.migration.ITooltipFlag;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -52,7 +55,7 @@ public abstract class AstralItem extends Item {
     // public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
     // }
 
-    public abstract boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumFacing side,
+    public abstract boolean onRightClick(World world, BlockPos pos, EntityPlayer player, ForgeDirection side,
                                          ItemStack stack);
 
     @Override

@@ -20,7 +20,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.config.Config;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

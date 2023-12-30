@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -33,9 +33,9 @@ import shordinger.astralsorcery.common.tile.TileRitualPedestal;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -181,7 +181,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                                 world.setBlockToAir(bp);
                             } else {
                                 melt.placeResultAt(world, bp);
-                                for (EnumFacing f : EnumFacing.VALUES) {
+                                for (ForgeDirection f : ForgeDirection.VALUES) {
                                     BlockPos test = bp.offset(f);
                                     if (findNewPositionAt(world, pos, test, modified) && rand.nextBoolean()) {
                                         break;

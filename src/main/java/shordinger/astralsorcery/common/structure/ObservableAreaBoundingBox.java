@@ -12,7 +12,7 @@ import java.util.Collection;
 
 import net.minecraft.util.AxisAlignedBB;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

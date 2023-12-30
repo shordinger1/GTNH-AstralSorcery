@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

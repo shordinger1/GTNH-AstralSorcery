@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.starlight.transmission.base.SimplePrismTr
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -10,13 +10,10 @@ package shordinger.astralsorcery.common.block;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.block.network.BlockStarlightNetwork;
@@ -25,8 +22,10 @@ import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,11 +54,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && hand.equals()) {
+                                     ForgeDirection side, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote ) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
             if (infuser != null) {
-                infuser.onInteract(playerIn, hand, playerIn.getHeldItem(hand));
+                infuser.onInteract(playerIn, playerIn.getHeldItem());
             }
         }
         return true;
@@ -113,7 +112,7 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

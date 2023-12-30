@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package shordinger.astralsorcery.migration;
+package shordinger.astralsorcery.migration.block;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,15 +16,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.migration.Mirror;
+import shordinger.astralsorcery.migration.Rotation;
 
 public interface IBlockState extends IBlockBehaviors, IBlockProperties {
 
@@ -102,7 +103,7 @@ public interface IBlockProperties {
 
     boolean canProvidePower();
 
-    int getWeakPower(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    int getWeakPower(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
     boolean hasComparatorInputOverride();
 
@@ -112,7 +113,7 @@ public interface IBlockProperties {
 
     float getPlayerRelativeBlockHardness(EntityPlayer var1, World var2, BlockPos var3);
 
-    int getStrongPower(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    int getStrongPower(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
     EnumPushReaction getMobilityFlag();
 
@@ -122,7 +123,7 @@ public interface IBlockProperties {
     AxisAlignedBB getSelectedBoundingBox(World var1, BlockPos var2);
 
     @SideOnly(Side.CLIENT)
-    boolean shouldSideBeRendered(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    boolean shouldSideBeRendered(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
     boolean isOpaqueCube();
 
@@ -142,28 +143,18 @@ public interface IBlockProperties {
     @Deprecated
     boolean isTopSolid();
 
-    boolean doesSideBlockRendering(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    boolean doesSideBlockRendering(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
-    boolean isSideSolid(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    boolean isSideSolid(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
-    boolean doesSideBlockChestOpening(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    boolean doesSideBlockChestOpening(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 
     Vec3 getOffset(IBlockAccess var1, BlockPos var2);
 
     boolean causesSuffocation();
 
-    BlockFaceShape getBlockFaceShape(IBlockAccess var1, BlockPos var2, EnumFacing var3);
+    BlockFaceShape getBlockFaceShape(IBlockAccess var1, BlockPos var2, ForgeDirection var3);
 }
 
-public interface IProperty<T extends Comparable<T>> {
 
-    String getName();
 
-    Collection<T> getAllowedValues();
-
-    Class<T> getValueClass();
-
-    Optional<T> parseValue(String var1);
-
-    String getName(T var1);
-}

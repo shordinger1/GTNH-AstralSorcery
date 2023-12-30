@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -36,8 +36,8 @@ import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.awt.*;
 import java.util.List;
@@ -215,7 +215,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
         }
     }
 
-    public void breakBlocksPlaneVertical(EntityPlayerMP player, EnumFacing sideBroken, World world, BlockPos at) {
+    public void breakBlocksPlaneVertical(EntityPlayerMP player, ForgeDirection sideBroken, World world, BlockPos at) {
         for (int xx = -2; xx <= 2; xx++) {
             if (sideBroken.getDirectionVec()
                 .getX() != 0 && xx != 0) continue;
@@ -242,7 +242,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
         }
     }
 
-    public void breakBlocksPlaneHorizontal(EntityPlayerMP player, EnumFacing sideBroken, World world, BlockPos at) {
+    public void breakBlocksPlaneHorizontal(EntityPlayerMP player, ForgeDirection sideBroken, World world, BlockPos at) {
         for (int xx = -2; xx <= 2; xx++) {
             if (sideBroken.getDirectionVec()
                 .getX() != 0 && xx != 0) continue;

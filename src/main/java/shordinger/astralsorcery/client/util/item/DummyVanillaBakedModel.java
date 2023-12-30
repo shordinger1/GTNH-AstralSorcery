@@ -16,9 +16,9 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +36,7 @@ public class DummyVanillaBakedModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable ForgeDirection side, long rand) {
         return Collections.emptyList();
     }
 

@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

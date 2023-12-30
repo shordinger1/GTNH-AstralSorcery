@@ -1,6 +1,7 @@
 package shordinger.astralsorcery.migration;
 
 import net.minecraft.entity.Entity;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 public class ChunkPos {
 

@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -44,8 +44,8 @@ import shordinger.astralsorcery.common.tile.TileIlluminator;
 import shordinger.astralsorcery.common.tile.TileTranslucent;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -115,8 +115,8 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = playerIn.getHeldItem(hand);
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem();
         if (stack.stackSize==0 || !(stack.getItem() instanceof ItemIlluminationWand)) {
             return EnumActionResult.SUCCESS;
         }

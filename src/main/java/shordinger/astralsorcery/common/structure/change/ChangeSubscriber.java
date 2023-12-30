@@ -19,9 +19,9 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.structure.StructureMatcher;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

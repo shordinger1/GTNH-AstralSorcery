@@ -34,8 +34,8 @@ import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
 
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.integrations.ModIntegrationBotania;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -11,13 +11,13 @@ package shordinger.astralsorcery.common.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,8 +26,8 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileBore;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 
@@ -51,12 +51,12 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (worldIn.getBlockState(pos.down())
             .getBlock()
             .isReplaceable(worldIn, pos.down())) {
             TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
-            ItemStack held = playerIn.getHeldItem(hand);
+            ItemStack held = playerIn.getHeldItem();
             if (tb != null && !held.stackSize==0
                 && held.getItem() instanceof ItemBlock
                 && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
@@ -75,7 +75,7 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -96,7 +96,7 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

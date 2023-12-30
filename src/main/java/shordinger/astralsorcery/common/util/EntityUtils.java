@@ -28,7 +28,7 @@ import com.google.common.base.Predicate;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -12,18 +12,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.common.util.ForgeDirection;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
@@ -35,8 +34,8 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -93,7 +92,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
         13D / 16D,
         13D / 16D);
 
-    public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
+    public static PropertyEnum<ForgeDirection> PLACED_AGAINST = PropertyEnum.create("against", ForgeDirection.class);
 
     public BlockPrism() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -104,7 +103,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(
             this.blockState.getBaseState()
-                .withProperty(PLACED_AGAINST, EnumFacing.DOWN));
+                .withProperty(PLACED_AGAINST, ForgeDirection.DOWN));
     }
 
     @Override
@@ -152,14 +151,14 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.UP;
-        for (EnumFacing f : EnumFacing.values()) {
+        ForgeDirection facing = ForgeDirection.UP;
+        for (ForgeDirection f : ForgeDirection.values()) {
             if (f.ordinal() == meta) {
                 facing = f;
                 break;
@@ -175,7 +174,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+    public IBlockState getStateForPlacement(World world, BlockPos pos, ForgeDirection facing, float hitX, float hitY,
                                             float hitZ, int meta, EntityLivingBase placer) {
         return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
     }
@@ -207,7 +206,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
 
     @Override
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos,
-                                        EnumFacing side) {
+                                        ForgeDirection side) {
         return true;
     }
 
@@ -254,7 +253,7 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote && playerIn.isSneaking()) {
             TileCrystalPrismLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
             if (lens != null && lens.getLensColor() != null) {
@@ -270,8 +269,8 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.DOWN;
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+        return side == ForgeDirection.DOWN;
     }
 
     @Override

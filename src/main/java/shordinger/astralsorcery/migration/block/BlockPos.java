@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package shordinger.astralsorcery.migration;
+package shordinger.astralsorcery.migration.block;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +12,7 @@ import javax.annotation.concurrent.Immutable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.Vec3;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +24,8 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
+import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.migration.Rotation;
 
 @Immutable
 public class BlockPos extends Vec3 {
@@ -93,7 +95,7 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos up(int n) {
-        return this.offset(EnumFacing.UP, n);
+        return this.offset(ForgeDirection.UP, n);
     }
 
     public BlockPos down() {
@@ -101,7 +103,7 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos down(int n) {
-        return this.offset(EnumFacing.DOWN, n);
+        return this.offset(ForgeDirection.DOWN, n);
     }
 
     public BlockPos north() {
@@ -109,7 +111,7 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos north(int n) {
-        return this.offset(EnumFacing.NORTH, n);
+        return this.offset(ForgeDirection.NORTH, n);
     }
 
     public BlockPos south() {
@@ -117,7 +119,7 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos south(int n) {
-        return this.offset(EnumFacing.SOUTH, n);
+        return this.offset(ForgeDirection.SOUTH, n);
     }
 
     public BlockPos west() {
@@ -125,7 +127,7 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos west(int n) {
-        return this.offset(EnumFacing.WEST, n);
+        return this.offset(ForgeDirection.WEST, n);
     }
 
     public BlockPos east() {
@@ -133,14 +135,14 @@ public class BlockPos extends Vec3 {
     }
 
     public BlockPos east(int n) {
-        return this.offset(EnumFacing.EAST, n);
+        return this.offset(ForgeDirection.EAST, n);
     }
 
-    public BlockPos offset(EnumFacing facing) {
+    public BlockPos offset(ForgeDirection facing) {
         return this.offset(facing, 1);
     }
 
-    public BlockPos offset(EnumFacing facing, int n) {
+    public BlockPos offset(ForgeDirection facing, int n) {
         return n == 0 ? this
             : new BlockPos(
             xCoord + facing.getFrontOffsetX() * n,
@@ -377,11 +379,11 @@ public class BlockPos extends Vec3 {
             return (PooledMutableBlockPos) super.setPos(xIn, yIn, zIn);
         }
 
-        public PooledMutableBlockPos move(EnumFacing facing) {
+        public PooledMutableBlockPos move(ForgeDirection facing) {
             return (PooledMutableBlockPos) super.move(facing);
         }
 
-        public PooledMutableBlockPos move(EnumFacing facing, int n) {
+        public PooledMutableBlockPos move(ForgeDirection facing, int n) {
             return (PooledMutableBlockPos) super.move(facing, n);
         }
     }
@@ -415,7 +417,7 @@ public class BlockPos extends Vec3 {
             return super.add(x, y, z).toImmutable();
         }
 
-        public BlockPos offset(EnumFacing facing, int n) {
+        public BlockPos offset(ForgeDirection facing, int n) {
             return super.offset(facing, n).toImmutable();
         }
 
@@ -456,11 +458,11 @@ public class BlockPos extends Vec3 {
             return this.setPos(newVec.getX(), newVec.getY(), newVec.getZ());
         }
 
-        public MutableBlockPos move(EnumFacing facing) {
+        public MutableBlockPos move(ForgeDirection facing) {
             return this.move(facing, 1);
         }
 
-        public MutableBlockPos move(EnumFacing facing, int n) {
+        public MutableBlockPos move(ForgeDirection facing, int n) {
             return this.setPos(
                 this.x + facing.getFrontOffsetX() * n,
                 this.y + facing.getFrontOffsetY() * n,

@@ -37,7 +37,7 @@ import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

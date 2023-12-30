@@ -11,30 +11,34 @@ package shordinger.astralsorcery.common.block;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockRenderLayer;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import static shordinger.astralsorcery.common.block.BlockCustomFlower.FlowerType.GLOW_FLOWER;
+import static shordinger.astralsorcery.migration.block.AstralBlock.NULL_AABB;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +47,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 28.03.2017 / 23:24
  */
-public class BlockCustomFlower extends Block implements BlockCustomName, BlockVariants, IShearable {
+public class BlockCustomFlower extends AstralBlock implements BlockCustomName, BlockVariants, IShearable {
 
     public static final PropertyEnum<FlowerType> FLOWER_TYPE = PropertyEnum.create("flower", FlowerType.class);
     private static final AxisAlignedBB box = new AxisAlignedBB(
@@ -69,29 +73,25 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
         if (!(world instanceof World)) {
             return;
         }
-        switch (state.getValue(FLOWER_TYPE)) {
-            case GLOW_FLOWER:
-                int size = 1;
-                for (int i = 0; i < fortune; i++) {
-                    size += rand.nextInt(3) + 1;
-                }
-                for (int i = 0; i < size; i++) {
-                    ItemUtils.dropItemNaturally(
-                        (World) world,
-                        pos.getX() + 0.5,
-                        pos.getY() + 0.1,
-                        pos.getZ() + 0.5,
-                        new ItemStack(Items.GLOWSTONE_DUST));
-                }
-                break;
-            default:
-                break;
+        if (state.getValue(FLOWER_TYPE).equals(GLOW_FLOWER)) {
+            int size = 1;
+            for (int i = 0; i < fortune; i++) {
+                size += rand.nextInt(3) + 1;
+            }
+            for (int i = 0; i < size; i++) {
+                ItemUtils.dropItemNaturally(
+                    (World) world,
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.1,
+                    pos.getZ() + 0.5,
+                    new ItemStack(Items.glowstone_dust));
+            }
         }
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -102,8 +102,9 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
 
     protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!this.canBlockStay(worldIn, pos)) {
+
             this.dropBlockAsItem(worldIn, pos, state, 0);
-            worldIn.setBlockToAir(pos);
+            worldIn.setBlockToAir(pos.getX(), pos.getY(), pos.getZ());
         }
     }
 
@@ -119,7 +120,7 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
 
     private boolean canBlockStay(World worldIn, BlockPos pos) {
         IBlockState downState = worldIn.getBlockState(pos.down());
-        return downState.isSideSolid(worldIn, pos, EnumFacing.UP);
+        return downState.isSideSolid(worldIn, pos, ForgeDirection.UP);
     }
 
     @Override
@@ -200,14 +201,15 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
             .getName();
     }
 
+
     @Override
-    public boolean isShearable(@Nonnull ItemStack item, IBlockAccess world, BlockPos pos) {
+    public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
         return true;
     }
 
     @Override
-    public List<ItemStack> onSheared(@Nonnull ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-        return Lists.newArrayList(ItemUtils.createBlockStack(WorldHelper.getBlockState(world, pos)));
+    public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+        return Lists.newArrayList(ItemUtils.createBlockStack(WorldHelper.getBlockState((World) world, new BlockPos(x, y, z))));
     }
 
     public static enum FlowerType implements IStringSerializable {

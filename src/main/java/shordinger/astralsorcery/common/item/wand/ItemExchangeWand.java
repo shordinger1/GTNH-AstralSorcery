@@ -25,7 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -58,9 +58,9 @@ import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -265,7 +265,7 @@ public class ItemExchangeWand extends ItemBlockStorage
         RayTraceResult rtr = getLookBlock(pl, false, true, ctrl.getBlockReachDistance());
         if (rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) return;
 
-        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, world.getWorldType());
+        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, world.getWorldInfo().getTerrainType());
         BlockPos origin = rtr.getBlockPos();
         IBlockState atOrigin = WorldHelper.getBlockState(world, origin);
         IBlockState match = MiscUtils.getMatchingState(storedStates.keySet(), atOrigin);
@@ -368,9 +368,9 @@ public class ItemExchangeWand extends ItemBlockStorage
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos origin,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return EnumActionResult.SUCCESS;
-        ItemStack stack = playerIn.getHeldItem(hand);
+        ItemStack stack = playerIn.getHeldItem();
         if (stack.stackSize==0) return EnumActionResult.SUCCESS;
 
         if (playerIn.isSneaking()) {
@@ -461,7 +461,7 @@ public class ItemExchangeWand extends ItemBlockStorage
                                 hand);
                     } catch (Exception exc) {
                     }
-                    if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, EnumFacing.UP)) {
+                    if (MiscUtils.canPlayerPlaceBlockPos(playerIn, hand, place, placePos, ForgeDirection.UP)) {
                         if (world.setBlockState(placePos, place)) {
                             drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
                             if (!playerIn.isCreative()) {

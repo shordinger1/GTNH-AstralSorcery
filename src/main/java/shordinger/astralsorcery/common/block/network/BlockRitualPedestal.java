@@ -11,14 +11,15 @@ package shordinger.astralsorcery.common.block.network;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockFaceShape;
+import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
@@ -26,8 +27,8 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -77,7 +78,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -117,7 +118,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
         TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
         if (pedestal == null) {
             return false;
@@ -125,7 +126,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if (worldIn.isRemote) {
             return true;
         }
-        ItemStack heldItem = playerIn.getHeldItem(hand);
+        ItemStack heldItem = playerIn.getHeldItem();
 
         ItemStack in = pedestal.getCurrentPedestalCrystal();
         if (!heldItem.isEmpty() && in.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
@@ -145,7 +146,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if (te != null && !worldIn.isRemote) {
             BlockPos toCheck = pos.up();
             IBlockState other = worldIn.getBlockState(toCheck);
-            if (other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
+            if (other.isSideSolid(worldIn, toCheck, ForgeDirection.DOWN)) {
                 ItemUtils.dropItem(
                     worldIn,
                     pos.getX() + 0.5,
@@ -173,8 +174,8 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.DOWN;
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+        return side == ForgeDirection.DOWN;
     }
 
     @Override

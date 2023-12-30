@@ -11,14 +11,14 @@ package shordinger.astralsorcery.common.item.tool;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.auxiliary.link.LinkHandler;
 import shordinger.astralsorcery.common.item.base.ISpecialInteractItem;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +38,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     /*
      * @Override
      * public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
-     * EnumFacing side, float hitX, float hitY, float hitZ) {
+     * ForgeDirection side, float hitX, float hitY, float hitZ) {
      * if(!world.isRemote) {
      * LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
      * LinkHandler.propagateClick(result, player, world, pos);
@@ -56,7 +56,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
                                 ItemStack stack) {
         if (!world.isRemote) {
             LinkHandler.RightClickResult result = LinkHandler

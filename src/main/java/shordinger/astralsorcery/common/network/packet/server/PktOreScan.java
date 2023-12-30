@@ -22,7 +22,7 @@ import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

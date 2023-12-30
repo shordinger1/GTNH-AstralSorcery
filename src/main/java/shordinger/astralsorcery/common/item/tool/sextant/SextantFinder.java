@@ -32,7 +32,7 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.util.StructureFinder;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

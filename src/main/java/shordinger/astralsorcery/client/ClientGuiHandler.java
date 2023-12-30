@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
-import shordinger.astralsorcery.client.gui.*;
 import shordinger.astralsorcery.client.gui.GuiConstellationPaper;
 import shordinger.astralsorcery.client.gui.GuiHandTelescope;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
@@ -28,7 +27,6 @@ import shordinger.astralsorcery.client.gui.GuiMapDrawing;
 import shordinger.astralsorcery.client.gui.GuiObservatory;
 import shordinger.astralsorcery.client.gui.GuiSextantSelector;
 import shordinger.astralsorcery.client.gui.GuiTelescope;
-import shordinger.astralsorcery.client.gui.container.*;
 import shordinger.astralsorcery.client.gui.container.GuiAltarAttunement;
 import shordinger.astralsorcery.client.gui.container.GuiAltarConstellation;
 import shordinger.astralsorcery.client.gui.container.GuiAltarDiscovery;
@@ -47,7 +45,7 @@ import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

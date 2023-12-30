@@ -16,7 +16,7 @@ import net.minecraft.util.AxisAlignedBB;
 import com.google.common.collect.Lists;
 
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

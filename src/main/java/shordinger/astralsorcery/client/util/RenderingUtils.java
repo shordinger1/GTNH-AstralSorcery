@@ -39,7 +39,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
@@ -55,8 +55,8 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**
@@ -207,7 +207,7 @@ public class RenderingUtils {
             } catch (Exception exc) {
                 EnumBlockRenderType type = state.getRenderType();
                 if (type != EnumBlockRenderType.INVISIBLE) {
-                    if (world.getWorldType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
+                    if (world.getWorldInfo().getTerrainType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
                         try {
                             state = state.getActualState(world, offset);
                         } catch (Exception ignored) {
@@ -600,7 +600,7 @@ public class RenderingUtils {
         Tessellator tessellator = Tessellator.instance;
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-        for (EnumFacing enumfacing : EnumFacing.values()) {
+        for (ForgeDirection enumfacing : ForgeDirection.values()) {
             renderColoredQuads(bufferbuilder, model.getQuads(null, enumfacing, 0L), alphaColor, stack);
         }
         renderColoredQuads(bufferbuilder, model.getQuads(null, null, 0L), alphaColor, stack);

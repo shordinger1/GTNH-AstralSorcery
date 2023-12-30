@@ -9,10 +9,10 @@
 package shordinger.astralsorcery.common.item.base;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,6 +23,6 @@ import shordinger.astralsorcery.migration.BlockPos;
  */
 public interface IWandInteract {
 
-    public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneak);
+    public void onInteract(World world, BlockPos pos, EntityPlayer player, ForgeDirection side, boolean sneak);
 
 }

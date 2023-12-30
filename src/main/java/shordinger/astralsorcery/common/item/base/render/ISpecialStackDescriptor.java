@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

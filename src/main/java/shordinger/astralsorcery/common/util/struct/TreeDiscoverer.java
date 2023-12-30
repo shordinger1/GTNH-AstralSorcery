@@ -15,15 +15,15 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.base.TreeTypes;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -106,7 +106,7 @@ public class TreeDiscoverer {
                         }
                     }
                 } else {
-                    for (EnumFacing face : EnumFacing.values()) {
+                    for (ForgeDirection face : ForgeDirection.values()) {
                         BlockPos newPos = offset.offset(face);
                         if ((xzLimitSq == -1 || flatDistanceSq(newPos, origin) <= xzLimitSq)
                             && !out.hasBlockAt(newPos)) {

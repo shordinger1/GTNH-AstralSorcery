@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class Capability<T> {
 
@@ -26,12 +26,12 @@ public class Capability<T> {
         return this.storage;
     }
 
-    public void readNBT(T instance, EnumFacing side, NBTBase nbt) {
+    public void readNBT(T instance, ForgeDirection side, NBTBase nbt) {
         this.storage.readNBT(this, instance, side, nbt);
     }
 
     @Nullable
-    public NBTBase writeNBT(T instance, EnumFacing side) {
+    public NBTBase writeNBT(T instance, ForgeDirection side) {
         return this.storage.writeNBT(this, instance, side);
     }
 
@@ -58,8 +58,8 @@ public class Capability<T> {
     public interface IStorage<T> {
 
         @Nullable
-        NBTBase writeNBT(Capability<T> var1, T var2, EnumFacing var3);
+        NBTBase writeNBT(Capability<T> var1, T var2, ForgeDirection var3);
 
-        void readNBT(Capability<T> var1, T var2, EnumFacing var3, NBTBase var4);
+        void readNBT(Capability<T> var1, T var2, ForgeDirection var3, NBTBase var4);
     }
 }

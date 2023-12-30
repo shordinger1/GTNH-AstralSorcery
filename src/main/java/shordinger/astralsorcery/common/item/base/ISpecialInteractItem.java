@@ -10,11 +10,11 @@ package shordinger.astralsorcery.common.item.base;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +27,7 @@ public interface ISpecialInteractItem {
 
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack);
 
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side,
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
                                 ItemStack stack);
 
 }

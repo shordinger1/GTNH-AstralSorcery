@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,8 +25,8 @@ import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,10 +63,10 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     }
 
     @Override
-    public EnumFacing getPlacedAgainst() {
+    public ForgeDirection getPlacedAgainst() {
         IBlockState state = WorldHelper.getBlockState(world, getPos());
         if (!(state.getBlock() instanceof BlockPrism)) {
-            return EnumFacing.DOWN;
+            return ForgeDirection.DOWN;
         }
         return state.getValue(BlockPrism.PLACED_AGAINST);
     }

@@ -34,7 +34,7 @@ import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

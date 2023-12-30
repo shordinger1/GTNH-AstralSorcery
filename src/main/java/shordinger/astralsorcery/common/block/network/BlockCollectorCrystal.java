@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.item.block.ItemCollectorCrystal;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.lib.BlocksAS;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nonnull;

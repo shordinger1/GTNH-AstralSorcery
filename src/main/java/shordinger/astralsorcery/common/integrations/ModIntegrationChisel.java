@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockMarble;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

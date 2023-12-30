@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

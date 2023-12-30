@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -121,7 +121,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
-        ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        ItemStack itemStackIn = playerIn.getHeldItem();
         if (itemStackIn.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         if (worldIn.isRemote && getConstellation(itemStackIn) != null) {
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);

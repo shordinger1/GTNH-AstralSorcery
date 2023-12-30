@@ -11,16 +11,16 @@ package shordinger.astralsorcery.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 /**
@@ -30,7 +30,7 @@ import shordinger.astralsorcery.migration.NonNullList;
  * Created by HellFirePvP
  * Date: 12.05.2016 / 16:58
  */
-public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
+public class BlockOpaqueCosmeticRock extends AstralBlock implements BlockCustomName {
 
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 

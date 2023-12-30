@@ -15,7 +15,7 @@ import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

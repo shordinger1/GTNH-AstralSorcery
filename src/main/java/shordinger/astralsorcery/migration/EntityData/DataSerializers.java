@@ -10,10 +10,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -232,21 +232,21 @@ public class DataSerializers {
             return value;
         }
     };
-    public static final DataSerializer<EnumFacing> FACING = new DataSerializer<EnumFacing>() {
+    public static final DataSerializer<ForgeDirection> FACING = new DataSerializer<ForgeDirection>() {
 
-        public void write(PacketBuffer buf, EnumFacing value) {
+        public void write(PacketBuffer buf, ForgeDirection value) {
             buf.writeEnumValue(value);
         }
 
-        public EnumFacing read(PacketBuffer buf) throws IOException {
-            return (EnumFacing) buf.readEnumValue(EnumFacing.class);
+        public ForgeDirection read(PacketBuffer buf) throws IOException {
+            return (ForgeDirection) buf.readEnumValue(ForgeDirection.class);
         }
 
-        public DataParameter<EnumFacing> createKey(int id) {
+        public DataParameter<ForgeDirection> createKey(int id) {
             return new DataParameter(id, this);
         }
 
-        public EnumFacing copyValue(EnumFacing value) {
+        public ForgeDirection copyValue(ForgeDirection value) {
             return value;
         }
     };

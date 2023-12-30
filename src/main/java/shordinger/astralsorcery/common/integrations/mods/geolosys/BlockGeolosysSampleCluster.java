@@ -22,16 +22,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.common.util.ForgeDirection;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -94,7 +94,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
         if (replaceable) {
             BlockPos down = pos.down();
-            if (!worldIn.isSideSolid(down, EnumFacing.UP)) replaceable = false;
+            if (!worldIn.isSideSolid(down, ForgeDirection.UP)) replaceable = false;
         }
         return replaceable;
     }
@@ -120,7 +120,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -128,7 +128,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if (!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+        if (!downState.isSideSolid(worldIn, down, ForgeDirection.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);

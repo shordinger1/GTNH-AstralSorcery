@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import java.awt.*;
 import java.util.EnumSet;

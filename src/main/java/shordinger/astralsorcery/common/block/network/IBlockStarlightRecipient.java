@@ -13,7 +13,7 @@ import java.util.Random;
 import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

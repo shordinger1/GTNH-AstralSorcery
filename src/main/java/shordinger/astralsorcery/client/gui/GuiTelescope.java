@@ -60,7 +60,7 @@ import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.MathHelper;
 import shordinger.astralsorcery.migration.TextComponentString;

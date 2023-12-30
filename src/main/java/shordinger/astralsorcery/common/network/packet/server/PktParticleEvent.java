@@ -46,7 +46,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.CelestialStrike;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

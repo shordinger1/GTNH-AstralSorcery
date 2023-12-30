@@ -24,7 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import com.gtnewhorizons.modularui.api.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Mouse;

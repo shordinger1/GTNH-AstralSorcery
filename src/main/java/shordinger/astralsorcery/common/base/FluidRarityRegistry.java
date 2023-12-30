@@ -10,7 +10,7 @@ package shordinger.astralsorcery.common.base;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
@@ -351,13 +351,13 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
         private final ChunkFluidEntry defaultImpl = new ChunkFluidEntry();
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable ForgeDirection facing) {
             return capability.equals(CAPABILITY_CHUNK_FLUID);
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable ForgeDirection facing) {
             return hasCapability(capability, facing) ? CAPABILITY_CHUNK_FLUID.cast(defaultImpl) : null;
         }
 

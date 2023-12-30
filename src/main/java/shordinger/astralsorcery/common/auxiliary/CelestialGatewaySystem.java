@@ -31,7 +31,7 @@ import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktUpdateGateways;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 import java.io.File;
 import java.io.IOException;

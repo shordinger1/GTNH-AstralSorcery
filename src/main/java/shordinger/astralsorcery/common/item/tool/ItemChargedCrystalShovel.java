@@ -23,8 +23,8 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileFakeTree;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

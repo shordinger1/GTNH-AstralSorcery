@@ -10,18 +10,13 @@ package shordinger.astralsorcery.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -33,8 +28,12 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.IStringSerializable;
+import shordinger.astralsorcery.migration.block.AstralBlock;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockRenderLayer;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -48,7 +47,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 18:03
  */
-public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
+public class BlockCustomOre extends AstralBlock implements BlockCustomName, BlockVariants {
 
     public static boolean allowCrystalHarvest = false;
     private static final Random rand = new Random();
@@ -117,8 +116,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
                          int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         switch (type) {
-            case ROCK_CRYSTAL:
-                if (world != null && world instanceof World
+            case ROCK_CRYSTAL -> {
+                if (world instanceof World
                     && (allowCrystalHarvest
                     || (checkSafety((World) world, pos) && securityCheck((World) world, harvesters.get())))) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
@@ -131,12 +130,10 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
                         drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     }
                 }
-                break;
-            case STARMETAL:
-                drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
-                break;
-            default:
-                break;
+            }
+            case STARMETAL -> drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
+            default -> {
+            }
         }
     }
 

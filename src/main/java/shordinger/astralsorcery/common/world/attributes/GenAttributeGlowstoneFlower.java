@@ -11,7 +11,7 @@ package shordinger.astralsorcery.common.world.attributes;
 import java.util.Collection;
 import java.util.Random;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.block.BlockCustomFlower;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.world.WorldGenAttributeCommon;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
@@ -113,7 +113,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
             && pos.getY() >= cfgEntry.getMinY()
             && pos.getY() <= cfgEntry.getMaxY()
             && WorldHelper.getBlockState(world, pos.down())
-            .isSideSolid(world, pos.down(), EnumFacing.UP)
+            .isSideSolid(world, pos.down(), ForgeDirection.UP)
             && (ignoreSnowCondition || world.canSnowAt(pos, false));
     }
 

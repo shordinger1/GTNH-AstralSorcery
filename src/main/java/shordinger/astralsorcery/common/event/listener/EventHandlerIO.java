@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.auxiliary.StorageNetworkHandler;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.tile.TileOreGenerator;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 import java.util.Iterator;

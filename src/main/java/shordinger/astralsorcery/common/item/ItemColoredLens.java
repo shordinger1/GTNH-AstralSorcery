@@ -23,7 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -44,8 +44,8 @@ import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.ITooltipFlag;
 import shordinger.astralsorcery.migration.NonNullList;
 
@@ -89,7 +89,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack inHand = playerIn.getHeldItem();
             ColorType type = null;

@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.tool.sextant.ItemSextant;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

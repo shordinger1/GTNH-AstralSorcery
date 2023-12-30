@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
@@ -42,7 +42,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
@@ -66,7 +66,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
     private int nextTest = -1;
 
     public TileChalice() {
-        tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, EnumFacing.DOWN);
+        tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, ForgeDirection.DOWN);
         this.tank.setOnUpdate(this::markForUpdate);
     }
 
@@ -374,19 +374,19 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = SimpleSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
-        if (!tank.hasCapability(EnumFacing.DOWN)) {
-            tank.accessibleSides.add(EnumFacing.DOWN);
+        if (!tank.hasCapability(ForgeDirection.DOWN)) {
+            tank.accessibleSides.add(ForgeDirection.DOWN);
         }
         this.tank.setOnUpdate(this::markForUpdate);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, ForgeDirection facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, ForgeDirection facing) {
         if (capability != CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || !hasCapability(capability, facing))
             return null;
         return (T) tank.getCapability(facing);

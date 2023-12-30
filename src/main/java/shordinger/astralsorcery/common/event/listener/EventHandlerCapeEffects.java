@@ -25,7 +25,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -62,8 +62,8 @@ import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.core.ASMCallHook;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -171,9 +171,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
             try {
                 RayTraceResult rtr = MiscUtils.rayTraceLook(pl);
                 if (rtr != null) {
-                    EnumFacing faceHit = rtr.sideHit;
+                    ForgeDirection faceHit = rtr.sideHit;
                     if (faceHit != null) {
-                        if (faceHit.getAxis() == EnumFacing.Axis.Y) {
+                        if (faceHit.getAxis() == ForgeDirection.Axis.Y) {
                             ev.breakBlocksPlaneHorizontal((EntityPlayerMP) pl, faceHit, event.world, event.getPos());
                         } else {
                             ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.world, event.getPos());

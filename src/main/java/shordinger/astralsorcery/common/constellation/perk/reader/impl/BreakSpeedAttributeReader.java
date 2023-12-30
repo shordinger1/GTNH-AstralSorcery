@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttribut
 import shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeBreakSpeed;
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
 import shordinger.astralsorcery.common.event.AttributeEvent;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 /**

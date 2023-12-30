@@ -5,6 +5,8 @@
 
 package shordinger.astralsorcery.migration;
 
+import shordinger.astralsorcery.migration.block.BlockPos;
+
 import java.util.Random;
 import java.util.UUID;
 

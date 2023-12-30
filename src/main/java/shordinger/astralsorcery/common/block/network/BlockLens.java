@@ -12,21 +12,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockStateContainer;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.common.util.ForgeDirection;
+import shordinger.astralsorcery.migration.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.block.BlockVariants;
@@ -39,8 +35,8 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.NonNullList;
 
 import javax.annotation.Nullable;
@@ -100,7 +96,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
         13.5D / 16D);
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
-    public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
+    public static PropertyEnum<ForgeDirection> PLACED_AGAINST = PropertyEnum.create("against", ForgeDirection.class);
 
     public BlockLens() {
         super(Material.ROCK, MapColor.BLACK);
@@ -112,7 +108,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
         setDefaultState(
             this.blockState.getBaseState()
                 .withProperty(RENDER_FULLY, true)
-                .withProperty(PLACED_AGAINST, EnumFacing.DOWN));
+                .withProperty(PLACED_AGAINST, ForgeDirection.DOWN));
     }
 
     @Override
@@ -141,20 +137,20 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+    public IBlockState getStateForPlacement(World world, BlockPos pos, ForgeDirection facing, float hitX, float hitY,
                                             float hitZ, int meta, EntityLivingBase placer) {
         return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.UP;
-        for (EnumFacing f : EnumFacing.values()) {
+        ForgeDirection facing = ForgeDirection.UP;
+        for (ForgeDirection f : ForgeDirection.values()) {
             if (f.ordinal() == meta) {
                 facing = f;
                 break;
@@ -224,8 +220,8 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return side == EnumFacing.DOWN;
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+        return side == ForgeDirection.DOWN;
     }
 
     @Override
@@ -271,7 +267,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote && playerIn.isSneaking()) {
             TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
             if (lens != null && lens.getLensColor() != null) {

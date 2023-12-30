@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.MathHelper;
 
 import java.awt.*;

@@ -19,14 +19,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -40,8 +36,8 @@ import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -108,8 +104,8 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
         boolean shouldCreateBlock = false;
         boolean isCold = true;
 
-        for (EnumFacing side : EnumFacing.VALUES) {
-            if (side != EnumFacing.DOWN) {
+        for (ForgeDirection side : ForgeDirection.VALUES) {
+            if (side != ForgeDirection.DOWN) {
                 IBlockState offset = WorldHelper.getBlockState(world, pos.offset(side));
                 if (offset.getMaterial()
                     .isLiquid() && !(offset.getBlock() instanceof FluidBlockLiquidStarlight)

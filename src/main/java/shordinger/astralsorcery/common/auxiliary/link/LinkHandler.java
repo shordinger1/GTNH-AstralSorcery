@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

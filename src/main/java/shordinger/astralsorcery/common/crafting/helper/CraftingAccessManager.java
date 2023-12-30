@@ -35,7 +35,7 @@ import shordinger.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

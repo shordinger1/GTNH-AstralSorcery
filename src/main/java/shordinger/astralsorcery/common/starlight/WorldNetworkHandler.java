@@ -26,7 +26,7 @@ import shordinger.astralsorcery.common.starlight.transmission.ITransmissionSourc
 import shordinger.astralsorcery.common.starlight.transmission.NodeConnection;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.ChunkPos;
 
 /**

@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.starlight.transmission.NodeConnection;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweake
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.LightTransmutationAdd;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.LightTransmutationRemove;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 

@@ -61,9 +61,9 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
 import shordinger.astralsorcery.common.world.util.WorldEventNotifier;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.EnumActionResult;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import java.util.Iterator;
 import java.util.List;

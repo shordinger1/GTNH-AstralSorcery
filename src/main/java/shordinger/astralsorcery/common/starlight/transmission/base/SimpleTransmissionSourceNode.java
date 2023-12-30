@@ -14,7 +14,7 @@ import shordinger.astralsorcery.common.starlight.IStarlightSource;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

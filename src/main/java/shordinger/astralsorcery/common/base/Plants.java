@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import com.google.common.collect.Lists;
 
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

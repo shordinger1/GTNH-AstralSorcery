@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

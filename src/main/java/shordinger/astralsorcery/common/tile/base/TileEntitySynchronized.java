@@ -10,13 +10,12 @@ package shordinger.astralsorcery.common.tile.base;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.tileentity.TileEntity;
 
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.WorldHelper;
 
 /**
@@ -29,11 +28,11 @@ import shordinger.astralsorcery.migration.WorldHelper;
 public abstract class TileEntitySynchronized extends TileEntity {
 
     protected static final Random rand = new Random();
-    public BlockPos pos;
 
 
     public BlockPos getPos() {
-        return pos;
+
+        return new BlockPos(xCoord, yCoord, zCoord);
     }
 
     public final void readFromNBT(NBTTagCompound compound) {

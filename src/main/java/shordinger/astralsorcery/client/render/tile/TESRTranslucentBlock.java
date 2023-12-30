@@ -32,8 +32,8 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileTranslucent;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -112,7 +112,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     private static int batch(Collection<TranslucentBlockState> set, int color) {
         RenderWorldBuffer iba = new RenderWorldBuffer(
             Biomes.PLAINS,
-            Minecraft.getMinecraft().theWorld.getWorldType(),
+            Minecraft.getMinecraft().theWorld.getWorldInfo().getTerrainType(),
             new BlockArray());
         iba.appendAll(MiscUtils.splitMap(set, entry -> new Tuple<>(entry.pos, entry.state)));
         int batchDList = GLAllocation.generateDisplayLists(1);

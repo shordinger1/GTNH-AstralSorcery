@@ -16,7 +16,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
+import shordinger.astralsorcery.migration.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,7 @@ import shordinger.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

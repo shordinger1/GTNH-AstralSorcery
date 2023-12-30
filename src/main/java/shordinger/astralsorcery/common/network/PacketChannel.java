@@ -53,7 +53,7 @@ import shordinger.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import shordinger.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import shordinger.astralsorcery.common.network.packet.server.PktSyncStepAssist;
 import shordinger.astralsorcery.common.network.packet.server.PktUpdateGateways;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

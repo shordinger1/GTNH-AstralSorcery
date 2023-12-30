@@ -24,8 +24,8 @@ import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.world.WorldGenAttribute;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

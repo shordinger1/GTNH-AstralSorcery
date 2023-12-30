@@ -37,7 +37,7 @@ public class ItemRenderRegistry {
     }
 
     public static boolean shouldHandleItemRendering(ItemStack stack) {
-        if (stack.getItem() == Items.AIR) return false;
+        if (stack.getItem() == null) return false;
         // ResourceLocation entry = stack.getAttItem().getRegistryName();
         ResourceLocation entry = getWrappedLocation(
             stack.getItem()

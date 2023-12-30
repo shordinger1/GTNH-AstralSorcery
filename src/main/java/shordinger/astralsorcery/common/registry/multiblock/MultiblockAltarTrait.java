@@ -16,7 +16,7 @@ import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the 1.11.2 port of Reika's mods.

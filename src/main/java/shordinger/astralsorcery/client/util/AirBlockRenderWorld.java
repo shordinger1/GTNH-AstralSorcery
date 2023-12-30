@@ -10,12 +10,12 @@ package shordinger.astralsorcery.client.util;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 
@@ -63,7 +63,7 @@ public class AirBlockRenderWorld implements IBlockAccess {
     }
 
     @Override
-    public int getStrongPower(BlockPos pos, EnumFacing direction) {
+    public int getStrongPower(BlockPos pos, ForgeDirection direction) {
         return 0;
     }
 
@@ -73,7 +73,7 @@ public class AirBlockRenderWorld implements IBlockAccess {
     }
 
     @Override
-    public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+    public boolean isSideSolid(BlockPos pos, ForgeDirection side, boolean _default) {
         return _default;
     }
 

@@ -22,17 +22,17 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
+import shordinger.astralsorcery.migration.block.BlockPos;
 import shordinger.astralsorcery.migration.BufferBuilder;
 import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -250,18 +250,18 @@ public class BlockArrayRenderHelper {
         }
 
         @Override
-        public int getStrongPower(BlockPos pos, EnumFacing direction) {
+        public int getStrongPower(BlockPos pos, ForgeDirection direction) {
             return 0;
         }
 
         @Override
         @SideOnly(Side.CLIENT)
         public WorldType getWorldType() {
-            return Minecraft.getMinecraft().theWorld.getWorldType();
+            return Minecraft.getMinecraft().theWorld.getWorldInfo().getTerrainType();
         }
 
         @Override
-        public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+        public boolean isSideSolid(BlockPos pos, ForgeDirection side, boolean _default) {
             return isInBounds(pos) ? getBlockState(pos).isSideSolid(this, pos, side) : _default;
         }
 

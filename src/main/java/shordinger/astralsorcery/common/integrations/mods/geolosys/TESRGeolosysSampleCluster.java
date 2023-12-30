@@ -26,8 +26,8 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod

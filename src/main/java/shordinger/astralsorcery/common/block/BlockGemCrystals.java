@@ -9,22 +9,15 @@
 package shordinger.astralsorcery.common.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
@@ -33,8 +26,12 @@ import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileGemCrystals;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.BlockPos;
-import shordinger.astralsorcery.migration.IBlockState;
+import shordinger.astralsorcery.migration.RayTraceResult;
+import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.astralsorcery.migration.block.AstralBlockContainer;
+import shordinger.astralsorcery.migration.block.BlockFaceShape;
+import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.migration.block.IBlockState;
 import shordinger.astralsorcery.migration.MathHelper;
 import shordinger.astralsorcery.migration.NonNullList;
 
@@ -49,7 +46,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 27.11.2018 / 18:57
  */
-public class BlockGemCrystals extends BlockContainer implements BlockCustomName, BlockVariants {
+public class BlockGemCrystals extends AstralBlockContainer implements BlockCustomName, BlockVariants {
 
     public static final PropertyEnum<GrowthStageType> STAGE = PropertyEnum.create("stage", GrowthStageType.class);
 
@@ -84,26 +81,21 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
         if (replaceable) {
             BlockPos down = pos.down();
-            if (!worldIn.isSideSolid(down, EnumFacing.UP)) replaceable = false;
+            if (!worldIn.isSideSolid(down, ForgeDirection.UP)) replaceable = false;
         }
         return replaceable;
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        switch (state.getValue(STAGE)) {
-            case STAGE_0:
-                return boxStage0;
-            case STAGE_1:
-                return boxStage1;
-            case STAGE_2_SKY:
-                return boxStage2Sky;
-            case STAGE_2_DAY:
-                return boxStage2Day;
-            case STAGE_2_NIGHT:
-                return boxStage2Night;
-        }
-        return super.getBoundingBox(state, source, pos);
+        return switch (state.getValue(STAGE)) {
+            case STAGE_0 -> boxStage0;
+            case STAGE_1 -> boxStage1;
+            case STAGE_2_SKY -> boxStage2Sky;
+            case STAGE_2_DAY -> boxStage2Day;
+            case STAGE_2_NIGHT -> boxStage2Night;
+            default -> super.getBoundingBox(state, source, pos);
+        };
     }
 
     @Override
@@ -119,7 +111,7 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            EnumFacing p_193383_4_) {
+                                            ForgeDirection p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -174,7 +166,7 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
         return false;
     }
 
@@ -182,7 +174,7 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if (!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+        if (!downState.isSideSolid(worldIn, down, ForgeDirection.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
