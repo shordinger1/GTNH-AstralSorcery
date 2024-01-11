@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.client.gui.journal.overlay;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import shordinger.astralsorcery.client.util.Blending;
@@ -20,10 +25,6 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,8 @@ import java.util.List;
  */
 public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
 
-    public static final BindableResource textureKnowledgeOverlay = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
+    public static final BindableResource textureKnowledgeOverlay = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
     private static final int HEADER_WIDTH = 190;
     private static final int DEFAULT_WIDTH = 175;
 
@@ -69,7 +71,12 @@ public class GuiJournalOverlayKnowledge extends GuiScreenJournalOverlay {
         int height = 344;
 
         textureKnowledgeOverlay.bindTexture();
-        drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, width, height, textureKnowledgeOverlay);
+        drawTexturedRect(
+            guiLeft + guiWidth / 2 - width / 2,
+            guiTop + guiHeight / 2 - height / 2,
+            width,
+            height,
+            textureKnowledgeOverlay);
 
         drawHeader();
         drawPageText();

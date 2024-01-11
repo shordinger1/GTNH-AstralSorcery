@@ -8,7 +8,16 @@
 
 package shordinger.astralsorcery.common.util;
 
+import static hellfirepvp.astralsorcery.common.util.ItemComparator.Clause.*;
+
+import java.util.*;
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.integrations.ModIntegrationBotania;
 import shordinger.wrapper.net.minecraft.block.Block;
@@ -33,13 +42,6 @@ import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandlerModifiable;
 import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Predicate;
-
-import static hellfirepvp.astralsorcery.common.util.ItemComparator.Clause.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,7 +84,8 @@ public class ItemUtils {
     public static ItemStack createBlockStack(IBlockState state) {
         Item i = Item.getItemFromBlock(state.getBlock());
         if (i == Items.AIR) return ItemStack.EMPTY;
-        int meta = state.getBlock().damageDropped(state);
+        int meta = state.getBlock()
+            .damageDropped(state);
         return new ItemStack(i, 1, meta);
     }
 
@@ -101,45 +104,53 @@ public class ItemUtils {
         List<ItemStack> out = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (!s.isEmpty() && s.getItem() == i)
-                out.add(copyStackWithSize(s, s.getCount()));
+            if (!s.isEmpty() && s.getItem() == i) out.add(copyStackWithSize(s, s.getCount()));
         }
         return out;
     }
 
-    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match, boolean strict) {
+    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match,
+                                                                 boolean strict) {
         return findItemsInInventory(handler, match, strict);
     }
 
-    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
-        return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match, strict);
+    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match,
+                                                                   boolean strict) {
+        return findItemsInInventory(
+            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            match,
+            strict);
     }
 
     public static Collection<ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
         List<ItemStack> stacksOut = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ?
-                    ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
-                    ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+            if (strict ? ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)
+                : ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 stacksOut.add(copyStackWithSize(s, s.getCount()));
             }
         }
         return stacksOut;
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player, Predicate<ItemStack> match) {
-        return findItemsIndexedInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match);
+    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player,
+                                                                            Predicate<ItemStack> match) {
+        return findItemsIndexedInInventory(
+            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            match);
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
-        return findItemsIndexedInInventory(handler,
-                (s) -> strict ?
-                        ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
-                        ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT));
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match,
+                                                                      boolean strict) {
+        return findItemsIndexedInInventory(
+            handler,
+            (s) -> strict ? ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)
+                : ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT));
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, Predicate<ItemStack> match) {
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler,
+                                                                      Predicate<ItemStack> match) {
         Map<Integer, ItemStack> stacksOut = new HashMap<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
@@ -150,7 +161,8 @@ public class ItemUtils {
         return stacksOut;
     }
 
-    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
+    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack,
+                                                     ItemStack toConsume, boolean simulate) {
         int consumed = 0;
         if (Mods.BOTANIA.isPresent()) {
             IBlockState consumeState = createBlockState(toConsume);
@@ -159,7 +171,8 @@ public class ItemUtils {
                 int meta = b.damageDropped(consumeState);
 
                 for (int i = 0; i < toConsume.getCount(); i++) {
-                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, !simulate);
+                    ItemStack res = ModIntegrationBotania
+                        .requestFromInventory(player, requestingItemStack, b, meta, !simulate);
                     if (!res.isEmpty()) {
                         consumed++;
                     }
@@ -167,11 +180,15 @@ public class ItemUtils {
             }
         }
         ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
-        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);
+        return tryConsume.isEmpty() || consumeFromInventory(
+            (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            tryConsume,
+            simulate);
     }
 
     public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
-        return handler instanceof IItemHandlerModifiable && consumeFromInventory((IItemHandlerModifiable) handler, toConsume, simulate);
+        return handler instanceof IItemHandlerModifiable
+            && consumeFromInventory((IItemHandlerModifiable) handler, toConsume, simulate);
     }
 
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
@@ -210,15 +227,17 @@ public class ItemUtils {
         return FluidUtil.tryEmptyContainer(stack, FluidHandlerVoid.INSTANCE, fluidStack.amount, null, doDrain);
     }
 
-    /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
-        if(slot < 0 || slot >= stacks.length) return;
-        ItemStack st = stacks[slot];
-        if(st == null) return;
-        st.getCount()--;
-        if(st.getCount() <= 0) {
-            stacks[slot] = null;
-        }
-    }*/
+    /*
+     * public static void decrStackInInventory(ItemStack[] stacks, int slot) {
+     * if(slot < 0 || slot >= stacks.length) return;
+     * ItemStack st = stacks[slot];
+     * if(st == null) return;
+     * st.getCount()--;
+     * if(st.getCount() <= 0) {
+     * stacks[slot] = null;
+     * }
+     * }
+     */
 
     public static void decrStackInInventory(ItemStackHandler handler, int slot) {
         if (slot < 0 || slot >= handler.getSlots()) return;
@@ -252,16 +271,19 @@ public class ItemUtils {
                     int space = max - in.getCount();
                     int added = Math.min(stack.getCount(), space);
                     stack.setCount(stack.getCount() - added);
-                    handler.getStackInSlot(i).setCount(handler.getStackInSlot(i).getCount() + added);
-                    if (stack.getCount() <= 0)
-                        return true;
+                    handler.getStackInSlot(i)
+                        .setCount(
+                            handler.getStackInSlot(i)
+                                .getCount() + added);
+                    if (stack.getCount() <= 0) return true;
                 }
             }
         }
         return stack.getCount() == 0;
     }
 
-    public static boolean hasInventorySpace(@Nonnull ItemStack stack, IItemHandler handler, int rangeMin, int rangeMax) {
+    public static boolean hasInventorySpace(@Nonnull ItemStack stack, IItemHandler handler, int rangeMin,
+                                            int rangeMax) {
         int size = stack.getCount();
         int max = stack.getMaxStackSize();
         for (int i = rangeMin; i < rangeMax && size > 0; i++) {
@@ -290,7 +312,7 @@ public class ItemUtils {
         namePart = namePart.toLowerCase();
         List<String> oreNames = getOreDictNames(stack);
         for (String s : oreNames) {
-            if(s.contains(namePart)) return true;
+            if (s.contains(namePart)) return true;
         }
         return false;
     }
@@ -307,7 +329,9 @@ public class ItemUtils {
     private static List<String> getOreDictNames(ItemStack stack) {
         List<String> out = Lists.newArrayList();
         for (int id : OreDictionary.getOreIDs(stack)) {
-            out.add(OreDictionary.getOreName(id).toLowerCase());
+            out.add(
+                OreDictionary.getOreName(id)
+                    .toLowerCase());
         }
         return out;
     }

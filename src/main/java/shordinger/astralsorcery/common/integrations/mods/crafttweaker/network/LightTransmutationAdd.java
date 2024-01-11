@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import javax.annotation.Nullable;
+
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

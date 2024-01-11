@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.ICooldownPerk;
@@ -18,13 +19,11 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.potion.PotionEffect;
-import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,19 +44,45 @@ public class KeyCheatDeath extends KeyPerk implements ICooldownPerk {
     public KeyCheatDeath(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                thresholdApplyPerkHealth = cfg.getFloat("ThresholdHealth", getConfigurationSection(),
-                        thresholdApplyPerkHealth, 0F, 20F, "If the player drops below this value of health, the potion effect will apply in case it isn't on cooldown.");
-                thresholdApplyPerkDamage = cfg.getFloat("ThresholdDamage", getConfigurationSection(),
-                        thresholdApplyPerkDamage, 1F, 100F, "If the player takes damage equals/higher to the amount of damage configured here, the potion effect will apply in case it isn't on cooldown.");
-                cooldownPotionApplication = cfg.getInt("CooldownPotion", getConfigurationSection(),
-                        cooldownPotionApplication, 1, Integer.MAX_VALUE, "Once the potion effect gets applied, it'll take at least this amount of ticks or a server restart until it can be re-applied by this perk");
+                thresholdApplyPerkHealth = cfg.getFloat(
+                    "ThresholdHealth",
+                    getConfigurationSection(),
+                    thresholdApplyPerkHealth,
+                    0F,
+                    20F,
+                    "If the player drops below this value of health, the potion effect will apply in case it isn't on cooldown.");
+                thresholdApplyPerkDamage = cfg.getFloat(
+                    "ThresholdDamage",
+                    getConfigurationSection(),
+                    thresholdApplyPerkDamage,
+                    1F,
+                    100F,
+                    "If the player takes damage equals/higher to the amount of damage configured here, the potion effect will apply in case it isn't on cooldown.");
+                cooldownPotionApplication = cfg.getInt(
+                    "CooldownPotion",
+                    getConfigurationSection(),
+                    cooldownPotionApplication,
+                    1,
+                    Integer.MAX_VALUE,
+                    "Once the potion effect gets applied, it'll take at least this amount of ticks or a server restart until it can be re-applied by this perk");
 
-                potionDuration = cfg.getInt("PotionDuration", getConfigurationSection(),
-                        potionDuration, 1, Integer.MAX_VALUE, "Once the potion effect gets applied by any of the triggers, this will be used as tick-duration of the potion effect.");
-                potionAmplifier = cfg.getInt("PotionAmplifier", getConfigurationSection(),
-                        potionAmplifier, 0, 32, "Once the potion effect gets applied by any of the triggers, this will be used as amplifier of the potion effect.");
+                potionDuration = cfg.getInt(
+                    "PotionDuration",
+                    getConfigurationSection(),
+                    potionDuration,
+                    1,
+                    Integer.MAX_VALUE,
+                    "Once the potion effect gets applied by any of the triggers, this will be used as tick-duration of the potion effect.");
+                potionAmplifier = cfg.getInt(
+                    "PotionAmplifier",
+                    getConfigurationSection(),
+                    potionAmplifier,
+                    0,
+                    32,
+                    "Once the potion effect gets applied by any of the triggers, this will be used as amplifier of the potion effect.");
             }
         });
     }
@@ -77,11 +102,17 @@ public class KeyCheatDeath extends KeyPerk implements ICooldownPerk {
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this) && side == Side.SERVER) {
-                if(player.getHealth() <= thresholdApplyPerkHealth ||
-                        event.getAmount() >= thresholdApplyPerkDamage) {
-                    if(!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {
-                        PerkEffectHelper.EVENT_INSTANCE.setCooldownActiveForPlayer(player, this, cooldownPotionApplication);
-                        player.addPotionEffect(new PotionEffect(RegistryPotions.potionCheatDeath, potionDuration, potionAmplifier, true, false));
+                if (player.getHealth() <= thresholdApplyPerkHealth || event.getAmount() >= thresholdApplyPerkDamage) {
+                    if (!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {
+                        PerkEffectHelper.EVENT_INSTANCE
+                            .setCooldownActiveForPlayer(player, this, cooldownPotionApplication);
+                        player.addPotionEffect(
+                            new PotionEffect(
+                                RegistryPotions.potionCheatDeath,
+                                potionDuration,
+                                potionAmplifier,
+                                true,
+                                false));
                     }
                 }
             }

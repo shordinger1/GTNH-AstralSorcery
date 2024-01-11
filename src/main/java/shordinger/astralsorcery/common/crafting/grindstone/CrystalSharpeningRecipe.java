@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,11 +42,11 @@ public class CrystalSharpeningRecipe extends GrindstoneRecipe {
     public GrindResult grind(ItemStack stackIn) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stackIn);
         CrystalProperties result = prop.grindCopy(rand);
-        if(result == null) {
+        if (result == null) {
             return GrindResult.failBreakItem();
         }
         CrystalProperties.applyCrystalProperties(stackIn, result);
-        if(result.getSize() <= 0) {
+        if (result.getSize() <= 0) {
             return GrindResult.failBreakItem();
         }
         return GrindResult.success();

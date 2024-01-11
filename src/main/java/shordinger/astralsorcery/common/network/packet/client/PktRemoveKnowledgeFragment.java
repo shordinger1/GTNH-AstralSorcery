@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
-import shordinger.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import io.netty.buffer.ByteBuf;
+import shordinger.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
@@ -46,15 +46,17 @@ public class PktRemoveKnowledgeFragment implements IMessage, IMessageHandler<Pkt
 
     @Override
     public IMessage onMessage(PktRemoveKnowledgeFragment pkt, MessageContext ctx) {
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-            EntityPlayer pl = ctx.getServerHandler().player;
-            if (pl != null) {
-                ItemStack stack = pl.inventory.getStackInSlot(pkt.index);
-                if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
-                    pl.inventory.setInventorySlotContents(pkt.index, ItemStack.EMPTY); // Remove that fragment.
+        FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .addScheduledTask(() -> {
+                EntityPlayer pl = ctx.getServerHandler().player;
+                if (pl != null) {
+                    ItemStack stack = pl.inventory.getStackInSlot(pkt.index);
+                    if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
+                        pl.inventory.setInventorySlotContents(pkt.index, ItemStack.EMPTY); // Remove that fragment.
+                    }
                 }
-            }
-        });
+            });
         return null;
     }
 }

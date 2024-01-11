@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.base.HerdableAnimal;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
@@ -26,9 +30,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -44,32 +45,39 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
     public static float dropChance = 0.01F;
 
     public CEffectBootes(@Nullable ILocatable origin) {
-        super(origin, Constellations.bootes, "bootes", 12D, EntityLivingBase.class, (e) -> HerdableAnimal.getHerdable(e) != null);
+        super(
+            origin,
+            Constellations.bootes,
+            "bootes",
+            12D,
+            EntityLivingBase.class,
+            (e) -> HerdableAnimal.getHerdable(e) != null);
     }
 
     @Override
-    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified,
+                              @Nullable IMinorConstellation possibleTraitEffect) {
         percStrength *= potencyMultiplier;
-        if(percStrength < 1) {
-            if(world.rand.nextFloat() > percStrength) return false;
+        if (percStrength < 1) {
+            if (world.rand.nextFloat() > percStrength) return false;
         }
         boolean did = false;
         List<EntityLivingBase> entities = collectEntities(world, pos, modified);
-        if(!entities.isEmpty()) {
+        if (!entities.isEmpty()) {
             for (EntityLivingBase e : entities) {
                 HerdableAnimal herd = HerdableAnimal.getHerdable(e);
-                if(herd == null) continue;
-                if(modified.isCorrupted()) {
+                if (herd == null) continue;
+                if (modified.isCorrupted()) {
                     did = true;
                     e.hurtResistantTime = 0;
                     e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 5));
                     DamageUtil.attackEntityFrom(e, CommonProxy.dmgSourceStellar, 5000.0F);
                     continue;
                 }
-                if(rand.nextFloat() < herdChance && MiscUtils.canEntityTickAt(world, e.getPosition())) {
+                if (rand.nextFloat() < herdChance && MiscUtils.canEntityTickAt(world, e.getPosition())) {
                     List<ItemStack> drops = herd.getHerdingDropsTick(e, world, rand, herdingLuck);
                     for (ItemStack stack : drops) {
-                        if(rand.nextFloat() < dropChance) {
+                        if (rand.nextFloat() < dropChance) {
                             ItemUtils.dropItemNaturally(world, e.posX, e.posY, e.posZ, stack);
                             did = true;
                         }
@@ -89,9 +97,33 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
     public void loadFromConfig(Configuration cfg) {
         super.loadFromConfig(cfg);
 
-        herdingLuck = cfg.getFloat(getKey() + "HerdLuck", getConfigurationSection(), -5F, -200.0F, 200.0F, "Set the 'luck' when herding an animal for drops or related");
-        herdChance = cfg.getFloat(getKey() + "HerdChance", getConfigurationSection(), 0.05F, 0.0F, 1.0F, "Set the chance that an registered animal will be 'herded' if it is close to the ritual.");
-        potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
-        dropChance = cfg.getFloat(getKey() + "OverallDropChance", getConfigurationSection(), 0.01F, 0.0F, 1.0F, "Set the chance that a drop that has been found from the entity's loot table is actually dropped.");
+        herdingLuck = cfg.getFloat(
+            getKey() + "HerdLuck",
+            getConfigurationSection(),
+            -5F,
+            -200.0F,
+            200.0F,
+            "Set the 'luck' when herding an animal for drops or related");
+        herdChance = cfg.getFloat(
+            getKey() + "HerdChance",
+            getConfigurationSection(),
+            0.05F,
+            0.0F,
+            1.0F,
+            "Set the chance that an registered animal will be 'herded' if it is close to the ritual.");
+        potencyMultiplier = cfg.getFloat(
+            getKey() + "PotencyMultiplier",
+            getConfigurationSection(),
+            1.0F,
+            0.01F,
+            100F,
+            "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
+        dropChance = cfg.getFloat(
+            getKey() + "OverallDropChance",
+            getConfigurationSection(),
+            0.01F,
+            0.0F,
+            1.0F,
+            "Set the chance that a drop that has been found from the entity's loot table is actually dropped.");
     }
 }

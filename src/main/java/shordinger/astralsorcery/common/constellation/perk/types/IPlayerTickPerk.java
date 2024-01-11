@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.types;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,7 +20,7 @@ import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
  */
 public interface IPlayerTickPerk {
 
-    //The player being ticked definitely has the perk unlocked
+    // The player being ticked definitely has the perk unlocked
     public void onPlayerTick(EntityPlayer player, Side side);
 
 }

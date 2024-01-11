@@ -9,7 +9,6 @@
 package shordinger.astralsorcery.common.block;
 
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
-import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -17,14 +16,12 @@ import shordinger.astralsorcery.common.tile.TileGemCrystals;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
 import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -40,8 +37,6 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -58,16 +53,11 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
 
     public static final PropertyEnum<GrowthStageType> STAGE = PropertyEnum.create("stage", GrowthStageType.class);
 
-    private static final AxisAlignedBB boxStage0 = new AxisAlignedBB(0.25, 0, 0.25,
-            0.75, 0.375, 0.75);
-    private static final AxisAlignedBB boxStage1 = new AxisAlignedBB(0.25, 0, 0.25,
-            0.75, 0.5, 0.75);
-    private static final AxisAlignedBB boxStage2Night = new AxisAlignedBB(0.25, 0, 0.25,
-            0.75, 0.5, 0.75);
-    private static final AxisAlignedBB boxStage2Sky = new AxisAlignedBB(0.25, 0, 0.25,
-            0.75, 0.5625, 0.75);
-    private static final AxisAlignedBB boxStage2Day = new AxisAlignedBB(0.25, 0, 0.25,
-            0.75, 0.5625, 0.75);
+    private static final AxisAlignedBB boxStage0 = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.375, 0.75);
+    private static final AxisAlignedBB boxStage1 = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Night = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Sky = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5625, 0.75);
+    private static final AxisAlignedBB boxStage2Day = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5625, 0.75);
 
     public BlockGemCrystals() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -77,7 +67,9 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
         setLightLevel(0.3F);
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(STAGE, GrowthStageType.STAGE_0));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(STAGE, GrowthStageType.STAGE_0));
     }
 
     @Override
@@ -90,10 +82,9 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
-        if(replaceable) {
+        if (replaceable) {
             BlockPos down = pos.down();
-            if(!worldIn.isSideSolid(down, EnumFacing.UP))
-                replaceable = false;
+            if (!worldIn.isSideSolid(down, EnumFacing.UP)) replaceable = false;
         }
         return replaceable;
     }
@@ -121,12 +112,14 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -136,20 +129,23 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        state.withProperty(STAGE, GrowthStageType.values()[
-                MathHelper.clamp(stack.getItemDamage(), 0, GrowthStageType.values().length)]);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
+        state.withProperty(
+            STAGE,
+            GrowthStageType.values()[MathHelper.clamp(stack.getItemDamage(), 0, GrowthStageType.values().length)]);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(STAGE).ordinal();
+        return state.getValue(STAGE)
+            .ordinal();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(STAGE, GrowthStageType.values()[
-                MathHelper.clamp(meta, 0, GrowthStageType.values().length)]);
+        return getDefaultState()
+            .withProperty(STAGE, GrowthStageType.values()[MathHelper.clamp(meta, 0, GrowthStageType.values().length)]);
     }
 
     @Override
@@ -158,7 +154,8 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         ItemStack gem = ItemStack.EMPTY;
         switch (state.getValue(STAGE)) {
             case STAGE_2_SKY:
@@ -185,7 +182,7 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+        if (!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
@@ -195,10 +192,15 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileGemCrystals te = MiscUtils.getTileAt(worldIn, pos, TileGemCrystals.class, true);
-        if(te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.GEM_CRYSTAL_BURST,
-                    pos.getX(), pos.getY(), pos.getZ());
-            event.setAdditionalDataLong(state.getValue(STAGE).ordinal());
+        if (te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(
+                PktParticleEvent.ParticleEventType.GEM_CRYSTAL_BURST,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
+            event.setAdditionalDataLong(
+                state.getValue(STAGE)
+                    .ordinal());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
         }
         super.breakBlock(worldIn, pos, state);
@@ -259,7 +261,8 @@ public class BlockGemCrystals extends BlockContainer implements BlockCustomName,
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(STAGE).getName();
+        return state.getValue(STAGE)
+            .getName();
     }
 
     public static enum GrowthStageType implements IStringSerializable {

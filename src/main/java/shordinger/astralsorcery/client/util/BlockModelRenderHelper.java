@@ -44,12 +44,16 @@ public class BlockModelRenderHelper {
 
     private static BlockFluidRenderer getFluidRenderer() {
         if (bfr == null) {
-            bfr = new BlockFluidRenderer(new BlockColorsOverride(Minecraft.getMinecraft().getBlockColors()));
+            bfr = new BlockFluidRenderer(
+                new BlockColorsOverride(
+                    Minecraft.getMinecraft()
+                        .getBlockColors()));
         }
         return bfr;
     }
 
-    public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb, int color) {
+    public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb,
+                                                 int color) {
         try {
             EnumBlockRenderType type = state.getRenderType();
             if (type == EnumBlockRenderType.INVISIBLE) return;
@@ -57,8 +61,12 @@ public class BlockModelRenderHelper {
 
             switch (type) {
                 case MODEL:
-                    IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
-                    state = state.getBlock().getExtendedState(state, world, pos);
+                    IBakedModel model = Minecraft.getMinecraft()
+                        .getBlockRendererDispatcher()
+                        .getBlockModelShapes()
+                        .getModelForState(state);
+                    state = state.getBlock()
+                        .getExtendedState(state, world, pos);
                     renderModelFlat(world, model, state, pos, vb, true, MathHelper.getPositionRandom(pos), color);
                     break;
                 case LIQUID:
@@ -72,12 +80,18 @@ public class BlockModelRenderHelper {
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block in world");
             CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being tesselated");
-            CrashReportCategory.addBlockInfo(crashreportcategory, pos, state.getBlock(), state.getBlock().getMetaFromState(state));
+            CrashReportCategory.addBlockInfo(
+                crashreportcategory,
+                pos,
+                state.getBlock(),
+                state.getBlock()
+                    .getMetaFromState(state));
             throw new ReportedException(crashreport);
         }
     }
 
-    private static void renderModelFlat(IBlockAccess worldIn, IBakedModel modelIn, IBlockState stateIn, BlockPos posIn, BufferBuilder buffer, boolean checkSides, long rand, int color) {
+    private static void renderModelFlat(IBlockAccess worldIn, IBakedModel modelIn, IBlockState stateIn, BlockPos posIn,
+                                        BufferBuilder buffer, boolean checkSides, long rand, int color) {
         BitSet bitset = new BitSet(3);
 
         for (EnumFacing enumfacing : EnumFacing.values()) {
@@ -89,17 +103,16 @@ public class BlockModelRenderHelper {
         }
         List<BakedQuad> quads = modelIn.getQuads(stateIn, null, rand);
         if (!quads.isEmpty()) {
-            renderQuadsFlat(worldIn, stateIn, posIn, -1, true, buffer, quads, bitset,  color);
+            renderQuadsFlat(worldIn, stateIn, posIn, -1, true, buffer, quads, bitset, color);
         }
     }
 
     private static void renderQuadsFlat(IBlockAccess blockAccessIn, IBlockState stateIn, BlockPos posIn,
-                                 int brightnessIn, boolean ownBrightness, BufferBuilder buffer,
-                                 List<BakedQuad> list, BitSet bitSet, int color) {
+                                        int brightnessIn, boolean ownBrightness, BufferBuilder buffer, List<BakedQuad> list, BitSet bitSet, int color) {
         Vec3d vec3d = stateIn.getOffset(blockAccessIn, posIn);
-        double d0 = (double)posIn.getX() + vec3d.x;
-        double d1 = (double)posIn.getY() + vec3d.y;
-        double d2 = (double)posIn.getZ() + vec3d.z;
+        double d0 = (double) posIn.getX() + vec3d.x;
+        double d1 = (double) posIn.getY() + vec3d.y;
+        double d2 = (double) posIn.getZ() + vec3d.z;
         int i = 0;
 
         for (int j = list.size(); i < j; ++i) {
@@ -118,10 +131,10 @@ public class BlockModelRenderHelper {
                 color = TextureUtil.anaglyphColor(color);
             }
 
-            float red   = (float) (color >> 16  & 255) / 255F;
-            float green = (float) (color >> 8   & 255) / 255F;
-            float blue  = (float) (color        & 255) / 255F;
-            if(bakedquad.shouldApplyDiffuseLighting()) {
+            float red = (float) (color >> 16 & 255) / 255F;
+            float green = (float) (color >> 8 & 255) / 255F;
+            float blue = (float) (color & 255) / 255F;
+            if (bakedquad.shouldApplyDiffuseLighting()) {
                 float diffuse = net.minecraftforge.client.model.pipeline.LightUtil.diffuseLight(bakedquad.getFace());
                 red *= diffuse;
                 green *= diffuse;
@@ -136,8 +149,8 @@ public class BlockModelRenderHelper {
         }
     }
 
-    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, EnumFacing face, @Nullable float[] quadBounds, BitSet boundsFlags)
-    {
+    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, EnumFacing face,
+                                       @Nullable float[] quadBounds, BitSet boundsFlags) {
         float f = 32.0F;
         float f1 = 32.0F;
         float f2 = 32.0F;
@@ -212,13 +225,13 @@ public class BlockModelRenderHelper {
         }
 
         @Override
-        public int colorMultiplier(IBlockState state, @Nullable IBlockAccess blockAccess, @Nullable BlockPos pos, int tintIndex) {
-            if(override != -1) {
+        public int colorMultiplier(IBlockState state, @Nullable IBlockAccess blockAccess, @Nullable BlockPos pos,
+                                   int tintIndex) {
+            if (override != -1) {
                 return override;
             }
             return prev.colorMultiplier(state, blockAccess, pos, tintIndex);
         }
     }
-
 
 }

@@ -8,13 +8,15 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.client.gui.GuiTelescope;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
@@ -23,8 +25,6 @@ import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,13 +33,15 @@ import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
  * Created by HellFirePvP
  * Date: 10.01.2017 / 00:54
  */
-public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTelescope, PktRotateTelescope>, ClientReplyPacket {
+public class PktRotateTelescope
+    implements IMessage, IMessageHandler<PktRotateTelescope, PktRotateTelescope>, ClientReplyPacket {
 
     private boolean isClockwise = false;
     private int dimId = -1;
     private BlockPos pos = BlockPos.ORIGIN;
 
-    public PktRotateTelescope() {}
+    public PktRotateTelescope() {
+    }
 
     public PktRotateTelescope(boolean isClockwise, int dimId, BlockPos pos) {
         this.isClockwise = isClockwise;
@@ -63,18 +65,27 @@ public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTe
 
     @Override
     public PktRotateTelescope onMessage(PktRotateTelescope message, MessageContext ctx) {
-        if(ctx.side == Side.SERVER) {
-            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-                if(DimensionManager.isDimensionRegistered(message.dimId)) {
-                    WorldServer ws = DimensionManager.getWorld(message.dimId);
-                    TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, false);
-                    if(tt != null) {
-                        tt.setRotation(message.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
-                        PktRotateTelescope pkt =  new PktRotateTelescope(message.isClockwise, message.dimId, message.pos);
-                        PacketChannel.CHANNEL.sendTo(pkt, ctx.getServerHandler().player);
+        if (ctx.side == Side.SERVER) {
+            FMLCommonHandler.instance()
+                .getMinecraftServerInstance()
+                .addScheduledTask(() -> {
+                    if (DimensionManager.isDimensionRegistered(message.dimId)) {
+                        WorldServer ws = DimensionManager.getWorld(message.dimId);
+                        TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, false);
+                        if (tt != null) {
+                            tt.setRotation(
+                                message.isClockwise ? tt.getRotation()
+                                    .nextClockWise()
+                                    : tt.getRotation()
+                                    .nextCounterClockWise());
+                            PktRotateTelescope pkt = new PktRotateTelescope(
+                                message.isClockwise,
+                                message.dimId,
+                                message.pos);
+                            PacketChannel.CHANNEL.sendTo(pkt, ctx.getServerHandler().player);
+                        }
                     }
-                }
-            });
+                });
         } else {
             applyRotation(message);
         }
@@ -83,14 +94,18 @@ public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTe
 
     @SideOnly(Side.CLIENT)
     private void applyRotation(PktRotateTelescope pkt) {
-        if(Minecraft.getMinecraft().world.provider.getDimension() == pkt.dimId) {
+        if (Minecraft.getMinecraft().world.provider.getDimension() == pkt.dimId) {
             TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pkt.pos, TileTelescope.class, false);
-            if(tt != null) {
-                tt.setRotation(pkt.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
+            if (tt != null) {
+                tt.setRotation(
+                    pkt.isClockwise ? tt.getRotation()
+                        .nextClockWise()
+                        : tt.getRotation()
+                        .nextCounterClockWise());
             }
         }
-        if(Minecraft.getMinecraft().currentScreen != null &&
-                Minecraft.getMinecraft().currentScreen instanceof GuiTelescope) {
+        if (Minecraft.getMinecraft().currentScreen != null
+            && Minecraft.getMinecraft().currentScreen instanceof GuiTelescope) {
             ((GuiTelescope) Minecraft.getMinecraft().currentScreen).handleRotationChange(pkt.isClockwise);
         }
     }

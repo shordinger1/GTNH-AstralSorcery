@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
@@ -34,8 +36,6 @@ import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -67,7 +67,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
 
-        if(state.getValue(ORE_TYPE).equals(OreType.ROCK_CRYSTAL)) {
+        if (state.getValue(ORE_TYPE)
+            .equals(OreType.ROCK_CRYSTAL)) {
             RockCrystalHandler.INSTANCE.removeOre(worldIn, pos, true);
         }
     }
@@ -87,7 +88,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta]) : getDefaultState();
+        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -96,9 +98,11 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state,
+                             @Nullable TileEntity te, @Nullable ItemStack stack) {
         OreType type = state.getValue(ORE_TYPE);
-        if(type != OreType.ROCK_CRYSTAL || (allowCrystalHarvest || (securityCheck(worldIn, player) && checkSafety(worldIn, pos)))) {
+        if (type != OreType.ROCK_CRYSTAL
+            || (allowCrystalHarvest || (securityCheck(worldIn, player) && checkSafety(worldIn, pos)))) {
             super.harvestBlock(worldIn, player, pos, state, te, stack);
         }
     }
@@ -109,18 +113,21 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         switch (type) {
             case ROCK_CRYSTAL:
-                if(world != null && world instanceof World && (allowCrystalHarvest || (checkSafety((World) world, pos) && securityCheck((World) world, harvesters.get())))) {
+                if (world != null && world instanceof World
+                    && (allowCrystalHarvest
+                    || (checkSafety((World) world, pos) && securityCheck((World) world, harvesters.get())))) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     for (int i = 0; i < (fortune + 1); i++) {
-                        if(((World) world).rand.nextBoolean()) {
+                        if (((World) world).rand.nextBoolean()) {
                             drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                         }
                     }
-                    if(((World) world).rand.nextBoolean()) {
+                    if (((World) world).rand.nextBoolean()) {
                         drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     }
                 }
@@ -146,7 +153,6 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
     }
-
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -182,8 +188,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         OreType ot = state.getValue(ORE_TYPE);
-        if(ot == OreType.ROCK_CRYSTAL) {
-            if(Config.rockCrystalOreSilkTouchHarvestable) {
+        if (ot == OreType.ROCK_CRYSTAL) {
+            if (Config.rockCrystalOreSilkTouchHarvestable) {
                 return true;
             }
         }
@@ -192,15 +198,19 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(ORE_TYPE).getName();
+        return state.getValue(ORE_TYPE)
+            .getName();
     }
 
     @SideOnly(Side.CLIENT)
     public static void playStarmetalOreEffects(PktParticleEvent event) {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                event.getVec().getX() + rand.nextFloat(),
-                event.getVec().getY() + rand.nextFloat(),
-                event.getVec().getZ() + rand.nextFloat());
+            event.getVec()
+                .getX() + rand.nextFloat(),
+            event.getVec()
+                .getY() + rand.nextFloat(),
+            event.getVec()
+                .getZ() + rand.nextFloat());
         p.motion(0, rand.nextFloat() * 0.05, 0);
         p.scale(0.2F);
     }
@@ -229,6 +239,5 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
             return name().toLowerCase();
         }
     }
-
 
 }

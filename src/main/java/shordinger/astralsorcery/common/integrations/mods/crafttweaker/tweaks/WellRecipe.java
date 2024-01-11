@@ -46,7 +46,8 @@ public class WellRecipe extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addLiquefaction(IItemStack input, ILiquidStack output, float productionMultiplier, float shatterMultiplier, int colorhex) {
+    public static void addLiquefaction(IItemStack input, ILiquidStack output, float productionMultiplier,
+                                       float shatterMultiplier, int colorhex) {
         ItemStack in = convertToItemStack(input);
         if (in.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input itemstack.");
@@ -59,7 +60,8 @@ public class WellRecipe extends BaseTweaker {
             return;
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new WellRecipeAdd(in, fs.getFluid(), productionMultiplier, shatterMultiplier, colorhex));
+        ModIntegrationCrafttweaker.recipeModifications
+            .add(new WellRecipeAdd(in, fs.getFluid(), productionMultiplier, shatterMultiplier, colorhex));
     }
 
 }

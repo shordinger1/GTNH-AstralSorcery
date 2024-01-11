@@ -29,30 +29,37 @@ public class PerkUlteria extends ConstellationPerk {
         setCategory(CATEGORY_FOCUS);
 
         float perPoint = 0.05F;
-        this.addModifier(new PerkAttributeModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 1F + perPoint) {
-            @Override
-            protected void initModifier() {
-                super.initModifier();
+        this.addModifier(
+            new PerkAttributeModifier(
+                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP,
+                PerkAttributeModifier.Mode.STACKING_MULTIPLY,
+                1F + perPoint) {
 
-                this.setAbsolute();
-            }
+                @Override
+                protected void initModifier() {
+                    super.initModifier();
 
-            @Override
-            public float getValue(EntityPlayer player, PlayerProgress progress) {
-                return 1F + (perPoint * progress.getAvailablePerkPoints(player));
-            }
+                    this.setAbsolute();
+                }
 
-            @Override
-            public boolean hasDisplayString() {
-                return false;
-            }
-        });
+                @Override
+                public float getValue(EntityPlayer player, PlayerProgress progress) {
+                    return 1F + (perPoint * progress.getAvailablePerkPoints(player));
+                }
+
+                @Override
+                public boolean hasDisplayString() {
+                    return false;
+                }
+            });
     }
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        return super.mayUnlockPerk(progress, player) &&
-                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
+        return super.mayUnlockPerk(progress, player) && !MiscUtils.contains(
+            progress.getAppliedPerks(),
+            perk -> perk.getCategory()
+                .equals(CATEGORY_FOCUS));
     }
 
 }

@@ -8,22 +8,23 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.registry;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.event.StarlightNetworkEvent;
 import shordinger.astralsorcery.common.starlight.IIndependentStarlightSource;
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
-* This class is part of the Astral Sorcery Mod
-* The complete source code for this mod can be found on github.
-* Class: SourceClassRegistry
-* Created by HellFirePvP
-* Date: 04.08.2016 / 16:33
-*/
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: SourceClassRegistry
+ * Created by HellFirePvP
+ * Date: 04.08.2016 / 16:33
+ */
 public class SourceClassRegistry {
 
     public static final SourceClassRegistry eventInstance = new SourceClassRegistry();
@@ -42,7 +43,8 @@ public class SourceClassRegistry {
     }
 
     public static void register(SourceProvider provider) {
-        if(providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException("Already registered identifier SourceProvider: " + provider.getIdentifier());
+        if (providerMap.containsKey(provider.getIdentifier()))
+            throw new RuntimeException("Already registered identifier SourceProvider: " + provider.getIdentifier());
         providerMap.put(provider.getIdentifier(), provider);
     }
 

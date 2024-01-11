@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.client.gui.journal;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,10 +41,10 @@ public class PartSizeHandler extends SizeHandler {
             int x = node.renderPosX;
             int y = node.renderPosZ;
 
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
         }
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }

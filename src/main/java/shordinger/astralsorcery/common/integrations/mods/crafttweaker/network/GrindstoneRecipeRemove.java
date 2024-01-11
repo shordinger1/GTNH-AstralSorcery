@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**

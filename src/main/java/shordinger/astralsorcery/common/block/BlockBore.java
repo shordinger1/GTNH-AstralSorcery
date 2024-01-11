@@ -14,7 +14,6 @@ import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileBore;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -51,14 +50,20 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(worldIn.getBlockState(pos.down()).getBlock().isReplaceable(worldIn, pos.down())) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (worldIn.getBlockState(pos.down())
+            .getBlock()
+            .isReplaceable(worldIn, pos.down())) {
             TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
             ItemStack held = playerIn.getHeldItem(hand);
-            if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
-                if(!worldIn.isRemote) {
-                    if (worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()))) {
-                        if(!playerIn.isCreative()) {
+            if (tb != null && !held.isEmpty()
+                && held.getItem() instanceof ItemBlock
+                && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
+                if (!worldIn.isRemote) {
+                    if (worldIn
+                        .setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()))) {
+                        if (!playerIn.isCreative()) {
                             held.shrink(1);
                         }
                     }
@@ -90,7 +95,8 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -115,6 +121,5 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return null;
     }
-
 
 }

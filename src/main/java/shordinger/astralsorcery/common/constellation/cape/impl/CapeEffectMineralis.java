@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
@@ -26,10 +30,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -58,30 +58,38 @@ public class CapeEffectMineralis extends CapeArmorEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        highlightRange = cfg.getInt(getKey() + "HighlightRange", getConfigurationSection(), highlightRange, 4, 64, "Sets the highlight radius in which the cape effect will search for the block you're holding.");
+        highlightRange = cfg.getInt(
+            getKey() + "HighlightRange",
+            getConfigurationSection(),
+            highlightRange,
+            4,
+            64,
+            "Sets the highlight radius in which the cape effect will search for the block you're holding.");
     }
 
     @SideOnly(Side.CLIENT)
     public void playClientHighlightTick(EntityPlayer pl) {
-        if(rand.nextFloat() > 0.7F) return;
+        if (rand.nextFloat() > 0.7F) return;
 
         ItemStack main = pl.getHeldItemMainhand();
         IBlockState check = null;
-        if(!main.isEmpty()) {
+        if (!main.isEmpty()) {
             try {
                 check = ItemUtils.createBlockState(main);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        if(check == null) {
+        if (check == null) {
             main = pl.getHeldItemOffhand();
             try {
                 check = ItemUtils.createBlockState(main);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
 
-        if(check != null) {
-            if(Mods.ORESTAGES.isPresent()) {
-                if(!ModIntegrationOreStages.canSeeOreClient(check)) {
+        if (check != null) {
+            if (Mods.ORESTAGES.isPresent()) {
+                if (!ModIntegrationOreStages.canSeeOreClient(check)) {
                     return;
                 }
             }
@@ -95,18 +103,20 @@ public class CapeEffectMineralis extends CapeArmorEffect {
                 return;
             }
             List<BlockPos> blocks = MiscUtils.searchAreaFor(pl.world, pl.getPosition(), b, meta, highlightRange);
-            if(blocks.isEmpty()) return;
+            if (blocks.isEmpty()) return;
 
             int index = blocks.size() > 10 ? rand.nextInt(blocks.size()) : rand.nextInt(10);
-            if(index >= blocks.size()) {
+            if (index >= blocks.size()) {
                 return;
             }
             BlockPos at = blocks.get(index);
             IBlockState act = pl.world.getBlockState(at);
-            EffectTranslucentFallingBlock bl = EffectHandler.getInstance().translucentFallingBlock(
-                    new Vector3(at).add(0.5, 0.5, 0.5), act);
-            bl.setDisableDepth(true).setScaleFunction(new EntityComplexFX.ScaleFunction.Shrink<>());
-            bl.setMotion(0, 0.02, 0).setAlphaFunction(EntityComplexFX.AlphaFunction.PYRAMID);
+            EffectTranslucentFallingBlock bl = EffectHandler.getInstance()
+                .translucentFallingBlock(new Vector3(at).add(0.5, 0.5, 0.5), act);
+            bl.setDisableDepth(true)
+                .setScaleFunction(new EntityComplexFX.ScaleFunction.Shrink<>());
+            bl.setMotion(0, 0.02, 0)
+                .setAlphaFunction(EntityComplexFX.AlphaFunction.PYRAMID);
             bl.tumble();
             bl.setMaxAge(40 + rand.nextInt(15));
         }

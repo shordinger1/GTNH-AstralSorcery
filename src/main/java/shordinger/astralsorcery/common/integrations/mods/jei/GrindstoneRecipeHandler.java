@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
+import mezz.jei.api.recipe.IRecipeWrapper;
 import shordinger.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
 
 /**
  * This class is part of the Astral Sorcery Mod

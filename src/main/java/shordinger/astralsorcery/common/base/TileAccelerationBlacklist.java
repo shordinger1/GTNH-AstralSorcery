@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.base;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.tile.*;
 import shordinger.astralsorcery.common.tile.base.TileSourceBase;
@@ -15,10 +20,6 @@ import shordinger.astralsorcery.common.tile.base.TileTransmissionBase;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.ITickable;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,44 +35,42 @@ public class TileAccelerationBlacklist {
     private static List<Class<?>> blacklistedClasses = new LinkedList<>();
 
     public static boolean canAccelerate(@Nullable TileEntity te) {
-        if(te == null) return false; //Nothing there.
-        if(!(te instanceof ITickable)) return false; //Uh nope.
+        if (te == null) return false; // Nothing there.
+        if (!(te instanceof ITickable)) return false; // Uh nope.
 
         Class<?> tClass = te.getClass();
         String className = tClass.getName();
         String lCClassName = className.toLowerCase();
         if (lCClassName.startsWith("[L")) {
-            lCClassName = lCClassName.substring(2); //Cull descriptor
+            lCClassName = lCClassName.substring(2); // Cull descriptor
         }
         for (String pref : blacklistedPrefixes) {
-            if(lCClassName.startsWith(pref)) {
+            if (lCClassName.startsWith(pref)) {
                 return false;
             }
         }
         for (Class<?> tCl : blacklistedClasses) {
-            if(tCl.isAssignableFrom(tClass)) {
+            if (tCl.isAssignableFrom(tClass)) {
                 return false;
             }
         }
         return !erroredTiles.contains(tClass);
     }
 
-    //Specifically used if the tile crashed once when trying to accel it.
+    // Specifically used if the tile crashed once when trying to accel it.
     @Deprecated
     public static void errored(Class<?> teClass) {
-        if(!erroredTiles.contains(teClass)) {
+        if (!erroredTiles.contains(teClass)) {
             erroredTiles.add(teClass);
         }
     }
 
     public static void blacklistTileClassAndSubclasses(Class<?> tileClass) {
-        if(!blacklistedClasses.contains(tileClass))
-            blacklistedClasses.add(tileClass);
+        if (!blacklistedClasses.contains(tileClass)) blacklistedClasses.add(tileClass);
     }
 
     public static void blacklistTileClassNamePrefix(String prefix) {
-        if(!blacklistedPrefixes.contains(prefix.toLowerCase()))
-            blacklistedPrefixes.add(prefix.toLowerCase());
+        if (!blacklistedPrefixes.contains(prefix.toLowerCase())) blacklistedPrefixes.add(prefix.toLowerCase());
     }
 
     public static void init() {
@@ -86,9 +85,9 @@ public class TileAccelerationBlacklist {
 
     public static class TileAccelBlacklistEntry extends ConfigEntry {
 
-        private static String[] DEFAULT_ENTRIES = new String[] {
-                "appeng", //I don't wanna run into issues that come from accelerating any network stuffs.
-                "raoulvdberge.refinedstorage" //Same as AE stuff
+        private static String[] DEFAULT_ENTRIES = new String[]{"appeng", // I don't wanna run into issues that come
+            // from accelerating any network stuffs.
+            "raoulvdberge.refinedstorage" // Same as AE stuff
         };
 
         public TileAccelBlacklistEntry() {
@@ -97,8 +96,11 @@ public class TileAccelerationBlacklist {
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            String[] blacklist = cfg.getStringList("ClassesOrSuperPackages", getConfigurationSection(), DEFAULT_ENTRIES,
-                    "The classes for tileentities to be blacklisted from AstralSorcery's tile acceleration mechanics. Fully define a class or a package above it. Separated by '/'");
+            String[] blacklist = cfg.getStringList(
+                "ClassesOrSuperPackages",
+                getConfigurationSection(),
+                DEFAULT_ENTRIES,
+                "The classes for tileentities to be blacklisted from AstralSorcery's tile acceleration mechanics. Fully define a class or a package above it. Separated by '/'");
 
             for (String entry : blacklist) {
                 blacklistTileClassNamePrefix(entry);

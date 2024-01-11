@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client;
 
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.*;
 import shordinger.astralsorcery.client.gui.container.*;
@@ -30,10 +34,6 @@ import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,9 +47,9 @@ public class ClientGuiHandler {
     @SideOnly(Side.CLIENT)
     public static Object openGui(CommonProxy.EnumGuiId guiType, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity t = null;
-        if(guiType.getTileClass() != null) {
+        if (guiType.getTileClass() != null) {
             t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass(), true);
-            if(t == null) {
+            if (t == null) {
                 return null;
             }
         }
@@ -59,8 +59,8 @@ public class ClientGuiHandler {
             case HAND_TELESCOPE:
                 return new GuiHandTelescope();
             case CONSTELLATION_PAPER:
-                IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
-                if(c == null) {
+                IConstellation c = ConstellationRegistry.getConstellationById(x); // Suggested Constellation id;
+                if (c == null) {
                     AstralSorcery.log.info("Tried opening ConstellationPaper GUI with out-of-range constellation id!");
                     return null;
                 } else {
@@ -80,8 +80,8 @@ public class ClientGuiHandler {
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
-                if(!held.isEmpty()) {
-                    if(held.getItem() instanceof ItemJournal) {
+                if (!held.isEmpty()) {
+                    if (held.getItem() instanceof ItemJournal) {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
                 }
@@ -94,7 +94,8 @@ public class ClientGuiHandler {
                 }
             case KNOWLEDGE_CONSTELLATION:
                 Tuple<EnumHand, ItemStack> handFragment = MiscUtils.getMainOrOffHand(player, ItemsAS.knowledgeFragment);
-                Tuple<IConstellation, List<MoonPhase>> cstInfo = ItemKnowledgeFragment.getConstellationInformation(handFragment.value);
+                Tuple<IConstellation, List<MoonPhase>> cstInfo = ItemKnowledgeFragment
+                    .getConstellationInformation(handFragment.value);
                 if (cstInfo != null) {
                     return new GuiKnowledgeFragment(cstInfo.key, cstInfo.value);
                 }

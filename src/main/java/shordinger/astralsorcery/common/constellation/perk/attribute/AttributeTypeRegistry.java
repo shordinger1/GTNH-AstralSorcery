@@ -67,7 +67,7 @@ public class AttributeTypeRegistry {
     AttributeTypeRegistry() {}
 
     public static void registerPerkType(PerkAttributeType type) {
-        if(typeMap.putIfAbsent(type.getTypeString(), type) == null) {
+        if (typeMap.putIfAbsent(type.getTypeString(), type) == null) {
             type.init();
             MinecraftForge.EVENT_BUS.register(type);
         }
@@ -97,10 +97,11 @@ public class AttributeTypeRegistry {
 
     @Nullable
     public static PerkAttributeType findType(IAttribute vanillaType) {
-        return MiscUtils.iterativeSearch(typeMap.values(),
-                type -> type instanceof VanillaAttributeType &&
-                ((VanillaAttributeType) type).getAttribute() != null &&
-                ((VanillaAttributeType) type).getAttribute().equals(vanillaType));
+        return MiscUtils.iterativeSearch(
+            typeMap.values(),
+            type -> type instanceof VanillaAttributeType && ((VanillaAttributeType) type).getAttribute() != null
+                && ((VanillaAttributeType) type).getAttribute()
+                .equals(vanillaType));
     }
 
 }

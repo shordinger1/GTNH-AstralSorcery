@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.crafting;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import shordinger.astralsorcery.common.item.wand.ItemIlluminationWand;
 import shordinger.astralsorcery.common.lib.ItemsAS;
@@ -19,8 +21,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,8 +45,8 @@ public class RecipeChangeWandColor extends BasePlainRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         EnumDyeColor color = tryFindValidRecipeAndDye(inv);
-        if(color == null) {
-            return ItemStack.EMPTY; //Uhh.. wtf went wrong here. no valid check?
+        if (color == null) {
+            return ItemStack.EMPTY; // Uhh.. wtf went wrong here. no valid check?
         }
         ItemStack wand = new ItemStack(ItemsAS.illuminationWand);
         ItemIlluminationWand.setConfiguredColor(wand, color);
@@ -62,14 +62,14 @@ public class RecipeChangeWandColor extends BasePlainRecipe {
         for (int x = 0; x < 3; x++) {
             for (int z = 0; z < 3; z++) {
                 ItemStack in = inv.getStackInRowAndColumn(x, z);
-                if(!in.isEmpty()) {
+                if (!in.isEmpty()) {
                     nonEmptyItemsFound++;
 
-                    if(in.getItem() instanceof ItemIlluminationWand) {
+                    if (in.getItem() instanceof ItemIlluminationWand) {
                         foundWand = true;
                     } else {
                         for (EnumDyeColor color : EnumDyeColor.values()) {
-                            if(ItemUtils.hasOreName(in, OreDictAlias.getDyeOreDict(color))) {
+                            if (ItemUtils.hasOreName(in, OreDictAlias.getDyeOreDict(color))) {
                                 dyeColorFound = color;
                                 break;
                             }
@@ -79,7 +79,7 @@ public class RecipeChangeWandColor extends BasePlainRecipe {
             }
         }
 
-        if(!foundWand || dyeColorFound == null || nonEmptyItemsFound != 2) {
+        if (!foundWand || dyeColorFound == null || nonEmptyItemsFound != 2) {
             return null;
         } else {
             return dyeColorFound;

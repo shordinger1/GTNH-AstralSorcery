@@ -8,7 +8,12 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Sets;
+
 import shordinger.astralsorcery.common.util.nbt.NBTComparator;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTBase;
@@ -16,9 +21,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nonnull;
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +39,8 @@ public class ItemComparator {
             if (thisStack.isEmpty() && !sampleCompare.isEmpty()) {
                 return false;
             }
-            if (!thisStack.isEmpty() && !thisStack.getItem().equals(sampleCompare.getItem())) { //Includes inverse case of the above.
+            if (!thisStack.isEmpty() && !thisStack.getItem()
+                .equals(sampleCompare.getItem())) { // Includes inverse case of the above.
                 return false;
             }
         }
@@ -57,9 +60,9 @@ public class ItemComparator {
                 return false;
             }
         } else if (lClauses.contains(Clause.META_WILDCARD)) {
-            if (thisStack.getMetadata() != sampleCompare.getMetadata() &&
-                    thisStack.getMetadata() != OreDictionary.WILDCARD_VALUE &&
-                    sampleCompare.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+            if (thisStack.getMetadata() != sampleCompare.getMetadata()
+                && thisStack.getMetadata() != OreDictionary.WILDCARD_VALUE
+                && sampleCompare.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
                 return false;
             }
         }
@@ -70,7 +73,8 @@ public class ItemComparator {
         if (lClauses.contains(Clause.NBT_STRICT)) {
             if (!thisHasTag && sampleHasTag) {
                 return false;
-            } else if (thisHasTag && (!sampleHasTag || !thisStack.getTagCompound().equals(sampleCompare.getTagCompound()))) {
+            } else if (thisHasTag && (!sampleHasTag || !thisStack.getTagCompound()
+                .equals(sampleCompare.getTagCompound()))) {
                 return false;
             }
         } else if (lClauses.contains(Clause.NBT_LEAST)) {
@@ -114,8 +118,7 @@ public class ItemComparator {
 
     private static boolean isListEmpty(NBTTagList list) {
         if (!list.hasNoTags()) {
-            if (list.getTagType() != Constants.NBT.TAG_LIST &&
-                    list.getTagType() != Constants.NBT.TAG_COMPOUND) {
+            if (list.getTagType() != Constants.NBT.TAG_LIST && list.getTagType() != Constants.NBT.TAG_COMPOUND) {
                 return false;
             }
             for (NBTBase element : list) {
@@ -150,8 +153,8 @@ public class ItemComparator {
 
         public static class Sets {
 
-            public static final Clause[] ITEMSTACK_STRICT =
-                    { Clause.ITEM, Clause.AMOUNT_EXACT, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE };
+            public static final Clause[] ITEMSTACK_STRICT = {Clause.ITEM, Clause.AMOUNT_EXACT, META_STRICT, NBT_STRICT,
+                CAPABILITIES_COMPATIBLE};
 
         }
 

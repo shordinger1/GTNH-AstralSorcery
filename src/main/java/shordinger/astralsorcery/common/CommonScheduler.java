@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.util.Counter;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +41,7 @@ public class CommonScheduler implements ITickHandler {
             while (iterator.hasNext()) {
                 Tuple<Runnable, Counter> r = iterator.next();
                 r.value.decrement();
-                if(r.value.value <= 0) {
+                if (r.value.value <= 0) {
                     r.key.run();
                     iterator.remove();
                 }
@@ -71,7 +71,7 @@ public class CommonScheduler implements ITickHandler {
 
     public void addRunnable(Runnable r, int tickDelay) {
         synchronized (lock) {
-            if(inTick) {
+            if (inTick) {
                 waiting.addLast(new Tuple<>(r, tickDelay));
             } else {
                 queue.addLast(new Tuple<>(r, new Counter(tickDelay)));

@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.auxiliary.link.ILinkableTile;
 import shordinger.astralsorcery.common.starlight.IStarlightSource;
 import shordinger.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
@@ -17,10 +22,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +50,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
     protected void updateSkyState(boolean seesSky) {
         boolean oldState = doesSeeSky();
         super.updateSkyState(seesSky);
-        if(oldState != doesSeeSky()) {
+        if (oldState != doesSeeSky()) {
             needsUpdate = true;
         }
     }
@@ -63,7 +64,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
         super.readCustomNBT(compound);
         positions.clear();
 
-        if(compound.hasKey("linked")) {
+        if (compound.hasKey("linked")) {
             NBTTagList list = compound.getTagList("linked", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound tag = list.getCompoundTagAt(i);
@@ -102,15 +103,15 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
 
     @Override
     public void onLinkCreate(EntityPlayer player, BlockPos other) {
-        if(other.equals(getPos())) return;
+        if (other.equals(getPos())) return;
 
-        if(TransmissionNetworkHelper.createTransmissionLink(this, other)) {
-            if(!this.positions.contains(other)) {
+        if (TransmissionNetworkHelper.createTransmissionLink(this, other)) {
+            if (!this.positions.contains(other)) {
                 this.positions.add(other);
                 markDirty();
             }
 
-            if(!hasBeenLinked()) {
+            if (!hasBeenLinked()) {
                 this.linked = true;
                 this.needsUpdate = true;
             }
@@ -124,9 +125,9 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
 
     @Override
     public boolean tryUnlink(EntityPlayer player, BlockPos other) {
-        if(other.equals(getPos())) return false;
+        if (other.equals(getPos())) return false;
 
-        if(TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
+        if (TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
             TransmissionNetworkHelper.removeTransmissionLink(this, other);
             this.positions.remove(other);
             markDirty();

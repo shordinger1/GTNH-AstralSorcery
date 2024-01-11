@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.effect;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,7 +23,8 @@ import javax.annotation.Nullable;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int maxCount, Verifier verifier) {
+    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int maxCount,
+                               Verifier verifier) {
         super(origin, c, cfgName, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
@@ -34,7 +35,7 @@ public abstract class CEffectPositionList extends CEffectPositionListGen<GenList
     @Nullable
     public BlockPos getRandomPosition() {
         GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
-        if(entry != null) {
+        if (entry != null) {
             return entry.getPos();
         }
         return null;

@@ -8,18 +8,19 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.crafting.IGatedRecipe;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidActionResult;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,9 +89,9 @@ public abstract class AbstractInfusionRecipe {
 
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
-        if(!stack.isEmpty()) {
+        if (!stack.isEmpty()) {
             FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
-            if(fas.isSuccess()) {
+            if (fas.isSuccess()) {
                 infuser.setStack(fas.getResult());
             }
         }
@@ -125,12 +126,13 @@ public abstract class AbstractInfusionRecipe {
     public void onCraftClientTick(TileStarlightInfuser infuser, long tick, Random rand) {}
 
     public boolean matches(TileStarlightInfuser infuser) {
-        if(this instanceof IGatedRecipe) {
-            if(infuser.getWorld().isRemote) {
-                if(!((IGatedRecipe) this).hasProgressionClient()) return false;
+        if (this instanceof IGatedRecipe) {
+            if (infuser.getWorld().isRemote) {
+                if (!((IGatedRecipe) this).hasProgressionClient()) return false;
             }
         }
 
-        return infuser.hasMultiblock() && !infuser.getInputStack().isEmpty() && input.matchCrafting(infuser.getInputStack());
+        return infuser.hasMultiblock() && !infuser.getInputStack()
+            .isEmpty() && input.matchCrafting(infuser.getInputStack());
     }
 }

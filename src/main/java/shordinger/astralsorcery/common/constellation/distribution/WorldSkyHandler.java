@@ -8,7 +8,16 @@
 
 package shordinger.astralsorcery.common.constellation.distribution;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
 import shordinger.astralsorcery.common.constellation.*;
 import shordinger.astralsorcery.common.data.DataActiveCelestials;
@@ -16,13 +25,6 @@ import shordinger.astralsorcery.common.data.SyncDataHolder;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,17 +67,18 @@ public class WorldSkyHandler {
         this.seededRand = new Random(savedSeed);
     }
 
-    //Fired on client and serverside - client only if it's the world the client is in obviously.
+    // Fired on client and serverside - client only if it's the world the client is in obviously.
     public void tick(World w) {
-        if(!w.getGameRules().getBoolean("doDaylightCycle")) {
+        if (!w.getGameRules()
+            .getBoolean("doDaylightCycle")) {
             return;
         }
 
-        if(initialValueMappings.isEmpty()) {
+        if (initialValueMappings.isEmpty()) {
             setupInitialFunctions();
         }
 
-        if(w.isRemote && clientConstellationPositionMapping == null) {
+        if (w.isRemote && clientConstellationPositionMapping == null) {
             clientConstellationPositionMapping = new ClientConstellationPositionMapping();
         }
 
@@ -86,13 +89,13 @@ public class WorldSkyHandler {
         int trackingDifference = currentDay - lastRecordedDay;
         lastRecordedDay = currentDay;
         if (trackingDifference > 0) {
-            //Calculating until that day is reached.
+            // Calculating until that day is reached.
             scheduleDayProgression(w, trackingDifference);
         } else if (trackingDifference < 0) {
-            //Resetting and recalculating until specified day is reached!
+            // Resetting and recalculating until specified day is reached!
 
-            //Iterate back to current day.
-            //+1 because we start from 'day -1'
+            // Iterate back to current day.
+            // +1 because we start from 'day -1'
             scheduleDayProgression(w, currentDay + 1);
         }
     }
@@ -116,14 +119,16 @@ public class WorldSkyHandler {
         weakAndMajor.forEach(constellations::addFirst);
 
         for (IConstellation c : constellations) {
-            if(c instanceof IConstellationSpecialShowup) continue;
+            if (c instanceof IConstellationSpecialShowup) continue;
 
-            if(c instanceof IMinorConstellation) {
+            if (c instanceof IMinorConstellation) {
                 for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases(savedSeed)) {
-                    initialValueMappings.get(ph.ordinal()).add(c);
+                    initialValueMappings.get(ph.ordinal())
+                        .add(c);
                 }
                 for (int i = 0; i < 8; i++) {
-                    dayDistributionMap.get(i).put(c, 0F);
+                    dayDistributionMap.get(i)
+                        .put(c, 0F);
                 }
             } else {
                 int start;
@@ -135,35 +140,38 @@ public class WorldSkyHandler {
 
                     int needed = Math.min(3, getFreeSlots(occupied));
                     int count = collect(start, occupied);
-                    if(count >= needed) {
+                    if (count >= needed) {
                         foundFree = true;
                     }
                 } while (!foundFree && tries > 0);
                 occupySlots(start, occupied);
-                if(getFreeSlots(occupied) <= 0) {
+                if (getFreeSlots(occupied) <= 0) {
                     Arrays.fill(occupied, false);
                 }
                 for (int i = 0; i < 5; i++) {
                     int index = (start + i) % 8;
-                    initialValueMappings.get(index).addLast(c);
+                    initialValueMappings.get(index)
+                        .addLast(c);
                 }
 
-                if(c instanceof IWeakConstellation) {
+                if (c instanceof IWeakConstellation) {
                     for (int i = 0; i < 8; i++) {
                         int index = (start + i) % 8;
                         float distr = spSine(start, index);
-                        dayDistributionMap.get(index).put(c, distr);
+                        dayDistributionMap.get(index)
+                            .put(c, distr);
                     }
                 } else {
                     for (int i = 0; i < 8; i++) {
-                        dayDistributionMap.get(i).put(c, 0F);
+                        dayDistributionMap.get(i)
+                            .put(c, 0F);
                     }
                 }
             }
         }
     }
 
-    //1F to 0F
+    // 1F to 0F
     private float spSine(int dayStart, int dayIn) {
         int v = dayStart > dayIn ? (dayIn + 8) - dayStart : dayIn;
         float part = ((float) v) / 4F;
@@ -175,12 +183,12 @@ public class WorldSkyHandler {
             doConstellationIteration(w);
         }
 
-        if(!w.isRemote) {
+        if (!w.isRemote) {
             DataActiveCelestials celestials = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             celestials.setNewConstellations(w.provider.getDimension(), activeConstellations);
         } else {
             ((ClientConstellationPositionMapping) clientConstellationPositionMapping)
-                    .updatePositions(activeConstellations);
+                .updatePositions(activeConstellations);
         }
     }
 
@@ -189,7 +197,8 @@ public class WorldSkyHandler {
         activeDistributions.clear();
 
         int activeDay = ((lastRecordedDay % 8) + 8) % 8;
-        LinkedList<IConstellation> linkedConstellations = initialValueMappings.computeIfAbsent(activeDay, day -> new LinkedList<>());
+        LinkedList<IConstellation> linkedConstellations = initialValueMappings
+            .computeIfAbsent(activeDay, day -> new LinkedList<>());
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
         }
@@ -202,11 +211,13 @@ public class WorldSkyHandler {
         activeDistributions = Maps.newHashMap(iteration);
 
         for (IConstellationSpecialShowup special : ConstellationRegistry.getSpecialShowupConstellations()) {
-            if(special.doesShowUp(this, w, lastRecordedDay)) {
+            if (special.doesShowUp(this, w, lastRecordedDay)) {
                 activeConstellations.addLast(special);
-                activeDistributions.put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, true), 0F, 1F));
+                activeDistributions
+                    .put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, true), 0F, 1F));
             } else {
-                activeDistributions.put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, false), 0F, 1F));
+                activeDistributions
+                    .put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, false), 0F, 1F));
             }
         }
     }
@@ -214,7 +225,7 @@ public class WorldSkyHandler {
     private void occupySlots(int start, boolean[] occupied) {
         for (int i = start; i < start + 8; i++) {
             int index = start % 8;
-            if(!occupied[index]) occupied[index] = true;
+            if (!occupied[index]) occupied[index] = true;
         }
     }
 
@@ -222,7 +233,7 @@ public class WorldSkyHandler {
         int found = 0;
         for (int i = start; i < start + 8; i++) {
             int index = start % 8;
-            if(!occupied[index]) found++;
+            if (!occupied[index]) found++;
         }
         return found;
     }
@@ -230,7 +241,7 @@ public class WorldSkyHandler {
     private int getFreeSlots(boolean[] array) {
         int it = 0;
         for (boolean b : array) {
-            if(!b) it++;
+            if (!b) it++;
         }
         return it;
     }
@@ -246,7 +257,8 @@ public class WorldSkyHandler {
     public LinkedList<IConstellation> getSortedActiveConstellations() {
         LinkedList<IConstellation> out = new LinkedList<>();
         LinkedList<Map.Entry<IConstellation, Float>> entries = new LinkedList<>();
-        activeDistributions.entrySet().forEach(entries::add);
+        activeDistributions.entrySet()
+            .forEach(entries::add);
         entries.sort((e1, e2) -> MathHelper.floor(e2.getValue() * 1000) - MathHelper.floor(e1.getValue() * 1000));
         entries.forEach((e) -> out.addLast(e.getKey()));
         return out;
@@ -262,26 +274,26 @@ public class WorldSkyHandler {
         float highest = -1F;
         List<IConstellation> highestVal = new LinkedList<>();
         for (Map.Entry<IConstellation, Float> entry : activeDistributions.entrySet()) {
-            if(entry.getValue() > highest) {
-                if(acceptorFunc.test(entry.getKey())) {
+            if (entry.getValue() > highest) {
+                if (acceptorFunc.test(entry.getKey())) {
                     highest = entry.getValue();
                     highestVal.clear();
                     highestVal.add(entry.getKey());
                 }
-            } else if(entry.getValue() == highest) {
-                if(acceptorFunc.test(entry.getKey())) {
+            } else if (entry.getValue() == highest) {
+                if (acceptorFunc.test(entry.getKey())) {
                     highestVal.add(entry.getKey());
                 }
             }
         }
-        if(highestVal.isEmpty()) return null;
+        if (highestVal.isEmpty()) return null;
         return highestVal.get(random.nextInt(highestVal.size()));
     }
 
     @SideOnly(Side.CLIENT)
     @Nullable
     public ClientConstellationPositionMapping getConstellationPositionMapping() {
-        if(clientConstellationPositionMapping == null) return null;
+        if (clientConstellationPositionMapping == null) return null;
         return (ClientConstellationPositionMapping) clientConstellationPositionMapping;
     }
 
@@ -298,8 +310,8 @@ public class WorldSkyHandler {
      */
     public List<CelestialEvent> getCurrentDayCelestialEvents() {
         List<CelestialEvent> list = new LinkedList<>();
-        if(dayOfSolarEclipse) list.add(CelestialEvent.SOLAR_ECLIPSE);
-        if(dayOfLunarEclipse) list.add(CelestialEvent.LUNAR_ECLIPSE);
+        if (dayOfSolarEclipse) list.add(CelestialEvent.SOLAR_ECLIPSE);
+        if (dayOfLunarEclipse) list.add(CelestialEvent.LUNAR_ECLIPSE);
         return list;
     }
 
@@ -308,19 +320,22 @@ public class WorldSkyHandler {
      * Solar and lunar eclipse are mutually exclusive in your case.
      */
     public CelestialEvent getCurrentlyActiveEvent() {
-        if(solarEclipse) {
+        if (solarEclipse) {
             return CelestialEvent.SOLAR_ECLIPSE;
         }
-        if(lunarEclipse) {
+        if (lunarEclipse) {
             return CelestialEvent.LUNAR_ECLIPSE;
         }
         return null;
     }
 
     private void evaluateCelestialEventTimes(World world) {
-        long seed = new Random(world.getWorldInfo().getSeed()).nextLong();
-        if(world.isRemote) {
-            Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
+        long seed = new Random(
+            world.getWorldInfo()
+                .getSeed()).nextLong();
+        if (world.isRemote) {
+            Optional<Long> testSeed = ConstellationSkyHandler.getInstance()
+                .getSeedIfPresent(world);
             if (!testSeed.isPresent()) {
                 return;
             }
@@ -328,7 +343,7 @@ public class WorldSkyHandler {
         }
         Random r = new Random(seed);
         for (int i = 0; i < 10 + r.nextInt(10); i++) {
-            r.nextLong(); //Flush
+            r.nextLong(); // Flush
         }
         int rand = r.nextInt(36);
         if (rand >= 18) {
@@ -343,11 +358,11 @@ public class WorldSkyHandler {
 
         int solarTime = (int) ((wTime - offset * suggestedDayLength) % (repeat * suggestedDayLength));
         dayOfSolarEclipse = solarTime < suggestedDayLength;
-        int midSOffset = suggestedDayLength / 4; //Rounding errors are not my fault.
+        int midSOffset = suggestedDayLength / 4; // Rounding errors are not my fault.
 
-        if (wTime > suggestedDayLength &&
-                solarTime > (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration()) &&
-                solarTime < (midSOffset + ConstellationSkyHandler.getSolarEclipseHalfDuration())) {
+        if (wTime > suggestedDayLength
+            && solarTime > (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration())
+            && solarTime < (midSOffset + ConstellationSkyHandler.getSolarEclipseHalfDuration())) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
             solarEclipseTick = solarTime - (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration());
@@ -360,11 +375,11 @@ public class WorldSkyHandler {
         repeat = 68;
         int lunarTime = (int) (wTime % (repeat * suggestedDayLength));
         dayOfLunarEclipse = lunarTime < suggestedDayLength;
-        int midLOffset = Math.round(suggestedDayLength * 0.75F); //Rounding errors are not my fault.
+        int midLOffset = Math.round(suggestedDayLength * 0.75F); // Rounding errors are not my fault.
 
-        if (wTime > suggestedDayLength &&
-                lunarTime > (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration()) &&
-                lunarTime < (midLOffset + ConstellationSkyHandler.getLunarEclipseHalfDuration())) {
+        if (wTime > suggestedDayLength
+            && lunarTime > (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration())
+            && lunarTime < (midLOffset + ConstellationSkyHandler.getLunarEclipseHalfDuration())) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
             lunarEclipseTick = lunarTime - (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration());
@@ -376,7 +391,7 @@ public class WorldSkyHandler {
     }
 
     public Float getCurrentDistribution(IConstellation c, Function<Float, Float> func) {
-        if(!activeDistributions.containsKey(c)) return func.apply(0F);
+        if (!activeDistributions.containsKey(c)) return func.apply(0F);
         return func.apply(activeDistributions.get(c));
     }
 

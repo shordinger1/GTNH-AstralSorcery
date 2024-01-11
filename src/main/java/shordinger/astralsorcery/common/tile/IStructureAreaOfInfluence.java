@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.tile;
 
-import shordinger.astralsorcery.common.util.ILocatable;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import java.awt.*;
 
 import javax.annotation.Nullable;
-import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.common.util.ILocatable;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

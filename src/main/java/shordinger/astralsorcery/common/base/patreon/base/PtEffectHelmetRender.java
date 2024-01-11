@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
+import java.util.UUID;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +20,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.client.event.RenderPlayerEvent;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,9 +34,7 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
     private final ItemStack dummyHeadItem;
     private boolean addedHelmet = false;
 
-    public PtEffectHelmetRender(UUID uniqueId,
-                                PatreonEffectHelper.FlareColor chosenColor,
-                                UUID plUUID,
+    public PtEffectHelmetRender(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor, UUID plUUID,
                                 ItemStack headStack) {
         super(uniqueId, chosenColor);
         this.playerUUID = plUUID;
@@ -54,9 +52,12 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre ev) {
         EntityPlayer player = ev.getEntityPlayer();
-        if (player.getUniqueID().equals(playerUUID) &&
-                player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()) {
-            player.inventory.armorInventory.set(EntityEquipmentSlot.HEAD.getIndex(), ItemUtils.copyStackWithSize(dummyHeadItem, 1));
+        if (player.getUniqueID()
+            .equals(playerUUID)
+            && player.getItemStackFromSlot(EntityEquipmentSlot.HEAD)
+            .isEmpty()) {
+            player.inventory.armorInventory
+                .set(EntityEquipmentSlot.HEAD.getIndex(), ItemUtils.copyStackWithSize(dummyHeadItem, 1));
             addedHelmet = true;
         }
     }
@@ -65,7 +66,8 @@ public class PtEffectHelmetRender extends PatreonEffectHelper.PatreonEffect {
     @SubscribeEvent
     public void onRenderPost(RenderPlayerEvent.Post ev) {
         EntityPlayer player = ev.getEntityPlayer();
-        if (player.getUniqueID().equals(playerUUID) && addedHelmet) {
+        if (player.getUniqueID()
+            .equals(playerUUID) && addedHelmet) {
             player.inventory.armorInventory.set(EntityEquipmentSlot.HEAD.getIndex(), ItemStack.EMPTY);
             addedHelmet = false;
         }

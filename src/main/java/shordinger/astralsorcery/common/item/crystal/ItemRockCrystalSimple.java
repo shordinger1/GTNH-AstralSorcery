@@ -26,7 +26,7 @@ public class ItemRockCrystalSimple extends ItemRockCrystalBase {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxRockProperties());
             subItems.add(stack);

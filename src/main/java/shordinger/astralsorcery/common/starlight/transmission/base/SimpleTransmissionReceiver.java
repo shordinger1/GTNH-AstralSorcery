@@ -8,6 +8,14 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
@@ -16,13 +24,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +49,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
+        if (!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override
@@ -63,7 +64,8 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Override
     public List<BlockPos> getSources() {
-        return sourcesToThis.stream().collect(Collectors.toCollection(LinkedList::new));
+        return sourcesToThis.stream()
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Nullable

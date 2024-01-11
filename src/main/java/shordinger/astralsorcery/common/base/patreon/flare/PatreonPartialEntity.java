@@ -8,18 +8,19 @@
 
 package shordinger.astralsorcery.common.base.patreon.flare;
 
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,13 @@ public abstract class PatreonPartialEntity {
     }
 
     public void setPositionNear(EntityPlayer player) {
-        this.pos = Vector3.atEntityCenter(player).setY(player.posY).addY(player.height).add(Vector3.random().setY(0).normalize());
+        this.pos = Vector3.atEntityCenter(player)
+            .setY(player.posY)
+            .addY(player.height)
+            .add(
+                Vector3.random()
+                    .setY(0)
+                    .normalize());
         this.prevPos = this.pos.clone();
         this.motion = new Vector3();
         this.updatePos = true;
@@ -107,7 +114,8 @@ public abstract class PatreonPartialEntity {
         if (target == null) {
             this.motion = new Vector3();
         } else {
-            Vector3 moveTarget = Vector3.atEntityCenter(target).addY(1.5);
+            Vector3 moveTarget = Vector3.atEntityCenter(target)
+                .addY(1.5);
             if (moveTarget.distanceSquared(this.pos) <= 3D) {
                 this.motion.multiply(0.95F);
             } else {

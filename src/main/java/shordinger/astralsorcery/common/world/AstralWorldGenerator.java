@@ -14,8 +14,11 @@ import shordinger.astralsorcery.common.world.attributes.GenAttributeGlowstoneFlo
 import shordinger.astralsorcery.common.world.attributes.GenAttributeMarble;
 import shordinger.astralsorcery.common.world.attributes.GenAttributeRockCrystals;
 import shordinger.astralsorcery.common.world.retrogen.ChunkVersionController;
-import shordinger.astralsorcery.common.world.structure.*;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.astralsorcery.common.world.structure.StructureAncientShrine;
+import shordinger.astralsorcery.common.world.structure.StructureDesertShrine;
+import shordinger.astralsorcery.common.world.structure.StructureSmallRuin;
+import shordinger.astralsorcery.common.world.structure.StructureSmallShrine;
+import shordinger.astralsorcery.common.world.structure.StructureTreasureShrine;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldType;
@@ -55,10 +58,10 @@ public class AstralWorldGenerator implements IWorldGenerator {
     }
 
     public AstralWorldGenerator setupAttributes() {
-        if(Config.marbleAmount > 0) {
+        if (Config.marbleAmount > 0) {
             decorators.add(new GenAttributeMarble());
         }
-        if(Config.aquamarineAmount > 0) {
+        if (Config.aquamarineAmount > 0) {
             decorators.add(new GenAttributeAquamarine());
         }
 
@@ -74,21 +77,26 @@ public class AstralWorldGenerator implements IWorldGenerator {
     }
 
     @Override
-    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        if(!Config.enableFlatGen && world.getWorldType().equals(WorldType.FLAT)) return;
-        if(!Config.worldGenDimWhitelist.contains(world.provider.getDimension())) return;
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
+                         IChunkProvider chunkProvider) {
+        if (!Config.enableFlatGen && world.getWorldType()
+            .equals(WorldType.FLAT)) return;
+        if (!Config.worldGenDimWhitelist.contains(world.provider.getDimension())) return;
 
-        ChunkVersionController.instance.setGenerationVersion(new ChunkPos(chunkX, chunkZ), CURRENT_WORLD_GENERATOR_VERSION);
+        ChunkVersionController.instance
+            .setGenerationVersion(new ChunkPos(chunkX, chunkZ), CURRENT_WORLD_GENERATOR_VERSION);
         generateWithLastKnownVersion(chunkX, chunkZ, world, -1);
 
-        /*for (int xx = 0; xx < 16; xx++) {
-            for (int zz = 0; zz < 16; zz++) {
-                BlockPos pos = new BlockPos((chunkX * 16) + xx, 0, (chunkZ * 16) + zz);
-                float distr = SkyNoiseCalculator.getSkyNoiseDistribution(world, pos);
-                int y = (int) (35 + distr * 40);
-                world.setBlockState(new BlockPos(pos.getX(), y, pos.getZ()), Blocks.GLASS.getDefaultState(), 2);
-            }
-        }*/
+        /*
+         * for (int xx = 0; xx < 16; xx++) {
+         * for (int zz = 0; zz < 16; zz++) {
+         * BlockPos pos = new BlockPos((chunkX * 16) + xx, 0, (chunkZ * 16) + zz);
+         * float distr = SkyNoiseCalculator.getSkyNoiseDistribution(world, pos);
+         * int y = (int) (35 + distr * 40);
+         * world.setBlockState(new BlockPos(pos.getX(), y, pos.getZ()), Blocks.GLASS.getDefaultState(), 2);
+         * }
+         * }
+         */
     }
 
     private void generateWithLastKnownVersion(int chunkX, int chunkZ, World world, int lastKnownChunkVersion) {
@@ -99,7 +107,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         long chunkSeed = (xSeed * chunkX + zSeed * chunkZ) ^ worldSeed;
 
         for (WorldGenAttribute attribute : worldGenAttributes) {
-            if(attribute.attributeVersion > lastKnownChunkVersion) {
+            if (attribute.attributeVersion > lastKnownChunkVersion) {
                 rand.setSeed(chunkSeed);
                 attribute.generate(rand, chunkX, chunkZ, world);
             }

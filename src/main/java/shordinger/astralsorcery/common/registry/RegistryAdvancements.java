@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import shordinger.astralsorcery.common.advancements.*;
-
 import static hellfirepvp.astralsorcery.common.lib.AdvancementTriggers.*;
 import static net.minecraft.advancements.CriteriaTriggers.register;
+
+import shordinger.astralsorcery.common.advancements.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

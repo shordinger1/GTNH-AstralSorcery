@@ -21,11 +21,11 @@ import shordinger.astralsorcery.common.constellation.IWeakConstellation;
  */
 public class Constellations {
 
-    public static IMajorConstellation discidia; //Aspect of Offensive
-    public static IMajorConstellation armara;   //Aspect of Defence
-    public static IMajorConstellation vicio;    //Aspect of Travel
-    public static IMajorConstellation aevitas;  //Aspect of Creation
-    public static IMajorConstellation evorsio;  //Aspect of Destruction
+    public static IMajorConstellation discidia; // Aspect of Offensive
+    public static IMajorConstellation armara; // Aspect of Defence
+    public static IMajorConstellation vicio; // Aspect of Travel
+    public static IMajorConstellation aevitas; // Aspect of Creation
+    public static IMajorConstellation evorsio; // Aspect of Destruction
 
     public static IWeakConstellation mineralis;
     public static IWeakConstellation lucerna;

@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.structure.change;
 
+import java.util.List;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import shordinger.astralsorcery.common.event.BlockModifyEvent;
@@ -18,8 +20,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,12 +37,14 @@ public class StructureIntegrityObserver {
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         World world = event.getWorld();
-        if (world.isRemote || !event.getChunk().isTerrainPopulated()) {
+        if (world.isRemote || !event.getChunk()
+            .isTerrainPopulated()) {
             return;
         }
 
         StructureMatchingBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH);
-        ChunkPos ch = event.getChunk().getPos();
+        ChunkPos ch = event.getChunk()
+            .getPos();
         BlockPos pos = event.getPos();
         IBlockState oldS = event.getOldState();
         IBlockState newS = event.getNewState();

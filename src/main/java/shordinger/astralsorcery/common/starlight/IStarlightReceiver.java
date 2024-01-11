@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.starlight;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

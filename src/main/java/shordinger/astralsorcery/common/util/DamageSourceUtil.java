@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.EntityDamageSource;
 import shordinger.wrapper.net.minecraft.util.EntityDamageSourceIndirect;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,8 @@ public class DamageSourceUtil {
         return new EntityDamageSource(damageType, source);
     }
 
-    public static DamageSource withEntityIndirect(@Nonnull String damageType, @Nullable Entity actualSource, @Nullable Entity indirectSource) {
+    public static DamageSource withEntityIndirect(@Nonnull String damageType, @Nullable Entity actualSource,
+                                                  @Nullable Entity indirectSource) {
         return new EntityDamageSourceIndirect(damageType, indirectSource, actualSource);
     }
 
@@ -44,7 +46,8 @@ public class DamageSourceUtil {
     }
 
     @Nullable
-    public static DamageSource withEntityIndirect(@Nonnull DamageSource damageType, @Nullable Entity actualSource, @Nullable Entity indirectSource) {
+    public static DamageSource withEntityIndirect(@Nonnull DamageSource damageType, @Nullable Entity actualSource,
+                                                  @Nullable Entity indirectSource) {
         return override(damageType, indirectSource, actualSource);
     }
 
@@ -65,8 +68,8 @@ public class DamageSourceUtil {
 
     private static boolean mayChangeAttributes(DamageSource src) {
         Class<?> srcClass = src.getClass();
-        return srcClass.equals(DamageSource.class) || srcClass.equals(EntityDamageSource.class) ||
-                srcClass.equals(EntityDamageSourceIndirect.class);
+        return srcClass.equals(DamageSource.class) || srcClass.equals(EntityDamageSource.class)
+            || srcClass.equals(EntityDamageSourceIndirect.class);
     }
 
     @Nullable
@@ -84,40 +87,44 @@ public class DamageSourceUtil {
             return null;
         }
         DamageSource dst;
-        if (src.getClass().equals(DamageSource.class)) {
+        if (src.getClass()
+            .equals(DamageSource.class)) {
             dst = new DamageSource(src.getDamageType());
-        } else if (src.getClass().equals(EntityDamageSource.class)) {
-            dst = new EntityDamageSource(src.getDamageType(),
-                    directSource != null ? directSource : src.getImmediateSource());
+        } else if (src.getClass()
+            .equals(EntityDamageSource.class)) {
+            dst = new EntityDamageSource(
+                src.getDamageType(),
+                directSource != null ? directSource : src.getImmediateSource());
         } else { // equals EntityDamageSourceIndirect.class
-            dst = new EntityDamageSourceIndirect(src.getDamageType(),
-                    directSource != null ? directSource : src.getImmediateSource(),
-                    trueSource != null ? trueSource : (directSource != null ? directSource : src.getTrueSource()));
+            dst = new EntityDamageSourceIndirect(
+                src.getDamageType(),
+                directSource != null ? directSource : src.getImmediateSource(),
+                trueSource != null ? trueSource : (directSource != null ? directSource : src.getTrueSource()));
         }
         copy(src, dst);
         return dst;
     }
 
     private static void copy(DamageSource src, DamageSource dest) {
-        if(src.canHarmInCreative()) {
+        if (src.canHarmInCreative()) {
             dest.setDamageAllowedInCreativeMode();
         }
-        if(src.isDamageAbsolute()) {
+        if (src.isDamageAbsolute()) {
             dest.setDamageIsAbsolute();
         }
-        if(src.isProjectile()) {
+        if (src.isProjectile()) {
             dest.setProjectile();
         }
-        if(src.isExplosion()) {
+        if (src.isExplosion()) {
             dest.setExplosion();
         }
-        if(src.isFireDamage()) {
+        if (src.isFireDamage()) {
             dest.setFireDamage();
         }
-        if(src.isMagicDamage()) {
+        if (src.isMagicDamage()) {
             dest.setMagicDamage();
         }
-        if(src.isDifficultyScaled()) {
+        if (src.isDifficultyScaled()) {
             dest.setDifficultyScaled();
         }
     }

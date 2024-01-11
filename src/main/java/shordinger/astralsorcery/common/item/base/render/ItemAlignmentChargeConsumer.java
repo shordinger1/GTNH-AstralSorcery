@@ -21,12 +21,12 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer {
 
     default public boolean drainTempCharge(EntityPlayer player, float charge, boolean simulate) {
-        if(player.isCreative()) return true;
+        if (player.isCreative()) return true;
 
-        if(!PlayerChargeHandler.INSTANCE.hasAtLeast(player, charge)) {
+        if (!PlayerChargeHandler.INSTANCE.hasAtLeast(player, charge)) {
             return false;
         }
-        if(!simulate) {
+        if (!simulate) {
             PlayerChargeHandler.INSTANCE.drainCharge(player, charge);
         }
         return true;

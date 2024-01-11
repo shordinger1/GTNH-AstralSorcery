@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.container;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,14 +26,16 @@ public class ConstellationPaperSlot extends SlotItemHandler {
 
     private final ContainerJournal listener;
 
-    public ConstellationPaperSlot(IItemHandler handle, ContainerJournal containerJournal, int index, int xPosition, int yPosition) {
+    public ConstellationPaperSlot(IItemHandler handle, ContainerJournal containerJournal, int index, int xPosition,
+                                  int yPosition) {
         super(handle, index, xPosition, yPosition);
         this.listener = containerJournal;
     }
 
     @Override
     public boolean isItemValid(@Nullable ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(stack) != null;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationPaper
+            && ItemConstellationPaper.getConstellation(stack) != null;
     }
 
     @Override

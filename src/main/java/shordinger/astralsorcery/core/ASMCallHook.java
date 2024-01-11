@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR})
 public @interface ASMCallHook {
-    //Interface to note a method is being directly referenced through bytecode manipulation
-    //to avoid renaming or deleting methods on accident
+    // Interface to note a method is being directly referenced through bytecode manipulation
+    // to avoid renaming or deleting methods on accident
 }

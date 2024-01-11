@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.integrations;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import crafttweaker.CraftTweakerAPI;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.SerializeableRecipe;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.*;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,17 +44,21 @@ public class ModIntegrationCrafttweaker {
         CraftTweakerAPI.registerClass(Utils.class);
         CraftTweakerAPI.registerClass(GameStageTweaks.class);
 
-        //For the perk removal / disabling events
+        // For the perk removal / disabling events
         MinecraftForge.EVENT_BUS.register(new PerkTree());
     }
 
     public void pushChanges() {
-        AstralSorcery.log.info("Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
+        AstralSorcery.log
+            .info("Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
         for (SerializeableRecipe recipe : recipeModifications) {
             try {
                 recipe.applyRecipe();
             } catch (Exception exc) {
-                AstralSorcery.log.error("Couldn't apply RecipeModification for type " + recipe.getType().name().toLowerCase());
+                AstralSorcery.log.error(
+                    "Couldn't apply RecipeModification for type " + recipe.getType()
+                        .name()
+                        .toLowerCase());
                 exc.printStackTrace();
             }
         }

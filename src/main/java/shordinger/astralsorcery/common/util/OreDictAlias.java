@@ -19,11 +19,9 @@ import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
  */
 public class OreDictAlias {
 
-    private static final String[] DYE_COLORS_BY_META = new String[] {
-            "dyeWhite", "dyeOrange", "dyeMagenta", "dyeLightBlue",
-            "dyeYellow", "dyeLime", "dyePink", "dyeGray",
-            "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
-            "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack" };
+    private static final String[] DYE_COLORS_BY_META = new String[]{"dyeWhite", "dyeOrange", "dyeMagenta",
+        "dyeLightBlue", "dyeYellow", "dyeLime", "dyePink", "dyeGray", "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
+        "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack"};
 
     public static String ITEM_ENDERPEARL = "enderpearl";
     public static String ITEM_DIAMOND = "gemDiamond";

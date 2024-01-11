@@ -8,15 +8,17 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.base;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
-import shordinger.astralsorcery.AstralSorcery;
+
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

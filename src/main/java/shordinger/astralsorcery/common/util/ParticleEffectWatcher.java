@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,8 @@ public class ParticleEffectWatcher implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        worldWatch.getOrDefault(((World) context[0]).provider.getDimension(), Lists.newArrayList()).clear();
+        worldWatch.getOrDefault(((World) context[0]).provider.getDimension(), Lists.newArrayList())
+            .clear();
     }
 
     public boolean mayFire(World world, BlockPos pos) {

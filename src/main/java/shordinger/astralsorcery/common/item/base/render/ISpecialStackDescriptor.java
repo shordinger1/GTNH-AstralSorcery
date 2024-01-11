@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.item.base.render;
 
+import javax.annotation.Nonnull;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 23.04.2017 / 18:14
  */
-//Intended to be implemented by blocks to give a more appropiate itemstack as descriptor
+// Intended to be implemented by blocks to give a more appropiate itemstack as descriptor
 public interface ISpecialStackDescriptor {
 
     @Nonnull

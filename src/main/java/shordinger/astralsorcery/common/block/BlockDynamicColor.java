@@ -23,7 +23,8 @@ import javax.annotation.Nullable;
  */
 public interface BlockDynamicColor {
 
-    //Return -1 for no color multiplication
-    public int getColorMultiplier(IBlockState state, @Nullable IBlockAccess access, @Nullable BlockPos pos, int renderPass);
+    // Return -1 for no color multiplication
+    public int getColorMultiplier(IBlockState state, @Nullable IBlockAccess access, @Nullable BlockPos pos,
+                                  int renderPass);
 
 }

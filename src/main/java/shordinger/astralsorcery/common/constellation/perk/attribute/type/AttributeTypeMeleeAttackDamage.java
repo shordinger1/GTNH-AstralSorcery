@@ -24,9 +24,12 @@ import java.util.UUID;
  */
 public class AttributeTypeMeleeAttackDamage extends VanillaAttributeType {
 
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_ID = UUID
+        .fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID
+        .fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID
+        .fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
 
     public AttributeTypeMeleeAttackDamage() {
         super(AttributeTypeRegistry.ATTR_TYPE_MELEE_DAMAGE);

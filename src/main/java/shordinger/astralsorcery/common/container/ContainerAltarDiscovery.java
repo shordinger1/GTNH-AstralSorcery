@@ -29,7 +29,7 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
-            addSlotToContainer(new SlotItemHandler(invHandler,     xx, 62 + xx * 18, 11));
+            addSlotToContainer(new SlotItemHandler(invHandler, xx, 62 + xx * 18, 11));
         }
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 3 + xx, 62 + xx * 18, 29));

@@ -15,4 +15,5 @@ package shordinger.astralsorcery.common.entities;
  * Created by HellFirePvP
  * Date: 31.10.2017 / 12:47
  */
-public interface EntityTechnicalAmbient {}
+public interface EntityTechnicalAmbient {
+}

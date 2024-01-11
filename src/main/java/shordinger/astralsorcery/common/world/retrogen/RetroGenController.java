@@ -15,13 +15,7 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraftforge.event.world.ChunkEvent;
-import shordinger.wrapper.net.minecraftforge.event.world.WorldEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +35,8 @@ public class RetroGenController {
         if (w.isRemote) return;
         Chunk ch = event.getChunk();
 
-        if (!event.getChunk().isTerrainPopulated()) {
+        if (!event.getChunk()
+            .isTerrainPopulated()) {
             return;
         }
 
@@ -53,9 +48,8 @@ public class RetroGenController {
         int chX = pos.x;
         int chZ = pos.z;
 
-        if (w.isChunkGeneratedAt(chX + 1, chZ) &&
-                w.isChunkGeneratedAt(chX, chZ + 1) &&
-                w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
+        if (w.isChunkGeneratedAt(chX + 1, chZ) && w.isChunkGeneratedAt(chX, chZ + 1)
+            && w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
 
             Integer chunkVersion = -1;
             if (((WorldServer) w).getChunkProvider().chunkLoader.isChunkGeneratedAt(chX, chZ)) {

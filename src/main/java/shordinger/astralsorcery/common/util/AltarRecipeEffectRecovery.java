@@ -25,9 +25,9 @@ public class AltarRecipeEffectRecovery {
     public static void attemptRecipeRecovery() {
         for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
             for (AbstractAltarRecipe ar : AltarRecipeRegistry.getRecipesForLevel(al)) {
-                if(!(ar instanceof ISpecialCraftingEffects)) {
+                if (!(ar instanceof ISpecialCraftingEffects)) {
                     ISpecialCraftingEffects eff = AltarRecipeRegistry.shouldHaveSpecialEffects(ar);
-                    if(eff != null) {
+                    if (eff != null) {
                         ar.setSpecialEffectRecovery(eff.copyNewEffectInstance());
                     }
                 }

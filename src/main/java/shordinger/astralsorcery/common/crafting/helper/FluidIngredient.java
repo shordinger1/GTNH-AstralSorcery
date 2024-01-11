@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -18,13 +25,6 @@ import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,7 +68,6 @@ public class FluidIngredient extends Ingredient {
         }
         return this.itemArray;
     }
-
 
     @Override
     @Nonnull

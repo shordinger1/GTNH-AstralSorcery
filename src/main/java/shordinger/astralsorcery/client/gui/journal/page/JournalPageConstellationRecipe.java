@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
@@ -15,7 +17,6 @@ import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
-import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +40,8 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
     public static class Render extends JournalPageAttunementRecipe.Render {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridcst");
+        private static final BindableResource texGrid = AssetLibrary
+            .loadTexture(AssetLoader.TextureLocation.GUI, "gridcst");
 
         private final ConstellationRecipe recipe;
 
@@ -51,17 +53,49 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
         protected void renderAdditionalSlots(float offsetX, float offsetY, float zLevel, ConstellationRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAltarSlot(offsetX +  55, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT));
-            renderAltarSlot(offsetX + 105, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT));
+            renderAltarSlot(
+                offsetX + 55,
+                offsetY + 78,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT));
+            renderAltarSlot(
+                offsetX + 105,
+                offsetY + 78,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT));
 
-            renderAltarSlot(offsetX +  30, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT));
+            renderAltarSlot(
+                offsetX + 30,
+                offsetY + 103,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT));
+            renderAltarSlot(
+                offsetX + 131,
+                offsetY + 103,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT));
 
-            renderAltarSlot(offsetX +  30, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT));
+            renderAltarSlot(
+                offsetX + 30,
+                offsetY + 153,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT));
+            renderAltarSlot(
+                offsetX + 131,
+                offsetY + 153,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT));
 
-            renderAltarSlot(offsetX +  55, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT));
-            renderAltarSlot(offsetX + 105, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT));
+            renderAltarSlot(
+                offsetX + 55,
+                offsetY + 178,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT));
+            renderAltarSlot(
+                offsetX + 105,
+                offsetY + 178,
+                zLevel,
+                recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
         }

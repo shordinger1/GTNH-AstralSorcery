@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.block;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import shordinger.wrapper.net.minecraft.block.properties.IProperty;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.util.IStringSerializable;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +24,8 @@ import java.util.List;
  */
 public interface BlockVariants {
 
-    default <T extends Comparable<T>> List<IBlockState> singleEnumPropertyStates(IBlockState defaultState, IProperty<T> prop, T[] enumValues) {
+    default <T extends Comparable<T>> List<IBlockState> singleEnumPropertyStates(IBlockState defaultState,
+                                                                                 IProperty<T> prop, T[] enumValues) {
         List<IBlockState> ret = new LinkedList<>();
         for (T val : enumValues) {
             ret.add(defaultState.withProperty(prop, val));
@@ -32,8 +33,10 @@ public interface BlockVariants {
         return ret;
     }
 
-    default <T extends Comparable<T> & IStringSerializable> String extractEnumPropertyString(IBlockState state, IProperty<T> property) {
-        return state.getValue(property).getName();
+    default <T extends Comparable<T> & IStringSerializable> String extractEnumPropertyString(IBlockState state,
+                                                                                             IProperty<T> property) {
+        return state.getValue(property)
+            .getName();
     }
 
     public List<IBlockState> getValidStates();
@@ -41,7 +44,9 @@ public interface BlockVariants {
     public String getStateName(IBlockState state);
 
     default public String getBlockName(IBlockState state) {
-        return state.getBlock().getClass().getSimpleName();
+        return state.getBlock()
+            .getClass()
+            .getSimpleName();
     }
 
 }

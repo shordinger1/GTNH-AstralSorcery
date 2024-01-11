@@ -8,7 +8,15 @@
 
 package shordinger.astralsorcery.client.util;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Iterables;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.journal.page.*;
 import shordinger.astralsorcery.common.base.Mods;
@@ -27,12 +35,6 @@ import shordinger.astralsorcery.common.util.CraftingRecipeHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -45,7 +47,7 @@ public class JournalRecipeDisplayRecovery {
     private JournalRecipeDisplayRecovery() {}
 
     public static void attemptRecipeRecovery() {
-        if(!Mods.CRAFTTWEAKER.isPresent()) return; //Well, i guess noone changed recipes then?
+        if (!Mods.CRAFTTWEAKER.isPresent()) return; // Well, i guess noone changed recipes then?
 
         int rec = 0;
         for (ResearchProgression prog : ResearchProgression.values()) {
@@ -65,7 +67,8 @@ public class JournalRecipeDisplayRecovery {
                                 matchingRecipes = CraftingRecipeHelper.findRecipesWithOutput(actual.getRecipeOutput());
                                 found = false;
                                 for (IRecipe ir : matchingRecipes) {
-                                    if (ir.getRegistryName().equals(actual.getRegistryName())) {
+                                    if (ir.getRegistryName()
+                                        .equals(actual.getRegistryName())) {
                                         found = true;
                                         break;
                                     }
@@ -77,10 +80,12 @@ public class JournalRecipeDisplayRecovery {
                                 break;
                             case LIGHT_CRAFTING:
                                 AccessibleRecipeAdapater recipeAd = ((JournalPageLightProximityRecipe) page).shapedLightProxRecipe;
-                                matchingRecipes = CraftingRecipeHelper.findRecipesWithOutput(recipeAd.getRecipeOutput());
+                                matchingRecipes = CraftingRecipeHelper
+                                    .findRecipesWithOutput(recipeAd.getRecipeOutput());
                                 found = false;
                                 for (IRecipe ir : matchingRecipes) {
-                                    if (ir.getRegistryName().equals(recipeAd.getRegistryName())) {
+                                    if (ir.getRegistryName()
+                                        .equals(recipeAd.getRegistryName())) {
                                         found = true;
                                         break;
                                     }
@@ -92,7 +97,7 @@ public class JournalRecipeDisplayRecovery {
                                 break;
                             case ALTAR:
                                 TileAltar.AltarLevel al = guessAltarLevel(page);
-                                if(al != null) {
+                                if (al != null) {
                                     AbstractAltarRecipe currentRecipe = null;
                                     ItemStack outputMatch = ItemStack.EMPTY;
                                     switch (al) {
@@ -115,16 +120,17 @@ public class JournalRecipeDisplayRecovery {
                                         default:
                                             break;
                                     }
-                                    if(!outputMatch.isEmpty() && currentRecipe != null) {
-                                        List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(outputMatch, al);
+                                    if (!outputMatch.isEmpty() && currentRecipe != null) {
+                                        List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry
+                                            .getAltarRecipesByOutput(outputMatch, al);
                                         found = false;
-                                        for(AbstractAltarRecipe aar : recipesMatched) {
-                                            if(aar.equals(currentRecipe)) {
+                                        for (AbstractAltarRecipe aar : recipesMatched) {
+                                            if (aar.equals(currentRecipe)) {
                                                 found = true;
                                                 break;
                                             }
                                         }
-                                        if(!found) {
+                                        if (!found) {
                                             rec++;
                                             update.put(i, findReplacementPage(outputMatch));
                                         }
@@ -137,12 +143,13 @@ public class JournalRecipeDisplayRecovery {
                     }
                 }
                 for (Map.Entry<Integer, IJournalPage> entry : update.entrySet()) {
-                    rn.getPages().set(entry.getKey(), entry.getValue());
+                    rn.getPages()
+                        .set(entry.getKey(), entry.getValue());
                 }
             }
         }
 
-        if(rec > 0) {
+        if (rec > 0) {
             AstralSorcery.log.info("Recovered " + rec + " changed recipes into journal!");
         }
     }
@@ -152,24 +159,24 @@ public class JournalRecipeDisplayRecovery {
         List<IRecipe> matchingRecipes = CraftingRecipeHelper.findRecipesWithOutput(output);
         if (!matchingRecipes.isEmpty()) {
             IRecipe recipe = Iterables.getFirst(matchingRecipes, null);
-            return new JournalPageRecipe(new AccessibleRecipeAdapater(
-                    recipe,
-                    AbstractRecipeAccessor.buildAccessorFor(recipe)));
+            return new JournalPageRecipe(
+                new AccessibleRecipeAdapater(recipe, AbstractRecipeAccessor.buildAccessorFor(recipe)));
         }
-        List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(output, TileAltar.AltarLevel.DISCOVERY);
-        if(!recipesMatched.isEmpty()) {
+        List<AbstractAltarRecipe> recipesMatched = AltarRecipeRegistry
+            .getAltarRecipesByOutput(output, TileAltar.AltarLevel.DISCOVERY);
+        if (!recipesMatched.isEmpty()) {
             return new JournalPageDiscoveryRecipe((DiscoveryRecipe) Iterables.getFirst(recipesMatched, null));
         }
         recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(output, TileAltar.AltarLevel.ATTUNEMENT);
-        if(!recipesMatched.isEmpty()) {
+        if (!recipesMatched.isEmpty()) {
             return new JournalPageAttunementRecipe((AttunementRecipe) Iterables.getFirst(recipesMatched, null));
         }
         recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(output, TileAltar.AltarLevel.CONSTELLATION_CRAFT);
-        if(!recipesMatched.isEmpty()) {
+        if (!recipesMatched.isEmpty()) {
             return new JournalPageConstellationRecipe((ConstellationRecipe) Iterables.getFirst(recipesMatched, null));
         }
         recipesMatched = AltarRecipeRegistry.getAltarRecipesByOutput(output, TileAltar.AltarLevel.TRAIT_CRAFT);
-        if(!recipesMatched.isEmpty()) {
+        if (!recipesMatched.isEmpty()) {
             return new JournalPageTraitRecipe((TraitRecipe) Iterables.getFirst(recipesMatched, null));
         }
         return new JournalPageText("astralsorcery.journal.recipe.removalinfo");
@@ -177,16 +184,15 @@ public class JournalRecipeDisplayRecovery {
 
     @Nullable
     private static RecoveryType getRecoveryType(IJournalPage page) {
-        if(page instanceof JournalPageRecipe) {
+        if (page instanceof JournalPageRecipe) {
             return RecoveryType.CRAFTING;
         }
-        if(page instanceof JournalPageLightProximityRecipe) {
+        if (page instanceof JournalPageLightProximityRecipe) {
             return RecoveryType.LIGHT_CRAFTING;
         }
-        if(page instanceof JournalPageDiscoveryRecipe ||
-                page instanceof JournalPageAttunementRecipe ||
-                page instanceof JournalPageConstellationRecipe ||
-                page instanceof JournalPageTraitRecipe) {
+        if (page instanceof JournalPageDiscoveryRecipe || page instanceof JournalPageAttunementRecipe
+            || page instanceof JournalPageConstellationRecipe
+            || page instanceof JournalPageTraitRecipe) {
             return RecoveryType.ALTAR;
         }
         return null;
@@ -194,16 +200,16 @@ public class JournalRecipeDisplayRecovery {
 
     @Nullable
     private static TileAltar.AltarLevel guessAltarLevel(IJournalPage page) {
-        if(page instanceof JournalPageTraitRecipe) {
+        if (page instanceof JournalPageTraitRecipe) {
             return TileAltar.AltarLevel.TRAIT_CRAFT;
         }
-        if(page instanceof JournalPageConstellationRecipe) {
+        if (page instanceof JournalPageConstellationRecipe) {
             return TileAltar.AltarLevel.CONSTELLATION_CRAFT;
         }
-        if(page instanceof JournalPageAttunementRecipe) {
+        if (page instanceof JournalPageAttunementRecipe) {
             return TileAltar.AltarLevel.ATTUNEMENT;
         }
-        if(page instanceof JournalPageDiscoveryRecipe) {
+        if (page instanceof JournalPageDiscoveryRecipe) {
             return TileAltar.AltarLevel.DISCOVERY;
         }
         return null;

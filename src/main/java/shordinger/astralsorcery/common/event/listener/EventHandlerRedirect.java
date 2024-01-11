@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.core.ASMCallHook;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,13 +27,14 @@ public class EventHandlerRedirect {
 
     @ASMCallHook
     public static float getSunBrightnessFactorInj(float prevBrightness, World world) {
-        if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+        if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
             return prevBrightness;
         }
-        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
+            .getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
-            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { //fading out
+            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { // fading out
                 eclTick -= ConstellationSkyHandler.getSolarEclipseHalfDuration();
             } else {
                 eclTick = ConstellationSkyHandler.getSolarEclipseHalfDuration() - eclTick;
@@ -47,13 +48,14 @@ public class EventHandlerRedirect {
     @ASMCallHook
     @SideOnly(Side.CLIENT)
     public static float getSunBrightnessBodyInj(float prevBrightness, World world) {
-        if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+        if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
             return prevBrightness;
         }
-        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
+            .getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
-            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { //fading out
+            if (eclTick >= ConstellationSkyHandler.getSolarEclipseHalfDuration()) { // fading out
                 eclTick -= ConstellationSkyHandler.getSolarEclipseHalfDuration();
             } else {
                 eclTick = ConstellationSkyHandler.getSolarEclipseHalfDuration() - eclTick;

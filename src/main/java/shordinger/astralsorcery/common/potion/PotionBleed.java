@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.potion;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
@@ -16,8 +18,6 @@ import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,10 +37,11 @@ public class PotionBleed extends PotionCustomTexture {
 
     @Override
     public void performEffect(EntityLivingBase entity, int amplifier) {
-        if(entity instanceof EntityPlayer &&
-                !entity.getEntityWorld().isRemote &&
-                entity.getEntityWorld() instanceof WorldServer &&
-                entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+        if (entity instanceof EntityPlayer && !entity.getEntityWorld().isRemote
+            && entity.getEntityWorld() instanceof WorldServer
+            && entity.getEntityWorld()
+            .getMinecraftServer()
+            .isPVPEnabled()) {
             return;
         }
         int preTime = entity.hurtResistantTime;
@@ -56,7 +57,7 @@ public class PotionBleed extends PotionCustomTexture {
     @Override
     @SideOnly(Side.CLIENT)
     public BindableResource getResource() {
-        if(texBuffer == null) {
+        if (texBuffer == null) {
             texBuffer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed");
         }
         return (BindableResource) texBuffer;

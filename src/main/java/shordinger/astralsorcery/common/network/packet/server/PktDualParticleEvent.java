@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,11 +81,16 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
         try {
             DualParticleEventType type = DualParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
-            if(trigger != null) {
+            if (trigger != null) {
                 AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing DualParticleEventType " + message.typeOrdinal + " from " + getOriginVec() + " to " + getTargetVec());
+            AstralSorcery.log.warn(
+                "Error executing DualParticleEventType " + message.typeOrdinal
+                    + " from "
+                    + getOriginVec()
+                    + " to "
+                    + getTargetVec());
         }
         return null;
     }
@@ -114,7 +119,7 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
         }
 
         public EventAction getTrigger(Side side) {
-            if(!side.isClient()) return null;
+            if (!side.isClient()) return null;
             return getClientTrigger(this);
         }
 

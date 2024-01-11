@@ -19,7 +19,7 @@ import shordinger.wrapper.net.minecraft.world.IBlockAccess;
  * Created by HellFirePvP
  * Date: 29.12.2018 / 15:52
  */
-//Add interface to blocks to notify structure match buffer of block removals
+// Add interface to blocks to notify structure match buffer of block removals
 public interface BlockStructureObserver {
 
     // oldState's block will be *this* block's instance!

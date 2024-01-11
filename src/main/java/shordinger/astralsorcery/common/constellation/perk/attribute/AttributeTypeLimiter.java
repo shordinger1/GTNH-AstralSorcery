@@ -47,7 +47,7 @@ public class AttributeTypeLimiter {
     @SubscribeEvent
     public void onProcess(AttributeEvent.PostProcessVanilla ev) {
         PerkAttributeType type = ev.resolveAttributeType();
-        if (type != null) { //If managed
+        if (type != null) { // If managed
             checkValue(type, (float) ev.getValue(), ev::setValue);
         }
     }

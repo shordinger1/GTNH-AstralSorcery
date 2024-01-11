@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.util.data;
 
+import java.util.Objects;
+
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -15,8 +17,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod

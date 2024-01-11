@@ -34,7 +34,8 @@ public class ItemBlockAltar extends ItemBlockCustomName {
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+                                float hitX, float hitY, float hitZ, IBlockState newState) {
         BlockAltar.AltarType type = newState.getValue(BlockAltar.ALTAR_TYPE);
         switch (type) {
             case ALTAR_1:
@@ -47,7 +48,9 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                 for (int xx = -1; xx <= 1; xx++) {
                     for (int zz = -1; zz <= 1; zz++) {
                         mut.setPos(pos.getX() + xx, pos.getY(), pos.getZ() + zz);
-                        if (!world.isAirBlock(mut) && !world.getBlockState(mut).getBlock().isReplaceable(world, mut)) {
+                        if (!world.isAirBlock(mut) && !world.getBlockState(mut)
+                            .getBlock()
+                            .isReplaceable(world, mut)) {
                             mut.release();
                             return false;
                         }

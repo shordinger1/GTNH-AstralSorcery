@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.block.BlockVariants;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.CrystalPropertyItem;
@@ -18,7 +20,6 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyBool;
@@ -41,8 +42,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -57,12 +56,48 @@ import java.util.List;
  */
 public class BlockLens extends BlockStarlightNetwork implements BlockVariants, CrystalPropertyItem {
 
-    private static final AxisAlignedBB boxLensDown =  new AxisAlignedBB(2.5D/16D, 0,        2.5D/16D, 13.5D/16D, 14.5D/16D, 13.5D/16D);
-    private static final AxisAlignedBB boxLensUp =    new AxisAlignedBB(2.5D/16D, 1.5D/16D, 2.5D/16D, 13.5D/16D, 1,         13.5D/16D);
-    private static final AxisAlignedBB boxLensNorth = new AxisAlignedBB(2.5D/16D, 2.5D/16D, 0,        13.5D/16D, 13.5D/16D, 14.5D/16D);
-    private static final AxisAlignedBB boxLensSouth = new AxisAlignedBB(2.5D/16D, 2.5D/16D, 1.5D/16D, 13.5D/16D, 13.5D/16D, 1);
-    private static final AxisAlignedBB boxLensEast =  new AxisAlignedBB(1.5D/16D, 2.5D/16D, 2.5D/16D, 1,         13.5D/16D, 13.5D/16D);
-    private static final AxisAlignedBB boxLensWest =  new AxisAlignedBB(0,        2.5D/16D, 2.5D/16D, 14.5D/16D, 13.5D/16D, 13.5D/16D);
+    private static final AxisAlignedBB boxLensDown = new AxisAlignedBB(
+        2.5D / 16D,
+        0,
+        2.5D / 16D,
+        13.5D / 16D,
+        14.5D / 16D,
+        13.5D / 16D);
+    private static final AxisAlignedBB boxLensUp = new AxisAlignedBB(
+        2.5D / 16D,
+        1.5D / 16D,
+        2.5D / 16D,
+        13.5D / 16D,
+        1,
+        13.5D / 16D);
+    private static final AxisAlignedBB boxLensNorth = new AxisAlignedBB(
+        2.5D / 16D,
+        2.5D / 16D,
+        0,
+        13.5D / 16D,
+        13.5D / 16D,
+        14.5D / 16D);
+    private static final AxisAlignedBB boxLensSouth = new AxisAlignedBB(
+        2.5D / 16D,
+        2.5D / 16D,
+        1.5D / 16D,
+        13.5D / 16D,
+        13.5D / 16D,
+        1);
+    private static final AxisAlignedBB boxLensEast = new AxisAlignedBB(
+        1.5D / 16D,
+        2.5D / 16D,
+        2.5D / 16D,
+        1,
+        13.5D / 16D,
+        13.5D / 16D);
+    private static final AxisAlignedBB boxLensWest = new AxisAlignedBB(
+        0,
+        2.5D / 16D,
+        2.5D / 16D,
+        14.5D / 16D,
+        13.5D / 16D,
+        13.5D / 16D);
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
     public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
@@ -74,7 +109,10 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
         setResistance(12.0F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(RENDER_FULLY, true).withProperty(PLACED_AGAINST, EnumFacing.DOWN));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(RENDER_FULLY, true)
+                .withProperty(PLACED_AGAINST, EnumFacing.DOWN));
     }
 
     @Override
@@ -102,12 +140,14 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+                                            float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
     }
 
@@ -115,7 +155,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.UP;
         for (EnumFacing f : EnumFacing.values()) {
-            if(f.ordinal() == meta) {
+            if (f.ordinal() == meta) {
                 facing = f;
                 break;
             }
@@ -125,7 +165,8 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(PLACED_AGAINST).ordinal();
+        return state.getValue(PLACED_AGAINST)
+            .ordinal();
     }
 
     @Override
@@ -158,7 +199,9 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) { return false; }
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
@@ -186,10 +229,13 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+    }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
         TileCrystalLens lens = MiscUtils.getTileAt(world, pos, TileCrystalLens.class, true);
         if (lens != null && lens.getCrystalProperties() != null) {
@@ -203,10 +249,11 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
-        if(lens != null && !worldIn.isRemote && !player.isCreative()) {
+        if (lens != null && !worldIn.isRemote && !player.isCreative()) {
             ItemStack drop;
-            if(lens.getLensColor() != null) {
-                drop = lens.getLensColor().asStack();
+            if (lens.getLensColor() != null) {
+                drop = lens.getLensColor()
+                    .asStack();
                 ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
             }
 
@@ -223,11 +270,13 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote && playerIn.isSneaking()) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote && playerIn.isSneaking()) {
             TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
-            if(lens != null && lens.getLensColor() != null) {
-                ItemStack drop = lens.getLensColor().asStack();
+            if (lens != null && lens.getLensColor() != null) {
+                ItemStack drop = lens.getLensColor()
+                    .asStack();
                 ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);
                 lens.setLensColor(null);
@@ -248,19 +297,23 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants, C
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         TileCrystalLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
-        if(te == null) return;
+        if (te == null) return;
         te.onPlace(CrystalProperties.getCrystalProperties(stack));
     }
 
     @Override
     public List<IBlockState> getValidStates() {
-        return Arrays.asList(getDefaultState().withProperty(RENDER_FULLY, false), getDefaultState().withProperty(RENDER_FULLY, true));
+        return Arrays.asList(
+            getDefaultState().withProperty(RENDER_FULLY, false),
+            getDefaultState().withProperty(RENDER_FULLY, true));
     }
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(RENDER_FULLY).toString();
+        return state.getValue(RENDER_FULLY)
+            .toString();
     }
 }

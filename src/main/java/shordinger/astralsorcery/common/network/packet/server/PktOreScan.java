@@ -8,20 +8,21 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -69,8 +70,8 @@ public class PktOreScan implements IMessage, IMessageHandler<PktOreScan, IMessag
 
     @SideOnly(Side.CLIENT)
     private void playEffect(PktOreScan message) {
-        AstralSorcery.proxy.scheduleClientside(() -> ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble));
+        AstralSorcery.proxy
+            .scheduleClientside(() -> ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble));
     }
 
 }
-

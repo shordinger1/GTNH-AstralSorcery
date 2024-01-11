@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

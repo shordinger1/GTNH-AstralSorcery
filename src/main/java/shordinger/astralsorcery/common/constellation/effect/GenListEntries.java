@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.effect;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
 import shordinger.astralsorcery.common.util.EntityUtils;
@@ -18,11 +24,6 @@ import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,19 +51,20 @@ public class GenListEntries {
         public static PelotrioSpawnListEntry createEntry(World world, BlockPos pos) {
             Biome b = world.getBiome(pos);
             List<Biome.SpawnListEntry> applicable = new LinkedList<>();
-            if(ConstellationSkyHandler.getInstance().isNight(world)) {
+            if (ConstellationSkyHandler.getInstance()
+                .isNight(world)) {
                 applicable.addAll(b.getSpawnableList(EnumCreatureType.MONSTER));
             } else {
                 applicable.addAll(b.getSpawnableList(EnumCreatureType.CREATURE));
             }
-            if(applicable.isEmpty()) {
-                return null; //Duh.
+            if (applicable.isEmpty()) {
+                return null; // Duh.
             }
             Collections.shuffle(applicable);
             Biome.SpawnListEntry entry = applicable.get(world.rand.nextInt(applicable.size()));
             Class<? extends EntityLivingBase> applicableClass = entry.entityClass;
             ResourceLocation key = EntityList.getKey(applicableClass);
-            if(key != null && EntityUtils.canEntitySpawnHere(world, pos, key, true, (e) -> {
+            if (key != null && EntityUtils.canEntitySpawnHere(world, pos, key, true, (e) -> {
                 EventHandlerEntity.spawnSkipId = e.getEntityId();
                 return null;
             })) {
@@ -85,18 +87,23 @@ public class GenListEntries {
         }
 
         public void spawn(World world) {
-            if(entityName != null && EntityUtils.canEntitySpawnHere(world, getPos(), entityName, true, (e) -> {
+            if (entityName != null && EntityUtils.canEntitySpawnHere(world, getPos(), entityName, true, (e) -> {
                 EventHandlerEntity.spawnSkipId = e.getEntityId();
                 return null;
             })) {
                 EventHandlerEntity.spawnSkipId = -1;
                 Entity entity = EntityList.createEntityByIDFromName(entityName, world);
-                if(entity != null) {
+                if (entity != null) {
                     BlockPos at = getPos();
-                    entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
-                    if(entity instanceof EntityLiving) {
+                    entity.setLocationAndAngles(
+                        at.getX() + 0.5,
+                        at.getY() + 0.5,
+                        at.getZ() + 0.5,
+                        world.rand.nextFloat() * 360.0F,
+                        0.0F);
+                    if (entity instanceof EntityLiving) {
                         ((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(at), null);
-                        if(!((EntityLiving) entity).isNotColliding()) {
+                        if (!((EntityLiving) entity).isNotColliding()) {
                             entity.setDead();
                             return;
                         }
@@ -172,14 +179,17 @@ public class GenListEntries {
         }
 
         @Override
-        public void readFromNBT(NBTTagCompound nbt) {}
+        public void readFromNBT(NBTTagCompound nbt) {
+        }
 
         @Override
-        public void writeToNBT(NBTTagCompound nbt) {}
+        public void writeToNBT(NBTTagCompound nbt) {
+        }
 
     }
 
-    public static class PosDefinedTuple<K extends NBTBase, V extends NBTBase> implements CEffectPositionListGen.CEffectGenListEntry {
+    public static class PosDefinedTuple<K extends NBTBase, V extends NBTBase>
+        implements CEffectPositionListGen.CEffectGenListEntry {
 
         private final BlockPos pos;
         public K key;

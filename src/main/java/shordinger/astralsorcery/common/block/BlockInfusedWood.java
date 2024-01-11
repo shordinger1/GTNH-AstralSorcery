@@ -12,7 +12,6 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
@@ -49,36 +48,41 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
         setResistance(3.0F);
         setSoundType(SoundType.WOOD);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(WOOD_TYPE, WoodType.RAW));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(WOOD_TYPE, WoodType.RAW));
     }
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (WoodType t : WoodType.values()) {
-            if(!t.obtainableInCreative()) continue;
+            if (!t.obtainableInCreative()) continue;
             list.add(new ItemStack(this, 1, t.getMeta()));
         }
     }
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        //return super.getActualState(state, worldIn, pos);
-        if(state.getValue(WOOD_TYPE).isColumn()) {
+        // return super.getActualState(state, worldIn, pos);
+        if (state.getValue(WOOD_TYPE)
+            .isColumn()) {
             IBlockState st = worldIn.getBlockState(pos.up());
             boolean top = false;
-            if(st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE).isColumn()) {
+            if (st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
+                .isColumn()) {
                 top = true;
             }
             st = worldIn.getBlockState(pos.down());
             boolean down = false;
-            if(st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE).isColumn()) {
+            if (st.getBlock() instanceof BlockInfusedWood && st.getValue(WOOD_TYPE)
+                .isColumn()) {
                 down = true;
             }
-            if(top && down) {
+            if (top && down) {
                 return state.withProperty(WOOD_TYPE, WoodType.COLUMN);
-            } else if(top) {
+            } else if (top) {
                 return state.withProperty(WOOD_TYPE, WoodType.COLUMN_BOTTOM);
-            } else if(down) {
+            } else if (down) {
                 return state.withProperty(WOOD_TYPE, WoodType.COLUMN_TOP);
             } else {
                 return state.withProperty(WOOD_TYPE, WoodType.COLUMN);
@@ -92,12 +96,10 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
         IBlockState actual = state.getActualState(source, pos);
         switch (actual.getValue(WOOD_TYPE)) {
             case COLUMN:
-                return new AxisAlignedBB(0.25, 0, 0.25,
-                        0.75, 1, 0.75);
+                return new AxisAlignedBB(0.25, 0, 0.25, 0.75, 1, 0.75);
             case COLUMN_TOP:
             case COLUMN_BOTTOM:
-                return new AxisAlignedBB(0.125, 0, 0.125,
-                        0.875, 1, 0.875);
+                return new AxisAlignedBB(0.125, 0, 0.125, 0.875, 1, 0.875);
         }
         return super.getBoundingBox(state, source, pos);
     }
@@ -108,8 +110,10 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
-        return p_193383_2_.getValue(WOOD_TYPE).isColumn() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
+        return p_193383_2_.getValue(WOOD_TYPE)
+            .isColumn() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
 
     @Override
@@ -120,7 +124,7 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         WoodType woodType = state.getValue(WOOD_TYPE);
-        if(woodType == WoodType.COLUMN_TOP || woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM) {
+        if (woodType == WoodType.COLUMN_TOP || woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM) {
             return 0;
         }
         return super.getLightOpacity(state, world, pos);
@@ -148,14 +152,14 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         WoodType woodType = state.getValue(WOOD_TYPE);
         IBlockState other = world.getBlockState(pos.offset(face));
-        if(MiscUtils.isFluidBlock(other) &&
-                (woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM || woodType == WoodType.COLUMN_TOP)) {
+        if (MiscUtils.isFluidBlock(other)
+            && (woodType == WoodType.COLUMN || woodType == WoodType.COLUMN_BOTTOM || woodType == WoodType.COLUMN_TOP)) {
             return false;
         }
-        if(woodType == WoodType.COLUMN_TOP) {
+        if (woodType == WoodType.COLUMN_TOP) {
             return face == EnumFacing.UP;
         }
-        if(woodType == WoodType.COLUMN_BOTTOM) {
+        if (woodType == WoodType.COLUMN_BOTTOM) {
             return face == EnumFacing.DOWN;
         }
         return state.isOpaqueCube();
@@ -180,7 +184,8 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < WoodType.values().length ? getDefaultState().withProperty(WOOD_TYPE, WoodType.values()[meta]) : getDefaultState();
+        return meta < WoodType.values().length ? getDefaultState().withProperty(WOOD_TYPE, WoodType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -199,7 +204,8 @@ public class BlockInfusedWood extends Block implements BlockCustomName, BlockVar
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(WOOD_TYPE).getName();
+        return state.getValue(WOOD_TYPE)
+            .getName();
     }
 
     public static enum WoodType implements IStringSerializable {

@@ -10,6 +10,7 @@ package shordinger.astralsorcery.common.advancements;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.advancements.instances.PerkLevelInstance;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;

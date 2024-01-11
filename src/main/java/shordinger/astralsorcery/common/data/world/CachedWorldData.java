@@ -47,14 +47,15 @@ public abstract class CachedWorldData implements IWorldRelatedData {
     public void onLoad(World world) {}
 
     /*
-    public final <T extends CachedWorldData> T initializeAndGet(World world) {
-        String id = getSaveKey().getIdentifier();
-        CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
-        if (data == null) {
-            data = constructNewData();
-            world.getPerWorldStorage().setData(id, data);
-        }
-        return (T) data;
-    }*/
+     * public final <T extends CachedWorldData> T initializeAndGet(World world) {
+     * String id = getSaveKey().getIdentifier();
+     * CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
+     * if (data == null) {
+     * data = constructNewData();
+     * world.getPerWorldStorage().setData(id, data);
+     * }
+     * return (T) data;
+     * }
+     */
 
 }

@@ -21,7 +21,8 @@ import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
  */
 public class EnchantmentBase extends Enchantment {
 
-    protected EnchantmentBase(String unlocName, Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
+    protected EnchantmentBase(String unlocName, Rarity rarityIn, EnumEnchantmentType typeIn,
+                              EntityEquipmentSlot... slots) {
         super(rarityIn, typeIn, slots);
         setName(unlocName);
     }

@@ -41,14 +41,14 @@ public class MultiblockGateway extends PatternBlockArray {
         addBlock(0, 0, 0, BlocksAS.celestialGateway.getDefaultState());
 
         addBlock(-3, -1, -3, mru);
-        addBlock( 3, -1, -3, mru);
-        addBlock( 3, -1,  3, mru);
-        addBlock(-3, -1,  3, mru);
+        addBlock(3, -1, -3, mru);
+        addBlock(3, -1, 3, mru);
+        addBlock(-3, -1, 3, mru);
 
-        addBlock(-3,  0, -3, mgr);
-        addBlock( 3,  0, -3, mgr);
-        addBlock( 3,  0,  3, mgr);
-        addBlock(-3,  0,  3, mgr);
+        addBlock(-3, 0, -3, mgr);
+        addBlock(3, 0, -3, mgr);
+        addBlock(3, 0, 3, mgr);
+        addBlock(-3, 0, 3, mgr);
     }
 
 }

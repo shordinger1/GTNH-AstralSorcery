@@ -11,25 +11,23 @@ package shordinger.astralsorcery.client.util.image;
 /*
  * Java Color Thief
  * by Sven Woltmann, Fonpit AG
- *
  * http://www.androidpit.com
  * http://www.androidpit.de
- *
  * License
  * -------
  * Creative Commons Attribution 2.5 License:
  * http://creativecommons.org/licenses/by/2.5/
- *
  * Thanks
  * ------
  * Lokesh Dhakar - for the original Color Thief JavaScript version
  * available at http://lokeshdhakar.com/projects/color-thief/
  */
 
-import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.Arrays;
+
+import javax.annotation.Nullable;
 
 @SuppressWarnings("ALL")
 public class ColorThief {
@@ -171,9 +169,8 @@ public class ColorThief {
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixelsFast(BufferedImage sourceImage, int quality, boolean ignoreWhite) {
-        DataBufferByte imageData = (DataBufferByte) sourceImage
-                .getRaster()
-                .getDataBuffer();
+        DataBufferByte imageData = (DataBufferByte) sourceImage.getRaster()
+            .getDataBuffer();
         byte[] pixels = imageData.getData();
         int pixelCount = sourceImage.getWidth() * sourceImage.getHeight();
 
@@ -194,9 +191,8 @@ public class ColorThief {
 
         int expectedDataLength = pixelCount * colorDepth;
         if (expectedDataLength != pixels.length) {
-            throw new IllegalArgumentException("(expectedDataLength = "
-                    + expectedDataLength + ") != (pixels.length = "
-                    + pixels.length + ")");
+            throw new IllegalArgumentException(
+                "(expectedDataLength = " + expectedDataLength + ") != (pixels.length = " + pixels.length + ")");
         }
 
         // Store the RGB values in an array format suitable for quantize

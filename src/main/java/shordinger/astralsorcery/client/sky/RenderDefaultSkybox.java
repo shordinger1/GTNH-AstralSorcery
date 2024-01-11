@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client.sky;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.WorldClient;
 import shordinger.wrapper.net.minecraft.client.renderer.*;
@@ -19,9 +23,6 @@ import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
 import shordinger.wrapper.net.minecraftforge.client.IRenderHandler;
-import org.lwjgl.opengl.GL11;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,11 +44,13 @@ public class RenderDefaultSkybox extends IRenderHandler {
     private static VertexFormat vertexBufferFormat;
 
     private static final ResourceLocation MC_DEF_SUN_PNG = new ResourceLocation("textures/environment/sun.png");
-    private static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation("textures/environment/moon_phases.png");
+    private static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation(
+        "textures/environment/moon_phases.png");
 
     public static void setupDefaultSkybox() {
         vertexBufferFormat = new VertexFormat();
-        vertexBufferFormat.addElement(new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3));
+        vertexBufferFormat.addElement(
+            new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3));
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vb = tessellator.getBuffer();
@@ -75,7 +78,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
             glSkyList2 = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(glSkyList2, GL11.GL_COMPILE);
             setupSkyVertices(vb, -16.0F, true);
-            Tessellator.getInstance().draw();
+            Tessellator.getInstance()
+                .draw();
             GL11.glEndList();
         }
     }
@@ -98,7 +102,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
             glSkyList = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(glSkyList, GL11.GL_COMPILE);
             setupSkyVertices(vb, 16.0F, false);
-            Tessellator.getInstance().draw();
+            Tessellator.getInstance()
+                .draw();
             GL11.glEndList();
         }
     }
@@ -122,7 +127,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
             GlStateManager.pushMatrix();
             GL11.glNewList(starGLCallList, GL11.GL_COMPILE);
             setupStarVertices(vb);
-            Tessellator.getInstance().draw();
+            Tessellator.getInstance()
+                .draw();
             GL11.glEndList();
             GlStateManager.popMatrix();
         }
@@ -142,10 +148,14 @@ public class RenderDefaultSkybox extends IRenderHandler {
                     f = (float) (k + 64);
                 }
 
-                vb.pos((double) f, (double) y, (double) l).endVertex();
-                vb.pos((double) f1, (double) y, (double) l).endVertex();
-                vb.pos((double) f1, (double) y, (double) (l + 64)).endVertex();
-                vb.pos((double) f, (double) y, (double) (l + 64)).endVertex();
+                vb.pos((double) f, (double) y, (double) l)
+                    .endVertex();
+                vb.pos((double) f1, (double) y, (double) l)
+                    .endVertex();
+                vb.pos((double) f1, (double) y, (double) (l + 64))
+                    .endVertex();
+                vb.pos((double) f, (double) y, (double) (l + 64))
+                    .endVertex();
             }
         }
     }
@@ -157,7 +167,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             double x = (double) (random.nextFloat() * 2.0F - 1.0F);
             double y = (double) (random.nextFloat() * 2.0F - 1.0F);
             double z = (double) (random.nextFloat() * 2.0F - 1.0F);
-            double ovrSize = (double) (0.15F + random.nextFloat() * 0.1F); //Size flat increase.
+            double ovrSize = (double) (0.15F + random.nextFloat() * 0.1F); // Size flat increase.
             double d4 = x * x + y * y + z * z;
             if (d4 < 1.0D && d4 > 0.01D) {
 
@@ -178,17 +188,17 @@ public class RenderDefaultSkybox extends IRenderHandler {
                 double d12 = Math.sin(d11);
                 double d13 = Math.cos(d11);
 
-                //Sizes
+                // Sizes
                 double d14 = random.nextDouble() * Math.PI * 2.0D;
-                double size = Math.sin(d14); //Size percentage increase.
+                double size = Math.sin(d14); // Size percentage increase.
                 double d16 = Math.cos(d14);
 
-                //Set 2D vertices
+                // Set 2D vertices
                 for (int j = 0; j < 4; ++j) {
-                    //double d17 = 0.0D;
-                    double d18 = (double) ((j & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
-                    double d19 = (double) ((j + 1 & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
-                    //double d20 = 0.0D;
+                    // double d17 = 0.0D;
+                    double d18 = (double) ((j & 2) - 1) * ovrSize; // 0 = -1 * [0.15-0.25[
+                    double d19 = (double) ((j + 1 & 2) - 1) * ovrSize; // 0 = -1 * [0.15-0.25[
+                    // double d20 = 0.0D;
 
                     double d21 = d18 * d16 - d19 * size;
                     double d22 = d19 * d16 + d18 * size;
@@ -198,7 +208,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
                     double d25 = d24 * d9 - d22 * d10;
                     double d26 = d22 * d9 + d24 * d10;
-                    vb.pos(d5 + d25, d6 + d23, d7 + d26).endVertex();
+                    vb.pos(d5 + d25, d6 + d23, d7 + d26)
+                        .endVertex();
                 }
             }
         }
@@ -215,7 +226,10 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
     private static void renderDefaultSkybox(float partialTicks) {
         GlStateManager.disableTexture2D();
-        Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+        Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(
+            Minecraft.getMinecraft()
+                .getRenderViewEntity(),
+            partialTicks);
         float f = (float) vec3.x;
         float f1 = (float) vec3.y;
         float f2 = (float) vec3.z;
@@ -252,14 +266,20 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.disableStandardItemLighting();
-        float[] afloat = Minecraft.getMinecraft().world.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
+        float[] afloat = Minecraft.getMinecraft().world.provider
+            .calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
 
         if (afloat != null) {
             GlStateManager.disableTexture2D();
             GlStateManager.shadeModel(7425);
             GlStateManager.pushMatrix();
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(
+                MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
+                    : 0.0F,
+                0.0F,
+                0.0F,
+                1.0F);
             GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
             float f6 = afloat[0];
             float f7 = afloat[1];
@@ -275,14 +295,18 @@ public class RenderDefaultSkybox extends IRenderHandler {
             }
 
             vb.begin(6, DefaultVertexFormats.POSITION_COLOR);
-            vb.pos(0.0D, 100.0D, 0.0D).color(f6, f7, f8, afloat[3]).endVertex();
-            //int j = 16;
+            vb.pos(0.0D, 100.0D, 0.0D)
+                .color(f6, f7, f8, afloat[3])
+                .endVertex();
+            // int j = 16;
 
             for (int l = 0; l <= 16; ++l) {
                 float f21 = (float) l * (float) Math.PI * 2.0F / 16.0F;
                 float f12 = MathHelper.sin(f21);
                 float f13 = MathHelper.cos(f21);
-                vb.pos((double) (f12 * 120.0F), (double) (f13 * 120.0F), (double) (-f13 * 40.0F * afloat[3])).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
+                vb.pos((double) (f12 * 120.0F), (double) (f13 * 120.0F), (double) (-f13 * 40.0F * afloat[3]))
+                    .color(afloat[0], afloat[1], afloat[2], 0.0F)
+                    .endVertex();
             }
 
             tessellator.draw();
@@ -296,14 +320,23 @@ public class RenderDefaultSkybox extends IRenderHandler {
         float f16 = 1.0F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, f16);
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager
+            .rotate(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
         float f17 = 30.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos((double) (-f17), 100.0D, (double) (-f17)).tex(0.0D, 0.0D).endVertex();
-        vb.pos((double) f17, 100.0D, (double) (-f17)).tex(1.0D, 0.0D).endVertex();
-        vb.pos((double) f17, 100.0D, (double) f17).tex(1.0D, 1.0D).endVertex();
-        vb.pos((double) (-f17), 100.0D, (double) f17).tex(0.0D, 1.0D).endVertex();
+        vb.pos((double) (-f17), 100.0D, (double) (-f17))
+            .tex(0.0D, 0.0D)
+            .endVertex();
+        vb.pos((double) f17, 100.0D, (double) (-f17))
+            .tex(1.0D, 0.0D)
+            .endVertex();
+        vb.pos((double) f17, 100.0D, (double) f17)
+            .tex(1.0D, 1.0D)
+            .endVertex();
+        vb.pos((double) (-f17), 100.0D, (double) f17)
+            .tex(0.0D, 1.0D)
+            .endVertex();
         tessellator.draw();
         f17 = 20.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
@@ -315,10 +348,18 @@ public class RenderDefaultSkybox extends IRenderHandler {
         float f24 = (float) (k + 1) / 4.0F;
         float f14 = (float) (i1 + 1) / 2.0F;
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos((double) (-f17), -100.0D, (double) f17).tex((double) f24, (double) f14).endVertex();
-        vb.pos((double) f17, -100.0D, (double) f17).tex((double) f22, (double) f14).endVertex();
-        vb.pos((double) f17, -100.0D, (double) (-f17)).tex((double) f22, (double) f23).endVertex();
-        vb.pos((double) (-f17), -100.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
+        vb.pos((double) (-f17), -100.0D, (double) f17)
+            .tex((double) f24, (double) f14)
+            .endVertex();
+        vb.pos((double) f17, -100.0D, (double) f17)
+            .tex((double) f22, (double) f14)
+            .endVertex();
+        vb.pos((double) f17, -100.0D, (double) (-f17))
+            .tex((double) f22, (double) f23)
+            .endVertex();
+        vb.pos((double) (-f17), -100.0D, (double) (-f17))
+            .tex((double) f24, (double) f23)
+            .endVertex();
         tessellator.draw();
         GlStateManager.disableTexture2D();
         float f15 = Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * f16;
@@ -345,7 +386,8 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
-        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y - Minecraft.getMinecraft().world.getHorizon();
+        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y
+            - Minecraft.getMinecraft().world.getHorizon();
 
         if (d0 < 0.0D) {
             GlStateManager.pushMatrix();
@@ -363,30 +405,70 @@ public class RenderDefaultSkybox extends IRenderHandler {
             }
 
             GlStateManager.popMatrix();
-            //float f18 = 1.0F;
+            // float f18 = 1.0F;
             float f19 = -((float) (d0 + 65.0D));
-            //float f20 = -1.0F;
+            // float f20 = -1.0F;
             vb.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            vb.pos(-1.0D, (double) f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+            vb.pos(-1.0D, (double) f19, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, (double) f19, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, (double) f19, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, (double) f19, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, (double) f19, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, (double) f19, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, (double) f19, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, (double) f19, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(-1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, 1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
+            vb.pos(1.0D, -1.0D, -1.0D)
+                .color(0, 0, 0, 255)
+                .endVertex();
             tessellator.draw();
         }
 

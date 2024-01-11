@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.migration;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.RockCrystalBuffer;
@@ -15,11 +20,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +46,8 @@ public class LegacyDataMigration {
                 int chunkCount = 0;
                 int migrated = 0;
                 int failed = 0;
-                Iterator<List<BlockPos>> iterator = crystalData.values().iterator();
+                Iterator<List<BlockPos>> iterator = crystalData.values()
+                    .iterator();
                 while (iterator.hasNext()) {
                     List<BlockPos> positionList = iterator.next();
                     chunkCount++;
@@ -69,8 +70,10 @@ public class LegacyDataMigration {
                     }
 
                     if (chunkCount % 100 == 0) {
-                        world.getChunkProvider().queueUnloadAll();
-                        world.getChunkProvider().tick();
+                        world.getChunkProvider()
+                            .queueUnloadAll();
+                        world.getChunkProvider()
+                            .tick();
                     }
                 }
 
@@ -78,7 +81,8 @@ public class LegacyDataMigration {
                     DimensionManager.keepDimensionLoaded(world.provider.getDimension(), false);
                 }
 
-                msgOut.accept("Migrated " + migrated + " entries successfully. " + failed + " entries failed to be transferred!");
+                msgOut.accept(
+                    "Migrated " + migrated + " entries successfully. " + failed + " entries failed to be transferred!");
             }
 
             data.markDirty();

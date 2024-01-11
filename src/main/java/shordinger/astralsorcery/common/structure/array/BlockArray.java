@@ -31,7 +31,11 @@ import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 
 /**
@@ -80,7 +84,7 @@ public class BlockArray {
     public void addAll(BlockArray other, @Nullable Function<BlockPos, BlockPos> positionTransform) {
         for (Map.Entry<BlockPos, BlockInformation> patternEntry : other.pattern.entrySet()) {
             BlockPos to = patternEntry.getKey();
-            if(positionTransform != null) {
+            if (positionTransform != null) {
                 to = positionTransform.apply(to);
             }
             pattern.put(to, patternEntry.getValue());
@@ -88,7 +92,7 @@ public class BlockArray {
         }
         for (Map.Entry<BlockPos, TileEntityCallback> patternEntry : other.tileCallbacks.entrySet()) {
             BlockPos to = patternEntry.getKey();
-            if(positionTransform != null) {
+            if (positionTransform != null) {
                 to = positionTransform.apply(to);
             }
             tileCallbacks.put(to, patternEntry.getValue());
@@ -120,22 +124,22 @@ public class BlockArray {
     }
 
     private void updateSize(BlockPos addedPos) {
-        if(addedPos.getX() < min.getX()) {
+        if (addedPos.getX() < min.getX()) {
             min = new Vec3i(addedPos.getX(), min.getY(), min.getZ());
         }
-        if(addedPos.getX() > max.getX()) {
+        if (addedPos.getX() > max.getX()) {
             max = new Vec3i(addedPos.getX(), max.getY(), max.getZ());
         }
-        if(addedPos.getY() < min.getY()) {
+        if (addedPos.getY() < min.getY()) {
             min = new Vec3i(min.getX(), addedPos.getY(), min.getZ());
         }
-        if(addedPos.getY() > max.getY()) {
+        if (addedPos.getY() > max.getY()) {
             max = new Vec3i(max.getX(), addedPos.getY(), max.getZ());
         }
-        if(addedPos.getZ() < min.getZ()) {
+        if (addedPos.getZ() < min.getZ()) {
             min = new Vec3i(min.getX(), min.getY(), addedPos.getZ());
         }
-        if(addedPos.getZ() > max.getZ()) {
+        if (addedPos.getZ() > max.getZ()) {
             max = new Vec3i(max.getX(), max.getY(), addedPos.getZ());
         }
         size = new Vec3i(max.getX() - min.getX() + 1, max.getY() - min.getY() + 1, max.getZ() - min.getZ() + 1);
@@ -148,7 +152,7 @@ public class BlockArray {
     public Map<BlockPos, BlockInformation> getPatternSlice(int slice) {
         Map<BlockPos, BlockInformation> copy = new HashMap<>();
         for (BlockPos pos : pattern.keySet()) {
-            if(pos.getY() == slice) {
+            if (pos.getY() == slice) {
                 copy.put(pos, pattern.get(pos));
             }
         }
@@ -156,7 +160,8 @@ public class BlockArray {
     }
 
     public int getBlockSize() {
-        return this.getPattern().size();
+        return this.getPattern()
+            .size();
     }
 
     public Map<BlockPos, TileEntityCallback> getTileCallbacks() {
@@ -164,31 +169,51 @@ public class BlockArray {
     }
 
     public void addAirCube(int ox, int oy, int oz, int tx, int ty, int tz) {
-        addBlockCube(Blocks.AIR.getDefaultState(), state -> state.getMaterial() == Material.AIR, ox, oy, oz, tx, ty, tz);
+        addBlockCube(
+            Blocks.AIR.getDefaultState(),
+            state -> state.getMaterial() == Material.AIR,
+            ox,
+            oy,
+            oz,
+            tx,
+            ty,
+            tz);
     }
 
     public void addBlockCube(@Nonnull IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
-        addBlockCube(state, new BlockStateCheck.Meta(state.getBlock(), state.getBlock().getMetaFromState(state)), ox, oy, oz, tx, ty, tz);
+        addBlockCube(
+            state,
+            new BlockStateCheck.Meta(
+                state.getBlock(),
+                state.getBlock()
+                    .getMetaFromState(state)),
+            ox,
+            oy,
+            oz,
+            tx,
+            ty,
+            tz);
     }
 
-    public void addBlockCube(@Nonnull IBlockState state, BlockStateCheck match, int ox, int oy, int oz, int tx, int ty, int tz) {
+    public void addBlockCube(@Nonnull IBlockState state, BlockStateCheck match, int ox, int oy, int oz, int tx, int ty,
+                             int tz) {
         int lx, ly, lz;
         int hx, hy, hz;
-        if(ox < tx) {
+        if (ox < tx) {
             lx = ox;
             hx = tx;
         } else {
             lx = tx;
             hx = ox;
         }
-        if(oy < ty) {
+        if (oy < ty) {
             ly = oy;
             hy = ty;
         } else {
             ly = ty;
             hy = oy;
         }
-        if(oz < tz) {
+        if (oz < tz) {
             lz = oz;
             hz = tz;
         } else {
@@ -216,14 +241,14 @@ public class BlockArray {
             }
             result.put(at, state);
 
-            if(MiscUtils.isFluidBlock(state)) {
+            if (MiscUtils.isFluidBlock(state)) {
                 world.neighborChanged(at, state.getBlock(), at);
             }
 
             TileEntity placed = world.getTileEntity(at);
-            if(tileCallbacks.containsKey(entry.getKey())) {
+            if (tileCallbacks.containsKey(entry.getKey())) {
                 TileEntityCallback callback = tileCallbacks.get(entry.getKey());
-                if(callback.isApplicable(placed)) {
+                if (callback.isApplicable(placed)) {
                     callback.onPlace(world, at, placed);
                 }
             }
@@ -236,31 +261,37 @@ public class BlockArray {
         for (BlockInformation info : pattern.values()) {
             int meta = info.metadata;
             ItemStack s;
-            if(info.type instanceof BlockFluidBase) {
-                s = FluidUtil.getFilledBucket(new FluidStack(((BlockFluidBase) info.type).getFluid(), Fluid.BUCKET_VOLUME));
-            } else if(info.type instanceof BlockStructural) {
+            if (info.type instanceof BlockFluidBase) {
+                s = FluidUtil
+                    .getFilledBucket(new FluidStack(((BlockFluidBase) info.type).getFluid(), Fluid.BUCKET_VOLUME));
+            } else if (info.type instanceof BlockStructural) {
                 continue;
-                //IBlockState otherState = info.state.getValue(BlockStructural.BLOCK_TYPE).getSupportedState();
-                //Item i = Item.getItemFromBlock(otherState.getBlock());
-                //if(i == null) continue;
-                //s = new ItemStack(i, 1, otherState.getBlock().getMetaFromState(otherState));
-            } else if(info.type instanceof ISpecialStackDescriptor) {
+                // IBlockState otherState = info.state.getValue(BlockStructural.BLOCK_TYPE).getSupportedState();
+                // Item i = Item.getItemFromBlock(otherState.getBlock());
+                // if(i == null) continue;
+                // s = new ItemStack(i, 1, otherState.getBlock().getMetaFromState(otherState));
+            } else if (info.type instanceof ISpecialStackDescriptor) {
                 s = ((ISpecialStackDescriptor) info.type).getDecriptor(info.state);
             } else {
                 Item i = Item.getItemFromBlock(info.type);
-                if(i == Items.AIR) continue;
+                if (i == Items.AIR) continue;
                 s = new ItemStack(i, 1, meta);
             }
-            if(!s.isEmpty()) {
+            if (!s.isEmpty()) {
                 boolean found = false;
                 for (ItemStack stack : out) {
-                    if(stack.getItem().getRegistryName().equals(s.getItem().getRegistryName()) && stack.getItemDamage() == s.getItemDamage()) {
+                    if (stack.getItem()
+                        .getRegistryName()
+                        .equals(
+                            s.getItem()
+                                .getRegistryName())
+                        && stack.getItemDamage() == s.getItemDamage()) {
                         stack.setCount(stack.getCount() + 1);
                         found = true;
                         break;
                     }
                 }
-                if(!found) {
+                if (!found) {
                     out.add(s);
                 }
             }

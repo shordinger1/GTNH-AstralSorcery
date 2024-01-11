@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -20,7 +21,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,10 +36,16 @@ public class KeyNoArmor extends KeyPerk {
     public KeyNoArmor(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                dmgReductionMultiplier = cfg.getFloat("ReductionMultiplier", getConfigurationSection(), dmgReductionMultiplier, 0.05F, 1F,
-                        "The multiplier that is applied to damage the player receives. The lower the more damage is negated.");
+                dmgReductionMultiplier = cfg.getFloat(
+                    "ReductionMultiplier",
+                    getConfigurationSection(),
+                    dmgReductionMultiplier,
+                    0.05F,
+                    1F,
+                    "The multiplier that is applied to damage the player receives. The lower the more damage is negated.");
             }
         });
     }
@@ -63,13 +69,13 @@ public class KeyNoArmor extends KeyPerk {
         if (prog.hasPerkEffect(this)) {
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
-                if(!stack.isEmpty()) {
+                if (!stack.isEmpty()) {
                     eq++;
                 }
             }
             if (eq < 2) {
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                    .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
                 event.setAmount(event.getAmount() * (dmgReductionMultiplier * (1F / effMulti)));
             }
         }

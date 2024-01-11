@@ -8,17 +8,16 @@
 
 package shordinger.astralsorcery.common.base.patreon.entity;
 
+import java.awt.*;
+import java.util.UUID;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
-import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.Provider;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +30,7 @@ public class PartialEntityFlareColor extends PartialEntityFlare {
 
     private Provider<Color> colorFunction;
 
-    public PartialEntityFlareColor(UUID ownerUUID,
-                                   Provider<Color> colorFunction) {
+    public PartialEntityFlareColor(UUID ownerUUID, Provider<Color> colorFunction) {
         super(null, ownerUUID);
         this.colorFunction = colorFunction;
     }
@@ -46,7 +44,9 @@ public class PartialEntityFlareColor extends PartialEntityFlare {
     @Override
     @SideOnly(Side.CLIENT)
     protected Color getColor() {
-        return rand.nextInt(3) == 0 ? colorFunction.provide() : colorFunction.provide().brighter();
+        return rand.nextInt(3) == 0 ? colorFunction.provide()
+            : colorFunction.provide()
+            .brighter();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PartialEntityFlareColor extends PartialEntityFlare {
     public void tickInRenderDistance() {
         if (clientSprite != null) {
             EntityFXFacingSprite p = (EntityFXFacingSprite) clientSprite;
-            if(!p.isRemoved() && Config.enablePatreonEffects) {
+            if (!p.isRemoved() && Config.enablePatreonEffects) {
                 p.setOverlayColor(colorFunction.provide());
             }
         }

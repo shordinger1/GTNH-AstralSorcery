@@ -8,16 +8,16 @@
 
 package shordinger.astralsorcery.common.util;
 
-import com.google.common.collect.Lists;
-import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-import shordinger.wrapper.net.minecraft.world.IBlockAccess;
-import shordinger.wrapper.net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import scala.actors.threadpool.Arrays;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,7 +74,10 @@ public interface BlockStateCheck {
 
         @Override
         public boolean isStateValid(IBlockState state) {
-            return state.getBlock().equals(block) && state.getBlock().getMetaFromState(state) == toCheck;
+            return state.getBlock()
+                .equals(block)
+                && state.getBlock()
+                .getMetaFromState(state) == toCheck;
         }
     }
 
@@ -115,7 +118,11 @@ public interface BlockStateCheck {
 
         @Override
         public boolean isStateValid(IBlockState state) {
-            return state.getBlock().equals(block) && passableMetadataValues.contains(state.getBlock().getMetaFromState(state));
+            return state.getBlock()
+                .equals(block)
+                && passableMetadataValues.contains(
+                state.getBlock()
+                    .getMetaFromState(state));
         }
     }
 

@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
@@ -17,10 +22,6 @@ import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,11 +51,13 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
         List<CrystalProperties> prop = new LinkedList<>();
         for (ShapedRecipeSlot slot : ShapedRecipeSlot.values()) {
             ItemHandle handle = centralGridMap.get(slot);
-            if(handle == null) continue;
-            if(handle.getApplicableItems().size() != 1) continue; //Force it to be the crystal. and only the crystal.
-            ItemStack stack = handle.getApplicableItems().get(0);
+            if (handle == null) continue;
+            if (handle.getApplicableItems()
+                .size() != 1) continue; // Force it to be the crystal. and only the crystal.
+            ItemStack stack = handle.getApplicableItems()
+                .get(0);
             CrystalProperties c = CrystalProperties.getCrystalProperties(stack);
-            if(c == null) continue;
+            if (c == null) continue;
             prop.add(c);
         }
         ItemCrystalToolBase.setToolProperties(toolOut, ToolCrystalProperties.merge(prop));

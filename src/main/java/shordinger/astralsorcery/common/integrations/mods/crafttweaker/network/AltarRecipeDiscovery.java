@@ -26,7 +26,8 @@ public class AltarRecipeDiscovery extends BaseAltarRecipe {
         super(null, null, null, 0, 0);
     }
 
-    public AltarRecipeDiscovery(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+    public AltarRecipeDiscovery(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired,
+                                int craftingTickTime) {
         super(name, inputs, output, starlightRequired, craftingTickTime);
     }
 
@@ -38,13 +39,12 @@ public class AltarRecipeDiscovery extends BaseAltarRecipe {
     @Override
     public void applyRecipe() {
         CraftingAccessManager.registerMTAltarRecipe(
-                buildRecipeUnsafe(
-                        TileAltar.AltarLevel.DISCOVERY,
-                        this.starlightRequired,
-                        this.craftingTickTime,
-                        this.output,
-                        this.inputs)
-        );
+            buildRecipeUnsafe(
+                TileAltar.AltarLevel.DISCOVERY,
+                this.starlightRequired,
+                this.craftingTickTime,
+                this.output,
+                this.inputs));
     }
 
 }

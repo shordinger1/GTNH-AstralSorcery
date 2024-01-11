@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.util.struct;
 
+import java.util.Stack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.base.TreeTypes;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
@@ -20,10 +25,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Stack;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -33,25 +34,34 @@ import java.util.Stack;
  */
 public class TreeDiscoverer {
 
-    //Pass -1 into the limits to make unlimited.
+    // Pass -1 into the limits to make unlimited.
     @Nullable
     public static BlockArray tryCaptureTreeAt(World world, BlockPos origin, int xzLimit, boolean cornerSpread) {
         Tuple<BlockStateCheck, BlockStateCheck> treeChecks = discoverTreeLogAndLeaf(world, origin);
         BlockStateCheck logCheck = treeChecks.key;
         BlockStateCheck leafCheck = treeChecks.value;
 
-        //Nothing found to search for.
+        // Nothing found to search for.
         if (logCheck == null && leafCheck == null) return null;
 
         int xzLimitSq = xzLimit == -1 ? -1 : xzLimit * xzLimit;
 
         BlockArray out = new BlockArray();
-        Tuple<BlockStateCheck, BlockStateCheck> checks = itDiscoverAndAdd(world, origin, logCheck, leafCheck, xzLimitSq, cornerSpread, out);
-        if(checks.key == null || checks.value == null) return null; //If we only have leaves or only logs, we didn't really find a tree...
+        Tuple<BlockStateCheck, BlockStateCheck> checks = itDiscoverAndAdd(
+            world,
+            origin,
+            logCheck,
+            leafCheck,
+            xzLimitSq,
+            cornerSpread,
+            out);
+        if (checks.key == null || checks.value == null) return null; // If we only have leaves or only logs, we didn't
+        // really find a tree...
         return out;
     }
 
-    private static Tuple<BlockStateCheck, BlockStateCheck> itDiscoverAndAdd(World world, BlockPos origin, BlockStateCheck logCheck, BlockStateCheck leafCheck, int xzLimitSq, boolean cornerSpread, BlockArray out) {
+    private static Tuple<BlockStateCheck, BlockStateCheck> itDiscoverAndAdd(World world, BlockPos origin,
+                                                                            BlockStateCheck logCheck, BlockStateCheck leafCheck, int xzLimitSq, boolean cornerSpread, BlockArray out) {
         Stack<BlockPos> offsetPositions = new Stack<>();
         offsetPositions.add(origin);
         while (!offsetPositions.isEmpty()) {
@@ -88,7 +98,8 @@ public class TreeDiscoverer {
                         for (int yy = -1; yy <= 1; yy++) {
                             for (int zz = -1; zz <= 1; zz++) {
                                 BlockPos newPos = offset.add(xx, yy, zz);
-                                if((xzLimitSq == -1 || flatDistanceSq(newPos, origin) <= xzLimitSq) && !out.hasBlockAt(newPos)) {
+                                if ((xzLimitSq == -1 || flatDistanceSq(newPos, origin) <= xzLimitSq)
+                                    && !out.hasBlockAt(newPos)) {
                                     offsetPositions.push(newPos);
                                 }
                             }
@@ -97,7 +108,8 @@ public class TreeDiscoverer {
                 } else {
                     for (EnumFacing face : EnumFacing.VALUES) {
                         BlockPos newPos = offset.offset(face);
-                        if((xzLimitSq == -1 || flatDistanceSq(newPos, origin) <= xzLimitSq) && !out.hasBlockAt(newPos)) {
+                        if ((xzLimitSq == -1 || flatDistanceSq(newPos, origin) <= xzLimitSq)
+                            && !out.hasBlockAt(newPos)) {
                             offsetPositions.push(newPos);
                         }
                     }
@@ -113,29 +125,33 @@ public class TreeDiscoverer {
         return xDiff * xDiff + zDiff * zDiff;
     }
 
-    //LogStateCheck, LeafStateCheck
+    // LogStateCheck, LeafStateCheck
     @Nonnull
     private static Tuple<BlockStateCheck, BlockStateCheck> discoverTreeLogAndLeaf(World world, BlockPos pos) {
         BlockStateCheck logCheck = null, leafCheck = null;
 
         TreeTypes t = TreeTypes.getTree(world, pos);
-        if(t != null) {
-            if(t.getLogCheck().isStateValid(world.getBlockState(pos))) {
+        if (t != null) {
+            if (t.getLogCheck()
+                .isStateValid(world.getBlockState(pos))) {
                 logCheck = t.getLogCheck();
             }
-            if(t.getLeavesCheck().isStateValid(world.getBlockState(pos))) {
+            if (t.getLeavesCheck()
+                .isStateValid(world.getBlockState(pos))) {
                 leafCheck = t.getLeavesCheck();
             }
         } else {
             IBlockState at = world.getBlockState(pos);
             if (at.getBlock() instanceof BlockLog) {
                 logCheck = new BlockStateCheck.Block(at.getBlock());
-            } else if (at.getBlock().isWood(world, pos)) {
+            } else if (at.getBlock()
+                .isWood(world, pos)) {
                 logCheck = new BlockStateCheck.Block(at.getBlock());
             }
             if (at.getBlock() instanceof BlockLeaves) {
                 leafCheck = new BlockStateCheck.Block(at.getBlock());
-            } else if (at.getBlock().isLeaves(at, world, pos)) {
+            } else if (at.getBlock()
+                .isLeaves(at, world, pos)) {
                 leafCheck = new BlockStateCheck.Block(at.getBlock());
             }
         }

@@ -1,15 +1,5 @@
 package shordinger.astralsorcery;
 
-import static shordinger.astralsorcery.Tags.MODID;
-
-import java.util.Map;
-
-import shordinger.wrapper.net.minecraft.launchwrapper.Launch;
-import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.SidedProxy;
@@ -23,6 +13,9 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.launchwrapper.Launch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.base.Mods;
@@ -43,6 +36,11 @@ import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
 import shordinger.astralsorcery.common.integrations.mods.jei.util.JEISessionHandler;
 import shordinger.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import shordinger.astralsorcery.common.util.PlayerActivityManager;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+
+import java.util.Map;
+
+import static shordinger.astralsorcery.Tags.MODID;
 
 @Mod(modid = MODID, version = Tags.VERSION, name = Tags.MODNAME, acceptedMinecraftVersions = "[1.7.10]")
 public class AstralSorcery {

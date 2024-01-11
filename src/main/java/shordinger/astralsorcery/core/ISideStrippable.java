@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.core;
 
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod

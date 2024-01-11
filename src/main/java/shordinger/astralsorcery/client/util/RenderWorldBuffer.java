@@ -8,8 +8,16 @@
 
 package shordinger.astralsorcery.client.util;
 
-import shordinger.astralsorcery.common.util.MiscUtils;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
+import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -18,13 +26,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.WorldType;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,7 +74,8 @@ public class RenderWorldBuffer implements IBlockAccess {
 
     @Override
     public boolean isAirBlock(BlockPos pos) {
-        return this.blockRenderData.getOrDefault(pos, Blocks.AIR.getDefaultState()).getBlock() == Blocks.AIR;
+        return this.blockRenderData.getOrDefault(pos, Blocks.AIR.getDefaultState())
+            .getBlock() == Blocks.AIR;
     }
 
     @Nonnull

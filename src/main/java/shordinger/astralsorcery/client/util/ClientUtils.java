@@ -8,10 +8,11 @@
 
 package shordinger.astralsorcery.client.util;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
-import shordinger.wrapper.net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.settings.KeyBinding;
 
 /**
  * This class is part of the Astral Sorcery Mod

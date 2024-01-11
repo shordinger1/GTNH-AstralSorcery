@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common;
 
+import java.awt.*;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.mojang.authlib.GameProfile;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.auxiliary.link.LinkHandler;
@@ -90,10 +96,6 @@ import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.UUID;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -105,8 +107,11 @@ public class CommonProxy implements IGuiHandler {
 
     private static final UUID AS_FAKEPLAYER_UUID = UUID.fromString("5ae0411c-9069-4d79-8892-bc112c4b3a08");
 
-    public static DamageSource dmgSourceBleed   = DamageSourceUtil.newType("as.bleed").setDamageBypassesArmor();
-    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSource dmgSourceBleed = DamageSourceUtil.newType("as.bleed")
+        .setDamageBypassesArmor();
+    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar")
+        .setDamageBypassesArmor()
+        .setMagicDamage();
     public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
     public static InternalRegistryPrimer registryPrimer;
 
@@ -153,7 +158,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryEntities.init();
 
-        //Transmission registry
+        // Transmission registry
         SourceClassRegistry.setupRegistry();
         TransmissionClassRegistry.setupRegistry();
         StarlightNetworkRegistry.setupRegistry();
@@ -178,47 +183,63 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        //Chunk Fluid storage for Neromantic primes
-        CapabilityManager.INSTANCE.register(FluidRarityRegistry.ChunkFluidEntry.class, new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
-            @Nullable
-            @Override
-            public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
-                return instance.serializeNBT();
-            }
+        // Chunk Fluid storage for Neromantic primes
+        CapabilityManager.INSTANCE.register(
+            FluidRarityRegistry.ChunkFluidEntry.class,
+            new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
 
-            @Override
-            public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
-                instance.deserializeNBT((NBTTagCompound) nbt);
-            }
-        }, new FluidRarityRegistry.ChunkFluidEntryFactory());
+                @Nullable
+                @Override
+                public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
+                                        FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
+                    return instance.serializeNBT();
+                }
 
-        //Item data storage to find player + item combinations
-        CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
-            @Nullable
-            @Override
-            public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side) {
-                return instance.serializeNBT();
-            }
+                @Override
+                public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
+                                    FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
+                    instance.deserializeNBT((NBTTagCompound) nbt);
+                }
+            },
+            new FluidRarityRegistry.ChunkFluidEntryFactory());
 
-            @Override
-            public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side, NBTBase nbt) {
-                instance.deserializeNBT((NBTTagCompound) nbt);
-            }
-        }, new AmuletHolderCapability.Factory());
+        // Item data storage to find player + item combinations
+        CapabilityManager.INSTANCE
+            .register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
 
-        //Chunk rock crystal storage for rock crystal generation
-        CapabilityManager.INSTANCE.register(RockCrystalHandler.RockCrystalPositions.class, new Capability.IStorage<RockCrystalHandler.RockCrystalPositions>() {
-            @Nullable
-            @Override
-            public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
-                return instance.serializeNBT();
-            }
+                @Nullable
+                @Override
+                public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
+                                        EnumFacing side) {
+                    return instance.serializeNBT();
+                }
 
-            @Override
-            public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
-                instance.deserializeNBT((NBTTagCompound) nbt);
-            }
-        }, new RockCrystalHandler.ChunkFluidEntryFactory());
+                @Override
+                public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
+                                    EnumFacing side, NBTBase nbt) {
+                    instance.deserializeNBT((NBTTagCompound) nbt);
+                }
+            }, new AmuletHolderCapability.Factory());
+
+        // Chunk rock crystal storage for rock crystal generation
+        CapabilityManager.INSTANCE.register(
+            RockCrystalHandler.RockCrystalPositions.class,
+            new Capability.IStorage<RockCrystalHandler.RockCrystalPositions>() {
+
+                @Nullable
+                @Override
+                public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
+                                        RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
+                    return instance.serializeNBT();
+                }
+
+                @Override
+                public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
+                                    RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
+                    instance.deserializeNBT((NBTTagCompound) nbt);
+                }
+            },
+            new RockCrystalHandler.ChunkFluidEntryFactory());
     }
 
     public void registerOreDictEntries() {
@@ -238,7 +259,8 @@ public class CommonProxy implements IGuiHandler {
         OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.RUNED.asStack());
 
         OreDictionary.registerOre("oreAstralStarmetal", BlockCustomOre.OreType.STARMETAL.asStack());
-        OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_INGOT, ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
+        OreDictionary
+            .registerOre(OreDictAlias.ITEM_STARMETAL_INGOT, ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
         OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_DUST, ItemCraftingComponent.MetaType.STARDUST.asStack());
 
         OreDictionary.registerOre("oreAquamarine", BlockCustomSandOre.OreType.AQUAMARINE.asStack());
@@ -255,7 +277,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryConstellations.initMapEffects();
 
-        if(Mods.CRAFTTWEAKER.isPresent()) {
+        if (Mods.CRAFTTWEAKER.isPresent()) {
             ModIntegrationCrafttweaker.instance.pushChanges();
         }
         ModIntegrationChisel.sendVariantIMC();
@@ -290,7 +312,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(StructureIntegrityObserver.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
-        if(Config.enableRetroGen) {
+        if (Config.enableRetroGen) {
             MinecraftForge.EVENT_BUS.register(new RetroGenController());
         }
 
@@ -308,26 +330,27 @@ public class CommonProxy implements IGuiHandler {
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
-        manager.register(new LinkHandler()); //Only used as PERK_TREE for tick handling
+        manager.register(new LinkHandler()); // Only used as PERK_TREE for tick handling
         manager.register(SyncDataHolder.getTickInstance());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
         manager.register(PlayerAmuletHandler.INSTANCE);
-        //manager.register(SpellCastingManager.PERK_TREE);
+        // manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
         manager.register(ShootingStarHandler.getInstance());
         manager.register(ParticleEffectWatcher.INSTANCE);
         manager.register(PlayerActivityManager.INSTANCE);
 
-        //TickTokenizedMaps
+        // TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
         manager.register(EventHandlerEntity.invulnerabilityCooldown);
         manager.register(EventHandlerEntity.ritualFlight);
         manager.register(PerkEffectHelper.perkCooldowns);
-        manager.register(PerkEffectHelper.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
+        manager.register(PerkEffectHelper.perkCooldownsClient); // Doesn't matter being registered on servers aswell.
+        // And prevent fckery in integrated.
     }
 
     public void postInit() {
@@ -378,7 +401,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void fireLightning(World world, Vector3 from, Vector3 to, Color overlay) {
         PktLightningEffect effect = new PktLightningEffect(from, to);
-        if(overlay != null) {
+        if (overlay != null) {
             effect.setColorOverlay(overlay);
         }
         PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, from.toBlockPos(), 40));
@@ -386,13 +409,13 @@ public class CommonProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        if(id < 0 || id >= EnumGuiId.values().length) return null; //Out of range.
+        if (id < 0 || id >= EnumGuiId.values().length) return null; // Out of range.
         EnumGuiId guiType = EnumGuiId.values()[id];
 
         TileEntity t = null;
-        if(guiType.getTileClass() != null) {
+        if (guiType.getTileClass() != null) {
             t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass(), true);
-            if(t == null) {
+            if (t == null) {
                 return null;
             }
         }
@@ -408,8 +431,8 @@ public class CommonProxy implements IGuiHandler {
                 return new ContainerAltarTrait(player.inventory, (TileAltar) t);
             case JOURNAL_STORAGE: {
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
-                if(!held.isEmpty()) {
-                    if(held.getItem() instanceof ItemJournal) {
+                if (!held.isEmpty()) {
+                    if (held.getItem() instanceof ItemJournal) {
                         return new ContainerJournal(player.inventory, held, player.inventory.currentItem);
                     }
                 }

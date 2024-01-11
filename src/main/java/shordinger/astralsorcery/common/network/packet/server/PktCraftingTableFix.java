@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.crafting.ShapedLightProximityRecipe;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,13 +47,13 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
 
     @Override
     public IMessage onMessage(PktCraftingTableFix message, MessageContext ctx) {
-        if(ctx.side == Side.CLIENT) {
+        if (ctx.side == Side.CLIENT) {
             openProperCraftingTableGui(message);
         }
         return null;
     }
 
-    //A crafting table that knows its position. useful.
+    // A crafting table that knows its position. useful.
     @SideOnly(Side.CLIENT)
     private void openProperCraftingTableGui(PktCraftingTableFix message) {
         AstralSorcery.proxy.scheduleClientside(() -> ShapedLightProximityRecipe.clientWorkbenchPosition = message.at);

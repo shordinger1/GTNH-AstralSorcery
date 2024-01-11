@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common.entities;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Iterables;
+
 import shordinger.astralsorcery.common.container.ContainerObservatory;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileObservatory;
@@ -26,10 +32,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -39,7 +41,8 @@ import java.util.UUID;
  */
 public class EntityObservatoryHelper extends Entity {
 
-    private static DataParameter<BlockPos> FIXED = EntityDataManager.createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
+    private static DataParameter<BlockPos> FIXED = EntityDataManager
+        .createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
 
     public EntityObservatoryHelper(World worldIn) {
         super(worldIn);
@@ -75,32 +78,32 @@ public class EntityObservatoryHelper extends Entity {
         this.noClip = true;
 
         TileObservatory to;
-        if((to = isOnTelescope()) == null) {
-            if(!world.isRemote) {
+        if ((to = isOnTelescope()) == null) {
+            if (!world.isRemote) {
                 setDead();
             }
             return;
         }
         List<Entity> passengers = getPassengers();
-        if(!to.isUsable()) {
+        if (!to.isUsable()) {
             passengers.forEach(Entity::dismountRidingEntity);
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if(riding != null && riding instanceof EntityPlayer) {
+        if (riding != null && riding instanceof EntityPlayer) {
             applyObservatoryRotationsFrom(to, (EntityPlayer) riding);
         }
     }
 
     public void applyObservatoryRotationsFrom(TileObservatory to, EntityPlayer riding) {
         if (riding.openContainer != null && riding.openContainer instanceof ContainerObservatory) {
-            //Adjust observatory pitch and jaw to player head
+            // Adjust observatory pitch and jaw to player head
             this.rotationYaw = riding.rotationYawHead;
             this.prevRotationYaw = riding.prevRotationYawHead;
             this.rotationPitch = riding.rotationPitch;
             this.prevRotationPitch = riding.prevRotationPitch;
-        } else  {
-            //Adjust observatory to player-body
+        } else {
+            // Adjust observatory to player-body
             this.rotationYaw = riding.renderYawOffset;
             this.prevRotationYaw = riding.prevRenderYawOffset;
         }
@@ -116,7 +119,7 @@ public class EntityObservatoryHelper extends Entity {
             return null;
         }
         UUID helper = to.getEntityHelperRef();
-        if(helper == null || !helper.equals(this.entityUniqueID)) {
+        if (helper == null || !helper.equals(this.entityUniqueID)) {
             return null;
         }
         return to;
@@ -124,7 +127,7 @@ public class EntityObservatoryHelper extends Entity {
 
     @Override
     protected boolean canBeRidden(Entity entityIn) {
-        if(!super.canBeRidden(entityIn)) return false;
+        if (!super.canBeRidden(entityIn)) return false;
         TileObservatory to = isOnTelescope();
         return to != null && to.isUsable();
     }

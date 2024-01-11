@@ -16,13 +16,13 @@
 
 package shordinger.astralsorcery.common.util.log;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.util.Provider;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,6 +42,7 @@ public class LogUtil {
             AstralSorcery.log.info(String.format(PREFIX, category.name(), msgProvider.provide()));
         }
     }
+
     public static void warn(LogCategory category, Provider<String> msgProvider) {
         if (loggingEnabled && loggedCategories.contains(category)) {
             AstralSorcery.log.warn(String.format(PREFIX, category.name(), msgProvider.provide()));
@@ -59,7 +60,11 @@ public class LogUtil {
             loggedCategories.clear();
 
             for (LogCategory cat : LogCategory.values()) {
-                boolean enabled = cfg.getBoolean(cat.name(), getConfigurationSection(), false, "Set to true to enable this logging category. Only do this if you have to debug this section of code! May spam your log HEAVILY!");
+                boolean enabled = cfg.getBoolean(
+                    cat.name(),
+                    getConfigurationSection(),
+                    false,
+                    "Set to true to enable this logging category. Only do this if you have to debug this section of code! May spam your log HEAVILY!");
                 if (enabled) {
                     loggedCategories.add(cat);
                 }

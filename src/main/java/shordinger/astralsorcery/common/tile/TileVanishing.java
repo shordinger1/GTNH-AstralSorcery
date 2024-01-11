@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.util.List;
+
 import shordinger.astralsorcery.common.item.tool.wand.ItemWand;
 import shordinger.astralsorcery.common.item.tool.wand.WandAugment;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,21 +26,23 @@ import java.util.List;
  */
 public class TileVanishing extends TileEntityTick {
 
-    private static final AxisAlignedBB topBox = new AxisAlignedBB(-0.9,0, -0.9, 0.9, 0.9, 0.9);
+    private static final AxisAlignedBB topBox = new AxisAlignedBB(-0.9, 0, -0.9, 0.9, 0.9, 0.9);
 
     @Override
     public void update() {
         super.update();
 
-        if(!world.isRemote && ticksExisted % 10 == 0) {
+        if (!world.isRemote && ticksExisted % 10 == 0) {
             List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, topBox.offset(pos));
             for (EntityPlayer player : players) {
                 ItemStack held = player.getHeldItemMainhand();
-                if(!held.isEmpty() && held.getItem() instanceof ItemWand && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
+                if (!held.isEmpty() && held.getItem() instanceof ItemWand
+                    && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }
                 held = player.getHeldItemOffhand();
-                if(!held.isEmpty() && held.getItem() instanceof ItemWand && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
+                if (!held.isEmpty() && held.getItem() instanceof ItemWand
+                    && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }
             }

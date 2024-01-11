@@ -16,14 +16,13 @@ import shordinger.astralsorcery.common.block.BlockVariants;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.IVariantTileProvider;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyBool;
@@ -36,7 +35,11 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
@@ -55,7 +58,8 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 20:52
  */
-public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants, BlockStructureObserver {
+public class BlockAltar extends BlockStarlightNetwork
+    implements BlockCustomName, BlockVariants, BlockStructureObserver {
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
@@ -67,26 +71,53 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         setResistance(25.0F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(ALTAR_TYPE, AltarType.ALTAR_1));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(ALTAR_TYPE, AltarType.ALTAR_1));
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote) {
             TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
-            if(ta != null) {
+            if (ta != null) {
                 switch (ta.getAltarLevel()) {
                     case DISCOVERY:
-                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_DISCOVERY, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        AstralSorcery.proxy.openGui(
+                            CommonProxy.EnumGuiId.ALTAR_DISCOVERY,
+                            playerIn,
+                            worldIn,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ());
                         return true;
                     case ATTUNEMENT:
-                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_ATTUNEMENT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        AstralSorcery.proxy.openGui(
+                            CommonProxy.EnumGuiId.ALTAR_ATTUNEMENT,
+                            playerIn,
+                            worldIn,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ());
                         return true;
                     case CONSTELLATION_CRAFT:
-                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_CONSTELLATION, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        AstralSorcery.proxy.openGui(
+                            CommonProxy.EnumGuiId.ALTAR_CONSTELLATION,
+                            playerIn,
+                            worldIn,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ());
                         return true;
                     case TRAIT_CRAFT:
-                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_TRAIT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        AstralSorcery.proxy.openGui(
+                            CommonProxy.EnumGuiId.ALTAR_TRAIT,
+                            playerIn,
+                            worldIn,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ());
                         return true;
                     case BRILLIANCE:
                         break;
@@ -106,7 +137,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
-            if(type == AltarType.ALTAR_5) continue;
+            if (type == AltarType.ALTAR_5) continue;
             list.add(new ItemStack(this, 1, type.ordinal()));
         }
     }
@@ -125,8 +156,10 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     public static void startSearchForRelayUpdate(World world, BlockPos pos) {
         Thread searchThread = new Thread(() -> {
-            BlockArray relaysAndAltars = BlockDiscoverer.searchForBlocksAround(world, pos, 16, new BlockStateCheck.Block(BlocksAS.attunementRelay));
-            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern().entrySet()) {
+            BlockArray relaysAndAltars = BlockDiscoverer
+                .searchForBlocksAround(world, pos, 16, new BlockStateCheck.Block(BlocksAS.attunementRelay));
+            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern()
+                .entrySet()) {
                 BlockAttunementRelay.startSearchRelayLinkThreadAt(world, entry.getKey(), false);
             }
         });
@@ -138,7 +171,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         AltarType type = state.getValue(ALTAR_TYPE);
         AxisAlignedBB box = type.getBox();
-        if(box != null) {
+        if (box != null) {
             return box;
         }
         return FULL_BLOCK_AABB;
@@ -152,7 +185,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < AltarType.values().length ? getDefaultState().withProperty(ALTAR_TYPE, AltarType.values()[meta]) : getDefaultState();
+        return meta < AltarType.values().length ? getDefaultState().withProperty(ALTAR_TYPE, AltarType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -167,39 +201,48 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         int lvl = stack.getItemDamage();
         TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
-        if(ta != null) {
+        if (ta != null) {
             ta.onPlace(TileAltar.AltarLevel.values()[lvl]);
         }
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state,
+                             @Nullable TileEntity te, @Nullable ItemStack stack) {
         super.harvestBlock(worldIn, player, pos, state, te, stack);
 
-        if(!worldIn.isRemote && te != null && te instanceof TileAltar) {
+        if (!worldIn.isRemote && te != null && te instanceof TileAltar) {
             ItemStack out = new ItemStack(BlocksAS.blockAltar, 1, damageDropped(state));
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, out);
         }
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
-
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); // Waila fix. wtf. why waila.
+        // why.
+    }
+
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+                                            float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return getStateFromMeta(meta);
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) { return false; }
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -217,7 +260,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -238,7 +282,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(ALTAR_TYPE).getName();
+        return state.getValue(ALTAR_TYPE)
+            .getName();
     }
 
     @Override
@@ -254,7 +299,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
         ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.BRILLIANCE));
 
-        //Ugly workaround to make constructors nicer
+        // Ugly workaround to make constructors nicer
         private final IVariantTileProvider provider;
 
         private AltarType(IVariantTileProvider provider) {

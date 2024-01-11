@@ -23,9 +23,10 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 public class TESRStarlightInfuser extends TileEntitySpecialRenderer<TileStarlightInfuser> {
 
     @Override
-    public void render(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
         ItemStack in = te.getInputStack();
-        if(in.isEmpty()) return;
+        if (in.isEmpty()) return;
         RenderingUtils.renderItemAsEntity(in, x, y, z, partialTicks, te.getTicksExisted());
     }
 }

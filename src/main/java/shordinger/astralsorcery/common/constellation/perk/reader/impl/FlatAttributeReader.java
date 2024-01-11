@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.reader.impl;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
@@ -19,8 +21,6 @@ import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,8 +54,8 @@ public class FlatAttributeReader extends AttributeReader {
     @Override
     public double getModifierValueForMode(PlayerAttributeMap statMap, EntityPlayer player, Side side,
                                           PerkAttributeModifier.Mode mode) {
-        return statMap.getModifier(player, ResearchManager.getProgress(player, side),
-                this.attribute.getTypeString(), mode);
+        return statMap
+            .getModifier(player, ResearchManager.getProgress(player, side), this.attribute.getTypeString(), mode);
     }
 
     @Override
@@ -64,13 +64,15 @@ public class FlatAttributeReader extends AttributeReader {
         Float limit = AttributeTypeLimiter.INSTANCE.getMaxLimit(this.attribute);
         String limitStr = limit == null ? "" : I18n.format("perk.reader.limit.default", MathHelper.floor(limit));
 
-        double value = statMap.modifyValue(player, ResearchManager.getProgress(player, Side.CLIENT),
-                this.attribute.getTypeString(), (float) this.getDefaultValue(statMap, player, Side.CLIENT));
+        double value = statMap.modifyValue(
+            player,
+            ResearchManager.getProgress(player, Side.CLIENT),
+            this.attribute.getTypeString(),
+            (float) this.getDefaultValue(statMap, player, Side.CLIENT));
 
         String postProcess = "";
         double post = AttributeEvent.postProcessModded(player, this.attribute, value);
-        if (Math.abs(value - post) > 1E-4 &&
-                (limit == null || Math.abs(post - limit) > 1E-4)) {
+        if (Math.abs(value - post) > 1E-4 && (limit == null || Math.abs(post - limit) > 1E-4)) {
             if (Math.abs(post) >= 1E-4) {
                 postProcess = I18n.format("perk.reader.postprocess.default", formatForDisplay(post));
             }

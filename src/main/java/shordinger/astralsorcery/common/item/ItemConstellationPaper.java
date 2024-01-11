@@ -8,6 +8,14 @@
 
 package shordinger.astralsorcery.common.item;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
@@ -37,13 +45,6 @@ import shordinger.wrapper.net.minecraft.util.text.Style;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentTranslation;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,7 +64,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1));
 
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
@@ -76,11 +77,12 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
     @Override
     public int getColorForItemStack(ItemStack stack, int tintIndex) {
-        if(tintIndex != 1) return 0xFFFFFFFF;
+        if (tintIndex != 1) return 0xFFFFFFFF;
         IConstellation c = getConstellation(stack);
-        if(c != null) {
-            if(ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                return 0xFF000000 | c.getConstellationColor().getRGB();
+        if (c != null) {
+            if (ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                return 0xFF000000 | c.getConstellationColor()
+                    .getRGB();
             }
         }
         return 0xFF333333;
@@ -119,10 +121,16 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         ItemStack itemStackIn = playerIn.getHeldItem(hand);
-        if(itemStackIn.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
-        if(worldIn.isRemote && getConstellation(itemStackIn) != null) {
+        if (itemStackIn.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
+        if (worldIn.isRemote && getConstellation(itemStackIn) != null) {
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
-            AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.CONSTELLATION_PAPER, playerIn, worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
+            AstralSorcery.proxy.openGui(
+                CommonProxy.EnumGuiId.CONSTELLATION_PAPER,
+                playerIn,
+                worldIn,
+                ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)),
+                0,
+                0);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
     }
@@ -133,25 +141,25 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
         IConstellation cst = getConstellation(stack);
 
-        if(cst == null) {
+        if (cst == null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
 
             List<IConstellation> constellations = new ArrayList<>();
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                if(c.canDiscover((EntityPlayer) entityIn, progress)) {
+                if (c.canDiscover((EntityPlayer) entityIn, progress)) {
                     constellations.add(c);
                 }
             }
 
             for (String strConstellation : progress.getKnownConstellations()) {
                 IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                if(c != null) {
+                if (c != null) {
                     constellations.remove(c);
                 }
             }
             for (String strConstellation : progress.getSeenConstellations()) {
                 IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                if(c != null) {
+                if (c != null) {
                     constellations.remove(c);
                 }
             }
@@ -164,28 +172,30 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         }
 
         cst = getConstellation(stack);
-        if(cst != null) {
+        if (cst != null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
 
             boolean has = false;
             for (String strConstellation : progress.getSeenConstellations()) {
                 IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                if(c != null && c.equals(cst)) {
+                if (c != null && c.equals(cst)) {
                     has = true;
                     break;
                 }
             }
-            if(!has) {
-                if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+            if (!has) {
+                if (ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
                     entityIn.sendMessage(
-                            new TextComponentTranslation("progress.seen.constellation.chat",
-                                    new TextComponentTranslation(cst.getUnlocalizedName())
-                                            .setStyle(new Style().setColor(TextFormatting.GRAY)))
-                                    .setStyle(new Style().setColor(TextFormatting.BLUE)));
-                    if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
+                        new TextComponentTranslation(
+                            "progress.seen.constellation.chat",
+                            new TextComponentTranslation(cst.getUnlocalizedName())
+                                .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                            .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                    if (ResearchManager.clientProgress.getSeenConstellations()
+                        .size() == 1) {
                         entityIn.sendMessage(
-                                new TextComponentTranslation("progress.seen.constellation.first.chat")
-                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                            new TextComponentTranslation("progress.seen.constellation.first.chat")
+                                .setStyle(new Style().setColor(TextFormatting.BLUE)));
                     }
                 }
             }
@@ -195,7 +205,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     private List<WRItemObject<IConstellation>> buildWeightedRandomList(List<IConstellation> constellations) {
         List<WRItemObject<IConstellation>> wrc = new ArrayList<>();
         for (IConstellation c : constellations) {
-            WRItemObject<IConstellation> i = new WRItemObject<>(1, c);//(int) (tier.getShowupChance() * 100), c);
+            WRItemObject<IConstellation> i = new WRItemObject<>(1, c);// (int) (tier.getShowupChance() * 100), c);
             wrc.add(i);
         }
         return wrc;
@@ -204,8 +214,8 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @Override
     public Color getHightlightColor(ItemStack stack) {
         IConstellation c = getConstellation(stack);
-        if(c != null) {
-            if(ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+        if (c != null) {
+            if (ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
                 return c.getConstellationColor();
             }
             return c.getTierRenderColor();

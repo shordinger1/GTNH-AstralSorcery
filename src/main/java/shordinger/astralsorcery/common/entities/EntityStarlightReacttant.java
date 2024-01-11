@@ -25,14 +25,16 @@ public interface EntityStarlightReacttant {
 
     default public boolean isInLiquidStarlight(Entity e) {
         BlockPos at = e.getPosition();
-        IBlockState state = e.getEntityWorld().getBlockState(at);
-        if(!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
+        IBlockState state = e.getEntityWorld()
+            .getBlockState(at);
+        if (!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
             return false;
         }
-        if(!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(e.getEntityWorld(), at)) {
+        if (!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(e.getEntityWorld(), at)) {
             return false;
         }
-        state = e.getEntityWorld().getBlockState(at.down());
+        state = e.getEntityWorld()
+            .getBlockState(at.down());
         return state.isSideSolid(e.getEntityWorld(), at.down(), EnumFacing.UP);
     }
 

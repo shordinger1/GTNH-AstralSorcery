@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.base.patreon.data.provider;
 
-import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
-import shordinger.astralsorcery.common.base.patreon.base.PtEffectCrystalFootprint;
-import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
-
 import java.awt.*;
 import java.util.List;
 import java.util.UUID;
+
+import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import shordinger.astralsorcery.common.base.patreon.base.PtEffectCrystalFootprint;
+import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import shordinger.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
@@ -31,9 +31,11 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
     private float consumeChance;
     private int craftingTickTime;
 
-    InfusionRecipeAdd() {}
+    InfusionRecipeAdd() {
+    }
 
-    public InfusionRecipeAdd(ItemHandle in, ItemStack out, boolean consumeMultiple, float consumeChance, int craftingTickTime) {
+    public InfusionRecipeAdd(ItemHandle in, ItemStack out, boolean consumeMultiple, float consumeChance,
+                             int craftingTickTime) {
         this.in = in;
         this.out = out;
         this.consumeAll = consumeMultiple;
@@ -71,6 +73,7 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
 
     public AbstractInfusionRecipe compile() {
         return new BasicInfusionRecipe(out, this.in) {
+
             @Override
             public int craftingTickTime() {
                 return craftingTickTime;

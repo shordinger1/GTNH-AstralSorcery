@@ -21,13 +21,14 @@ import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
  */
 public class CompoundGatewayShield extends CompoundEffectSphere {
 
-    public CompoundGatewayShield(Vector3 centralPoint, Vector3 southNorthAxis, double sphereRadius, int fractionsSplit, int fractionsCircle) {
+    public CompoundGatewayShield(Vector3 centralPoint, Vector3 southNorthAxis, double sphereRadius, int fractionsSplit,
+                                 int fractionsCircle) {
         super(centralPoint, southNorthAxis, sphereRadius, fractionsSplit, fractionsCircle);
     }
 
     @Override
     public void render(BufferBuilder vb, float pTicks) {
-        if(EffectHandler.getInstance().renderGateway) {
+        if (EffectHandler.getInstance().renderGateway) {
             super.render(vb, pTicks);
         }
     }

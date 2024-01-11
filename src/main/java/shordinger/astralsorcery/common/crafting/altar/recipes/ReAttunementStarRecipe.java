@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
+import java.awt.*;
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -25,11 +30,6 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.OreDictAlias;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,27 +43,30 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
     private final IMajorConstellation attuneCst;
 
     public ReAttunementStarRecipe(IMajorConstellation cst) {
-        super(shapedRecipe("shiftingstar/enhanced/" + cst.getSimpleName(), ItemShiftingStar.createStack(cst))
-                .addPart(cst.getConstellationSignatureItems().get(0),
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(ItemsAS.shiftingStar,
-                        ShapedRecipeSlot.CENTER)
-                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
+        super(
+            shapedRecipe("shiftingstar/enhanced/" + cst.getSimpleName(), ItemShiftingStar.createStack(cst))
+                .addPart(
+                    cst.getConstellationSignatureItems()
+                        .get(0),
+                    ShapedRecipeSlot.UPPER_CENTER,
+                    ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemsAS.shiftingStar, ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT)
                 .unregisteredAccessibleShapedRecipe());
-        setInnerTraitItem(OreDictAlias.ITEM_STARMETAL_DUST,
-                TraitRecipeSlot.values());
+        setInnerTraitItem(OreDictAlias.ITEM_STARMETAL_DUST, TraitRecipeSlot.values());
 
         addOuterTraitItem(OreDictAlias.ITEM_STARMETAL_DUST);
         addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack());
-        addOuterTraitItem(cst.getConstellationSignatureItems().get(0));
+        addOuterTraitItem(
+            cst.getConstellationSignatureItems()
+                .get(0));
         addOuterTraitItem(OreDictAlias.ITEM_STARMETAL_DUST);
         addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack());
-        addOuterTraitItem(cst.getConstellationSignatureItems().get(0));
+        addOuterTraitItem(
+            cst.getConstellationSignatureItems()
+                .get(0));
 
-        //Better early than late.
+        // Better early than late.
         if (cst == null) {
             throw new IllegalArgumentException("NULL constellation passed to shifting-star enhancement recipe!");
         }
@@ -87,7 +90,7 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 
-        if(state != ActiveCraftingTask.CraftingState.ACTIVE) {
+        if (state != ActiveCraftingTask.CraftingState.ACTIVE) {
             return;
         }
 
@@ -102,10 +105,16 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
             Vector3 v = new Vector3(1, 0, 0);
             float originalAngle = (((float) i) / ((float) parts)) * 360F;
             double angle = originalAngle + (MathHelper.sin(percCycle) * angleSwirl);
-            v.rotate(-Math.toRadians(angle), Vector3.RotAxis.Y_AXIS).normalize().multiply(dst);
-            Vector3 pos = center.clone().add(v);
+            v.rotate(-Math.toRadians(angle), Vector3.RotAxis.Y_AXIS)
+                .normalize()
+                .multiply(dst);
+            Vector3 pos = center.clone()
+                .add(v);
 
-            Vector3 mot = center.clone().subtract(pos).normalize().multiply(0.07);
+            Vector3 mot = center.clone()
+                .subtract(pos)
+                .normalize()
+                .multiply(0.07);
 
             EntityFXFacingParticle particle = playParticle(pos, rand);
             particle.motion(mot.getX(), mot.getY(), mot.getZ());
@@ -123,12 +132,19 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
         particle.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
 
         if (rand.nextInt(12) == 0) {
-            EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(offset.clone().addY(3 + rand.nextInt(2)), offset, 1);
+            EffectLightbeam lightbeam = EffectHandler.getInstance()
+                .lightbeam(
+                    offset.clone()
+                        .addY(3 + rand.nextInt(2)),
+                    offset,
+                    1);
             lightbeam.setMaxAge(48);
             if (rand.nextInt(4) == 0) {
                 lightbeam.setColorOverlay(Color.WHITE);
             } else if (rand.nextInt(3) == 0) {
-                lightbeam.setColorOverlay(attuneCst.getConstellationColor().brighter());
+                lightbeam.setColorOverlay(
+                    attuneCst.getConstellationColor()
+                        .brighter());
             } else {
                 lightbeam.setColorOverlay(attuneCst.getConstellationColor());
             }
@@ -142,37 +158,53 @@ public class ReAttunementStarRecipe extends TraitRecipe implements ISpecialCraft
         particle = playParticle(offset, rand);
         particle.scale(0.2F + rand.nextFloat() * 0.5F);
         particle.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-        particle.motion(rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.01F,
-                rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
+        particle.motion(
+            rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
+            rand.nextFloat() * 0.01F,
+            rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
 
         if (rand.nextInt(12) == 0) {
-            EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(offset.clone().addY(3 + rand.nextInt(2)), offset, 1);
+            EffectLightbeam lightbeam = EffectHandler.getInstance()
+                .lightbeam(
+                    offset.clone()
+                        .addY(3 + rand.nextInt(2)),
+                    offset,
+                    1);
             lightbeam.setMaxAge(48);
             if (rand.nextInt(4) == 0) {
                 lightbeam.setColorOverlay(Color.WHITE);
             } else if (rand.nextInt(3) == 0) {
-                lightbeam.setColorOverlay(attuneCst.getConstellationColor().brighter());
+                lightbeam.setColorOverlay(
+                    attuneCst.getConstellationColor()
+                        .brighter());
             } else {
                 lightbeam.setColorOverlay(attuneCst.getConstellationColor());
             }
         }
 
         particle = playParticle(new Vector3(altar).add(-3 + rand.nextFloat() * 7, 0, -3 + rand.nextFloat() * 7), rand);
-        particle.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(rand.nextFloat() * 0.2F + 0.1F);
-        particle.setColor(attuneCst.getConstellationColor().brighter());
+        particle.gravity(0.004)
+            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+            .scale(rand.nextFloat() * 0.2F + 0.1F);
+        particle.setColor(
+            attuneCst.getConstellationColor()
+                .brighter());
     }
 
     @SideOnly(Side.CLIENT)
     private EntityFXFacingParticle playParticle(Vector3 at, Random rand) {
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at);
-        particle.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).scale(rand.nextFloat() * 0.4F + 0.27F);
+        particle.gravity(0.004)
+            .enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
+            .scale(rand.nextFloat() * 0.4F + 0.27F);
         particle.setMaxAge(50);
         particle.scale(0.2F + rand.nextFloat());
         if (rand.nextInt(4) == 0) {
             particle.setColor(Color.WHITE);
         } else if (rand.nextInt(3) == 0) {
-            particle.setColor(attuneCst.getConstellationColor().brighter());
+            particle.setColor(
+                attuneCst.getConstellationColor()
+                    .brighter());
         } else {
             particle.setColor(attuneCst.getConstellationColor());
         }

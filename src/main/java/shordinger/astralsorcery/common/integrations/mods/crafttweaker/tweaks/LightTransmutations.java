@@ -36,22 +36,25 @@ public class LightTransmutations extends BaseTweaker {
     protected static final String name = "AstralSorcery Starlight Transmutation";
 
     @ZenMethod
-    public static void addTransmutation(IItemStack stackIn, IItemStack stackOut, double cost, String requiredConstellation) {
+    public static void addTransmutation(IItemStack stackIn, IItemStack stackOut, double cost,
+                                        String requiredConstellation) {
         ItemStack in = convertToItemStack(stackIn);
         ItemStack out = convertToItemStack(stackOut);
-        if(in.isEmpty() || out.isEmpty()) {
+        if (in.isEmpty() || out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe due to invalid input/output.");
             return;
         }
 
         IBlockState state = ItemUtils.createBlockState(in);
-        if(state == null) {
-            CraftTweakerAPI.logError("[" + name + "] Skipping recipe - Can't create a valid BlockState from given Input");
+        if (state == null) {
+            CraftTweakerAPI
+                .logError("[" + name + "] Skipping recipe - Can't create a valid BlockState from given Input");
             return;
         }
         state = ItemUtils.createBlockState(out);
-        if(state == null) {
-            CraftTweakerAPI.logError("[" + name + "] Skipping recipe - Can't create a valid BlockState from given Output");
+        if (state == null) {
+            CraftTweakerAPI
+                .logError("[" + name + "] Skipping recipe - Can't create a valid BlockState from given Output");
             return;
         }
 
@@ -61,7 +64,10 @@ public class LightTransmutations extends BaseTweaker {
             if (cst != null && cst instanceof IWeakConstellation) {
                 req = (IWeakConstellation) cst;
             } else {
-                CraftTweakerAPI.logError("[" + name + "] Skipping recipe - Unknown or Non-Bright/Non-Dim constellation: " + requiredConstellation);
+                CraftTweakerAPI.logError(
+                    "[" + name
+                        + "] Skipping recipe - Unknown or Non-Bright/Non-Dim constellation: "
+                        + requiredConstellation);
                 return;
             }
         }
@@ -77,7 +83,7 @@ public class LightTransmutations extends BaseTweaker {
     @ZenMethod
     public static void removeTransmutation(IItemStack stackToRemove, boolean matchMeta) {
         ItemStack removeMatch = convertToItemStack(stackToRemove);
-        if(removeMatch.isEmpty()) {
+        if (removeMatch.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-removal due to invalid output.");
             return;
         }

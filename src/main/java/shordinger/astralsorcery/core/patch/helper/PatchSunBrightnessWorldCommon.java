@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +33,10 @@ public class PatchSunBrightnessWorldCommon extends ClassPatch {
         AbstractInsnNode fRet;
         while (index > 0 && (fRet = mn.instructions.get(index)) != null) {
             mn.instructions.insertBefore(fRet, new VarInsnNode(Opcodes.ALOAD, 0));
-            mn.instructions.insertBefore(fRet, new MethodInsnNode(Opcodes.INVOKESTATIC,
+            mn.instructions.insertBefore(
+                fRet,
+                new MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/event/listener/EventHandlerRedirect",
                     "getSunBrightnessFactorInj",
                     "(FLnet/minecraft/world/World;)F",

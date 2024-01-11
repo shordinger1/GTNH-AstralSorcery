@@ -8,11 +8,12 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,21 +35,21 @@ public class NonDuplicateCappedList<T> implements Iterable<T> {
     }
 
     public boolean offerElement(T element) {
-        if(elements.size() + 1 > cap) return false;
-        if(elements.contains(element)) return false;
+        if (elements.size() + 1 > cap) return false;
+        if (elements.contains(element)) return false;
         return elements.add(element);
     }
 
     @Nullable
     public T getRandomElement() {
-        if(elements.isEmpty()) return null;
+        if (elements.isEmpty()) return null;
         return elements.get(rand.nextInt(elements.size()));
     }
 
     @Nullable
     public T getRandomElementByChance(Random rand, float rngMultiplier) {
-        if(elements.isEmpty()) return null;
-        if(Math.max(0, rand.nextInt( ((int)((cap - elements.size()) * rngMultiplier)) / 2 + 1)) == 0 ) {
+        if (elements.isEmpty()) return null;
+        if (Math.max(0, rand.nextInt(((int) ((cap - elements.size()) * rngMultiplier)) / 2 + 1)) == 0) {
             return getRandomElement();
         }
         return null;

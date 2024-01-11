@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.client.gui.journal;
 
+import java.awt.*;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.client.util.mappings.ClientJournalMapping;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
-
-import javax.annotation.Nullable;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,24 +41,25 @@ public class GalaxySizeHandler extends SizeHandler {
         PlayerProgress progress = ResearchManager.clientProgress;
         for (ResearchProgression resProgress : progress.getResearchProgression()) {
             ClientJournalMapping.JournalCluster cluster = ClientJournalMapping.getClusterMapping(resProgress);
-            if(cluster == null)
-                throw new IllegalStateException("Could not get Cluster mapping for " + resProgress.name() + " - This is an Implementation error. Please report this!");
+            if (cluster == null) throw new IllegalStateException(
+                "Could not get Cluster mapping for " + resProgress.name()
+                    + " - This is an Implementation error. Please report this!");
 
-            //Because i don't care.
+            // Because i don't care.
             Point b = cluster.boundary1;
             int x = b.x;
             int y = b.y;
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
             b = cluster.boundary2;
             x = b.x;
             y = b.y;
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
         }
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }

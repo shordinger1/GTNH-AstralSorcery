@@ -8,7 +8,16 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -26,13 +35,6 @@ import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -56,7 +58,8 @@ public class JournalPageRecipe implements IJournalPage {
 
     public static class Render implements IGuiRenderablePage {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "griddisc");
+        private static final BindableResource texGrid = AssetLibrary
+            .loadTexture(AssetLoader.TextureLocation.GUI, "griddisc");
 
         private final AccessibleRecipeAdapater recipe;
 
@@ -69,10 +72,11 @@ public class JournalPageRecipe implements IJournalPage {
         @Override
         public boolean propagateMouseClick(int mouseX, int mouseZ) {
             for (Rectangle r : thisFrameStackFrames.keySet()) {
-                if(r.contains(mouseX, mouseZ)) {
+                if (r.contains(mouseX, mouseZ)) {
                     ItemStack stack = thisFrameStackFrames.get(r);
-                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
-                    if(lookup != null) {
+                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
+                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                    if (lookup != null) {
                         RegistryBookLookups.openLookupJournalPage(lookup);
                     }
                 }
@@ -100,7 +104,11 @@ public class JournalPageRecipe implements IJournalPage {
             GL11.glTranslated(offsetX + 78, offsetY + 25, zLevel + 60);
             GL11.glScaled(1.4, 1.4, 1.4);
             Rectangle r = drawItemStack(out, 0, 0, 0);
-            r = new Rectangle((int) offsetX + 78, (int) offsetY + 25, (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
+            r = new Rectangle(
+                (int) offsetX + 78,
+                (int) offsetY + 25,
+                (int) (r.getWidth() * 1.4),
+                (int) (r.getHeight() * 1.4));
             this.thisFrameStackFrames.put(r, out);
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
@@ -110,10 +118,12 @@ public class JournalPageRecipe implements IJournalPage {
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
 
                 NonNullList<ItemStack> expected = recipe.getExpectedStackForRender(srs);
-                if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
-                if(expected == null || expected.isEmpty()) continue;
+                if (expected == null || expected.isEmpty())
+                    expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
+                if (expected == null || expected.isEmpty()) continue;
 
-                long select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
+                long select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40)
+                    / 20);
                 select %= expected.size();
                 ItemStack draw = expected.get((int) select);
 
@@ -122,7 +132,11 @@ public class JournalPageRecipe implements IJournalPage {
                 GL11.glScaled(1.13, 1.13, 1.13);
                 RenderHelper.enableGUIStandardItemLighting();
                 r = drawItemStack(draw, 0, 0, 0);
-                r = new Rectangle((int) offX + (srs.columnMultiplier * 25), (int) offY + (srs.rowMultipler * 25), (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
+                r = new Rectangle(
+                    (int) offX + (srs.columnMultiplier * 25),
+                    (int) offY + (srs.rowMultipler * 25),
+                    (int) (r.getWidth() * 1.4),
+                    (int) (r.getHeight() * 1.4));
                 this.thisFrameStackFrames.put(r, draw);
                 GL11.glPopMatrix();
                 TextureHelper.refreshTextureBindState();
@@ -137,15 +151,21 @@ public class JournalPageRecipe implements IJournalPage {
 
         public void addStackTooltip(float mouseX, float mouseY, List<String> tooltip) {
             for (Rectangle rect : thisFrameStackFrames.keySet()) {
-                if(rect.contains(mouseX, mouseY)) {
+                if (rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     try {
-                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
+                        tooltip.addAll(
+                            stack.getTooltip(
+                                Minecraft.getMinecraft().player,
+                                Minecraft.getMinecraft().gameSettings.advancedItemTooltips
+                                    ? ITooltipFlag.TooltipFlags.ADVANCED
+                                    : ITooltipFlag.TooltipFlags.NORMAL));
                     } catch (Throwable tr) {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }
-                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
-                    if(lookup != null) {
+                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
+                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                    if (lookup != null) {
                         tooltip.add("");
                         tooltip.add(I18n.format("misc.craftInformation"));
                     }
@@ -161,9 +181,8 @@ public class JournalPageRecipe implements IJournalPage {
 
             List<String> out = Lists.newLinkedList();
             addStackTooltip(mouseX, mouseY, out);
-            if(!out.isEmpty()) {
-                RenderingUtils.renderBlueTooltip((int) (mouseX), (int) (mouseY),
-                        out, getStandardFontRenderer());
+            if (!out.isEmpty()) {
+                RenderingUtils.renderBlueTooltip((int) (mouseX), (int) (mouseY), out, getStandardFontRenderer());
             }
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopAttrib();

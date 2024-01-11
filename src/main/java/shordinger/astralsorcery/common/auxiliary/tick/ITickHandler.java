@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.auxiliary.tick;
 
-import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
 import java.util.EnumSet;
+
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod

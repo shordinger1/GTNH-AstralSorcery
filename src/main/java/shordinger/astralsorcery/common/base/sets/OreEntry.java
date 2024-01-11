@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.base.sets;
 
-import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +39,7 @@ public class OreEntry implements ConfigDataAdapter.DataSet {
     @Nullable
     public static OreEntry deserialize(String str) {
         String[] spl = str.split(";");
-        if(spl.length != 2) {
+        if (spl.length != 2) {
             return null;
         }
         String oreDict = spl[0];

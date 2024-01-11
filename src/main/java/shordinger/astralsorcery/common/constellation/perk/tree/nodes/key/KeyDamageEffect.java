@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -21,9 +24,6 @@ import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingDamageEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,19 +51,17 @@ public class KeyDamageEffect extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 EntityLivingBase attacked = event.getEntityLiving();
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, baseApplyChance);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, baseApplyChance);
                 if (rand.nextFloat() < chance) {
                     switch (rand.nextInt(3)) {
                         case 0:
                             attacked.setFire(100);
                             break;
                         case 1:
-                            attacked.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 1,
-                                    false, false));
+                            attacked.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 1, false, false));
                             break;
                         case 2:
-                            attacked.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1,
-                                    false, false));
+                            attacked.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1, false, false));
                             break;
                         default:
                             break;

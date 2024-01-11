@@ -8,8 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.effect;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.wrapper.net.minecraft.entity.Entity;
@@ -17,9 +22,6 @@ import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +39,8 @@ public abstract class CEffectEntityCollect<T extends Entity> extends Constellati
     protected double range;
     public boolean enabled = true;
 
-    public CEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, double defaultRange, Class<T> entityClass, Predicate<T> filter) {
+    public CEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName,
+                                double defaultRange, Class<T> entityClass, Predicate<T> filter) {
         super(origin, constellation, cfgName);
         this.classToSearch = entityClass;
         this.searchFilter = filter;
@@ -45,14 +48,28 @@ public abstract class CEffectEntityCollect<T extends Entity> extends Constellati
     }
 
     public List<T> collectEntities(World world, BlockPos pos, ConstellationEffectProperties prop) {
-        if(!enabled) return Lists.newArrayList();
-        return world.getEntitiesWithinAABB(classToSearch, BOX.grow(prop.getSize()).offset(pos), searchFilter);
+        if (!enabled) return Lists.newArrayList();
+        return world.getEntitiesWithinAABB(
+            classToSearch,
+            BOX.grow(prop.getSize())
+                .offset(pos),
+            searchFilter);
     }
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        range = cfg.getFloat(getKey() + "Range", getConfigurationSection(), (float) range, 2, 64, "Defines the range in which the ritual will try to find entities");
-        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        range = cfg.getFloat(
+            getKey() + "Range",
+            getConfigurationSection(),
+            (float) range,
+            2,
+            64,
+            "Defines the range in which the ritual will try to find entities");
+        enabled = cfg.getBoolean(
+            getKey() + "Enabled",
+            getConfigurationSection(),
+            true,
+            "Set to false to disable this ConstellationEffect.");
     }
 
 }

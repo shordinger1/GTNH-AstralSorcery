@@ -21,10 +21,12 @@ import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
  */
 public abstract class EnchantmentPlayerWornTick extends EnchantmentBase {
 
-    public EnchantmentPlayerWornTick(String name, Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
+    public EnchantmentPlayerWornTick(String name, Rarity rarityIn, EnumEnchantmentType typeIn,
+                                     EntityEquipmentSlot... slots) {
         super(name, rarityIn, typeIn, slots);
     }
 
-    public void onWornTick(boolean isClient, EntityPlayer base, int level) {}
+    public void onWornTick(boolean isClient, EntityPlayer base, int level) {
+    }
 
 }

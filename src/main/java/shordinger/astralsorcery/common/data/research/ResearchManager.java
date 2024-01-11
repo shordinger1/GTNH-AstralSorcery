@@ -8,7 +8,17 @@
 
 package shordinger.astralsorcery.common.data.research;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.io.Files;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.event.ClientRenderEventHandler;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
@@ -41,14 +51,6 @@ import shordinger.wrapper.net.minecraft.util.text.Style;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,9 +73,9 @@ public class ResearchManager {
 
     @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
-        if(side == Side.CLIENT) {
+        if (side == Side.CLIENT) {
             return clientProgress;
-        } else if(player instanceof EntityPlayerMP) {
+        } else if (player instanceof EntityPlayerMP) {
             return getProgressServer((EntityPlayerMP) player);
         } else {
             return new PlayerProgressTestAccess();
@@ -82,7 +84,7 @@ public class ResearchManager {
 
     @Nonnull
     private static PlayerProgress getProgressServer(EntityPlayerMP player) {
-        if(MiscUtils.isPlayerFakeMP(player)) {
+        if (MiscUtils.isPlayerFakeMP(player)) {
             return new PlayerProgressTestAccess();
         }
         return getProgress(player.getUniqueID());
@@ -96,9 +98,9 @@ public class ResearchManager {
             progress = playerProgressServer.get(uuid);
         }
         if (progress == null) {
-            progress = new PlayerProgress(); //WELL we already try recovering.. so wtf.
-            //AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
-            //AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
+            progress = new PlayerProgress(); // WELL we already try recovering.. so wtf.
+            // AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
+            // AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
         }
         return progress;
     }
@@ -130,10 +132,11 @@ public class ResearchManager {
 
     public static void unsafeForceGiveResearch(EntityPlayerMP player, ResearchProgression prog) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier reqTier = prog.getRequiredProgress();
-        if(!progress.getTierReached().isThisLaterOrEqual(reqTier)) {
+        if (!progress.getTierReached()
+            .isThisLaterOrEqual(reqTier)) {
             progress.setTierReached(reqTier);
         }
 
@@ -141,7 +144,8 @@ public class ResearchManager {
         progToGive.add(prog);
         while (!progToGive.isEmpty()) {
             ResearchProgression give = progToGive.pop();
-            if(!progress.getResearchProgression().contains(give)) {
+            if (!progress.getResearchProgression()
+                .contains(give)) {
                 progress.forceGainResearch(give);
             }
             progToGive.addAll(give.getPreConditions());
@@ -156,15 +160,17 @@ public class ResearchManager {
 
     public static void giveResearchIgnoreFail(EntityPlayer player, ResearchProgression prog) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier tier = prog.getRequiredProgress();
-        if(!progress.getTierReached().isThisLaterOrEqual(tier)) return;
+        if (!progress.getTierReached()
+            .isThisLaterOrEqual(tier)) return;
         for (ResearchProgression other : prog.getPreConditions()) {
-            if(!progress.getResearchProgression().contains(other)) return;
+            if (!progress.getResearchProgression()
+                .contains(other)) return;
         }
 
-        if(progress.forceGainResearch(prog)) {
+        if (progress.forceGainResearch(prog)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(prog);
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
@@ -175,12 +181,12 @@ public class ResearchManager {
 
     public static void giveProgressionIgnoreFail(EntityPlayer player, ProgressionTier tier) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return;
+        if (!progress.isValid()) return;
 
         ProgressionTier t = progress.getTierReached();
-        if(!t.hasNextTier()) return; //No higher tier available anyway.
+        if (!t.hasNextTier()) return; // No higher tier available anyway.
         ProgressionTier next = t.next();
-        if(!next.equals(tier)) return; //Given one is not the next step.
+        if (!next.equals(tier)) return; // Given one is not the next step.
 
         progress.setTierReached(next);
         PktProgressionUpdate pkt = new PktProgressionUpdate(next);
@@ -192,7 +198,7 @@ public class ResearchManager {
 
     public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.acceptMergeFrom(toMergeFrom);
 
@@ -203,7 +209,7 @@ public class ResearchManager {
 
     public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.useTarget(to);
 
@@ -214,7 +220,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         for (IConstellation c : csts) {
             progress.discoverConstellation(c.getUnlocalizedName());
@@ -228,7 +234,7 @@ public class ResearchManager {
 
     public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
 
@@ -241,7 +247,7 @@ public class ResearchManager {
 
     public static boolean memorizeConstellation(IConstellation c, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.memorizeConstellation(c.getUnlocalizedName());
 
@@ -252,7 +258,7 @@ public class ResearchManager {
 
     public static boolean maximizeTier(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
@@ -266,7 +272,7 @@ public class ResearchManager {
 
     public static boolean setAttunedBefore(EntityPlayer player, boolean wasAttunedBefore) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
         progress.setAttunedBefore(wasAttunedBefore);
 
@@ -277,9 +283,10 @@ public class ResearchManager {
 
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(!progress.isValid()) return false;
+        if (!progress.isValid()) return false;
 
-        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getUnlocalizedName())) {
+        if (constellation != null && !progress.getKnownConstellations()
+            .contains(constellation.getUnlocalizedName())) {
             return false;
         }
 
@@ -288,7 +295,8 @@ public class ResearchManager {
             dropPerk(progress, player, Side.SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL
+            .sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
 
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
@@ -308,7 +316,8 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData, NBTTagCompound newData) {
+    public static boolean setPerkData(EntityPlayer player, @Nonnull AbstractPerk perk, NBTTagCompound prevoiusData,
+                                      NBTTagCompound newData) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (!progress.isValid()) return false;
         if (!progress.hasPerkEffect(perk)) return false;
@@ -375,10 +384,11 @@ public class ResearchManager {
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
 
-        //Send way after research sync...
-        AstralSorcery.proxy.scheduleDelayed(() -> {
-            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
-        });
+        // Send way after research sync...
+        AstralSorcery.proxy.scheduleDelayed(
+            () -> {
+                PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+            });
         return true;
     }
 
@@ -451,14 +461,16 @@ public class ResearchManager {
             dropPerk(progress, player, Side.SERVER, perkEntry.getKey(), perkEntry.getValue());
         }
 
-        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
+        PacketChannel.CHANNEL
+            .sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.CLEARALL), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
-    private static void dropPerk(PlayerProgress progress, EntityPlayer player, Side side, AbstractPerk perk, NBTTagCompound data) {
+    private static void dropPerk(PlayerProgress progress, EntityPlayer player, Side side, AbstractPerk perk,
+                                 NBTTagCompound data) {
         progress.removePerk(perk);
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, side, perk, true);
         perk.onRemovePerkServer(player, progress, data);
@@ -515,7 +527,8 @@ public class ResearchManager {
             progress.useTarget(to);
         }
 
-        if(progress.getTierReached().isThisLater(before)) {
+        if (progress.getTierReached()
+            .isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
@@ -552,7 +565,7 @@ public class ResearchManager {
     }
 
     public static void savePlayerKnowledge(EntityPlayerMP p) {
-        if(!MiscUtils.isPlayerFakeMP(p)) {
+        if (!MiscUtils.isPlayerFakeMP(p)) {
             savePlayerKnowledge(p.getUniqueID(), false);
         }
     }
@@ -568,7 +581,7 @@ public class ResearchManager {
     }
 
     public static void loadPlayerKnowledge(EntityPlayerMP p) {
-        if(!MiscUtils.isPlayerFakeMP(p)) {
+        if (!MiscUtils.isPlayerFakeMP(p)) {
             loadPlayerKnowledge(p.getUniqueID());
         }
     }
@@ -585,9 +598,10 @@ public class ResearchManager {
             playerFile = getPlayerBackupFile(pUUID);
             try {
                 load_unsafe(pUUID, playerFile);
-                Files.copy(playerFile, getPlayerFile(pUUID)); //Copying back.
+                Files.copy(playerFile, getPlayerFile(pUUID)); // Copying back.
             } catch (Exception e1) {
-                AstralSorcery.log.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
+                AstralSorcery.log
+                    .warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
                 AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
                 e1.printStackTrace();
 
@@ -595,12 +609,15 @@ public class ResearchManager {
                 File plBackup = getPlayerBackupFile(pUUID);
                 try {
                     Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
-                    Files.copy(plBackup,   new File(plBackup.getParent(),     plBackup.getName() + ".lerror"));
-                    AstralSorcery.log.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
-                    AstralSorcery.log.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
+                    Files.copy(plBackup, new File(plBackup.getParent(), plBackup.getName() + ".lerror"));
+                    AstralSorcery.log.warn(
+                        "Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
+                    AstralSorcery.log.warn(
+                        "send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
                 } catch (IOException e2) {
                     AstralSorcery.log.warn("Unable to copy files to error-files.");
-                    AstralSorcery.log.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
+                    AstralSorcery.log
+                        .warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
                     e2.printStackTrace();
                 }
                 plOriginal.delete();
@@ -615,7 +632,7 @@ public class ResearchManager {
     }
 
     private static void load_unsafe(UUID pUUID, File playerFile) throws Exception {
-        NBTTagCompound compound = CompressedStreamTools.read(playerFile); //IO-Exc thrown only here.
+        NBTTagCompound compound = CompressedStreamTools.read(playerFile); // IO-Exc thrown only here.
         load_unsafeFromNBT(pUUID, compound);
     }
 
@@ -635,16 +652,20 @@ public class ResearchManager {
 
     public static File getPlayerFile(UUID pUUID) {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astral");
-        if(!f.exists()) {
+        if (!f.exists()) {
             try {
                 CompressedStreamTools.write(new NBTTagCompound(), f);
-            } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
+            } catch (IOException ignored) {
+            } // Will be created later anyway... just as fail-safe.
         }
         return f;
     }
 
     public static boolean doesPlayerFileExist(EntityPlayer player) {
-        return new File(getPlayerDirectory(), player.getUniqueID().toString() + ".astral").exists();
+        return new File(
+            getPlayerDirectory(),
+            player.getUniqueID()
+                .toString() + ".astral").exists();
     }
 
     public static File getPlayerBackupFile(EntityPlayer player) {
@@ -653,16 +674,18 @@ public class ResearchManager {
 
     public static File getPlayerBackupFile(UUID pUUID) {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astralback");
-        if(!f.exists()) {
+        if (!f.exists()) {
             try {
                 CompressedStreamTools.write(new NBTTagCompound(), f);
-            } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
+            } catch (IOException ignored) {
+            } // Will be created later anyway... just as fail-safe.
         }
         return f;
     }
 
     private static File getPlayerDirectory() {
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        MinecraftServer server = FMLCommonHandler.instance()
+            .getMinecraftServerInstance();
         File worldDir = new File(server.anvilFile, server.getFolderName());
         File pDir = new File(worldDir, "playerdata");
         if (!pDir.exists()) {
@@ -699,13 +722,15 @@ public class ResearchManager {
 
     public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
         EntityPlayer crafter = recipe.tryGetCraftingPlayerServer();
-        if(crafter == null) {
+        if (crafter == null) {
             AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+            AstralSorcery.log
+                .warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
             return;
         }
 
-        ItemStack out = recipe.getRecipeToCraft().getOutput(infuser);
+        ItemStack out = recipe.getRecipeToCraft()
+            .getOutput(infuser);
         Item iOut = out.getItem();
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
@@ -713,13 +738,15 @@ public class ResearchManager {
 
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
         EntityPlayer crafter = recipeToCraft.tryGetCraftingPlayerServer();
-        if(crafter == null || !(crafter instanceof EntityPlayerMP)) {
+        if (crafter == null || !(crafter instanceof EntityPlayerMP)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
+            AstralSorcery.log
+                .warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
             return;
         }
 
-        ItemStack out = recipeToCraft.getRecipeToCraft().getOutputForMatching();
+        ItemStack out = recipeToCraft.getRecipeToCraft()
+            .getOutputForMatching();
         Item iOut = out.getItem();
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
@@ -728,8 +755,8 @@ public class ResearchManager {
     }
 
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
-        if(iBlock != null) {
-            if(iBlock instanceof BlockAltar) {
+        if (iBlock != null) {
+            if (iBlock instanceof BlockAltar) {
                 giveProgressionIgnoreFail(crafter, ProgressionTier.BASIC_CRAFT);
                 giveResearchIgnoreFail(crafter, ResearchProgression.BASIC_CRAFT);
 
@@ -759,17 +786,28 @@ public class ResearchManager {
     }
 
     private static void informPlayersAboutProgressionLoss(UUID pUUID) {
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if(server != null) {
-            EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(pUUID);
-            if(player != null) {
-                player.sendMessage(new TextComponentString("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
+        MinecraftServer server = FMLCommonHandler.instance()
+            .getMinecraftServerInstance();
+        if (server != null) {
+            EntityPlayerMP player = server.getPlayerList()
+                .getPlayerByUUID(pUUID);
+            if (player != null) {
+                player.sendMessage(
+                    new TextComponentString(
+                        "AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.")
+                        .setStyle(new Style().setColor(TextFormatting.RED)));
             }
             String resolvedName = player != null ? player.getName() : pUUID.toString() + " (Not online)";
-            for (String opName : server.getPlayerList().getOppedPlayerNames()) {
-                EntityPlayer pl = server.getPlayerList().getPlayerByUsername(opName);
-                if(pl != null) {
-                    pl.sendMessage(new TextComponentString("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
+            for (String opName : server.getPlayerList()
+                .getOppedPlayerNames()) {
+                EntityPlayer pl = server.getPlayerList()
+                    .getPlayerByUsername(opName);
+                if (pl != null) {
+                    pl.sendMessage(
+                        new TextComponentString(
+                            "AstralSorcery: The progression of " + resolvedName
+                                + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!")
+                            .setStyle(new Style().setColor(TextFormatting.RED)));
                 }
             }
         }

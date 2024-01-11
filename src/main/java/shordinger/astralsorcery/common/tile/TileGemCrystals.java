@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -16,11 +22,8 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.block.BlockGemCrystals;
-import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
-import shordinger.astralsorcery.common.data.DataActiveCelestials;
-import shordinger.astralsorcery.common.data.SyncDataHolder;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.tile.base.TileSkybound;
@@ -28,12 +31,6 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +51,7 @@ public class TileGemCrystals extends TileSkybound {
     @Nullable
     public BlockGemCrystals.GrowthStageType getGrowth() {
         IBlockState state = getBlockState();
-        if(!(state.getBlock() instanceof BlockGemCrystals)) return null;
+        if (!(state.getBlock() instanceof BlockGemCrystals)) return null;
         return state.getValue(BlockGemCrystals.STAGE);
     }
 
@@ -62,11 +59,11 @@ public class TileGemCrystals extends TileSkybound {
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             tryGrow();
         } else {
             BlockGemCrystals.GrowthStageType growthStage = getGrowth();
-            if(growthStage != null && growthStage.getGrowthStage() == 2) {
+            if (growthStage != null && growthStage.getGrowthStage() == 2) {
                 playHarvestEffects(growthStage);
             }
         }
@@ -74,15 +71,17 @@ public class TileGemCrystals extends TileSkybound {
 
     private void tryGrow() {
         int r = 50000;
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-        if(doesSeeSky() && handle != null) {
-            double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
-            if(dstr > 0) {
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
+            .getWorldHandler(world);
+        if (doesSeeSky() && handle != null) {
+            double dstr = ConstellationSkyHandler.getInstance()
+                .getCurrentDaytimeDistribution(world);
+            if (dstr > 0) {
                 r *= (0.7 + ((1 - dstr) * 0.3));
             }
         }
 
-        if(world.rand.nextInt(Math.max(r, 1)) == 0) {
+        if (world.rand.nextInt(Math.max(r, 1)) == 0) {
             grow();
         }
     }
@@ -100,9 +99,11 @@ public class TileGemCrystals extends TileSkybound {
                 next = BlockGemCrystals.GrowthStageType.STAGE_1;
                 break;
             case STAGE_1:
-                if (ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) <= 0.1) {
+                if (ConstellationSkyHandler.getInstance()
+                    .getCurrentDaytimeDistribution(world) <= 0.1) {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_DAY;
-                } else if (ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) >= 0.8) {
+                } else if (ConstellationSkyHandler.getInstance()
+                    .getCurrentDaytimeDistribution(world) >= 0.8) {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_NIGHT;
                 } else {
                     next = BlockGemCrystals.GrowthStageType.STAGE_2_SKY;
@@ -119,18 +120,21 @@ public class TileGemCrystals extends TileSkybound {
                 break;
         }
         if (next != null) {
-            world.setBlockState(pos, BlocksAS.gemCrystals.getDefaultState().withProperty(BlockGemCrystals.STAGE, next));
+            world.setBlockState(
+                pos,
+                BlocksAS.gemCrystals.getDefaultState()
+                    .withProperty(BlockGemCrystals.STAGE, next));
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void playHarvestEffects(BlockGemCrystals.GrowthStageType growthStage) {
-        if(rand.nextInt(4) == 0) {
+        if (rand.nextInt(4) == 0) {
 
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    pos.getX() + rand.nextFloat(),
-                    pos.getY() + rand.nextFloat(),
-                    pos.getZ() + rand.nextFloat());
+                pos.getX() + rand.nextFloat(),
+                pos.getY() + rand.nextFloat(),
+                pos.getZ() + rand.nextFloat());
             p.gravity(0.004);
             p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
             p.setColor(growthStage.getDisplayColor());
@@ -141,8 +145,8 @@ public class TileGemCrystals extends TileSkybound {
     @SideOnly(Side.CLIENT)
     public static void playBreakParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        BlockGemCrystals.GrowthStageType growthStage =
-                BlockGemCrystals.GrowthStageType.values()[(int) event.getAdditionalDataLong()];
+        BlockGemCrystals.GrowthStageType growthStage = BlockGemCrystals.GrowthStageType
+            .values()[(int) event.getAdditionalDataLong()];
         float scale = 0.4F;
         SpriteSheetResource sprite;
         switch (growthStage) {
@@ -170,11 +174,10 @@ public class TileGemCrystals extends TileSkybound {
                 sprite = SpriteLibrary.spriteGemExplodeGray;
                 break;
         }
-        EffectHandler.getInstance().registerFX(EntityFXFacingSprite.fromSpriteSheet(sprite,
-                at.getX() + 0.5,
-                at.getY() + (scale * 0.25),
-                at.getZ() + 0.5,
-                scale, 0));
+        EffectHandler.getInstance()
+            .registerFX(
+                EntityFXFacingSprite
+                    .fromSpriteSheet(sprite, at.getX() + 0.5, at.getY() + (scale * 0.25), at.getZ() + 0.5, scale, 0));
     }
 
     @Override

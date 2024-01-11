@@ -29,8 +29,7 @@ public class StarConnection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StarConnection that = (StarConnection) o;
-        return (from.equals(that.from) && to.equals(that.to)) ||
-                (from.equals(that.to) && to.equals(that.from));
+        return (from.equals(that.from) && to.equals(that.to)) || (from.equals(that.to) && to.equals(that.from));
     }
 
     @Override

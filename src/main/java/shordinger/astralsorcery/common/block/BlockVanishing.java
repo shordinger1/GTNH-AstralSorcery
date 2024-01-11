@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.block;
 
+import java.awt.*;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -33,12 +40,6 @@ import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -90,7 +91,9 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+    }
 
     @Override
     public int quantityDropped(Random random) {
@@ -120,12 +123,14 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos,
+                                    EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
@@ -144,11 +149,17 @@ public class BlockVanishing extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 4; i++) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + rand.nextFloat(), pos.getY() + 0.7 + rand.nextFloat() * 0.3, pos.getZ() + rand.nextFloat());
-            p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(45 + rand.nextInt(20));
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(1F);
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                pos.getX() + rand.nextFloat(),
+                pos.getY() + 0.7 + rand.nextFloat() * 0.3,
+                pos.getZ() + rand.nextFloat());
+            p.gravity(0.004)
+                .scale(0.3F + rand.nextFloat() * 0.2F)
+                .setMaxAge(45 + rand.nextInt(20));
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
+                .setAlphaMultiplier(1F);
             p.motion(0, -rand.nextFloat() * 0.001, 0);
-            if(rand.nextInt(6) == 0) {
+            if (rand.nextInt(6) == 0) {
                 p.setColor(Color.WHITE);
                 p.scale(0.1F + rand.nextFloat() * 0.1F);
             } else {

@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -25,7 +26,6 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,10 +41,16 @@ public class KeyDisarm extends KeyPerk {
     public KeyDisarm(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                dropChance = cfg.getFloat("DropChance", getConfigurationSection(), dropChance, 0F, 1F,
-                        "Defines the chance (in percent) per hit to make the attacked entity drop its armor.");
+                dropChance = cfg.getFloat(
+                    "DropChance",
+                    getConfigurationSection(),
+                    dropChance,
+                    0F,
+                    1F,
+                    "Defines the chance (in percent) per hit to make the attacked entity drop its armor.");
             }
         });
     }
@@ -65,15 +71,15 @@ public class KeyDisarm extends KeyPerk {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dropChance);
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-                    if(rand.nextFloat() >= currentChance) {
+                    if (rand.nextFloat() >= currentChance) {
                         continue;
                     }
                     EntityLivingBase attacked = event.getEntityLiving();
                     ItemStack stack = attacked.getItemStackFromSlot(slot);
-                    if(!stack.isEmpty()) {
+                    if (!stack.isEmpty()) {
                         attacked.setItemStackToSlot(slot, ItemStack.EMPTY);
                         ItemUtils.dropItemNaturally(attacked.world, attacked.posX, attacked.posY, attacked.posZ, stack);
                         break;

@@ -100,7 +100,7 @@ public class ASCape extends ModelArmorBase {
         makeRenderCascade();
     }
 
-    //Build hierarchy so a single rendercall cascades down
+    // Build hierarchy so a single rendercall cascades down
     private void makeRenderCascade() {
         this.bodyReplacement = new ModelRenderer(this);
         this.bodyReplacement.addChild(this.bodyAnchor);
@@ -126,7 +126,8 @@ public class ASCape extends ModelArmorBase {
     }
 
     @Override
-    public void render(@Nonnull Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(@Nonnull Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
+                       float netHeadYaw, float headPitch, float scale) {
 
         bodyAnchor.showModel = true;
         armRAnchor.showModel = true;

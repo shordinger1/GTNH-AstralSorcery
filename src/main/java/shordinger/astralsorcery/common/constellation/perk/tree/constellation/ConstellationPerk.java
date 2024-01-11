@@ -32,8 +32,11 @@ public abstract class ConstellationPerk extends AttributeModifierPerk {
 
     @Override
     protected PerkTreePoint<? extends ConstellationPerk> initPerkTreePoint() {
-        return new PerkTreePointConstellation<>(this, getOffset(),
-                this.constellation, PerkTreePointConstellation.MINOR_SPRITE_SIZE);
+        return new PerkTreePointConstellation<>(
+            this,
+            getOffset(),
+            this.constellation,
+            PerkTreePointConstellation.MINOR_SPRITE_SIZE);
     }
 
     public IConstellation getConstellation() {

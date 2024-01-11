@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.data;
 
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +45,7 @@ public class DataActiveCelestials extends AbstractData {
     }
 
     private void requestUpdate(int dimId) {
-        if(!updateRequested.contains(dimId)) updateRequested.add(dimId);
+        if (!updateRequested.contains(dimId)) updateRequested.add(dimId);
         markDirty();
     }
 
@@ -65,7 +66,7 @@ public class DataActiveCelestials extends AbstractData {
     private void addDimensionConstellations(int dimId, NBTTagCompound mainCompound) {
         NBTTagList list = new NBTTagList();
         Collection<IConstellation> csts = getActiveConstellations(dimId);
-        if(csts != null) {
+        if (csts != null) {
             for (IConstellation c : csts) {
                 list.appendTag(new NBTTagString(c.getUnlocalizedName()));
             }
@@ -80,7 +81,8 @@ public class DataActiveCelestials extends AbstractData {
             try {
                 dimId = Integer.parseInt(dimIdStr);
             } catch (Exception exc) {
-                AstralSorcery.log.warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
+                AstralSorcery.log
+                    .warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
                 AstralSorcery.log.warn("Skipping...");
                 continue;
             }

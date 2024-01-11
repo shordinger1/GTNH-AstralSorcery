@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import javax.annotation.Nonnull;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktPlayEffect;
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
@@ -17,10 +21,6 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ITickable;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,15 +35,15 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     private ItemStack grindingItem = ItemStack.EMPTY;
     public int tickWheelAnimation = 0, prevTickWheelAnimation = 0;
-    private boolean repeat = false; //Used for repeat after effect went off..~
+    private boolean repeat = false; // Used for repeat after effect went off..~
 
     @Override
     public void update() {
-        if(world.isRemote) {
-            if(tickWheelAnimation > 0) {
+        if (world.isRemote) {
+            if (tickWheelAnimation > 0) {
                 prevTickWheelAnimation = tickWheelAnimation;
                 tickWheelAnimation--;
-                if(tickWheelAnimation <= 0 && repeat) {
+                if (tickWheelAnimation <= 0 && repeat) {
                     tickWheelAnimation = TICKS_WHEEL_ROTATION;
                     prevTickWheelAnimation = TICKS_WHEEL_ROTATION + 1;
                     repeat = false;
@@ -57,7 +57,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     public void playWheelEffect() {
         PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.EffectType.GRINDSTONE_WHEEL, getPos());
-        if(world.isRemote) {
+        if (world.isRemote) {
             playWheelAnimation(effect);
         } else {
             PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, getPos(), 32));
@@ -66,11 +66,12 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     @SideOnly(Side.CLIENT)
     public static void playWheelAnimation(PktPlayEffect pktPlayEffect) {
-        TileGrindstone tgr = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pktPlayEffect.pos, TileGrindstone.class, false);
-        if(tgr != null) {
-            if(tgr.tickWheelAnimation == 0) {
+        TileGrindstone tgr = MiscUtils
+            .getTileAt(Minecraft.getMinecraft().world, pktPlayEffect.pos, TileGrindstone.class, false);
+        if (tgr != null) {
+            if (tgr.tickWheelAnimation == 0) {
                 tgr.tickWheelAnimation = TICKS_WHEEL_ROTATION;
-            } else if(tgr.tickWheelAnimation * 2 <= TICKS_WHEEL_ROTATION) {
+            } else if (tgr.tickWheelAnimation * 2 <= TICKS_WHEEL_ROTATION) {
                 tgr.repeat = true;
             }
         }

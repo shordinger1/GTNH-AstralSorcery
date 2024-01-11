@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.util.struct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
@@ -18,9 +21,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +46,7 @@ public class OreDiscoverer {
                     for (int y = 0; y < highest; y++) {
                         pooledPos.setY(y);
                         IBlockState at = c.getBlockState(pooledPos);
-                        if(successfulOres.contains(at)) {
+                        if (successfulOres.contains(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
                         } else if (isOre(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
@@ -62,7 +62,7 @@ public class OreDiscoverer {
     }
 
     private static boolean isOre(IBlockState state) {
-        if (state.getBlock() instanceof BlockOre) { //WELL that's easy enough.
+        if (state.getBlock() instanceof BlockOre) { // WELL that's easy enough.
             return true;
         }
         ItemStack blockStack = ItemUtils.createBlockStack(state);
@@ -70,4 +70,3 @@ public class OreDiscoverer {
     }
 
 }
-

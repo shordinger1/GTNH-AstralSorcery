@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.starlight.network;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
@@ -15,11 +21,6 @@ import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,15 +31,16 @@ import java.util.Random;
  */
 public class StarlightNetworkRegistry {
 
-    //private static Map<Block, Map<Integer, IStarlightBlockHandler>> validEndpoints = new HashMap<>();
+    // private static Map<Block, Map<Integer, IStarlightBlockHandler>> validEndpoints = new HashMap<>();
     private static List<IStarlightBlockHandler> dynamicBlockHandlers = new LinkedList<>();
 
     @Nullable
-    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state, IWeakConstellation cst) {
+    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state,
+                                                             IWeakConstellation cst) {
         Block b = state.getBlock();
-        if(b instanceof IBlockStarlightRecipient) return null;
+        if (b instanceof IBlockStarlightRecipient) return null;
         for (IStarlightBlockHandler handler : dynamicBlockHandlers) {
-            if(handler.isApplicable(world, pos, state, cst)) return handler;
+            if (handler.isApplicable(world, pos, state, cst)) return handler;
         }
         return null;
     }
@@ -51,8 +53,8 @@ public class StarlightNetworkRegistry {
         registerEndpoint(new BlockTransmutationHandler());
     }
 
-    //1 instance is/should be created for 1 type of block+meta pair
-    //This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
+    // 1 instance is/should be created for 1 type of block+meta pair
+    // This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
 
         /**
@@ -61,11 +63,13 @@ public class StarlightNetworkRegistry {
         @Deprecated
         public boolean isApplicable(World world, BlockPos pos, IBlockState state);
 
-        default public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType) {
+        default public boolean isApplicable(World world, BlockPos pos, IBlockState state,
+                                            @Nullable IWeakConstellation starlightType) {
             return isApplicable(world, pos, state);
         }
 
-        public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount);
+        public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType,
+                                     double amount);
 
     }
 

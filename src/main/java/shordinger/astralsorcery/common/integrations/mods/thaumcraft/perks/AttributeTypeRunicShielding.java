@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -17,7 +18,6 @@ import shordinger.astralsorcery.common.event.RunicShieldingCalculateEvent;
 import shordinger.astralsorcery.common.integrations.ModIntegrationThaumcraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +39,7 @@ public class AttributeTypeRunicShielding extends PerkAttributeType {
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         val = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, prog, ModIntegrationThaumcraft.ATTR_TYPE_RUNIC_SHIELDING, val);
+            .modifyValue(player, prog, ModIntegrationThaumcraft.ATTR_TYPE_RUNIC_SHIELDING, val);
 
         val = AttributeEvent.postProcessModded(player, this, val);
         event.setRunicShieldingValue(Math.round(val));

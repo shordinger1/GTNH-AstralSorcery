@@ -42,7 +42,7 @@ public class BaublesHelper {
         List<ItemStack> worn = NonNullList.create();
         for (int slot : type.getValidSlots()) {
             ItemStack stack = handler.getStackInSlot(slot);
-            if(!stack.isEmpty()) {
+            if (!stack.isEmpty()) {
                 worn.add(stack);
             }
         }

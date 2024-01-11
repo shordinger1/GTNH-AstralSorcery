@@ -11,11 +11,9 @@ package shordinger.astralsorcery.common.block.network;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
-import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -25,7 +23,10 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
@@ -40,7 +41,7 @@ import shordinger.wrapper.net.minecraft.world.World;
  */
 public class BlockRitualPedestal extends BlockStarlightNetwork {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 13D/16D, 1);
+    private static final AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 13D / 16D, 1);
 
     public BlockRitualPedestal() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -78,39 +79,50 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileRitualPedestal ped = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(ped != null && !worldIn.isRemote) {
-            ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(ped.getCatalystCache(), ped.getCatalystCache().getCount()));
+        if (ped != null && !worldIn.isRemote) {
+            ItemUtils.dropItem(
+                worldIn,
+                pos.getX() + 0.5,
+                pos.getY() + 0.8,
+                pos.getZ() + 0.5,
+                ItemUtils.copyStackWithSize(
+                    ped.getCatalystCache(),
+                    ped.getCatalystCache()
+                        .getCount()));
         }
 
         super.breakBlock(worldIn, pos, state);
     }
 
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        RenderingUtils.playBlockBreakParticles(pos,
-                BlocksAS.blockMarble.getDefaultState()
-                        .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
-        return true;
-    }
+    /*
+     * @Override
+     * @SideOnly(Side.CLIENT)
+     * public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+     * RenderingUtils.playBlockBreakParticles(pos,
+     * BlocksAS.blockMarble.getDefaultState()
+     * .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
+     * return true;
+     * }
+     * @Override
+     * @SideOnly(Side.CLIENT)
+     * public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+     * return true;
+     * }
+     */
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-        return true;
-    }*/
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(pedestal == null) {
+        if (pedestal == null) {
             return false;
         }
         if (worldIn.isRemote) {
@@ -137,7 +149,15 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             BlockPos toCheck = pos.up();
             IBlockState other = worldIn.getBlockState(toCheck);
             if (other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
-                ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(te.getCatalystCache(), te.getCatalystCache().getCount()));
+                ItemUtils.dropItem(
+                    worldIn,
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.8,
+                    pos.getZ() + 0.5,
+                    ItemUtils.copyStackWithSize(
+                        te.getCatalystCache(),
+                        te.getCatalystCache()
+                            .getCount()));
                 te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
@@ -145,9 +165,10 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(te != null && !worldIn.isRemote) {
+        if (te != null && !worldIn.isRemote) {
             if (placer instanceof EntityPlayer) {
                 te.setOwner(placer.getUniqueID());
             }

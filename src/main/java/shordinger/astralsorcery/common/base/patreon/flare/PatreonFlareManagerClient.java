@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.base.patreon.flare;
 
+import java.util.Collection;
+import java.util.EnumSet;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectFixedSprite;
@@ -19,11 +23,6 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,7 +49,8 @@ public class PatreonFlareManagerClient implements ITickHandler {
         for (Collection<PatreonPartialEntity> playerFlares : dataFlares.getEntities(Side.CLIENT)) {
             for (PatreonPartialEntity flare : playerFlares) {
                 if (flare.getLastTickedDim() == null || clDim != flare.getLastTickedDim()) continue;
-                if (flare.getPos().distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
+                if (flare.getPos()
+                    .distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
                     flare.tickInRenderDistance();
                 }
                 flare.update(clWorld);
@@ -58,7 +58,8 @@ public class PatreonFlareManagerClient implements ITickHandler {
         }
 
         for (EntityPlayer pl : clWorld.playerEntities) {
-            for (PatreonEffectHelper.PatreonEffect eff : PatreonEffectHelper.getPatreonEffects(Side.CLIENT, pl.getUniqueID())) {
+            for (PatreonEffectHelper.PatreonEffect eff : PatreonEffectHelper
+                .getPatreonEffects(Side.CLIENT, pl.getUniqueID())) {
                 if (eff instanceof PtEffectFixedSprite) {
                     ((PtEffectFixedSprite) eff).doEffect(pl);
                 }

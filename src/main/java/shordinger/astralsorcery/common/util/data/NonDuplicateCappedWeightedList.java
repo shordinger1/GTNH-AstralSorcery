@@ -8,11 +8,12 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import shordinger.astralsorcery.common.util.WRItemObject;
-import shordinger.wrapper.net.minecraft.util.WeightedRandom;
+import java.util.Random;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+
+import shordinger.astralsorcery.common.util.WRItemObject;
+import shordinger.wrapper.net.minecraft.util.WeightedRandom;
 
 /**
  * This class is part of the Astral Sorcery Mod

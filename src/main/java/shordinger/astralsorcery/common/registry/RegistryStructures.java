@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.registry;
 
+import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.multiblock.*;
@@ -17,8 +19,6 @@ import shordinger.astralsorcery.common.structure.StructureRegistry;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-
-import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,24 +36,23 @@ public class RegistryStructures {
         treasureShrine = new StructureTreasureShrine();
         smallRuin = new StructureSmallRuin();
 
-        patternRitualPedestal       = registerPattern(new MultiblockRitualPedestal());
-        patternAltarAttunement      = registerPattern(new MultiblockAltarAttunement());
-        patternAltarConstellation   = registerPattern(new MultiblockAltarConstellation());
-        patternAltarTrait           = registerPattern(new MultiblockAltarTrait());
-        patternAttunementFrame      = registerPattern(new MultiblockAttunementFrame());
-        patternStarlightInfuser     = registerPattern(new MultiblockStarlightInfuser());
-        patternCollectorRelay       = registerPattern(new MultiblockStarlightRelay());
-        patternCelestialGateway     = registerPattern(new MultiblockGateway());
+        patternRitualPedestal = registerPattern(new MultiblockRitualPedestal());
+        patternAltarAttunement = registerPattern(new MultiblockAltarAttunement());
+        patternAltarConstellation = registerPattern(new MultiblockAltarConstellation());
+        patternAltarTrait = registerPattern(new MultiblockAltarTrait());
+        patternAttunementFrame = registerPattern(new MultiblockAttunementFrame());
+        patternStarlightInfuser = registerPattern(new MultiblockStarlightInfuser());
+        patternCollectorRelay = registerPattern(new MultiblockStarlightRelay());
+        patternCelestialGateway = registerPattern(new MultiblockGateway());
         patternCollectorEnhancement = registerPattern(new MultiblockCrystalEnhancement());
-        patternFountain             = registerPattern(new MultiblockFountain());
+        patternFountain = registerPattern(new MultiblockFountain());
 
-        patternSmallRuin = new PatternBlockArray(
-                new ResourceLocation(AstralSorcery.MODID,"pattern_small_ruin"));
+        patternSmallRuin = new PatternBlockArray(new ResourceLocation(AstralSorcery.MODID, "pattern_small_ruin"));
         patternSmallRuin.addAll(smallRuin);
         registerPattern(patternSmallRuin);
 
         patternRitualPedestalWithLink = new MultiblockRitualPedestal(
-                new ResourceLocation(AstralSorcery.MODID,"pattern_ritual_pedestal_link"));
+            new ResourceLocation(AstralSorcery.MODID, "pattern_ritual_pedestal_link"));
         patternRitualPedestalWithLink.addBlock(0, 5, 0, BlocksAS.ritualLink.getDefaultState());
         registerPattern(patternRitualPedestalWithLink);
     }

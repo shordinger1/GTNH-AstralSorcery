@@ -33,7 +33,7 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
-            addSlotToContainer(new SlotItemHandler(invHandler,     xx, 102 + xx * 18, 29));
+            addSlotToContainer(new SlotItemHandler(invHandler, xx, 102 + xx * 18, 29));
         }
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 3 + xx, 102 + xx * 18, 47));
@@ -41,9 +41,9 @@ public class ContainerAltarAttunement extends ContainerAltarBase {
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 6 + xx, 102 + xx * 18, 65));
         }
-        addSlotToContainer(new SlotItemHandler(invHandler,  9, 84,  11));
+        addSlotToContainer(new SlotItemHandler(invHandler, 9, 84, 11));
         addSlotToContainer(new SlotItemHandler(invHandler, 10, 156, 11));
-        addSlotToContainer(new SlotItemHandler(invHandler, 11, 84,  83));
+        addSlotToContainer(new SlotItemHandler(invHandler, 11, 84, 83));
         addSlotToContainer(new SlotItemHandler(invHandler, 12, 156, 83));
     }
 

@@ -8,17 +8,16 @@
 
 package shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks.key;
 
+import java.util.Collection;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks.KeyPerkThaumcraft;
-import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,9 +35,10 @@ public class KeyEnergyShield extends KeyPerkThaumcraft {
     @SubscribeEvent
     public void on(AttributeEvent.PostProcessVanilla event) {
         EntityPlayer owner = event.getPlayer();
-        if (owner != null && event.getAttribute().equals(SharedMonsterAttributes.MAX_HEALTH)) {
+        if (owner != null && event.getAttribute()
+            .equals(SharedMonsterAttributes.MAX_HEALTH)) {
             if (owner.getEntityWorld() == null) {
-                return; //Srsly, fck you ExU2. do your stuff correlty for once.
+                return; // Srsly, fck you ExU2. do your stuff correlty for once.
             }
             Side side = owner.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(owner, side);

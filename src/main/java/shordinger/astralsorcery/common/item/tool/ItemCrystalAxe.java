@@ -8,17 +8,16 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.wrapper.net.minecraft.block.material.Material;
-import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +38,7 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
             setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));

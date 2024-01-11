@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
-import shordinger.astralsorcery.common.util.ItemComparator;
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.util.ItemComparator;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,22 +39,28 @@ public class GrindstoneRecipeRegistry {
         return registerGrindstoneRecipe(new GrindstoneRecipe(in, out, chance));
     }
 
-    //Used for both CraftTweaker as well as internal registrations
+    // Used for both CraftTweaker as well as internal registrations
     public static GrindstoneRecipe registerGrindstoneRecipe(GrindstoneRecipe recipe) {
         recipes.add(recipe);
         return recipe;
     }
 
     public static Collection<GrindstoneRecipe> getValidRecipes() {
-        return recipes.stream().filter(GrindstoneRecipe::isValid)
-                .filter(r -> !(r instanceof CrystalToolSharpeningRecipe ||
-                        r instanceof CrystalSharpeningRecipe || r instanceof SwordSharpeningRecipe))
-                .collect(Collectors.toList());
+        return recipes.stream()
+            .filter(GrindstoneRecipe::isValid)
+            .filter(
+                r -> !(r instanceof CrystalToolSharpeningRecipe || r instanceof CrystalSharpeningRecipe
+                    || r instanceof SwordSharpeningRecipe))
+            .collect(Collectors.toList());
     }
 
     public static GrindstoneRecipe tryRemoveGrindstoneRecipe(ItemStack matchOut) {
         for (GrindstoneRecipe gr : recipes) {
-            if (gr.isValid() && ItemComparator.compare(gr.getOutputForMatching(), matchOut, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+            if (gr.isValid() && ItemComparator.compare(
+                gr.getOutputForMatching(),
+                matchOut,
+                ItemComparator.Clause.ITEM,
+                ItemComparator.Clause.META_STRICT)) {
                 recipes.remove(gr);
                 return gr;
             }
@@ -62,7 +69,7 @@ public class GrindstoneRecipeRegistry {
     }
 
     public static void cacheLocalFallback() {
-        if(localFallback.isEmpty()) {
+        if (localFallback.isEmpty()) {
             localFallback.addAll(recipes);
         }
     }
@@ -76,16 +83,16 @@ public class GrindstoneRecipeRegistry {
     public static GrindstoneRecipe findMatchingRecipe(ItemStack stackIn) {
         List<GrindstoneRecipe> matching = new LinkedList<>();
         for (GrindstoneRecipe gr : recipes) {
-            if(gr.isValid() && gr.matches(stackIn)) {
+            if (gr.isValid() && gr.matches(stackIn)) {
                 matching.add(gr);
             }
         }
         for (GrindstoneRecipe gr : mtRecipes) {
-            if(gr.isValid() && gr.matches(stackIn)) {
+            if (gr.isValid() && gr.matches(stackIn)) {
                 matching.add(gr);
             }
         }
-        if(matching.isEmpty()) return null;
+        if (matching.isEmpty()) return null;
         return matching.get(rand.nextInt(matching.size()));
     }
 

@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.constellation;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -17,7 +18,6 @@ import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,29 +31,39 @@ public class PerkVorux extends ConstellationPerk {
     public PerkVorux(int x, int y) {
         super("cst_vorux", Constellations.vorux, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addModifier(new PerkAttributeModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, PerkAttributeModifier.Mode.ADDED_MULTIPLY, 0.01F) {
-            @Override
-            protected void initModifier() {
-                super.initModifier();
+        this.addModifier(
+            new PerkAttributeModifier(
+                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
+                PerkAttributeModifier.Mode.ADDED_MULTIPLY,
+                0.01F) {
 
-                this.setAbsolute();
-            }
+                @Override
+                protected void initModifier() {
+                    super.initModifier();
 
-            @Override
-            public float getValue(EntityPlayer player, PlayerProgress progress) {
-                return getFlatValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
-            }
+                    this.setAbsolute();
+                }
 
-            @Override
-            public boolean hasDisplayString() {
-                return false;
-            }
-        });
+                @Override
+                public float getValue(EntityPlayer player, PlayerProgress progress) {
+                    return getFlatValue() * (progress.getAppliedPerks()
+                        .size()
+                        - progress.getSealedPerks()
+                        .size());
+                }
+
+                @Override
+                public boolean hasDisplayString() {
+                    return false;
+                }
+            });
     }
 
     @SubscribeEvent
     public void onExpGain(AttributeEvent.PostProcessModded ev) {
-        if (ev.getType().getTypeString().equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP)) {
+        if (ev.getType()
+            .getTypeString()
+            .equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP)) {
             EntityPlayer player = ev.getPlayer();
             Side side = player.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
@@ -65,8 +75,10 @@ public class PerkVorux extends ConstellationPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        return super.mayUnlockPerk(progress, player) &&
-                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
+        return super.mayUnlockPerk(progress, player) && !MiscUtils.contains(
+            progress.getAppliedPerks(),
+            perk -> perk.getCategory()
+                .equals(CATEGORY_FOCUS));
     }
 
 }

@@ -8,19 +8,20 @@
 
 package shordinger.astralsorcery.common.data;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,8 +47,9 @@ public class DataTimeFreezeEffects extends AbstractData {
     }
 
     public void server_removeEffect(int dimId, TimeStopEffectHelper effectHelper) {
-        if(serverActiveFreezeZones.containsKey(dimId)) {
-            serverActiveFreezeZones.get(dimId).remove(effectHelper);
+        if (serverActiveFreezeZones.containsKey(dimId)) {
+            serverActiveFreezeZones.get(dimId)
+                .remove(effectHelper);
         }
         scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.REMOVE, dimId, effectHelper));
         markDirty();
@@ -61,7 +63,7 @@ public class DataTimeFreezeEffects extends AbstractData {
 
     @Nullable
     public List<TimeStopEffectHelper> client_getTimeStopEffects(World world) {
-        if(world.provider == null) return null;
+        if (world.provider == null) return null;
         return client_getTimeStopEffects(world.provider.getDimension());
     }
 
@@ -73,12 +75,14 @@ public class DataTimeFreezeEffects extends AbstractData {
     private void client_applyChange(ServerSyncAction action) {
         switch (action.type) {
             case ADD:
-                List<TimeStopEffectHelper> zones = clientActiveFreezeZones.computeIfAbsent(action.dimId, (id) -> new LinkedList<>());
+                List<TimeStopEffectHelper> zones = clientActiveFreezeZones
+                    .computeIfAbsent(action.dimId, (id) -> new LinkedList<>());
                 zones.add(action.involvedEffect);
                 break;
             case REMOVE:
-                if(clientActiveFreezeZones.containsKey(action.dimId)) {
-                    clientActiveFreezeZones.get(action.dimId).remove(action.involvedEffect);
+                if (clientActiveFreezeZones.containsKey(action.dimId)) {
+                    clientActiveFreezeZones.get(action.dimId)
+                        .remove(action.involvedEffect);
                 }
                 break;
             case CLEAR:
@@ -124,10 +128,10 @@ public class DataTimeFreezeEffects extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if(!(serverData instanceof DataTimeFreezeEffects)) return;
+        if (!(serverData instanceof DataTimeFreezeEffects)) return;
 
         NBTTagCompound buf = ((DataTimeFreezeEffects) serverData).clientReadBuffer;
-        if(buf.getBoolean("sync_all")) {
+        if (buf.getBoolean("sync_all")) {
             NBTTagCompound dims = buf.getCompoundTag("dimensions");
             for (String key : dims.getKeySet()) {
                 int dimId;
@@ -187,7 +191,8 @@ public class DataTimeFreezeEffects extends AbstractData {
         }
 
         private static ServerSyncAction deserializeNBT(NBTTagCompound cmp) {
-            ActionType type = ActionType.values()[MathHelper.clamp(cmp.getInteger("type"), 0, ActionType.values().length - 1)];
+            ActionType type = ActionType.values()[MathHelper
+                .clamp(cmp.getInteger("type"), 0, ActionType.values().length - 1)];
             int dimId = cmp.getInteger("dimId");
             TimeStopEffectHelper helper = null;
             switch (type) {

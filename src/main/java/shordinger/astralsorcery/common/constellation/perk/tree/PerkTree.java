@@ -8,8 +8,16 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree;
 
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
@@ -17,12 +25,6 @@ import shordinger.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -85,7 +87,9 @@ public class PerkTree {
     private PointConnector setPoint(AbstractPerk perk) throws IllegalArgumentException {
         PerkTreePoint<?> offsetPoint = perk.getPoint();
         if (this.treePoints.contains(offsetPoint)) {
-            throw new IllegalArgumentException("Tried to register perk-point at already placed position: " + offsetPoint.getOffset().toString());
+            throw new IllegalArgumentException(
+                "Tried to register perk-point at already placed position: " + offsetPoint.getOffset()
+                    .toString());
         }
         this.treePoints.add(offsetPoint);
         return new PointConnector(perk);
@@ -108,14 +112,16 @@ public class PerkTree {
         return ImmutableList.copyOf(this.treePoints);
     }
 
-    //Only for rendering purposes.
+    // Only for rendering purposes.
     @SideOnly(Side.CLIENT)
     public Collection<Tuple<AbstractPerk, AbstractPerk>> getConnections() {
         return ImmutableList.copyOf(this.connections);
     }
 
     public void clearCache(Side side) {
-        this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
+        this.treePoints.stream()
+            .map(PerkTreePoint::getPerk)
+            .forEach(p -> p.clearCaches(side));
     }
 
     public void removePerk(AbstractPerk perk) {
@@ -156,7 +162,7 @@ public class PerkTree {
         }
 
         public boolean disconnect(AbstractPerk other) {
-            if (other ==  null) {
+            if (other == null) {
                 return false;
             }
 
@@ -167,12 +173,19 @@ public class PerkTree {
             if (!others.remove(other)) {
                 return false;
             }
-            return connections.removeIf(t -> (t.getKey().equals(other) && t.getValue().equals(point)) ||
-                    (t.getKey().equals(point) && t.getValue().equals(other)));
+            return connections.removeIf(
+                t -> (t.getKey()
+                    .equals(other)
+                    && t.getValue()
+                    .equals(point))
+                    || (t.getKey()
+                    .equals(point)
+                    && t.getValue()
+                    .equals(other)));
         }
 
         public PointConnector connect(AbstractPerk other) {
-            if (other ==  null) {
+            if (other == null) {
                 return this;
             }
 

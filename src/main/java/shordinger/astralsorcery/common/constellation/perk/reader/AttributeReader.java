@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.reader;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
 
@@ -29,12 +29,12 @@ public abstract class AttributeReader {
 
     /**
      * Returns a string representation of the current attribute.
-     *
+     * <p>
      * Return string should be the currently active value, properly formatted as
      * percentage or flat value depending on its representation.
      *
      * @param statMap The player's current stat map
-     * @param player The player
+     * @param player  The player
      * @return A string representation of the attribute's value
      */
     @SideOnly(Side.CLIENT)
@@ -44,8 +44,8 @@ public abstract class AttributeReader {
      * Return the default value the perks or other things scale off of.
      *
      * @param statMap The player's current stat map
-     * @param player The player
-     * @param side The current side
+     * @param player  The player
+     * @param side    The current side
      * @return The default value as it would be without any modifiers.
      */
     public abstract double getDefaultValue(PlayerAttributeMap statMap, EntityPlayer player, Side side);
@@ -54,9 +54,9 @@ public abstract class AttributeReader {
      * Return the modifier (multiplier or addition) for the given mode.
      *
      * @param statMap The player's current stat map
-     * @param player The player
-     * @param side The current side
-     * @param mode The mode to get the modifier for
+     * @param player  The player
+     * @param side    The current side
+     * @param mode    The mode to get the modifier for
      * @return The currently applying modifier value for the given mode.
      */
     public abstract double getModifierValueForMode(PlayerAttributeMap statMap, EntityPlayer player, Side side,

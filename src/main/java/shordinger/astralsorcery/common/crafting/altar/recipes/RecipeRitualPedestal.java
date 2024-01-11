@@ -24,27 +24,25 @@ import shordinger.astralsorcery.common.util.OreDictAlias;
 public class RecipeRitualPedestal extends AttunementRecipe {
 
     public RecipeRitualPedestal() {
-        super(shapedRecipe("ritualpedestal", BlocksAS.ritualPedestal)
-                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
-                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(BlocksAS.fluidLiquidStarlight,
-                        ShapedRecipeSlot.CENTER)
-        .unregisteredAccessibleShapedRecipe());
-        setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
-                AttunementAltarSlot.UPPER_LEFT,
-                AttunementAltarSlot.UPPER_RIGHT);
-        setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                AttunementAltarSlot.LOWER_LEFT,
-                AttunementAltarSlot.LOWER_RIGHT);
+        super(
+            shapedRecipe("ritualpedestal", BlocksAS.ritualPedestal)
+                .addPart(
+                    BlockMarble.MarbleBlockType.RUNED.asStack(),
+                    ShapedRecipeSlot.LOWER_LEFT,
+                    ShapedRecipeSlot.LOWER_CENTER,
+                    ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(), ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT)
+                .addPart(
+                    BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                    ShapedRecipeSlot.UPPER_LEFT,
+                    ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemHandle.getCrystalVariant(false, false), ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(BlocksAS.fluidLiquidStarlight, ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
+        setAttItem(OreDictAlias.ITEM_GOLD_INGOT, AttunementAltarSlot.UPPER_LEFT, AttunementAltarSlot.UPPER_RIGHT);
+        setAttItem(
+            BlockMarble.MarbleBlockType.PILLAR.asStack(),
+            AttunementAltarSlot.LOWER_LEFT,
+            AttunementAltarSlot.LOWER_RIGHT);
     }
 }

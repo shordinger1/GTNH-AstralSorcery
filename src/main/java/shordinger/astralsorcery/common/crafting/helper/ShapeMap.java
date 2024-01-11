@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import java.util.HashMap;
+
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-
-import java.util.HashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +46,7 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
         Baked baked = new Baked(cut);
         for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
             ItemHandle handle = get(srs);
-            if(handle != null) {
+            if (handle != null) {
                 baked.put(srs, handle.getRecipeIngredient());
             } else {
                 baked.put(srs, Ingredient.EMPTY);
@@ -61,17 +61,18 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
         private NonNullList<Ingredient> rawIngredientList = null;
 
         private Baked(boolean doCut) {
-            if(!doCut) {
+            if (!doCut) {
                 width = 3;
                 height = 3;
             }
         }
 
-        private Baked sanitize()  {
+        private Baked sanitize() {
             calculateWidth();
             calculateHeight();
-            if(width > 0 && height > 0 && (width < 3 || height < 3)) {
-                while (tryShiftIngredients()) {}
+            if (width > 0 && height > 0 && (width < 3 || height < 3)) {
+                while (tryShiftIngredients()) {
+                }
             }
             return this;
         }
@@ -80,11 +81,11 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
             boolean needsShift = true;
             for (int y = 0; y < 3; y++) {
                 Ingredient i = get(ShapedRecipeSlot.getByRowColumnIndex(0, y));
-                if(i != Ingredient.EMPTY) {
+                if (i != Ingredient.EMPTY) {
                     needsShift = false;
                 }
             }
-            if(needsShift) { //Shift up
+            if (needsShift) { // Shift up
                 for (int x = 1; x < 3; x++) {
                     for (int y = 0; y < 3; y++) {
                         ShapedRecipeSlot source = ShapedRecipeSlot.getByRowColumnIndex(x, y);
@@ -97,11 +98,11 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
             needsShift = true;
             for (int x = 0; x < 3; x++) {
                 Ingredient i = get(ShapedRecipeSlot.getByRowColumnIndex(x, 0));
-                if(i != Ingredient.EMPTY) {
+                if (i != Ingredient.EMPTY) {
                     needsShift = false;
                 }
             }
-            if(needsShift) { //Shift left
+            if (needsShift) { // Shift left
                 for (int y = 1; y < 3; y++) {
                     for (int x = 0; x < 3; x++) {
                         ShapedRecipeSlot source = ShapedRecipeSlot.getByRowColumnIndex(x, y);
@@ -115,7 +116,7 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
         }
 
         public NonNullList<Ingredient> getRawIngredientList() {
-            if(rawIngredientList != null) {
+            if (rawIngredientList != null) {
                 return rawIngredientList;
             }
             rawIngredientList = NonNullList.create();
@@ -127,51 +128,51 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
         }
 
         private void calculateHeight() {
-            if(height != -1) return;
+            if (height != -1) return;
             boolean up = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(0, y);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     up = true;
                 }
             }
             boolean mid = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(1, y);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     mid = true;
                 }
             }
             boolean down = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(2, y);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     down = true;
                 }
             }
-            if(up) {
-                if(mid) {
-                    if(down) {
+            if (up) {
+                if (mid) {
+                    if (down) {
                         height = 3;
                     } else {
                         height = 2;
                     }
                 } else {
-                    if(down) {
+                    if (down) {
                         height = 3;
                     } else {
                         height = 1;
                     }
                 }
             } else {
-                if(mid) {
-                    if(down) {
+                if (mid) {
+                    if (down) {
                         height = 2;
                     } else {
                         height = 1;
                     }
                 } else {
-                    if(down) {
+                    if (down) {
                         height = 1;
                     } else {
                         height = 0;
@@ -181,51 +182,51 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
         }
 
         private void calculateWidth() {
-            if(width != -1) return;
+            if (width != -1) return;
             boolean left = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(y, 0);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     left = true;
                 }
             }
             boolean mid = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(y, 1);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     mid = true;
                 }
             }
             boolean right = false;
             for (int y = 0; y < 3; y++) {
                 ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(y, 2);
-                if(get(srs) != Ingredient.EMPTY) {
+                if (get(srs) != Ingredient.EMPTY) {
                     right = true;
                 }
             }
-            if(left) {
-                if(mid) {
-                    if(right) {
+            if (left) {
+                if (mid) {
+                    if (right) {
                         width = 3;
                     } else {
                         width = 2;
                     }
                 } else {
-                    if(right) {
+                    if (right) {
                         width = 3;
                     } else {
                         width = 1;
                     }
                 }
             } else {
-                if(mid) {
-                    if(right) {
+                if (mid) {
+                    if (right) {
                         width = 2;
                     } else {
                         width = 1;
                     }
                 } else {
-                    if(right) {
+                    if (right) {
                         width = 1;
                     } else {
                         width = 0;

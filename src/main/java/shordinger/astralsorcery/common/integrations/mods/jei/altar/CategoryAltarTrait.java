@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
-import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -35,7 +35,9 @@ public class CategoryAltarTrait extends JEIBaseCategory<AltarTraitRecipeWrapper>
 
     public CategoryAltarTrait(IGuiHelper guiHelper) {
         super("jei.category.altar.trait", ModIntegrationJEI.idAltarTrait);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateAltarTrait.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateAltarTrait.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 162);
     }
 
@@ -84,9 +86,10 @@ public class CategoryAltarTrait extends JEIBaseCategory<AltarTraitRecipeWrapper>
         int centerX = 49;
         int centerY = 95;
         TraitRecipe recipe = recipeWrapper.getUnderlyingRecipe();
-        int additional = recipe.getTraitItemHandles().size();
+        int additional = recipe.getTraitItemHandles()
+            .size();
         for (int i = 0; i < additional; i++) {
-            double part = ((double) i) / ((double) additional) * 2.0 * Math.PI; //Shift by half a period
+            double part = ((double) i) / ((double) additional) * 2.0 * Math.PI; // Shift by half a period
             part = MathHelper.clamp(part, 0, 2.0 * Math.PI);
             part += Math.PI;
             double xAdd = Math.sin(part) * 60.0;
@@ -99,7 +102,13 @@ public class CategoryAltarTrait extends JEIBaseCategory<AltarTraitRecipeWrapper>
         group.addTooltipCallback((slot, input, stack, tooltip) -> {
             if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+                tooltip.add(
+                    TextFormatting.DARK_GRAY + I18n.format(
+                        "misc.recipename",
+                        recipeWrapper.getRecipe()
+                            .getNativeRecipe()
+                            .getRegistryName()
+                            .toString()));
             }
         });
     }

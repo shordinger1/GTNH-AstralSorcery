@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
@@ -17,8 +19,6 @@ import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -58,8 +58,9 @@ public class CapeAttunementRecipe extends TraitRecipe {
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack cape = new ItemStack(ItemsAS.armorImbuedCape);
-        ItemStack center = altar.getInventoryHandler().getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
-        if(!center.isEmpty() && center.getItem() instanceof ItemCape) {
+        ItemStack center = altar.getInventoryHandler()
+            .getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
+        if (!center.isEmpty() && center.getItem() instanceof ItemCape) {
             cape = ItemUtils.copyStackWithSize(center, center.getCount());
         }
         ItemCape.setAttunedConstellation(cape, constellation);

@@ -8,16 +8,15 @@
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
+import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
+import static hellfirepvp.astralsorcery.common.block.BlockMarble.MarbleBlockType;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-
-import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
-import static hellfirepvp.astralsorcery.common.block.BlockMarble.MarbleBlockType;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,82 +46,86 @@ public class MultiblockRitualPedestal extends PatternBlockArray {
 
         addBlock(0, 0, 0, BlocksAS.ritualPedestal.getDefaultState());
 
-        IBlockState mch = marble.getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.CHISELED);
-        IBlockState mbr = marble.getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.BRICKS);
-        IBlockState mrw = marble.getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.RAW);
-        IBlockState mar = marble.getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.ARCH);
+        IBlockState mch = marble.getDefaultState()
+            .withProperty(MARBLE_TYPE, MarbleBlockType.CHISELED);
+        IBlockState mbr = marble.getDefaultState()
+            .withProperty(MARBLE_TYPE, MarbleBlockType.BRICKS);
+        IBlockState mrw = marble.getDefaultState()
+            .withProperty(MARBLE_TYPE, MarbleBlockType.RAW);
+        IBlockState mar = marble.getDefaultState()
+            .withProperty(MARBLE_TYPE, MarbleBlockType.ARCH);
 
         addBlock(0, -1, 0, mch);
 
-        addBlock( 0, -1,  1, mbr);
-        addBlock( 0, -1,  2, mbr);
-        addBlock( 0, -1,  3, mbr);
-        addBlock( 1, -1,  3, mbr);
-        addBlock(-1, -1,  3, mbr);
+        addBlock(0, -1, 1, mbr);
+        addBlock(0, -1, 2, mbr);
+        addBlock(0, -1, 3, mbr);
+        addBlock(1, -1, 3, mbr);
+        addBlock(-1, -1, 3, mbr);
 
-        addBlock( 0, -1, -1, mbr);
-        addBlock( 0, -1, -2, mbr);
-        addBlock( 0, -1, -3, mbr);
-        addBlock( 1, -1, -3, mbr);
+        addBlock(0, -1, -1, mbr);
+        addBlock(0, -1, -2, mbr);
+        addBlock(0, -1, -3, mbr);
+        addBlock(1, -1, -3, mbr);
         addBlock(-1, -1, -3, mbr);
 
-        addBlock( 1, -1,  0, mbr);
-        addBlock( 2, -1,  0, mbr);
-        addBlock( 3, -1,  0, mbr);
-        addBlock( 3, -1,  1, mbr);
-        addBlock( 3, -1, -1, mbr);
+        addBlock(1, -1, 0, mbr);
+        addBlock(2, -1, 0, mbr);
+        addBlock(3, -1, 0, mbr);
+        addBlock(3, -1, 1, mbr);
+        addBlock(3, -1, -1, mbr);
 
-        addBlock(-1, -1,  0, mbr);
-        addBlock(-2, -1,  0, mbr);
-        addBlock(-3, -1,  0, mbr);
-        addBlock(-3, -1,  1, mbr);
+        addBlock(-1, -1, 0, mbr);
+        addBlock(-2, -1, 0, mbr);
+        addBlock(-3, -1, 0, mbr);
+        addBlock(-3, -1, 1, mbr);
         addBlock(-3, -1, -1, mbr);
 
-        addBlock( 2, -1,  2, mbr);
-        addBlock(-2, -1,  2, mbr);
-        addBlock( 2, -1, -2, mbr);
+        addBlock(2, -1, 2, mbr);
+        addBlock(-2, -1, 2, mbr);
+        addBlock(2, -1, -2, mbr);
         addBlock(-2, -1, -2, mbr);
 
-        addBlock( 1, -1,  1, mrw);
-        addBlock( 1, -1,  2, mrw);
-        addBlock( 2, -1,  1, mrw);
+        addBlock(1, -1, 1, mrw);
+        addBlock(1, -1, 2, mrw);
+        addBlock(2, -1, 1, mrw);
 
-        addBlock(-1, -1,  1, mrw);
-        addBlock(-1, -1,  2, mrw);
-        addBlock(-2, -1,  1, mrw);
+        addBlock(-1, -1, 1, mrw);
+        addBlock(-1, -1, 2, mrw);
+        addBlock(-2, -1, 1, mrw);
 
-        addBlock( 1, -1, -1, mrw);
-        addBlock( 1, -1, -2, mrw);
-        addBlock( 2, -1, -1, mrw);
+        addBlock(1, -1, -1, mrw);
+        addBlock(1, -1, -2, mrw);
+        addBlock(2, -1, -1, mrw);
 
         addBlock(-1, -1, -1, mrw);
         addBlock(-1, -1, -2, mrw);
         addBlock(-2, -1, -1, mrw);
 
-        addBlock( 0, -1,  4, mar);
-        addBlock( 1, -1,  4, mar);
-        addBlock(-1, -1,  4, mar);
+        addBlock(0, -1, 4, mar);
+        addBlock(1, -1, 4, mar);
+        addBlock(-1, -1, 4, mar);
 
-        addBlock( 0, -1, -4, mar);
-        addBlock( 1, -1, -4, mar);
+        addBlock(0, -1, -4, mar);
+        addBlock(1, -1, -4, mar);
         addBlock(-1, -1, -4, mar);
 
-        addBlock( 4, -1,  0, mar);
-        addBlock( 4, -1,  1, mar);
-        addBlock( 4, -1, -1, mar);
+        addBlock(4, -1, 0, mar);
+        addBlock(4, -1, 1, mar);
+        addBlock(4, -1, -1, mar);
 
-        addBlock(-4, -1,  0, mar);
-        addBlock(-4, -1,  1, mar);
+        addBlock(-4, -1, 0, mar);
+        addBlock(-4, -1, 1, mar);
         addBlock(-4, -1, -1, mar);
 
-        addBlock( 3, -1,  2, mar);
-        addBlock( 3, -1, -2, mar);
-        addBlock(-3, -1,  2, mar);
+        addBlock(3, -1, 2, mar);
+        addBlock(3, -1, -2, mar);
+        addBlock(-3, -1, 2, mar);
         addBlock(-3, -1, -2, mar);
 
-        addBlock( 2, -1,  3, mar);
-        addBlock(-2, -1,  3, mar);
-        addBlock( 2, -1, -3, mar);
+        addBlock(2, -1, 3, mar);
+        addBlock(-2, -1, 3, mar);
+        addBlock(2, -1, -3, mar);
         addBlock(-2, -1, -3, mar);
     }
 

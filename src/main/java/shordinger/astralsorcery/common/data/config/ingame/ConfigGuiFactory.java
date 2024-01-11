@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.data.config.ingame;
 
+import java.util.Set;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.config.ingame.screen.GuiConfigOverview;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraftforge.fml.client.IModGuiFactory;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod

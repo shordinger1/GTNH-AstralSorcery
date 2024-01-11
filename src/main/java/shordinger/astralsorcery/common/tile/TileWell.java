@@ -8,6 +8,14 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -44,13 +52,6 @@ import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,16 +89,17 @@ public class TileWell extends TileReceiverBaseInventory {
 
         if (!world.isRemote) {
             if (MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, false)) {
-                double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
+                double sbDayDistribution = ConstellationSkyHandler.getInstance()
+                    .getCurrentDaytimeDistribution(world);
                 sbDayDistribution = 0.3 + (0.7 * sbDayDistribution);
                 int yLevel = getPos().getY();
                 float dstr;
-                if(yLevel > 120) {
+                if (yLevel > 120) {
                     dstr = 1F;
                 } else {
                     dstr = yLevel / 120F;
                 }
-                if(posDistribution == -1) {
+                if (posDistribution == -1) {
                     posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
                 }
 
@@ -107,27 +109,31 @@ public class TileWell extends TileReceiverBaseInventory {
             }
 
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if(!stack.isEmpty()) {
-                if(!world.isAirBlock(getPos().up())) {
+            if (!stack.isEmpty()) {
+                if (!world.isAirBlock(getPos().up())) {
                     breakCatalyst();
                 } else {
                     running = WellLiquefaction.getLiquefactionEntry(stack);
 
-                    if(running != null) {
+                    if (running != null) {
                         double gain = Math.sqrt(starlightBuffer) * running.productionMultiplier;
-                        if(gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
+                        if (gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
                             if (tank.getFluidAmount() <= MAX_CAPACITY) {
                                 markForUpdate();
                             }
                             fillAndDiscardRest(running, gain);
-                            if(rand.nextInt(2000) == 0) {
-                                EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            if (rand.nextInt(2000) == 0) {
+                                EntityFlare.spawnAmbient(
+                                    world,
+                                    new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             }
                         }
                         starlightBuffer = 0;
-                        if(rand.nextInt(1 + (int) (1000 * running.shatterMultiplier)) == 0) {
+                        if (rand.nextInt(1 + (int) (1000 * running.shatterMultiplier)) == 0) {
                             breakCatalyst();
-                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            EntityFlare.spawnAmbient(
+                                world,
+                                new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                         }
                     }
                 }
@@ -136,11 +142,12 @@ public class TileWell extends TileReceiverBaseInventory {
                 starlightBuffer = 0;
             }
 
-            if((ticksExisted % 100 == 0) && getHeldFluid() != null && getFluidAmount() > 100) {
+            if ((ticksExisted % 100 == 0) && getHeldFluid() != null && getFluidAmount() > 100) {
                 int mb = Math.min(400, getFluidAmount());
                 FluidStack fluidStack = new FluidStack(getHeldFluid(), mb);
-                java.util.List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, fluidStack);
-                if(!out.isEmpty()) {
+                java.util.List<TileChalice> out = LiquidStarlightChaliceHandler
+                    .findNearbyChalicesWithSpaceFor(this, fluidStack);
+                if (!out.isEmpty()) {
                     TileChalice target = out.get(rand.nextInt(out.size()));
                     LiquidStarlightChaliceHandler.doFluidTransfer(this, target, fluidStack.copy());
                     this.tank.drain(mb, true);
@@ -149,18 +156,19 @@ public class TileWell extends TileReceiverBaseInventory {
             }
         } else {
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if(!stack.isEmpty()) {
+            if (!stack.isEmpty()) {
                 running = WellLiquefaction.getLiquefactionEntry(stack);
 
-                if(running != null) {
+                if (running != null) {
                     Color color = Color.WHITE;
-                    if(running.catalystColor != null) {
+                    if (running.catalystColor != null) {
                         color = running.catalystColor;
                     }
                     doCatalystEffect(color);
                 }
             }
-            if(tank.getFluidAmount() > 0 && tank.getTankFluid() != null && tank.getTankFluid() instanceof FluidLiquidStarlight) {
+            if (tank.getFluidAmount() > 0 && tank.getTankFluid() != null
+                && tank.getTankFluid() instanceof FluidLiquidStarlight) {
                 doStarlightEffect();
             }
         }
@@ -168,30 +176,48 @@ public class TileWell extends TileReceiverBaseInventory {
 
     public void breakCatalyst() {
         getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
-        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK, getPos().getX(), getPos().getY(), getPos().getZ());
+        PktParticleEvent ev = new PktParticleEvent(
+            PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK,
+            getPos().getX(),
+            getPos().getY(),
+            getPos().getZ());
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPos(), 32));
         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 1F, 1F);
     }
 
     @SideOnly(Side.CLIENT)
     private void doStarlightEffect() {
-        if(rand.nextInt(3) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.4, getPos().getZ() + 0.5);
+        if (rand.nextInt(3) == 0) {
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.4, getPos().getZ() + 0.5);
             p.offset(0, getPercFilled() * 0.5, 0);
-            p.offset(rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1), 0, rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.16F).gravity(0.006).setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+            p.offset(
+                rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1),
+                0,
+                rand.nextFloat() * 0.35 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.16F)
+                .gravity(0.006)
+                .setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void doCatalystEffect(Color color) {
-        if(rand.nextInt(6) == 0) {
-            Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-            if(rView == null) rView = Minecraft.getMinecraft().player;
-            if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5);
-            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1, rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.2F).gravity(-0.004).setAlphaMultiplier(1F).setColor(color);
+        if (rand.nextInt(6) == 0) {
+            Entity rView = Minecraft.getMinecraft()
+                .getRenderViewEntity();
+            if (rView == null) rView = Minecraft.getMinecraft().player;
+            if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5);
+            p.offset(
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1,
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.2F)
+                .gravity(-0.004)
+                .setAlphaMultiplier(1F)
+                .setColor(color);
         }
     }
 
@@ -200,9 +226,9 @@ public class TileWell extends TileReceiverBaseInventory {
     }
 
     private void fillAndDiscardRest(WellLiquefaction.LiquefactionEntry entry, double gain) {
-        if(tank.getTankFluid() == null) {
+        if (tank.getTankFluid() == null) {
             tank.setFluid(entry.producing);
-        } else if(!entry.producing.equals(tank.getTankFluid())) {
+        } else if (!entry.producing.equals(tank.getTankFluid())) {
             tank.drain(tank.getFluidAmount());
             tank.setFluid(entry.producing);
         }
@@ -211,8 +237,11 @@ public class TileWell extends TileReceiverBaseInventory {
 
     @SideOnly(Side.CLIENT)
     public static void catalystBurst(PktParticleEvent event) {
-        BlockPos at = event.getVec().toBlockPos();
-        EffectHandler.getInstance().registerFX(new EntityFXCrystalBurst(rand.nextInt(), at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
+        BlockPos at = event.getVec()
+            .toBlockPos();
+        EffectHandler.getInstance()
+            .registerFX(
+                new EntityFXCrystalBurst(rand.nextInt(), at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
     }
 
     @Nullable
@@ -250,7 +279,7 @@ public class TileWell extends TileReceiverBaseInventory {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = PrecisionSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
-        if(!tank.hasCapability(EnumFacing.DOWN)) {
+        if (!tank.hasCapability(EnumFacing.DOWN)) {
             tank.accessibleSides.add(EnumFacing.DOWN);
         }
         this.tank.setOnUpdate(this::markForUpdate);
@@ -258,8 +287,8 @@ public class TileWell extends TileReceiverBaseInventory {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing)) ||
-                super.hasCapability(capability, facing);
+        return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing))
+            || super.hasCapability(capability, facing);
     }
 
     @Override
@@ -290,7 +319,7 @@ public class TileWell extends TileReceiverBaseInventory {
 
         @Override
         public boolean canInsertItem(int slot, @Nonnull ItemStack toAdd, @Nonnull ItemStack existing) {
-            if(toAdd.isEmpty()) return true;
+            if (toAdd.isEmpty()) return true;
             return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing.isEmpty();
         }
 
@@ -309,9 +338,9 @@ public class TileWell extends TileReceiverBaseInventory {
 
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-            if(isChunkLoaded) {
+            if (isChunkLoaded) {
                 TileWell tw = MiscUtils.getTileAt(world, getLocationPos(), TileWell.class, false);
-                if(tw != null) {
+                if (tw != null) {
                     tw.receiveStarlight(amount);
                 }
             }

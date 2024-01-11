@@ -8,16 +8,18 @@
 
 package shordinger.astralsorcery.common.constellation.perk.reader;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +53,8 @@ public class PlayerAttributeInterpreter {
     @Nullable
     public PerkStatistic getValue(String typeString) {
         if (attributeReaderOverrides.containsKey(typeString)) {
-            return attributeReaderOverrides.get(typeString).getStatistics(attributeMap, player);
+            return attributeReaderOverrides.get(typeString)
+                .getStatistics(attributeMap, player);
         } else {
             AttributeReader reader = AttributeReaderRegistry.getReader(typeString);
             if (reader != null) {

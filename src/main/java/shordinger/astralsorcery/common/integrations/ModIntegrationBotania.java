@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.integrations;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -18,12 +25,6 @@ import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.wrapper.InvWrapper;
 import vazkii.botania.api.item.IBlockProvider;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,11 +37,12 @@ public class ModIntegrationBotania {
 
     private ModIntegrationBotania() {}
 
-    //Empty if no provider can provide that, an item (size 1) if it could be requested successfully.
+    // Empty if no provider can provide that, an item (size 1) if it could be requested successfully.
     @Nonnull
-    public static ItemStack requestFromInventory(EntityPlayer requestingPlayer, ItemStack requestingStack, Block block, int meta, boolean doit) {
+    public static ItemStack requestFromInventory(EntityPlayer requestingPlayer, ItemStack requestingStack, Block block,
+                                                 int meta, boolean doit) {
         IItemHandler inv = requestingPlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        if(inv == null) {
+        if (inv == null) {
             return ItemStack.EMPTY;
         }
         List<ItemStack> providers = new LinkedList<>();
@@ -62,9 +64,10 @@ public class ModIntegrationBotania {
         return ItemStack.EMPTY;
     }
 
-    //-1 = infinite
-    public static int getItemCount(EntityPlayer requestingPlayer, ItemStack requestingStack, @Nullable IBlockState stateSearch) {
-        if(stateSearch == null) return 0;
+    // -1 = infinite
+    public static int getItemCount(EntityPlayer requestingPlayer, ItemStack requestingStack,
+                                   @Nullable IBlockState stateSearch) {
+        if (stateSearch == null) return 0;
         Block block = stateSearch.getBlock();
         int meta;
         try {
@@ -74,7 +77,7 @@ public class ModIntegrationBotania {
         }
         ItemStack blockStackStored = ItemUtils.createBlockStack(stateSearch);
         IItemHandler inv = requestingPlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        if(inv == null) {
+        if (inv == null) {
             return 0;
         }
         int amtFound = 0;
@@ -83,8 +86,9 @@ public class ModIntegrationBotania {
             if (!invStack.isEmpty()) {
                 Item item = invStack.getItem();
                 if ((item instanceof IBlockProvider)) {
-                    int res = ((IBlockProvider) item).getBlockCount(requestingPlayer, requestingStack, invStack, block, meta);
-                    if(res == -1) {
+                    int res = ((IBlockProvider) item)
+                            .getBlockCount(requestingPlayer, requestingStack, invStack, block, meta);
+                    if (res == -1) {
                         return -1;
                     } else {
                         amtFound += res;
@@ -93,7 +97,8 @@ public class ModIntegrationBotania {
             }
         }
 
-        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(requestingPlayer.inventory), blockStackStored, false);
+        Collection<ItemStack> stacks = ItemUtils
+                .scanInventoryForMatching(new InvWrapper(requestingPlayer.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
             amtFound += stack.getCount();
         }

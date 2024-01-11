@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,8 @@ public class GrindstoneRecipe {
     }
 
     public boolean isValid() {
-        return this.input.getApplicableItems().size() > 0 && !this.output.isEmpty();
+        return this.input.getApplicableItems()
+            .size() > 0 && !this.output.isEmpty();
     }
 
     public float getChanceToDoubleOutput() {
@@ -68,7 +70,7 @@ public class GrindstoneRecipe {
 
     @Nonnull
     public GrindResult grind(ItemStack stackIn) {
-        if(rand.nextInt(chance) == 0) {
+        if (rand.nextInt(chance) == 0) {
             int out = this.output.getCount();
             if (rand.nextFloat() <= getChanceToDoubleOutput()) {
                 out *= 2;
@@ -132,10 +134,10 @@ public class GrindstoneRecipe {
 
     public static enum ResultType {
 
-        SUCCESS, //Successfully grinded something
-        ITEMCHANGE, //Successfully grinded something, other item now on the grindstone
-        FAIL_SILENT, //Did nothing, but nothing went wrong. just.. uuuh.. nothing.
-        FAIL_BREAK_ITEM //The item broke while grinding.
+        SUCCESS, // Successfully grinded something
+        ITEMCHANGE, // Successfully grinded something, other item now on the grindstone
+        FAIL_SILENT, // Did nothing, but nothing went wrong. just.. uuuh.. nothing.
+        FAIL_BREAK_ITEM // The item broke while grinding.
 
     }
 }

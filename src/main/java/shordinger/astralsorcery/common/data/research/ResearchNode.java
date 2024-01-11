@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.data.research;
 
-import shordinger.astralsorcery.client.gui.journal.page.IJournalPage;
-import shordinger.astralsorcery.client.util.resource.SpriteQuery;
-import shordinger.astralsorcery.client.util.resource.TextureQuery;
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.client.gui.journal.page.IJournalPage;
+import shordinger.astralsorcery.client.util.resource.SpriteQuery;
+import shordinger.astralsorcery.client.util.resource.TextureQuery;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +36,7 @@ public class ResearchNode {
     private final RenderType renderType;
     public final int renderPosX, renderPosZ;
     private String unlocName;
-    //private boolean special = false;
+    // private boolean special = false;
 
     private ItemStack[] renderItemStacks;
     private TextureQuery renderTextureQuery;
@@ -75,10 +76,12 @@ public class ResearchNode {
         this.renderSpriteQuery = query;
     }
 
-    /*public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
-        this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
-        this.texture = textureResource;
-    }*/
+    /*
+     * public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
+     * this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
+     * this.texture = textureResource;
+     * }
+     */
 
     public ResearchNode addSourceConnectionFrom(ResearchNode node) {
         this.connectionsTo.add(node);
@@ -107,14 +110,15 @@ public class ResearchNode {
         return true;
     }
 
-    /*public ResearchNode setSpecial() {
-        this.special = true;
-        return this;
-    }
-
-    public boolean isSpecial() {
-        return special;
-    }*/
+    /*
+     * public ResearchNode setSpecial() {
+     * this.special = true;
+     * return this;
+     * }
+     * public boolean isSpecial() {
+     * return special;
+     * }
+     */
 
     public ResearchNode setTextureColorHintWithAlpha(Color textureColorHint) {
         this.textureColorHint = textureColorHint;
@@ -173,7 +177,9 @@ public class ResearchNode {
 
     public static enum RenderType {
 
-        ITEMSTACK, TEXTURE, TEXTURE_SPRITE
+        ITEMSTACK,
+        TEXTURE,
+        TEXTURE_SPRITE
 
     }
 

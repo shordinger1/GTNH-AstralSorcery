@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.util;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.PositionedLoopSound;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
@@ -17,8 +19,6 @@ import shordinger.wrapper.net.minecraft.util.SoundEvent;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,37 +30,59 @@ import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 public class SoundHelper {
 
     public static void playSoundAround(SoundEvent sound, World world, Vec3i position, float volume, float pitch) {
-        playSoundAround(sound, SoundCategory.MASTER, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
+        playSoundAround(
+            sound,
+            SoundCategory.MASTER,
+            world,
+            position.getX(),
+            position.getY(),
+            position.getZ(),
+            volume,
+            pitch);
     }
 
-    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vec3i position, float volume, float pitch) {
+    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vec3i position,
+                                       float volume, float pitch) {
         playSoundAround(sound, category, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
     public static void playSoundAround(SoundEvent sound, World world, Vector3 position, float volume, float pitch) {
-        playSoundAround(sound, SoundCategory.MASTER, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
+        playSoundAround(
+            sound,
+            SoundCategory.MASTER,
+            world,
+            position.getX(),
+            position.getY(),
+            position.getZ(),
+            volume,
+            pitch);
     }
 
-    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vector3 position, float volume, float pitch) {
+    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, Vector3 position,
+                                       float volume, float pitch) {
         playSoundAround(sound, category, world, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
-    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, double posX, double posY, double posZ, float volume, float pitch) {
-        if(sound instanceof SoundUtils.CategorizedSoundEvent) {
+    public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, double posX, double posY,
+                                       double posZ, float volume, float pitch) {
+        if (sound instanceof SoundUtils.CategorizedSoundEvent) {
             category = ((SoundUtils.CategorizedSoundEvent) sound).getCategory();
         }
         world.playSound(null, posX, posY, posZ, sound, category, volume, pitch);
     }
 
     @SideOnly(Side.CLIENT)
-    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, PositionedLoopSound.ActivityFunction func) {
+    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch,
+                                                          PositionedLoopSound.ActivityFunction func) {
         SoundCategory cat = SoundCategory.MASTER;
-        if(sound instanceof SoundUtils.CategorizedSoundEvent) {
+        if (sound instanceof SoundUtils.CategorizedSoundEvent) {
             cat = ((SoundUtils.CategorizedSoundEvent) sound).getCategory();
         }
         PositionedLoopSound posSound = new PositionedLoopSound(sound, cat, volume, pitch, pos);
         posSound.setRefreshFunction(func);
-        Minecraft.getMinecraft().getSoundHandler().playSound(posSound);
+        Minecraft.getMinecraft()
+            .getSoundHandler()
+            .playSound(posSound);
         return posSound;
     }
 
@@ -78,14 +100,24 @@ public class SoundHelper {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void playSoundClientWorld(SoundUtils.CategorizedSoundEvent sound, BlockPos pos, float volume, float pitch) {
+    public static void playSoundClientWorld(SoundUtils.CategorizedSoundEvent sound, BlockPos pos, float volume,
+                                            float pitch) {
         playSoundClientWorld(sound, sound.getCategory(), pos, volume, pitch);
     }
 
     @SideOnly(Side.CLIENT)
-    public static void playSoundClientWorld(SoundEvent sound, SoundCategory cat, BlockPos pos, float volume, float pitch) {
-        if(Minecraft.getMinecraft().world != null) {
-            Minecraft.getMinecraft().world.playSound(Minecraft.getMinecraft().player, pos.getX(), pos.getY(), pos.getZ(), sound, cat, volume, pitch);
+    public static void playSoundClientWorld(SoundEvent sound, SoundCategory cat, BlockPos pos, float volume,
+                                            float pitch) {
+        if (Minecraft.getMinecraft().world != null) {
+            Minecraft.getMinecraft().world.playSound(
+                Minecraft.getMinecraft().player,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ(),
+                sound,
+                cat,
+                volume,
+                pitch);
         }
     }
 

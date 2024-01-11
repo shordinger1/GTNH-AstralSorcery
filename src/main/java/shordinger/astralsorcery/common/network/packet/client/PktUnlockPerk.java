@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -16,19 +19,14 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
-import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
-import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +52,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     public void fromBytes(ByteBuf buf) {
         this.serverAccept = buf.readBoolean();
         AbstractPerk perk = PerkTree.PERK_TREE.getPerk(ByteBufUtils.readResourceLocation(buf));
-        if(perk != null) {
+        if (perk != null) {
             this.perk = perk;
         }
     }
@@ -67,13 +65,14 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
 
     @Override
     public PktUnlockPerk onMessage(PktUnlockPerk message, MessageContext ctx) {
-        if(ctx.side == Side.SERVER) {
-            MinecraftServer ms = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (ctx.side == Side.SERVER) {
+            MinecraftServer ms = FMLCommonHandler.instance()
+                .getMinecraftServerInstance();
             if (ms != null) {
                 ms.addScheduledTask(() -> {
                     EntityPlayerMP pl = ctx.getServerHandler().player;
-                    if(pl != null) {
-                        if(message.perk != null) {
+                    if (pl != null) {
+                        if (message.perk != null) {
                             AbstractPerk perk = message.perk;
                             PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
                             if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
@@ -97,7 +96,8 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
             AbstractPerk perk = message.perk;
             GuiScreen current = Minecraft.getMinecraft().currentScreen;
             if (current instanceof GuiJournalPerkTree) {
-                Minecraft.getMinecraft().addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(perk));
+                Minecraft.getMinecraft()
+                    .addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(perk));
             }
         }
     }

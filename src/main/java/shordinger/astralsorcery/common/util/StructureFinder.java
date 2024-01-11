@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -17,10 +23,6 @@ import shordinger.wrapper.net.minecraft.world.biome.Biome;
 import shordinger.wrapper.net.minecraft.world.biome.BiomeProvider;
 import shordinger.wrapper.net.minecraft.world.gen.IChunkGenerator;
 import shordinger.wrapper.net.minecraftforge.common.BiomeDictionary;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +45,8 @@ public class StructureFinder {
     private StructureFinder() {}
 
     @Nullable
-    public static BlockPos tryFindClosestAstralSorceryStructure(WorldServer world, BlockPos playerPos, StructureGenBuffer.StructureType searchKey) {
+    public static BlockPos tryFindClosestAstralSorceryStructure(WorldServer world, BlockPos playerPos,
+                                                                StructureGenBuffer.StructureType searchKey) {
         StructureGenBuffer buffer = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_GEN);
         return buffer.getClosest(searchKey, playerPos);
     }
@@ -51,7 +54,7 @@ public class StructureFinder {
     @Nullable
     public static BlockPos tryFindClosestVanillaStructure(WorldServer world, BlockPos playerPos, String searchKey) {
         IChunkGenerator gen = world.getChunkProvider().chunkGenerator;
-        if(gen == null) return null;
+        if (gen == null) return null;
         try {
             return gen.getNearestStructurePos(world, searchKey, playerPos, true);
         } catch (Exception ignored) {
@@ -60,15 +63,17 @@ public class StructureFinder {
     }
 
     @Nullable
-    public static BlockPos tryFindClosestBiomeType(WorldServer world, BlockPos playerPos, BiomeDictionary.Type biomeType) {
+    public static BlockPos tryFindClosestBiomeType(WorldServer world, BlockPos playerPos,
+                                                   BiomeDictionary.Type biomeType) {
         List<Biome> fitting = Lists.newArrayList(BiomeDictionary.getBiomes(biomeType));
-        if(fitting.isEmpty()) {
+        if (fitting.isEmpty()) {
             return null;
         }
         BiomeProvider gen = world.getBiomeProvider();
         for (int reach = 64; reach < 2112; reach += 128) {
-            BlockPos closest = gen.findBiomePosition(playerPos.getX(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
-            if(closest != null) {
+            BlockPos closest = gen
+                .findBiomePosition(playerPos.getX(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
+            if (closest != null) {
                 return closest;
             }
         }

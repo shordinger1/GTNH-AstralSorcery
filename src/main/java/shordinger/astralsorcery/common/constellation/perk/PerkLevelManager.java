@@ -8,18 +8,19 @@
 
 package shordinger.astralsorcery.common.constellation.perk;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.darkhax.gamestages.GameStageHelper;
+import net.darkhax.gamestages.data.IStageData;
+
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.data.IStageData;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,7 +89,7 @@ public class PerkLevelManager extends ConfigEntry {
 
         int level = getLevel(totalExp, player);
         if (level >= LEVEL_CAP) {
-            return 1F; //Done.
+            return 1F; // Done.
         }
         long nextLevel = this.totalExpLevelRequired.getOrDefault(level, 0L);
         long prevLevel = this.totalExpLevelRequired.getOrDefault(level - 1, 0L);
@@ -126,6 +127,12 @@ public class PerkLevelManager extends ConfigEntry {
     public void loadFromConfig(Configuration cfg) {
         this.totalExpLevelRequired.clear();
 
-        LEVEL_CAP = cfg.getInt(getKey() + "Cap", getConfigurationSection(), LEVEL_CAP, 1, 100, "Sets the max level for the perk tree levels.");
+        LEVEL_CAP = cfg.getInt(
+            getKey() + "Cap",
+            getConfigurationSection(),
+            LEVEL_CAP,
+            1,
+            100,
+            "Sets the max level for the perk tree levels.");
     }
 }

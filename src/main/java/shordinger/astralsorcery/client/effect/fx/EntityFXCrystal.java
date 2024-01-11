@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.client.effect.fx;
 
+import java.awt.*;
+
+import javax.annotation.Nonnull;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
 import shordinger.astralsorcery.client.util.Blending;
@@ -18,10 +24,6 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +34,8 @@ import java.awt.*;
  */
 public class EntityFXCrystal extends EntityComplexFX {
 
-    private static final AbstractRenderableTexture texWhite = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_white");
+    private static final AbstractRenderableTexture texWhite = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_white");
     private static int lCrystal = -1;
 
     private double x, y, z;
@@ -104,9 +107,9 @@ public class EntityFXCrystal extends EntityComplexFX {
     }
 
     public EntityFXCrystal setColor(Color color) {
-        colorRed   = ((float) color.getRed())   / 255F;
+        colorRed = ((float) color.getRed()) / 255F;
         colorGreen = ((float) color.getGreen()) / 255F;
-        colorBlue  = ((float) color.getBlue())  / 255F;
+        colorBlue = ((float) color.getBlue()) / 255F;
         return this;
     }
 
@@ -162,7 +165,7 @@ public class EntityFXCrystal extends EntityComplexFX {
 
     private void renderCrystal() {
         texWhite.bindTexture();
-        if(lCrystal == -1) {
+        if (lCrystal == -1) {
             lCrystal = GLAllocation.generateDisplayLists(1);
             GlStateManager.glNewList(lCrystal, GL11.GL_COMPILE);
             OBJModelLibrary.bigCrystal.renderAll(true);

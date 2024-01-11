@@ -22,16 +22,12 @@ import shordinger.astralsorcery.common.util.OreDictAlias;
 public class GrindstoneRecipe extends DiscoveryRecipe {
 
     public GrindstoneRecipe() {
-        super(shapedRecipe("grindstone", BlockMachine.MachineType.GRINDSTONE.asStack())
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.CENTER)
-                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
-                        ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(OreDictAlias.ITEM_STICKS,
-                        ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT)
-        .unregisteredAccessibleShapedRecipe());
+        super(
+            shapedRecipe("grindstone", BlockMachine.MachineType.GRINDSTONE.asStack())
+                .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(OreDictAlias.ITEM_STICKS, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.LOWER_LEFT)
+                .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

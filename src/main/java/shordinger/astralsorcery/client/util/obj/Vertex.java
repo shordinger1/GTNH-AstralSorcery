@@ -15,6 +15,7 @@ package shordinger.astralsorcery.client.util.obj;
  * Vertex
  */
 public class Vertex {
+
     public float x, y, z;
 
     public Vertex(float x, float y) {

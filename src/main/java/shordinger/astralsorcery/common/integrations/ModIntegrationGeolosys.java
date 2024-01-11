@@ -8,19 +8,19 @@
 
 package shordinger.astralsorcery.common.integrations;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mezz.jei.api.ingredients.IIngredientBlacklist;
 import shordinger.astralsorcery.client.util.item.ItemRenderRegistry;
 import shordinger.astralsorcery.common.integrations.mods.geolosys.BlockGeolosysSampleCluster;
 import shordinger.astralsorcery.common.integrations.mods.geolosys.TESRGeolosysSampleCluster;
 import shordinger.astralsorcery.common.integrations.mods.geolosys.TileGeolosysSampleCluster;
 import shordinger.astralsorcery.common.registry.RegistryBlocks;
-import mezz.jei.api.ingredients.IIngredientBlacklist;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fml.client.registry.ClientRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -33,7 +33,8 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("[Astral Sorcery] Waiting for server synchronization on login for " + p.getName() + "...");
+        AstralSorcery.log
+            .info("[Astral Sorcery] Waiting for server synchronization on login for " + p.getName() + "...");
         AstralSorcery.proxy.scheduleDelayed(() -> {
             AstralSorcery.log.info("[Astral Sorcery] Synchronizing baseline information to " + p.getName());
             ResearchManager.sendInitClientKnowledge(p);
@@ -50,7 +51,7 @@ public class EventHandlerNetwork {
 
         PlayerChargeHandler.INSTANCE.informDisconnect(player);
         EventHandlerEntity.attackStack.remove(e.player.getEntityId());
-        //ResearchManager.logoutResetClient(player);
+        // ResearchManager.logoutResetClient(player);
     }
 
 }

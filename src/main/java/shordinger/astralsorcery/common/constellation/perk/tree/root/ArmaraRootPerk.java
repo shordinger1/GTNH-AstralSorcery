@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -22,7 +23,6 @@ import shordinger.wrapper.net.minecraft.util.EntityDamageSource;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +37,7 @@ public class ArmaraRootPerk extends RootPerk {
         super("armara", Constellations.armara, x, y);
     }
 
-    //Measure firstmost incoming damage
+    // Measure firstmost incoming damage
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHurt(LivingHurtEvent event) {
         Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
@@ -54,7 +54,8 @@ public class ArmaraRootPerk extends RootPerk {
             if (prog.hasPerkEffect(this)) {
                 float expGain = event.getAmount();
                 expGain *= 3F;
-                if (event.getSource().isFireDamage()) {
+                if (event.getSource()
+                    .isFireDamage()) {
                     if (player.isInLava()) {
                         expGain *= 0.01F;
                     } else {
@@ -74,9 +75,12 @@ public class ArmaraRootPerk extends RootPerk {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
-                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
-                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
-                expGain = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side)
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, expGain);
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side)
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
+                expGain = AttributeEvent
+                    .postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
 
                 float xpGain = expGain;
                 LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Armara)");

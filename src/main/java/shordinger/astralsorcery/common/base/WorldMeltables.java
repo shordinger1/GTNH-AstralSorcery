@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.base;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.effect.GenListEntries;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.ItemUtils;
@@ -20,9 +23,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -32,15 +32,15 @@ import javax.annotation.Nullable;
  */
 public enum WorldMeltables implements MeltInteraction {
 
-    COBBLE(     new BlockStateCheck.Block(Blocks.COBBLESTONE),     Blocks.FLOWING_LAVA.getDefaultState(),  180),
-    STONE(      new BlockStateCheck.Block(Blocks.STONE),           Blocks.FLOWING_LAVA.getDefaultState(),  100),
-    OBSIDIAN(   new BlockStateCheck.Block(Blocks.OBSIDIAN),        Blocks.FLOWING_LAVA.getDefaultState(),  75),
-    NETHERRACK( new BlockStateCheck.Block(Blocks.NETHERRACK),      Blocks.FLOWING_LAVA.getDefaultState(),  40),
-    NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK),    Blocks.FLOWING_LAVA.getDefaultState(),  60),
-    MAGMA(      new BlockStateCheck.Block(Blocks.MAGMA),           Blocks.FLOWING_LAVA.getDefaultState(),  1),
-    ICE(        new BlockStateCheck.Block(Blocks.ICE),             Blocks.FLOWING_WATER.getDefaultState(), 1),
-    FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE),     Blocks.FLOWING_WATER.getDefaultState(), 1),
-    PACKED_ICE( new BlockStateCheck.Block(Blocks.PACKED_ICE),      Blocks.FLOWING_WATER.getDefaultState(), 2);
+    COBBLE(new BlockStateCheck.Block(Blocks.COBBLESTONE), Blocks.FLOWING_LAVA.getDefaultState(), 180),
+    STONE(new BlockStateCheck.Block(Blocks.STONE), Blocks.FLOWING_LAVA.getDefaultState(), 100),
+    OBSIDIAN(new BlockStateCheck.Block(Blocks.OBSIDIAN), Blocks.FLOWING_LAVA.getDefaultState(), 75),
+    NETHERRACK(new BlockStateCheck.Block(Blocks.NETHERRACK), Blocks.FLOWING_LAVA.getDefaultState(), 40),
+    NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK), Blocks.FLOWING_LAVA.getDefaultState(), 60),
+    MAGMA(new BlockStateCheck.Block(Blocks.MAGMA), Blocks.FLOWING_LAVA.getDefaultState(), 1),
+    ICE(new BlockStateCheck.Block(Blocks.ICE), Blocks.FLOWING_WATER.getDefaultState(), 1),
+    FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE), Blocks.FLOWING_WATER.getDefaultState(), 1),
+    PACKED_ICE(new BlockStateCheck.Block(Blocks.PACKED_ICE), Blocks.FLOWING_WATER.getDefaultState(), 2);
 
     private final BlockStateCheck meltableCheck;
     private final IBlockState meltResult;
@@ -78,13 +78,13 @@ public enum WorldMeltables implements MeltInteraction {
     public static MeltInteraction getMeltable(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         for (WorldMeltables melt : values()) {
-            if(melt.isMeltable(world, pos, state))
-                return melt;
+            if (melt.isMeltable(world, pos, state)) return melt;
         }
         ItemStack stack = ItemUtils.createBlockStack(state);
-        if(!stack.isEmpty()) {
-            ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
-            if(!out.isEmpty()) {
+        if (!stack.isEmpty()) {
+            ItemStack out = FurnaceRecipes.instance()
+                .getSmeltingResult(stack);
+            if (!out.isEmpty()) {
                 return new FurnaceRecipeInteraction(state, out);
             }
         }
@@ -98,7 +98,7 @@ public enum WorldMeltables implements MeltInteraction {
         }
 
         public boolean isValid(World world, boolean forceLoad) {
-            if(!forceLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true;
+            if (!forceLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true;
             return getMeltable(world) != null;
         }
 
@@ -114,7 +114,10 @@ public enum WorldMeltables implements MeltInteraction {
         private final BlockStateCheck.Meta matchInState;
 
         public FurnaceRecipeInteraction(IBlockState inState, ItemStack outStack) {
-            this.matchInState = new BlockStateCheck.Meta(inState.getBlock(), inState.getBlock().getMetaFromState(inState));
+            this.matchInState = new BlockStateCheck.Meta(
+                inState.getBlock(),
+                inState.getBlock()
+                    .getMetaFromState(inState));
             this.out = outStack;
         }
 

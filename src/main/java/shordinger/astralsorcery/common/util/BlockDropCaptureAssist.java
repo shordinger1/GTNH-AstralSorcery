@@ -43,18 +43,21 @@ public class BlockDropCaptureAssist {
             ItemStack itemStack = ((EntityItem) event.getEntity()).getItem();
             if (stack > -1) {
                 event.setCanceled(true);
-                if(!itemStack.isEmpty()) {
-                    if(itemStack.getItem() instanceof ItemBlock &&
-                            ((ItemBlock) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
-                        event.getEntity().setDead();
+                if (!itemStack.isEmpty()) {
+                    if (itemStack.getItem() instanceof ItemBlock && ((ItemBlock) itemStack.getItem()).getBlock()
+                        .equals(Blocks.STONE)) {
+                        event.getEntity()
+                            .setDead();
                         return;
                     }
-                    //Apparently concurrency sometimes gets us here...
+                    // Apparently concurrency sometimes gets us here...
                     if (stack > -1) {
-                        capturedStacks.computeIfAbsent(stack, st -> NonNullList.create()).add(itemStack);
+                        capturedStacks.computeIfAbsent(stack, st -> NonNullList.create())
+                            .add(itemStack);
                     }
                 }
-                event.getEntity().setDead();
+                event.getEntity()
+                    .setDead();
             }
         }
     }

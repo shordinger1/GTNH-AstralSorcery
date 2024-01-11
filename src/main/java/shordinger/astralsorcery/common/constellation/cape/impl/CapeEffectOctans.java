@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import shordinger.astralsorcery.common.lib.Constellations;
@@ -15,8 +17,6 @@ import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,13 +34,19 @@ public class CapeEffectOctans extends CapeArmorEffect {
     }
 
     public void onWaterHealTick(EntityPlayer pl) {
-        if(healPerTick <= 0) return;
+        if (healPerTick <= 0) return;
         pl.heal(healPerTick);
     }
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        healPerTick = cfg.getFloat(getKey() + "HealPerTick", getConfigurationSection(), healPerTick, 0, 5, "Defines the amount of health that is healed while the wearer is in water. Can be set to 0 to disable this.");
+        healPerTick = cfg.getFloat(
+            getKey() + "HealPerTick",
+            getConfigurationSection(),
+            healPerTick,
+            0,
+            5,
+            "Defines the amount of health that is healed while the wearer is in water. Can be set to 0 to disable this.");
     }
 
     @Override
@@ -52,7 +58,7 @@ public class CapeEffectOctans extends CapeArmorEffect {
     @SideOnly(Side.CLIENT)
     public void playActiveParticleTick(EntityPlayer pl) {
         float perc = 0.15F;
-        if(pl.isInsideOfMaterial(Material.WATER)) {
+        if (pl.isInsideOfMaterial(Material.WATER)) {
             perc = 0.3F;
         }
         playConstellationCapeSparkles(pl, perc);

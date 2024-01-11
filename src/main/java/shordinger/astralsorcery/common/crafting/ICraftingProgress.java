@@ -21,7 +21,8 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
  */
 public interface ICraftingProgress {
 
-    //True if the recipe progressed, false if the recipe should be stuck..
-    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick, int totalCraftingTime);
+    // True if the recipe progressed, false if the recipe should be stuck..
+    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData,
+                              int activeCraftingTick, int totalCraftingTime);
 
 }

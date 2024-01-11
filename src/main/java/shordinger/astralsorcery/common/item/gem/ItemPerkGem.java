@@ -8,7 +8,15 @@
 
 package shordinger.astralsorcery.common.item.gem;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -30,12 +38,6 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -67,7 +69,7 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             for (GemType type : GemType.values()) {
                 items.add(new ItemStack(this, 1, type.ordinal()));
             }
@@ -96,7 +98,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
             return Lists.newArrayList();
         }
         List<GemAttributeModifier> modifiers = Lists.newArrayList();
-        NBTTagList mods = NBTHelper.getPersistentData(stack).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
+        NBTTagList mods = NBTHelper.getPersistentData(stack)
+            .getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < mods.tagCount(); i++) {
             NBTTagCompound tag = mods.getCompoundTagAt(i);
             modifiers.add(GemAttributeModifier.deserialize(tag));
@@ -112,7 +115,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
         for (GemAttributeModifier modifier : modifiers) {
             mods.appendTag(modifier.serialize());
         }
-        NBTHelper.getPersistentData(stack).setTag("modifiers", mods);
+        NBTHelper.getPersistentData(stack)
+            .setTag("modifiers", mods);
         return true;
     }
 
@@ -131,9 +135,11 @@ public class ItemPerkGem extends Item implements IItemVariants {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         Item i = stack.getItem();
-        if(i instanceof ItemPerkGem) {
+        if (i instanceof ItemPerkGem) {
             GemType type = GemType.values()[MathHelper.clamp(stack.getItemDamage(), 0, GemType.values().length)];
-            return super.getUnlocalizedName(stack) + "." + type.name().toLowerCase();
+            return super.getUnlocalizedName(stack) + "."
+                + type.name()
+                .toLowerCase();
         }
         return super.getUnlocalizedName(stack);
     }
@@ -144,7 +150,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
         GemType[] values = GemType.values();
         for (int i = 0; i < values.length; i++) {
             GemType mt = values[i];
-            sub[i] = mt.name().toLowerCase();
+            sub[i] = mt.name()
+                .toLowerCase();
         }
         return sub;
     }
@@ -162,8 +169,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     public static enum GemType {
 
-        SKY  (1.0F, 1.0F),
-        DAY  (7.5F, 0.6F),
+        SKY(1.0F, 1.0F),
+        DAY(7.5F, 0.6F),
         NIGHT(0.5F, 3.0F);
 
         public final float countModifier;

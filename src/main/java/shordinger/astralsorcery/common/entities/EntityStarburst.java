@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.entities;
 
+import java.awt.*;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.util.EntityUtils;
@@ -21,11 +26,6 @@ import shordinger.wrapper.net.minecraft.util.EntitySelectors;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,36 +61,43 @@ public class EntityStarburst extends EntityThrowable {
         if (world.isRemote) {
             playEffects();
         } else {
-            if(targetId == -1) {
+            if (targetId == -1) {
                 AxisAlignedBB box = searchBox.offset(posX, posY, posZ);
-                List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_ALIVE);
-                if(getThrower() != null) {
+                List<EntityLivingBase> entities = world
+                    .getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_ALIVE);
+                if (getThrower() != null) {
                     entities.remove(getThrower());
                 }
                 entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(getThrower(), e));
 
-                EntityLivingBase closest = EntityUtils.selectClosest(entities, entityLivingBase -> entityLivingBase.getDistanceSq(this));
-                if(closest != null) {
+                EntityLivingBase closest = EntityUtils
+                    .selectClosest(entities, entityLivingBase -> entityLivingBase.getDistanceSq(this));
+                if (closest != null) {
                     targetId = closest.getEntityId();
                 }
             }
-            if(targetId != -1) {
+            if (targetId != -1) {
                 Entity e = world.getEntityByID(targetId);
-                if(e == null || e.isDead || !(e instanceof EntityLivingBase)) {
+                if (e == null || e.isDead || !(e instanceof EntityLivingBase)) {
                     targetId = -1;
                 } else {
                     EntityLivingBase entity = (EntityLivingBase) e;
 
-                    Vector3 thisPos =  Vector3.atEntityCorner(this);
+                    Vector3 thisPos = Vector3.atEntityCorner(this);
                     Vector3 targetEntity = Vector3.atEntityCorner(entity);
-                    Vector3 dirMotion = targetEntity.clone().subtract(thisPos);
+                    Vector3 dirMotion = targetEntity.clone()
+                        .subtract(thisPos);
                     Vector3 currentMotion = new Vector3(this.motionX, this.motionY, this.motionZ);
                     double dst = thisPos.distance(targetEntity);
-                    if(dst < descendingDst) {
+                    if (dst < descendingDst) {
                         double originalPart = dst / descendingDst;
                         double length = currentMotion.length();
-                        currentMotion = dirMotion.multiply(1 - originalPart).add(currentMotion.clone().multiply(originalPart));
-                        currentMotion.normalize().multiply(length);
+                        currentMotion = dirMotion.multiply(1 - originalPart)
+                            .add(
+                                currentMotion.clone()
+                                    .multiply(originalPart));
+                        currentMotion.normalize()
+                            .multiply(length);
                     }
 
                     this.motionX = currentMotion.getX();
@@ -106,10 +113,12 @@ public class EntityStarburst extends EntityThrowable {
         EntityFXFacingParticle particle;
         for (int i = 0; i < 2; i++) {
             particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-            particle.motion(
+            particle
+                .motion(
                     rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
                     rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
-                    rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F).scale(0.3F);
+                    rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F)
+                .scale(0.3F);
             switch (rand.nextInt(4)) {
                 case 0:
                     particle.setColor(Color.WHITE);
@@ -124,17 +133,20 @@ public class EntityStarburst extends EntityThrowable {
                     break;
             }
         }
-        if(ticksExisted % 12 == 0) {
+        if (ticksExisted % 12 == 0) {
             for (Vector3 pos : MiscUtils.getCirclePositions(
-                    Vector3.atEntityCenter(this),
-                    new Vector3(motionX, motionY, motionZ),
-                    1F, 25 + rand.nextInt(14))) {
-                particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ()).gravity(0.004);
-                particle.scale(0.4F).setAlphaMultiplier(0.5F);
+                Vector3.atEntityCenter(this),
+                new Vector3(motionX, motionY, motionZ),
+                1F,
+                25 + rand.nextInt(14))) {
+                particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ())
+                    .gravity(0.004);
+                particle.scale(0.4F)
+                    .setAlphaMultiplier(0.5F);
                 particle.motion(
-                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
-                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
-                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F);
+                    rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
+                    rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
+                    rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F);
                 switch (rand.nextInt(3)) {
                     case 0:
                         particle.setColor(Color.WHITE);
@@ -189,11 +201,14 @@ public class EntityStarburst extends EntityThrowable {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }
-                CelestialStrike.play(getThrower(), world, Vector3.atEntityCenter(result.entityHit), Vector3.atEntityCenter(result.entityHit));
+                CelestialStrike.play(
+                    getThrower(),
+                    world,
+                    Vector3.atEntityCenter(result.entityHit),
+                    Vector3.atEntityCenter(result.entityHit));
             }
             setDead();
         }
     }
 
 }
-

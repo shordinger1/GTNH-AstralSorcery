@@ -8,8 +8,9 @@
 
 package shordinger.astralsorcery.client.gui.journal;
 
-import javax.annotation.Nullable;
 import java.awt.*;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +23,7 @@ public abstract class SizeHandler {
 
     private static final int W_H_NODE = 18;
 
-    //Space between outermost nodes and border.
+    // Space between outermost nodes and border.
     public final double heightToBorder;
     public final double widthToBorder;
 
@@ -74,8 +75,8 @@ public abstract class SizeHandler {
         int lowerMost = 0;
 
         int[] requiredRect = buildRequiredRectangle();
-        if(requiredRect != null) {
-            leftMost =  requiredRect[0];
+        if (requiredRect != null) {
+            leftMost = requiredRect[0];
             rightMost = requiredRect[1];
             upperMost = requiredRect[2];
             lowerMost = requiredRect[3];
@@ -87,7 +88,7 @@ public abstract class SizeHandler {
         upperMost = Math.abs(upperMost);
         lowerMost = Math.abs(lowerMost);
 
-        int leftAdded  = (leftMost  * this.widthHeightNodes + leftMost  * this.spaceBetweenNodes);
+        int leftAdded = (leftMost * this.widthHeightNodes + leftMost * this.spaceBetweenNodes);
         int rightAdded = (rightMost * this.widthHeightNodes + rightMost * this.spaceBetweenNodes);
 
         int upperAdded = (upperMost * this.widthHeightNodes + upperMost * this.spaceBetweenNodes);
@@ -135,12 +136,12 @@ public abstract class SizeHandler {
     }
 
     public void handleZoomIn() {
-        if(scalingFactor >= maxScale) return;
+        if (scalingFactor >= maxScale) return;
         scalingFactor = Math.min(maxScale, scalingFactor + scaleSpeed);
     }
 
     public void handleZoomOut() {
-        if(scalingFactor <= minScale) return;
+        if (scalingFactor <= minScale) return;
         scalingFactor = Math.max(minScale, scalingFactor - scaleSpeed);
     }
 
@@ -152,30 +153,30 @@ public abstract class SizeHandler {
         this.scalingFactor = 1.0D;
     }
 
-    //ensures that the cursor pos never gets too close to a border. (X)
-    //scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
+    // ensures that the cursor pos never gets too close to a border. (X)
+    // scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
     public double clampX(double centerX) {
-        if((centerX + widthToBorder) > getTotalWidth()) {
+        if ((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
-        if((centerX - widthToBorder) < 0) {
+        if ((centerX - widthToBorder) < 0) {
             centerX = widthToBorder;
         }
         return centerX;
     }
 
-    //ensures that the cursor pos never gets too close to a border. (Y)
+    // ensures that the cursor pos never gets too close to a border. (Y)
     public double clampY(double centerY) {
-        if((centerY + heightToBorder) > getTotalHeight()) {
+        if ((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }
-        if((centerY - heightToBorder) < 0) {
+        if ((centerY - heightToBorder) < 0) {
             centerY = heightToBorder;
         }
         return centerY;
     }
 
-    //Translates a renderPos into a gui-valid renderPosition (zoomed)
+    // Translates a renderPos into a gui-valid renderPosition (zoomed)
     public double evRelativePosX(int relativeX) {
         return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
     }

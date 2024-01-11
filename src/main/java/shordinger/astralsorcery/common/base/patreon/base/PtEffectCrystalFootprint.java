@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
+import java.awt.*;
+import java.util.EnumSet;
+import java.util.UUID;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -19,12 +25,6 @@ import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.EnumSet;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +38,8 @@ public class PtEffectCrystalFootprint extends PatreonEffectHelper.PatreonEffect 
     private final UUID playerUUID;
     private Color color;
 
-    public PtEffectCrystalFootprint(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor, UUID playerUUID, Color footprintColor) {
+    public PtEffectCrystalFootprint(UUID uniqueId, PatreonEffectHelper.FlareColor chosenColor, UUID playerUUID,
+                                    Color footprintColor) {
         super(uniqueId, chosenColor);
         this.playerUUID = playerUUID;
         this.color = footprintColor;
@@ -48,19 +49,20 @@ public class PtEffectCrystalFootprint extends PatreonEffectHelper.PatreonEffect 
     public void initialize() {
         super.initialize();
 
-        TickManager.getInstance().register(this);
+        TickManager.getInstance()
+            .register(this);
     }
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         EntityPlayer player = (EntityPlayer) context[0];
         Side side = (Side) context[1];
-        if (side == Side.CLIENT &&
-                player != null &&
-                player.getUniqueID().equals(playerUUID) &&
-                player.onGround) {
+        if (side == Side.CLIENT && player != null
+            && player.getUniqueID()
+            .equals(playerUUID)
+            && player.onGround) {
 
-            //spawnDust(player);
+            // spawnDust(player);
 
             if (rand.nextBoolean()) {
                 spawnFootprint(player);
@@ -71,16 +73,13 @@ public class PtEffectCrystalFootprint extends PatreonEffectHelper.PatreonEffect 
     @SideOnly(Side.CLIENT)
     private void spawnDust(EntityPlayer player) {
         Vector3 pos = Vector3.atEntityCorner(player)
-                .subtract(player.width / 2,
-                        0,
-                        player.width / 2)
-                .add(player.width * rand.nextFloat(),
-                        0.01,
-                        player.width * rand.nextFloat());
+            .subtract(player.width / 2, 0, player.width / 2)
+            .add(player.width * rand.nextFloat(), 0.01, player.width * rand.nextFloat());
 
         float scale = rand.nextFloat() * 0.3F + 0.25F;
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos);
-        p.setColor(this.color).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        p.setColor(this.color)
+            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
         p.scale(scale);
         p.gravity(0.004);
         p.setMaxAge(45 + rand.nextInt(30));
@@ -89,23 +88,20 @@ public class PtEffectCrystalFootprint extends PatreonEffectHelper.PatreonEffect 
     @SideOnly(Side.CLIENT)
     private void spawnFootprint(EntityPlayer player) {
         Vector3 pos = Vector3.atEntityCorner(player)
-                .subtract(player.width / 2,
-                        0.1,
-                        player.width / 2)
-                .add(player.width * rand.nextFloat(),
-                        0,
-                        player.width * rand.nextFloat());
+            .subtract(player.width / 2, 0.1, player.width / 2)
+            .add(player.width * rand.nextFloat(), 0, player.width * rand.nextFloat());
 
         EntityFXCrystal crystal = new EntityFXCrystal(pos.getX(), pos.getY(), pos.getZ());
         crystal.rotation(
-                rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1),
-                180 + rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1));
+            rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1),
+            rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1),
+            180 + rand.nextFloat() * 25F * (rand.nextBoolean() ? 1 : -1));
         crystal.setColor(this.color);
         crystal.setMaxAge(70 + rand.nextInt(40));
         crystal.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
         crystal.scale(0.025F + rand.nextFloat() * 0.03F);
-        EffectHandler.getInstance().registerFX(crystal);
+        EffectHandler.getInstance()
+            .registerFX(crystal);
     }
 
     @Override

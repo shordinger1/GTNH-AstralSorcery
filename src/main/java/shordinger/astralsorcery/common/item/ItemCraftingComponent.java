@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.item;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.entities.EntityItemStardust;
 import shordinger.astralsorcery.common.item.base.IItemVariants;
 import shordinger.astralsorcery.common.lib.ItemsAS;
@@ -20,8 +22,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,7 +40,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             for (MetaType type : MetaType.values()) {
                 items.add(new ItemStack(this, 1, type.getMeta()));
             }
@@ -65,7 +65,12 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         MetaType type = MetaType.fromMeta(itemstack.getItemDamage());
         switch (type) {
             case STARDUST:
-                EntityItemStardust stardust = new EntityItemStardust(world, location.posX, location.posY, location.posZ, itemstack);
+                EntityItemStardust stardust = new EntityItemStardust(
+                    world,
+                    location.posX,
+                    location.posY,
+                    location.posZ,
+                    itemstack);
                 stardust.setDefaultPickupDelay();
                 stardust.motionX = location.motionX;
                 stardust.motionY = location.motionY;
@@ -84,7 +89,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         Item i = stack.getItem();
-        if(i instanceof ItemCraftingComponent) {
+        if (i instanceof ItemCraftingComponent) {
             MetaType type = MetaType.fromMeta(stack.getItemDamage());
             return super.getUnlocalizedName(stack) + "." + type.getUnlocalizedName();
         }
@@ -135,7 +140,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         }
 
         public static MetaType fromMeta(int meta) {
-            int ord = MathHelper.clamp(meta, 0, values().length -1);
+            int ord = MathHelper.clamp(meta, 0, values().length - 1);
             return values()[ord];
         }
 

@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
@@ -31,7 +31,9 @@ public class CategoryInfuser extends JEIBaseCategory<InfuserRecipeWrapper> {
 
     public CategoryInfuser(IGuiHelper guiHelper) {
         super("jei.category.infuser", ModIntegrationJEI.idInfuser);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateInfusion.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateInfusion.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 54);
     }
 

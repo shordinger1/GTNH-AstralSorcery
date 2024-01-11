@@ -8,11 +8,13 @@
 
 package shordinger.astralsorcery.common.structure;
 
-import com.google.common.collect.Maps;
-import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import java.util.Map;
 
 import javax.annotation.Nullable;
-import java.util.Map;
+
+import com.google.common.collect.Maps;
+
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod

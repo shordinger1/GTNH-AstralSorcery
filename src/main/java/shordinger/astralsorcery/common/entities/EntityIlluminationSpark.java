@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.entities;
 
+import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -15,10 +19,6 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityThrowable;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +46,7 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     public void onUpdate() {
         super.onUpdate();
 
-        if(world.isRemote) {
+        if (world.isRemote) {
             playEffects();
         }
     }
@@ -56,10 +56,12 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
         EntityFXFacingParticle particle;
         for (int i = 0; i < 6; i++) {
             particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-            particle.motion(
+            particle
+                .motion(
                     0.04F - rand.nextFloat() * 0.08F,
                     0.04F - rand.nextFloat() * 0.08F,
-                    0.04F - rand.nextFloat() * 0.08F).scale(0.25F);
+                    0.04F - rand.nextFloat() * 0.08F)
+                .scale(0.25F);
             randomizeColor(particle);
         }
         particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
@@ -91,10 +93,20 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     protected void onImpact(RayTraceResult result) {
         if (!world.isRemote) {
             if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                if (world.mayPlace(BlocksAS.blockVolatileLight, result.getBlockPos().offset(result.sideHit), false, result.sideHit, null)) {
-                    world.setBlockState(result.getBlockPos().offset(result.sideHit), BlocksAS.blockVolatileLight.getDefaultState(), 3);
+                if (world.mayPlace(
+                    BlocksAS.blockVolatileLight,
+                    result.getBlockPos()
+                        .offset(result.sideHit),
+                    false,
+                    result.sideHit,
+                    null)) {
+                    world.setBlockState(
+                        result.getBlockPos()
+                            .offset(result.sideHit),
+                        BlocksAS.blockVolatileLight.getDefaultState(),
+                        3);
                 }
-            } else if(result.typeOfHit == RayTraceResult.Type.ENTITY) {
+            } else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }

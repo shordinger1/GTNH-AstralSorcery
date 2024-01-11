@@ -33,10 +33,11 @@ public class InfusionRecipe extends BaseTweaker {
     protected static final String name = "AstralSorcery Starlight Infusion";
 
     @ZenMethod
-    public static void addInfusion(IItemStack input, IItemStack output, boolean consumeMultiple, float consumptionChance, int craftingTickTime) {
+    public static void addInfusion(IItemStack input, IItemStack output, boolean consumeMultiple,
+                                   float consumptionChance, int craftingTickTime) {
         ItemHandle in = convertToHandle(input);
         ItemStack out = convertToItemStack(output);
-        if(in == null || out.isEmpty()) {
+        if (in == null || out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe due to invalid input/output.");
             return;
         }
@@ -44,13 +45,14 @@ public class InfusionRecipe extends BaseTweaker {
         consumptionChance = MathHelper.clamp(consumptionChance, 0F, 1F);
         craftingTickTime = Math.max(1, craftingTickTime);
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new InfusionRecipeAdd(in, out, consumeMultiple, consumptionChance, craftingTickTime));
+        ModIntegrationCrafttweaker.recipeModifications
+            .add(new InfusionRecipeAdd(in, out, consumeMultiple, consumptionChance, craftingTickTime));
     }
 
     @ZenMethod
     public static void removeInfusion(IItemStack output) {
         ItemStack out = convertToItemStack(output);
-        if(out.isEmpty()) {
+        if (out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-remoal due to invalid output.");
             return;
         }

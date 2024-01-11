@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.client.util;
 
-import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
-import shordinger.wrapper.net.minecraft.util.ChatAllowedCharacters;
-import org.lwjgl.input.Keyboard;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.lwjgl.input.Keyboard;
+
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.util.ChatAllowedCharacters;
 
 /**
  * This class is part of the Astral Sorcery Mod

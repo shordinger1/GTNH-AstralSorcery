@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.base.patreon.data;
 
-import com.google.common.collect.Lists;
-
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class is part of the Astral Sorcery Mod

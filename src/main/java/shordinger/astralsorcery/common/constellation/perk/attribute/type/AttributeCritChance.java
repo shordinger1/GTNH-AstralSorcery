@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
@@ -22,7 +23,6 @@ import shordinger.wrapper.net.minecraftforge.event.entity.player.CriticalHitEven
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
@@ -56,7 +56,7 @@ public class AttributeCritChance extends PerkAttributeType {
                     return;
                 }
                 float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
+                    .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
                 critChance = AttributeEvent.postProcessModded(player, this, critChance);
                 critChance /= 100.0F;
                 if (critChance >= rand.nextFloat()) {
@@ -78,7 +78,7 @@ public class AttributeCritChance extends PerkAttributeType {
         }
 
         float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
+            .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
         critChance = AttributeEvent.postProcessModded(player, this, critChance);
         critChance /= 100.0F;
         if (critChance >= rand.nextFloat()) {

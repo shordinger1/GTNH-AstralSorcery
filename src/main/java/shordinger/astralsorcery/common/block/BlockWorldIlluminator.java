@@ -21,7 +21,6 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
 import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -83,8 +82,10 @@ public class BlockWorldIlluminator extends BlockContainer {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (!worldIn.isRemote && placer instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
+        if (!worldIn.isRemote && placer instanceof EntityPlayerMP
+            && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
             TileIlluminator ti = MiscUtils.getTileAt(worldIn, pos, TileIlluminator.class, true);
             if (ti != null) {
                 ti.setPlayerPlaced();
@@ -93,7 +94,8 @@ public class BlockWorldIlluminator extends BlockContainer {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

@@ -43,7 +43,7 @@ public class ASlens extends ModelBase {
         this.lens = new ModelRenderer(this, 0, 0);
         this.lens.setRotationPoint(0.0F, 14.0F, 0.0F);
         this.lens.addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1, 0.0F);
-        //this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
+        // this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
     }
 
     @Override

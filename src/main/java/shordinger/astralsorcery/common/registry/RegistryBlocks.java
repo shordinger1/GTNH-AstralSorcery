@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.registry;
 
+import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.base.Mods;
@@ -34,11 +39,6 @@ import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -59,7 +59,7 @@ public class RegistryBlocks {
 
         registerTileEntities();
 
-        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+        if (Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleBlock();
         }
     }
@@ -69,17 +69,23 @@ public class RegistryBlocks {
         FluidRegistry.registerFluid(f);
         fluidLiquidStarlight = FluidRegistry.getFluid(f.getName());
         blockLiquidStarlight = new FluidBlockLiquidStarlight();
-        CommonProxy.registryPrimer.register(blockLiquidStarlight
-                .setUnlocalizedName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase())
-                .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
+        CommonProxy.registryPrimer.register(
+            blockLiquidStarlight.setUnlocalizedName(
+                    blockLiquidStarlight.getClass()
+                        .getSimpleName()
+                        .toLowerCase())
+                .setRegistryName(
+                    blockLiquidStarlight.getClass()
+                        .getSimpleName()
+                        .toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
         FluidRegistry.addBucketForFluid(fluidLiquidStarlight);
     }
 
-    //Blocks
+    // Blocks
     private static void registerBlocks() {
-        //WorldGen&Related
+        // WorldGen&Related
         customOre = registerBlock(new BlockCustomOre());
         queueCustomNameItemBlock(customOre);
         customSandOre = registerBlock(new BlockCustomSandOre());
@@ -107,7 +113,7 @@ public class RegistryBlocks {
         blockBoreHead = registerBlock(new BlockBoreHead());
         queueCustomNameItemBlock(blockBoreHead);
 
-        //Mechanics
+        // Mechanics
         blockAltar = registerBlock(new BlockAltar());
         attunementAltar = registerBlock(new BlockAttunementAltar());
         queueDefaultItemBlock(attunementAltar);
@@ -150,8 +156,8 @@ public class RegistryBlocks {
         gemCrystals = registerBlock(new BlockGemCrystals());
         queueCustomNameItemBlock(gemCrystals);
 
-        //Machines&Related
-        //stoneMachine = registerBlock(new BlockStoneMachine());
+        // Machines&Related
+        // stoneMachine = registerBlock(new BlockStoneMachine());
         collectorCrystal = registerBlock(new BlockCollectorCrystal());
         celestialCollectorCrystal = registerBlock(new BlockCelestialCollectorCrystal());
 
@@ -159,8 +165,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(blockStructural);
     }
 
-    //Called after items are registered.
-    //Necessary for blocks that require different models/renders for different metadata values
+    // Called after items are registered.
+    // Necessary for blocks that require different models/renders for different metadata values
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
@@ -178,7 +184,7 @@ public class RegistryBlocks {
         registerBlockRender(gemCrystals);
     }
 
-    //Tiles
+    // Tiles
     private static void registerTileEntities() {
         registerTile(TileAltar.class);
         registerTile(TileRitualPedestal.class);
@@ -219,19 +225,25 @@ public class RegistryBlocks {
     }
 
     private static <T extends Block> T registerBlock(T block, String name) {
-        CommonProxy.registryPrimer.register(block.setUnlocalizedName(name).setRegistryName(name));
-        if(block instanceof BlockDynamicColor) {
+        CommonProxy.registryPrimer.register(
+            block.setUnlocalizedName(name)
+                .setRegistryName(name));
+        if (block instanceof BlockDynamicColor) {
             pendingIBlockColorBlocks.add((BlockDynamicColor) block);
         }
         return block;
     }
 
     public static <T extends Block> T registerBlock(T block) {
-        return registerBlock(block, block.getClass().getSimpleName().toLowerCase());
+        return registerBlock(
+            block,
+            block.getClass()
+                .getSimpleName()
+                .toLowerCase());
     }
 
     private static void registerBlockRender(Block block) {
-        if(block instanceof BlockVariants) {
+        if (block instanceof BlockVariants) {
             for (IBlockState state : ((BlockVariants) block).getValidStates()) {
                 String unlocName = ((BlockVariants) block).getBlockName(state);
                 String name = unlocName + "_" + ((BlockVariants) block).getStateName(state);
@@ -251,7 +263,10 @@ public class RegistryBlocks {
     }
 
     public static void registerTile(Class<? extends TileEntity> tile) {
-        registerTile(tile, tile.getSimpleName().toLowerCase());
+        registerTile(
+            tile,
+            tile.getSimpleName()
+                .toLowerCase());
     }
 
     public static class FluidCustomModelMapper extends StateMapperBase implements ItemMeshDefinition {

@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
@@ -16,8 +18,6 @@ import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,7 +30,7 @@ public class ItemTunedRockCrystal extends ItemTunedCrystalBase implements ItemGa
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             ItemStack stack;
             for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
                 stack = new ItemStack(this);
@@ -49,7 +49,8 @@ public class ItemTunedRockCrystal extends ItemTunedCrystalBase implements ItemGa
     @Override
     @SideOnly(Side.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
-        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
+        return getClientProgress().getTierReached()
+            .isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
     }
 
 }

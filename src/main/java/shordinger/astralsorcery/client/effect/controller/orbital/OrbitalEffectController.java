@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.client.effect.controller.orbital;
 
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +33,8 @@ public class OrbitalEffectController extends EntityComplexFX {
     private Vector3 orbitAxis = Vector3.RotAxis.Y_AXIS;
     private Vector3 offset = new Vector3();
 
-    public OrbitalEffectController(OrbitPointEffect effect, @Nullable OrbitPersistence persistence, @Nullable OrbitTickModifier tickModifier) {
+    public OrbitalEffectController(OrbitPointEffect effect, @Nullable OrbitPersistence persistence,
+                                   @Nullable OrbitTickModifier tickModifier) {
         this.effect = effect;
         this.persistence = persistence;
         this.tickModifier = tickModifier;
@@ -73,15 +74,15 @@ public class OrbitalEffectController extends EntityComplexFX {
     public void tick() {
         super.tick();
 
-        if(canRemove()) {
-            if(persistence != null) {
-                if(persistence.canPersist(this)){
+        if (canRemove()) {
+            if (persistence != null) {
+                if (persistence.canPersist(this)) {
                     age = 0;
                 }
             }
         }
 
-        if(tickModifier != null) {
+        if (tickModifier != null) {
             tickModifier.onTick(this);
         }
 
@@ -89,7 +90,12 @@ public class OrbitalEffectController extends EntityComplexFX {
     }
 
     private void scheduleEffects() {
-        Vector3 point = orbitAxis.clone().perpendicular().normalize().multiply(orbitRadius).rotate(Math.toRadians(getRotationDegree()), orbitAxis).add(offset);
+        Vector3 point = orbitAxis.clone()
+            .perpendicular()
+            .normalize()
+            .multiply(orbitRadius)
+            .rotate(Math.toRadians(getRotationDegree()), orbitAxis)
+            .add(offset);
         effect.doPointTickEffect(this, point);
     }
 

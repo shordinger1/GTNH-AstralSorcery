@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.item;
 
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
@@ -30,11 +36,6 @@ import shordinger.wrapper.net.minecraft.util.EnumActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -51,9 +52,9 @@ public class ItemJournal extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        if(worldIn.isRemote && !playerIn.isSneaking()) {
+        if (worldIn.isRemote && !playerIn.isSneaking()) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL, playerIn, worldIn, 0, 0, 0);
-        } else if(!worldIn.isRemote && playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
+        } else if (!worldIn.isRemote && playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL_STORAGE, playerIn, worldIn, 0, 0, 0);
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
@@ -61,7 +62,7 @@ public class ItemJournal extends Item {
 
     @Nullable
     public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack, int journalIndex) {
-        if(stack.isEmpty() || !(stack.getItem() instanceof ItemJournal)) return null;
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemJournal)) return null;
         return new ContainerJournal(playerInv, stack, journalIndex);
     }
 
@@ -94,7 +95,7 @@ public class ItemJournal extends Item {
         LinkedList<IConstellation> out = new LinkedList<>();
         for (int i = 0; i < constellationPapers.tagCount(); i++) {
             IConstellation c = ConstellationRegistry.getConstellationByName(constellationPapers.getStringTagAt(i));
-            if(c != null) {
+            if (c != null) {
                 out.add(c);
             }
         }

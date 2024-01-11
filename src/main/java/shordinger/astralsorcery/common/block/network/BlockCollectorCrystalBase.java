@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
@@ -28,7 +30,6 @@ import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -48,8 +49,6 @@ import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -64,7 +63,7 @@ import java.util.Optional;
  * Date: 15.09.2016 / 19:03
  */
 public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
-        implements ISpecialStackDescriptor, CrystalPropertyItem, BlockStructureObserver {
+    implements ISpecialStackDescriptor, CrystalPropertyItem, BlockStructureObserver {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 
@@ -88,17 +87,16 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
         Color c = null;
-        if(state.getBlock() instanceof BlockCelestialCollectorCrystal) {
+        if (state.getBlock() instanceof BlockCelestialCollectorCrystal) {
             c = CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
         }
         for (int i = 0; i < 1 + world.rand.nextInt(2); i++) {
-            AstralSorcery.proxy.fireLightning(world,
-                    new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5),
-                    new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5)
-                            .add(-0.5 + world.rand.nextFloat(),
-                                 -2 + world.rand.nextFloat() * 4,
-                                 -0.5 + world.rand.nextFloat()),
-                    c);
+            AstralSorcery.proxy.fireLightning(
+                world,
+                new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5),
+                new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5)
+                    .add(-0.5 + world.rand.nextFloat(), -2 + world.rand.nextFloat() * 4, -0.5 + world.rand.nextFloat()),
+                c);
         }
         return true;
     }
@@ -124,7 +122,8 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -134,21 +133,28 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
         Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, getMaxSize(stack));
 
-        if(missing.isPresent()) {
+        if (missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
             IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
-            if(c != null) {
-                if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
+            if (c != null) {
+                if (EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier)
+                    && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                    tooltip.add(
+                        TextFormatting.GRAY + I18n
+                            .format("crystal.collect.type", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
                     IMinorConstellation tr = ItemCollectorCrystal.getTrait(stack);
-                    if(tr != null) {
-                        if(EnumGatedKnowledge.CRYSTAL_TRAIT.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
-                            tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
+                    if (tr != null) {
+                        if (EnumGatedKnowledge.CRYSTAL_TRAIT.canSee(tier)
+                            && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
+                            tooltip.add(
+                                TextFormatting.GRAY + I18n.format(
+                                    "crystal.trait",
+                                    TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
                         } else {
                             tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                         }
                     }
-                } else if(!missing.get()) {
+                } else if (!missing.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
             }
@@ -158,7 +164,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     @Override
     public int getMaxSize(ItemStack stack) {
         BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
-        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if (type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             return CrystalProperties.MAX_SIZE_CELESTIAL;
         }
         return CrystalProperties.MAX_SIZE_ROCK;
@@ -170,25 +176,28 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
         return CrystalProperties.getCrystalProperties(stack);
     }
 
-    /*@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
-            TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
-            if(te != null) {
-                playerIn.addChatMessage(new TextComponentString("PlayerMade: " + te.isPlayerMade()));
-                playerIn.addChatMessage(new TextComponentString("Constellation: " + te.getTransmittingType().getName()));
-                playerIn.addChatMessage(new TextComponentString("Can charge: " + te.canCharge()));
-                playerIn.addChatMessage(new TextComponentString("Charge: " + te.getCharge()));
-            }
-        }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
-    }*/
+    /*
+     * @Override
+     * public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand
+     * hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+     * if(!worldIn.isRemote) {
+     * TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+     * if(te != null) {
+     * playerIn.addChatMessage(new TextComponentString("PlayerMade: " + te.isPlayerMade()));
+     * playerIn.addChatMessage(new TextComponentString("Constellation: " + te.getTransmittingType().getName()));
+     * playerIn.addChatMessage(new TextComponentString("Can charge: " + te.canCharge()));
+     * playerIn.addChatMessage(new TextComponentString("Charge: " + te.getCharge()));
+     * }
+     * }
+     * return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+     * }
+     */
 
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
-        if(te != null) {
-            if(te.isPlayerMade()) {
+        if (te != null) {
+            if (te.isPlayerMade()) {
                 return 4.0F;
             }
         }
@@ -196,19 +205,27 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(!(placer instanceof EntityPlayer)) return;
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
+        if (!(placer instanceof EntityPlayer)) return;
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
-        if(te == null) return;
+        if (te == null) return;
 
         IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
-        if(c != null) {
-            te.onPlace(c, ItemCollectorCrystal.getTrait(stack), CrystalProperties.getCrystalProperties(stack), placer.getUniqueID(), ItemCollectorCrystal.getType(stack));
+        if (c != null) {
+            te.onPlace(
+                c,
+                ItemCollectorCrystal.getTrait(stack),
+                CrystalProperties.getCrystalProperties(stack),
+                placer.getUniqueID(),
+                ItemCollectorCrystal.getType(stack));
         }
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+    }
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
@@ -226,10 +243,11 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
-        if(te != null) {
-            if(te.getCrystalProperties() == null || te.getConstellation() == null || te.getType() == null) {
+        if (te != null) {
+            if (te.getCrystalProperties() == null || te.getConstellation() == null || te.getType() == null) {
                 return ItemStack.EMPTY;
             }
             ItemStack stack = new ItemStack(this);
@@ -245,7 +263,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     @Override
     public String getUnlocalizedName() {
         PlayerProgress client = ResearchManager.clientProgress;
-        if(EnumGatedKnowledge.COLLECTOR_CRYSTAL.canSee(client.getTierReached())) {
+        if (EnumGatedKnowledge.COLLECTOR_CRYSTAL.canSee(client.getTierReached())) {
             return super.getUnlocalizedName();
         }
         return "tile.blockcollectorcrystal.obf";
@@ -264,17 +282,23 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
-        if(te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.COLLECTOR_BURST,
-                    pos.getX(), pos.getY(), pos.getZ());
+        if (te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(
+                PktParticleEvent.ParticleEventType.COLLECTOR_BURST,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
             TileCollectorCrystal.breakDamage(worldIn, pos);
 
-            if(te.isPlayerMade() && !player.isCreative()) {
-                ItemStack drop = new ItemStack(te.getType() == CollectorCrystalType.CELESTIAL_CRYSTAL ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);
-                if(te.getCrystalProperties() != null && te.getConstellation() != null) {
+            if (te.isPlayerMade() && !player.isCreative()) {
+                ItemStack drop = new ItemStack(
+                    te.getType() == CollectorCrystalType.CELESTIAL_CRYSTAL ? BlocksAS.celestialCollectorCrystal
+                        : BlocksAS.collectorCrystal);
+                if (te.getCrystalProperties() != null && te.getConstellation() != null) {
                     CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
-                    ItemCollectorCrystal.setType(drop, te.getType() != null ? te.getType() : CollectorCrystalType.ROCK_CRYSTAL);
+                    ItemCollectorCrystal
+                        .setType(drop, te.getType() != null ? te.getType() : CollectorCrystalType.ROCK_CRYSTAL);
                     ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
                     ItemCollectorCrystal.setTraitConstellation(drop, te.getTrait());
                     ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);

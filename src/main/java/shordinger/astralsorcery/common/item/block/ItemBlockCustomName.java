@@ -24,7 +24,7 @@ public class ItemBlockCustomName extends ItemBlock {
 
     public ItemBlockCustomName(Block block) {
         super(block);
-        setHasSubtypes(true); //Normally the case if you're using multi-type blocks.
+        setHasSubtypes(true); // Normally the case if you're using multi-type blocks.
     }
 
     @Override

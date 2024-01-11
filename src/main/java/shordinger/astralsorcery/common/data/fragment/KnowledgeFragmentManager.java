@@ -8,13 +8,15 @@
 
 package shordinger.astralsorcery.common.data.fragment;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod

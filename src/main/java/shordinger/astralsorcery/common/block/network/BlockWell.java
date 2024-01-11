@@ -8,8 +8,13 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.base.WellLiquefaction;
-import shordinger.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileWell;
 import shordinger.astralsorcery.common.util.ItemUtils;
@@ -41,11 +46,6 @@ import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 import shordinger.wrapper.net.minecraftforge.items.wrapper.InvWrapper;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -89,16 +89,18 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return p_193383_4_ == EnumFacing.UP ? BlockFaceShape.BOWL : BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, true);
-        if(tw != null) {
-            if(tw.getHeldFluid() != null) {
-                return tw.getHeldFluid().getLuminosity();
+        if (tw != null) {
+            if (tw.getHeldFluid() != null) {
+                return tw.getHeldFluid()
+                    .getLuminosity();
             }
         }
         return super.getLightValue(state, world, pos);
@@ -115,40 +117,52 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote) {
 
             ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(!heldItem.isEmpty() && playerIn instanceof EntityPlayerMP) {
+            if (!heldItem.isEmpty() && playerIn instanceof EntityPlayerMP) {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
-                if(tw == null) return false;
+                if (tw == null) return false;
 
                 WellLiquefaction.LiquefactionEntry entry = WellLiquefaction.getLiquefactionEntry(heldItem);
-                if(entry != null) {
+                if (entry != null) {
                     ItemStackHandler handle = tw.getInventoryHandler();
-                    if(!handle.getStackInSlot(0).isEmpty()) return false;
+                    if (!handle.getStackInSlot(0)
+                        .isEmpty()) return false;
 
-                    if(!worldIn.isAirBlock(pos.up())) {
+                    if (!worldIn.isAirBlock(pos.up())) {
                         return false;
                     }
 
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
-                    worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
-                            SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
-                            ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    worldIn.playSound(
+                        null,
+                        pos.getX(),
+                        pos.getY(),
+                        pos.getZ(),
+                        SoundEvents.ENTITY_ITEM_PICKUP,
+                        SoundCategory.PLAYERS,
+                        0.2F,
+                        ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
-                    if(!playerIn.isCreative()) {
+                    if (!playerIn.isCreative()) {
                         heldItem.shrink(1);
                     }
-                    if(heldItem.getCount() <= 0) {
+                    if (heldItem.getCount() <= 0) {
                         playerIn.setHeldItem(hand, ItemStack.EMPTY);
                     }
                 }
 
-                FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem,
-                        tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN),
-                        new InvWrapper(playerIn.inventory), Fluid.BUCKET_VOLUME, playerIn, true);
-                if(far.isSuccess()) {
+                FluidActionResult far = FluidUtil.tryFillContainerAndStow(
+                    heldItem,
+                    tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN),
+                    new InvWrapper(playerIn.inventory),
+                    Fluid.BUCKET_VOLUME,
+                    playerIn,
+                    true);
+                if (far.isSuccess()) {
                     playerIn.setHeldItem(hand, far.getResult());
                     SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
                     tw.markForUpdate();
@@ -161,9 +175,10 @@ public class BlockWell extends BlockStarlightNetwork {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, true);
-        if(tw != null && !worldIn.isRemote) {
-            ItemStack stack = tw.getInventoryHandler().getStackInSlot(0);
-            if(!stack.isEmpty()) {
+        if (tw != null && !worldIn.isRemote) {
+            ItemStack stack = tw.getInventoryHandler()
+                .getStackInSlot(0);
+            if (!stack.isEmpty()) {
                 tw.breakCatalyst();
             }
         }
@@ -182,7 +197,8 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
+                                      List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
         for (AxisAlignedBB box : collisionBoxes) {
             addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
         }
@@ -215,12 +231,12 @@ public class BlockWell extends BlockStarlightNetwork {
     static {
         List<AxisAlignedBB> boxes = new LinkedList<>();
 
-        boxes.add(new AxisAlignedBB( 1D / 16D,       0D,  1D / 16D, 15D / 16D, 5D / 16D, 15D / 16D));
+        boxes.add(new AxisAlignedBB(1D / 16D, 0D, 1D / 16D, 15D / 16D, 5D / 16D, 15D / 16D));
 
-        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D,  1D / 16D,  2D / 16D,       1D, 15D / 16D));
-        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D,  1D / 16D, 15D / 16D,       1D,  2D / 16D));
-        boxes.add(new AxisAlignedBB(14D / 16D, 5D / 16D,  1D / 16D, 15D / 16D,       1D, 15D / 16D));
-        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D, 14D / 16D, 15D / 16D,       1D, 15D / 16D));
+        boxes.add(new AxisAlignedBB(1D / 16D, 5D / 16D, 1D / 16D, 2D / 16D, 1D, 15D / 16D));
+        boxes.add(new AxisAlignedBB(1D / 16D, 5D / 16D, 1D / 16D, 15D / 16D, 1D, 2D / 16D));
+        boxes.add(new AxisAlignedBB(14D / 16D, 5D / 16D, 1D / 16D, 15D / 16D, 1D, 15D / 16D));
+        boxes.add(new AxisAlignedBB(1D / 16D, 5D / 16D, 14D / 16D, 15D / 16D, 1D, 15D / 16D));
 
         collisionBoxes = Collections.unmodifiableList(boxes);
     }

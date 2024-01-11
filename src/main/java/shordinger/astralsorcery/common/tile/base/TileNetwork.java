@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
-import shordinger.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
-
 import java.util.Random;
+
+import shordinger.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,11 +27,11 @@ public abstract class TileNetwork extends TileEntityTick {
     public void update() {
         super.update();
 
-        if(world.isRemote) {
+        if (world.isRemote) {
             return;
         }
 
-        if(!isNetworkInformed && !TransmissionNetworkHelper.isTileInNetwork(this)) {
+        if (!isNetworkInformed && !TransmissionNetworkHelper.isTileInNetwork(this)) {
             TransmissionNetworkHelper.informNetworkTilePlacement(this);
             isNetworkInformed = true;
         }
@@ -43,7 +43,7 @@ public abstract class TileNetwork extends TileEntityTick {
     }
 
     public void onBreak() {
-        if(world.isRemote) return;
+        if (world.isRemote) return;
         TransmissionNetworkHelper.informNetworkTileRemoval(this);
         isNetworkInformed = false;
     }

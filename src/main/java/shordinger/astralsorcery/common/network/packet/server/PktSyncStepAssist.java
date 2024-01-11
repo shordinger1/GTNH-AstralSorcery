@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import shordinger.astralsorcery.AstralSorcery;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,7 +31,7 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
     public PktSyncStepAssist() {}
 
     public PktSyncStepAssist(float stepHeight) {
-        this.stepHeight = stepHeight - 0.4F; //FFS mojang
+        this.stepHeight = stepHeight - 0.4F; // FFS mojang
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
 
     @SideOnly(Side.CLIENT)
     public void apply(float stepHeight) {
-        if(Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().player == null) {
             AstralSorcery.proxy.scheduleClientside(() -> apply(stepHeight), 4);
             return;
         }

@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,10 +32,12 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
         int peek = peekFirstInstructionAfter(mn, 0, Opcodes.IRETURN);
         while (peek != -1) {
             AbstractInsnNode node = mn.instructions.get(peek);
-            //The old value is on the stack right now
-            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0)); //Enchantment
-            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1)); //ItemStack
-            mn.instructions.insertBefore(node, new MethodInsnNode(
+            // The old value is on the stack right now
+            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0)); // Enchantment
+            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1)); // ItemStack
+            mn.instructions.insertBefore(
+                node,
+                new MethodInsnNode(
                     Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/enchantment/amulet/EnchantmentUpgradeHelper",
                     "getNewEnchantmentLevel",
@@ -48,9 +51,11 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
         peek = peekFirstInstructionAfter(mn, 0, Opcodes.ARETURN);
         while (peek != -1) {
             AbstractInsnNode node = mn.instructions.get(peek);
-            //The stack currently contains the calculated enchantment->level mapping
-            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0)); //ItemStack
-            mn.instructions.insertBefore(node, new MethodInsnNode(
+            // The stack currently contains the calculated enchantment->level mapping
+            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 0)); // ItemStack
+            mn.instructions.insertBefore(
+                node,
+                new MethodInsnNode(
                     Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/enchantment/amulet/EnchantmentUpgradeHelper",
                     "applyNewEnchantmentLevels",
@@ -61,29 +66,34 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
         }
 
         mn = getMethodLazy(cn, "applyEnchantmentModifier", "func_77518_a");
-        peek = peekFirstMethodCallAfter(mn,
-                "net/minecraft/item/ItemStack",
-                "getEnchantmentTagList",
-                "func_77986_q",
-                "()Lnet/minecraft/nbt/NBTTagList;",
-                0);
+        peek = peekFirstMethodCallAfter(
+            mn,
+            "net/minecraft/item/ItemStack",
+            "getEnchantmentTagList",
+            "func_77986_q",
+            "()Lnet/minecraft/nbt/NBTTagList;",
+            0);
         while (peek != -1) {
-            AbstractInsnNode node = mn.instructions.get(peek).getNext();
-            //The actual enchantment-NBT-list is on the stack right now.
-            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1)); //ItemStack
-            mn.instructions.insertBefore(node, new MethodInsnNode(
+            AbstractInsnNode node = mn.instructions.get(peek)
+                .getNext();
+            // The actual enchantment-NBT-list is on the stack right now.
+            mn.instructions.insertBefore(node, new VarInsnNode(Opcodes.ALOAD, 1)); // ItemStack
+            mn.instructions.insertBefore(
+                node,
+                new MethodInsnNode(
                     Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/enchantment/amulet/EnchantmentUpgradeHelper",
                     "modifyEnchantmentTags",
                     "(Lnet/minecraft/nbt/NBTTagList;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/nbt/NBTTagList;",
                     false));
 
-            peek = peekFirstMethodCallAfter(mn,
-                    "net/minecraft/item/ItemStack",
-                    "getEnchantmentTagList",
-                    "func_77986_q",
-                    "()Lnet/minecraft/nbt/NBTTagList;",
-                    mn.instructions.indexOf(node) + 1);
+            peek = peekFirstMethodCallAfter(
+                mn,
+                "net/minecraft/item/ItemStack",
+                "getEnchantmentTagList",
+                "func_77986_q",
+                "()Lnet/minecraft/nbt/NBTTagList;",
+                mn.instructions.indexOf(node) + 1);
         }
     }
 

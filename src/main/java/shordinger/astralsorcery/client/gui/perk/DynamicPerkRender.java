@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
  */
 public interface DynamicPerkRender {
 
-    public void renderAt(PerkTreePoint.AllocationStatus status, long spriteOffsetTick, float pTicks,
-                              double x, double y, double scale);
+    public void renderAt(PerkTreePoint.AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
+                         double scale);
 
 }

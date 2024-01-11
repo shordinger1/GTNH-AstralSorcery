@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.data.config.ingame.screen;
 
+import java.util.ArrayList;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraftforge.common.config.ConfigElement;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.fml.client.config.*;
-
-import java.util.ArrayList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +26,13 @@ import java.util.ArrayList;
 public class ConfigHelper {
 
     public static IConfigElement getCategoryElement(String name, Configuration cfg) {
-        return new FileConfigElement(name, null, ConfigGuiType.CONFIG_CATEGORY, "config." + AstralSorcery.MODID + ".category." + name, cfg) {
+        return new FileConfigElement(
+            name,
+            null,
+            ConfigGuiType.CONFIG_CATEGORY,
+            "config." + AstralSorcery.MODID + ".category." + name,
+            cfg) {
+
             {
                 for (String s : cfg.getCategoryNames()) {
                     if (s.contains(Configuration.CATEGORY_SPLITTER)) continue;
@@ -38,17 +44,21 @@ public class ConfigHelper {
 
     public static class SubCategoryClass extends GuiConfigEntries.CategoryEntry {
 
-        public SubCategoryClass(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement configElement) {
+        public SubCategoryClass(GuiConfig owningScreen, GuiConfigEntries owningEntryList,
+                                IConfigElement configElement) {
             super(owningScreen, owningEntryList, configElement);
         }
 
         @Override
         protected GuiScreen buildChildScreen() {
-            return new GuiConfig(this.owningScreen,
-                    this.configElement.getChildElements(), this.owningScreen.modID, this.configElement.getName(),
-                    this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
-                    this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
-                    GuiConfig.getAbridgedConfigPath(this.configElement.toString()));
+            return new GuiConfig(
+                this.owningScreen,
+                this.configElement.getChildElements(),
+                this.owningScreen.modID,
+                this.configElement.getName(),
+                this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
+                this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
+                GuiConfig.getAbridgedConfigPath(this.configElement.toString()));
         }
     }
 

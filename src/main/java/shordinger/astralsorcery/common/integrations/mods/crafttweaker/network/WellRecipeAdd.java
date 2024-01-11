@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import java.awt.*;
+
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidRegistry;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,9 +31,11 @@ public class WellRecipeAdd implements SerializeableRecipe {
     private float productionMultiplier, shatterMultiplier;
     private int colorHex;
 
-    WellRecipeAdd() {}
+    WellRecipeAdd() {
+    }
 
-    public WellRecipeAdd(ItemStack inStack, Fluid fluidOut, float productionMultiplier, float shatterMultiplier, int colorHex) {
+    public WellRecipeAdd(ItemStack inStack, Fluid fluidOut, float productionMultiplier, float shatterMultiplier,
+                         int colorHex) {
         this.inStack = inStack;
         this.fluidOut = fluidOut;
         this.productionMultiplier = productionMultiplier;
@@ -66,7 +68,12 @@ public class WellRecipeAdd implements SerializeableRecipe {
 
     @Override
     public void applyRecipe() {
-        CraftingAccessManager.addMTLiquefaction(this.inStack, this.fluidOut, this.productionMultiplier, this.shatterMultiplier, new Color(this.colorHex));
+        CraftingAccessManager.addMTLiquefaction(
+            this.inStack,
+            this.fluidOut,
+            this.productionMultiplier,
+            this.shatterMultiplier,
+            new Color(this.colorHex));
     }
 
 }

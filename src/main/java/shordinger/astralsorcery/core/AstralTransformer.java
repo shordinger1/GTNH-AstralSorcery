@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.core;
 
-import shordinger.astralsorcery.core.transform.AstralPatchTransformer;
-import shordinger.wrapper.net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import shordinger.astralsorcery.core.transform.AstralPatchTransformer;
+import shordinger.wrapper.net.minecraft.launchwrapper.IClassTransformer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,19 +37,19 @@ public class AstralTransformer implements IClassTransformer {
 
     private void loadSubTransformers() throws IOException {
         subTransformers.add(new AstralPatchTransformer());
-        //subTransformers.add(new TransformerSideStrippable());
+        // subTransformers.add(new TransformerSideStrippable());
     }
 
     private boolean isTransformationRequired(String trName) {
         for (SubClassTransformer transformer : subTransformers) {
-            if(transformer.isTransformRequired(trName)) return true;
+            if (transformer.isTransformRequired(trName)) return true;
         }
         return false;
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
-        if(!isTransformationRequired(transformedName)) return bytes;
+        if (!isTransformationRequired(transformedName)) return bytes;
 
         ClassNode node = new ClassNode();
         ClassReader reader = new ClassReader(bytes);
@@ -63,7 +63,7 @@ public class AstralTransformer implements IClassTransformer {
                 AstralCore.log.warn("Transformer added information:");
                 subTransformer.addErrorInformation();
                 asmException.printStackTrace();
-                throw asmException; //Rethrow
+                throw asmException; // Rethrow
             }
         }
 
@@ -74,13 +74,13 @@ public class AstralTransformer implements IClassTransformer {
         if (false) {
             try {
                 File f = new File("C:/ASTestClasses/" + transformedName + ".class");
-                f.getParentFile().mkdirs();
+                f.getParentFile()
+                    .mkdirs();
                 f.createNewFile();
                 FileOutputStream out = new FileOutputStream(f);
                 out.write(bytes);
                 out.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

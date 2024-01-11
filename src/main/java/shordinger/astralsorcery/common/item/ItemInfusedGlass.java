@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.item;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.starmap.ActiveStarMap;
 import shordinger.astralsorcery.common.item.base.render.INBTModel;
@@ -27,12 +34,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,11 +72,11 @@ public class ItemInfusedGlass extends Item implements INBTModel {
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        if(damage < getDamage(stack)) return;
+        if (damage < getDamage(stack)) return;
         int lvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        if(lvl > 0) {
+        if (lvl > 0) {
             for (int i = 0; i < lvl; i++) {
-                if(itemRand.nextFloat() > 0.7) {
+                if (itemRand.nextFloat() > 0.7) {
                     return;
                 }
             }
@@ -92,17 +93,18 @@ public class ItemInfusedGlass extends Item implements INBTModel {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ActiveStarMap map = getMapEngravingInformations(stack);
-        if(map != null) {
-            if(GuiScreen.isShiftKeyDown()) {
-                for(IConstellation c : map.getConstellations()) {
+        if (map != null) {
+            if (GuiScreen.isShiftKeyDown()) {
+                for (IConstellation c : map.getConstellations()) {
                     String out = TextFormatting.GRAY + "- " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName());
-                    if(Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
+                    if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
                         out += TextFormatting.LIGHT_PURPLE + " (Creative) " + (int) (map.getPercentage(c) * 100) + "%";
                     }
                     tooltip.add(out);
                 }
             } else {
-                tooltip.add(TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.format("misc.moreInformation"));
+                tooltip.add(
+                    TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.format("misc.moreInformation"));
             }
         }
     }
@@ -110,37 +112,42 @@ public class ItemInfusedGlass extends Item implements INBTModel {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         ActiveStarMap map = getMapEngravingInformations(stack);
-        if(map != null) {
+        if (map != null) {
             return super.getUnlocalizedName(stack) + ".active";
         }
         return super.getUnlocalizedName(stack);
     }
 
     public static void setMapEngravingInformations(ItemStack infusedGlassStack, ActiveStarMap map) {
-        NBTHelper.getPersistentData(infusedGlassStack).setTag("map", map.serialize());
+        NBTHelper.getPersistentData(infusedGlassStack)
+            .setTag("map", map.serialize());
     }
 
     @Nullable
     public static ActiveStarMap getMapEngravingInformations(ItemStack infusedGlassStack) {
         NBTTagCompound tag = NBTHelper.getPersistentData(infusedGlassStack);
-        if(!tag.hasKey("map")) return null;
+        if (!tag.hasKey("map")) return null;
         return ActiveStarMap.deserialize(tag.getCompoundTag("map"));
     }
 
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
-        if(ItemInfusedGlass.getMapEngravingInformations(stack) == null) {
+        if (ItemInfusedGlass.getMapEngravingInformations(stack) == null) {
             return suggestedDefaultLocation;
         }
-        return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
-                suggestedDefaultLocation.getResourcePath() + "_engraved"), suggestedDefaultLocation.getVariant());
+        return new ModelResourceLocation(
+            new ResourceLocation(
+                suggestedDefaultLocation.getResourceDomain(),
+                suggestedDefaultLocation.getResourcePath() + "_engraved"),
+            suggestedDefaultLocation.getVariant());
     }
 
     @Override
     public List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation) {
         List<ResourceLocation> out = new LinkedList<>();
         out.add(defaultLocation);
-        out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_engraved"));
+        out.add(
+            new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_engraved"));
         return out;
     }
 

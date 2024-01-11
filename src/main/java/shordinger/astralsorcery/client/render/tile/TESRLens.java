@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.client.render.tile;
 
+import java.awt.*;
+import java.util.List;
+
 import shordinger.astralsorcery.client.models.base.ASlens;
 import shordinger.astralsorcery.client.models.base.ASlens_color;
 import shordinger.astralsorcery.client.util.Blending;
@@ -22,9 +25,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
-import java.awt.*;
-import java.util.List;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -35,31 +35,35 @@ import java.util.List;
 public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
 
     private static final ASlens modelLensPart = new ASlens();
-    private static final BindableResource texLensPart = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/lens");
+    private static final BindableResource texLensPart = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/lens");
 
     private static final ASlens_color modelLensColoredFrame = new ASlens_color();
-    private static final BindableResource texLensColorFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "lens/lens_color");
+    private static final BindableResource texLensColorFrame = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.MODELS, "lens/lens_color");
 
     @Override
-    public void render(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
         Blending.DEFAULT.apply();
 
         GlStateManager.pushMatrix();
 
-        //Let's just... not look at that stuff down there again and be happy it works alright? Thanks.
+        // Let's just... not look at that stuff down there again and be happy it works alright? Thanks.
         List<BlockPos> linked = te.getLinkedPositions();
-        float yaw = 0; //Degree
-        float pitch = 0; //Degree
+        float yaw = 0; // Degree
+        float pitch = 0; // Degree
         switch (te.getPlacedAgainst()) {
             case DOWN:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
+                    pitch = (float) Math
+                        .atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
 
                     yaw = (float) Math.atan2(dir.getX(), dir.getZ());
 
@@ -74,7 +78,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate(yaw % 360, 0, 1, 0);
 
                 renderHandle(pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -83,12 +87,13 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 }
                 break;
             case UP:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
+                    pitch = (float) Math
+                        .atan2(dir.getY(), Math.sqrt(dir.getX() * dir.getX() + dir.getZ() * dir.getZ()));
 
                     yaw = (float) Math.atan2(dir.getX(), dir.getZ());
 
@@ -102,7 +107,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate((-yaw + 180) % 360, 0, 1, 0);
 
                 renderHandle(-pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -111,12 +116,13 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 }
                 break;
             case NORTH:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
+                    pitch = (float) Math
+                        .atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
 
                     yaw = (float) Math.atan2(dir.getX(), dir.getY());
 
@@ -130,7 +136,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate((-yaw + 180) % 360, 0, 1, 0);
 
                 renderHandle(pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -139,12 +145,13 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 }
                 break;
             case SOUTH:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
+                    pitch = (float) Math
+                        .atan2(dir.getZ(), Math.sqrt(dir.getX() * dir.getX() + dir.getY() * dir.getY()));
 
                     yaw = (float) Math.atan2(dir.getX(), dir.getY());
 
@@ -158,7 +165,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate(yaw % 360, 0, 1, 0);
 
                 renderHandle(-pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -167,12 +174,13 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 }
                 break;
             case WEST:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
+                    pitch = (float) Math
+                        .atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
 
                     yaw = (float) Math.atan2(dir.getZ(), dir.getY());
 
@@ -186,7 +194,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate((yaw + 270 % 360), 0, 1, 0);
 
                 renderHandle(pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -195,12 +203,13 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 }
                 break;
             case EAST:
-                if(!linked.isEmpty() && linked.size() == 1) {
+                if (!linked.isEmpty() && linked.size() == 1) {
                     BlockPos to = linked.get(0);
                     BlockPos from = te.getTrPos();
                     Vector3 dir = new Vector3(to).subtract(new Vector3(from));
 
-                    pitch = (float) Math.atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
+                    pitch = (float) Math
+                        .atan2(dir.getX(), Math.sqrt(dir.getZ() * dir.getZ() + dir.getY() * dir.getY()));
 
                     yaw = (float) Math.atan2(dir.getZ(), dir.getY());
 
@@ -214,7 +223,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
                 GlStateManager.rotate((-yaw + 90 % 360), 0, 1, 0);
 
                 renderHandle(-pitch);
-                if(te.getLensColor() != null) {
+                if (te.getLensColor() != null) {
                     GlStateManager.rotate(180, 0, 1, 0);
                     Color c = te.getLensColor().wrappedColor;
                     GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
@@ -232,11 +241,11 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
     }
 
     private void renderColoredLens(float pitch) {
-        modelLensColoredFrame.glass.    rotateAngleX = pitch * 0.017453292F;
-        modelLensColoredFrame.fitting1. rotateAngleX = pitch * 0.017453292F;
-        modelLensColoredFrame.fitting2. rotateAngleX = pitch * 0.017453292F;
+        modelLensColoredFrame.glass.rotateAngleX = pitch * 0.017453292F;
+        modelLensColoredFrame.fitting1.rotateAngleX = pitch * 0.017453292F;
+        modelLensColoredFrame.fitting2.rotateAngleX = pitch * 0.017453292F;
         modelLensColoredFrame.detail1_1.rotateAngleX = pitch * 0.017453292F;
-        modelLensColoredFrame.detail1.  rotateAngleX = pitch * 0.017453292F;
+        modelLensColoredFrame.detail1.rotateAngleX = pitch * 0.017453292F;
 
         texLensColorFrame.bind();
         modelLensColoredFrame.render(null, 0, 0, 0, 0, 0, 1);

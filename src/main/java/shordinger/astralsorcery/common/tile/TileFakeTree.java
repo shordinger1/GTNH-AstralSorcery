@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktDualParticleEvent;
@@ -32,11 +38,6 @@ import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -60,7 +61,8 @@ public class TileFakeTree extends TileEntityTick {
                 if (ta != null) {
                     ta.update(this);
                 }
-                if (fakedState == null || fakedState.getBlock().equals(Blocks.AIR)) {
+                if (fakedState == null || fakedState.getBlock()
+                    .equals(Blocks.AIR)) {
                     cleanUp();
                 }
             }
@@ -68,7 +70,7 @@ public class TileFakeTree extends TileEntityTick {
     }
 
     private void cleanUp() {
-        if(fakedState != null) {
+        if (fakedState != null) {
             world.setBlockState(getPos(), fakedState);
         } else {
             world.setBlockToAir(getPos());
@@ -117,7 +119,7 @@ public class TileFakeTree extends TileEntityTick {
         super.readCustomNBT(compound);
 
         int index = compound.getInteger("type");
-        if(index == 0) {
+        if (index == 0) {
             this.ta = new TreeBeaconRef(null);
             ta.read(compound);
         } else {
@@ -130,10 +132,10 @@ public class TileFakeTree extends TileEntityTick {
             this.playerEffectRef = null;
         }
 
-        if(compound.hasKey("Block") && compound.hasKey("Data")) {
+        if (compound.hasKey("Block") && compound.hasKey("Data")) {
             int data = compound.getInteger("Data");
             Block b = Block.getBlockFromName(compound.getString("Block"));
-            if(b != null) {
+            if (b != null) {
                 fakedState = b.getStateFromMeta(data);
             }
         }
@@ -148,12 +150,18 @@ public class TileFakeTree extends TileEntityTick {
         } else if (ta instanceof PlayerHarvestRef) {
             compound.setInteger("type", 1);
         }
-        if(ta != null) {
+        if (ta != null) {
             ta.write(compound);
         }
-        if(fakedState != null) {
-            compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
-            compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
+        if (fakedState != null) {
+            compound.setString(
+                "Block",
+                Block.REGISTRY.getNameForObject(fakedState.getBlock())
+                    .toString());
+            compound.setInteger(
+                "Data",
+                fakedState.getBlock()
+                    .getMetaFromState(fakedState));
         }
 
         if (this.playerEffectRef != null) {
@@ -203,7 +211,7 @@ public class TileFakeTree extends TileEntityTick {
             if (usedAxe != null && !usedAxe.isEmpty()) {
                 this.usedTool = usedAxe.copy();
                 Map<Enchantment, Integer> levels = EnchantmentHelper.getEnchantments(this.usedTool);
-                if(levels.containsKey(Enchantments.FORTUNE)) {
+                if (levels.containsKey(Enchantments.FORTUNE)) {
                     levels.put(Enchantments.FORTUNE, levels.get(Enchantments.FORTUNE) + 2);
                 } else {
                     levels.put(Enchantments.FORTUNE, 2);
@@ -216,41 +224,54 @@ public class TileFakeTree extends TileEntityTick {
 
         @Override
         public void update(TileFakeTree tft) {
-            if(tft.ticksExisted <= 10) return;
-            if(player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && tft.fakedState != null) {
+            if (tft.ticksExisted <= 10) return;
+            if (player != null && player instanceof EntityPlayerMP
+                && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)
+                && tft.fakedState != null) {
                 NonNullList<ItemStack> out = NonNullList.create();
                 harvestAndAppend(tft, out);
                 Vector3 plPos = Vector3.atEntityCenter(player);
                 for (ItemStack stack : out) {
                     if (!player.addItemStackToInventory(stack)) {
-                        ItemUtils.dropItemNaturally(player.getEntityWorld(),
-                                plPos.getX() + rand.nextFloat() - rand.nextFloat(),
-                                plPos.getY() + rand.nextFloat(),
-                                plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
-                                stack);
+                        ItemUtils.dropItemNaturally(
+                            player.getEntityWorld(),
+                            plPos.getX() + rand.nextFloat() - rand.nextFloat(),
+                            plPos.getY() + rand.nextFloat(),
+                            plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
+                            stack);
                     }
                 }
-                PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), Vector3.atEntityCenter(player));
-                if(usedTool != null && (usedTool.isEmpty() || !(usedTool.getItem() instanceof ItemChargedCrystalAxe))) {
-                    ev.setAdditionalData(Color.GRAY.brighter().getRGB());
+                PktDualParticleEvent ev = new PktDualParticleEvent(
+                    PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST,
+                    new Vector3(tft),
+                    Vector3.atEntityCenter(player));
+                if (usedTool != null
+                    && (usedTool.isEmpty() || !(usedTool.getItem() instanceof ItemChargedCrystalAxe))) {
+                    ev.setAdditionalData(
+                        Color.GRAY.brighter()
+                            .getRGB());
                 } else {
                     ev.setAdditionalData(Color.GREEN.getRGB());
                 }
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(tft.world, tft.getPos(), 24));
             }
-            tft.getWorld().setBlockToAir(tft.getPos());
+            tft.getWorld()
+                .setBlockToAir(tft.getPos());
         }
 
         private void harvestAndAppend(TileFakeTree tft, NonNullList<ItemStack> out) {
             BlockDropCaptureAssist.startCapturing();
             try {
-                tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
+                tft.getFakedState()
+                    .getBlock()
+                    .harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
             } finally {
-                BlockDropCaptureAssist.getCapturedStacksAndStop().forEach(stack -> {
-                    if(stack != null && !stack.isEmpty()) {
-                        out.add(stack);
-                    }
-                });
+                BlockDropCaptureAssist.getCapturedStacksAndStop()
+                    .forEach(stack -> {
+                        if (stack != null && !stack.isEmpty()) {
+                            out.add(stack);
+                        }
+                    });
             }
         }
 
@@ -272,9 +293,9 @@ public class TileFakeTree extends TileEntityTick {
 
         @Override
         public void update(TileFakeTree tft) {
-            if(MiscUtils.isChunkLoaded(tft.world, new ChunkPos(ref))) {
+            if (MiscUtils.isChunkLoaded(tft.world, new ChunkPos(ref))) {
                 TileTreeBeacon beacon = MiscUtils.getTileAt(tft.world, ref, TileTreeBeacon.class, true);
-                if(beacon == null || beacon.isInvalid()) {
+                if (beacon == null || beacon.isInvalid()) {
                     tft.cleanUp();
                 }
             }
@@ -282,7 +303,7 @@ public class TileFakeTree extends TileEntityTick {
 
         @Override
         public void write(NBTTagCompound cmp) {
-            if(ref != null) {
+            if (ref != null) {
                 NBTHelper.writeBlockPosToNBT(ref, cmp);
             }
         }

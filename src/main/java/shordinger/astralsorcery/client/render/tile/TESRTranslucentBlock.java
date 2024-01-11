@@ -8,14 +8,21 @@
 
 package shordinger.astralsorcery.client.render.tile;
 
+import java.awt.*;
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderWorldBuffer;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileTranslucent;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
@@ -26,11 +33,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpe
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import shordinger.wrapper.net.minecraft.init.Biomes;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,7 +52,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         TextureHelper.setActiveTextureToAtlasSprite();
         GlStateManager.pushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(RenderingUtils.getCurrentRenderPartialTicks());
-        GlStateManager.color(1F, 1F, 1F,1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         for (Map.Entry<Color, Collection<TranslucentBlockState>> setBlocks : blockEffects.entrySet()) {
@@ -61,19 +63,22 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
             if (batchList == -1) {
                 batches.put(overlay, batch(setBlocks.getValue(), overlay.getRGB()));
                 hashes.put(overlay, hashBlocks(setBlocks.getValue()));
-                setBlocks.getValue().clear();
-            } else if(nullableHash == null) {
+                setBlocks.getValue()
+                    .clear();
+            } else if (nullableHash == null) {
                 GlStateManager.glDeleteLists(batchList, 1);
                 batches.put(overlay, batch(setBlocks.getValue(), overlay.getRGB()));
                 hashes.put(overlay, hashBlocks(setBlocks.getValue()));
-                setBlocks.getValue().clear();
+                setBlocks.getValue()
+                    .clear();
             } else {
                 int newHash = hashBlocks(setBlocks.getValue());
                 if (newHash != nullableHash) {
                     GlStateManager.glDeleteLists(batchList, 1);
                     batches.put(overlay, batch(setBlocks.getValue(), overlay.getRGB()));
                     hashes.put(overlay, newHash);
-                    setBlocks.getValue().clear();
+                    setBlocks.getValue()
+                        .clear();
                 }
             }
         }
@@ -82,8 +87,8 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         GlStateManager.enableBlend();
         Blending.CONSTANT_ALPHA.applyStateManager();
         Blending.CONSTANT_ALPHA.apply();
-        //Sync Statemanager
-        GlStateManager.color(1F, 1F, 1F,1F);
+        // Sync Statemanager
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         for (Color colorKey : blockEffects.keySet()) {
@@ -91,19 +96,23 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
             if ((batch = batches.get(colorKey)) != null) {
                 GlStateManager.callList(batch);
             }
-            blockEffects.getOrDefault(colorKey, new ArrayList<>(0)).clear();
+            blockEffects.getOrDefault(colorKey, new ArrayList<>(0))
+                .clear();
         }
 
         Blending.DEFAULT.applyStateManager();
-        GlStateManager.color(1F, 1F, 1F,1F);
-        //Drawing color-overlay'd blocks leaks color states into native GL context but doesn't apply them
-        //to minecraft's GL wrapper. updating this manually.
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        // Drawing color-overlay'd blocks leaks color states into native GL context but doesn't apply them
+        // to minecraft's GL wrapper. updating this manually.
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
     }
 
     private static int batch(Collection<TranslucentBlockState> set, int color) {
-        RenderWorldBuffer iba = new RenderWorldBuffer(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType(), new BlockArray());
+        RenderWorldBuffer iba = new RenderWorldBuffer(
+            Biomes.PLAINS,
+            Minecraft.getMinecraft().world.getWorldType(),
+            new BlockArray());
         iba.appendAll(MiscUtils.splitMap(set, entry -> new Tuple<>(entry.pos, entry.state)));
         int batchDList = GLAllocation.generateDisplayLists(1);
         GlStateManager.enableBlend();
@@ -142,15 +151,17 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     }
 
     @Override
-    public void render(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if(te.getFakedState() == null) return;
+    public void render(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
+        if (te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
-        if(x * x + y * y + z * z >= 64 * 64) return;
+        if (x * x + y * y + z * z >= 64 * 64) return;
         addForRender(null, renderState, te.getPos());
     }
 
     public static void addForRender(@Nullable Color overlay, IBlockState state, BlockPos pos) {
-        blockEffects.computeIfAbsent(overlay == null ? Color.WHITE : overlay, c -> new LinkedList<>()).add(new TranslucentBlockState(state, pos));
+        blockEffects.computeIfAbsent(overlay == null ? Color.WHITE : overlay, c -> new LinkedList<>())
+            .add(new TranslucentBlockState(state, pos));
     }
 
     public static class TranslucentBlockState {

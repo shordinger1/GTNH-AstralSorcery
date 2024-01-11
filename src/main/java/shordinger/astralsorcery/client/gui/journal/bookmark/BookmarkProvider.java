@@ -8,15 +8,13 @@
 
 package shordinger.astralsorcery.client.gui.journal.bookmark;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.common.util.Provider;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,8 +31,7 @@ public class BookmarkProvider {
     private final String unlocName;
     private Provider<Boolean> canSeeTest;
 
-    public BookmarkProvider(String unlocName, int bookmarkIndex,
-                            Provider<GuiScreen> guiProvider,
+    public BookmarkProvider(String unlocName, int bookmarkIndex, Provider<GuiScreen> guiProvider,
                             Provider<Boolean> canSeeTest) {
         this.unlocName = unlocName;
         this.index = bookmarkIndex;

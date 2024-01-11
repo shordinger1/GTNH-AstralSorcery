@@ -8,7 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -18,9 +22,6 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,9 +56,13 @@ public class KeyAddEnchantment extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 List<DynamicEnchantment> listedEnchantments = event.getEnchantmentsToApply();
                 for (DynamicEnchantment ench : this.enchantments) {
-                    DynamicEnchantment added = MiscUtils.iterativeSearch(listedEnchantments, e ->
-                            (e.getEnchantment() == null ? ench.getEnchantment() == null : e.getEnchantment().equals(ench.getEnchantment())) &&
-                            e.getType().equals(ench.getType()));
+                    DynamicEnchantment added = MiscUtils.iterativeSearch(
+                        listedEnchantments,
+                        e -> (e.getEnchantment() == null ? ench.getEnchantment() == null
+                            : e.getEnchantment()
+                            .equals(ench.getEnchantment()))
+                            && e.getType()
+                            .equals(ench.getType()));
                     if (added != null) {
                         added.setLevelAddition(added.getLevelAddition() + ench.getLevelAddition());
                     } else {

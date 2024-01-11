@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.auxiliary;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemAxe;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.ItemSword;
-
-import javax.annotation.Nonnull;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,24 +32,30 @@ public class SwordSharpenHelper {
     public static List<String> blacklistedSharpenableSwordClassNames = new LinkedList<>();
 
     public static boolean isSwordSharpened(@Nonnull ItemStack stack) {
-        if(!isSharpenableItem(stack) || !stack.hasTagCompound()) return false;
-        return NBTHelper.getData(stack).getBoolean("sharp");
+        if (!isSharpenableItem(stack) || !stack.hasTagCompound()) return false;
+        return NBTHelper.getData(stack)
+            .getBoolean("sharp");
     }
 
     public static void setSwordSharpened(@Nonnull ItemStack stack) {
-        if(!isSharpenableItem(stack)) return;
-        NBTHelper.getData(stack).setBoolean("sharp", true);
+        if (!isSharpenableItem(stack)) return;
+        NBTHelper.getData(stack)
+            .setBoolean("sharp", true);
     }
 
     public static boolean canBeSharpened(@Nonnull ItemStack stack) {
-        if(stack.isEmpty()) return false;
+        if (stack.isEmpty()) return false;
         Item i = stack.getItem();
-        if(blacklistedSharpenableSwordClassNames.contains(i.getClass().getName())) return false;
+        if (blacklistedSharpenableSwordClassNames.contains(
+            i.getClass()
+                .getName()))
+            return false;
 
-        if(isSharpenableItem(stack)) return true;
-        Class<?> itemClass = stack.getItem().getClass();
+        if (isSharpenableItem(stack)) return true;
+        Class<?> itemClass = stack.getItem()
+            .getClass();
         for (Class<?> clazz : otherSharpenableSwordSuperClasses) {
-            if(clazz.isAssignableFrom(itemClass)) {
+            if (clazz.isAssignableFrom(itemClass)) {
                 return true;
             }
         }

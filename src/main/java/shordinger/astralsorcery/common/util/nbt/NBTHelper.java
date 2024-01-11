@@ -8,7 +8,14 @@
 
 package shordinger.astralsorcery.common.util.nbt;
 
+import java.util.Collection;
+import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.base.Optional;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
@@ -25,11 +32,6 @@ import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,7 +76,6 @@ public class NBTHelper {
         return base.hasKey(AstralSorcery.MODID) && base.getTag(AstralSorcery.MODID) instanceof NBTTagCompound;
     }
 
-
     public static void removePersistentData(Entity entity) {
         removePersistentData(entity.getEntityData());
     }
@@ -86,7 +87,6 @@ public class NBTHelper {
     public static void removePersistentData(NBTTagCompound base) {
         base.removeTag(AstralSorcery.MODID);
     }
-
 
     public static NBTTagCompound getData(ItemStack stack) {
         NBTTagCompound compound = stack.getTagCompound();
@@ -111,11 +111,16 @@ public class NBTHelper {
 
     @Nonnull
     public static NBTTagCompound getBlockStateNBTTag(IBlockState state) {
-        if(state.getBlock().getRegistryName() == null) {
+        if (state.getBlock()
+            .getRegistryName() == null) {
             state = Blocks.AIR.getDefaultState();
         }
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("registryName", state.getBlock().getRegistryName().toString());
+        tag.setString(
+            "registryName",
+            state.getBlock()
+                .getRegistryName()
+                .toString());
         NBTTagList properties = new NBTTagList();
         for (IProperty property : state.getPropertyKeys()) {
             NBTTagCompound propTag = new NBTTagCompound();
@@ -140,7 +145,7 @@ public class NBTHelper {
     public static <T extends Comparable<T>> IBlockState getBlockStateFromTag(NBTTagCompound cmp, IBlockState _default) {
         ResourceLocation key = new ResourceLocation(cmp.getString("registryName"));
         Block block = ForgeRegistries.BLOCKS.getValue(key);
-        if(block == null || block == Blocks.AIR) return _default;
+        if (block == null || block == Blocks.AIR) return _default;
         IBlockState state = block.getDefaultState();
         Collection<IProperty<?>> properties = state.getPropertyKeys();
         NBTTagList list = cmp.getTagList("properties", Constants.NBT.TAG_COMPOUND);
@@ -148,14 +153,18 @@ public class NBTHelper {
             NBTTagCompound propertyTag = list.getCompoundTagAt(i);
             String valueStr = propertyTag.getString("value");
             String propertyStr = propertyTag.getString("property");
-            IProperty<T> match = (IProperty<T>) MiscUtils.iterativeSearch(properties, prop -> prop.getName().equalsIgnoreCase(propertyStr));
-            if(match != null) {
+            IProperty<T> match = (IProperty<T>) MiscUtils.iterativeSearch(
+                properties,
+                prop -> prop.getName()
+                    .equalsIgnoreCase(propertyStr));
+            if (match != null) {
                 try {
                     Optional<T> opt = match.parseValue(valueStr);
-                    if(opt.isPresent()) {
+                    if (opt.isPresent()) {
                         state = state.withProperty(match, opt.get());
                     }
-                } catch (Throwable tr) {} // Thanks Exu2
+                } catch (Throwable tr) {
+                } // Thanks Exu2
             }
         }
         return state;
@@ -180,7 +189,7 @@ public class NBTHelper {
         return getStack(compound, tag, ItemStack.EMPTY);
     }
 
-    //Get tags with default value
+    // Get tags with default value
     public static ItemStack getStack(NBTTagCompound compound, String tag, ItemStack defaultValue) {
         if (compound.hasKey(tag)) {
             return new ItemStack(compound.getCompoundTag(tag));
@@ -246,10 +255,7 @@ public class NBTHelper {
     }
 
     public static Vector3 readVector3(NBTTagCompound compound) {
-        return new Vector3(
-                compound.getDouble("vecPosX"),
-                compound.getDouble("vecPosY"),
-                compound.getDouble("vecPosZ"));
+        return new Vector3(compound.getDouble("vecPosX"), compound.getDouble("vecPosY"), compound.getDouble("vecPosZ"));
     }
 
     public static void writeBoundingBox(AxisAlignedBB box, NBTTagCompound tag) {
@@ -263,11 +269,11 @@ public class NBTHelper {
 
     public static AxisAlignedBB readBoundingBox(NBTTagCompound tag) {
         return new AxisAlignedBB(
-                tag.getDouble("boxMinX"),
-                tag.getDouble("boxMinY"),
-                tag.getDouble("boxMinZ"),
-                tag.getDouble("boxMaxX"),
-                tag.getDouble("boxMaxY"),
-                tag.getDouble("boxMaxZ"));
+            tag.getDouble("boxMinX"),
+            tag.getDouble("boxMinY"),
+            tag.getDouble("boxMinZ"),
+            tag.getDouble("boxMaxX"),
+            tag.getDouble("boxMaxY"),
+            tag.getDouble("boxMaxZ"));
     }
 }

@@ -8,14 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.IConverterProvider;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.*;
 import java.util.Collections;
@@ -46,7 +45,14 @@ public abstract class AttributeConverterPerk extends ProgressGatedPerk implement
     }
 
     public <T> T addRangedConverter(double radius, PerkConverter converter) {
-        this.converters.add(converter.asRangedConverter(new Point.Double(this.getOffset().getX(), this.getOffset().getY()), radius));
+        this.converters.add(
+            converter.asRangedConverter(
+                new Point.Double(
+                    this.getOffset()
+                        .getX(),
+                    this.getOffset()
+                        .getY()),
+                radius));
         return (T) this;
     }
 

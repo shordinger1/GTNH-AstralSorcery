@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,12 +60,14 @@ public class StorageKey {
 
         StorageKey that = (StorageKey) o;
 
-        return (item.getHasSubtypes() || metadata == that.metadata) && item.getRegistryName().equals(that.item.getRegistryName());
+        return (item.getHasSubtypes() || metadata == that.metadata) && item.getRegistryName()
+            .equals(that.item.getRegistryName());
     }
 
     @Override
     public int hashCode() {
-        int result = item.getRegistryName().hashCode();
+        int result = item.getRegistryName()
+            .hashCode();
         if (item.getHasSubtypes()) {
             result = 31 * result + metadata;
         }
@@ -75,12 +77,15 @@ public class StorageKey {
     @Nonnull
     public NBTTagCompound serialize() {
         NBTTagCompound keyTag = new NBTTagCompound();
-        keyTag.setString("name", item.getRegistryName().toString());
+        keyTag.setString(
+            "name",
+            item.getRegistryName()
+                .toString());
         keyTag.setInteger("meta", metadata);
         return keyTag;
     }
 
-    //If the item in question does no longer exist in the registry, return null.
+    // If the item in question does no longer exist in the registry, return null.
     @Nullable
     public static StorageKey deserialize(NBTTagCompound nbt) {
         ResourceLocation rl = new ResourceLocation(nbt.getString("name"));

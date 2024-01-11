@@ -12,7 +12,6 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
@@ -39,7 +38,8 @@ import java.util.List;
  */
 public class BlockBlackMarble extends Block implements BlockCustomName, BlockVariants {
 
-    public static PropertyEnum<BlackMarbleBlockType> BLACK_MARBLE_TYPE = PropertyEnum.create("marbletype", BlackMarbleBlockType.class);
+    public static PropertyEnum<BlackMarbleBlockType> BLACK_MARBLE_TYPE = PropertyEnum
+        .create("marbletype", BlackMarbleBlockType.class);
 
     public BlockBlackMarble() {
         super(Material.ROCK, MapColor.BLACK);
@@ -48,36 +48,41 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
         setResistance(3.0F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.RAW));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.RAW));
     }
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlackMarbleBlockType t : BlackMarbleBlockType.values()) {
-            if(!t.obtainableInCreative()) continue;
+            if (!t.obtainableInCreative()) continue;
             list.add(new ItemStack(this, 1, t.ordinal()));
         }
     }
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        //return super.getActualState(state, worldIn, pos);
-        if(state.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+        // return super.getActualState(state, worldIn, pos);
+        if (state.getValue(BLACK_MARBLE_TYPE)
+            .isPillar()) {
             IBlockState st = worldIn.getBlockState(pos.up());
             boolean top = false;
-            if(st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+            if (st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
+                .isPillar()) {
                 top = true;
             }
             st = worldIn.getBlockState(pos.down());
             boolean down = false;
-            if(st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+            if (st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE)
+                .isPillar()) {
                 down = true;
             }
-            if(top && down) {
+            if (top && down) {
                 return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR);
-            } else if(top) {
+            } else if (top) {
                 return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR_BOTTOM);
-            } else if(down) {
+            } else if (down) {
                 return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR_TOP);
             } else {
                 return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR);
@@ -92,14 +97,17 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
-        return p_193383_2_.getValue(BLACK_MARBLE_TYPE).isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
+        return p_193383_2_.getValue(BLACK_MARBLE_TYPE)
+            .isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
 
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
-        if(marbleType == BlackMarbleBlockType.PILLAR_TOP || marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
+        if (marbleType == BlackMarbleBlockType.PILLAR_TOP || marbleType == BlackMarbleBlockType.PILLAR
+            || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
             return 0;
         }
         return super.getLightOpacity(state, world, pos);
@@ -108,36 +116,40 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
-        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM
+            && marbleType != BlackMarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullCube(IBlockState state) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
-        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM
+            && marbleType != BlackMarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullBlock(IBlockState state) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
-        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM
+            && marbleType != BlackMarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
         IBlockState other = world.getBlockState(pos.offset(face));
-        if(MiscUtils.isFluidBlock(other) &&
-                (marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM || marbleType == BlackMarbleBlockType.PILLAR_TOP)) {
+        if (MiscUtils.isFluidBlock(other)
+            && (marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM
+            || marbleType == BlackMarbleBlockType.PILLAR_TOP)) {
             return true;
         }
-        if(marbleType == BlackMarbleBlockType.PILLAR) {
+        if (marbleType == BlackMarbleBlockType.PILLAR) {
             return false;
         }
-        if(marbleType == BlackMarbleBlockType.PILLAR_TOP) {
+        if (marbleType == BlackMarbleBlockType.PILLAR_TOP) {
             return face == EnumFacing.UP;
         }
-        if(marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
+        if (marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
             return face == EnumFacing.DOWN;
         }
         return state.isOpaqueCube();
@@ -162,7 +174,9 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < BlackMarbleBlockType.values().length ? getDefaultState().withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.values()[meta]) : getDefaultState();
+        return meta < BlackMarbleBlockType.values().length
+            ? getDefaultState().withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -181,7 +195,8 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(BLACK_MARBLE_TYPE).getName();
+        return state.getValue(BLACK_MARBLE_TYPE)
+            .getName();
     }
 
     public static enum BlackMarbleBlockType implements IStringSerializable {

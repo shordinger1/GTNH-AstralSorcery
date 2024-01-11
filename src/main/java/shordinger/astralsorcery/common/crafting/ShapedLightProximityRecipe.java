@@ -50,7 +50,7 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
-        if(!vanillaMatch(inv)) return false;
+        if (!vanillaMatch(inv)) return false;
 
         Container c = inv.eventHandler;
         if (!(c instanceof ContainerWorkbench)) return false;
@@ -61,12 +61,10 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
             GuiScreen sc = Minecraft.getMinecraft().currentScreen;
             if (sc == null || !(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
             if (!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                    .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition))
-                return false;
+                .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition)) return false;
         } else {
             if (!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                    .doesPositionReceiveStarlightServer(world, pos))
-                return false;
+                .doesPositionReceiveStarlightServer(world, pos)) return false;
         }
         return true;
     }

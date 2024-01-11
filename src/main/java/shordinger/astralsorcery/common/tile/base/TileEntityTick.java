@@ -24,7 +24,7 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
 
     @Override
     public void update() {
-        if(ticksExisted == 0) {
+        if (ticksExisted == 0) {
             onFirstTick();
         }
 

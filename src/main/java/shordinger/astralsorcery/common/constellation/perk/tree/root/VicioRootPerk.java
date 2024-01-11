@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
@@ -22,11 +27,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.stats.StatBase;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.stats.StatisticsManager;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,10 +48,14 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
         super.removePerkLogic(player, side);
 
         if (side == Side.SERVER) {
-            this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>())
+                .remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>())
+                .remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>())
+                .remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>())
+                .remove(player.getUniqueID());
         }
     }
 
@@ -74,10 +78,14 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             int flown = manager.readStat(StatList.FLY_ONE_CM);
             int elytra = manager.readStat(StatList.AVIATE_ONE_CM);
 
-            int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> walked);
-            int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> sprint);
-            int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> flown);
-            int lastElytra = this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> elytra);
+            int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>())
+                .computeIfAbsent(uuid, u -> walked);
+            int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>())
+                .computeIfAbsent(uuid, u -> sprint);
+            int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>())
+                .computeIfAbsent(uuid, u -> flown);
+            int lastElytra = this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>())
+                .computeIfAbsent(uuid, u -> elytra);
 
             float added = 0;
 
@@ -86,7 +94,8 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 if (added >= 500F) {
                     added = 500F;
                 }
-                this.moveTrackMap.get(StatList.WALK_ONE_CM).put(uuid, walked);
+                this.moveTrackMap.get(StatList.WALK_ONE_CM)
+                    .put(uuid, walked);
             }
             if (sprint > lastSprint) {
                 added += Math.min(sprint - lastSprint, 500F);
@@ -94,17 +103,20 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                     added = 500F;
                 }
                 added *= 1.2F;
-                this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
+                this.moveTrackMap.get(StatList.SPRINT_ONE_CM)
+                    .put(uuid, sprint);
             }
             if (flown > lastFly) {
                 added += Math.min(flown - lastFly, 500F);
                 added *= 0.4F;
-                this.moveTrackMap.get(StatList.FLY_ONE_CM).put(uuid, flown);
+                this.moveTrackMap.get(StatList.FLY_ONE_CM)
+                    .put(uuid, flown);
             }
             if (elytra > lastElytra) {
                 added += Math.min(elytra - lastElytra, 500F);
                 added *= 0.8F;
-                this.moveTrackMap.get(StatList.AVIATE_ONE_CM).put(uuid, flown);
+                this.moveTrackMap.get(StatList.AVIATE_ONE_CM)
+                    .put(uuid, flown);
             }
 
             if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
@@ -116,8 +128,10 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
 
                 added *= 0.025F;
                 added *= expMultiplier;
-                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
-                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side)
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side)
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
                 added = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
 
                 float xpGain = added;

@@ -47,7 +47,8 @@ public class LiquidInteraction extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addInteraction(ILiquidStack liquidIn1, float chanceConsumption1, ILiquidStack liquidIn2, float chanceConsumption2, int weight, IItemStack output) {
+    public static void addInteraction(ILiquidStack liquidIn1, float chanceConsumption1, ILiquidStack liquidIn2,
+                                      float chanceConsumption2, int weight, IItemStack output) {
         ItemStack out = convertToItemStack(output);
         if (out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-removal due to invalid/empty item output.");
@@ -68,7 +69,8 @@ public class LiquidInteraction extends BaseTweaker {
         chanceConsumption1 = Math.max(0, chanceConsumption1);
         chanceConsumption2 = Math.max(0, chanceConsumption2);
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new LiquidInteractionAdd(in1, in2, chanceConsumption1, chanceConsumption2, out, weight));
+        ModIntegrationCrafttweaker.recipeModifications
+            .add(new LiquidInteractionAdd(in1, in2, chanceConsumption1, chanceConsumption2, out, weight));
     }
 
 }

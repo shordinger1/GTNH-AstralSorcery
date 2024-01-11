@@ -13,7 +13,6 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
@@ -43,7 +42,7 @@ import java.util.Map;
  */
 public class BlockMarble extends Block implements BlockCustomName, BlockVariants, BlockDynamicStateMapper.Festive {
 
-    //private static final int RAND_MOSS_CHANCE = 10;
+    // private static final int RAND_MOSS_CHANCE = 10;
 
     public static PropertyEnum<MarbleBlockType> MARBLE_TYPE = PropertyEnum.create("marbletype", MarbleBlockType.class);
 
@@ -53,48 +52,55 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
         setHarvestLevel("pickaxe", 1);
         setResistance(3.0F);
         setSoundType(SoundType.STONE);
-        //setTickRandomly(true);
+        // setTickRandomly(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(MARBLE_TYPE, MarbleBlockType.RAW));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(MARBLE_TYPE, MarbleBlockType.RAW));
     }
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
-            if(!t.obtainableInCreative()) continue;
+            if (!t.obtainableInCreative()) continue;
             list.add(new ItemStack(this, 1, t.getMeta()));
         }
     }
 
-    /*@Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        if (!worldIn.isRemote && worldIn.isRaining() && rand.nextInt(RAND_MOSS_CHANCE) == 0) {
-            MarbleBlockType type = state.getValue(MARBLE_TYPE);
-            if (type.canTurnMossy() && worldIn.isRainingAt(pos)) {
-                worldIn.setBlockState(pos, state.withProperty(MARBLE_TYPE, type.getMossyEquivalent()), 3);
-            }
-        }
-    }*/
+    /*
+     * @Override
+     * public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+     * if (!worldIn.isRemote && worldIn.isRaining() && rand.nextInt(RAND_MOSS_CHANCE) == 0) {
+     * MarbleBlockType type = state.getValue(MARBLE_TYPE);
+     * if (type.canTurnMossy() && worldIn.isRainingAt(pos)) {
+     * worldIn.setBlockState(pos, state.withProperty(MARBLE_TYPE, type.getMossyEquivalent()), 3);
+     * }
+     * }
+     * }
+     */
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        //return super.getActualState(state, worldIn, pos);
-        if(state.getValue(MARBLE_TYPE).isPillar()) {
+        // return super.getActualState(state, worldIn, pos);
+        if (state.getValue(MARBLE_TYPE)
+            .isPillar()) {
             IBlockState st = worldIn.getBlockState(pos.up());
             boolean top = false;
-            if(st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE).isPillar()) {
+            if (st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
+                .isPillar()) {
                 top = true;
             }
             st = worldIn.getBlockState(pos.down());
             boolean down = false;
-            if(st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE).isPillar()) {
+            if (st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE)
+                .isPillar()) {
                 down = true;
             }
-            if(top && down) {
+            if (top && down) {
                 return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR);
-            } else if(top) {
+            } else if (top) {
                 return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR_BOTTOM);
-            } else if(down) {
+            } else if (down) {
                 return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR_TOP);
             } else {
                 return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR);
@@ -104,8 +110,10 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
-        return p_193383_2_.getValue(MARBLE_TYPE).isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
+        return p_193383_2_.getValue(MARBLE_TYPE)
+            .isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
 
     @Override
@@ -116,7 +124,8 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
-        if(marbleType == MarbleBlockType.PILLAR_TOP || marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM) {
+        if (marbleType == MarbleBlockType.PILLAR_TOP || marbleType == MarbleBlockType.PILLAR
+            || marbleType == MarbleBlockType.PILLAR_BOTTOM) {
             return 0;
         }
         return super.getLightOpacity(state, world, pos);
@@ -125,33 +134,37 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
-        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM
+            && marbleType != MarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullCube(IBlockState state) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
-        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM
+            && marbleType != MarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullBlock(IBlockState state) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
-        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM
+            && marbleType != MarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
         IBlockState other = world.getBlockState(pos.offset(face));
-        if(MiscUtils.isFluidBlock(other) &&
-                (marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM || marbleType == MarbleBlockType.PILLAR_TOP)) {
+        if (MiscUtils.isFluidBlock(other)
+            && (marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM
+            || marbleType == MarbleBlockType.PILLAR_TOP)) {
             return false;
         }
-        if(marbleType == MarbleBlockType.PILLAR_TOP) {
+        if (marbleType == MarbleBlockType.PILLAR_TOP) {
             return face == EnumFacing.UP;
         }
-        if(marbleType == MarbleBlockType.PILLAR_BOTTOM) {
+        if (marbleType == MarbleBlockType.PILLAR_BOTTOM) {
             return face == EnumFacing.DOWN;
         }
         return state.isOpaqueCube();
@@ -176,7 +189,9 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < MarbleBlockType.values().length ? getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.values()[meta]) : getDefaultState();
+        return meta < MarbleBlockType.values().length
+            ? getDefaultState().withProperty(MARBLE_TYPE, MarbleBlockType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -195,7 +210,8 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(MARBLE_TYPE).getName() + (handleRegisterStateMapper() ? "_festive" : "");
+        return state.getValue(MARBLE_TYPE)
+            .getName() + (handleRegisterStateMapper() ? "_festive" : "");
     }
 
     @Override
@@ -222,9 +238,9 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
         PILLAR_TOP(2),
         PILLAR_BOTTOM(2);
 
-        //BRICKS_MOSSY,
-        //PILLAR_MOSSY,
-        //CRACK_MOSSY;
+        // BRICKS_MOSSY,
+        // PILLAR_MOSSY,
+        // CRACK_MOSSY;
 
         private final int meta;
 
@@ -257,22 +273,23 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
             return name().toLowerCase();
         }
 
-        /*public boolean canTurnMossy() {
-            return this == BRICKS || this == PILLAR || this == CRACKED;
-        }
-
-        public MarbleBlockType getMossyEquivalent() {
-            if(!canTurnMossy()) return null;
-            switch (this) {
-                case BRICKS:
-                    return BRICKS_MOSSY;
-                case PILLAR:
-                    return PILLAR_MOSSY;
-                case CRACKED:
-                    return CRACK_MOSSY;
-            }
-            return null;
-        }*/
+        /*
+         * public boolean canTurnMossy() {
+         * return this == BRICKS || this == PILLAR || this == CRACKED;
+         * }
+         * public MarbleBlockType getMossyEquivalent() {
+         * if(!canTurnMossy()) return null;
+         * switch (this) {
+         * case BRICKS:
+         * return BRICKS_MOSSY;
+         * case PILLAR:
+         * return PILLAR_MOSSY;
+         * case CRACKED:
+         * return CRACK_MOSSY;
+         * }
+         * return null;
+         * }
+         */
     }
 
 }

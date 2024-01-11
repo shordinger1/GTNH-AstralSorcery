@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.item.wand;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.entities.EntityGrapplingHook;
 import shordinger.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
@@ -20,8 +22,6 @@ import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,7 +55,7 @@ public class ItemGrappleWand extends Item implements ItemAlignmentChargeConsumer
         if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
-        if(drainTempCharge(player, Config.grappleWandUseCost, true)) {
+        if (drainTempCharge(player, Config.grappleWandUseCost, true)) {
             worldIn.spawnEntity(new EntityGrapplingHook(worldIn, player));
             drainTempCharge(player, Config.grappleWandUseCost, false);
         }

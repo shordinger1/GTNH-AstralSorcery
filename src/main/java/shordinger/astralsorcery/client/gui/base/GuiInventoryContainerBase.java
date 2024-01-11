@@ -44,8 +44,9 @@ public abstract class GuiInventoryContainerBase extends GuiContainer {
     public void updateScreen() {
         super.updateScreen();
 
-        if(te.isInvalid()) {
-            Minecraft.getMinecraft().displayGuiScreen(null);
+        if (te.isInvalid()) {
+            Minecraft.getMinecraft()
+                .displayGuiScreen(null);
         }
     }
 }

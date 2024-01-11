@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +20,6 @@ import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,13 +58,14 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY : super.hasCapability(capability, facing);
+        return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+            : super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if(hasHandlerForSide(facing)) {
-            if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (hasHandlerForSide(facing)) {
+            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handle);
             }
         }
@@ -76,7 +78,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
 
         this.handle = createNewItemHandler();
         this.handle.deserializeNBT(compound.getCompoundTag("inventory"));
-        if(this.handle.getSlots() != this.inventorySize) {
+        if (this.handle.getSlots() != this.inventorySize) {
             ItemHandlerTile newInv = createNewItemHandler();
             for (int i = 0; i < Math.min(this.handle.getSlots(), this.inventorySize); i++) {
                 ItemStack old = this.handle.getStackInSlot(i);

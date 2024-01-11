@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,7 +29,8 @@ public class CraftingRecipeHelper {
     public static List<IRecipe> findRecipesWithOutput(ItemStack stack) {
         List<IRecipe> ir = new LinkedList<>();
         for (IRecipe rec : ForgeRegistries.RECIPES) {
-            if (ItemComparator.compare(stack, rec.getRecipeOutput(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+            if (ItemComparator
+                .compare(stack, rec.getRecipeOutput(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                 ir.add(rec);
             }
         }

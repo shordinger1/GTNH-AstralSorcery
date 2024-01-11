@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.client.render.entity;
 
+import java.awt.*;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.entities.EntitySpectralTool;
@@ -23,10 +29,6 @@ import shordinger.wrapper.net.minecraft.item.ItemAxe;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.client.registry.IRenderFactory;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +46,7 @@ public class RenderSpectralTool extends Render<EntitySpectralTool> {
     @Override
     public void doRender(EntitySpectralTool entity, double x, double y, double z, float entityYaw, float partialTicks) {
         ItemStack is = entity.getItem();
-        if(is.isEmpty()) {
+        if (is.isEmpty()) {
             return;
         }
 
@@ -52,17 +54,21 @@ public class RenderSpectralTool extends Render<EntitySpectralTool> {
         GlStateManager.translate(x, y + 0.2, z);
         GlStateManager.scale(2, 2, 2);
         GlStateManager.rotate(-entityYaw - 90, 0, 1, 0);
-        if(is.getItem() instanceof ItemAxe) {
+        if (is.getItem() instanceof ItemAxe) {
             GlStateManager.rotate(180, 1, 0, 0);
             GlStateManager.rotate(270, 0, 0, 1);
         }
 
-        IBakedModel bakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(is, null, null);
-        bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
+        IBakedModel bakedModel = Minecraft.getMinecraft()
+            .getRenderItem()
+            .getItemModelWithOverrides(is, null, null);
+        bakedModel = net.minecraftforge.client.ForgeHooksClient
+            .handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
 
         TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
         textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            .setBlurMipmap(false, false);
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableRescaleNormal();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
@@ -78,7 +84,8 @@ public class RenderSpectralTool extends Render<EntitySpectralTool> {
         GlStateManager.disableBlend();
         Blending.DEFAULT.applyStateManager();
         textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+            .restoreLastBlurMipmap();
 
         GlStateManager.popMatrix();
     }

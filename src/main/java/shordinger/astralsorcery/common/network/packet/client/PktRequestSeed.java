@@ -8,9 +8,13 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
@@ -18,10 +22,6 @@ import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,18 +64,18 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
 
     @Override
     public PktRequestSeed onMessage(PktRequestSeed message, MessageContext ctx) {
-        if(ctx.side == Side.SERVER) {
+        if (ctx.side == Side.SERVER) {
             Long seed;
             try {
                 WorldProvider mgr = DimensionManager.getProvider(message.dimId);
                 seed = new Random(mgr.getSeed()).nextLong();
             } catch (Exception exc) {
                 World plWorld = ctx.getServerHandler().player.world;
-                if(plWorld.provider.getDimension() == message.dimId) {
+                if (plWorld.provider.getDimension() == message.dimId) {
                     seed = ctx.getServerHandler().player.world.getSeed();
                     seed = new Random(seed).nextLong();
                 } else {
-                    return null; //Who sent that packet? World desync between server and client?...
+                    return null; // Who sent that packet? World desync between server and client?...
                 }
             }
             return new PktRequestSeed(message.session, message.dimId).seed(seed);
@@ -87,8 +87,10 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
 
     @SideOnly(Side.CLIENT)
     private void updateSeedClient(int dimId, int session, long seed) {
-        Minecraft.getMinecraft().addScheduledTask(() ->
-                ConstellationSkyHandler.getInstance().updateSeedCache(dimId, session, seed));
+        Minecraft.getMinecraft()
+            .addScheduledTask(
+                () -> ConstellationSkyHandler.getInstance()
+                    .updateSeedCache(dimId, session, seed));
     }
 
 }

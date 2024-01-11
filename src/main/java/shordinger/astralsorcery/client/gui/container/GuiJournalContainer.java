@@ -29,7 +29,8 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
  */
 public class GuiJournalContainer extends GuiContainer {
 
-    private static BindableResource texJournalContainer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijstoragebook");
+    private static BindableResource texJournalContainer = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.GUI, "guijstoragebook");
 
     public GuiJournalContainer(InventoryPlayer playerInv, ItemStack journal, int journalIndex) {
         super(new ContainerJournal(playerInv, journal, journalIndex));
@@ -60,10 +61,18 @@ public class GuiJournalContainer extends GuiContainer {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,          zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
+        vb.pos(offsetX, offsetY + height, zLevel)
+            .tex(0, 1)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel)
+            .tex(1, 1)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY, zLevel)
+            .tex(1, 0)
+            .endVertex();
+        vb.pos(offsetX, offsetY, zLevel)
+            .tex(0, 0)
+            .endVertex();
         tes.draw();
     }
 

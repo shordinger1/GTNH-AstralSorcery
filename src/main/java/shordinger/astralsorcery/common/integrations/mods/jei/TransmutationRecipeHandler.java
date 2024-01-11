@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
+import mezz.jei.api.recipe.IRecipeWrapper;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**

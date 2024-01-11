@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.registry.internal;
 
-import com.google.common.collect.Lists;
-import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
+
+import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * This class is part of the Astral Sorcery Mod

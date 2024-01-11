@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.entities;
 
+import java.awt.*;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -35,11 +41,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,7 +51,8 @@ import java.awt.*;
  */
 public class EntitySpectralTool extends EntityFlying implements EntityTechnicalAmbient {
 
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager
+        .createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
     private AIToolTask aiTask;
     private BlockPos originalStartPosition;
     private int ticksUntilDeath = 0;
@@ -85,14 +87,14 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
     @Override
     public void applyEntityCollision(Entity entityIn) {
-        if(entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
+        if (entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
             super.applyEntityCollision(entityIn);
         }
     }
 
     @Override
     protected void collideWithEntity(Entity entityIn) {
-        if(entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
+        if (entityIn != null && !(entityIn instanceof EntityPlayer || entityIn instanceof EntitySpectralTool)) {
             super.collideWithEntity(entityIn);
         }
     }
@@ -108,10 +110,13 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
 
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+        this.getAttributeMap()
+            .registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
 
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.85);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH)
+            .setBaseValue(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED)
+            .setBaseValue(0.85);
     }
 
     @Override
@@ -126,11 +131,11 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
     public void onUpdate() {
         super.onUpdate();
 
-        if(world.isRemote) {
+        if (world.isRemote) {
             spawnAmbientEffects();
         } else {
             this.ticksUntilDeath--;
-            if(this.ticksUntilDeath <= 0) {
+            if (this.ticksUntilDeath <= 0) {
                 DamageUtil.attackEntityFrom(this, CommonProxy.dmgSourceStellar, 5000.0F);
             }
         }
@@ -138,20 +143,22 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
     @SideOnly(Side.CLIENT)
     private void spawnAmbientEffects() {
-        if(rand.nextFloat() < 0.2F) {
+        if (rand.nextFloat() < 0.2F) {
             Color c = IConstellation.weak;
             double x = posX + rand.nextFloat() * width - (width / 2);
             double y = posY + rand.nextFloat() * (height / 2) + 0.2;
             double z = posZ + rand.nextFloat() * width - (width / 2);
 
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-            p.setColor(c).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.setColor(c)
+                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
             p.scale(rand.nextFloat() * 0.5F + 0.3F);
             p.setMaxAge(30 + rand.nextInt(20));
 
-            if(rand.nextFloat() < 0.8F) {
+            if (rand.nextFloat() < 0.8F) {
                 p = EffectHelper.genericFlareParticle(x, y, z);
-                p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                p.setColor(Color.WHITE)
+                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
                 p.scale(rand.nextFloat() * 0.2F + 0.1F);
                 p.setMaxAge(20 + rand.nextInt(10));
             }
@@ -177,17 +184,18 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
         setItem(NBTHelper.getStack(compound, "AS_SpectralItem", ItemStack.EMPTY));
         int task = compound.getInteger("AS_ToolTask");
-        if(this.aiTask != null) {
-            this.aiTask.taskTarget = new ToolTask(ToolTask.Type.values()[MathHelper.clamp(task, 0, ToolTask.Type.values().length - 1)]);
+        if (this.aiTask != null) {
+            this.aiTask.taskTarget = new ToolTask(
+                ToolTask.Type.values()[MathHelper.clamp(task, 0, ToolTask.Type.values().length - 1)]);
         } else {
-            //Fcking thanks TOP
+            // Fcking thanks TOP
             this.aiTask = new AIToolTask(this);
             this.aiTask.taskTarget = new ToolTask(ToolTask.Type.BREAK_BLOCK);
         }
         this.ticksUntilDeath = compound.getInteger("AS_ToolDeathTicks");
-        this.originalStartPosition = compound.hasKey("AS_StartPosition") ?
-                NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("AS_StartPosition")) :
-                this.getPosition();
+        this.originalStartPosition = compound.hasKey("AS_StartPosition")
+            ? NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("AS_StartPosition"))
+            : this.getPosition();
     }
 
     @Override
@@ -196,12 +204,15 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
         NBTHelper.setStack(compound, "AS_SpectralItem", getItem());
         int task = 0;
-        if(this.aiTask != null) {
+        if (this.aiTask != null) {
             task = this.aiTask.taskTarget.type.ordinal();
         }
         compound.setInteger("AS_ToolTask", task);
         compound.setInteger("AS_ToolDeathTicks", this.ticksUntilDeath);
-        NBTHelper.setAsSubTag(compound, "AS_StartPosition", subTag -> NBTHelper.writeBlockPosToNBT(this.originalStartPosition, subTag));
+        NBTHelper.setAsSubTag(
+            compound,
+            "AS_StartPosition",
+            subTag -> NBTHelper.writeBlockPosToNBT(this.originalStartPosition, subTag));
     }
 
     public static class ToolTask {
@@ -242,8 +253,8 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         private BlockPos designatedBreakTarget = null;
         private EntityLivingBase designatedAttackTarget = null;
 
-        //Break-process ticks
-        //Attack-cooldown ticks
+        // Break-process ticks
+        // Attack-cooldown ticks
         private int actionTicks = 0;
 
         public AIToolTask(EntitySpectralTool entity) {
@@ -266,30 +277,48 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
             } else {
                 switch (this.taskTarget.type) {
                     case BREAK_BLOCK:
-                        BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
-                                (world, at, state) -> world.getTileEntity(at) == null &&
-                                        !state.getBlock().isAir(state, world, at) &&
-                                        state.getBlockHardness(world, at) != -1 &&
-                                        state.getBlockHardness(world, at) <= 10 &&
-                                        MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_PICKAXE))
-                        );
+                        BlockPos validStateStone = MiscUtils.searchAreaForFirst(
+                            parentEntity.world,
+                            parentEntity.getPosition(),
+                            8,
+                            Vector3.atEntityCorner(this.parentEntity),
+                            (world, at, state) -> world.getTileEntity(at) == null && !state.getBlock()
+                                .isAir(state, world, at)
+                                && state.getBlockHardness(world, at) != -1
+                                && state.getBlockHardness(world, at) <= 10
+                                && MiscUtils.canToolBreakBlockWithoutPlayer(
+                                world,
+                                at,
+                                state,
+                                new ItemStack(Items.DIAMOND_PICKAXE)));
                         return validStateStone != null;
                     case BREAK_LOG:
-                        BlockPos validStateLog = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 10, Vector3.atEntityCorner(this.parentEntity),
-                                (world, at, state) -> world.getTileEntity(at) == null &&
-                                    !state.getBlock().isAir(state, world, at) &&
-                                    (state.getBlock().isWood(world, at) || state.getBlock().isLeaves(state, world, at)) &&
-                                    state.getBlockHardness(world, at) != -1 &&
-                                    state.getBlockHardness(world, at) <= 10 &&
-                                    MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_AXE))
-                        );
+                        BlockPos validStateLog = MiscUtils.searchAreaForFirst(
+                            parentEntity.world,
+                            parentEntity.getPosition(),
+                            10,
+                            Vector3.atEntityCorner(this.parentEntity),
+                            (world, at, state) -> world.getTileEntity(at) == null && !state.getBlock()
+                                .isAir(state, world, at)
+                                && (state.getBlock()
+                                .isWood(world, at)
+                                || state.getBlock()
+                                .isLeaves(state, world, at))
+                                && state.getBlockHardness(world, at) != -1
+                                && state.getBlockHardness(world, at) <= 10
+                                && MiscUtils.canToolBreakBlockWithoutPlayer(
+                                world,
+                                at,
+                                state,
+                                new ItemStack(Items.DIAMOND_AXE)));
                         return validStateLog != null;
                     case ATTACK_MONSTER:
                         java.util.List<EntityLivingBase> eList = this.parentEntity.world.getEntitiesWithinAABB(
-                                EntityLivingBase.class,
-                                new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
-                                e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
+                            EntityLivingBase.class,
+                            new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
+                            e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
+                        EntityLivingBase entity = EntityUtils
+                            .selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                         return entity != null;
                     default:
                         break;
@@ -319,19 +348,19 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
         public void updateTask() {
             super.updateTask();
 
-            if(!shouldContinueExecuting() || this.taskTarget == null) {
+            if (!shouldContinueExecuting() || this.taskTarget == null) {
                 return;
             }
 
-            if(actionTicks < 0) {
-                actionTicks = 0; //lol. wtf.
+            if (actionTicks < 0) {
+                actionTicks = 0; // lol. wtf.
             }
 
             EntityMoveHelper entitymovehelper = this.parentEntity.getMoveHelper();
             boolean resetTimer = false;
             switch (this.taskTarget.type) {
                 case BREAK_BLOCK:
-                    if(this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
+                    if (this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
                         this.designatedBreakTarget = null;
                         resetTimer = true;
                     } else {
@@ -339,16 +368,23 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         double d1 = entitymovehelper.getY() - this.parentEntity.posY;
                         double d2 = entitymovehelper.getZ() - this.parentEntity.posZ;
                         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                        this.parentEntity.getMoveHelper().setMoveTo(
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(
                                 this.designatedBreakTarget.getX(),
                                 this.designatedBreakTarget.getY(),
                                 this.designatedBreakTarget.getZ(),
                                 1.5);
-                        if(d3 < 3D) {
+                        if (d3 < 3D) {
                             this.actionTicks++;
-                            if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockPick() && this.parentEntity.world instanceof WorldServer) {
-                                if (MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true)) {
+                            if (this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockPick()
+                                && this.parentEntity.world instanceof WorldServer) {
+                                if (MiscUtils.breakBlockWithoutPlayer(
+                                    (WorldServer) this.parentEntity.world,
+                                    this.designatedBreakTarget,
+                                    this.parentEntity.world.getBlockState(this.designatedBreakTarget),
+                                    true,
+                                    true,
+                                    true)) {
                                     resetTimer = true;
                                 }
                             }
@@ -356,7 +392,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                     }
                     break;
                 case BREAK_LOG:
-                    if(this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
+                    if (this.parentEntity.world.isAirBlock(this.designatedBreakTarget)) {
                         this.designatedBreakTarget = null;
                         resetTimer = true;
                     } else {
@@ -364,16 +400,23 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         double d1 = entitymovehelper.getY() - this.parentEntity.posY;
                         double d2 = entitymovehelper.getZ() - this.parentEntity.posZ;
                         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                        this.parentEntity.getMoveHelper().setMoveTo(
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(
                                 this.designatedBreakTarget.getX(),
                                 this.designatedBreakTarget.getY(),
                                 this.designatedBreakTarget.getZ(),
                                 1.5);
-                        if(d3 < 3D) {
+                        if (d3 < 3D) {
                             this.actionTicks++;
-                            if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe() && this.parentEntity.world instanceof WorldServer) {
-                                if (MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true)) {
+                            if (this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe()
+                                && this.parentEntity.world instanceof WorldServer) {
+                                if (MiscUtils.breakBlockWithoutPlayer(
+                                    (WorldServer) this.parentEntity.world,
+                                    this.designatedBreakTarget,
+                                    this.parentEntity.world.getBlockState(this.designatedBreakTarget),
+                                    true,
+                                    true,
+                                    true)) {
                                     resetTimer = true;
                                 }
                             }
@@ -381,42 +424,48 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                     }
                     break;
                 case ATTACK_MONSTER:
-                    if(this.designatedAttackTarget.isDead) {
+                    if (this.designatedAttackTarget.isDead) {
                         this.designatedAttackTarget = null;
                         resetTimer = true;
                     } else {
                         java.util.List<EntityLivingBase> eList = this.parentEntity.world.getEntitiesWithinAABB(
-                                EntityLivingBase.class,
-                                new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
-                                e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
-                        if(entity != null) {
+                            EntityLivingBase.class,
+                            new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
+                            e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
+                        EntityLivingBase entity = EntityUtils
+                            .selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
+                        if (entity != null) {
                             double d0 = entity.posX;
                             double d1 = entity.posY;
                             double d2 = entity.posZ;
-                            this.parentEntity.getMoveHelper().setMoveTo(d0, d1, d2, 1.6D);
+                            this.parentEntity.getMoveHelper()
+                                .setMoveTo(d0, d1, d2, 1.6D);
                         }
 
                         double d0 = entitymovehelper.getX() - this.parentEntity.posX;
                         double d1 = entitymovehelper.getY() - this.parentEntity.posY;
                         double d2 = entitymovehelper.getZ() - this.parentEntity.posZ;
                         double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                        this.parentEntity.getMoveHelper().setMoveTo(
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(
                                 this.designatedAttackTarget.posX,
                                 this.designatedAttackTarget.posY,
                                 this.designatedAttackTarget.posZ,
                                 1.7);
-                        if(d3 < 3D) {
+                        if (d3 < 3D) {
                             this.actionTicks++;
-                            if(this.actionTicks > CapeEffectPelotrio.getTicksSwordAttacks()) {
-                                DamageUtil.attackEntityFrom(this.designatedAttackTarget, CommonProxy.dmgSourceStellar, CapeEffectPelotrio.getSwordAttackDamage());
+                            if (this.actionTicks > CapeEffectPelotrio.getTicksSwordAttacks()) {
+                                DamageUtil.attackEntityFrom(
+                                    this.designatedAttackTarget,
+                                    CommonProxy.dmgSourceStellar,
+                                    CapeEffectPelotrio.getSwordAttackDamage());
                                 resetTimer = true;
                             }
                         }
                     }
                     break;
             }
-            if(resetTimer) {
+            if (resetTimer) {
                 this.actionTicks = 0;
             }
         }
@@ -431,54 +480,73 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
 
             switch (this.taskTarget.type) {
                 case BREAK_BLOCK:
-                    BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
-                            (world, at, state) -> world.getTileEntity(at) == null &&
-                            at.getY() >= parentEntity.originalStartPosition.getY() &&
-                            !state.getBlock().isAir(state, world, at) &&
-                            state.getBlockHardness(world, at) != -1 &&
-                            state.getBlockHardness(world, at) <= 10 &&
-                            MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_PICKAXE))
-                    );
-                    if(validStateStone != null) {
+                    BlockPos validStateStone = MiscUtils.searchAreaForFirst(
+                        parentEntity.world,
+                        parentEntity.getPosition(),
+                        8,
+                        Vector3.atEntityCorner(this.parentEntity),
+                        (world, at, state) -> world.getTileEntity(at) == null
+                            && at.getY() >= parentEntity.originalStartPosition.getY()
+                            && !state.getBlock()
+                            .isAir(state, world, at)
+                            && state.getBlockHardness(world, at) != -1
+                            && state.getBlockHardness(world, at) <= 10
+                            && MiscUtils.canToolBreakBlockWithoutPlayer(
+                            world,
+                            at,
+                            state,
+                            new ItemStack(Items.DIAMOND_PICKAXE)));
+                    if (validStateStone != null) {
                         this.designatedBreakTarget = validStateStone;
 
                         double d0 = validStateStone.getX();
                         double d1 = validStateStone.getY();
                         double d2 = validStateStone.getZ();
-                        this.parentEntity.getMoveHelper().setMoveTo(d0, d1, d2, 1.5);
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(d0, d1, d2, 1.5);
                     }
                     break;
                 case BREAK_LOG:
-                    BlockPos validStateLog = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 10, Vector3.atEntityCorner(this.parentEntity),
-                            (world, at, state) -> world.getTileEntity(at) == null &&
-                                    !state.getBlock().isAir(state, world, at) &&
-                                    (state.getBlock().isWood(world, at) || state.getBlock().isLeaves(state, world, at)) &&
-                                    state.getBlockHardness(world, at) != -1 &&
-                                    state.getBlockHardness(world, at) <= 10 &&
-                                    MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_AXE))
-                    );
-                    if(validStateLog != null) {
+                    BlockPos validStateLog = MiscUtils.searchAreaForFirst(
+                        parentEntity.world,
+                        parentEntity.getPosition(),
+                        10,
+                        Vector3.atEntityCorner(this.parentEntity),
+                        (world, at, state) -> world.getTileEntity(at) == null && !state.getBlock()
+                            .isAir(state, world, at)
+                            && (state.getBlock()
+                            .isWood(world, at)
+                            || state.getBlock()
+                            .isLeaves(state, world, at))
+                            && state.getBlockHardness(world, at) != -1
+                            && state.getBlockHardness(world, at) <= 10
+                            && MiscUtils
+                            .canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_AXE)));
+                    if (validStateLog != null) {
                         this.designatedBreakTarget = validStateLog;
 
                         double d0 = validStateLog.getX();
                         double d1 = validStateLog.getY();
                         double d2 = validStateLog.getZ();
-                        this.parentEntity.getMoveHelper().setMoveTo(d0, d1, d2, 1.5);
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(d0, d1, d2, 1.5);
                     }
                     break;
                 case ATTACK_MONSTER:
                     java.util.List<EntityLivingBase> eList = this.parentEntity.world.getEntitiesWithinAABB(
-                            EntityLivingBase.class,
-                            new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
-                            e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                    EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
-                    if(entity != null) {
+                        EntityLivingBase.class,
+                        new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
+                        e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
+                    EntityLivingBase entity = EntityUtils
+                        .selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
+                    if (entity != null) {
                         this.designatedAttackTarget = entity;
 
                         double d0 = entity.posX;
                         double d1 = entity.posY;
                         double d2 = entity.posZ;
-                        this.parentEntity.getMoveHelper().setMoveTo(d0, d1, d2, 1.7);
+                        this.parentEntity.getMoveHelper()
+                            .setMoveTo(d0, d1, d2, 1.7);
                     }
                     break;
             }

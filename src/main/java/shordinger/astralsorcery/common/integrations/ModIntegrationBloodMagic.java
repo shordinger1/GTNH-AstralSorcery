@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 public class ModIntegrationBloodMagic {
 
     public static void sendIMC() {
-        //Teleposer blacklist
+        // Teleposer blacklist
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.attunementRelay);
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.celestialGateway);
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.blockFakeTree);

@@ -8,7 +8,17 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -24,12 +34,11 @@ import shordinger.astralsorcery.common.base.FluidRarityRegistry;
 import shordinger.astralsorcery.common.block.BlockBoreHead;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
-import shordinger.astralsorcery.common.data.world.WorldCacheManager;
-import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import shordinger.astralsorcery.common.entities.EntityTechnicalAmbient;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
@@ -37,7 +46,6 @@ import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
@@ -58,14 +66,6 @@ import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidRegistry;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -106,6 +106,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     @Override
     protected ItemHandlerTile createNewItemHandler() {
         return new TileInventoryBase.ItemHandlerTileFiltered(this) {
+
             @Override
             public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
                 return false;
@@ -117,24 +118,24 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             updateMultiblockState();
 
-            if(mbStarlight <= 12000 && getCurrentBoreType() != null) {
+            if (mbStarlight <= 12000 && getCurrentBoreType() != null) {
                 TileChalice tc = MiscUtils.getTileAt(world, getPos().up(), TileChalice.class, false);
-                if(tc != null) {
+                if (tc != null) {
                     LiquidStarlightChaliceHandler.requestLiquidStarlightAndTransferTo(this, tc, ticksExisted, 400);
                 }
             }
-            if(!consumeLiquid()) {
-                if(this.operationTicks > 0) {
+            if (!consumeLiquid()) {
+                if (this.operationTicks > 0) {
                     operationTicks -= 10;
                     markForUpdate();
                 }
                 return;
             }
-            if(getCurrentBoreType() == null) {
-                if(operationTicks > 0) {
+            if (getCurrentBoreType() == null) {
+                if (operationTicks > 0) {
                     markForUpdate();
                 }
                 this.operationTicks = 0;
@@ -142,36 +143,38 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             }
             handleSetupProgressTick();
             markForUpdate();
-            if(this.operationTicks >= SEGMENT_PREPARATION) {
+            if (this.operationTicks >= SEGMENT_PREPARATION) {
                 switch (getCurrentBoreType()) {
                     case LIQUID:
-                        if(coneBlockDiscoverer == null) {
-                            coneBlockDiscoverer = new VerticalConeBlockDiscoverer(this.getPos().down(3));
+                        if (coneBlockDiscoverer == null) {
+                            coneBlockDiscoverer = new VerticalConeBlockDiscoverer(
+                                this.getPos()
+                                    .down(3));
                         }
 
-                        if(!preparationSuccessful) {
-                            if((ticksExisted % 8) == 0) {
+                        if (!preparationSuccessful) {
+                            if ((ticksExisted % 8) == 0) {
                                 attemptDig();
                             }
                         } else {
-                            if((ticksExisted % 32) == 0) {
+                            if ((ticksExisted % 32) == 0) {
                                 checkDigState();
                             }
-                            if(this.preparationSuccessful) {
+                            if (this.preparationSuccessful) {
                                 playBoreLiquidEffect();
                             }
                         }
                         break;
                     case VORTEX:
-                        if(!preparationSuccessful) {
-                            if((ticksExisted % 8) == 0) {
+                        if (!preparationSuccessful) {
+                            if ((ticksExisted % 8) == 0) {
                                 attemptDigVortex();
                             }
                         } else {
-                            if((ticksExisted % 32) == 0) {
+                            if ((ticksExisted % 32) == 0) {
                                 checkVortexDigState();
                             }
-                            if(this.preparationSuccessful) {
+                            if (this.preparationSuccessful) {
                                 playBoreVortexEffect();
                             }
                         }
@@ -181,7 +184,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 }
             }
         } else {
-            if(hasMultiblock && this.operationTicks > 0 && getCurrentBoreType() != null) {
+            if (hasMultiblock && this.operationTicks > 0 && getCurrentBoreType() != null) {
                 updateBoreSprite();
 
                 switch (getCurrentWorkingSegment()) {
@@ -189,20 +192,21 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                         float chance = ((float) this.operationTicks) / ((float) SEGMENT_STARTUP);
                         playVortex(chance);
                         playArcs(chance);
-                        if(getCurrentBoreType() == BoreType.VORTEX) {
+                        if (getCurrentBoreType() == BoreType.VORTEX) {
                             playCoreParticles(chance);
                         }
                         break;
                     case PREPARATION:
-                        float prepChance = ((float) this.operationTicks - SEGMENT_STARTUP) / ((float) SEGMENT_PREPARATION - SEGMENT_STARTUP);
+                        float prepChance = ((float) this.operationTicks - SEGMENT_STARTUP)
+                            / ((float) SEGMENT_PREPARATION - SEGMENT_STARTUP);
                         playArcs(prepChance);
                         switch (getCurrentBoreType()) {
                             case LIQUID:
                                 playVortex(1F - prepChance);
-                                if(operationTicks == SEGMENT_PREPARATION) {
+                                if (operationTicks == SEGMENT_PREPARATION) {
                                     markDigProcess();
                                 }
-                                if(prepChance <= 0.85) {
+                                if (prepChance <= 0.85) {
                                     playInnerVortex(Math.max(0, (-0.35 + prepChance) * 2F));
                                 } else {
                                     double ch = (prepChance - 0.85);
@@ -214,7 +218,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 playVortex(1F - (prepChance * 0.5F));
                                 playCoreParticles(1F - (2 * prepChance));
                                 playVortexCore(prepChance);
-                                if(operationTicks == SEGMENT_PREPARATION) {
+                                if (operationTicks == SEGMENT_PREPARATION) {
                                     vortexExplosion();
                                 }
                                 break;
@@ -246,7 +250,13 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void playBoreVortexEffect() {
-        AxisAlignedBB boxVortex = new AxisAlignedBB(-3, this.vortexOffset - 3, -3, 3, Math.min(-3, this.vortexOffset + 3), 3).offset(getPos());
+        AxisAlignedBB boxVortex = new AxisAlignedBB(
+            -3,
+            this.vortexOffset - 3,
+            -3,
+            3,
+            Math.min(-3, this.vortexOffset + 3),
+            3).offset(getPos());
         AxisAlignedBB drawBox = boxVortex.grow(16);
 
         double boxSizeX = boxVortex.maxX - boxVortex.minX;
@@ -257,25 +267,34 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         double density = densityMax;
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boxVortex);
         for (EntityLivingBase e : entities) {
-            if(e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
-            if(e.width * e.width * e.height >= boxSizeX * boxSizeY * boxSizeZ) {
-                if(e.getPositionVector().distanceTo(new Vec3d(getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5)) >= 0.1) {
-                    e.setPositionAndUpdate(
+            if (e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
+            if (e.width * e.width * e.height >= boxSizeX * boxSizeY * boxSizeZ) {
+                if (e.getPositionVector()
+                    .distanceTo(
+                        new Vec3d(
                             getPos().getX() + 0.5,
                             getPos().getY() + 0.5 + this.vortexOffset,
-                            getPos().getZ() + 0.5
-                    );
-                    //To move all the dragon-pieces along...
-                    if(e instanceof EntityDragon) {
-                        String prev = world.getGameRules().getString("mobGriefing");
-                        world.getGameRules().setOrCreateGameRule("mobGriefing", "false");
+                            getPos().getZ() + 0.5))
+                    >= 0.1) {
+                    e.setPositionAndUpdate(
+                        getPos().getX() + 0.5,
+                        getPos().getY() + 0.5 + this.vortexOffset,
+                        getPos().getZ() + 0.5);
+                    // To move all the dragon-pieces along...
+                    if (e instanceof EntityDragon) {
+                        String prev = world.getGameRules()
+                            .getString("mobGriefing");
+                        world.getGameRules()
+                            .setOrCreateGameRule("mobGriefing", "false");
                         e.onLivingUpdate();
-                        world.getGameRules().setOrCreateGameRule("mobGriefing", prev);
+                        world.getGameRules()
+                            .setOrCreateGameRule("mobGriefing", prev);
                     }
                 }
             }
-            if(e instanceof EntityDragon) {
-                e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 40, 0));
+            if (e instanceof EntityDragon) {
+                e.getActivePotionMap()
+                    .put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 40, 0));
             } else {
                 e.addPotionEffect(new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
             }
@@ -286,39 +305,48 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<EntityLivingBase> draws = world.getEntitiesWithinAABB(EntityLivingBase.class, drawBox);
         draws.removeAll(entities);
         for (EntityLivingBase e : draws) {
-            if(e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
-            if(e instanceof EntityDragon) {
-                e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+            if (e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
+            if (e instanceof EntityDragon) {
+                e.getActivePotionMap()
+                    .put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
             }
             EntityUtils.applyVortexMotion((v) -> Vector3.atEntityCorner(e), (v) -> {
-                if(e instanceof EntityDragon) {
-                    e.posX += v.getX();
-                    e.posY += v.getY();
-                    e.posZ += v.getZ();
-                    e.motionX = 0;
-                    e.motionY = 0;
-                    e.motionZ = 0;
-                } else {
-                    e.motionX += v.getX();
-                    e.motionY += (v.getY() * 2.5);
-                    e.motionZ += v.getZ();
-                }
-                return null;
-            }, new Vector3(this).addY(0.5).addY(this.vortexOffset), 48, 3);
+                    if (e instanceof EntityDragon) {
+                        e.posX += v.getX();
+                        e.posY += v.getY();
+                        e.posZ += v.getZ();
+                        e.motionX = 0;
+                        e.motionY = 0;
+                        e.motionZ = 0;
+                    } else {
+                        e.motionX += v.getX();
+                        e.motionY += (v.getY() * 2.5);
+                        e.motionZ += v.getZ();
+                    }
+                    return null;
+                },
+                new Vector3(this).addY(0.5)
+                    .addY(this.vortexOffset),
+                48,
+                3);
 
-            if(e.getDistanceSq(getPos().add(0, this.vortexOffset - 1, 0)) <= (25)) { // 5 * 5
+            if (e.getDistanceSq(getPos().add(0, this.vortexOffset - 1, 0)) <= (25)) { // 5 * 5
                 Vector3 randomBuffer = new Vector3(
-                        Math.max(0, (boxSizeX - e.width ) / 2D),
-                        Math.max(0, (boxSizeY - e.height) / 2D),
-                        Math.max(0, (boxSizeZ - e.width ) / 2D));
-                Vector3 randPos = new Vector3(this).addY(0.5).addY(this.vortexOffset)
-                        .add(
-                                randomBuffer.getX() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
-                                randomBuffer.getY() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
-                                randomBuffer.getZ() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
+                    Math.max(0, (boxSizeX - e.width) / 2D),
+                    Math.max(0, (boxSizeY - e.height) / 2D),
+                    Math.max(0, (boxSizeZ - e.width) / 2D));
+                Vector3 randPos = new Vector3(this).addY(0.5)
+                    .addY(this.vortexOffset)
+                    .add(
+                        randomBuffer.getX() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
+                        randomBuffer.getY() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
+                        randomBuffer.getZ() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
                 e.setPositionAndUpdate(randPos.getX(), randPos.getY(), randPos.getZ());
-                if(e instanceof EntityDragon) {
-                    e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+                if (e instanceof EntityDragon) {
+                    e.getActivePotionMap()
+                        .put(
+                            RegistryPotions.potionTimeFreeze,
+                            new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
                 } else {
                     e.addPotionEffect(new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
                 }
@@ -328,25 +356,27 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void playBoreLiquidEffect() {
-        if(productionTimeout > 0) {
+        if (productionTimeout > 0) {
             productionTimeout--;
         }
-        if(productionTimeout <= 0) {
+        if (productionTimeout <= 0) {
             productionTimeout = rand.nextInt(10) + 20;
             Chunk ch = world.getChunkFromBlockCoords(getPos());
             FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
-            if(entry != null) {
+            if (entry != null) {
                 int mbDrain = rand.nextInt(300) + 300;
                 int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
                 FluidStack drained;
-                if(entry.isValid() && actMbDrain > 0) {
+                if (entry.isValid() && actMbDrain > 0) {
                     drained = entry.tryDrain(actMbDrain, false);
-                    if(drained == null || drained.getFluid() == null) {
+                    if (drained == null || drained.getFluid() == null) {
                         drained = new FluidStack(FluidRegistry.WATER, mbDrain);
                     }
                     List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
-                    out.removeIf((t) -> t.getPos().equals(getPos().up()));
-                    if(!out.isEmpty()) {
+                    out.removeIf(
+                        (t) -> t.getPos()
+                            .equals(getPos().up()));
+                    if (!out.isEmpty()) {
                         TileChalice target = out.get(rand.nextInt(out.size()));
                         LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
                         entry.tryDrain(actMbDrain, true);
@@ -354,8 +384,10 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 } else {
                     drained = new FluidStack(FluidRegistry.WATER, mbDrain);
                     List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
-                    out.removeIf((t) -> t.getPos().equals(getPos().up()));
-                    if(!out.isEmpty()) {
+                    out.removeIf(
+                        (t) -> t.getPos()
+                            .equals(getPos().up()));
+                    if (!out.isEmpty()) {
                         TileChalice target = out.get(rand.nextInt(out.size()));
                         LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
                     }
@@ -369,68 +401,86 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private void playLowVortex() {
         for (int i = 0; i < 2; i++) {
             Vector3 dir = new Vector3(
-                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1)
-            );
+                rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
             Vector3 v = new Vector3(this).add(0.5, -0.65, 0.5);
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-            particle.gravity(0.004).scale(0.4F).setAlphaMultiplier(1F);
+            particle.gravity(0.004)
+                .scale(0.4F)
+                .setAlphaMultiplier(1F);
             particle.motion(dir.getX(), dir.getY(), dir.getZ());
             particle.setColor(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
         }
 
         for (int i = 0; i < 3; i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() - 4                     + rand.nextFloat() * 9,
-                    pos.getY() - 2 + this.vortexOffset + rand.nextFloat() * 9,
-                    pos.getZ() - 4                     + rand.nextFloat() * 9
-            );
-            Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5 + this.vortexOffset, pos.getZ() + 0.5).normalize().divide(-30);
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-            p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                pos.getX() - 4 + rand.nextFloat() * 9,
+                pos.getY() - 2 + this.vortexOffset + rand.nextFloat() * 9,
+                pos.getZ() - 4 + rand.nextFloat() * 9);
+            Vector3 dir = particlePos.clone()
+                .subtract(pos.getX() + 0.5, pos.getY() + 0.5 + this.vortexOffset, pos.getZ() + 0.5)
+                .normalize()
+                .divide(-30);
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+            p.motion(dir.getX(), dir.getY(), dir.getZ())
+                .setAlphaMultiplier(1F)
+                .setMaxAge(rand.nextInt(40) + 20);
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
+                .scale(0.2F + rand.nextFloat() * 0.1F)
+                .setColor(Color.WHITE);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void updateNoisePlane() {
         EntityFXFacingSprite spr = (EntityFXFacingSprite) facingVortexPlane;
-        if((spr == null || spr.canRemove() || spr.isRemoved()) &&
-                this.operationTicks > 0) {
-            spr = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2,
-                    getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5, 2F, 2);
+        if ((spr == null || spr.canRemove() || spr.isRemoved()) && this.operationTicks > 0) {
+            spr = EntityFXFacingSprite.fromSpriteSheet(
+                SpriteLibrary.spriteStar2,
+                getPos().getX() + 0.5,
+                getPos().getY() + 0.5 + this.vortexOffset,
+                getPos().getZ() + 0.5,
+                2F,
+                2);
             spr.setRefreshFunc(() -> {
-                if(isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
+                if (isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
                 }
-                if(this.getWorld().provider == null || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider == null) {
+                if (this.getWorld().provider == null || Minecraft.getMinecraft().world == null
+                    || Minecraft.getMinecraft().world.provider == null) {
                     return false;
                 }
-                return this.getWorld().provider.getDimension() == Minecraft.getMinecraft().world.provider.getDimension();
+                return this.getWorld().provider.getDimension()
+                    == Minecraft.getMinecraft().world.provider.getDimension();
             });
-            EffectHandler.getInstance().registerFX(spr);
+            EffectHandler.getInstance()
+                .registerFX(spr);
             facingVortexPlane = spr;
         }
 
-        if(ctrlEffectNoise == null) {
+        if (ctrlEffectNoise == null) {
             ctrlEffectNoise = Lists.newArrayList(
-                    new ControllerNoisePlane(1.2F),
-                    new ControllerNoisePlane(1.8F),
-                    new ControllerNoisePlane(2.4F)
-            );
+                new ControllerNoisePlane(1.2F),
+                new ControllerNoisePlane(1.8F),
+                new ControllerNoisePlane(2.4F));
         }
 
         for (Object ctrl : ctrlEffectNoise) {
             for (int i = 0; i < 3; i++) {
                 EntityFXFacingParticle p = ((ControllerNoisePlane) ctrl).setupParticle();
-                p.updatePosition(getPos().getX() + 0.5, getPos().getY() + 0.5 + this.vortexOffset, getPos().getZ() + 0.5)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                .motion(rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
+                p.updatePosition(
+                        getPos().getX() + 0.5,
+                        getPos().getY() + 0.5 + this.vortexOffset,
+                        getPos().getZ() + 0.5)
+                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                    .motion(
+                        rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                         rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1),
                         rand.nextFloat() * 0.005 * (rand.nextBoolean() ? 1 : -1))
-                .scale(0.15F + rand.nextFloat() * 0.05F)
-                .setMaxAge(30 + rand.nextInt(15));
+                    .scale(0.15F + rand.nextFloat() * 0.05F)
+                    .setMaxAge(30 + rand.nextInt(15));
             }
         }
     }
@@ -439,18 +489,21 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private void vortexExplosion() {
         for (int i = 0; i < 140; i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() + 0.5                     - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getY() + 0.5 + this.vortexOffset - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getZ() + 0.5                     - 0.1F + rand.nextFloat() * 0.2
-            );
+                pos.getX() + 0.5 - 0.1F + rand.nextFloat() * 0.2,
+                pos.getY() + 0.5 + this.vortexOffset - 0.1F + rand.nextFloat() * 0.2,
+                pos.getZ() + 0.5 - 0.1F + rand.nextFloat() * 0.2);
             Vector3 dir = new Vector3(
-                    rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1)
-            );
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-            p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.3F + rand.nextFloat() * 0.15F).setColor(Color.WHITE);
+                rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.15 * (rand.nextBoolean() ? 1 : -1));
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+            p.motion(dir.getX(), dir.getY(), dir.getZ())
+                .setAlphaMultiplier(1F)
+                .setMaxAge(rand.nextInt(40) + 20);
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                .scale(0.3F + rand.nextFloat() * 0.15F)
+                .setColor(Color.WHITE);
         }
     }
 
@@ -459,36 +512,46 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         float yOffset = -0.5F + (((float) (this.vortexOffset + 1)) * Math.min(1, prepChance * 2F));
         for (int i = 0; i < 15; i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() + 0.5     - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getY() + yOffset - 0.1F + rand.nextFloat() * 0.2,
-                    pos.getZ() + 0.5     - 0.1F + rand.nextFloat() * 0.2
-            );
+                pos.getX() + 0.5 - 0.1F + rand.nextFloat() * 0.2,
+                pos.getY() + yOffset - 0.1F + rand.nextFloat() * 0.2,
+                pos.getZ() + 0.5 - 0.1F + rand.nextFloat() * 0.2);
             float mul = prepChance <= 0.5F ? 1 : (1F - prepChance);
             Vector3 dir = new Vector3(
-                    rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1)
-            );
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-            p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.035 * mul * (rand.nextBoolean() ? 1 : -1));
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+            p.motion(dir.getX(), dir.getY(), dir.getZ())
+                .setAlphaMultiplier(1F)
+                .setMaxAge(rand.nextInt(40) + 20);
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                .scale(0.2F + rand.nextFloat() * 0.1F)
+                .setColor(Color.WHITE);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void playInnerVortex(double chance) {
         for (int i = 0; i < 12; i++) {
-            if(rand.nextFloat() < chance) {
+            if (rand.nextFloat() < chance) {
                 Vector3 particlePos = new Vector3(
-                        pos.getX() - 0.4 + rand.nextFloat() * 1.8,
-                        pos.getY()       - rand.nextFloat() * 3,
-                        pos.getZ() - 0.4 + rand.nextFloat() * 1.8
-                );
-                Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-                p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
-                if(rand.nextBoolean()) {
+                    pos.getX() - 0.4 + rand.nextFloat() * 1.8,
+                    pos.getY() - rand.nextFloat() * 3,
+                    pos.getZ() - 0.4 + rand.nextFloat() * 1.8);
+                Vector3 dir = particlePos.clone()
+                    .subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                    .normalize()
+                    .divide(-30);
+                EntityFXFacingParticle p = EffectHelper
+                    .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+                p.motion(dir.getX(), dir.getY(), dir.getZ())
+                    .setAlphaMultiplier(1F)
+                    .setMaxAge(rand.nextInt(40) + 20);
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                    .scale(0.2F + rand.nextFloat() * 0.1F)
+                    .setColor(Color.WHITE);
+                if (rand.nextBoolean()) {
                     p.setColor(new Color(0x5865FF));
                 }
             }
@@ -502,40 +565,54 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         for (int yy = 0; yy < getPos().getY(); yy++) {
             BlockPos pos = new BlockPos(x, yy, z);
             IBlockState at = world.getBlockState(pos);
-            if(at.isTranslucent() || at.getBlock().isAir(at, world, pos)) {
+            if (at.isTranslucent() || at.getBlock()
+                .isAir(at, world, pos)) {
                 for (int i = 0; i < 20; i++) {
                     Vector3 v = new Vector3(
-                            x + 0.2 + rand.nextFloat() * 0.6,
-                            yy + rand.nextFloat(),
-                            z + 0.2 + rand.nextFloat() * 0.6
-                    );
+                        x + 0.2 + rand.nextFloat() * 0.6,
+                        yy + rand.nextFloat(),
+                        z + 0.2 + rand.nextFloat() * 0.6);
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-                    p.setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-                    p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                    p.setAlphaMultiplier(1F)
+                        .setMaxAge(rand.nextInt(40) + 20);
+                    p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                        .scale(0.2F + rand.nextFloat() * 0.1F)
+                        .setColor(Color.WHITE);
                 }
             }
         }
 
         Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
-        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(0);
-        EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 1.5).setAlphaMultiplier(1);
+        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5)
+            .setY(0);
+        EffectLightbeam beam = EffectHandler.getInstance()
+            .lightbeam(target, origin, 1.5)
+            .setAlphaMultiplier(1);
         beam.setAlphaFunction(EntityComplexFX.AlphaFunction.FADE_OUT);
-        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x5865FF));
+        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5)
+            .setColorOverlay(new Color(0x5865FF));
     }
 
     @SideOnly(Side.CLIENT)
     private void playCoreParticles(float chance) {
         for (int i = 0; i < 20; i++) {
-            if(rand.nextFloat() < chance) {
+            if (rand.nextFloat() < chance) {
                 Vector3 particlePos = new Vector3(
-                        pos.getX() - 1     + rand.nextFloat() * 3,
-                        pos.getY() - 1.5   + rand.nextFloat() * 2,
-                        pos.getZ() - 1     + rand.nextFloat() * 3
-                );
-                Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() - 0.5, pos.getZ() + 0.5).normalize().divide(-30);
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-                p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                    pos.getX() - 1 + rand.nextFloat() * 3,
+                    pos.getY() - 1.5 + rand.nextFloat() * 2,
+                    pos.getZ() - 1 + rand.nextFloat() * 3);
+                Vector3 dir = particlePos.clone()
+                    .subtract(pos.getX() + 0.5, pos.getY() - 0.5, pos.getZ() + 0.5)
+                    .normalize()
+                    .divide(-30);
+                EntityFXFacingParticle p = EffectHelper
+                    .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+                p.motion(dir.getX(), dir.getY(), dir.getZ())
+                    .setAlphaMultiplier(1F)
+                    .setMaxAge(rand.nextInt(40) + 20);
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                    .scale(0.2F + rand.nextFloat() * 0.1F)
+                    .setColor(Color.WHITE);
             }
         }
     }
@@ -543,71 +620,103 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     @SideOnly(Side.CLIENT)
     private void playVortex(float chance) {
         for (int i = 0; i < 20; i++) {
-            if(rand.nextFloat() < chance) {
+            if (rand.nextFloat() < chance) {
                 Vector3 particlePos = new Vector3(
-                        pos.getX() - 3   + rand.nextFloat() * 7,
-                        pos.getY()       + rand.nextFloat(),
-                        pos.getZ() - 3   + rand.nextFloat() * 7
-                );
-                Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-                p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                    pos.getX() - 3 + rand.nextFloat() * 7,
+                    pos.getY() + rand.nextFloat(),
+                    pos.getZ() - 3 + rand.nextFloat() * 7);
+                Vector3 dir = particlePos.clone()
+                    .subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                    .normalize()
+                    .divide(-30);
+                EntityFXFacingParticle p = EffectHelper
+                    .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+                p.motion(dir.getX(), dir.getY(), dir.getZ())
+                    .setAlphaMultiplier(1F)
+                    .setMaxAge(rand.nextInt(40) + 20);
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                    .scale(0.2F + rand.nextFloat() * 0.1F)
+                    .setColor(Color.WHITE);
             }
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void playArcs(float chance) {
-        if((chance == 1 || rand.nextFloat() < chance) && rand.nextInt(10) == 0) {
+        if ((chance == 1 || rand.nextFloat() < chance) && rand.nextInt(10) == 0) {
             Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
             Vector3 dir = new Vector3(1, 0, 0).rotate(Math.toRadians(rand.nextFloat() * 360), Vector3.RotAxis.Y_AXIS);
-            dir.normalize().multiply(4);
-            Vector3 pos1 = pos.clone().add(dir);
+            dir.normalize()
+                .multiply(4);
+            Vector3 pos1 = pos.clone()
+                .add(dir);
             dir = new Vector3(1, 0, 0).rotate(Math.toRadians(rand.nextFloat() * 360), Vector3.RotAxis.Y_AXIS);
-            dir.normalize().multiply(4);
-            Vector3 pos2 = pos.clone().add(dir);
+            dir.normalize()
+                .multiply(4);
+            Vector3 pos2 = pos.clone()
+                .add(dir);
 
-            EffectHandler.getInstance().lightning(pos1, pos2);
+            EffectHandler.getInstance()
+                .lightning(pos1, pos2);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void playLightbeam() {
         Vector3 particlePos = new Vector3(
-                pos.getX() - 2.5 + rand.nextFloat() * 6,
-                pos.getY() - 1.2 + rand.nextFloat() * 3.4,
-                pos.getZ() - 2.5 + rand.nextFloat() * 6
-        );
-        Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-        p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-        p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+            pos.getX() - 2.5 + rand.nextFloat() * 6,
+            pos.getY() - 1.2 + rand.nextFloat() * 3.4,
+            pos.getZ() - 2.5 + rand.nextFloat() * 6);
+        Vector3 dir = particlePos.clone()
+            .subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+            .normalize()
+            .divide(-30);
+        EntityFXFacingParticle p = EffectHelper
+            .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+        p.motion(dir.getX(), dir.getY(), dir.getZ())
+            .setAlphaMultiplier(1F)
+            .setMaxAge(rand.nextInt(40) + 20);
+        p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+            .scale(0.2F + rand.nextFloat() * 0.1F)
+            .setColor(Color.WHITE);
 
         for (int i = 0; i < 5; i++) {
-            Vector3 v = new Vector3(this).add(0.3 + rand.nextFloat() * 0.4, -rand.nextFloat() * 1.7, 0.3 + rand.nextFloat() * 0.4);
+            Vector3 v = new Vector3(this)
+                .add(0.3 + rand.nextFloat() * 0.4, -rand.nextFloat() * 1.7, 0.3 + rand.nextFloat() * 0.4);
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-            particle.gravity(0.004).scale(0.4F).setAlphaMultiplier(1F);
+            particle.gravity(0.004)
+                .scale(0.4F)
+                .setAlphaMultiplier(1F);
             particle.motion(0, -rand.nextFloat() * 0.015, 0);
             particle.setColor(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
         }
 
-        if(ticksExisted % 25 != 0) return;
+        if (ticksExisted % 25 != 0) return;
 
-        float yTarget = this.getPos().getY() * (1 - this.digPercentage);
+        float yTarget = this.getPos()
+            .getY() * (1 - this.digPercentage);
         Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
-        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
-        EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 9).setAlphaMultiplier(1);
+        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5)
+            .setY(yTarget);
+        EffectLightbeam beam = EffectHandler.getInstance()
+            .lightbeam(target, origin, 9)
+            .setAlphaMultiplier(1);
         beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5);
 
-        yTarget = this.getPos().getY() * (0.75F - (this.digPercentage / 4F));
-        target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
-        origin = origin.clone().add(
+        yTarget = this.getPos()
+            .getY() * (0.75F - (this.digPercentage / 4F));
+        target = new Vector3(getPos()).add(0.5, 0, 0.5)
+            .setY(yTarget);
+        origin = origin.clone()
+            .add(
                 rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
                 0,
                 rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
-        beam = EffectHandler.getInstance().lightbeam(target, origin, 0.8).setAlphaMultiplier(1);
-        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x6A9EFF));
+        beam = EffectHandler.getInstance()
+            .lightbeam(target, origin, 0.8)
+            .setAlphaMultiplier(1);
+        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5)
+            .setColorOverlay(new Color(0x6A9EFF));
     }
 
     private boolean consumeLiquid() {
@@ -615,7 +724,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private boolean consumeLiquid(int amt) {
-        if(mbStarlight >= amt) {
+        if (mbStarlight >= amt) {
             mbStarlight -= amt;
             return true;
         }
@@ -624,13 +733,17 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void checkVortexDigState() {
-        if(digPosResult == null) {
+        if (digPosResult == null) {
             this.preparationSuccessful = false;
             return;
         }
-        List<BlockPos> out = digPosResult.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
-                world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
-        if(!out.isEmpty()) {
+        List<BlockPos> out = digPosResult.stream()
+            .filter(
+                (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
+                    && world.getBlockState(p)
+                    .getBlockHardness(world, p) >= 0)
+            .collect(Collectors.toList());
+        if (!out.isEmpty()) {
             this.preparationSuccessful = false;
             this.digPosResult = null;
         } else {
@@ -639,14 +752,18 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void checkDigState() {
-        if(digPosResult == null) {
+        if (digPosResult == null) {
             this.preparationSuccessful = false;
             this.digPercentage = 0;
             return;
         }
-        List<BlockPos> out = digPosResult.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
-                world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
-        if(!out.isEmpty()) {
+        List<BlockPos> out = digPosResult.stream()
+            .filter(
+                (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
+                    && world.getBlockState(p)
+                    .getBlockHardness(world, p) >= 0)
+            .collect(Collectors.toList());
+        if (!out.isEmpty()) {
             this.preparationSuccessful = false;
             this.digPercentage = 0;
             this.digPosResult = null;
@@ -665,16 +782,20 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 }
             }
         }
-        List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
-                world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
-        if(!out.isEmpty() && world instanceof WorldServer) {
+        List<BlockPos> out = pos.stream()
+            .filter(
+                (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
+                    && world.getBlockState(p)
+                    .getBlockHardness(world, p) >= 0)
+            .collect(Collectors.toList());
+        if (!out.isEmpty() && world instanceof WorldServer) {
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
                     IBlockState state = world.getBlockState(p);
-                    if(!state.getMaterial().isLiquid()) {
-                        MiscUtils.breakBlockWithoutPlayer(
-                                ((WorldServer) world), p, state, true, true, false);
+                    if (!state.getMaterial()
+                        .isLiquid()) {
+                        MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), p, state, true, true, false);
                     }
                 }
             } finally {
@@ -692,19 +813,24 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     private void attemptDig() {
         float downPerc = Math.min(1, this.digPercentage + 0.2F);
-        float dst = this.getPos().getY() * downPerc;
+        float dst = this.getPos()
+            .getY() * downPerc;
         List<BlockPos> pos = coneBlockDiscoverer.tryDiscoverBlocksDown(dst, 5F * downPerc);
-        List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
-                world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
-        if(!out.isEmpty() && world instanceof WorldServer) {
+        List<BlockPos> out = pos.stream()
+            .filter(
+                (p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null
+                    && world.getBlockState(p)
+                    .getBlockHardness(world, p) >= 0)
+            .collect(Collectors.toList());
+        if (!out.isEmpty() && world instanceof WorldServer) {
 
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
                     IBlockState state = world.getBlockState(p);
-                    if(!state.getMaterial().isLiquid()) {
-                        MiscUtils.breakBlockWithoutPlayer(
-                                ((WorldServer) world), p, state, true, true, false);
+                    if (!state.getMaterial()
+                        .isLiquid()) {
+                        MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), p, state, true, true, false);
                     }
                 }
             } finally {
@@ -713,31 +839,31 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         }
         this.digPercentage = downPerc;
         this.preparationSuccessful = this.digPercentage >= 1F;
-        if(this.preparationSuccessful && this.digPosResult == null) {
+        if (this.preparationSuccessful && this.digPosResult == null) {
             this.digPosResult = pos;
         }
     }
 
     private void handleSetupProgressTick() {
-        if(!hasMultiblock || getCurrentBoreType() == null) {
+        if (!hasMultiblock || getCurrentBoreType() == null) {
             this.operationTicks = 0;
             return;
         }
-        if(this.operationTicks <= SEGMENT_PREPARATION) {
+        if (this.operationTicks <= SEGMENT_PREPARATION) {
             this.operationTicks++;
         }
     }
 
     @Nonnull
     public OperationSegment getCurrentWorkingSegment() {
-        if(this.operationTicks == 0) return OperationSegment.INACTIVE;
-        if(this.operationTicks <= SEGMENT_STARTUP) {
+        if (this.operationTicks == 0) return OperationSegment.INACTIVE;
+        if (this.operationTicks <= SEGMENT_STARTUP) {
             return OperationSegment.STARTUP;
         }
-        if(this.operationTicks <= SEGMENT_PREPARATION) {
+        if (this.operationTicks <= SEGMENT_PREPARATION) {
             return OperationSegment.PREPARATION;
         }
-        if(!preparationSuccessful) {
+        if (!preparationSuccessful) {
             return OperationSegment.PRE_RUN;
         }
         return OperationSegment.PRODUCTION;
@@ -760,10 +886,10 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         }
 
         boolean found = this.structureMatch.matches(this.getWorld());
-        if(found != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(() ->
-                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
-                            " (" + this.hasMultiblock + " -> " + found + ")");
+        if (found != this.hasMultiblock) {
+            LogCategory.STRUCTURE_MATCH.info(
+                () -> "Structure match updated: " + this.getClass()
+                    .getName() + " at " + this.getPos() + " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
         }
@@ -772,8 +898,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     @SideOnly(Side.CLIENT)
     private TextureSpritePlane updateBoreSprite() {
         TextureSpritePlane spr = (TextureSpritePlane) spritePlane;
-        if((spr == null || spr.canRemove() || spr.isRemoved()) &&
-                this.operationTicks > 0) {
+        if ((spr == null || spr.canRemove() || spr.isRemoved()) && this.operationTicks > 0) {
             SpriteSheetResource srs;
             switch (getCurrentBoreType()) {
                 case VORTEX:
@@ -784,19 +909,24 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                     srs = SpriteLibrary.spriteHalo3;
                     break;
             }
-            spr = EffectHandler.getInstance().textureSpritePlane(srs, Vector3.RotAxis.Y_AXIS.clone());
+            spr = EffectHandler.getInstance()
+                .textureSpritePlane(srs, Vector3.RotAxis.Y_AXIS.clone());
             spr.setPosition(new Vector3(this).add(0.5, 0.5, 0.5));
-            spr.setNoRotation(45).setAlphaMultiplier(1F);
+            spr.setNoRotation(45)
+                .setAlphaMultiplier(1F);
             spr.setRefreshFunc(() -> {
-                if(isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
+                if (isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
                 }
-                if(this.getWorld().provider == null || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider == null) {
+                if (this.getWorld().provider == null || Minecraft.getMinecraft().world == null
+                    || Minecraft.getMinecraft().world.provider == null) {
                     return false;
                 }
-                return this.getWorld().provider.getDimension() == Minecraft.getMinecraft().world.provider.getDimension();
+                return this.getWorld().provider.getDimension()
+                    == Minecraft.getMinecraft().world.provider.getDimension();
             });
-            spr.setRenderAlphaFunction((fx, a) -> a * Math.min(1, ((float) this.operationTicks) / ((float) SEGMENT_STARTUP)));
+            spr.setRenderAlphaFunction(
+                (fx, a) -> a * Math.min(1, ((float) this.operationTicks) / ((float) SEGMENT_STARTUP)));
             spr.setScale(5.5F);
             spritePlane = spr;
         }
@@ -806,7 +936,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     @Nullable
     public BoreType getCurrentBoreType() {
         IBlockState parent = world.getBlockState(pos.down());
-        if(parent.getBlock() instanceof BlockBoreHead) {
+        if (parent.getBlock() instanceof BlockBoreHead) {
             return parent.getValue(BlockBoreHead.BORE_TYPE);
         }
         return null;
@@ -849,7 +979,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = SimpleSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
-        if(!tank.hasCapability(EnumFacing.UP)) {
+        if (!tank.hasCapability(EnumFacing.UP)) {
             tank.accessibleSides.add(EnumFacing.UP);
         }
         this.operationTicks = compound.getInteger("operation");
@@ -904,7 +1034,13 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            vortexOffset = cfg.getInt("VortexOffset", getConfigurationSection(), vortexOffset, -64, -4, "Sets the offset where the vortex-point for the vortex-prime is at relative to the fountain block.");
+            vortexOffset = cfg.getInt(
+                "VortexOffset",
+                getConfigurationSection(),
+                vortexOffset,
+                -64,
+                -4,
+                "Sets the offset where the vortex-point for the vortex-prime is at relative to the fountain block.");
         }
     }
 

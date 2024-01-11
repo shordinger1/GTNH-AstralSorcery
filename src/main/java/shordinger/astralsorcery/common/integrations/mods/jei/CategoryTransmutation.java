@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
@@ -31,7 +31,9 @@ public class CategoryTransmutation extends JEIBaseCategory<TransmutationRecipeWr
 
     public CategoryTransmutation(IGuiHelper guiHelper) {
         super("jei.category.transmutation", ModIntegrationJEI.idTransmutation);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateTransmutation.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateTransmutation.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 54);
     }
 
@@ -44,7 +46,8 @@ public class CategoryTransmutation extends JEIBaseCategory<TransmutationRecipeWr
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, TransmutationRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, TransmutationRecipeWrapper recipeWrapper,
+                          IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, true, 22, 17);
         group.init(1, false, 94, 18);

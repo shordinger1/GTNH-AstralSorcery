@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,9 +31,9 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
         super.onApply(player, side);
 
         AttributeTypeRegistry.getTypes()
-                .stream()
-                .filter(t -> t instanceof VanillaAttributeType)
-                .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
+            .stream()
+            .filter(t -> t instanceof VanillaAttributeType)
+            .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
     }
 
     @Override
@@ -41,8 +41,8 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
         super.onRemove(player, side, removedCompletely);
 
         AttributeTypeRegistry.getTypes()
-                .stream()
-                .filter(t -> t instanceof VanillaAttributeType)
-                .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
+            .stream()
+            .filter(t -> t instanceof VanillaAttributeType)
+            .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
     }
 }

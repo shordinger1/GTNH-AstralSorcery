@@ -31,8 +31,8 @@ public interface IComplexEffect {
 
     public void tick();
 
-    //Valid layers: 0, 1, 2
-    //Lower layers are rendered first.
+    // Valid layers: 0, 1, 2
+    // Lower layers are rendered first.
     default public int getLayer() {
         return 0;
     }
@@ -44,6 +44,7 @@ public interface IComplexEffect {
 
     }
 
-    public static interface PreventRemoval {}
+    public static interface PreventRemoval {
+    }
 
 }

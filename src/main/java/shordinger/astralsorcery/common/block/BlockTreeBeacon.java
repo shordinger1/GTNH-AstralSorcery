@@ -8,8 +8,12 @@
 
 package shordinger.astralsorcery.common.block;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import shordinger.astralsorcery.common.block.network.BlockStarlightNetwork;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileTreeBeacon;
@@ -31,9 +35,6 @@ import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,24 +62,33 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements BlockDynam
         Map<IBlockState, ModelResourceLocation> out = Maps.newHashMap();
         ResourceLocation rl = Block.REGISTRY.getNameForObject(blockIn);
         rl = new ResourceLocation(rl.getResourceDomain(), rl.getResourcePath() + "_festive");
-        out.put(blockIn.getDefaultState(), new ModelResourceLocation(rl, getPropertyString(blockIn.getDefaultState().getProperties())));
+        out.put(
+            blockIn.getDefaultState(),
+            new ModelResourceLocation(
+                rl,
+                getPropertyString(
+                    blockIn.getDefaultState()
+                        .getProperties())));
         return out;
     }
 
     @Override
     public String getStateName(IBlockState state) {
-        if(handleRegisterStateMapper()) {
+        if (handleRegisterStateMapper()) {
             return "festive";
         }
         return "normal";
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
         TileTreeBeacon ttb = MiscUtils.getTileAt(worldIn, pos, TileTreeBeacon.class, true);
-        if (ttb != null && !worldIn.isRemote && placer instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
+        if (ttb != null && !worldIn.isRemote
+            && placer instanceof EntityPlayerMP
+            && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
             ttb.setPlacedBy((EntityPlayer) placer);
         }
     }

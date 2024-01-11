@@ -8,12 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation;
 
-import shordinger.astralsorcery.common.constellation.effect.ConstellationEffect;
-import shordinger.astralsorcery.common.data.research.PlayerProgress;
-import shordinger.astralsorcery.common.data.research.ProgressionTier;
-import shordinger.astralsorcery.common.util.ILocatable;
-
 import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.constellation.effect.ConstellationEffect;
+import shordinger.astralsorcery.common.util.ILocatable;
 
 /**
  * This class is part of the Astral Sorcery Mod

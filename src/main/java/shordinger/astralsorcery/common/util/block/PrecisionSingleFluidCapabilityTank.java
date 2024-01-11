@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.util.block;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.fluids.*;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidHandler;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidTankProperties;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 10.03.2017 / 16:36
  */
-public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTankProperties, IFluidHandler {
+public class PrecisionSingleFluidCapabilityTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 
     private double amount = 0;
     private int maxCapacity;
@@ -61,7 +62,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         this.allowOutput = allowOutput;
     }
 
-    //returns min(toAdd, what can be added at most)
+    // returns min(toAdd, what can be added at most)
     public double getMaxAddable(double toAdd) {
         return Math.min(toAdd, maxCapacity - amount);
     }
@@ -70,7 +71,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         return (int) Math.floor(Math.min(toDrain, amount));
     }
 
-    //leftover amount that could not be added
+    // leftover amount that could not be added
     public double addAmount(double amount) {
         if (this.fluid == null) return amount;
         double addable = getMaxAddable(amount);
@@ -81,7 +82,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         return amount - addable;
     }
 
-    //returns amount drained
+    // returns amount drained
     @Nullable
     public FluidStack drain(double amount) {
         if (this.fluid == null) return null;
@@ -149,12 +150,14 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
 
     @Override
     public boolean canFillFluidType(FluidStack fluidStack) {
-        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
+        return canFill() && (this.fluid == null || fluidStack.getFluid()
+            .equals(this.fluid));
     }
 
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
+        return canDrain() && (this.fluid != null && fluidStack.getFluid()
+            .equals(this.fluid));
     }
 
     public float getPercentageFilled() {
@@ -176,10 +179,10 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         if (!canFillFluidType(resource)) return 0;
         int maxAdded = resource.amount;
         int addable = MathHelper.floor(getMaxAddable(maxAdded));
-        if(addable > 0 && this.fluid == null && doFill) {
+        if (addable > 0 && this.fluid == null && doFill) {
             setFluid(resource.getFluid());
         }
-        if(doFill) {
+        if (doFill) {
             addable -= addAmount(addable);
         }
         return addable;
@@ -209,7 +212,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         tag.setInteger("capacity", this.maxCapacity);
         tag.setBoolean("aIn", this.allowInput);
         tag.setBoolean("aOut", this.allowOutput);
-        if(this.fluid != null) {
+        if (this.fluid != null) {
             tag.setString("fluid", this.fluid.getName());
         }
         int[] sides = new int[accessibleSides.size()];
@@ -226,7 +229,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         this.maxCapacity = tag.getInteger("capacity");
         this.allowInput = tag.getBoolean("aIn");
         this.allowOutput = tag.getBoolean("aOut");
-        if(tag.hasKey("fluid")) {
+        if (tag.hasKey("fluid")) {
             this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
         } else {
             this.fluid = null;
@@ -248,11 +251,10 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     }
 
     public IFluidHandler getCapability(EnumFacing facing) {
-        if(hasCapability(facing)) {
+        if (hasCapability(facing)) {
             return this;
         }
         return null;
     }
-
 
 }

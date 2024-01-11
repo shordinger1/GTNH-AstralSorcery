@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -33,7 +33,9 @@ public class CategoryAltarAttunement extends JEIBaseCategory<AltarAttunementReci
 
     public CategoryAltarAttunement(IGuiHelper guiHelper) {
         super("jei.category.altar.attunement", ModIntegrationJEI.idAltarAttunement);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateAltarAttunement.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateAltarAttunement.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 162);
     }
 
@@ -46,7 +48,8 @@ public class CategoryAltarAttunement extends JEIBaseCategory<AltarAttunementReci
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AltarAttunementRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, AltarAttunementRecipeWrapper recipeWrapper,
+                          IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);
 
@@ -70,7 +73,13 @@ public class CategoryAltarAttunement extends JEIBaseCategory<AltarAttunementReci
         group.addTooltipCallback((slot, input, stack, tooltip) -> {
             if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+                tooltip.add(
+                    TextFormatting.DARK_GRAY + I18n.format(
+                        "misc.recipename",
+                        recipeWrapper.getRecipe()
+                            .getNativeRecipe()
+                            .getRegistryName()
+                            .toString()));
             }
         });
     }

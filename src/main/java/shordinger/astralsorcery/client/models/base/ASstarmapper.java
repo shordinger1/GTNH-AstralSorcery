@@ -123,7 +123,8 @@ public class ASstarmapper extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float renderParchment, float renderGlass, float f2, float f3, float f4, float f5) {
+    public void render(Entity entity, float renderParchment, float renderGlass, float f2, float f3, float f4,
+                       float f5) {
 
         this.fitting_l.render(f5);
         this.fitting_r.render(f5);
@@ -146,7 +147,7 @@ public class ASstarmapper extends ModelBase {
         this.leg_3.render(f5);
         this.leg_4.render(f5);
 
-        if(renderParchment != 0) {
+        if (renderParchment != 0) {
             this.parchment.render(f5);
             this.black_mirror.render(f5);
         }

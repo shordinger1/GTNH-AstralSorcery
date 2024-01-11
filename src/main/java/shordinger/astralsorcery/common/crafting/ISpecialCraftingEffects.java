@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
  * Created by HellFirePvP
  * Date: 30.10.2017 / 11:06
  */
-//Interface to tell the internal recipe recovery that this has some special clientside effects.
+// Interface to tell the internal recipe recovery that this has some special clientside effects.
 public interface ISpecialCraftingEffects {
 
     public AbstractAltarRecipe copyNewEffectInstance();

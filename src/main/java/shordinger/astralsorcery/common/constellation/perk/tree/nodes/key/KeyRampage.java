@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -24,7 +25,6 @@ import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingDeathEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,10 +41,16 @@ public class KeyRampage extends KeyPerk {
     public KeyRampage(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                duration = cfg.getInt("Duration", getConfigurationSection(), duration, 10, 40_000,
-                        "Defines the duration of the rampage in ticks.");
+                duration = cfg.getInt(
+                    "Duration",
+                    getConfigurationSection(),
+                    duration,
+                    10,
+                    40_000,
+                    "Defines the duration of the rampage in ticks.");
             }
         });
     }
@@ -57,7 +63,7 @@ public class KeyRampage extends KeyPerk {
         this.chance *= multiplier;
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST) //Monitoring outcome after all other mods might've cancelled this
+    @SubscribeEvent(priority = EventPriority.LOWEST) // Monitoring outcome after all other mods might've cancelled this
     public void onEntityDeath(LivingDeathEvent event) {
         DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
@@ -67,13 +73,15 @@ public class KeyRampage extends KeyPerk {
             if (side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float ch = chance;
                 ch = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, ch);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, ch);
                 if (rand.nextFloat() < ch) {
 
                     int dur = duration;
-                    dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
+                    dur = Math.round(
+                        PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_RAMPAGE_DURATION, dur));
-                    dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
+                    dur = Math.round(
+                        PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, dur));
                     if (dur > 0) {
                         player.addPotionEffect(new PotionEffect(MobEffects.SPEED, dur, 1, false, false));

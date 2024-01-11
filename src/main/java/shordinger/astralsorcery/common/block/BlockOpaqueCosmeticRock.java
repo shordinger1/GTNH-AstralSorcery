@@ -56,7 +56,8 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta]) : getDefaultState();
+        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta])
+            : getDefaultState();
     }
 
     @Override

@@ -27,12 +27,12 @@ public class ModIntegrationChisel {
 
     public static void sendVariantIMC() {
         for (BlockMarble.MarbleBlockType type : BlockMarble.MarbleBlockType.values()) {
-            if(type.obtainableInCreative()) {
+            if (type.obtainableInCreative()) {
                 sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.MARBLE);
             }
         }
         for (BlockBlackMarble.BlackMarbleBlockType type : BlockBlackMarble.BlackMarbleBlockType.values()) {
-            if(type.obtainableInCreative()) {
+            if (type.obtainableInCreative()) {
                 sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.SOOTY_MARBLE);
             }
         }
@@ -42,8 +42,15 @@ public class ModIntegrationChisel {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("group", group.group);
         tag.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
-        tag.setString("block", state.getBlock().getRegistryName().toString());
-        tag.setInteger("meta", state.getBlock().getMetaFromState(state));
+        tag.setString(
+            "block",
+            state.getBlock()
+                .getRegistryName()
+                .toString());
+        tag.setInteger(
+            "meta",
+            state.getBlock()
+                .getMetaFromState(state));
         FMLInterModComms.sendMessage(Mods.CHISEL.modid, "add_variation", tag);
     }
 

@@ -8,14 +8,16 @@
 
 package shordinger.astralsorcery.common.integrations.mods.thaumcraft.perks;
 
-import com.google.common.collect.Lists;
-import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
-import shordinger.wrapper.net.minecraft.client.resources.I18n;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.Collection;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
+
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeModifierPerk;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
 
 /**
  * This class is part of the Astral Sorcery Mod

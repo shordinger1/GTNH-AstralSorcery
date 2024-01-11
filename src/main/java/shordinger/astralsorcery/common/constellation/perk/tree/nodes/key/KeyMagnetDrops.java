@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import java.util.Iterator;
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -20,12 +24,6 @@ import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingDropsEven
 import shordinger.wrapper.net.minecraftforge.event.world.BlockEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +46,8 @@ public class KeyMagnetDrops extends KeyPerk {
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                event.getDrops().removeIf(item -> this.attemptPickup(player, item));
+                event.getDrops()
+                    .removeIf(item -> this.attemptPickup(player, item));
             }
         }
     }
@@ -72,7 +71,8 @@ public class KeyMagnetDrops extends KeyPerk {
         // Simulate normal drop-logic to see what/which drops to try add before
         // setting chances to 1 with remaining not-capturable drops
         Random r = world.rand;
-        Iterator<ItemStack> iterator = event.getDrops().iterator();
+        Iterator<ItemStack> iterator = event.getDrops()
+            .iterator();
         while (iterator.hasNext()) {
             ItemStack drop = iterator.next();
             if (r.nextFloat() <= event.getDropChance()) {
@@ -87,14 +87,15 @@ public class KeyMagnetDrops extends KeyPerk {
     }
 
     private boolean attemptPickup(EntityPlayer player, EntityItem item) {
-        if (item.getItem().isEmpty()) {
+        if (item.getItem()
+            .isEmpty()) {
             return false;
         }
         item.setNoPickupDelay();
         try {
             item.onCollideWithPlayer(player);
         } catch (Exception ignored) {
-            //Guess some mod could run into an issue here...
+            // Guess some mod could run into an issue here...
         }
         if (!item.isDead) {
             item.setDefaultPickupDelay();

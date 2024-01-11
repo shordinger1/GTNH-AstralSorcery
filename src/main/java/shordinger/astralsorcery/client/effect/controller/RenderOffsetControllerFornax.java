@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.client.effect.controller;
 
+import java.util.Random;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,16 +25,23 @@ import java.util.Random;
 public class RenderOffsetControllerFornax implements EntityComplexFX.RenderOffsetController {
 
     @Override
-    public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion, float pTicks) {
-        Vector3 perp = currentMotion.clone().perpendicular().normalize().multiply(0.05);
-        Random r = new Random(fx.id); //LUL tho...
+    public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion,
+                                        float pTicks) {
+        Vector3 perp = currentMotion.clone()
+            .perpendicular()
+            .normalize()
+            .multiply(0.05);
+        Random r = new Random(fx.id); // LUL tho...
 
         int interv = (int) ((r.nextInt() + ClientScheduler.getClientTick()) % 9);
         float part = interv + pTicks;
         float perc = part / 10F;
 
         float sinPart = MathHelper.sin(perc * ((float) Math.PI) * 2F);
-        return currentRenderPos.clone().add(perp.rotate(r.nextFloat() * 360F, currentMotion).multiply(sinPart));
+        return currentRenderPos.clone()
+            .add(
+                perp.rotate(r.nextFloat() * 360F, currentMotion)
+                    .multiply(sinPart));
     }
 
 }

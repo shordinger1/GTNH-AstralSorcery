@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
+import java.awt.*;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.RenderConstellation;
 import shordinger.astralsorcery.client.util.TextureHelper;
@@ -23,10 +28,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,7 +51,8 @@ public class JournalPageTraitRecipe implements IJournalPage {
 
     public static class Render extends JournalPageConstellationRecipe.Render {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridtr");
+        private static final BindableResource texGrid = AssetLibrary
+            .loadTexture(AssetLoader.TextureLocation.GUI, "gridtr");
 
         private final TraitRecipe recipe;
 
@@ -62,10 +64,26 @@ public class JournalPageTraitRecipe implements IJournalPage {
 
         private void renderTraitInnerSlots(float offsetX, float offsetY, float zLevel, TraitRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAltarSlot(offsetX +  80, offsetY +  78, zLevel, recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.UPPER_CENTER));
-            renderAltarSlot(offsetX +  30, offsetY + 128, zLevel, recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.LEFT_CENTER));
-            renderAltarSlot(offsetX + 131, offsetY + 128, zLevel, recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.RIGHT_CENTER));
-            renderAltarSlot(offsetX +  80, offsetY + 178, zLevel, recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.LOWER_CENTER));
+            renderAltarSlot(
+                offsetX + 80,
+                offsetY + 78,
+                zLevel,
+                recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.UPPER_CENTER));
+            renderAltarSlot(
+                offsetX + 30,
+                offsetY + 128,
+                zLevel,
+                recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.LEFT_CENTER));
+            renderAltarSlot(
+                offsetX + 131,
+                offsetY + 128,
+                zLevel,
+                recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.RIGHT_CENTER));
+            renderAltarSlot(
+                offsetX + 80,
+                offsetY + 178,
+                zLevel,
+                recipe.getInnerTraitItems(TraitRecipe.TraitRecipeSlot.LOWER_CENTER));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
         }
@@ -84,12 +102,16 @@ public class JournalPageTraitRecipe implements IJournalPage {
             int amt = traitItemHandles.size();
             for (int i = 0; i < amt; i++) {
                 ItemHandle handle = traitItemHandles.get(i);
-                double part = ((double) i) / ((double) amt) * 2.0 * Math.PI; //Shift by half a period
+                double part = ((double) i) / ((double) amt) * 2.0 * Math.PI; // Shift by half a period
                 part = MathHelper.clamp(part, 0, 2.0 * Math.PI);
                 part += (2.0 * Math.PI * perc) + Math.PI;
                 double xAdd = Math.sin(part) * 75.0;
                 double yAdd = Math.cos(part) * 75.0;
-                renderRotatingSlot((float) (centerX + xAdd), (float) (centerY + yAdd), zLevel, handle.getApplicableItems());
+                renderRotatingSlot(
+                    (float) (centerX + xAdd),
+                    (float) (centerY + yAdd),
+                    zLevel,
+                    handle.getApplicableItems());
             }
 
             RenderHelper.disableStandardItemLighting();
@@ -97,7 +119,7 @@ public class JournalPageTraitRecipe implements IJournalPage {
         }
 
         private void renderRotatingSlot(float offsetX, float offsetY, float zLevel, List<ItemStack> stacks) {
-            if(stacks == null || stacks.isEmpty()) return;
+            if (stacks == null || stacks.isEmpty()) return;
 
             long select = (ClientScheduler.getClientTick() / 20);
             select %= stacks.size();
@@ -117,9 +139,13 @@ public class JournalPageTraitRecipe implements IJournalPage {
         public void addTooltip(List<String> out) {
             super.addTooltip(out);
 
-            if(recipe.getRequiredConstellation() != null) {
-                out.add(I18n.format("astralsorcery.journal.recipe.constellation",
-                        I18n.format(recipe.getRequiredConstellation().getUnlocalizedName())));
+            if (recipe.getRequiredConstellation() != null) {
+                out.add(
+                    I18n.format(
+                        "astralsorcery.journal.recipe.constellation",
+                        I18n.format(
+                            recipe.getRequiredConstellation()
+                                .getUnlocalizedName())));
             }
         }
 
@@ -130,17 +156,27 @@ public class JournalPageTraitRecipe implements IJournalPage {
             GlStateManager.color(1F, 1F, 1F, 1F);
             renderTraitInnerSlots(offsetX, offsetY, zLevel, recipe);
             renderTraitOuterSlots(offsetX, offsetY, zLevel, recipe);
-            if(recipe.getRequiredConstellation() != null) {
+            if (recipe.getRequiredConstellation() != null) {
                 IConstellation focus = recipe.getRequiredConstellation();
                 GlStateManager.disableAlpha();
-                RenderConstellation.renderConstellationIntoGUI(new Color(0xEEEEEE), focus,
-                        Math.round(offsetX + 30), Math.round(offsetY + 78), zLevel,
-                        125, 125, 2F, new RenderConstellation.BrightnessFunction() {
-                            @Override
-                            public float getBrightness() {
-                                return 0.3F;
-                            }
-                        }, true, false);
+                RenderConstellation.renderConstellationIntoGUI(
+                    new Color(0xEEEEEE),
+                    focus,
+                    Math.round(offsetX + 30),
+                    Math.round(offsetY + 78),
+                    zLevel,
+                    125,
+                    125,
+                    2F,
+                    new RenderConstellation.BrightnessFunction() {
+
+                        @Override
+                        public float getBrightness() {
+                            return 0.3F;
+                        }
+                    },
+                    true,
+                    false);
                 GlStateManager.enableAlpha();
             }
             GlStateManager.color(1F, 1F, 1F, 1F);

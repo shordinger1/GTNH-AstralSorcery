@@ -59,6 +59,7 @@ public class TileTelescope extends TileEntitySynchronized {
         public TelescopeRotation nextClockWise() {
             return values()[(ordinal() + 1) % values().length];
         }
+
         public TelescopeRotation nextCounterClockWise() {
             return values()[(ordinal() + 7) % values().length];
         }

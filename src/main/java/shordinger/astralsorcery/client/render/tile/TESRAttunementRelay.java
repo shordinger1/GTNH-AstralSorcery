@@ -24,7 +24,8 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 public class TESRAttunementRelay extends TileEntitySpecialRenderer<TileAttunementRelay> {
 
     @Override
-    public void render(TileAttunementRelay te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileAttunementRelay te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
         TileInventoryBase.ItemHandlerTile iht = te.getInventoryHandler();
         if (iht == null) return;
         ItemStack in = iht.getStackInSlot(0);

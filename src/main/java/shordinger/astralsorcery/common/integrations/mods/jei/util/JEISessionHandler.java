@@ -40,7 +40,8 @@ public class JEISessionHandler {
 
     @SubscribeEvent
     public void onClientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        if (!event.isLocal() && !event.getConnectionType().equals("MODDED")) {
+        if (!event.isLocal() && !event.getConnectionType()
+            .equals("MODDED")) {
             jeiOnServer = false;
         }
     }

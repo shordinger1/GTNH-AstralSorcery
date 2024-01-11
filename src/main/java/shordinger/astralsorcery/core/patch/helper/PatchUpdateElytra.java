@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,8 +30,10 @@ public class PatchUpdateElytra extends ClassPatch {
     public void patch(ClassNode cn) {
         MethodNode mn = getMethod(cn, "updateElytra", "func_184616_r", "()V");
         AbstractInsnNode first = mn.instructions.getFirst();
-        mn.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0)); //thisEntity
-        mn.instructions.insertBefore(first, new MethodInsnNode(
+        mn.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0)); // thisEntity
+        mn.instructions.insertBefore(
+            first,
+            new MethodInsnNode(
                 Opcodes.INVOKESTATIC,
                 "hellfirepvp/astralsorcery/common/event/listener/EventHandlerCapeEffects",
                 "updateElytraEventPre",
@@ -38,14 +41,19 @@ public class PatchUpdateElytra extends ClassPatch {
                 false));
 
         InsnList post = new InsnList();
-        post.add(new VarInsnNode(Opcodes.ALOAD, 0)); //thisEntity
-        post.add(new MethodInsnNode(
+        post.add(new VarInsnNode(Opcodes.ALOAD, 0)); // thisEntity
+        post.add(
+            new MethodInsnNode(
                 Opcodes.INVOKESTATIC,
                 "hellfirepvp/astralsorcery/common/event/listener/EventHandlerCapeEffects",
                 "updateElytraEventPost",
                 "(Lnet/minecraft/entity/EntityLivingBase;)V",
                 false));
-        mn.instructions.insert(mn.instructions.getLast().getPrevious().getPrevious(), post);
+        mn.instructions.insert(
+            mn.instructions.getLast()
+                .getPrevious()
+                .getPrevious(),
+            post);
     }
 
 }

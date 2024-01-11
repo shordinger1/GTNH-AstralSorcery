@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.util;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
 import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListGen;
@@ -21,8 +23,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -41,14 +41,15 @@ public class BlockBreakAssist {
 
     public static BreakEntry addProgress(World world, BlockPos pos, float expectedHardness, float percStrength) {
         TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.getDimension());
-        if(map == null) {
+        if (map == null) {
             map = new TickTokenizedMap<>(TickEvent.Type.SERVER);
-            TickManager.getInstance().register(map);
+            TickManager.getInstance()
+                .register(map);
             breakMap.put(world.provider.getDimension(), map);
         }
 
         BreakEntry breakProgress = map.get(pos);
-        if(breakProgress == null) {
+        if (breakProgress == null) {
             breakProgress = new BreakEntry(expectedHardness, world, pos, world.getBlockState(pos));
             map.put(pos, breakProgress);
         }
@@ -63,7 +64,8 @@ public class BlockBreakAssist {
         RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, Block.getStateById(pktPlayEffect.data));
     }
 
-    public static class BreakEntry implements TickTokenizedMap.TickMapToken<Float>,CEffectPositionListGen.CEffectGenListEntry {
+    public static class BreakEntry
+        implements TickTokenizedMap.TickMapToken<Float>, CEffectPositionListGen.CEffectGenListEntry {
 
         private float breakProgress;
         private final World world;
@@ -95,7 +97,7 @@ public class BlockBreakAssist {
 
         @Override
         public void onTimeout() {
-            if(breakProgress > 0) return;
+            if (breakProgress > 0) return;
 
             IBlockState nowAt = world.getBlockState(pos);
             if (MiscUtils.matchStateExact(expected, nowAt)) {

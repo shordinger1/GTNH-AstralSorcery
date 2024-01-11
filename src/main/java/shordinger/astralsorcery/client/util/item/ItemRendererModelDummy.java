@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.client.util.item;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.function.Function;
+
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelBlock;
@@ -16,11 +21,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.vertex.VertexFormat;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.client.model.IModel;
 import shordinger.wrapper.net.minecraftforge.common.model.IModelState;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +31,9 @@ import java.util.function.Function;
  */
 public class ItemRendererModelDummy implements IModel {
 
-    //Copy-pasta from ModelBakery
-    private static final String EMPTY_MODEL_RAW = "{    \'elements\': [        {   \'from\': [0, 0, 0],            \'to\': [16, 16, 16],            \'faces\': {                \'down\': {\'uv\': [0, 0, 16, 16], \'texture\': \'\' }            }        }    ]}".replaceAll("\'", "\"");
+    // Copy-pasta from ModelBakery
+    private static final String EMPTY_MODEL_RAW = "{    \'elements\': [        {   \'from\': [0, 0, 0],            \'to\': [16, 16, 16],            \'faces\': {                \'down\': {\'uv\': [0, 0, 16, 16], \'texture\': \'\' }            }        }    ]}"
+        .replaceAll("\'", "\"");
     public static final ModelBlock MODEL_GENERATED = ModelBlock.deserialize(EMPTY_MODEL_RAW);
     private static final IModelState NO_STATE = (part) -> Optional.empty();
 
@@ -53,7 +54,8 @@ public class ItemRendererModelDummy implements IModel {
     }
 
     @Override
-    public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public IBakedModel bake(IModelState state, VertexFormat format,
+                            Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         return new DummyVanillaBakedModel(getSupportedTransforms());
     }
 

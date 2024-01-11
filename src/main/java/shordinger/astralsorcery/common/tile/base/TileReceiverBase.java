@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.auxiliary.link.ILinkableTile;
 import shordinger.astralsorcery.common.starlight.IStarlightReceiver;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -16,11 +22,6 @@ import shordinger.astralsorcery.common.starlight.transmission.ITransmissionRecei
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,8 +74,9 @@ public abstract class TileReceiverBase extends TileNetwork implements IStarlight
 
     @Nullable
     public <T extends ITransmissionReceiver> T tryGetNode() {
-        IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(world).getTransmissionNode(getPos());
-        if(node == null || !(node instanceof ITransmissionReceiver)) return null;
+        IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(world)
+            .getTransmissionNode(getPos());
+        if (node == null || !(node instanceof ITransmissionReceiver)) return null;
         return (T) node;
     }
 

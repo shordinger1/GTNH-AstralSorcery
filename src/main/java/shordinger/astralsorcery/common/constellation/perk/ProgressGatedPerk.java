@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk;
 
+import java.util.Collection;
+import java.util.function.BiFunction;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
@@ -18,11 +23,6 @@ import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collection;
-import java.util.function.BiFunction;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,17 +48,22 @@ public class ProgressGatedPerk extends AbstractPerk {
     }
 
     public void addRequireProgress(ResearchProgression progression) {
-        addResearchPreRequisite(((player, progress) -> progress.getResearchProgression().contains(progression)));
+        addResearchPreRequisite(
+            ((player, progress) -> progress.getResearchProgression()
+                .contains(progression)));
     }
 
     public void addRequireTier(ProgressionTier tier) {
-        addResearchPreRequisite(((player, progress) -> progress.getTierReached().isThisLaterOrEqual(tier)));
+        addResearchPreRequisite(
+            ((player, progress) -> progress.getTierReached()
+                .isThisLaterOrEqual(tier)));
     }
 
     public void addResearchPreRequisite(BiFunction<EntityPlayer, PlayerProgress, Boolean> unlockFunction) {
         BiFunction<EntityPlayer, PlayerProgress, Boolean> prev = this.unlockFunction;
-        this.unlockFunction = (player, progress) -> prev.apply(player, progress) && unlockFunction.apply(player, progress);
-        disableTooltipCaching(); //Cannot cache as it may change.
+        this.unlockFunction = (player, progress) -> prev.apply(player, progress)
+            && unlockFunction.apply(player, progress);
+        disableTooltipCaching(); // Cannot cache as it may change.
     }
 
     @Override

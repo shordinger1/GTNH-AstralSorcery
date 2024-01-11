@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.constellation;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
@@ -16,9 +19,6 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,18 +33,27 @@ public class PerkAlcara extends ConstellationPerk {
         super("cst_alcara", Constellations.alcara, x, y);
         setCategory(CATEGORY_FOCUS);
         this.addConverter(new PerkConverter() {
+
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP)) {
+            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress,
+                                                         PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                if (modifier.getAttributeType()
+                    .equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP)) {
                     switch (modifier.getMode()) {
                         case ADDITION:
                         case ADDED_MULTIPLY:
-                            return modifier.convertModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), modifier.getValue(player, progress) * 0.5F);
+                            return modifier.convertModifier(
+                                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
+                                modifier.getMode(),
+                                modifier.getValue(player, progress) * 0.5F);
                         case STACKING_MULTIPLY:
                             float val = modifier.getValue(player, progress) - 1;
                             val *= 0.5F;
-                            return modifier.convertModifier(AttributeTypeRegistry. ATTR_TYPE_INC_PERK_EFFECT, modifier.getMode(), val + 1F);
+                            return modifier.convertModifier(
+                                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
+                                modifier.getMode(),
+                                val + 1F);
                         default:
                             break;
                     }
@@ -56,8 +65,10 @@ public class PerkAlcara extends ConstellationPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        return super.mayUnlockPerk(progress, player) &&
-                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
+        return super.mayUnlockPerk(progress, player) && !MiscUtils.contains(
+            progress.getAppliedPerks(),
+            perk -> perk.getCategory()
+                .equals(CATEGORY_FOCUS));
     }
 
 }

@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -17,7 +19,6 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
@@ -30,14 +31,16 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,12 +54,48 @@ import java.util.List;
  */
 public class BlockPrism extends BlockStarlightNetwork implements CrystalPropertyItem {
 
-    private static final AxisAlignedBB boxPrismDown =  new AxisAlignedBB(3D/16D, 0,      3D/16D, 13D/16D, 14D/16D, 13D/16D);
-    private static final AxisAlignedBB boxPrismUp =    new AxisAlignedBB(3D/16D, 2D/16D, 3D/16D, 13D/16D, 1,       13D/16D);
-    private static final AxisAlignedBB boxPrismNorth = new AxisAlignedBB(3D/16D, 3D/16D, 0,      13D/16D, 13D/16D, 14D/16D);
-    private static final AxisAlignedBB boxPrismSouth = new AxisAlignedBB(3D/16D, 3D/16D, 2D/16D, 13D/16D, 13D/16D, 1);
-    private static final AxisAlignedBB boxPrismEast =  new AxisAlignedBB(2D/16D, 3D/16D, 3D/16D, 1,       13D/16D, 13D/16D);
-    private static final AxisAlignedBB boxPrismWest =  new AxisAlignedBB(0,      3D/16D, 3D/16D, 14D/16D, 13D/16D, 13D/16D);
+    private static final AxisAlignedBB boxPrismDown = new AxisAlignedBB(
+        3D / 16D,
+        0,
+        3D / 16D,
+        13D / 16D,
+        14D / 16D,
+        13D / 16D);
+    private static final AxisAlignedBB boxPrismUp = new AxisAlignedBB(
+        3D / 16D,
+        2D / 16D,
+        3D / 16D,
+        13D / 16D,
+        1,
+        13D / 16D);
+    private static final AxisAlignedBB boxPrismNorth = new AxisAlignedBB(
+        3D / 16D,
+        3D / 16D,
+        0,
+        13D / 16D,
+        13D / 16D,
+        14D / 16D);
+    private static final AxisAlignedBB boxPrismSouth = new AxisAlignedBB(
+        3D / 16D,
+        3D / 16D,
+        2D / 16D,
+        13D / 16D,
+        13D / 16D,
+        1);
+    private static final AxisAlignedBB boxPrismEast = new AxisAlignedBB(
+        2D / 16D,
+        3D / 16D,
+        3D / 16D,
+        1,
+        13D / 16D,
+        13D / 16D);
+    private static final AxisAlignedBB boxPrismWest = new AxisAlignedBB(
+        0,
+        3D / 16D,
+        3D / 16D,
+        14D / 16D,
+        13D / 16D,
+        13D / 16D);
 
     public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
 
@@ -67,7 +106,9 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
         setResistance(12.0F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(PLACED_AGAINST, EnumFacing.DOWN));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(PLACED_AGAINST, EnumFacing.DOWN));
     }
 
     @Override
@@ -114,14 +155,16 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.UP;
         for (EnumFacing f : EnumFacing.values()) {
-            if(f.ordinal() == meta) {
+            if (f.ordinal() == meta) {
                 facing = f;
                 break;
             }
@@ -131,11 +174,13 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(PLACED_AGAINST).ordinal();
+        return state.getValue(PLACED_AGAINST)
+            .ordinal();
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+                                            float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
     }
 
@@ -155,7 +200,9 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) { return false; }
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
@@ -163,18 +210,22 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos,
+                                        EnumFacing side) {
         return true;
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) { }
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+    }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
         TileCrystalPrismLens lens = MiscUtils.getTileAt(world, pos, TileCrystalPrismLens.class, true);
-        if(lens != null && lens.getCrystalProperties() != null) {
+        if (lens != null && lens.getCrystalProperties() != null) {
             CrystalProperties.applyCrystalProperties(stack, lens.getCrystalProperties());
         } else {
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
@@ -185,10 +236,11 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCrystalPrismLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
-        if(lens != null && !worldIn.isRemote && !player.isCreative()) {
+        if (lens != null && !worldIn.isRemote && !player.isCreative()) {
             ItemStack drop;
-            if(lens.getLensColor() != null) {
-                drop = lens.getLensColor().asStack();
+            if (lens.getLensColor() != null) {
+                drop = lens.getLensColor()
+                    .asStack();
                 ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
             }
 
@@ -205,11 +257,13 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote && playerIn.isSneaking()) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote && playerIn.isSneaking()) {
             TileCrystalPrismLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
-            if(lens != null && lens.getLensColor() != null) {
-                ItemStack drop = lens.getLensColor().asStack();
+            if (lens != null && lens.getLensColor() != null) {
+                ItemStack drop = lens.getLensColor()
+                    .asStack();
                 ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);
                 lens.setLensColor(null);
@@ -245,9 +299,10 @@ public class BlockPrism extends BlockStarlightNetwork implements CrystalProperty
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         TileCrystalPrismLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
-        if(te == null) return;
+        if (te == null) return;
         te.onPlace(CrystalProperties.getCrystalProperties(stack));
     }
 

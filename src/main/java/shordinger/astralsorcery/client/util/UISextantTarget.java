@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client.util;
 
+import java.awt.*;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.sky.RenderAstralSkybox;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
@@ -26,9 +30,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
 import shordinger.wrapper.net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,51 +50,58 @@ public class UISextantTarget {
         Tuple<BlockPos, Integer> info;
         SextantFinder.TargetObject target;
 
-        if (!held.isEmpty() && held.getItem() instanceof ItemSextant &&
-                (info = ItemSextant.getCurrentTargetInformation(held)) != null &&
-                (target = ItemSextant.getTarget(held)) != null &&
-                target.isSelectable(held, ResearchManager.clientProgress) &&
-                info.value == w.provider.getDimension()) {
+        if (!held.isEmpty() && held.getItem() instanceof ItemSextant
+            && (info = ItemSextant.getCurrentTargetInformation(held)) != null
+            && (target = ItemSextant.getTarget(held)) != null
+            && target.isSelectable(held, ResearchManager.clientProgress)
+            && info.value == w.provider.getDimension()) {
             renderStar(info.key, target, pTicks);
         }
 
         held = pl.getHeldItem(EnumHand.OFF_HAND);
-        if (!held.isEmpty() && held.getItem() instanceof ItemSextant &&
-                (info = ItemSextant.getCurrentTargetInformation(held)) != null &&
-                (target = ItemSextant.getTarget(held)) != null &&
-                target.isSelectable(held, ResearchManager.clientProgress) &&
-                info.value == w.provider.getDimension()) {
+        if (!held.isEmpty() && held.getItem() instanceof ItemSextant
+            && (info = ItemSextant.getCurrentTargetInformation(held)) != null
+            && (target = ItemSextant.getTarget(held)) != null
+            && target.isSelectable(held, ResearchManager.clientProgress)
+            && info.value == w.provider.getDimension()) {
             renderStar(info.key, target, pTicks);
         }
     }
 
     private static void renderStar(BlockPos actPos, SextantFinder.TargetObject target, float pTicks) {
-        if(Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().world == null) {
             return;
         }
-        Entity e = Minecraft.getMinecraft().getRenderViewEntity();
-        if(e == null) {
+        Entity e = Minecraft.getMinecraft()
+            .getRenderViewEntity();
+        if (e == null) {
             e = Minecraft.getMinecraft().player;
         }
-        if(e == null) {
+        if (e == null) {
             return;
         }
-        float dayMultiplier = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
-        if(dayMultiplier <= 0.1F) {
+        float dayMultiplier = ConstellationSkyHandler.getInstance()
+            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+        if (dayMultiplier <= 0.1F) {
             return;
         }
-        //Flattened distance
-        Vector3 dir = new Vector3(actPos).setY(0).subtract(Vector3.atEntityCenter(e).setY(0));
-        //length, yaw, pitch
-        Vector3 polar = dir.clone().copyToPolar();
-        if(polar.getX() <= 20D) {
+        // Flattened distance
+        Vector3 dir = new Vector3(actPos).setY(0)
+            .subtract(
+                Vector3.atEntityCenter(e)
+                    .setY(0));
+        // length, yaw, pitch
+        Vector3 polar = dir.clone()
+            .copyToPolar();
+        if (polar.getX() <= 20D) {
             return;
         }
         float proximity = polar.getX() >= 350D ? 1F : MathHelper.sqrt(((float) polar.getX()) / 350F);
 
         double yaw = 180D - polar.getZ();
         double pitch = polar.getX() >= 350D ? -20D : Math.min(-20D, -20D - (70D - (70D * (polar.getX() / 350D))));
-        Vector3 act = new Vector3(Vec3d.fromPitchYaw((float) pitch, (float) yaw)).normalize().multiply(200);
+        Vector3 act = new Vector3(Vec3d.fromPitchYaw((float) pitch, (float) yaw)).normalize()
+            .multiply(200);
         act.add(Vector3.atEntityCenter(e));
 
         GlStateManager.pushMatrix();

@@ -9,13 +9,13 @@
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
+import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import shordinger.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import mezz.jei.api.ingredients.IIngredients;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 
@@ -69,7 +69,6 @@ public class AltarConstellationRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
-
 
     @Nullable
     @Override

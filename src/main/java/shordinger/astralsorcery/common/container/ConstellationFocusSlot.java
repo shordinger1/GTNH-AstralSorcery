@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.container;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +17,6 @@ import shordinger.wrapper.net.minecraft.inventory.IInventory;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +36,8 @@ public class ConstellationFocusSlot extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationFocus && ((ItemConstellationFocus) stack.getItem()).getFocusConstellation(stack) != null;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationFocus
+            && ((ItemConstellationFocus) stack.getItem()).getFocusConstellation(stack) != null;
     }
 
     @Override

@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.data.world.data;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
@@ -16,12 +23,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +55,7 @@ public class RockCrystalBuffer extends CachedWorldData {
             for (int zz = -rad; zz <= rad; zz++) {
                 ChunkPos other = new ChunkPos(center.x + xx, center.z + zz);
                 List<BlockPos> saved = crystalPositions.get(other);
-                if(saved != null) {
+                if (saved != null) {
                     out.addAll(saved);
                 }
             }
@@ -65,10 +66,11 @@ public class RockCrystalBuffer extends CachedWorldData {
     public void addOre(BlockPos pos) {
         ChunkPos ch = new ChunkPos(pos);
         synchronized (lock) {
-            if(!crystalPositions.containsKey(ch)) {
+            if (!crystalPositions.containsKey(ch)) {
                 crystalPositions.put(ch, new LinkedList<>());
             }
-            crystalPositions.get(ch).add(pos);
+            crystalPositions.get(ch)
+                .add(pos);
         }
 
         markDirty();
@@ -76,17 +78,19 @@ public class RockCrystalBuffer extends CachedWorldData {
 
     public void removeOre(BlockPos pos) {
         ChunkPos ch = new ChunkPos(pos);
-        if(!crystalPositions.containsKey(ch)) return;
+        if (!crystalPositions.containsKey(ch)) return;
         boolean removed;
         synchronized (lock) {
-            removed = crystalPositions.get(ch).remove(pos);
-            if(crystalPositions.get(ch).size() == 0) {
+            removed = crystalPositions.get(ch)
+                .remove(pos);
+            if (crystalPositions.get(ch)
+                .size() == 0) {
                 crystalPositions.remove(ch);
                 removed = true;
             }
         }
 
-        if(removed) {
+        if (removed) {
             markDirty();
         }
     }
@@ -98,7 +102,7 @@ public class RockCrystalBuffer extends CachedWorldData {
         }
 
         Map<ChunkPos, List<BlockPos>> work = new HashMap<>();
-        if(nbt.hasKey("crystalList")) {
+        if (nbt.hasKey("crystalList")) {
             NBTTagList list = nbt.getTagList("crystalList", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound chList = list.getCompoundTagAt(i);

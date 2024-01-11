@@ -8,17 +8,17 @@
 
 package shordinger.astralsorcery.common.starlight.transmission;
 
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-
 import javax.annotation.Nullable;
 
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
 /**
-* This class is part of the Astral Sorcery Mod
-* The complete source code for this mod can be found on github.
-* Class: NodeConnection
-* Created by HellFirePvP
-* Date: 03.08.2016 / 23:11
-*/
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: NodeConnection
+ * Created by HellFirePvP
+ * Date: 03.08.2016 / 23:11
+ */
 public class NodeConnection<T extends IPrismTransmissionNode> {
 
     private final T node;

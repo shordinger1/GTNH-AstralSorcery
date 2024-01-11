@@ -8,14 +8,12 @@
 
 package shordinger.astralsorcery.common.tile.storage;
 
-import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.wrapper.net.minecraft.item.Item;
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
+
+import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,9 +61,11 @@ public class StoredItemStack {
             return false;
         } else if (stack.hasTagCompound() ^ other.stack.hasTagCompound()) {
             return false;
-        } else if (stack.hasTagCompound() && !stack.getTagCompound().equals(other.stack.getTagCompound())) {
+        } else if (stack.hasTagCompound() && !stack.getTagCompound()
+            .equals(other.stack.getTagCompound())) {
             return false;
-        } else if (stack.getItem().getHasSubtypes() && stack.getMetadata() != other.stack.getMetadata()) {
+        } else if (stack.getItem()
+            .getHasSubtypes() && stack.getMetadata() != other.stack.getMetadata()) {
             return false;
         } else if (!stack.areCapsCompatible(other.stack)) {
             return false;
@@ -80,9 +80,11 @@ public class StoredItemStack {
             return false;
         } else if (stack.hasTagCompound() ^ other.hasTagCompound()) {
             return false;
-        } else if (stack.hasTagCompound() && !stack.getTagCompound().equals(other.getTagCompound())) {
+        } else if (stack.hasTagCompound() && !stack.getTagCompound()
+            .equals(other.getTagCompound())) {
             return false;
-        } else if (stack.getItem().getHasSubtypes() && stack.getMetadata() != other.getMetadata()) {
+        } else if (stack.getItem()
+            .getHasSubtypes() && stack.getMetadata() != other.getMetadata()) {
             return false;
         } else if (!stack.areCapsCompatible(other)) {
             return false;

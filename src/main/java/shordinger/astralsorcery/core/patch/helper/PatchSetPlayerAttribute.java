@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,8 +31,12 @@ public class PatchSetPlayerAttribute extends ClassPatch {
         MethodNode mn = getMethodLazy(cn, "getAttributeMap", "func_110140_aT");
         int instr = peekFirstInstructionAfter(mn, 0, Opcodes.ARETURN);
         while (instr != -1) {
-            AbstractInsnNode ain = mn.instructions.get(instr).getPrevious();
-            mn.instructions.insert(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,
+            AbstractInsnNode ain = mn.instructions.get(instr)
+                .getPrevious();
+            mn.instructions.insert(
+                ain,
+                new MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/event/AttributeEvent",
                     "markToPlayer",
                     "(Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/entity/ai/attributes/AbstractAttributeMap;",

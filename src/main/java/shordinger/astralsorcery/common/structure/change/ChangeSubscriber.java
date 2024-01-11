@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.structure.change;
 
+import java.util.Collection;
+
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
-import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
-import shordinger.astralsorcery.common.structure.ObservableArea;
 import shordinger.astralsorcery.common.structure.StructureMatcher;
-import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -21,9 +21,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,13 +54,17 @@ public class ChangeSubscriber<T extends StructureMatcher> {
 
     public Collection<ChunkPos> getObservableChunks() {
         if (affectedChunkCache == null) {
-            affectedChunkCache = Lists.newArrayList(getMatcher().getObservableArea().getAffectedChunks(getRequester()));
+            affectedChunkCache = Lists.newArrayList(
+                getMatcher().getObservableArea()
+                    .getAffectedChunks(getRequester()));
         }
         return affectedChunkCache;
     }
 
     public boolean observes(BlockPos pos) {
-        return this.getMatcher().getObservableArea().observes(pos.subtract(getRequester()));
+        return this.getMatcher()
+            .getObservableArea()
+            .observes(pos.subtract(getRequester()));
     }
 
     public void addChange(BlockPos pos, IBlockState oldState, IBlockState newState) {
@@ -76,13 +77,22 @@ public class ChangeSubscriber<T extends StructureMatcher> {
         }
 
         Boolean matchedBefore = this.isMatching;
-        LogCategory.STRUCTURE_MATCH.info(() -> "Updating matching for " + this.getRequester() + " with " + this.changeSet.getChanges().size() + " changes.");
+        LogCategory.STRUCTURE_MATCH.info(
+            () -> "Updating matching for " + this.getRequester()
+                + " with "
+                + this.changeSet.getChanges()
+                .size()
+                + " changes.");
 
         this.isMatching = this.matcher.notifyChange(world, this.getRequester(), this.changeSet);
         this.changeSet.reset();
-        WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH).markDirty();
+        WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH)
+            .markDirty();
 
-        LogCategory.STRUCTURE_MATCH.info(() -> "Updating matched-state from " + (matchedBefore == null ? "<unmatched>" : matchedBefore.toString()) + " to " + this.isMatching);
+        LogCategory.STRUCTURE_MATCH.info(
+            () -> "Updating matched-state from " + (matchedBefore == null ? "<unmatched>" : matchedBefore.toString())
+                + " to "
+                + this.isMatching);
 
         return this.isMatching;
     }

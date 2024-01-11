@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -15,7 +17,6 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -30,8 +31,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +41,13 @@ import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class BlockAttunementAltar extends BlockContainer implements BlockStructureObserver {
 
-    public static final AxisAlignedBB boxAttunementAlar = new AxisAlignedBB(-2D / 16D, 0, -2D / 16D, 18D / 16D, 6D / 16D, 18D / 16D);
+    public static final AxisAlignedBB boxAttunementAlar = new AxisAlignedBB(
+        -2D / 16D,
+        0,
+        -2D / 16D,
+        18D / 16D,
+        6D / 16D,
+        18D / 16D);
 
     public BlockAttunementAltar() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -62,7 +67,10 @@ public class BlockAttunementAltar extends BlockContainer implements BlockStructu
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        RenderingUtils.playBlockBreakParticles(pos, BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
+        RenderingUtils.playBlockBreakParticles(
+            pos,
+            BlocksAS.blockMarble.getDefaultState()
+                .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         return true;
     }
 
@@ -71,44 +79,52 @@ public class BlockAttunementAltar extends BlockContainer implements BlockStructu
         return boxAttunementAlar;
     }
 
-    /*@Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        //worldIn.setBlockState(pos.up(), BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
-        TileAttunementAltar te = MiscUtils.getTileAt(worldIn, pos, TileAttunementAltar.class, true);
-        if(te != null && !worldIn.isRemote) {
-            if(placer != null && placer instanceof EntityPlayer) {
-                te.setOwner(placer.getUniqueID());
-            }
-        }
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }*/
+    /*
+     * @Override
+     * public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack
+     * stack) {
+     * //worldIn.setBlockState(pos.up(),
+     * BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE,
+     * BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
+     * TileAttunementAltar te = MiscUtils.getTileAt(worldIn, pos, TileAttunementAltar.class, true);
+     * if(te != null && !worldIn.isRemote) {
+     * if(placer != null && placer instanceof EntityPlayer) {
+     * te.setOwner(placer.getUniqueID());
+     * }
+     * }
+     * super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+     * }
+     */
 
-    /*@Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbor) {
-        if(world.isAirBlock(pos.up())) {
-            world.setBlockToAir(pos);
-        }
-        super.neighborChanged(state, world, pos, neighbor);
-    }
+    /*
+     * @Override
+     * public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbor) {
+     * if(world.isAirBlock(pos.up())) {
+     * world.setBlockToAir(pos);
+     * }
+     * super.neighborChanged(state, world, pos, neighbor);
+     * }
+     * @Override
+     * public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+     * if(!(world instanceof World)) {
+     * super.onNeighborChange(world, pos, neighbor);
+     * return;
+     * }
+     * if(world.isAirBlock(pos.up())) {
+     * ((World) world).setBlockToAir(pos);
+     * }
+     * }
+     */
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        if(!(world instanceof World)) {
-            super.onNeighborChange(world, pos, neighbor);
-            return;
-        }
-        if(world.isAirBlock(pos.up())) {
-            ((World) world).setBlockToAir(pos);
-        }
-    }*/
-
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return p_193383_4_ == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
     }
 

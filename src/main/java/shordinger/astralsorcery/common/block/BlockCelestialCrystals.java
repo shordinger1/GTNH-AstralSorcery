@@ -20,14 +20,12 @@ import shordinger.astralsorcery.common.tile.TileCelestialCrystals;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyInteger;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
 import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -42,8 +40,6 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -56,7 +52,8 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 23:42
  */
-public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient, BlockCustomName, BlockVariants {
+public class BlockCelestialCrystals extends BlockContainer
+    implements IBlockStarlightRecipient, BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
@@ -76,7 +73,9 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         setLightLevel(0.4F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(STAGE, 0));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(STAGE, 0));
     }
 
     @Override
@@ -113,10 +112,9 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
-        if(replaceable) {
+        if (replaceable) {
             BlockPos down = pos.down();
-            if(!worldIn.isSideSolid(down, EnumFacing.UP))
-                replaceable = false;
+            if (!worldIn.isSideSolid(down, EnumFacing.UP)) replaceable = false;
         }
         return replaceable;
     }
@@ -127,46 +125,51 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); // Waila fix. wtf. why waila.
+        // why.
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
         int stage = state.getValue(STAGE);
         switch (stage) {
             case 4:
-                if(world != null && world instanceof World && checkSafety((World) world, pos)) {
-                    if(fortune > 0 || rand.nextInt(2) == 0) {
+                if (world != null && world instanceof World && checkSafety((World) world, pos)) {
+                    if (fortune > 0 || rand.nextInt(2) == 0) {
                         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
                     }
                     IBlockState down = world.getBlockState(pos.down());
-                    boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre &&
-                            down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL);
+                    boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre
+                        && down.getValue(BlockCustomOre.ORE_TYPE)
+                        .equals(BlockCustomOre.OreType.STARMETAL);
 
                     ItemStack celCrystal = ItemRockCrystalBase.createRandomCelestialCrystal();
-                    if(hasStarmetal) {
+                    if (hasStarmetal) {
                         CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
                         int missing = 100 - prop.getPurity();
-                        if(missing > 0) {
+                        if (missing > 0) {
                             prop = new CrystalProperties(
-                                    prop.getSize(),
-                                    MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
-                                    prop.getCollectiveCapability(),
-                                    prop.getFracturation(),
-                                    prop.getSizeOverride());
+                                prop.getSize(),
+                                MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
+                                prop.getCollectiveCapability(),
+                                prop.getFracturation(),
+                                prop.getSizeOverride());
                             CrystalProperties.applyCrystalProperties(celCrystal, prop);
                         }
                     }
                     drops.add(celCrystal);
-                    if(hasStarmetal && rand.nextInt(3) == 0) {
-                        drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
+                    if (hasStarmetal && rand.nextInt(3) == 0) {
+                        drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); // Lucky~~
                     }
                 }
                 break;
@@ -181,19 +184,22 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType,
+                                 double amount) {
         TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
-        if(tile != null) {
+        if (tile != null) {
             tile.tryGrowth(0.5);
             IBlockState down = world.getBlockState(pos.down());
-            if(down.getBlock() instanceof BlockCustomOre && down.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
+            if (down.getBlock() instanceof BlockCustomOre
+                && down.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 tile.tryGrowth(0.3);
             }
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         state.withProperty(STAGE, stack.getItemDamage());
     }
 
@@ -221,7 +227,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+        if (!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
@@ -231,9 +237,12 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileCelestialCrystals te = MiscUtils.getTileAt(worldIn, pos, TileCelestialCrystals.class, true);
-        if(te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
-                    pos.getX(), pos.getY(), pos.getZ());
+        if (te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(
+                PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
         }
         super.breakBlock(worldIn, pos, state);

@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import javax.annotation.Nonnull;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -35,10 +39,6 @@ import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,49 +62,55 @@ public class TileOreGenerator extends TileEntitySynchronized {
         gen.setPos(pos);
         gen.validate();
         Chunk ch = world.getChunkFromBlockCoords(pos);
-        ch.getTileEntityMap().put(pos, gen);
+        ch.getTileEntityMap()
+            .put(pos, gen);
         world.setTileEntity(pos, gen);
         gen.updateContainingBlockInfo();
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState) {
-        if(world.isRemote) return false;
-        if(generatingOre) return false;
-        if(newState.getBlock().getClass().equals(oldState.getBlock().getClass())) {
-            return false; //Uhm... shit like redstone ore and stuff.
+    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState,
+                                 @Nonnull IBlockState newState) {
+        if (world.isRemote) return false;
+        if (generatingOre) return false;
+        if (newState.getBlock()
+            .getClass()
+            .equals(
+                oldState.getBlock()
+                    .getClass())) {
+            return false; // Uhm... shit like redstone ore and stuff.
         }
-        if(remainingGuaranteed > 0) {
+        if (remainingGuaranteed > 0) {
             if (!isActualPlayerNearby(world, pos)) {
                 return true;
             }
             generatingOre = true;
             boolean stopGen = false;
             if (!world.setBlockState(pos, oldState)) {
-                return true; //Rip gen. can't replace block.
+                return true; // Rip gen. can't replace block.
             }
-            if(world instanceof WorldServer) {
+            if (world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
-                if(!MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState,
-                        false, true, true)) {
+                if (!MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true, true)) {
                     stopGen = true;
                 }
                 BlockCustomOre.allowCrystalHarvest = false;
             }
-            if(!world.setBlockState(pos, newState) || stopGen) {
-                return true; //Rip gen.
+            if (!world.setBlockState(pos, newState) || stopGen) {
+                return true; // Rip gen.
             }
 
             IBlockState state;
-            if(ConfigEntryMultiOre.oreChance == 0 || rand.nextInt(ConfigEntryMultiOre.oreChance) != 0) {
+            if (ConfigEntryMultiOre.oreChance == 0 || rand.nextInt(ConfigEntryMultiOre.oreChance) != 0) {
                 state = Blocks.STONE.getDefaultState();
             } else {
-                if(rand.nextInt(200) == 0) {
-                    state = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
+                if (rand.nextInt(200) == 0) {
+                    state = BlocksAS.customOre.getDefaultState()
+                        .withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                 } else {
                     ItemStack stack = OreTypes.TREASURE_SHRINE_GEN.getRandomOre(rand);
                     state = ItemUtils.createBlockState(stack);
-                    if(state == null) {
+                    if (state == null) {
                         state = Blocks.STONE.getDefaultState();
                     }
                 }
@@ -112,7 +118,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
             if (!world.setBlockState(pos, state)) {
                 return true;
             }
-            if(structural) {
+            if (structural) {
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.GEN_STRUCTURE, pos);
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 32));
             }
@@ -125,9 +131,14 @@ public class TileOreGenerator extends TileEntitySynchronized {
     }
 
     private boolean isActualPlayerNearby(World world, BlockPos pos) {
-        return !world.getEntities(EntityPlayer.class,
-                (p) -> p != null && p instanceof EntityPlayerMP && !p.isDead &&
-                        p.getDistanceSq(pos) < 81 && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) p)).isEmpty();
+        return !world
+            .getEntities(
+                EntityPlayer.class,
+                (p) -> p != null && p instanceof EntityPlayerMP
+                    && !p.isDead
+                    && p.getDistanceSq(pos) < 81
+                    && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) p))
+            .isEmpty();
     }
 
     @Override
@@ -137,7 +148,8 @@ public class TileOreGenerator extends TileEntitySynchronized {
         this.structural = compound.getBoolean("struct");
         this.remainingGuaranteed = compound.getInteger("remaining");
 
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide() == Side.SERVER) {
             EventHandlerIO.generatorQueue.add(this);
         }
     }
@@ -152,17 +164,25 @@ public class TileOreGenerator extends TileEntitySynchronized {
 
     @SideOnly(Side.CLIENT)
     public static void playGenerateStructureEffect(PktParticleEvent pktParticleEvent) {
-        BlockPos pos = pktParticleEvent.getVec().toBlockPos();
+        BlockPos pos = pktParticleEvent.getVec()
+            .toBlockPos();
         for (int i = 0; i < 40 + rand.nextInt(30); i++) {
             Vector3 particlePos = new Vector3(
-                    pos.getX() - 3 + rand.nextFloat() * 7,
-                    pos.getY() - 3 + rand.nextFloat() * 7,
-                    pos.getZ() - 3 + rand.nextFloat() * 7
-            );
-            Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
-            p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Constellations.armara.getConstellationColor());
+                pos.getX() - 3 + rand.nextFloat() * 7,
+                pos.getY() - 3 + rand.nextFloat() * 7,
+                pos.getZ() - 3 + rand.nextFloat() * 7);
+            Vector3 dir = particlePos.clone()
+                .subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                .normalize()
+                .divide(-30);
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+            p.motion(dir.getX(), dir.getY(), dir.getZ())
+                .setAlphaMultiplier(1F)
+                .setMaxAge(rand.nextInt(40) + 20);
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                .scale(0.2F + rand.nextFloat() * 0.1F)
+                .setColor(Constellations.armara.getConstellationColor());
         }
     }
 
@@ -180,9 +200,27 @@ public class TileOreGenerator extends TileEntitySynchronized {
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            guaranteedOres = cfg.getInt("guaranteedBlocks", getConfigurationSection(), guaranteedOres, 0, Integer.MAX_VALUE, "This value defines how often the block can be broken and will 100% respawn again.");
-            chanceDespawn = cfg.getInt("chanceDespawn", getConfigurationSection(), chanceDespawn, 1, Integer.MAX_VALUE, "This value defines how high the chance is after 'guaranteedBlocks' has been reached that the block-respawner despawns. The higher this number, the more unlikely it is to despawn.");
-            oreChance = cfg.getInt("oreChance", getConfigurationSection(), oreChance, 0, Integer.MAX_VALUE, "This defines how often an ore will be generated instead of a stone. The higher the number the more rare. Set to 0 to have it never generate ore, only stone.");
+            guaranteedOres = cfg.getInt(
+                "guaranteedBlocks",
+                getConfigurationSection(),
+                guaranteedOres,
+                0,
+                Integer.MAX_VALUE,
+                "This value defines how often the block can be broken and will 100% respawn again.");
+            chanceDespawn = cfg.getInt(
+                "chanceDespawn",
+                getConfigurationSection(),
+                chanceDespawn,
+                1,
+                Integer.MAX_VALUE,
+                "This value defines how high the chance is after 'guaranteedBlocks' has been reached that the block-respawner despawns. The higher this number, the more unlikely it is to despawn.");
+            oreChance = cfg.getInt(
+                "oreChance",
+                getConfigurationSection(),
+                oreChance,
+                0,
+                Integer.MAX_VALUE,
+                "This defines how often an ore will be generated instead of a stone. The higher the number the more rare. Set to 0 to have it never generate ore, only stone.");
         }
 
     }

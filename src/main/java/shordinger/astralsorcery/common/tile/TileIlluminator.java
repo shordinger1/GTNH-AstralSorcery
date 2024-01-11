@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.BlockFlareLight;
@@ -25,12 +31,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.EnumSkyBlock;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,15 +62,15 @@ public class TileIlluminator extends TileEntityTick {
         if (!playerPlaced) return;
 
         if (!world.isRemote) {
-            if(validPositions == null) recalculate();
-            if(rand.nextInt(3) == 0 && placeFlares()) {
+            if (validPositions == null) recalculate();
+            if (rand.nextInt(3) == 0 && placeFlares()) {
                 recalcRequested = true;
             }
             boost--;
             ticksUntilNext--;
-            if(ticksUntilNext <= 0) {
+            if (ticksUntilNext <= 0) {
                 ticksUntilNext = boost > 0 ? 30 : 180;
-                if(recalcRequested) {
+                if (recalcRequested) {
                     recalcRequested = false;
                     recalculate();
                 }
@@ -94,14 +94,13 @@ public class TileIlluminator extends TileEntityTick {
 
     @SideOnly(Side.CLIENT)
     private void playEffects() {
-        if(Minecraft.isFancyGraphicsEnabled() || rand.nextInt(5) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    getPos().getX() + 0.5,
-                    getPos().getY() + 0.5,
-                    getPos().getZ() + 0.5);
-            p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
+        if (Minecraft.isFancyGraphicsEnabled() || rand.nextInt(5) == 0) {
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+            p.motion(
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
             p.scale(0.25F);
 
             Color col = MiscUtils.flareColorFromDye(EnumDyeColor.YELLOW);
@@ -114,7 +113,9 @@ public class TileIlluminator extends TileEntityTick {
                     p.setColor(Color.WHITE);
                     break;
                 case 1:
-                    p.setColor(col.brighter().brighter());
+                    p.setColor(
+                        col.brighter()
+                            .brighter());
                     break;
                 case 2:
                     p.setColor(col);
@@ -128,26 +129,28 @@ public class TileIlluminator extends TileEntityTick {
     private boolean placeFlares() {
         boolean needsRecalc = false;
         for (LinkedList<BlockPos> list : validPositions) {
-            if(list.isEmpty()) {
+            if (list.isEmpty()) {
                 needsRecalc = true;
                 continue;
             }
             int index = rand.nextInt(list.size());
             BlockPos at = list.remove(index);
-            if(!needsRecalc && list.isEmpty()) needsRecalc = true;
+            if (!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
-            if(world.isBlockLoaded(at) &&
-                    at.getY() >= 0 &&
-                    at.getY() <= 255 &&
-                    illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+            if (world.isBlockLoaded(at) && at.getY() >= 0
+                && at.getY() <= 255
+                && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
                 EnumDyeColor color = EnumDyeColor.YELLOW;
                 if (this.chosenColor != null) {
                     color = this.chosenColor;
                 }
-                IBlockState lightState = BlocksAS.blockVolatileLight.getDefaultState().withProperty(BlockFlareLight.COLOR, color);
+                IBlockState lightState = BlocksAS.blockVolatileLight.getDefaultState()
+                    .withProperty(BlockFlareLight.COLOR, color);
                 if (world.setBlockState(at, lightState)) {
-                    if(rand.nextInt(4) == 0) {
-                        EntityFlare.spawnAmbient(world, new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));
+                    if (rand.nextInt(4) == 0) {
+                        EntityFlare.spawnAmbient(
+                            world,
+                            new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));
                     }
                 }
             }
@@ -162,14 +165,15 @@ public class TileIlluminator extends TileEntityTick {
             float yPart = ((float) i) / ((float) parts);
             int yLevel = Math.round(yPart * (getPos().getY() - 7));
             LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(
-                    new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH)
-                    .discoverApplicableBlocks();
+                new BlockPos(getPos().getX(), yLevel, getPos().getZ()),
+                SEARCH_RADIUS,
+                STEP_WIDTH).discoverApplicableBlocks();
             validPositions[i - 1] = repeatList(calcPositions);
         }
     }
 
     private LinkedList<BlockPos> repeatList(LinkedList<BlockPos> list) {
-        LinkedList<BlockPos> rep =  new LinkedList<>();
+        LinkedList<BlockPos> rep = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
             rep.addAll(list);
         }
@@ -212,10 +216,9 @@ public class TileIlluminator extends TileEntityTick {
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return world.isAirBlock(pos) &&
-                    !MiscUtils.canSeeSky(world, pos, false, false) &&
-                    world.getLight(pos) < 8 &&
-                    world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
+            return world.isAirBlock(pos) && !MiscUtils.canSeeSky(world, pos, false, false)
+                && world.getLight(pos) < 8
+                && world.getLightFor(EnumSkyBlock.SKY, pos) < 6;
         }
 
     }

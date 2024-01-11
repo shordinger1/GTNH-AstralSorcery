@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.starlight.transmission;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,7 +8,16 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -20,20 +29,12 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,7 +71,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.knownConstellations = progress.getKnownConstellations();
         this.seenConstellations = progress.getSeenConstellations();
         this.researchProgression = progress.getResearchProgression();
-        this.progressTier = progress.getTierReached().ordinal();
+        this.progressTier = progress.getTierReached()
+            .ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
         this.freePointTokens = progress.getFreePointTokens();
         this.usedPerks = progress.getUnlockedPerkData();
@@ -117,18 +119,19 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         }
 
         int attunementPresent = buf.readByte();
-        if(attunementPresent != -1) {
+        if (attunementPresent != -1) {
             String attunement = ByteBufUtils.readString(buf);
             IConstellation c = ConstellationRegistry.getConstellationByName(attunement);
-            if(c == null || !(c instanceof IMajorConstellation)) {
-                AstralSorcery.log.warn("received constellation-attunement progress-packet with unknown constellation: " + attunement);
+            if (c == null || !(c instanceof IMajorConstellation)) {
+                AstralSorcery.log.warn(
+                    "received constellation-attunement progress-packet with unknown constellation: " + attunement);
             } else {
                 this.attunedConstellation = (IMajorConstellation) c;
             }
         }
 
         int perkLength = buf.readInt();
-        if(perkLength != -1) {
+        if (perkLength != -1) {
             this.usedPerks = new HashMap<>();
             for (int i = 0; i < perkLength; i++) {
                 String key = ByteBufUtils.readString(buf);
@@ -216,33 +219,40 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeInt(-1);
         }
 
-        if(attunedConstellation != null) {
+        if (attunedConstellation != null) {
             buf.writeByte(1);
             ByteBufUtils.writeString(buf, attunedConstellation.getUnlocalizedName());
         } else {
             buf.writeByte(-1);
         }
 
-        if(usedPerks != null) {
+        if (usedPerks != null) {
             buf.writeInt(usedPerks.size());
             for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : usedPerks.entrySet()) {
-                ByteBufUtils.writeString(buf, perkEntry.getKey().getRegistryName().toString());
+                ByteBufUtils.writeString(
+                    buf,
+                    perkEntry.getKey()
+                        .getRegistryName()
+                        .toString());
                 ByteBufUtils.writeNBTTag(buf, perkEntry.getValue());
             }
         } else {
             buf.writeInt(-1);
         }
 
-        if(sealedPerks != null) {
+        if (sealedPerks != null) {
             buf.writeInt(sealedPerks.size());
             for (AbstractPerk perk : sealedPerks) {
-                ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
+                ByteBufUtils.writeString(
+                    buf,
+                    perk.getRegistryName()
+                        .toString());
             }
         } else {
             buf.writeInt(-1);
         }
 
-        if(usedTargets != null) {
+        if (usedTargets != null) {
             buf.writeInt(usedTargets.size());
             for (SextantFinder.TargetObject to : usedTargets) {
                 ByteBufUtils.writeString(buf, to.getRegistryName());

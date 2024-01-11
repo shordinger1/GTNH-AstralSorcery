@@ -17,7 +17,7 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
  * Created by HellFirePvP
  * Date: 23.07.2016 / 19:17
  */
-//Fck you 1.8 item render system.
+// Fck you 1.8 item render system.
 public interface IItemRenderer {
 
     public void render(ItemStack stack);

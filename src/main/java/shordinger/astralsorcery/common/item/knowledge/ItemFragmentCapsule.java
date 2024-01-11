@@ -8,13 +8,18 @@
 
 package shordinger.astralsorcery.common.item.knowledge;
 
+import java.awt.*;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityItemExplosionResistant;
 import shordinger.astralsorcery.common.item.base.ItemHighlighted;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
@@ -25,17 +30,10 @@ import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.EnumRarity;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.*;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -77,7 +75,8 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+                                      float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             spawnFragment(player, hand);
         }
@@ -85,7 +84,8 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     }
 
     private void spawnFragment(EntityPlayer player, EnumHand hand) {
-        SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
+        SoundHelper
+            .playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
         ItemStack frag = new ItemStack(ItemsAS.knowledgeFragment);
         ItemKnowledgeFragment.generateSeed(player, frag);
         player.setHeldItem(hand, frag);
@@ -102,7 +102,12 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityItemExplosionResistant e = new EntityItemExplosionResistant(world, location.posX, location.posY, location.posZ, itemstack);
+        EntityItemExplosionResistant e = new EntityItemExplosionResistant(
+            world,
+            location.posX,
+            location.posY,
+            location.posZ,
+            itemstack);
         e.setDefaultPickupDelay();
         e.motionX = location.motionX;
         e.motionY = location.motionY;

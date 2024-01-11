@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import shordinger.astralsorcery.common.block.BlockMachine;
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.block.BlockMachine;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -33,7 +33,9 @@ public class CategoryGrindstone extends JEIBaseCategory<GrindstoneRecipeWrapper>
 
     public CategoryGrindstone(IGuiHelper guiHelper) {
         super("jei.category.grindstone", ModIntegrationJEI.idGrindstone);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateLightwell.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateLightwell.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 54);
     }
 
@@ -45,7 +47,8 @@ public class CategoryGrindstone extends JEIBaseCategory<GrindstoneRecipeWrapper>
     @Override
     public void drawExtras(Minecraft minecraft) {
         RenderHelper.enableGUIStandardItemLighting();
-        minecraft.getRenderItem().renderItemAndEffectIntoGUI(BlockMachine.MachineType.GRINDSTONE.asStack(), 46, 18);
+        minecraft.getRenderItem()
+            .renderItemAndEffectIntoGUI(BlockMachine.MachineType.GRINDSTONE.asStack(), 46, 18);
         RenderHelper.disableStandardItemLighting();
     }
 

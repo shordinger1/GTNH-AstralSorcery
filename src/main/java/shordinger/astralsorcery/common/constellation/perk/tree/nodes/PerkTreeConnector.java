@@ -8,7 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -19,9 +24,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,8 +44,7 @@ public class PerkTreeConnector extends MajorPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        if (!progress.hasFreeAllocationPoint(player) ||
-                !canSee(player, progress)) return false;
+        if (!progress.hasFreeAllocationPoint(player) || !canSee(player, progress)) return false;
 
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
@@ -70,9 +71,10 @@ public class PerkTreeConnector extends MajorPerk {
 
         NBTTagList listTokens = new NBTTagList();
         for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
-            if(ResearchManager.forceApplyPerk(player, otherPerk)) {
-                String token = "connector-tk-" + otherPerk.getRegistryName().toString();
-                if(ResearchManager.grantFreePerkPoint(player, token)) {
+            if (ResearchManager.forceApplyPerk(player, otherPerk)) {
+                String token = "connector-tk-" + otherPerk.getRegistryName()
+                    .toString();
+                if (ResearchManager.grantFreePerkPoint(player, token)) {
                     listTokens.appendTag(new NBTTagString(token));
 
                     LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
@@ -89,7 +91,7 @@ public class PerkTreeConnector extends MajorPerk {
         NBTTagList list = dataStorage.getTagList("pointtokens", Constants.NBT.TAG_STRING);
         for (int i = 0; i < list.tagCount(); i++) {
             String token = list.getStringTagAt(i);
-            if (ResearchManager.revokeFreePoint(player, token)){
+            if (ResearchManager.revokeFreePoint(player, token)) {
                 LogCategory.PERKS.info(() -> "Revoked perk point " + token + " of " + player.getName());
             }
         }

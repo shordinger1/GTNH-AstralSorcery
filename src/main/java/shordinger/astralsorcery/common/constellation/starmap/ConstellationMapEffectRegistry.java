@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.constellation.starmap;
 
-import shordinger.astralsorcery.common.constellation.IConstellation;
-import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
-import shordinger.wrapper.net.minecraft.potion.Potion;
-
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.constellation.IConstellation;
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
+import shordinger.wrapper.net.minecraft.potion.Potion;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,8 @@ public class ConstellationMapEffectRegistry {
         return effectRegistry.get(c);
     }
 
-    public static MapEffect registerMapEffect(IConstellation c, Collection<EnchantmentMapEffect> enchantmentEffects, Collection<PotionMapEffect> potionEffects) {
+    public static MapEffect registerMapEffect(IConstellation c, Collection<EnchantmentMapEffect> enchantmentEffects,
+                                              Collection<PotionMapEffect> potionEffects) {
         MapEffect me = new MapEffect(enchantmentEffects, potionEffects);
         effectRegistry.put(c, me);
         return me;

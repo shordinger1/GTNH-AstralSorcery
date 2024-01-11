@@ -28,7 +28,9 @@ public abstract class ConfigEntry {
     }
 
     public String getConfigurationSection() {
-        return section.name().toLowerCase() + "." + key;
+        return section.name()
+            .toLowerCase() + "."
+            + key;
     }
 
     public String getKey() {

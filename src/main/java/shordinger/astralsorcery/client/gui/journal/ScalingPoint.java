@@ -9,12 +9,12 @@
 package shordinger.astralsorcery.client.gui.journal;
 
 /**
-* This class is part of the Astral Sorcery Mod
-* The complete source code for this mod can be found on github.
-* Class: ScalingPoint
-* Created by HellFirePvP
-* Date: 14.08.2016 / 16:39
-*/
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: ScalingPoint
+ * Created by HellFirePvP
+ * Date: 14.08.2016 / 16:39
+ */
 public class ScalingPoint {
 
     private double posX, posY;
@@ -24,7 +24,7 @@ public class ScalingPoint {
 
     public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
         ScalingPoint sp = new ScalingPoint();
-        if(arePositionsScaled) {
+        if (arePositionsScaled) {
             sp.updateScaledPos(posX, posY, scale);
         } else {
             sp.updatePos(posX, posY, scale);

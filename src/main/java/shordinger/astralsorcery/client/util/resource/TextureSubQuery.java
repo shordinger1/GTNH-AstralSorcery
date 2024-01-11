@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.client.util.resource;
 
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
 import java.awt.*;
 import java.awt.geom.Point2D;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +26,8 @@ public class TextureSubQuery extends TextureQuery {
     private final double uOffset, vOffset;
     private final double uLength, vLength;
 
-    public TextureSubQuery(AssetLoader.TextureLocation location, String name, double uOffset, double vOffset, double uLength, double vLength) {
+    public TextureSubQuery(AssetLoader.TextureLocation location, String name, double uOffset, double vOffset,
+                           double uLength, double vLength) {
         super(location, name);
         this.uOffset = uOffset;
         this.vOffset = vOffset;

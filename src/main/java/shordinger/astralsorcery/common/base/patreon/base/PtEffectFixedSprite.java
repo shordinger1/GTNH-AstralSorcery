@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
+import java.util.UUID;
+import java.util.function.Function;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.texture.TextureSpritePlane;
 import shordinger.astralsorcery.client.util.resource.SpriteQuery;
@@ -16,11 +21,6 @@ import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.UUID;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,14 +61,16 @@ public class PtEffectFixedSprite extends PatreonEffectHelper.PatreonEffect {
     @SideOnly(Side.CLIENT)
     private TextureSpritePlane makeSprite(SpriteSheetResource resource, EntityPlayer owningPlayer) {
         TextureSpritePlane spr = (TextureSpritePlane) activeSprite;
-        if(spr == null || spr.canRemove() || spr.isRemoved()) {
-            spr = EffectHandler.getInstance().textureSpritePlane(resource, Vector3.RotAxis.Y_AXIS.clone());
+        if (spr == null || spr.canRemove() || spr.isRemoved()) {
+            spr = EffectHandler.getInstance()
+                .textureSpritePlane(resource, Vector3.RotAxis.Y_AXIS.clone());
             spr.setPosFunc((fx, position, motionToBeMoved) -> this.getPosition(owningPlayer));
-            spr.setNoRotation(45).setAlphaMultiplier(1F);
-            spr.setRefreshFunc(() -> !owningPlayer.isDead &&
-                            Minecraft.getMinecraft().player != null &&
-                            Minecraft.getMinecraft().world != null &&
-                            Minecraft.getMinecraft().world.provider != null);
+            spr.setNoRotation(45)
+                .setAlphaMultiplier(1F);
+            spr.setRefreshFunc(
+                () -> !owningPlayer.isDead && Minecraft.getMinecraft().player != null
+                    && Minecraft.getMinecraft().world != null
+                    && Minecraft.getMinecraft().world.provider != null);
             spr.setScale(10F);
             activeSprite = spr;
         }

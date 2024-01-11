@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -15,11 +19,7 @@ import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
 import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +44,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     @SideOnly(Side.CLIENT)
     public NonNullList<ItemStack> getExpectedStackForRender(int row, int column) {
         ItemHandle handle = abstractRecipe.getExpectedStack(row, column);
-        if(handle == null) return NonNullList.create();
+        if (handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -58,7 +58,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     @SideOnly(Side.CLIENT)
     public NonNullList<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot) {
         ItemHandle handle = abstractRecipe.getExpectedStack(slot);
-        if(handle == null) return NonNullList.create();
+        if (handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -71,8 +71,12 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     private NonNullList<ItemStack> refactorSubItems(NonNullList<ItemStack> applicableItems) {
         NonNullList<ItemStack> out = NonNullList.create();
         for (ItemStack oreDictIn : applicableItems) {
-            if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
+            if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
+                oreDictIn.getItem()
+                    .getSubItems(
+                        oreDictIn.getItem()
+                            .getCreativeTab(),
+                        out);
             } else {
                 out.add(oreDictIn);
             }

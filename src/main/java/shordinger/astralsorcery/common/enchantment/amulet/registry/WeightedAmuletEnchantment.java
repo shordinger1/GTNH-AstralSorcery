@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet.registry;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
 import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.WeightedRandom;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,45 +41,51 @@ public class WeightedAmuletEnchantment extends WeightedRandom.Item implements Co
     @Nonnull
     @Override
     public String serialize() {
-        return this.enchantment.getRegistryName().toString() + ":" + itemWeight;
+        return this.enchantment.getRegistryName()
+            .toString() + ":" + itemWeight;
     }
 
     @Nullable
     public static WeightedAmuletEnchantment deserialize(String str) {
         String[] spl = str.split(":");
-        if(spl.length < 3) {
+        if (spl.length < 3) {
             return null;
         }
         String domain = spl[0];
         String weight = spl[spl.length - 1];
         StringBuilder path = new StringBuilder();
         for (int i = 1; i < spl.length - 1; i++) {
-            if(path.length() > 0) {
-                path.append(":"); //Cause that vanishes when splitting...
+            if (path.length() > 0) {
+                path.append(":"); // Cause that vanishes when splitting...
             }
             path.append(spl[i]);
         }
-        //TODO find a better solution than hardcoding (duh)
+        // TODO find a better solution than hardcoding (duh)
         String registryName = domain + ":" + path.toString();
         if (registryName.equalsIgnoreCase("cofhcore:holding")) {
             AstralSorcery.log.info("Ignoring amulet enchantment 'cofhcore:holding' as it's prone to cause issues.");
             return null;
         }
-        //see #1302
+        // see #1302
         if (domain.equalsIgnoreCase("dungeontactics")) {
-            AstralSorcery.log.info("Ignoring amulet enchantments for '" + registryName + "' as dungeontactic's enchantments generated through the prism are prone to cause issues.");
+            AstralSorcery.log.info(
+                "Ignoring amulet enchantments for '" + registryName
+                    + "' as dungeontactic's enchantments generated through the prism are prone to cause issues.");
             return null;
         }
         Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(registryName));
-        if(ench == null) {
-            AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
+        if (ench == null) {
+            AstralSorcery.log
+                .info("Ignoring whitelist entry " + str + " for amulet enchantments - Enchantment does not exist!");
             return null;
         }
         int w;
         try {
             w = Integer.parseInt(weight);
         } catch (NumberFormatException exc) {
-            AstralSorcery.log.info("Ignoring whitelist entry " + str + " for amulet enchantments - last :-separated argument is not a number!");
+            AstralSorcery.log.info(
+                "Ignoring whitelist entry " + str
+                    + " for amulet enchantments - last :-separated argument is not a number!");
             return null;
         }
         return new WeightedAmuletEnchantment(ench, w);

@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
-import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
+import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -33,7 +33,9 @@ public class CategoryAltarConstellation extends JEIBaseCategory<AltarConstellati
 
     public CategoryAltarConstellation(IGuiHelper guiHelper) {
         super("jei.category.altar.constellation", ModIntegrationJEI.idAltarConstellation);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateAltarConstellation.png");
+        ResourceLocation location = new ResourceLocation(
+            "astralsorcery",
+            "textures/gui/jei/recipeTemplateAltarConstellation.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 162);
     }
 
@@ -46,7 +48,8 @@ public class CategoryAltarConstellation extends JEIBaseCategory<AltarConstellati
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, AltarConstellationRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, AltarConstellationRecipeWrapper recipeWrapper,
+                          IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);
 
@@ -79,7 +82,13 @@ public class CategoryAltarConstellation extends JEIBaseCategory<AltarConstellati
         group.addTooltipCallback((slot, input, stack, tooltip) -> {
             if (!input && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                 tooltip.add("");
-                tooltip.add(TextFormatting.DARK_GRAY + I18n.format("misc.recipename", recipeWrapper.getRecipe().getNativeRecipe().getRegistryName().toString()));
+                tooltip.add(
+                    TextFormatting.DARK_GRAY + I18n.format(
+                        "misc.recipename",
+                        recipeWrapper.getRecipe()
+                            .getNativeRecipe()
+                            .getRegistryName()
+                            .toString()));
             }
         });
     }

@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.starlight.IIndependentStarlightSource;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +43,7 @@ public abstract class SimpleIndependentSource implements IIndependentStarlightSo
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        if(starlightType != null) {
+        if (starlightType != null) {
             starlightType.writeToNBT(compound);
         }
     }

@@ -26,7 +26,8 @@ public class AttributeTypeArmorToughness extends VanillaAttributeType {
 
     private static final UUID ARMOR_TOUGHNESS_ADD_ID = UUID.fromString("36DD43BF-0ACB-94AB-809B-D07F0FB060D5");
     private static final UUID ARMOR_TOUGHNESS_ADD_MULTIPLY_ID = UUID.fromString("36DD43BF-0ACB-40E4-809B-D07F0FB060D5");
-    private static final UUID ARMOR_TOUGHNESS_STACK_MULTIPLY_ID = UUID.fromString("36DD43BF-0ACB-FF51-809B-D07F0FB060D5");
+    private static final UUID ARMOR_TOUGHNESS_STACK_MULTIPLY_ID = UUID
+        .fromString("36DD43BF-0ACB-FF51-809B-D07F0FB060D5");
 
     public AttributeTypeArmorToughness() {
         super(AttributeTypeRegistry.ATTR_TYPE_ARMOR_TOUGHNESS);

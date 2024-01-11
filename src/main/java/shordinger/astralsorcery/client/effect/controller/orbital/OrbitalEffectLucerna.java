@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.client.effect.controller.orbital;
 
+import java.awt.*;
+import java.util.Random;
+
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.util.data.Vector3;
-
-import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,8 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 07.01.2017 / 19:26
  */
-public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect, OrbitalEffectController.OrbitTickModifier {
+public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersistence,
+    OrbitalEffectController.OrbitPointEffect, OrbitalEffectController.OrbitTickModifier {
 
     private static final Random rand = new Random();
 
@@ -36,33 +37,32 @@ public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersis
 
     @Override
     public void doPointTickEffect(OrbitalEffectController ctrl, Vector3 pos) {
-        if(rand.nextInt(2) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ());
+        if (rand.nextInt(2) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
             p.setMaxAge(45);
-            p.offset((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+            p.offset(
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
             p.setColor(new Color(255, 255, 127));
-            p.scale(0.25F).gravity(0.008);
+            p.scale(0.25F)
+                .gravity(0.008);
         }
-        if(rand.nextInt(3) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ());
-            p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
+        if (rand.nextInt(3) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+            p.motion(
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
             p.setMaxAge(35);
-            p.scale(0.25F).setColor(Color.WHITE);
+            p.scale(0.25F)
+                .setColor(Color.WHITE);
         }
     }
 
     @Override
     public void onTick(OrbitalEffectController controller) {
-        controller.getOffset().add(0, 0.05, 0);
+        controller.getOffset()
+            .add(0, 0.05, 0);
     }
 }

@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client.effect.texture;
 
+import java.awt.*;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.util.Blending;
@@ -18,9 +22,6 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -190,11 +191,12 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         }
 
         if (maxAge >= 0 && counter >= maxAge) {
-            if(refreshFunc != null) {
-                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-                if(rView == null) rView = Minecraft.getMinecraft().player;
-                if(rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) <= Config.maxEffectRenderDistanceSq) {
-                    if(refreshFunc.shouldRefresh()) {
+            if (refreshFunc != null) {
+                Entity rView = Minecraft.getMinecraft()
+                    .getRenderViewEntity();
+                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) <= Config.maxEffectRenderDistanceSq) {
+                    if (refreshFunc.shouldRefresh()) {
                         counter = 0;
                         return;
                     }
@@ -211,31 +213,36 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     @Override
     public void render(float partialTicks) {
-        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().player;
+        Entity rView = Minecraft.getMinecraft()
+            .getRenderViewEntity();
+        if (rView == null) rView = Minecraft.getMinecraft().player;
         Vector3 rPos = new Vector3(
-                RenderingUtils.interpolate(this.prevPos.getX(), this.pos.getX(), partialTicks),
-                RenderingUtils.interpolate(this.prevPos.getY(), this.pos.getY(), partialTicks),
-                RenderingUtils.interpolate(this.prevPos.getZ(), this.pos.getZ(), partialTicks));
+            RenderingUtils.interpolate(this.prevPos.getX(), this.pos.getX(), partialTicks),
+            RenderingUtils.interpolate(this.prevPos.getY(), this.pos.getY(), partialTicks),
+            RenderingUtils.interpolate(this.prevPos.getZ(), this.pos.getZ(), partialTicks));
         double dst = rView.getDistanceSq(rPos.getX(), rPos.getY(), rPos.getZ());
-        if(dst > Config.maxEffectRenderDistanceSq) return;
+        if (dst > Config.maxEffectRenderDistanceSq) return;
 
         float alphaMul = alphaFunction.getAlpha(counter, maxAge);
         float alphaGrad = (colorOverlay.getAlpha() / 255F) * alphaMul * this.alphaMultiplier;
-        if(alphaGradient) {
+        if (alphaGradient) {
             alphaGrad = getAlphaDistanceMultiplier(dst) * alphaMul * this.alphaMultiplier;
         }
-        if(renderAlphaFunction != null) {
+        if (renderAlphaFunction != null) {
             alphaGrad = renderAlphaFunction.getRenderAlpha(this, alphaGrad);
         }
 
         GlStateManager.pushMatrix();
-        GlStateManager.color(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
+        GlStateManager.color(
+            colorOverlay.getRed() / 255F,
+            colorOverlay.getGreen() / 255F,
+            colorOverlay.getBlue() / 255F,
+            alphaGrad);
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
         Vector3 axis = this.axis.clone();
         float deg;
-        if(ticksPerFullRot >= 0) {
+        if (ticksPerFullRot >= 0) {
             float anglePercent = ((float) (counter)) / ((float) ticksPerFullRot);
             deg = anglePercent * 360F;
             deg = RenderingUtils.interpolateRotation(lastRenderDegree, deg, partialTicks);
@@ -258,7 +265,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     private void currRenderAroundAxis(Vector3 position, float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
-        if(scaleFunc != null) {
+        if (scaleFunc != null) {
             scale = scaleFunc.getScale(this, position.clone(), parTicks, scale);
         }
         texture.bindTexture();

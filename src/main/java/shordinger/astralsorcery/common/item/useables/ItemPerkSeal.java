@@ -39,11 +39,15 @@ public class ItemPerkSeal extends Item {
 
     public static int getPlayerSealCount(IItemHandler inv) {
         return ItemUtils.findItemsInInventory(inv, new ItemStack(ItemsAS.perkSeal), false)
-                .stream().mapToInt(ItemStack::getCount).sum();
+            .stream()
+            .mapToInt(ItemStack::getCount)
+            .sum();
     }
 
     public static boolean useSeal(EntityPlayer player, boolean simulate) {
-        return useSeal((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), simulate);
+        return useSeal(
+            (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            simulate);
     }
 
     public static boolean useSeal(IItemHandlerModifiable inv, boolean simulate) {

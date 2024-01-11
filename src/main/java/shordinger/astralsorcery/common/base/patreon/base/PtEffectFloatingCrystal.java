@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
+import java.awt.*;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityCrystal;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +44,8 @@ public class PtEffectFloatingCrystal extends PatreonEffectHelper.PatreonEffect {
     @Nullable
     @Override
     public PatreonPartialEntity createEntity(UUID playerUUID) {
-        return new PartialEntityCrystal(playerUUID).setColorTheme(this.colorTheme).setQueryTexture(this.textureQuery);
+        return new PartialEntityCrystal(playerUUID).setColorTheme(this.colorTheme)
+            .setQueryTexture(this.textureQuery);
     }
 
 }

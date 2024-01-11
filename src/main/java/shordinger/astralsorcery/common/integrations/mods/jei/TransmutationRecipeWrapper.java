@@ -8,16 +8,18 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
+import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import mezz.jei.api.ingredients.IIngredients;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +41,7 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
         ItemStack in = transmutation.getInputDisplayStack();
         ItemStack out = transmutation.getOutputDisplayStack();
 
-        if(!in.isEmpty() && !out.isEmpty()) {
+        if (!in.isEmpty() && !out.isEmpty()) {
             ingredients.setInput(ItemStack.class, in);
             ingredients.setOutput(ItemStack.class, out);
         }
@@ -49,10 +51,12 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         if (minecraft.fontRenderer != null) {
             if (this.transmutation.getRequiredType() != null) {
-                String name = this.transmutation.getRequiredType().getUnlocalizedName();
+                String name = this.transmutation.getRequiredType()
+                    .getUnlocalizedName();
                 String out = I18n.format("misc.transmutation.constellation", I18n.format(name));
                 int length = minecraft.fontRenderer.getStringWidth(out);
-                minecraft.fontRenderer.drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
+                minecraft.fontRenderer
+                    .drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
             }
         }
     }

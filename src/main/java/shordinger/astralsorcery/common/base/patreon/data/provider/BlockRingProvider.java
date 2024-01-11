@@ -17,7 +17,6 @@ import shordinger.astralsorcery.common.base.patreon.base.PtEffectBlockRing;
 import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
@@ -51,20 +50,28 @@ public class BlockRingProvider implements EffectProvider<PtEffectBlockRing> {
         for (JsonElement patternElement : jo) {
             JsonObject obj = (JsonObject) patternElement;
             BlockPos pos = new BlockPos(
-                    obj.getAsJsonPrimitive("posX").getAsInt(),
-                    obj.getAsJsonPrimitive("posY").getAsInt(),
-                    obj.getAsJsonPrimitive("posZ").getAsInt());
-            Block b = Block.getBlockFromName(obj.getAsJsonPrimitive("block").getAsString());
-            int data = obj.has("data") ? obj.getAsJsonPrimitive("data").getAsInt() : 0;
+                obj.getAsJsonPrimitive("posX")
+                    .getAsInt(),
+                obj.getAsJsonPrimitive("posY")
+                    .getAsInt(),
+                obj.getAsJsonPrimitive("posZ")
+                    .getAsInt());
+            Block b = Block.getBlockFromName(
+                obj.getAsJsonPrimitive("block")
+                    .getAsString());
+            int data = obj.has("data") ? obj.getAsJsonPrimitive("data")
+                .getAsInt() : 0;
             pattern.put(pos, b.getStateFromMeta(data));
         }
-        return new PtEffectBlockRing(effectUniqueId,
-                fc, uuid,
-                distance,
-                rotationAngle,
-                repeats,
-                tickRotationSpeed,
-                pattern);
+        return new PtEffectBlockRing(
+            effectUniqueId,
+            fc,
+            uuid,
+            distance,
+            rotationAngle,
+            repeats,
+            tickRotationSpeed,
+            pattern);
     }
 
 }

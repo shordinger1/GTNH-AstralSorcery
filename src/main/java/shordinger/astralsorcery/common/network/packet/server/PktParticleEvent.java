@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
@@ -26,14 +29,11 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.CelestialStrike;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -107,18 +107,25 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         try {
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
-            if(trigger != null) {
+            if (trigger != null) {
                 AstralSorcery.proxy.scheduleClientside(() -> triggerClientside(trigger, message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
+            AstralSorcery.log.warn(
+                "Error executing ParticleEventType " + message.typeOrdinal
+                    + " at "
+                    + xCoord
+                    + ", "
+                    + yCoord
+                    + ", "
+                    + zCoord);
         }
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleEvent message) {
-        if(Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().world == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 
@@ -128,7 +135,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     public static enum ParticleEventType {
 
-        //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
+        // DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
         COLLECTOR_BURST,
         GEM_CRYSTAL_BURST,
         CELESTIAL_CRYSTAL_BURST,
@@ -164,8 +171,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         FLARE_PROC,
         RT_DEBUG;
 
-        //GOD I HATE THIS PART
-        //But i can't do this in the ctor because server-client stuffs.
+        // GOD I HATE THIS PART
+        // But i can't do this in the ctor because server-client stuffs.
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(ParticleEventType type) {
             switch (type) {
@@ -238,7 +245,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         }
 
         public EventAction getTrigger(Side side) {
-            if(!side.isClient()) return null;
+            if (!side.isClient()) return null;
             return getClientTrigger(this);
         }
 

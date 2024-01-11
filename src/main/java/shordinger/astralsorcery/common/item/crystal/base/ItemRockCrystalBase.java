@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.item.crystal.base;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityCrystal;
 import shordinger.astralsorcery.common.item.base.ItemHighlighted;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
@@ -23,14 +32,6 @@ import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,15 +54,15 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        if(prop == null) {
+        if (prop == null) {
             Item i = stack.getItem();
-            if(i instanceof ItemCelestialCrystal || i instanceof ItemTunedCelestialCrystal) {
+            if (i instanceof ItemCelestialCrystal || i instanceof ItemTunedCelestialCrystal) {
                 CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomCelestial());
             } else {
                 CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomRock());
             }
         } else {
-            if(prop.getFracturation() >= 100) {
+            if (prop.getFracturation() >= 100) {
                 stack.setCount(0);
                 entityIn.playSound(SoundEvents.ENTITY_ITEM_BREAK, 0.5F, rand.nextFloat() * 0.2F + 0.8F);
             }
@@ -112,7 +113,8 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
 
     @SideOnly(Side.CLIENT)
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxSize(stack));
+        return CrystalProperties
+            .addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxSize(stack));
     }
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();

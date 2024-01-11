@@ -26,7 +26,8 @@ public class AltarRecipeConstellation extends BaseAltarRecipe {
         super(null, null, null, 0, 0);
     }
 
-    public AltarRecipeConstellation(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+    public AltarRecipeConstellation(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired,
+                                    int craftingTickTime) {
         super(name, inputs, output, starlightRequired, craftingTickTime);
     }
 
@@ -38,13 +39,12 @@ public class AltarRecipeConstellation extends BaseAltarRecipe {
     @Override
     public void applyRecipe() {
         CraftingAccessManager.registerMTAltarRecipe(
-                buildRecipeUnsafe(
-                        TileAltar.AltarLevel.CONSTELLATION_CRAFT,
-                        this.starlightRequired,
-                        this.craftingTickTime,
-                        this.output,
-                        this.inputs)
-        );
+            buildRecipeUnsafe(
+                TileAltar.AltarLevel.CONSTELLATION_CRAFT,
+                this.starlightRequired,
+                this.craftingTickTime,
+                this.output,
+                this.inputs));
     }
 
 }

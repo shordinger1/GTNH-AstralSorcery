@@ -147,7 +147,8 @@ public class AttributeEvent {
     public static double postProcessVanilla(double value, ModifiableAttributeInstance instance) {
         PostProcessVanilla ev = new PostProcessVanilla(instance, value);
         MinecraftForge.EVENT_BUS.post(ev);
-        return ev.getAttribute().clampValue(ev.getValue()); //Cause that happened before our call already...
+        return ev.getAttribute()
+            .clampValue(ev.getValue()); // Cause that happened before our call already...
     }
 
     @ASMCallHook

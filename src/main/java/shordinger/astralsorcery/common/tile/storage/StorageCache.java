@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,8 @@ public class StorageCache {
                 return true;
             }
         }
-        content.get(key).add(new StoredItemStack(stack));
+        content.get(key)
+            .add(new StoredItemStack(stack));
         return true;
     }
 
@@ -112,7 +114,7 @@ public class StorageCache {
         return false;
     }
 
-    //True if anything has been transferred.
+    // True if anything has been transferred.
     public boolean attemptTransferInto(StorageKey key, IItemHandler inv, boolean simulate) {
         if (content.isEmpty()) return false;
 

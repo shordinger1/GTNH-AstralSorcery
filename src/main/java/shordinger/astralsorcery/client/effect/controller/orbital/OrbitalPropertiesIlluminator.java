@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.client.effect.controller.orbital;
 
+import java.awt.*;
+import java.util.Random;
+
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
@@ -17,9 +20,6 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import java.awt.*;
-import java.util.Random;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -27,7 +27,8 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 02.11.2016 / 00:20
  */
-public class OrbitalPropertiesIlluminator implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect {
+public class OrbitalPropertiesIlluminator
+    implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect {
 
     private static final Random rand = new Random();
 
@@ -42,16 +43,15 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
         World w = Minecraft.getMinecraft().world;
-        return w.provider.getDimension() == dim && w.getBlockState(thisPos).getBlock().equals(BlocksAS.blockIlluminator);
+        return w.provider.getDimension() == dim && w.getBlockState(thisPos)
+            .getBlock()
+            .equals(BlocksAS.blockIlluminator);
     }
 
     @Override
     public void doPointTickEffect(OrbitalEffectController ctrl, Vector3 pos) {
-        if(!Minecraft.isFancyGraphicsEnabled()) return;
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                pos.getX(),
-                pos.getY(),
-                pos.getZ());
+        if (!Minecraft.isFancyGraphicsEnabled()) return;
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
         p.setMaxAge(25);
         switch (rand.nextInt(3)) {
             case 0:
@@ -66,15 +66,14 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
             default:
                 break;
         }
-        p.scale(0.1F).gravity(0.004);
-        if(rand.nextInt(4) == 0) {
-            p = EffectHelper.genericFlareParticle(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ());
-            p.motion((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+        p.scale(0.1F)
+            .gravity(0.004);
+        if (rand.nextInt(4) == 0) {
+            p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+            p.motion(
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
             p.setMaxAge(35);
             switch (rand.nextInt(2)) {
                 case 0:
@@ -88,17 +87,19 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
             }
             p.scale(0.15F);
         }
-        /*if(rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ());
-            p.motion((rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1));
-            p.setMaxAge(5);
-            p.scale(0.15F);
-        }*/
+        /*
+         * if(rand.nextBoolean()) {
+         * p = EffectHelper.genericFlareParticle(
+         * pos.getX(),
+         * pos.getY(),
+         * pos.getZ());
+         * p.motion((rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
+         * (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
+         * (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1));
+         * p.setMaxAge(5);
+         * p.scale(0.15F);
+         * }
+         */
     }
 
 }

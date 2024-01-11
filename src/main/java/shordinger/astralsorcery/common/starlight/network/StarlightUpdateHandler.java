@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.starlight.network;
 
+import java.util.*;
+
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +37,7 @@ public class StarlightUpdateHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
-        if(world.isRemote) return;
+        if (world.isRemote) return;
 
         List<IPrismTransmissionNode> nodes = getNodes(world);
         synchronized (accessLock) {
@@ -50,7 +50,7 @@ public class StarlightUpdateHandler implements ITickHandler {
     private List<IPrismTransmissionNode> getNodes(World world) {
         int dimId = world.provider.getDimension();
         List<IPrismTransmissionNode> nodes = updateRequired.get(dimId);
-        if(nodes == null) {
+        if (nodes == null) {
             nodes = new LinkedList<>();
             updateRequired.put(dimId, nodes);
         }

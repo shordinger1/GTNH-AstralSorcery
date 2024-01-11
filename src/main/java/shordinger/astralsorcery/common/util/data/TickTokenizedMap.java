@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
 import java.util.Iterator;
+
+import javax.annotation.Nonnull;
+
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +23,8 @@ import java.util.Iterator;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 11:25
  */
-public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> extends TokenizedMap<K, V> implements ITickHandler {
+public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> extends TokenizedMap<K, V>
+    implements ITickHandler {
 
     private EnumSet<TickEvent.Type> tickTypes;
 
@@ -35,9 +37,12 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
         Iterator<Entry<K, V>> iteratorEntries = entrySet().iterator();
         while (iteratorEntries.hasNext()) {
             Entry<K, V> entry = iteratorEntries.next();
-            entry.getValue().tick();
-            if(entry.getValue().getRemainingTimeout() <= 0) {
-                entry.getValue().onTimeout();
+            entry.getValue()
+                .tick();
+            if (entry.getValue()
+                .getRemainingTimeout() <= 0) {
+                entry.getValue()
+                    .onTimeout();
                 iteratorEntries.remove();
             }
         }

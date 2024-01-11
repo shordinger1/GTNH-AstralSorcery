@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.data.world.data;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
@@ -16,12 +23,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +43,8 @@ public class StructureGenBuffer extends CachedWorldData {
     }
 
     public void markStructureGeneration(BlockPos pos, StructureType type) {
-        generatedStructures.get(type).add(pos);
+        generatedStructures.get(type)
+            .add(pos);
         markDirty();
     }
 
@@ -55,14 +57,13 @@ public class StructureGenBuffer extends CachedWorldData {
 
         if (type.needsDistanceToAnyStructure()) {
             for (StructureType tt : StructureType.values()) {
-                if (!tt.needsDistanceToAnyStructure() ||
-                        tt.equals(type)) {
+                if (!tt.needsDistanceToAnyStructure() || tt.equals(type)) {
                     continue;
                 }
                 for (BlockPos position : generatedStructures.get(type)) {
                     double dst = position.getDistance(x, y, z);
                     if (dst <= halfDst) {
-                        return dst; //Fast fail on close structures
+                        return dst; // Fast fail on close structures
                     }
                 }
             }
@@ -70,7 +71,7 @@ public class StructureGenBuffer extends CachedWorldData {
 
         for (BlockPos position : generatedStructures.get(type)) {
             double dst = position.getDistance(x, y, z);
-            if(dst < closest) {
+            if (dst < closest) {
                 closest = dst;
             }
         }
@@ -86,7 +87,7 @@ public class StructureGenBuffer extends CachedWorldData {
         int z = dstTo.getZ();
         for (BlockPos position : generatedStructures.get(type)) {
             double dst = position.getDistance(x, y, z);
-            if(dst < closest) {
+            if (dst < closest) {
                 closest = dst;
                 closestPos = position;
             }
@@ -97,15 +98,20 @@ public class StructureGenBuffer extends CachedWorldData {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         for (StructureType type : StructureType.values()) {
-            generatedStructures.get(type).clear();
+            generatedStructures.get(type)
+                .clear();
         }
 
         for (StructureType type : StructureType.values()) {
-            NBTTagList list = compound.getTagList(type.name().toLowerCase(), Constants.NBT.TAG_COMPOUND);
+            NBTTagList list = compound.getTagList(
+                type.name()
+                    .toLowerCase(),
+                Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound cmp = list.getCompoundTagAt(i);
                 BlockPos pos = NBTHelper.readBlockPosFromNBT(cmp);
-                generatedStructures.get(type).add(pos);
+                generatedStructures.get(type)
+                    .add(pos);
             }
         }
     }
@@ -119,7 +125,10 @@ public class StructureGenBuffer extends CachedWorldData {
                 NBTHelper.writeBlockPosToNBT(pos, tag);
                 list.appendTag(tag);
             }
-            compound.setTag(type.name().toLowerCase(), list);
+            compound.setTag(
+                type.name()
+                    .toLowerCase(),
+                list);
         }
     }
 

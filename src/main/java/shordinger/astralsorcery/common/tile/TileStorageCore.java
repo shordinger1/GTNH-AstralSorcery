@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.auxiliary.StorageNetworkHandler;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.tile.storage.IStorageNetworkTile;
@@ -19,9 +23,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,14 +54,16 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     public void onLoad() {
         super.onLoad();
 
-        StorageNetworkHandler.getHandler(getWorld()).addCore(this);
+        StorageNetworkHandler.getHandler(getWorld())
+            .addCore(this);
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
 
-        StorageNetworkHandler.getHandler(getWorld()).removeCore(this);
+        StorageNetworkHandler.getHandler(getWorld())
+            .removeCore(this);
     }
 
     @Override

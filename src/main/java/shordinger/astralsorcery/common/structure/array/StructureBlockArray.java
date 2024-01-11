@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.structure.array;
 
+import java.util.Map;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,7 +25,7 @@ public class StructureBlockArray extends BlockArray {
 
     public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
         Map<BlockPos, IBlockState> result = super.placeInWorld(world, center);
-        if(processor != null) {
+        if (processor != null) {
             for (Map.Entry<BlockPos, IBlockState> entry : result.entrySet())
                 processor.process(world, entry.getKey(), entry.getValue());
         }

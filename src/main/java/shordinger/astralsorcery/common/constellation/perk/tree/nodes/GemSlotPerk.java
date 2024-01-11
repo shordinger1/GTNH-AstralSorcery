@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
+import java.util.Collection;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -20,11 +26,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +52,8 @@ public interface GemSlotPerk {
 
     default public ItemStack getContainedItem(EntityPlayer player, Side side, @Nullable NBTTagCompound dataOvr) {
         if (!(this instanceof AbstractPerk)) {
-            throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
+            throw new UnsupportedOperationException(
+                "Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         NBTTagCompound data = dataOvr != null ? dataOvr : ((AbstractPerk) this).getPerkData(player, side);
         if (data == null) {
@@ -65,9 +67,11 @@ public interface GemSlotPerk {
         return setContainedItem(player, side, null, stack);
     }
 
-    default public boolean setContainedItem(EntityPlayer player, Side side, @Nullable NBTTagCompound dataOvr, ItemStack stack) {
+    default public boolean setContainedItem(EntityPlayer player, Side side, @Nullable NBTTagCompound dataOvr,
+                                            ItemStack stack) {
         if (!(this instanceof AbstractPerk)) {
-            throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
+            throw new UnsupportedOperationException(
+                "Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (!prog.hasPerkUnlocked((AbstractPerk) this)) {
@@ -98,7 +102,8 @@ public interface GemSlotPerk {
 
     default public void dropItemToPlayer(EntityPlayer player, @Nullable NBTTagCompound data) {
         if (!(this instanceof AbstractPerk)) {
-            throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
+            throw new UnsupportedOperationException(
+                "Cannot do perk-specific socketing logic on something that's not a perk!");
         }
 
         if (player.getEntityWorld().isRemote) {
@@ -142,14 +147,22 @@ public interface GemSlotPerk {
             if (prog.hasPerkEffect((AbstractPerk) this)) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.empty"));
 
-                boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getMinecraft().player,
-                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty()).isEmpty();
+                boolean has = !ItemUtils
+                    .findItemsIndexedInPlayerInventory(
+                        Minecraft.getMinecraft().player,
+                        s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
+                            && !ItemPerkGem.getModifiers(s)
+                            .isEmpty())
+                    .isEmpty();
                 if (!has) {
                     tooltip.add(TextFormatting.RED + I18n.format("perk.info.gem.content.empty.none"));
                 }
             }
         } else {
-            tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.content.item", contained.getRarity().rarityColor + contained.getDisplayName()));
+            tooltip.add(
+                TextFormatting.GRAY + I18n.format(
+                    "perk.info.gem.content.item",
+                    contained.getRarity().rarityColor + contained.getDisplayName()));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.remove"));
             }

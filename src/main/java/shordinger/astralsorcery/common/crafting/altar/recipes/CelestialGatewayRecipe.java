@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
+import java.awt.*;
+import java.util.Random;
+
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.BlockMarble;
@@ -23,9 +26,6 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.OreDictAlias;
 import shordinger.astralsorcery.common.util.data.Vector3;
 
-import java.awt.*;
-import java.util.Random;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -36,21 +36,23 @@ import java.util.Random;
 public class CelestialGatewayRecipe extends AttunementRecipe implements ISpecialCraftingEffects {
 
     public CelestialGatewayRecipe() {
-        super(shapedRecipe("gateway", BlocksAS.celestialGateway)
-                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
-                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.CENTER)
-        .unregisteredAccessibleShapedRecipe());
+        super(
+            shapedRecipe("gateway", BlocksAS.celestialGateway)
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT, ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(
+                    ItemUsableDust.DustType.ILLUMINATION.asStack(),
+                    ShapedRecipeSlot.UPPER_LEFT,
+                    ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(
+                    ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                    ShapedRecipeSlot.LEFT,
+                    ShapedRecipeSlot.RIGHT)
+                .addPart(
+                    BlockMarble.MarbleBlockType.RUNED.asStack(),
+                    ShapedRecipeSlot.LOWER_LEFT,
+                    ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemHandle.getCrystalVariant(false, false), ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
         setAttItem(OreDictAlias.ITEM_STARMETAL_DUST, AttunementAltarSlot.values());
     }
 
@@ -63,21 +65,25 @@ public class CelestialGatewayRecipe extends AttunementRecipe implements ISpecial
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 
-        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+        if (state == ActiveCraftingTask.CraftingState.ACTIVE) {
             int scale = 2;
-            if(altar.getAltarLevel().ordinal() > TileAltar.AltarLevel.ATTUNEMENT.ordinal()) {
+            if (altar.getAltarLevel()
+                .ordinal() > TileAltar.AltarLevel.ATTUNEMENT.ordinal()) {
                 scale = 3;
             }
             int edgeScale = (scale * 2 + 1);
             for (int i = 0; i < 3; i++) {
                 Vector3 offset = new Vector3(altar).add(-scale, 0, -scale);
-                if(rand.nextBoolean()) {
+                if (rand.nextBoolean()) {
                     offset.add(edgeScale * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * edgeScale);
                 } else {
                     offset.add(rand.nextFloat() * edgeScale, 0, edgeScale * (rand.nextBoolean() ? 1 : 0));
                 }
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
-                p.gravity(0.007).scale(0.25F + rand.nextFloat() * 0.15F).setMaxAge(20 + rand.nextInt(30));
+                EntityFXFacingParticle p = EffectHelper
+                    .genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+                p.gravity(0.007)
+                    .scale(0.25F + rand.nextFloat() * 0.15F)
+                    .setMaxAge(20 + rand.nextInt(30));
                 Color c = new Color(60, 0, 255);
                 switch (rand.nextInt(4)) {
                     case 0:

@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.registry;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.event.StarlightNetworkEvent;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
@@ -17,10 +22,6 @@ import shordinger.astralsorcery.common.starlight.transmission.base.crystal.Cryst
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import shordinger.astralsorcery.common.tile.*;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +48,8 @@ public class TransmissionClassRegistry {
     }
 
     public static void register(TransmissionProvider provider) {
-        if(providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException("Already registered identifier TransmissionProvider: " + provider.getIdentifier());
+        if (providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException(
+            "Already registered identifier TransmissionProvider: " + provider.getIdentifier());
         providerMap.put(provider.getIdentifier(), provider);
     }
 
@@ -55,7 +57,7 @@ public class TransmissionClassRegistry {
         register(new SimpleTransmissionNode.Provider());
         register(new SimplePrismTransmissionNode.Provider());
         register(new SimpleTransmissionSourceNode.Provider());
-        //register(new SimpleTransmissionReceiver.Provider());
+        // register(new SimpleTransmissionReceiver.Provider());
 
         register(new CrystalTransmissionNode.Provider());
         register(new CrystalPrismTransmissionNode.Provider());

@@ -39,10 +39,16 @@ public class RootPerk extends AttributeModifierPerk {
         setRequireDiscoveredConstellation(constellation);
         this.constellation = constellation;
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, "root_" + name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                expMultiplier = cfg.getFloat("Exp_Multiplier", getConfigurationSection(), expMultiplier, 0F, 1024F,
-                        "Sets the exp multiplier exp gained from this root-perk are multiplied by. (So higher multiplier -> more exp)");
+                expMultiplier = cfg.getFloat(
+                    "Exp_Multiplier",
+                    getConfigurationSection(),
+                    expMultiplier,
+                    0F,
+                    1024F,
+                    "Sets the exp multiplier exp gained from this root-perk are multiplied by. (So higher multiplier -> more exp)");
 
                 RootPerk.this.loadAdditionalConfigurations(cfg);
             }
@@ -51,8 +57,11 @@ public class RootPerk extends AttributeModifierPerk {
 
     @Override
     protected PerkTreePoint<? extends RootPerk> initPerkTreePoint() {
-        return new PerkTreePointConstellation<>(this, getOffset(),
-                constellation, PerkTreePointConstellation.ROOT_SPRITE_SIZE);
+        return new PerkTreePointConstellation<>(
+            this,
+            getOffset(),
+            constellation,
+            PerkTreePointConstellation.ROOT_SPRITE_SIZE);
     }
 
     @Override

@@ -33,8 +33,9 @@ public class TransmissionChunkTracker {
 
     @SubscribeEvent
     public void onChLoad(ChunkEvent.Load event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
-        if(handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
+            .getWorldHandler(event.getWorld());
+        if (handle != null) {
             Chunk ch = event.getChunk();
             handle.informChunkLoad(new ChunkPos(ch.x, ch.z));
         }
@@ -42,8 +43,9 @@ public class TransmissionChunkTracker {
 
     @SubscribeEvent
     public void onChUnload(ChunkEvent.Unload event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
-        if(handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
+            .getWorldHandler(event.getWorld());
+        if (handle != null) {
             Chunk ch = event.getChunk();
             handle.informChunkUnload(new ChunkPos(ch.x, ch.z));
         }
@@ -51,14 +53,15 @@ public class TransmissionChunkTracker {
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        //StarlightTransmissionHandler.getInstance().informWorldUnload(event.getWorld());
-        //StarlightUpdateHandler.getInstance().informWorldUnload(event.getWorld());
+        // StarlightTransmissionHandler.getInstance().informWorldUnload(event.getWorld());
+        // StarlightUpdateHandler.getInstance().informWorldUnload(event.getWorld());
     }
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
-        if(event.getWorld().isRemote) return;
-        StarlightUpdateHandler.getInstance().informWorldLoad(event.getWorld());
+        if (event.getWorld().isRemote) return;
+        StarlightUpdateHandler.getInstance()
+            .informWorldLoad(event.getWorld());
     }
 
 }

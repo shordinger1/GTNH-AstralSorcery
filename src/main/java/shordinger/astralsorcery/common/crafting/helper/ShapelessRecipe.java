@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
@@ -20,9 +23,6 @@ import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,7 +63,7 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
         private final NonNullList<ItemHandle> inputs = NonNullList.create();
 
         private Builder(String name, ItemStack output) {
-            this.entry = new ResourceLocation(AstralSorcery.MODID, "shapeless/" +name);
+            this.entry = new ResourceLocation(AstralSorcery.MODID, "shapeless/" + name);
             this.output = ItemUtils.copyStackWithSize(output, output.getCount());
         }
 
@@ -88,19 +88,19 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
         }
 
         public Builder add(ItemStack stack) {
-            if(inputs.size() >= 9) return this; //Add nothing then.
+            if (inputs.size() >= 9) return this; // Add nothing then.
             this.inputs.add(new ItemHandle(stack));
             return this;
         }
 
         public Builder add(String oreDictName) {
-            if(inputs.size() >= 9) return this; //Add nothing then.
+            if (inputs.size() >= 9) return this; // Add nothing then.
             this.inputs.add(new ItemHandle(oreDictName));
             return this;
         }
 
         public Builder addPart(FluidStack fluidStack) {
-            if(inputs.size() >= 9) return this; //Add nothing then.
+            if (inputs.size() >= 9) return this; // Add nothing then.
             this.inputs.add(new ItemHandle(fluidStack));
             return this;
         }
@@ -114,13 +114,13 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
         }
 
         public Builder addPart(ItemHandle handle) {
-            if(inputs.size() >= 9) return this; //Add nothing then.
+            if (inputs.size() >= 9) return this; // Add nothing then.
             this.inputs.add(handle);
             return this;
         }
 
         public AccessibleRecipeAdapater buildAndRegisterShapelessRecipe() {
-            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            if (registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapelessOreDictRecipe(entry, output, compileIngredients());
             CommonProxy.registryPrimer.register(actual);

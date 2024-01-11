@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-
 import javax.annotation.Nonnull;
+
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

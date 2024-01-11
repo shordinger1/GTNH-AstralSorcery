@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -16,7 +18,6 @@ import shordinger.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import shordinger.astralsorcery.common.tile.TileFakeTree;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -35,8 +36,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -62,7 +61,7 @@ public class BlockFakeTree extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, false);
-        if(tft != null && tft.getFakedState() != null) {
+        if (tft != null && tft.getFakedState() != null) {
             RenderingUtils.playBlockBreakParticles(pos, tft.getFakedState());
         }
         return true;
@@ -72,36 +71,45 @@ public class BlockFakeTree extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileFakeTree tft = MiscUtils.getTileAt(worldIn, pos, TileFakeTree.class, false);
-        if(tft == null || tft.getReference() == null) return;
-        if(rand.nextInt(20) == 0) {
+        if (tft == null || tft.getReference() == null) return;
+        if (rand.nextInt(20) == 0) {
             Color c = new Color(63, 255, 63);
             PatreonEffectHelper.PatreonEffect pe;
-            if (tft.getPlayerEffectRef() != null && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, tft.getPlayerEffectRef())
-                    .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null)) != null) {
+            if (tft.getPlayerEffectRef() != null
+                && (pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, tft.getPlayerEffectRef())
+                .stream()
+                .filter(p -> p instanceof PtEffectTreeBeacon)
+                .findFirst()
+                .orElse(null)) != null) {
                 c = new Color(((PtEffectTreeBeacon) pe).getColorTreeDrainEffects());
             }
 
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    pos.getX() + rand.nextFloat(),
-                    pos.getY() + rand.nextFloat(),
-                    pos.getZ() + rand.nextFloat());
+                pos.getX() + rand.nextFloat(),
+                pos.getY() + rand.nextFloat(),
+                pos.getZ() + rand.nextFloat());
             p.motion(0, 0, 0);
-            p.scale(0.45F).setColor(c).setMaxAge(65);
+            p.scale(0.45F)
+                .setColor(c)
+                .setMaxAge(65);
         }
     }
 
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
-        if(tft != null && tft.getFakedState() != null) {
+        if (tft != null && tft.getFakedState() != null) {
             IBlockState fake = tft.getFakedState();
-            return fake.getBlock().getSoundType(fake, world, pos, entity);
+            return fake.getBlock()
+                .getSoundType(fake, world, pos, entity);
         }
         return super.getSoundType(state, world, pos, entity);
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
+    }
 
     @Override
     public int quantityDropped(Random random) {
@@ -149,7 +157,8 @@ public class BlockFakeTree extends BlockContainer {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -174,13 +183,17 @@ public class BlockFakeTree extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
         TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
         try {
-            if(tft != null && tft.getFakedState() != null) {
-                return tft.getFakedState().getBlock().getPickBlock(tft.getFakedState(), target, world, pos, player);
+            if (tft != null && tft.getFakedState() != null) {
+                return tft.getFakedState()
+                    .getBlock()
+                    .getPickBlock(tft.getFakedState(), target, world, pos, player);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return ItemStack.EMPTY;
     }
 

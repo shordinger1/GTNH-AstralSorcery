@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.constellation;
 
-import shordinger.astralsorcery.AstralSorcery;
-
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.AstralSorcery;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,19 +33,20 @@ public class ConstellationRegistry {
     private static List<IConstellation> generalConstellationList = new LinkedList<>();
 
     public static <T extends IConstellation> void registerConstellation(T constellation) {
-        if(constellation instanceof IWeakConstellation) {
-            if(constellation instanceof IMajorConstellation) {
+        if (constellation instanceof IWeakConstellation) {
+            if (constellation instanceof IMajorConstellation) {
                 majorConstellations.add((IMajorConstellation) constellation);
             }
             weakConstellations.add((IWeakConstellation) constellation);
-        } else if(constellation instanceof IMinorConstellation) {
+        } else if (constellation instanceof IMinorConstellation) {
             minorConstellations.add((IMinorConstellation) constellation);
         } else {
-            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
+            AstralSorcery.log.warn(
+                "Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
             AstralSorcery.log.warn("Skipping specific constellation registration...");
             throw new IllegalStateException("Tried to register non-minor, non-weak and non-major constellation.");
         }
-        if(constellation instanceof IConstellationSpecialShowup) {
+        if (constellation instanceof IConstellationSpecialShowup) {
             specialShowupConstellations.add((IConstellationSpecialShowup) constellation);
         }
         generalConstellationList.add(constellation);
@@ -52,26 +54,30 @@ public class ConstellationRegistry {
 
     @Nullable
     public static IConstellation getConstellationByName(String name) {
-        if(name == null) return null;
+        if (name == null) return null;
 
-        for(IConstellation c : majorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
+        for (IConstellation c : majorConstellations) {
+            if (c.getUnlocalizedName()
+                .equals(name)) return c;
         }
-        for(IConstellation c : weakConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
+        for (IConstellation c : weakConstellations) {
+            if (c.getUnlocalizedName()
+                .equals(name)) return c;
         }
-        for(IConstellation c : minorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
+        for (IConstellation c : minorConstellations) {
+            if (c.getUnlocalizedName()
+                .equals(name)) return c;
         }
         return null;
     }
 
     @Nullable
     public static IMajorConstellation getMajorConstellationByName(String name) {
-        if(name == null) return null;
+        if (name == null) return null;
 
-        for(IMajorConstellation c : majorConstellations) {
-            if(c.getUnlocalizedName().equals(name)) return c;
+        for (IMajorConstellation c : majorConstellations) {
+            if (c.getUnlocalizedName()
+                .equals(name)) return c;
         }
         return null;
     }
@@ -80,7 +86,7 @@ public class ConstellationRegistry {
         List<IConstellation> resolved = new LinkedList<>();
         for (String s : constellationsAsStrings) {
             IConstellation c = getConstellationByName(s);
-            if(c != null) resolved.add(c);
+            if (c != null) resolved.add(c);
         }
         return resolved;
     }

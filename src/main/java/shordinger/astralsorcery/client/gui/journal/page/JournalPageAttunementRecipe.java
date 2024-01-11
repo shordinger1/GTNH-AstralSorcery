@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client.gui.journal.page;
 
+import java.awt.*;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
@@ -17,9 +21,6 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +44,8 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
     public static class Render extends JournalPageDiscoveryRecipe.Render {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridatt");
+        private static final BindableResource texGrid = AssetLibrary
+            .loadTexture(AssetLoader.TextureLocation.GUI, "gridatt");
 
         private final AttunementRecipe recipe;
 
@@ -55,16 +57,32 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
         protected void renderAltarSlots(float offsetX, float offsetY, float zLevel, AttunementRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAltarSlot(offsetX + 30, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT));
-            renderAltarSlot(offsetX +  30, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT));
+            renderAltarSlot(
+                offsetX + 30,
+                offsetY + 78,
+                zLevel,
+                recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_LEFT));
+            renderAltarSlot(
+                offsetX + 131,
+                offsetY + 78,
+                zLevel,
+                recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT));
+            renderAltarSlot(
+                offsetX + 30,
+                offsetY + 178,
+                zLevel,
+                recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_LEFT));
+            renderAltarSlot(
+                offsetX + 131,
+                offsetY + 178,
+                zLevel,
+                recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
         }
 
         protected void renderAltarSlot(float offsetX, float offsetY, float zLevel, java.util.List<ItemStack> stacks) {
-            if(stacks == null || stacks.isEmpty()) return;
+            if (stacks == null || stacks.isEmpty()) return;
 
             long select = ((ClientScheduler.getClientTick() + ((int) offsetX) * 40 + ((int) offsetY) * 40) / 20);
             select %= stacks.size();

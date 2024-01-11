@@ -8,7 +8,12 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import java.awt.*;
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
@@ -35,10 +40,6 @@ import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,16 +62,37 @@ public class KeyLightningArc extends KeyPerk {
     public KeyLightningArc(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                arcChance = cfg.getFloat("Chance", getConfigurationSection(), arcChance, 0F, 1F,
-                        "Sets the chance to spawn a damage-arc effect when an enemy is hit (value is in percent)");
-                arcPercent = cfg.getFloat("DamagePercent", getConfigurationSection(), arcPercent, 0.1F, 64F,
-                        "Defines the damage-multiplier which gets added to the damage dealt initially.");
-                distanceSearch = cfg.getFloat("Distance", getConfigurationSection(), distanceSearch, 0.2F, 16F,
-                        "Defines the distance for how far a single arc can jump/search for nearby entities");
-                arcTicks = cfg.getInt("DamageTicks", getConfigurationSection(), arcTicks, 1, 128,
-                        "Defines the amount of times an arc will repetitively chain between the mobs and deal damage after initially spawned/triggered");
+                arcChance = cfg.getFloat(
+                    "Chance",
+                    getConfigurationSection(),
+                    arcChance,
+                    0F,
+                    1F,
+                    "Sets the chance to spawn a damage-arc effect when an enemy is hit (value is in percent)");
+                arcPercent = cfg.getFloat(
+                    "DamagePercent",
+                    getConfigurationSection(),
+                    arcPercent,
+                    0.1F,
+                    64F,
+                    "Defines the damage-multiplier which gets added to the damage dealt initially.");
+                distanceSearch = cfg.getFloat(
+                    "Distance",
+                    getConfigurationSection(),
+                    distanceSearch,
+                    0.2F,
+                    16F,
+                    "Defines the distance for how far a single arc can jump/search for nearby entities");
+                arcTicks = cfg.getInt(
+                    "DamageTicks",
+                    getConfigurationSection(),
+                    arcTicks,
+                    1,
+                    128,
+                    "Defines the amount of times an arc will repetitively chain between the mobs and deal damage after initially spawned/triggered");
             }
         });
     }
@@ -95,11 +117,17 @@ public class KeyLightningArc extends KeyPerk {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (side == Side.SERVER && prog.hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {
                     float dmg = event.getAmount();
                     dmg = Math.max(MathHelper.sqrt(dmg), 1.5F);
-                    new RepetitiveArcEffect(player.world, player, arcTicks, event.getEntityLiving().getEntityId(), dmg).fire();
+                    new RepetitiveArcEffect(
+                        player.world,
+                        player,
+                        arcTicks,
+                        event.getEntityLiving()
+                            .getEntityId(),
+                        dmg).fire();
                 }
             }
         }
@@ -127,13 +155,23 @@ public class KeyLightningArc extends KeyPerk {
             }
 
             Color c = new Color(0x0195FF);
-            int chainTimes = Math.round(PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                    .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
+            int chainTimes = Math.round(
+                PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
+                    .modifyValue(
+                        player,
+                        ResearchManager.getProgress(player, Side.SERVER),
+                        AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS,
+                        arcBaseChains));
             List<EntityLivingBase> visitedEntities = Lists.newArrayList();
             Entity start = world.getEntityByID(entityStartId);
             if (start != null && start instanceof EntityLivingBase && !start.isDead) {
-                AxisAlignedBB box = new AxisAlignedBB(-distanceSearch, -distanceSearch, -distanceSearch,
-                        distanceSearch, distanceSearch, distanceSearch);
+                AxisAlignedBB box = new AxisAlignedBB(
+                    -distanceSearch,
+                    -distanceSearch,
+                    -distanceSearch,
+                    distanceSearch,
+                    distanceSearch,
+                    distanceSearch);
 
                 EntityLivingBase last = null;
                 EntityLivingBase entity = (EntityLivingBase) start;
@@ -142,10 +180,22 @@ public class KeyLightningArc extends KeyPerk {
                     chainTimes--;
 
                     if (last != null) {
-                        AstralSorcery.proxy.fireLightning(entity.getEntityWorld(), Vector3.atEntityCenter(last), Vector3.atEntityCenter(entity), c);
-                        AstralSorcery.proxy.fireLightning(entity.getEntityWorld(), Vector3.atEntityCenter(entity), Vector3.atEntityCenter(last), c);
+                        AstralSorcery.proxy.fireLightning(
+                            entity.getEntityWorld(),
+                            Vector3.atEntityCenter(last),
+                            Vector3.atEntityCenter(entity),
+                            c);
+                        AstralSorcery.proxy.fireLightning(
+                            entity.getEntityWorld(),
+                            Vector3.atEntityCenter(entity),
+                            Vector3.atEntityCenter(last),
+                            c);
                     }
-                    List<EntityLivingBase> entities = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, box.offset(entity.getPositionVector()), EntityUtils.selectEntities(EntityLivingBase.class));
+                    List<EntityLivingBase> entities = entity.getEntityWorld()
+                        .getEntitiesWithinAABB(
+                            EntityLivingBase.class,
+                            box.offset(entity.getPositionVector()),
+                            EntityUtils.selectEntities(EntityLivingBase.class));
                     entities.remove(entity);
                     if (last != null) {
                         entities.remove(last);
@@ -157,10 +207,11 @@ public class KeyLightningArc extends KeyPerk {
                     entities.removeIf(e -> e instanceof EntityTechnicalAmbient || e instanceof EntityFlare);
                     entities.removeIf(e -> !MiscUtils.canPlayerAttackServer(player, e));
 
-                    if(!entities.isEmpty()) {
-                        EntityLivingBase tmpEntity = entity; //Final for lambda
-                        EntityLivingBase closest = EntityUtils.selectClosest(entities, (e) -> (double) e.getDistance(tmpEntity));
-                        if(closest != null && !closest.isDead) {
+                    if (!entities.isEmpty()) {
+                        EntityLivingBase tmpEntity = entity; // Final for lambda
+                        EntityLivingBase closest = EntityUtils
+                            .selectClosest(entities, (e) -> (double) e.getDistance(tmpEntity));
+                        if (closest != null && !closest.isDead) {
                             last = entity;
                             entity = closest;
                         } else {

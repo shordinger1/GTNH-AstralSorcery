@@ -15,7 +15,6 @@ import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -24,7 +23,6 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
 import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
@@ -43,7 +41,13 @@ import javax.annotation.Nullable;
  */
 public class BlockCelestialGateway extends BlockContainer implements BlockStructureObserver {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(1D / 16D, 0D / 16D, 1D / 16D, 15D / 16D, 1D / 16D, 10D / 15D);
+    private static final AxisAlignedBB box = new AxisAlignedBB(
+        1D / 16D,
+        0D / 16D,
+        1D / 16D,
+        15D / 16D,
+        1D / 16D,
+        10D / 15D);
 
     public BlockCelestialGateway() {
         super(Material.ROCK, MapColor.BLACK);
@@ -60,9 +64,10 @@ public class BlockCelestialGateway extends BlockContainer implements BlockStruct
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                                ItemStack stack) {
         TileCelestialGateway gateway = MiscUtils.getTileAt(worldIn, pos, TileCelestialGateway.class, true);
-        if(gateway != null) {
+        if (gateway != null) {
             if (stack.hasDisplayName()) {
                 gateway.setGatewayName(stack.getDisplayName());
             }
@@ -103,7 +108,8 @@ public class BlockCelestialGateway extends BlockContainer implements BlockStruct
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

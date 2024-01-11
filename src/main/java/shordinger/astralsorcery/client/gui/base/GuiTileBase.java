@@ -35,8 +35,10 @@ public class GuiTileBase<T extends TileEntity> extends GuiWHScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if(te.isInvalid() || te.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
-            Minecraft.getMinecraft().displayGuiScreen(null);
+        if (te.isInvalid()
+            || te.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
+            Minecraft.getMinecraft()
+                .displayGuiScreen(null);
         }
     }
 

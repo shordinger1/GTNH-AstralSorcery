@@ -8,10 +8,11 @@
 
 package shordinger.astralsorcery.common.util;
 
-import shordinger.astralsorcery.AstralSorcery;
+import java.io.File;
 
 import javax.annotation.Nonnull;
-import java.io.File;
+
+import shordinger.astralsorcery.AstralSorcery;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +28,7 @@ public class FileStorageUtil {
     @Nonnull
     public static File getAstralSorceryDirectory() {
         File f = new File(System.getProperty("user.dir"), AstralSorcery.MODID);
-        if(!f.exists()) {
+        if (!f.exists()) {
             f.mkdirs();
         }
         return f;
@@ -36,7 +37,7 @@ public class FileStorageUtil {
     @Nonnull
     public static File getGeneralSubDirectory(String directoryName) {
         File f = new File(FileStorageUtil.getAstralSorceryDirectory(), directoryName);
-        if(!f.exists()) {
+        if (!f.exists()) {
             f.mkdirs();
         }
         return f;

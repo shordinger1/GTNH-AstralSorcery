@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common.base;
 
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
 import shordinger.astralsorcery.common.util.EntityUtils;
@@ -23,10 +29,6 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootContext;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootTable;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,7 +59,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
     public static void init() {
         register(new Squid());
 
-        //Register last! Least generic -> most generic...
+        // Register last! Least generic -> most generic...
         register(new GenericAnimal());
     }
 
@@ -71,13 +73,16 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
     public List<ItemStack> getHerdingDropsTick(T entity, World world, Random rand, float herdingLuck);
 
     @Nonnull
-    default <L extends EntityLiving> List<ItemStack> extractLootTable(L entity, World world, Random rand, float herdingLuck) {
+    default <L extends EntityLiving> List<ItemStack> extractLootTable(L entity, World world, Random rand,
+                                                                      float herdingLuck) {
         LootTable table = EntityUtils.getLootTable(entity);
         if (table == null) {
             return Lists.newArrayList();
         }
         LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
-        builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
+        builder.withDamageSource(CommonProxy.dmgSourceStellar)
+            .withLootedEntity(entity)
+            .withLuck(herdingLuck);
         return table.generateLootForPools(rand, builder.build());
     }
 
@@ -87,7 +92,6 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         public <E extends EntityLivingBase> boolean handles(@Nonnull E entity) {
             return EntityAnimal.class.isAssignableFrom(entity.getClass());
         }
-
 
         @Nonnull
         @Override
@@ -128,8 +132,8 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
 
         @Override
         public String getDescription() {
-            return "Defines a list of animals that can not be used in an bootes ritual to gain drops from. List animals with their registry name " +
-                    "(e.g. parrots would be 'minecraft:parrot')";
+            return "Defines a list of animals that can not be used in an bootes ritual to gain drops from. List animals with their registry name "
+                + "(e.g. parrots would be 'minecraft:parrot')";
         }
 
         @Nullable

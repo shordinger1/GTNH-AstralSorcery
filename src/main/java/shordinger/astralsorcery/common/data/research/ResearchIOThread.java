@@ -8,18 +8,19 @@
 
 package shordinger.astralsorcery.common.data.research;
 
-import com.google.common.collect.Maps;
-import com.google.common.io.Files;
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
+
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod

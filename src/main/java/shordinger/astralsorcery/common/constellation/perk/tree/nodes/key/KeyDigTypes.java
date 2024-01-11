@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -17,7 +18,6 @@ import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,10 +45,14 @@ public class KeyDigTypes extends KeyPerk {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             ItemStack heldMainHand = player.getHeldItemMainhand();
-            if(!heldMainHand.isEmpty() && heldMainHand.getItem().getToolClasses(heldMainHand).contains("pickaxe")) {
+            if (!heldMainHand.isEmpty() && heldMainHand.getItem()
+                .getToolClasses(heldMainHand)
+                .contains("pickaxe")) {
                 IBlockState tryHarvest = event.getTargetBlock();
-                String toolRequired = tryHarvest.getBlock().getHarvestTool(tryHarvest);
-                if(toolRequired == null || toolRequired.equalsIgnoreCase("shovel") || toolRequired.equalsIgnoreCase("axe")) {
+                String toolRequired = tryHarvest.getBlock()
+                    .getHarvestTool(tryHarvest);
+                if (toolRequired == null || toolRequired.equalsIgnoreCase("shovel")
+                    || toolRequired.equalsIgnoreCase("axe")) {
                     event.setCanHarvest(true);
                 }
             }
@@ -65,12 +69,21 @@ public class KeyDigTypes extends KeyPerk {
         if (prog.hasPerkEffect(this)) {
             IBlockState broken = event.getState();
             ItemStack playerMainHand = player.getHeldItemMainhand();
-            if(!playerMainHand.isEmpty()) {
-                if(playerMainHand.getItem().getToolClasses(playerMainHand).contains("pickaxe")) {
-                    if(!broken.getBlock().isToolEffective("pickaxe", broken)) {
-                        if(broken.getBlock().isToolEffective("shovel", broken) || broken.getBlock().isToolEffective("axe", broken)) {
+            if (!playerMainHand.isEmpty()) {
+                if (playerMainHand.getItem()
+                    .getToolClasses(playerMainHand)
+                    .contains("pickaxe")) {
+                    if (!broken.getBlock()
+                        .isToolEffective("pickaxe", broken)) {
+                        if (broken.getBlock()
+                            .isToolEffective("shovel", broken)
+                            || broken.getBlock()
+                            .isToolEffective("axe", broken)) {
                             checkingSpeed = true;
-                            event.setNewSpeed(Math.max(event.getNewSpeed(), playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
+                            event.setNewSpeed(
+                                Math.max(
+                                    event.getNewSpeed(),
+                                    playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
                             checkingSpeed = false;
                         }
                     }

@@ -8,7 +8,10 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -20,9 +23,6 @@ import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -32,7 +32,8 @@ import java.util.Set;
  */
 public class ItemCrystalPickaxe extends ItemCrystalToolBase {
 
-    private static final Set<Block> EFFECTIVE_SET = Sets.newHashSet(Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE, Blocks.OBSIDIAN);
+    private static final Set<Block> EFFECTIVE_SET = Sets
+        .newHashSet(Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE, Blocks.OBSIDIAN);
 
     public ItemCrystalPickaxe() {
         super(3, EFFECTIVE_SET);
@@ -52,7 +53,7 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
         }
     }
 
-    //Copy-Paste from ItemPickaxe - i'm so sorry.
+    // Copy-Paste from ItemPickaxe - i'm so sorry.
     @Override
     public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
         Block block = state.getBlock();

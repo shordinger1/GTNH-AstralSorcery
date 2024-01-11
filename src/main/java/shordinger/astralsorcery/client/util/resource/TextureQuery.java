@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.client.util.resource;
 
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +32,7 @@ public class TextureQuery {
 
     @SideOnly(Side.CLIENT)
     public AbstractRenderableTexture resolve() {
-        if(resolvedResource == null) {
+        if (resolvedResource == null) {
             resolvedResource = AssetLibrary.loadTexture(location, name);
         }
         return (AbstractRenderableTexture) resolvedResource;

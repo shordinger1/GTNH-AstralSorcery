@@ -36,7 +36,9 @@ public class RegistryPotions {
     }
 
     private static <T extends Potion> T registerPotion(T potion) {
-        potion.setRegistryName(potion.getClass().getSimpleName());
+        potion.setRegistryName(
+            potion.getClass()
+                .getSimpleName());
         CommonProxy.registryPrimer.register(potion);
         return potion;
     }

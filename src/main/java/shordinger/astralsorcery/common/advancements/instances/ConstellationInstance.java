@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.advancements.instances;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import shordinger.astralsorcery.common.constellation.*;
 import shordinger.wrapper.net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +42,8 @@ public class ConstellationInstance extends AbstractCriterionInstance {
         if (constellationMajor && !(discovered instanceof IMajorConstellation)) {
             return false;
         }
-        if (constellationWeak && (!(discovered instanceof IWeakConstellation) || discovered instanceof IMajorConstellation)) {
+        if (constellationWeak
+            && (!(discovered instanceof IWeakConstellation) || discovered instanceof IMajorConstellation)) {
             return false;
         }
         if (constellationMinor && !(discovered instanceof IMinorConstellation)) {
@@ -53,10 +55,11 @@ public class ConstellationInstance extends AbstractCriterionInstance {
     public static ConstellationInstance deserialize(ResourceLocation id, JsonObject json) {
         ConstellationInstance ci = new ConstellationInstance(id);
         ci.constellationMajor = JsonUtils.getBoolean(json, "major", false);
-        ci.constellationWeak  = JsonUtils.getBoolean(json, "weak", false);
+        ci.constellationWeak = JsonUtils.getBoolean(json, "weak", false);
         ci.constellationMinor = JsonUtils.getBoolean(json, "minor", false);
         for (JsonElement je : JsonUtils.getJsonArray(json, "constellations", new JsonArray())) {
-            if (!je.isJsonPrimitive() || je.getAsJsonPrimitive().isString()) {
+            if (!je.isJsonPrimitive() || je.getAsJsonPrimitive()
+                .isString()) {
                 continue;
             }
             IConstellation cst = ConstellationRegistry.getConstellationByName(je.getAsString());

@@ -8,7 +8,14 @@
 
 package shordinger.astralsorcery.common.util;
 
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.UUID;
+
 import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktPlayerStatus;
@@ -18,12 +25,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.InputEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,7 @@ import java.util.UUID;
  */
 public class PlayerActivityManager implements ITickHandler {
 
-    private static final long INACTIVITY_MS = 5 * 60 * 1000; //5 minutes.
+    private static final long INACTIVITY_MS = 5 * 60 * 1000; // 5 minutes.
     public static final PlayerActivityManager INSTANCE = new PlayerActivityManager();
     private Map<UUID, Boolean> serverActivityMap = Maps.newHashMap();
 

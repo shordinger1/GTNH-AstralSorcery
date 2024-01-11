@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
-import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,22 +45,22 @@ public class ToolCrystalProperties extends CrystalProperties {
             totalPurity += c.getPurity();
             totalCollectivity += c.getCollectiveCapability();
             frac += c.getFracturation();
-            if(c.getSizeOverride() >= 0) {
+            if (c.getSizeOverride() >= 0) {
                 ovr += (c.getSizeOverride() - MAX_SIZE_CELESTIAL);
             }
         }
-        if(ovr != 0) {
+        if (ovr != 0) {
             ovr /= properties.size();
             ovr += MAX_SIZE_CELESTIAL * properties.size();
         } else {
             ovr = -1;
         }
         return new ToolCrystalProperties(
-                totalSize,
-                totalPurity / properties.size(),
-                totalCollectivity / properties.size(),
-                frac / properties.size(),
-                ovr);
+            totalSize,
+            totalPurity / properties.size(),
+            totalCollectivity / properties.size(),
+            frac / properties.size(),
+            ovr);
     }
 
     public static ToolCrystalProperties readFromNBT(NBTTagCompound compound) {
@@ -74,19 +75,24 @@ public class ToolCrystalProperties extends CrystalProperties {
 
     public ToolCrystalProperties copyDamagedCutting() {
         return new ToolCrystalProperties(
-                this.size,
-                this.purity,
-                Math.max(0, this.collectiveCapability - 1),
-                this.fractured,
-                this.sizeOverride);
+            this.size,
+            this.purity,
+            Math.max(0, this.collectiveCapability - 1),
+            this.fractured,
+            this.sizeOverride);
     }
 
-    //Return null if the tool should break during grind.
+    // Return null if the tool should break during grind.
     @Nullable
     public ToolCrystalProperties grindCopy(Random rand) {
         CrystalProperties out = super.grindCopy(rand);
-        if(out == null) return null;
-        return new ToolCrystalProperties(out.size, out.purity, out.collectiveCapability, out.fractured, out.sizeOverride);
+        if (out == null) return null;
+        return new ToolCrystalProperties(
+            out.size,
+            out.purity,
+            out.collectiveCapability,
+            out.fractured,
+            out.sizeOverride);
     }
 
     public float getEfficiencyMultiplier() {

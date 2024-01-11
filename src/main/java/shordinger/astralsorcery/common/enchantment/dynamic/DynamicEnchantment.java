@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.enchantment.dynamic;
 
-import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,8 +28,9 @@ public class DynamicEnchantment {
     protected int levelAddition;
 
     public DynamicEnchantment(Type type, @Nonnull Enchantment enchantment, int levelAddition) {
-        if(!type.hasEnchantmentTag()) {
-            throw new IllegalArgumentException("Tried to create amulet enchantment that doesn't requires a std. enchantment together with an enchantment!");
+        if (!type.hasEnchantmentTag()) {
+            throw new IllegalArgumentException(
+                "Tried to create amulet enchantment that doesn't requires a std. enchantment together with an enchantment!");
         }
         this.type = type;
         this.enchantment = enchantment;
@@ -37,8 +38,9 @@ public class DynamicEnchantment {
     }
 
     public DynamicEnchantment(Type type, int levelAddition) {
-        if(type.hasEnchantmentTag()) {
-            throw new IllegalArgumentException("Tried to create amulet enchantment that requires a std. enchantment without an enchantment!");
+        if (type.hasEnchantmentTag()) {
+            throw new IllegalArgumentException(
+                "Tried to create amulet enchantment that requires a std. enchantment without an enchantment!");
         }
         this.type = type;
         this.enchantment = null;
@@ -69,14 +71,15 @@ public class DynamicEnchantment {
 
     @Nonnull
     public DynamicEnchantment copy(int level) {
-        if (this.getType().hasEnchantmentTag()) {
+        if (this.getType()
+            .hasEnchantmentTag()) {
             return new DynamicEnchantment(this.getType(), this.getEnchantment(), level);
         } else {
             return new DynamicEnchantment(this.type, level);
         }
     }
 
-    //The ordering in the enum defines the order of how the types of enchantments are applied/calculated!
+    // The ordering in the enum defines the order of how the types of enchantments are applied/calculated!
     public enum Type {
 
         ADD_TO_SPECIFIC,

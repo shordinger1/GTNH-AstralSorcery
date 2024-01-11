@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.data.config.entry;
 
-import com.google.common.collect.Lists;
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.wrapper.net.minecraftforge.common.BiomeDictionary;
-import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import com.google.common.collect.Lists;
+
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.wrapper.net.minecraftforge.common.BiomeDictionary;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +39,8 @@ public class WorldGenEntry extends ConfigEntry {
 
     private boolean loaded = false;
 
-    public WorldGenEntry(String key, int defaultChance, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... applicableTypes) {
+    public WorldGenEntry(String key, int defaultChance, boolean ignoreBiomeSpecifications,
+                         BiomeDictionary.Type... applicableTypes) {
         super(Section.WORLDGEN, key);
         this.doIgnoreBiomeSpecifications = ignoreBiomeSpecifications;
         this.generationChance = defaultChance;
@@ -50,28 +52,66 @@ public class WorldGenEntry extends ConfigEntry {
     @Override
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
-        doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), this.doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
-        doIgnoreDimensionSpecifications = cfg.getBoolean("IgnoreDimensionSettings", getConfigurationSection(), this.doIgnoreDimensionSpecifications, "Ignore dimension-whitelist when trying to generate " + getKey());
-        generationChance = cfg.getInt("Chance", getConfigurationSection(), this.generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
-        minY = cfg.getInt("MinY" , getConfigurationSection(), this.minY, 0, 255, "Set the minimum Y level to spawn this structure on");
-        maxY = cfg.getInt("MaxY" , getConfigurationSection(), this.maxY, 0, 255, "Set the maximum Y level to spawn this structure on");
-        String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), getDefaultBiomeTypes(), "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
+        doIgnoreBiomeSpecifications = cfg.getBoolean(
+            "IgnoreBiomes",
+            getConfigurationSection(),
+            this.doIgnoreBiomeSpecifications,
+            "Ignore Biome specifications when trying to generate " + getKey());
+        doIgnoreDimensionSpecifications = cfg.getBoolean(
+            "IgnoreDimensionSettings",
+            getConfigurationSection(),
+            this.doIgnoreDimensionSpecifications,
+            "Ignore dimension-whitelist when trying to generate " + getKey());
+        generationChance = cfg.getInt(
+            "Chance",
+            getConfigurationSection(),
+            this.generationChance,
+            1,
+            Integer.MAX_VALUE,
+            "Chance to generate the structure in a chunk. The higher, the lower the chance.");
+        minY = cfg.getInt(
+            "MinY",
+            getConfigurationSection(),
+            this.minY,
+            0,
+            255,
+            "Set the minimum Y level to spawn this structure on");
+        maxY = cfg.getInt(
+            "MaxY",
+            getConfigurationSection(),
+            this.maxY,
+            0,
+            255,
+            "Set the maximum Y level to spawn this structure on");
+        String[] strTypes = cfg.getStringList(
+            "BiomeTypes",
+            getConfigurationSection(),
+            getDefaultBiomeTypes(),
+            "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
         List<BiomeDictionary.Type> resolvedTypes = new LinkedList<>();
         for (String s : strTypes) {
             try {
                 resolvedTypes.add(BiomeDictionary.Type.getType(s));
             } catch (Exception e) {
-                AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+                AstralSorcery.log.error(
+                    "Could not find BiomeType by name '" + s
+                        + "' - Ignoring BiomeType specification for structure "
+                        + getKey());
             }
         }
         biomeTypes = Lists.newArrayList(resolvedTypes);
-        String[] dimensionWhitelist = cfg.getStringList("DimensionWhitelist", getConfigurationSection(), new String[0], "Define an array of dimensionID's where the structure is allowed to spawn in.");
+        String[] dimensionWhitelist = cfg.getStringList(
+            "DimensionWhitelist",
+            getConfigurationSection(),
+            new String[0],
+            "Define an array of dimensionID's where the structure is allowed to spawn in.");
         applicableDimensions = new ArrayList<>();
         for (String s : dimensionWhitelist) {
             try {
                 applicableDimensions.add(Integer.parseInt(s));
             } catch (NumberFormatException exc) {
-                AstralSorcery.log.error("Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+                AstralSorcery.log
+                    .error("Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
             }
         }
         loaded = true;
@@ -87,12 +127,12 @@ public class WorldGenEntry extends ConfigEntry {
     }
 
     public void setMinY(int minY) {
-        if(loaded) return;
+        if (loaded) return;
         this.minY = minY;
     }
 
     public void setMaxY(int maxY) {
-        if(loaded) return;
+        if (loaded) return;
         this.maxY = maxY;
     }
 

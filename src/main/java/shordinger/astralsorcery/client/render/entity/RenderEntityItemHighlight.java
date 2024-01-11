@@ -33,12 +33,17 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
     public RenderEntityItemHighlight(RenderManager renderManager) {
         super(renderManager);
-        renderItem = new RenderEntityItem(renderManager, Minecraft.getMinecraft().getRenderItem());
+        renderItem = new RenderEntityItem(
+            renderManager,
+            Minecraft.getMinecraft()
+                .getRenderItem());
     }
 
     @Override
-    public void doRender(EntityItemHighlighted entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        RenderingUtils.renderLightRayEffects(x, y + 0.5, z, entity.getHighlightColor(), 16024L, entity.getAge(), 16, 20, 5);
+    public void doRender(EntityItemHighlighted entity, double x, double y, double z, float entityYaw,
+                         float partialTicks) {
+        RenderingUtils
+            .renderLightRayEffects(x, y + 0.5, z, entity.getHighlightColor(), 16024L, entity.getAge(), 16, 20, 5);
 
         GlStateManager.pushMatrix();
         ItemStack stack = entity.getItem();

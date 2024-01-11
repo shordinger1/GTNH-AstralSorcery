@@ -55,10 +55,15 @@ public abstract class ContainerAltarBase extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (this instanceof ContainerAltarTrait && index >= 0 && index < 36 &&
-                    itemstack1.getItem() instanceof ItemConstellationFocus &&
-                    ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
-                if (this.mergeItemStack(itemstack1, ((ContainerAltarTrait) this).focusSlot.slotNumber, ((ContainerAltarTrait) this).focusSlot.slotNumber + 1, false)) {
+            if (this instanceof ContainerAltarTrait && index >= 0
+                && index < 36
+                && itemstack1.getItem() instanceof ItemConstellationFocus
+                && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
+                if (this.mergeItemStack(
+                    itemstack1,
+                    ((ContainerAltarTrait) this).focusSlot.slotNumber,
+                    ((ContainerAltarTrait) this).focusSlot.slotNumber + 1,
+                    false)) {
                     return itemstack;
                 }
             }
@@ -93,7 +98,8 @@ public abstract class ContainerAltarBase extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         BlockPos pos = this.tileAltar.getPos();
-        if (this.tileAltar.getWorld().getTileEntity(pos) != this.tileAltar) {
+        if (this.tileAltar.getWorld()
+            .getTileEntity(pos) != this.tileAltar) {
             return false;
         } else {
             return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;

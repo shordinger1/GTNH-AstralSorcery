@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
+import java.util.Random;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.NetworkManager;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,13 +33,13 @@ public abstract class TileEntitySynchronized extends TileEntity {
         readSaveNBT(compound);
     }
 
-    //Both Network & Chunk-saving
+    // Both Network & Chunk-saving
     public void readCustomNBT(NBTTagCompound compound) {}
 
-    //Only Network-read
+    // Only Network-read
     public void readNetNBT(NBTTagCompound compound) {}
 
-    //Only Chunk-read
+    // Only Chunk-read
     public void readSaveNBT(NBTTagCompound compound) {}
 
     public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -49,13 +49,13 @@ public abstract class TileEntitySynchronized extends TileEntity {
         return compound;
     }
 
-    //Both Network & Chunk-saving
+    // Both Network & Chunk-saving
     public void writeCustomNBT(NBTTagCompound compound) {}
 
-    //Only Network-write
+    // Only Network-write
     public void writeNetNBT(NBTTagCompound compound) {}
 
-    //Only Chunk-write
+    // Only Chunk-write
     public void writeSaveNBT(NBTTagCompound compound) {}
 
     @Override

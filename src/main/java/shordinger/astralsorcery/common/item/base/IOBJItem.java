@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.item.base;
 
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
 import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,8 @@ import javax.annotation.Nullable;
  */
 public interface IOBJItem {
 
-    //If false is returned, getOBJModelNames will be queried to applyServer OBJ resource locations directly instead of remotely.
+    // If false is returned, getOBJModelNames will be queried to applyServer OBJ resource locations directly instead of
+    // remotely.
     @SideOnly(Side.CLIENT)
     default public boolean hasOBJAsSubmodelDefinition() {
         return false;

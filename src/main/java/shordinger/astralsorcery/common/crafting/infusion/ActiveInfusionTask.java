@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
@@ -17,14 +26,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,9 +53,9 @@ public class ActiveInfusionTask {
     }
 
     public int getChaliceRequiredAmount() {
-        return recipeToCraft.doesConsumeMultiple() ?
-                MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400 * 12) :
-                MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400);
+        return recipeToCraft.doesConsumeMultiple()
+            ? MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400 * 12)
+            : MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400);
     }
 
     public UUID getPlayerCraftingUUID() {
@@ -63,7 +64,10 @@ public class ActiveInfusionTask {
 
     @Nullable
     public EntityPlayer tryGetCraftingPlayerServer() {
-        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerCraftingUUID);
+        return FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .getPlayerList()
+            .getPlayerByUUID(playerCraftingUUID);
     }
 
     public boolean tick(TileStarlightInfuser infuser) {
@@ -72,7 +76,7 @@ public class ActiveInfusionTask {
 
         for (BlockPos bp : this.pendingChalicePositions) {
             TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), bp, TileChalice.class, true);
-            if(test != null) {
+            if (test != null) {
                 this.supportingChalices.add(test);
             }
         }
@@ -87,10 +91,12 @@ public class ActiveInfusionTask {
                 change = true;
             } else {
                 TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), tc.getPos(), TileChalice.class, true);
-                if(test == null ||
-                        test.getTank() == null ||
-                        test.getTank().getFluid() == null ||
-                        !test.getTank().getFluid().containsFluid(fl)) {
+                if (test == null || test.getTank() == null
+                    || test.getTank()
+                    .getFluid() == null
+                    || !test.getTank()
+                    .getFluid()
+                    .containsFluid(fl)) {
                     iterator.remove();
                     change = true;
                 }
@@ -111,7 +117,7 @@ public class ActiveInfusionTask {
         return supportingChalices;
     }
 
-    //Used on clientside for rendering since we don't resolve the tile there
+    // Used on clientside for rendering since we don't resolve the tile there
     @SideOnly(Side.CLIENT)
     public List<BlockPos> getPendingChalicePositions() {
         return pendingChalicePositions;
@@ -122,8 +128,8 @@ public class ActiveInfusionTask {
     }
 
     public boolean isFinished() {
-        return ticksCrafting >= (recipeToCraft.craftingTickTime() *
-                (recipeToCraft.canBeSupportedByChalice() && !supportingChalices.isEmpty() ? 0.3F : 1F));
+        return ticksCrafting >= (recipeToCraft.craftingTickTime()
+            * (recipeToCraft.canBeSupportedByChalice() && !supportingChalices.isEmpty() ? 0.3F : 1F));
     }
 
     public void forceTick(int tick) {

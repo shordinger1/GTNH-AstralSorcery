@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
+import java.util.EnumSet;
+
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import shordinger.astralsorcery.common.event.DynamicEnchantmentEvent;
@@ -21,8 +23,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.event.AttachCapabilitiesEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.EnumSet;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,18 +39,21 @@ public class PlayerAmuletHandler implements ITickHandler {
 
     @SubscribeEvent
     public void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
-        if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
-            itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
+        if (!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
+            itemCapEvent
+                .addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
         }
     }
 
     @SubscribeEvent
     public void onAmuletEnchantApply(DynamicEnchantmentEvent.Add event) {
-        if(EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
-        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
-        if(linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
+        if (EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
+        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper
+            .getWornAmulet(event.getEnchantedItemStack());
+        if (linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
 
-        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
+        event.getEnchantmentsToApply()
+            .addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
     }
 
     @Override
@@ -62,7 +65,7 @@ public class PlayerAmuletHandler implements ITickHandler {
         boolean client = player.getEntityWorld().isRemote;
         for (EnchantmentPlayerWornTick e : RegistryEnchantments.wearableTickEnchantments) {
             int max = EnchantmentHelper.getMaxEnchantmentLevel(e, player);
-            if(max > 0) {
+            if (max > 0) {
                 e.onWornTick(client, player, max);
             }
         }

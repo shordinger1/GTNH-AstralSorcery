@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -23,7 +24,6 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.event.world.BlockEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,14 +59,17 @@ public class EvorsioRootPerk extends RootPerk {
                 gainedExp = 0.5F;
             }
             if (gainedExp <= 0) {
-                return; //Unbreakable lol. you're not getting exp for that.
+                return; // Unbreakable lol. you're not getting exp for that.
             }
             gainedExp *= 0.15F;
             gainedExp *= expMultiplier;
-            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
-            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, gainedExp);
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
             gainedExp = (float) Math.sqrt(gainedExp);
-            gainedExp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
+            gainedExp = AttributeEvent
+                .postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
 
             float xpGain = gainedExp;
             LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Evorsio)");

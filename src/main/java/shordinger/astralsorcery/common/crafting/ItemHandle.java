@@ -8,13 +8,21 @@
 
 package shordinger.astralsorcery.common.crafting;
 
+import java.lang.reflect.Constructor;
+import java.util.*;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.FluidIngredient;
 import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.astralsorcery.common.util.ItemUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
@@ -25,15 +33,8 @@ import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
 import shordinger.wrapper.net.minecraftforge.fluids.UniversalBucket;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 import shordinger.wrapper.net.minecraftforge.oredict.OreIngredient;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -111,8 +112,8 @@ public final class ItemHandle {
     }
 
     public static ItemHandle getCrystalVariant(boolean hasToBeTuned, boolean hasToBeCelestial) {
-        if(hasToBeTuned) {
-            if(hasToBeCelestial) {
+        if (hasToBeTuned) {
+            if (hasToBeCelestial) {
                 return new ItemHandle(new ItemStack(ItemsAS.tunedCelestialCrystal));
             }
 
@@ -120,7 +121,7 @@ public final class ItemHandle {
             handle.applicableItems.add(new ItemStack(ItemsAS.tunedCelestialCrystal));
             return handle;
         } else {
-            if(hasToBeCelestial) {
+            if (hasToBeCelestial) {
                 ItemHandle handle = new ItemHandle(new ItemStack(ItemsAS.celestialCrystal));
                 handle.applicableItems.add(new ItemStack(ItemsAS.tunedCelestialCrystal));
                 return handle;
@@ -135,20 +136,27 @@ public final class ItemHandle {
     }
 
     public NonNullList<ItemStack> getApplicableItems() {
-        if(oreDictName != null) {
+        if (oreDictName != null) {
             NonNullList<ItemStack> stacks = OreDictionary.getOres(oreDictName);
 
             NonNullList<ItemStack> out = NonNullList.create();
             for (ItemStack oreDictIn : stacks) {
                 if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                    oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
+                    oreDictIn.getItem()
+                        .getSubItems(
+                            oreDictIn.getItem()
+                                .getCreativeTab(),
+                            out);
                 } else {
                     out.add(oreDictIn);
                 }
             }
             return out;
-        } else if(fluidTypeAndAmount != null) {
-            return NonNullList.withSize(1, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid()));
+        } else if (fluidTypeAndAmount != null) {
+            return NonNullList.withSize(
+                1,
+                UniversalBucket
+                    .getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid()));
         } else {
             NonNullList<ItemStack> l = NonNullList.create();
             l.addAll(applicableItems);
@@ -158,11 +166,12 @@ public final class ItemHandle {
 
     @Deprecated
     public Object getObjectForRecipe() {
-        if(oreDictName != null) {
+        if (oreDictName != null) {
             return oreDictName;
         }
-        if(fluidTypeAndAmount != null) {
-            return UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid());
+        if (fluidTypeAndAmount != null) {
+            return UniversalBucket
+                .getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid());
         }
         return applicableItems;
     }
@@ -173,10 +182,10 @@ public final class ItemHandle {
         Iterator<ItemStack> iterator = applicable.iterator();
         while (iterator.hasNext()) {
             ItemStack stack = iterator.next();
-            if(stack.isEmpty()) continue;
+            if (stack.isEmpty()) continue;
             Item i = stack.getItem();
-            if(!ignoreGatingRequirement && i instanceof ItemGatedVisibility) {
-                if(!((ItemGatedVisibility) i).isSupposedToSeeInRender(stack)) {
+            if (!ignoreGatingRequirement && i instanceof ItemGatedVisibility) {
+                if (!((ItemGatedVisibility) i).isSupposedToSeeInRender(stack)) {
                     iterator.remove();
                 }
             }
@@ -184,7 +193,7 @@ public final class ItemHandle {
         return applicable;
     }
 
-    //CACHE THIS !!!111ELEVEN11!
+    // CACHE THIS !!!111ELEVEN11!
     public Ingredient getRecipeIngredient() {
         switch (handleType) {
             case OREDICT:
@@ -197,7 +206,7 @@ public final class ItemHandle {
                 for (ItemStack stack : this.applicableItems) {
                     if (!stack.isEmpty()) {
                         Ingredient i = new HandleIngredient(stack);
-                        if(i != Ingredient.EMPTY) {
+                        if (i != Ingredient.EMPTY) {
                             ingredients.add(i);
                         }
                     }
@@ -220,7 +229,7 @@ public final class ItemHandle {
     }
 
     public boolean matchCrafting(ItemStack stack) {
-        if(stack.isEmpty()) return false;
+        if (stack.isEmpty()) return false;
 
         switch (handleType) {
             case OREDICT:
@@ -233,17 +242,25 @@ public final class ItemHandle {
                 return false;
             case STACK:
                 for (ItemStack applicable : applicableItems) {
-                    if (ItemComparator.compare(applicable, stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_WILDCARD, ItemComparator.Clause.NBT_LEAST)) {
+                    if (ItemComparator.compare(
+                        applicable,
+                        stack,
+                        ItemComparator.Clause.ITEM,
+                        ItemComparator.Clause.META_WILDCARD,
+                        ItemComparator.Clause.NBT_LEAST)) {
                         return true;
                     }
                 }
                 return false;
             case FLUID:
                 FluidStack contained = FluidUtil.getFluidContained(stack);
-                if(contained == null || contained.getFluid() == null || !contained.getFluid().equals(fluidTypeAndAmount.getFluid())) {
+                if (contained == null || contained.getFluid() == null
+                    || !contained.getFluid()
+                    .equals(fluidTypeAndAmount.getFluid())) {
                     return false;
                 }
-                return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false).isSuccess();
+                return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false)
+                    .isSuccess();
             default:
                 break;
         }
@@ -297,7 +314,8 @@ public final class ItemHandle {
         try {
             ctor = CompoundIngredient.class.getDeclaredConstructor(Collection.class);
         } catch (Exception exc) {
-            throw new IllegalStateException("Could not find CompoundIngredient Constructor! Recipes can't be created; Exiting execution! Try with AS and forge alone first! Please report this along with exact forge version and other mods.");
+            throw new IllegalStateException(
+                "Could not find CompoundIngredient Constructor! Recipes can't be created; Exiting execution! Try with AS and forge alone first! Please report this along with exact forge version and other mods.");
         }
         ctor.setAccessible(true);
         COMPOUND_CTOR = ctor;
@@ -316,10 +334,12 @@ public final class ItemHandle {
             }
 
             for (ItemStack thisStack : this.matchingStacks) {
-                if (ItemComparator.compare(thisStack, other,
-                        ItemComparator.Clause.ITEM,
-                        ItemComparator.Clause.META_WILDCARD,
-                        ItemComparator.Clause.NBT_LEAST)) {
+                if (ItemComparator.compare(
+                    thisStack,
+                    other,
+                    ItemComparator.Clause.ITEM,
+                    ItemComparator.Clause.META_WILDCARD,
+                    ItemComparator.Clause.NBT_LEAST)) {
                     return true;
                 }
             }

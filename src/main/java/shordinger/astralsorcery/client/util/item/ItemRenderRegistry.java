@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.client.util.item;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import shordinger.wrapper.net.minecraft.client.renderer.ItemMeshDefinition;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,9 +19,6 @@ import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.client.model.ModelLoader;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,21 +37,24 @@ public class ItemRenderRegistry {
     }
 
     public static boolean shouldHandleItemRendering(ItemStack stack) {
-        if(stack.getItem() == Items.AIR) return false;
-        //ResourceLocation entry = stack.getAttItem().getRegistryName();
-        ResourceLocation entry = getWrappedLocation(stack.getItem().getRegistryName());
+        if (stack.getItem() == Items.AIR) return false;
+        // ResourceLocation entry = stack.getAttItem().getRegistryName();
+        ResourceLocation entry = getWrappedLocation(
+            stack.getItem()
+                .getRegistryName());
         return entry != null && isRegistered(entry);
     }
 
     public static void renderItemStack(ItemStack stack) {
-        //Since shouldHandleItemRendering checks for valid ResourceLocation, we can access it without checking.
-        ResourceLocation loc = stack.getItem().getRegistryName();
-        //IItemRenderer renderer = registeredItems.get(loc);
+        // Since shouldHandleItemRendering checks for valid ResourceLocation, we can access it without checking.
+        ResourceLocation loc = stack.getItem()
+            .getRegistryName();
+        // IItemRenderer renderer = registeredItems.get(loc);
         IItemRenderer renderer = registeredItems.get(getWrappedLocation(loc));
         renderer.render(stack);
     }
 
-    //Deprecated. Still works tho. We'll use it until it's removed.
+    // Deprecated. Still works tho. We'll use it until it's removed.
     public static void registerCameraTransforms(Item item, ItemCameraTransforms additionalTransforms) {
         registeredCameraTransforms.put(item.getRegistryName(), additionalTransforms);
     }
@@ -62,11 +65,11 @@ public class ItemRenderRegistry {
 
     public static void register(Item item, IItemRenderer renderer) {
         ResourceLocation loc = item.getRegistryName();
-        //registeredItems.put(loc, renderer);
+        // registeredItems.put(loc, renderer);
         registeredItems.put(getWrappedLocation(loc), renderer);
 
-        //We need to register it to the IMM to prevent "misconceptions"
-        //Without, the ItemRenderer assumes there is no Model defined for the Item. We dummy it out so we can redirect.
+        // We need to register it to the IMM to prevent "misconceptions"
+        // Without, the ItemRenderer assumes there is no Model defined for the Item. We dummy it out so we can redirect.
         ModelLoader.setCustomMeshDefinition(item, new DummyMeshDefinition(loc));
     }
 

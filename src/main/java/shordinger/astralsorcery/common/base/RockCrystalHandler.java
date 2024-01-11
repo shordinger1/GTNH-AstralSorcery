@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.base;
 
+import java.util.*;
+import java.util.concurrent.Callable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
@@ -26,11 +32,6 @@ import shordinger.wrapper.net.minecraftforge.common.util.INBTSerializable;
 import shordinger.wrapper.net.minecraftforge.event.AttachCapabilitiesEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.concurrent.Callable;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -40,7 +41,9 @@ import java.util.concurrent.Callable;
  */
 public class RockCrystalHandler {
 
-    private static final ResourceLocation CAP_ROCKCRYSTAL_NAME = new ResourceLocation(AstralSorcery.MODID, "cap_chunk_rock_crystal_position");
+    private static final ResourceLocation CAP_ROCKCRYSTAL_NAME = new ResourceLocation(
+        AstralSorcery.MODID,
+        "cap_chunk_rock_crystal_position");
     public static RockCrystalHandler INSTANCE = new RockCrystalHandler();
 
     @CapabilityInject(RockCrystalPositions.class)
@@ -166,6 +169,7 @@ public class RockCrystalHandler {
     }
 
     public static class ChunkFluidEntryFactory implements Callable<RockCrystalPositions> {
+
         @Override
         public RockCrystalPositions call() throws Exception {
             return new RockCrystalPositions();

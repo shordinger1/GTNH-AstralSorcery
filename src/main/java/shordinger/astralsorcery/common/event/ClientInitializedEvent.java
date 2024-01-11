@@ -17,5 +17,6 @@ import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
  * Created by HellFirePvP
  * Date: 04.08.2016 / 11:36
  */
-//Fired, when the client is done loading and the 1st clientTick happened.
-public class ClientInitializedEvent extends Event {}
+// Fired, when the client is done loading and the 1st clientTick happened.
+public class ClientInitializedEvent extends Event {
+}

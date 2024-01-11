@@ -35,11 +35,11 @@ public class AssetLibrary implements IResourceManagerReloadListener {
     private AssetLibrary() {}
 
     public static BindableResource loadTexture(AssetLoader.TextureLocation location, String name) {
-        if(name.endsWith(".png")) {
+        if (name.endsWith(".png")) {
             throw new IllegalArgumentException("Tried to loadTexture with appended .png from the AssetLibrary!");
         }
         Map<String, BindableResource> resources = loadedTextures.computeIfAbsent(location, l -> new HashMap<>());
-        if(resources.containsKey(name)) {
+        if (resources.containsKey(name)) {
             return resources.get(name);
         }
         BindableResource res = AssetLoader.load(AssetLoader.AssetLocation.TEXTURES, location, name, ".png");
@@ -49,12 +49,12 @@ public class AssetLibrary implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@Nullable IResourceManager resourceManager) {
-        if(reloading) return;
+        if (reloading) return;
         reloading = true;
         AstralSorcery.log.info("[AssetLibrary] Refreshing and Invalidating Resources");
         for (Map<String, BindableResource> map : loadedTextures.values()) {
             for (BindableResource res : map.values()) {
-                res.invalidateAndReload(); //Massively unloading all textures.
+                res.invalidateAndReload(); // Massively unloading all textures.
             }
         }
         reloading = false;

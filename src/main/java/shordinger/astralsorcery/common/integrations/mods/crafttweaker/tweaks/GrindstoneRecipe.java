@@ -55,7 +55,7 @@ public class GrindstoneRecipe extends BaseTweaker {
 
     private static void addRecipeInternal(IIngredient obj, IItemStack output, float doubleChance) {
         ItemHandle in = convertToHandle(obj);
-        if (in == null || in.handleType == ItemHandle.Type.FLUID) { //No fluid inputs :thonk:
+        if (in == null || in.handleType == ItemHandle.Type.FLUID) { // No fluid inputs :thonk:
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input itemstack.");
             return;
         }

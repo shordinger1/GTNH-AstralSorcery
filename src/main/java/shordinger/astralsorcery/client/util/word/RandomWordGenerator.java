@@ -8,11 +8,13 @@
 
 package shordinger.astralsorcery.client.util.word;
 
-import com.google.common.collect.Maps;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+
+import com.google.common.collect.Maps;
+
+import shordinger.wrapper.net.minecraft.client.Minecraft;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,7 +47,7 @@ public abstract class RandomWordGenerator {
     public static void init() {
         fallback = new WordGeneratorEnglish();
 
-        //Add new/other providers here...
+        // Add new/other providers here...
         localizedProviders.put("en_us", fallback);
         localizedProviders.put("zh_cn", new WordGeneratorChinese());
     }

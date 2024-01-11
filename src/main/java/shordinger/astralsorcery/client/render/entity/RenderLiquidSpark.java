@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.client.render.entity;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.entities.EntityLiquidSpark;
 import shordinger.wrapper.net.minecraft.client.renderer.entity.Render;
 import shordinger.wrapper.net.minecraft.client.renderer.entity.RenderManager;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

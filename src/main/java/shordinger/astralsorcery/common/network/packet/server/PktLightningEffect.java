@@ -8,19 +8,19 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.light.EffectLightning;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,7 +50,7 @@ public class PktLightningEffect implements IMessage, IMessageHandler<PktLightnin
     public void fromBytes(ByteBuf buf) {
         from = Vector3.fromBytes(buf);
         to = Vector3.fromBytes(buf);
-        if(buf.readBoolean()) {
+        if (buf.readBoolean()) {
             float[] colorComponents = new float[4];
             for (int i = 0; i < colorComponents.length; i++) {
                 colorComponents[i] = buf.readFloat();
@@ -64,7 +64,7 @@ public class PktLightningEffect implements IMessage, IMessageHandler<PktLightnin
         from.toBytes(buf);
         to.toBytes(buf);
         buf.writeBoolean(colorOverlay != null);
-        if(colorOverlay != null) {
+        if (colorOverlay != null) {
             for (float color : colorOverlay.getComponents(new float[4])) {
                 buf.writeFloat(color);
             }
@@ -79,12 +79,14 @@ public class PktLightningEffect implements IMessage, IMessageHandler<PktLightnin
 
     @SideOnly(Side.CLIENT)
     private void playLightningEffect(PktLightningEffect p) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            EffectLightning lightning = EffectHandler.getInstance().lightning(p.from, p.to);
-            if(p.colorOverlay != null) {
-                lightning.setOverlayColor(p.colorOverlay);
-            }
-        });
+        Minecraft.getMinecraft()
+            .addScheduledTask(() -> {
+                EffectLightning lightning = EffectHandler.getInstance()
+                    .lightning(p.from, p.to);
+                if (p.colorOverlay != null) {
+                    lightning.setOverlayColor(p.colorOverlay);
+                }
+            });
     }
 
 }

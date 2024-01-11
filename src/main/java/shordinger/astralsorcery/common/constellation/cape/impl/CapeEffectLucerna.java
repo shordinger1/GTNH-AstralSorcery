@@ -8,7 +8,14 @@
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
@@ -28,12 +35,6 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,28 +62,36 @@ public class CapeEffectLucerna extends CapeArmorEffect {
         if (player != Minecraft.getMinecraft().player) return;
 
         World w = player.getEntityWorld();
-        List<EntityLivingBase> entities = w.getEntities(EntityLivingBase.class, EntitySelectors.withinRange(player.posX, player.posY, player.posZ, range));
+        List<EntityLivingBase> entities = w.getEntities(
+            EntityLivingBase.class,
+            EntitySelectors.withinRange(player.posX, player.posY, player.posZ, range));
         for (EntityLivingBase entity : entities) {
-            if(entity != null && !entity.isDead && !entity.equals(player)) {
-                if(rand.nextFloat() > 0.4) continue;
+            if (entity != null && !entity.isDead && !entity.equals(player)) {
+                if (rand.nextFloat() > 0.4) continue;
                 Vector3 at = Vector3.atEntityCorner(entity);
-                if(at.distance(player.getPosition()) < 6) continue;
+                if (at.distance(player.getPosition()) < 6) continue;
 
-                at.add(entity.width * rand.nextFloat(), entity.height * rand.nextFloat(), entity.width * rand.nextFloat());
-                EntityFXFacingDepthParticle p = EffectHelper.genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
+                at.add(
+                    entity.width * rand.nextFloat(),
+                    entity.height * rand.nextFloat(),
+                    entity.width * rand.nextFloat());
+                EntityFXFacingDepthParticle p = EffectHelper
+                    .genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
                 p.setColor(Constellations.lucerna.getConstellationColor())
-                        .setAlphaMultiplier(1F)
-                        .scale(0.6F * rand.nextFloat() + 0.6F)
-                        .gravity(0.004)
-                        .setMaxAge(30 + rand.nextInt(20));
-                if(rand.nextInt(3) == 0) {
+                    .setAlphaMultiplier(1F)
+                    .scale(0.6F * rand.nextFloat() + 0.6F)
+                    .gravity(0.004)
+                    .setMaxAge(30 + rand.nextInt(20));
+                if (rand.nextInt(3) == 0) {
                     p.setColor(IConstellation.weak);
                 }
 
-                if(rand.nextFloat() < 0.8F) {
+                if (rand.nextFloat() < 0.8F) {
                     p = EffectHelper.genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
-                    p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                    p.scale(rand.nextFloat() * 0.3F + 0.3F).gravity(0.004);
+                    p.setColor(Color.WHITE)
+                        .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                    p.scale(rand.nextFloat() * 0.3F + 0.3F)
+                        .gravity(0.004);
                     p.setMaxAge(20 + rand.nextInt(10));
                 }
             }
@@ -96,12 +105,12 @@ public class CapeEffectLucerna extends CapeArmorEffect {
         for (int xx = minX; xx <= maxX; ++xx) {
             for (int zz = minZ; zz <= maxZ; ++zz) {
                 Chunk ch = w.getChunkFromChunkCoords(xx, zz);
-                if(!ch.isEmpty()) {
+                if (!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
                         TileEntity te = teEntry.getValue();
-                        if(te != null && te instanceof TileEntityMobSpawner) {
-                            if(rand.nextFloat() > 0.4) continue;
+                        if (te != null && te instanceof TileEntityMobSpawner) {
+                            if (rand.nextFloat() > 0.4) continue;
                             list.add((TileEntityMobSpawner) te);
                         }
                     }
@@ -113,20 +122,23 @@ public class CapeEffectLucerna extends CapeArmorEffect {
             Vector3 at = new Vector3(spawner.getPos());
             at.add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
 
-            EntityFXFacingDepthParticle p = EffectHelper.genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
+            EntityFXFacingDepthParticle p = EffectHelper
+                .genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
             p.setColor(new Color(0x9C0100))
-                    .setAlphaMultiplier(1F)
-                    .scale(0.6F * rand.nextFloat() + 0.6F)
-                    .gravity(0.004)
-                    .setMaxAge(30 + rand.nextInt(20));
-            if(rand.nextInt(3) == 0) {
+                .setAlphaMultiplier(1F)
+                .scale(0.6F * rand.nextFloat() + 0.6F)
+                .gravity(0.004)
+                .setMaxAge(30 + rand.nextInt(20));
+            if (rand.nextInt(3) == 0) {
                 p.setColor(IConstellation.weak);
             }
 
-            if(rand.nextFloat() < 0.8F) {
+            if (rand.nextFloat() < 0.8F) {
                 p = EffectHelper.genericDepthIgnoringFlareParticle(at.getX(), at.getY(), at.getZ());
-                p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                p.scale(rand.nextFloat() * 0.3F + 0.3F).gravity(0.004);
+                p.setColor(Color.WHITE)
+                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                p.scale(rand.nextFloat() * 0.3F + 0.3F)
+                    .gravity(0.004);
                 p.setMaxAge(20 + rand.nextInt(10));
             }
         }
@@ -140,8 +152,18 @@ public class CapeEffectLucerna extends CapeArmorEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        findSpawners = cfg.getBoolean(getKey() + "FindSpawners", getConfigurationSection(), findSpawners, "If this is set to true, particles spawned by the lucerna cape effect will also highlight spawners nearby.");
-        range = cfg.getFloat(getKey() + "Range", getConfigurationSection(), range, 12, 512, "Sets the maximum range of where the lucerna cape effect will get entities (and potentially spawners given the config option is enabled) to highlight.");
+        findSpawners = cfg.getBoolean(
+            getKey() + "FindSpawners",
+            getConfigurationSection(),
+            findSpawners,
+            "If this is set to true, particles spawned by the lucerna cape effect will also highlight spawners nearby.");
+        range = cfg.getFloat(
+            getKey() + "Range",
+            getConfigurationSection(),
+            range,
+            12,
+            512,
+            "Sets the maximum range of where the lucerna cape effect will get entities (and potentially spawners given the config option is enabled) to highlight.");
     }
 
 }

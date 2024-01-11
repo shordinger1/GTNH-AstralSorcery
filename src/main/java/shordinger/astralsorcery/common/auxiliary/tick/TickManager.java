@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.auxiliary.tick;
 
-import shordinger.astralsorcery.common.event.ClientInitializedEvent;
-import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import shordinger.astralsorcery.common.event.ClientInitializedEvent;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +44,8 @@ public class TickManager {
 
     public void register(ITickHandler handler) {
         for (TickEvent.Type type : handler.getHandledTypes()) {
-            registeredTickHandlers.get(type).add(handler);
+            registeredTickHandlers.get(type)
+                .add(handler);
         }
     }
 
@@ -52,7 +53,7 @@ public class TickManager {
     public void worldTick(TickEvent.WorldTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.WORLD)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.WORLD, event.world);
+            if (handler.canFire(ph)) handler.tick(TickEvent.Type.WORLD, event.world);
         }
     }
 
@@ -60,7 +61,7 @@ public class TickManager {
     public void serverTick(TickEvent.ServerTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.SERVER)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.SERVER);
+            if (handler.canFire(ph)) handler.tick(TickEvent.Type.SERVER);
         }
     }
 
@@ -68,10 +69,10 @@ public class TickManager {
     public void clientTick(TickEvent.ClientTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.CLIENT)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.CLIENT);
+            if (handler.canFire(ph)) handler.tick(TickEvent.Type.CLIENT);
         }
 
-        if(!firedFirstTick) {
+        if (!firedFirstTick) {
             firedFirstTick = true;
             MinecraftForge.EVENT_BUS.post(new ClientInitializedEvent());
         }
@@ -81,7 +82,7 @@ public class TickManager {
     public void renderTick(TickEvent.RenderTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.RENDER)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.RENDER, event.renderTickTime);
+            if (handler.canFire(ph)) handler.tick(TickEvent.Type.RENDER, event.renderTickTime);
         }
     }
 
@@ -89,7 +90,7 @@ public class TickManager {
     public void playerTick(TickEvent.PlayerTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.PLAYER)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.PLAYER, event.player, event.side);
+            if (handler.canFire(ph)) handler.tick(TickEvent.Type.PLAYER, event.player, event.side);
         }
     }
 

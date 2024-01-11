@@ -8,6 +8,14 @@
 
 package shordinger.astralsorcery.client.effect.fx;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -19,13 +27,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,8 @@ import java.util.List;
  */
 public class EntityFXFacingParticle extends EntityComplexFX {
 
-    public static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
+    public static final BindableResource staticFlareTex = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
 
     private double x, y, z;
     private double oldX, oldY, oldZ;
@@ -112,9 +114,9 @@ public class EntityFXFacingParticle extends EntityComplexFX {
     }
 
     public EntityFXFacingParticle setColor(Color color) {
-        colorRed   = ((float) color.getRed())   / 255F;
+        colorRed = ((float) color.getRed()) / 255F;
         colorGreen = ((float) color.getGreen()) / 255F;
-        colorBlue  = ((float) color.getBlue())  / 255F;
+        colorBlue = ((float) color.getBlue()) / 255F;
         return this;
     }
 
@@ -157,7 +159,7 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         for (T particle : new ArrayList<>(particles)) {
-            if(particle == null) continue;
+            if (particle == null) continue;
             particle.renderFast(parTicks, vb);
         }
 
@@ -168,23 +170,38 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         GlStateManager.enableCull();
     }
 
-    //Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
-    //GL states have to be preinitialized.
+    // Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
+    // GL states have to be preinitialized.
     public void renderFast(float pTicks, BufferBuilder vbDrawing) {
         float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
         double intX = RenderingUtils.interpolate(oldX, x, pTicks);
         double intY = RenderingUtils.interpolate(oldY, y, pTicks);
         double intZ = RenderingUtils.interpolate(oldZ, z, pTicks);
-        if(renderOffsetController != null) {
-            Vector3 result = renderOffsetController.changeRenderPosition(this, new Vector3(intX, intY, intZ), new Vector3(motionX, motionY - yGravity, motionZ), pTicks);
+        if (renderOffsetController != null) {
+            Vector3 result = renderOffsetController.changeRenderPosition(
+                this,
+                new Vector3(intX, intY, intZ),
+                new Vector3(motionX, motionY - yGravity, motionZ),
+                pTicks);
             intX = result.getX();
             intY = result.getY();
             intZ = result.getZ();
         }
         float fScale = scale;
         fScale = scaleFunction.getScale(this, new Vector3(intX, intY, intZ), pTicks, fScale);
-        RenderingUtils.renderFacingFullQuadVB(vbDrawing, intX, intY, intZ, pTicks, fScale, 0, colorRed, colorGreen, colorBlue, alpha);
+        RenderingUtils.renderFacingFullQuadVB(
+            vbDrawing,
+            intX,
+            intY,
+            intZ,
+            pTicks,
+            fScale,
+            0,
+            colorRed,
+            colorGreen,
+            colorBlue,
+            alpha);
     }
 
     @Override
@@ -198,11 +215,16 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         GlStateManager.color(colorRed, colorGreen, colorBlue, alpha);
         staticFlareTex.bind();
         RenderingUtils.renderFacingQuad(
-                RenderingUtils.interpolate(oldX, x, pTicks),
-                RenderingUtils.interpolate(oldY, y, pTicks),
-                RenderingUtils.interpolate(oldZ, z, pTicks),
-                pTicks, scale, 0,
-                0, 0, 1, 1);
+            RenderingUtils.interpolate(oldX, x, pTicks),
+            RenderingUtils.interpolate(oldY, y, pTicks),
+            RenderingUtils.interpolate(oldZ, z, pTicks),
+            pTicks,
+            scale,
+            0,
+            0,
+            0,
+            1,
+            1);
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();

@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
         this.delegate = delegate;
         this.tickTypes = EnumSet.noneOf(TickEvent.Type.class);
         for (TickEvent.Type type : types) {
-            if(type != null) this.tickTypes.add(type);
+            if (type != null) this.tickTypes.add(type);
         }
     }
 
@@ -45,14 +46,14 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public void add(int timeout, V value) {
-        if(value == null) return;
+        if (value == null) return;
 
         this.tickEntries.add(new TimeoutEntry<>(timeout, value));
     }
 
     public boolean setTimeout(int timeout, @Nonnull V value) {
         for (TimeoutEntry<V> entry : tickEntries) {
-            if(entry.value.equals(value)) {
+            if (entry.value.equals(value)) {
                 entry.timeout = timeout;
                 return true;
             }
@@ -61,7 +62,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public boolean setOrAddTimeout(int timeout, @Nonnull V value) {
-        if(!contains(value)) {
+        if (!contains(value)) {
             add(timeout, value);
             return true;
         } else {
@@ -70,16 +71,16 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public boolean contains(V value) {
-        if(value == null) return false;
+        if (value == null) return false;
         for (TimeoutEntry<V> entry : tickEntries) {
-            if(entry.value.equals(value)) return true;
+            if (entry.value.equals(value)) return true;
         }
         return false;
     }
 
     public int getTimeout(V value) {
         for (TimeoutEntry<V> entry : tickEntries) {
-            if(entry.value.equals(value)) {
+            if (entry.value.equals(value)) {
                 return entry.timeout;
             }
         }
@@ -87,9 +88,9 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public void addAll(TimeoutList<V> entries) {
-        if(entries == null) return;
+        if (entries == null) return;
 
-        for(TimeoutEntry<V> entry : entries.tickEntries) {
+        for (TimeoutEntry<V> entry : entries.tickEntries) {
             setOrAddTimeout(entry.timeout, entry.value);
         }
     }
@@ -104,8 +105,8 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
         while (iterator.hasNext()) {
             TimeoutEntry<V> entry = iterator.next();
             entry.timeout--;
-            if(entry.timeout <= 0) {
-                if(delegate != null) {
+            if (entry.timeout <= 0) {
+                if (delegate != null) {
                     delegate.onTimeout(entry.value);
                 }
                 iterator.remove();
@@ -166,7 +167,8 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     private static class TimeoutEntry<V> {
 
         private int timeout;
-        @Nonnull private V value;
+        @Nonnull
+        private V value;
 
         private TimeoutEntry(int timeout, @Nonnull V value) {
             this.timeout = timeout;

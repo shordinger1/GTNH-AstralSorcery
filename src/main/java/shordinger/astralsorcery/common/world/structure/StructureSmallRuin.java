@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.common.world.structure;
 
+import java.util.Collection;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -16,10 +21,6 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
 import shordinger.wrapper.net.minecraftforge.common.BiomeDictionary;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,44 +46,50 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
-        if(!isApplicableWorld(world)) return false;
-        if(!isApplicableBiome(world, pos)) return false;
-        if(!canSpawnPosition(world, pos.add(-1, 0,  5))) return false;
-        if(!canSpawnPosition(world, pos.add( 1, 0, -5))) return false;
-        if(!canSpawnPosition(world, pos.add( 1, 0,  5))) return false;
-        if(!canSpawnPosition(world, pos.add(-1, 0, -5))) return false;
+        if (!isApplicableWorld(world)) return false;
+        if (!isApplicableBiome(world, pos)) return false;
+        if (!canSpawnPosition(world, pos.add(-1, 0, 5))) return false;
+        if (!canSpawnPosition(world, pos.add(1, 0, -5))) return false;
+        if (!canSpawnPosition(world, pos.add(1, 0, 5))) return false;
+        if (!canSpawnPosition(world, pos.add(-1, 0, -5))) return false;
         return true;
     }
 
     private boolean isApplicableWorld(World world) {
-        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+        if (cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
 
         Integer dimId = world.provider.getDimension();
-        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        if (cfgEntry.getApplicableDimensions()
+            .isEmpty()) return false;
         for (Integer dim : cfgEntry.getApplicableDimensions()) {
-            if(dim.equals(dimId)) return true;
+            if (dim.equals(dimId)) return true;
         }
         return false;
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {
-        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+        if (cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
 
         Biome b = world.getBiome(pos);
         Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
-        if(types.isEmpty()) return false;
+        if (types.isEmpty()) return false;
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
-            if (cfgEntry.getTypes().contains(t)) applicable = true;
+            if (cfgEntry.getTypes()
+                .contains(t)) applicable = true;
         }
         return applicable;
     }
 
     private boolean canSpawnPosition(World world, BlockPos pos) {
-        int dY = world.getTopSolidOrLiquidBlock(pos).getY();
+        int dY = world.getTopSolidOrLiquidBlock(pos)
+            .getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
             IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY - 1, pos.getZ()));
-            return !at.getMaterial().isLiquid() && at.getMaterial().isOpaque() && isApplicableBiome(world, pos);
+            return !at.getMaterial()
+                .isLiquid() && at.getMaterial()
+                .isOpaque()
+                && isApplicableBiome(world, pos);
         }
         return false;
     }
@@ -92,7 +99,8 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         int rX = (chX * 16) + rand.nextInt(16) + 8;
         int rZ = (chZ * 16) + rand.nextInt(16) + 8;
-        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ)).getY();
+        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ))
+            .getY();
         return new BlockPos(rX, rY - 1, rZ);
     }
 
@@ -100,7 +108,12 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     protected void loadAdditionalConfigEntries(Configuration cfg) {
         super.loadAdditionalConfigEntries(cfg);
 
-        heightThreshold = cfg.getInt("heightThreshold", cfgEntry.getConfigurationSection(), heightThreshold, 1, 32,
-                "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
+        heightThreshold = cfg.getInt(
+            "heightThreshold",
+            cfgEntry.getConfigurationSection(),
+            heightThreshold,
+            1,
+            32,
+            "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
     }
 }

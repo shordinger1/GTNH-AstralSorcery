@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
@@ -25,7 +26,6 @@ import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
@@ -62,7 +62,7 @@ public class AttributeThorns extends PerkAttributeType {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
 
         float reflectAmount = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS, 0F);
+            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS, 0F);
         reflectAmount = AttributeEvent.postProcessModded(player, this, reflectAmount);
         reflectAmount /= 100.0F;
         if (reflectAmount <= 0) {
@@ -72,26 +72,27 @@ public class AttributeThorns extends PerkAttributeType {
 
         DamageSource source = event.getSource();
         EntityLivingBase reflectTarget = null;
-        if (source.getImmediateSource() != null &&
-                source.getImmediateSource() instanceof EntityLivingBase &&
-                !source.getImmediateSource().isDead) {
+        if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityLivingBase
+            && !source.getImmediateSource().isDead) {
             reflectTarget = (EntityLivingBase) source.getImmediateSource();
         }
 
-        if (reflectTarget == null &&
-                AttributeEvent.postProcessModded(player, this,
-                        PerkAttributeHelper.getOrCreateMap(player, side)
-                                .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED)) > 1) {
-            if (source.getTrueSource() != null &&
-                    source.getTrueSource() instanceof EntityLivingBase &&
-                    !source.getTrueSource().isDead) {
+        if (reflectTarget == null && AttributeEvent.postProcessModded(
+            player,
+            this,
+            PerkAttributeHelper.getOrCreateMap(player, side)
+                .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED))
+            > 1) {
+            if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase
+                && !source.getTrueSource().isDead) {
                 reflectTarget = (EntityLivingBase) source.getTrueSource();
             }
         }
 
         if (reflectTarget != null) {
             float dmgReflected = event.getAmount() * reflectAmount;
-            if (dmgReflected > 0 && !event.getEntityLiving().equals(reflectTarget)) {
+            if (dmgReflected > 0 && !event.getEntityLiving()
+                .equals(reflectTarget)) {
                 if (MiscUtils.canPlayerAttackServer(event.getEntityLiving(), reflectTarget)) {
                     DamageUtil.attackEntityFrom(reflectTarget, CommonProxy.dmgSourceReflect, dmgReflected, player);
                 }

@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.client.gui.perk;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.client.util.BufferBatch;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -32,12 +32,15 @@ public class BatchPerkContext {
 
     public static final int PRIORITY_BACKGROUND = 100;
     public static final int PRIORITY_FOREGROUND = 200;
-    public static final int PRIORITY_OVERLAY    = 300;
+    public static final int PRIORITY_OVERLAY = 300;
 
     private TreeMap<TextureObjectGroup, BufferBatch> bufferGroups = new TreeMap<>();
 
     public TextureObjectGroup addContext(AbstractRenderableTexture tex, int sortPriority) {
-        TextureObjectGroup group = MiscUtils.iterativeSearch(bufferGroups.keySet(), gr -> gr.getResource().equals(tex));
+        TextureObjectGroup group = MiscUtils.iterativeSearch(
+            bufferGroups.keySet(),
+            gr -> gr.getResource()
+                .equals(tex));
         if (group == null) {
             group = new TextureObjectGroup(tex, sortPriority);
             bufferGroups.put(group, BufferBatch.make());
@@ -57,7 +60,8 @@ public class BatchPerkContext {
     public void draw() {
         for (TextureObjectGroup group : bufferGroups.keySet()) {
             BufferBatch batch = bufferGroups.get(group);
-            group.getResource().bindTexture();
+            group.getResource()
+                .bindTexture();
             batch.draw();
         }
     }
@@ -65,8 +69,8 @@ public class BatchPerkContext {
     public void beginDrawingPerks() {
         for (TextureObjectGroup group : bufferGroups.keySet()) {
             bufferGroups.get(group)
-                    .getBuffer()
-                    .begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+                .getBuffer()
+                .begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         }
     }
 

@@ -8,16 +8,16 @@
 
 package shordinger.astralsorcery.common.item.base.render;
 
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +32,8 @@ public interface ItemHandRender {
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks);
 
     @Nullable
-    default public RayTraceResult getLookBlock(Entity e, boolean stopTraceOnLiquids, boolean ignoreBlockWithoutBoundingBox, double range) {
+    default public RayTraceResult getLookBlock(Entity e, boolean stopTraceOnLiquids,
+                                               boolean ignoreBlockWithoutBoundingBox, double range) {
         float pitch = e.rotationPitch;
         float yaw = e.rotationYaw;
         Vec3d entityVec = new Vec3d(e.posX, e.posY + e.getEyeHeight(), e.posZ);
@@ -43,7 +44,8 @@ public interface ItemHandRender {
         float f6 = f3 * f4;
         float f7 = f2 * f4;
         Vec3d vec3d1 = entityVec.addVector((double) f6 * range, (double) f5 * range, (double) f7 * range);
-        RayTraceResult rtr = e.getEntityWorld().rayTraceBlocks(entityVec, vec3d1, stopTraceOnLiquids, ignoreBlockWithoutBoundingBox, false);
+        RayTraceResult rtr = e.getEntityWorld()
+            .rayTraceBlocks(entityVec, vec3d1, stopTraceOnLiquids, ignoreBlockWithoutBoundingBox, false);
         if (rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) {
             return null;
         }

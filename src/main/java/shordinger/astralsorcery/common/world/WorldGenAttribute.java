@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.world;
 
-import shordinger.wrapper.net.minecraft.world.World;
-
 import java.util.Random;
+
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod

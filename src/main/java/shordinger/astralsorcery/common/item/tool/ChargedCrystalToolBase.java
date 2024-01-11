@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
@@ -16,9 +20,6 @@ import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,8 +39,10 @@ public interface ChargedCrystalToolBase {
         ToolCrystalProperties prop = getToolProperties(stack);
         ItemStack inert = new ItemStack(((ChargedCrystalToolBase) stack.getItem()).getInertVariant());
         applyToolProperties(inert, prop);
-        if(stack.hasTagCompound()) {
-            inert.setTagCompound(stack.getTagCompound().copy());
+        if (stack.hasTagCompound()) {
+            inert.setTagCompound(
+                stack.getTagCompound()
+                    .copy());
         }
         return inert;
     }
@@ -53,7 +56,7 @@ public interface ChargedCrystalToolBase {
         int c = tag.getInteger("chCount");
         c++;
         tag.setInteger("chCount", c);
-        if(c >= Config.revertStart) {
+        if (c >= Config.revertStart) {
             return chRand.nextInt(Config.revertChance) == 0;
         } else {
             return false;
@@ -61,11 +64,12 @@ public interface ChargedCrystalToolBase {
     }
 
     public static void removeChargeRevertCounter(ItemStack stack) {
-        NBTHelper.getPersistentData(stack).removeTag("chCount");
+        NBTHelper.getPersistentData(stack)
+            .removeTag("chCount");
     }
 
     public static boolean tryRevertMainHand(EntityPlayer player, ItemStack stack) {
-        if(shouldRevert(stack)) {
+        if (shouldRevert(stack)) {
             ItemStack inert = getAsInertVariant(stack);
             removeChargeRevertCounter(inert);
             player.setHeldItem(EnumHand.MAIN_HAND, inert);

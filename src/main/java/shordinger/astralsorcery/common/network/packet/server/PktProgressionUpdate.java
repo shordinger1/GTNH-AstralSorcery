@@ -8,13 +8,15 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
@@ -23,8 +25,6 @@ import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,8 +71,8 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     @Override
     public IMessage onMessage(PktProgressionUpdate message, MessageContext ctx) {
         AstralSorcery.proxy.scheduleClientside(() -> {
-            if(message.isPresent) {
-                if(message.isProg) {
+            if (message.isPresent) {
+                if (message.isProg) {
                     addProgressChatMessage();
                 } else {
                     addResearchChatMessage(message.tier);
@@ -86,9 +86,10 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     @SideOnly(Side.CLIENT)
     private void closeAndRefreshJournal() {
         GuiScreen open = Minecraft.getMinecraft().currentScreen;
-        if(open != null) {
-            if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
-                Minecraft.getMinecraft().displayGuiScreen(null);
+        if (open != null) {
+            if (open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
+                Minecraft.getMinecraft()
+                    .displayGuiScreen(null);
             }
         }
 

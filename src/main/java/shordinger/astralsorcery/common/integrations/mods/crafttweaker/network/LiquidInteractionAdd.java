@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 
@@ -28,9 +28,11 @@ public class LiquidInteractionAdd implements SerializeableRecipe {
     private ItemStack output;
     private int weight;
 
-    LiquidInteractionAdd() {}
+    LiquidInteractionAdd() {
+    }
 
-    public LiquidInteractionAdd(FluidStack comp1, FluidStack comp2, float chance1, float chance2, ItemStack output, int weight) {
+    public LiquidInteractionAdd(FluidStack comp1, FluidStack comp2, float chance1, float chance2, ItemStack output,
+                                int weight) {
         this.comp1 = comp1;
         this.comp2 = comp2;
         this.chance1 = chance1;
@@ -66,7 +68,8 @@ public class LiquidInteractionAdd implements SerializeableRecipe {
 
     @Override
     public void applyRecipe() {
-        CraftingAccessManager.addLiquidInteraction(this.weight, this.comp1, this.comp2, this.chance1, this.chance2, this.output);
+        CraftingAccessManager
+            .addLiquidInteraction(this.weight, this.comp1, this.comp2, this.chance1, this.chance2, this.output);
     }
 
 }

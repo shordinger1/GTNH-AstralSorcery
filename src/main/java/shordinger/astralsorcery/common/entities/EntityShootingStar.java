@@ -8,11 +8,16 @@
 
 package shordinger.astralsorcery.common.entities;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import shordinger.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.ASDataSerializers;
 import shordinger.astralsorcery.common.util.ItemUtils;
@@ -27,7 +32,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityThrowable;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
-import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -39,12 +43,6 @@ import shordinger.wrapper.net.minecraft.world.storage.loot.LootContext;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootTable;
 import shordinger.wrapper.net.minecraftforge.event.ForgeEventFactory;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the BeeBetterAtBees Mod
@@ -54,11 +52,14 @@ import java.util.Random;
  */
 public class EntityShootingStar extends EntityThrowable implements EntityTechnicalAmbient {
 
-    private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
-    private static final DataParameter<Long> EFFECT_SEED = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
-    private static final DataParameter<Long> LAST_UPDATE = EntityDataManager.createKey(EntityShootingStar.class, ASDataSerializers.LONG);
+    private static final DataParameter<Vector3> SHOOT_CONSTANT = EntityDataManager
+        .createKey(EntityShootingStar.class, ASDataSerializers.VECTOR);
+    private static final DataParameter<Long> EFFECT_SEED = EntityDataManager
+        .createKey(EntityShootingStar.class, ASDataSerializers.LONG);
+    private static final DataParameter<Long> LAST_UPDATE = EntityDataManager
+        .createKey(EntityShootingStar.class, ASDataSerializers.LONG);
 
-    //Not saved or synced value to deny 'capturing' one.
+    // Not saved or synced value to deny 'capturing' one.
     private boolean removalPending = true;
 
     public EntityShootingStar(World worldIn) {
@@ -106,8 +107,8 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         long lastTrackedTick = this.dataManager.get(LAST_UPDATE);
 
         if (!world.isRemote) {
-            if (removalPending || !ConstellationSkyHandler.getInstance().isNight(world) ||
-                    world.getTotalWorldTime() - lastTrackedTick >= 20) {
+            if (removalPending || !ConstellationSkyHandler.getInstance()
+                .isNight(world) || world.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;
             }
@@ -125,8 +126,8 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         correctMovement();
 
         if (world.isRemote) {
-            if (!ConstellationSkyHandler.getInstance().isNight(world) ||
-                    world.getTotalWorldTime() - lastTrackedTick >= 20) {
+            if (!ConstellationSkyHandler.getInstance()
+                .isNight(world) || world.getTotalWorldTime() - lastTrackedTick >= 20) {
                 setDead();
                 return;
             }
@@ -146,11 +147,16 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                 return currentRenderPos;
             }
             EntityFXFacingParticle pt = (EntityFXFacingParticle) fx;
-            Vector3 v = pt.getPosition().clone().subtract(Vector3.atEntityCenter(pl));
+            Vector3 v = pt.getPosition()
+                .clone()
+                .subtract(Vector3.atEntityCenter(pl));
             if (v.length() <= positionDist) {
                 return currentRenderPos;
             }
-            return Vector3.atEntityCenter(pl).add(v.normalize().multiply(positionDist));
+            return Vector3.atEntityCenter(pl)
+                .add(
+                    v.normalize()
+                        .multiply(positionDist));
         };
         EntityComplexFX.ScaleFunction scaleFct = (fx, pos, pTicks, scaleIn) -> {
             EntityPlayer pl = Minecraft.getMinecraft().player;
@@ -159,28 +165,31 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             }
             scaleIn = new EntityComplexFX.ScaleFunction.Shrink<>().getScale((EntityComplexFX) fx, pos, pTicks, scaleIn);
             EntityFXFacingParticle pt = (EntityFXFacingParticle) fx;
-            Vector3 v = pt.getPosition().clone().subtract(Vector3.atEntityCenter(pl));
+            Vector3 v = pt.getPosition()
+                .clone()
+                .subtract(Vector3.atEntityCenter(pl));
             float mul = v.length() <= positionDist ? 1 : (float) (positionDist / (v.length()));
             return (scaleIn * 0.25F) + ((mul * scaleIn) - (scaleIn * 0.25F));
         };
 
         for (int i = 0; i < 4; i++) {
             if (rand.nextFloat() > 0.75F) continue;
-            Vector3 dir = shot.clone().multiply(rand.nextFloat() * -0.6F);
+            Vector3 dir = shot.clone()
+                .multiply(rand.nextFloat() * -0.6F);
             dir.setX(dir.getX() + rand.nextFloat() * 0.008 * (rand.nextBoolean() ? 1 : -1));
             dir.setZ(dir.getZ() + rand.nextFloat() * 0.008 * (rand.nextBoolean() ? 1 : -1));
-            //dir.rotate(Math.toRadians((30 + rand.nextInt(15)) * (rand.nextBoolean() ? 1 : -1)), dir.perpendicular());
+            // dir.rotate(Math.toRadians((30 + rand.nextInt(15)) * (rand.nextBoolean() ? 1 : -1)), dir.perpendicular());
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(this.posX, this.posY, this.posZ);
             p.setColor(Color.WHITE)
-                    .setDistanceRemovable(false)
-                    .scale(1.2F + rand.nextFloat() * 0.5F)
-                    .motion(dir.getX(), dir.getY(), dir.getZ())
-                    .setAlphaMultiplier(0.85F)
-                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                    .setMaxAge(90 + rand.nextInt(40));
-            //Position within view distance
+                .setDistanceRemovable(false)
+                .scale(1.2F + rand.nextFloat() * 0.5F)
+                .motion(dir.getX(), dir.getY(), dir.getZ())
+                .setAlphaMultiplier(0.85F)
+                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                .setMaxAge(90 + rand.nextInt(40));
+            // Position within view distance
             p.setRenderOffsetController(renderCtrl);
-            //Make smaller if further away, not too linearly though.
+            // Make smaller if further away, not too linearly though.
             p.setScaleFunction(scaleFct);
         }
 
@@ -190,18 +199,18 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         Random seeded = new Random(getEffectSeed());
         EntityFXFacingParticle star = EffectHelper.genericFlareParticle(this.posX, this.posY, this.posZ);
         star.setColor(Color.getHSBColor(seeded.nextFloat() * 360F, 1F, 1F))
-                .setDistanceRemovable(false)
-                .scale(scale)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                .setMaxAge(age);
+            .setDistanceRemovable(false)
+            .scale(scale)
+            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+            .setMaxAge(age);
         star.setRenderOffsetController(renderCtrl);
         star.setScaleFunction(scaleFct);
         EntityFXFacingParticle st2 = EffectHelper.genericFlareParticle(this.posX, this.posY, this.posZ);
         st2.setColor(Color.WHITE)
-                .setDistanceRemovable(false)
-                .scale(scale * 0.6F)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                .setMaxAge(Math.round(age * 1.5F));
+            .setDistanceRemovable(false)
+            .scale(scale * 0.6F)
+            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+            .setMaxAge(Math.round(age * 1.5F));
         st2.setRenderOffsetController(renderCtrl);
         st2.setScaleFunction(scaleFct);
     }
@@ -225,7 +234,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             if (MiscUtils.isFluidBlock(state)) {
                 Fluid f = MiscUtils.tryGetFuild(state);
                 if (f != null) {
-                    if (f.getTemperature(world, hit) <= 300) { //About room temp; incl. water
+                    if (f.getTemperature(world, hit) <= 300) { // About room temp; incl. water
                         eligableForExplosion = false;
                     }
                 }
@@ -234,7 +243,12 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             Vector3 v = Vector3.atEntityCenter(this);
             ShootingStarExplosion.play(world, v, !eligableForExplosion, getEffectSeed());
 
-            EntityItem generated = new EntityItem(world, v.getX(), v.getY(), v.getZ(), new ItemStack(ItemsAS.fragmentCapsule));
+            EntityItem generated = new EntityItem(
+                world,
+                v.getX(),
+                v.getY(),
+                v.getZ(),
+                new ItemStack(ItemsAS.fragmentCapsule));
             Vector3 m = new Vector3();
             MiscUtils.applyRandomOffset(m, rand, 0.25F);
             generated.motionX = m.getX();
@@ -243,10 +257,10 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
             generated.setPickupDelay(20);
             world.spawnEntity(generated);
 
-            LootTable table = world.getLootTableManager().getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
+            LootTable table = world.getLootTableManager()
+                .getLootTableFromLocation(LootTableUtil.LOOT_TABLE_SHOOTING_STAR);
             if (table != null && world instanceof WorldServer) {
-                LootContext context = new LootContext.Builder((WorldServer) world)
-                        .build();
+                LootContext context = new LootContext.Builder((WorldServer) world).build();
                 List<ItemStack> stacks = table.generateLootForPools(rand, context);
                 for (ItemStack stack : stacks) {
                     ItemUtils.dropItemNaturally(world, v.getX(), v.getY(), v.getZ(), stack);

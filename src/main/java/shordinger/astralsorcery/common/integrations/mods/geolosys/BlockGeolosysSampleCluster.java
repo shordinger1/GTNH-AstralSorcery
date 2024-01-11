@@ -9,13 +9,14 @@
 package shordinger.astralsorcery.common.integrations.mods.geolosys;
 
 import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -32,8 +33,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -92,10 +91,9 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
-        if(replaceable) {
+        if (replaceable) {
             BlockPos down = pos.down();
-            if(!worldIn.isSideSolid(down, EnumFacing.UP))
-                replaceable = false;
+            if (!worldIn.isSideSolid(down, EnumFacing.UP)) replaceable = false;
         }
         return replaceable;
     }
@@ -106,8 +104,10 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
+                                  EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); // Waila fix. wtf. why waila.
+        // why.
     }
 
     @Override
@@ -126,7 +126,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+        if (!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
@@ -136,9 +136,12 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileGeolosysSampleCluster te = MiscUtils.getTileAt(worldIn, pos, TileGeolosysSampleCluster.class, true);
-        if(te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
-                    pos.getX(), pos.getY(), pos.getZ());
+        if (te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(
+                PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
         }
         super.breakBlock(worldIn, pos, state);

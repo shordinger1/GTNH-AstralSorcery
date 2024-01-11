@@ -17,4 +17,5 @@ import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
  * Created by HellFirePvP
  * Date: 03.10.2017 / 17:55
  */
-public class TileGeolosysSampleCluster extends TileEntitySynchronized {}
+public class TileGeolosysSampleCluster extends TileEntitySynchronized {
+}

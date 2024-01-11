@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.util.UUID;
+
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class TileOwned extends TileEntitySynchronized {
 
-    public static UUID UUID_OWNER_WORLD = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d2"); //LUL
+    public static UUID UUID_OWNER_WORLD = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d2"); // LUL
 
     protected UUID ownerUUID;
 
@@ -34,7 +34,7 @@ public class TileOwned extends TileEntitySynchronized {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if(compound.hasKey("owner")) {
+        if (compound.hasKey("owner")) {
             this.ownerUUID = compound.getUniqueId("owner");
         }
     }
@@ -43,7 +43,7 @@ public class TileOwned extends TileEntitySynchronized {
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if(ownerUUID != null) {
+        if (ownerUUID != null) {
             compound.setUniqueId("owner", ownerUUID);
         }
     }

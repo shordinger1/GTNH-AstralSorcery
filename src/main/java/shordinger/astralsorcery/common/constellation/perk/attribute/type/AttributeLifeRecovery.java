@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -17,7 +18,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHealEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,7 +45,7 @@ public class AttributeLifeRecovery extends PerkAttributeType {
         }
 
         float heal = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
+            .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), event.getAmount());
         heal = AttributeEvent.postProcessModded(player, this, heal);
         float val = heal;
         if (val <= 0) {

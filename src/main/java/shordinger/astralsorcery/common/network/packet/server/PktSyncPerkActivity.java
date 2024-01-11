@@ -8,22 +8,21 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,8 +72,10 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(this.unlock);
         ByteBufUtils.writeOptional(buf, this.type, ByteBufUtils::writeEnumValue);
-        ByteBufUtils.writeOptional(buf, this.perk,
-                ((byteBuf, perk) -> ByteBufUtils.writeResourceLocation(byteBuf, perk.getRegistryName())));
+        ByteBufUtils.writeOptional(
+            buf,
+            this.perk,
+            ((byteBuf, perk) -> ByteBufUtils.writeResourceLocation(byteBuf, perk.getRegistryName())));
         ByteBufUtils.writeOptional(buf, this.newData, ByteBufUtils::writeNBTTag);
         ByteBufUtils.writeOptional(buf, this.oldData, ByteBufUtils::writeNBTTag);
     }
@@ -99,14 +100,22 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                             PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
                             break;
                         case DATACHANGE:
-                            PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(Minecraft.getMinecraft().player, pkt.perk, pkt.oldData, pkt.newData);
+                            PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(
+                                Minecraft.getMinecraft().player,
+                                pkt.perk,
+                                pkt.oldData,
+                                pkt.newData);
                             break;
                         default:
                             break;
                     }
                 } else if (pkt.perk != null) {
-                    LogCategory.PERKS.info(() -> "Received perk modification packet on clientside: " + pkt.perk.getRegistryName() + " " + (pkt.unlock ? "Application" : "Removal"));
-                    PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
+                    LogCategory.PERKS.info(
+                        () -> "Received perk modification packet on clientside: " + pkt.perk.getRegistryName()
+                            + " "
+                            + (pkt.unlock ? "Application" : "Removal"));
+                    PerkEffectHelper.EVENT_INSTANCE
+                        .notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
             }
         });

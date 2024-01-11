@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.util;
 
-import shordinger.wrapper.net.minecraft.entity.Entity;
-import shordinger.wrapper.net.minecraft.util.DamageSource;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +27,8 @@ public class DamageUtil {
         return attacked.attackEntityFrom(type, amount);
     }
 
-    public static boolean attackEntityFrom(@Nonnull Entity attacked, @Nonnull DamageSource type, float amount, @Nullable Entity newSource) {
+    public static boolean attackEntityFrom(@Nonnull Entity attacked, @Nonnull DamageSource type, float amount,
+                                           @Nullable Entity newSource) {
         DamageSource newType = DamageSourceUtil.withEntityDirect(type, newSource);
         return attackEntityFrom(attacked, newType != null ? newType : type, amount);
     }

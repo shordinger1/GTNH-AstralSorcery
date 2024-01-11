@@ -12,7 +12,6 @@ import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.wrapper.net.minecraft.block.BlockFalling;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
 import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
@@ -65,7 +64,8 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta]) : getDefaultState();
+        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta])
+            : getDefaultState();
     }
 
     @Override
@@ -74,13 +74,14 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         switch (type) {
             case AQUAMARINE:
                 int f = fortune + 3;
                 int i = rand.nextInt(f * 2) - 1;
-                if(i < 0) {
+                if (i < 0) {
                     i = 0;
                 }
                 for (int j = 0; j < (i + 1); j++) {
@@ -134,7 +135,8 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(ORE_TYPE).getName();
+        return state.getValue(ORE_TYPE)
+            .getName();
     }
 
     @Override

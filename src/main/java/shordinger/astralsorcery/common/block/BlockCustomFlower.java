@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -47,7 +46,13 @@ import java.util.Random;
 public class BlockCustomFlower extends Block implements BlockCustomName, BlockVariants, IShearable {
 
     public static final PropertyEnum<FlowerType> FLOWER_TYPE = PropertyEnum.create("flower", FlowerType.class);
-    private static final AxisAlignedBB box = new AxisAlignedBB(1.5D / 16D, 0, 1.5D / 16D, 14.5D / 16D, 13D / 16D, 14.5D / 16D);
+    private static final AxisAlignedBB box = new AxisAlignedBB(
+        1.5D / 16D,
+        0,
+        1.5D / 16D,
+        14.5D / 16D,
+        13D / 16D,
+        14.5D / 16D);
     private static final Random rand = new Random();
 
     public BlockCustomFlower() {
@@ -59,7 +64,8 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+                         int fortune) {
         if (!(world instanceof World)) {
             return;
         }
@@ -70,9 +76,12 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
                     size += rand.nextInt(3) + 1;
                 }
                 for (int i = 0; i < size; i++) {
-                    ItemUtils.dropItemNaturally((World) world,
-                            pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5,
-                            new ItemStack(Items.GLOWSTONE_DUST));
+                    ItemUtils.dropItemNaturally(
+                        (World) world,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.1,
+                        pos.getZ() + 0.5,
+                        new ItemStack(Items.GLOWSTONE_DUST));
                 }
                 break;
             default:
@@ -81,7 +90,8 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -90,7 +100,7 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
         return canBlockStay(worldIn, pos);
     }
 
-    protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state){
+    protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!this.canBlockStay(worldIn, pos)) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
             worldIn.setBlockToAir(pos);
@@ -165,12 +175,14 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FLOWER_TYPE).getMeta();
+        return state.getValue(FLOWER_TYPE)
+            .getMeta();
     }
 
     @Override
     public String getIdentifierForMeta(int meta) {
-        return getStateFromMeta(meta).getValue(FLOWER_TYPE).getName();
+        return getStateFromMeta(meta).getValue(FLOWER_TYPE)
+            .getName();
     }
 
     @Override
@@ -184,7 +196,8 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(FLOWER_TYPE).getName();
+        return state.getValue(FLOWER_TYPE)
+            .getName();
     }
 
     @Override

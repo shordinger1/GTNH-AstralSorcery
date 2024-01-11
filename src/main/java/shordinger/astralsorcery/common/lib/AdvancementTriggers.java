@@ -19,10 +19,10 @@ import shordinger.astralsorcery.common.advancements.*;
  */
 public class AdvancementTriggers {
 
-    public static AltarCraftTrigger             ALTAR_CRAFT;
-    public static AttuneCrystalTrigger          ATTUNE_CRYSTAL;
-    public static AttuneSelfTrigger             ATTUNE_SELF;
-    public static DiscoverConstellationTrigger  DISCOVER_CONSTELLATION;
-    public static PerkLevelTrigger              PERK_LEVEL;
+    public static AltarCraftTrigger ALTAR_CRAFT;
+    public static AttuneCrystalTrigger ATTUNE_CRYSTAL;
+    public static AttuneSelfTrigger ATTUNE_SELF;
+    public static DiscoverConstellationTrigger DISCOVER_CONSTELLATION;
+    public static PerkLevelTrigger PERK_LEVEL;
 
 }

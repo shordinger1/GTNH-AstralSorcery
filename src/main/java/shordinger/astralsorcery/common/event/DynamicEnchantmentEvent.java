@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.event;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
-
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,12 +27,13 @@ import java.util.List;
  */
 public class DynamicEnchantmentEvent {
 
-    //The event to ADD new dynamic enchantments
+    // The event to ADD new dynamic enchantments
     public static class Add extends Event {
 
         private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
         private final ItemStack itemStack;
-        private final EntityPlayer resolvedPlayer; //If the player could be resolved through this event, pass it down to modify
+        private final EntityPlayer resolvedPlayer; // If the player could be resolved through this event, pass it down
+        // to modify
 
         public Add(ItemStack itemStack, @Nullable EntityPlayer player) {
             this.itemStack = itemStack;
@@ -52,14 +54,15 @@ public class DynamicEnchantmentEvent {
         }
     }
 
-    //The event to MODIFY or REACT to previously defined/added dynamic enchantments + enchantments
+    // The event to MODIFY or REACT to previously defined/added dynamic enchantments + enchantments
     public static class Modify extends Event {
 
         private List<DynamicEnchantment> enchantmentsToApply;
         private final ItemStack itemStack;
         private EntityPlayer resolvedPlayer;
 
-        public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply, @Nullable EntityPlayer resolvedPlayer) {
+        public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply,
+                      @Nullable EntityPlayer resolvedPlayer) {
             this.itemStack = itemStack;
             this.enchantmentsToApply = enchantmentsToApply;
             this.resolvedPlayer = resolvedPlayer;

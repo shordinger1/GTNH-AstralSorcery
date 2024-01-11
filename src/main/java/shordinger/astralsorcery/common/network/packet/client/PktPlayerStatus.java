@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import java.util.UUID;
+
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.PlayerActivityManager;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,9 +51,11 @@ public class PktPlayerStatus implements IMessageHandler<PktPlayerStatus, IMessag
 
     @Override
     public IMessage onMessage(PktPlayerStatus pkt, MessageContext ctx) {
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-            PlayerActivityManager.INSTANCE.setStatusServer(pkt.playerUUID, pkt.status);
-        });
+        FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .addScheduledTask(() -> {
+                PlayerActivityManager.INSTANCE.setStatusServer(pkt.playerUUID, pkt.status);
+            });
         return null;
     }
 }

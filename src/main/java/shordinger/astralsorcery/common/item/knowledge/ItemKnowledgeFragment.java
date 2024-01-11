@@ -8,6 +8,14 @@
 
 package shordinger.astralsorcery.common.item.knowledge;
 
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -39,14 +47,7 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,7 +82,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
             if (hasConstellationInformation(stack)) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.constellation.desc.1"));
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.constellation.desc.2"));
-            } else if(resolveFragment(stack) != null) {
+            } else if (resolveFragment(stack) != null) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.content.desc.1"));
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.content.desc.2"));
             } else {
@@ -92,10 +93,9 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote &&
-                !stack.isEmpty() &&
-                stack.getItem() instanceof ItemKnowledgeFragment &&
-                !getSeed(stack).isPresent()) {
+        if (!worldIn.isRemote && !stack.isEmpty()
+            && stack.getItem() instanceof ItemKnowledgeFragment
+            && !getSeed(stack).isPresent()) {
             stack.setCount(0);
         }
     }
@@ -105,17 +105,25 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         if (world.isRemote) {
             ItemStack stack = player.getHeldItem(hand);
             if (hasConstellationInformation(stack)) {
-                player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.KNOWLEDGE_CONSTELLATION.ordinal(), world, 0, 0, 0);
+                player.openGui(
+                    AstralSorcery.instance,
+                    CommonProxy.EnumGuiId.KNOWLEDGE_CONSTELLATION.ordinal(),
+                    world,
+                    0,
+                    0,
+                    0);
                 return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
             } else {
                 KnowledgeFragment frag = resolveFragment(stack);
                 if (frag != null) {
                     ItemKnowledgeFragment.clearFragment(player, frag);
-                    KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+                    KnowledgeFragmentData dat = PersistentDataManager.INSTANCE
+                        .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
                     if (dat.addFragment(frag)) {
-                        player.sendMessage(new TextComponentString(
-                                TextFormatting.GREEN +
-                                        I18n.format("misc.fragment.added", frag.getLocalizedIndexName())));
+                        player.sendMessage(
+                            new TextComponentString(
+                                TextFormatting.GREEN
+                                    + I18n.format("misc.fragment.added", frag.getLocalizedIndexName())));
                     }
                 }
             }
@@ -124,7 +132,8 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+                                      float hitX, float hitY, float hitZ) {
         return EnumActionResult.PASS;
     }
 
@@ -132,9 +141,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     public boolean onEntityItemUpdate(EntityItem entityItem) {
         if (!entityItem.world.isRemote) {
             ItemStack stack = entityItem.getItem();
-            if (!stack.isEmpty() &&
-                    stack.getItem() instanceof ItemKnowledgeFragment &&
-                    !getSeed(stack).isPresent()) {
+            if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment && !getSeed(stack).isPresent()) {
                 entityItem.setDead();
                 stack.setCount(0);
                 entityItem.setItem(stack);
@@ -145,7 +152,9 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
 
     static void generateSeed(EntityPlayer player, ItemStack stack) {
         if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
-            long baseRand = (((player.getEntityId() << 6) | (System.currentTimeMillis() & 223)) << 16) | player.getEntityWorld().getTotalWorldTime();
+            long baseRand = (((player.getEntityId() << 6) | (System.currentTimeMillis() & 223)) << 16)
+                | player.getEntityWorld()
+                .getTotalWorldTime();
             Random r = new Random(baseRand);
             r.nextLong();
             setSeed(stack, r.nextLong());
@@ -205,7 +214,8 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         Optional<Long> seedOpt = getSeed(stack);
         if (!seedOpt.isPresent()) return null;
         Random sRand = new Random(seedOpt.get());
-        KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+        KnowledgeFragmentData dat = PersistentDataManager.INSTANCE
+            .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> all = dat.getDiscoverableFragments();
         all.removeIf(f -> !f.isFullyPresent());
         if (all.isEmpty()) return null;
@@ -216,9 +226,9 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     @SideOnly(Side.CLIENT)
     public static List<ItemStack> gatherFragments(EntityPlayer player) {
         Collection<ItemStack> fragItems = ItemUtils.findItemsInInventory(
-                player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-                new ItemStack(ItemsAS.knowledgeFragment),
-                false);
+            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            new ItemStack(ItemsAS.knowledgeFragment),
+            false);
         List<ItemStack> frags = new LinkedList<>();
         for (ItemStack stack : fragItems) {
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
@@ -233,9 +243,9 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     @SideOnly(Side.CLIENT)
     public static void clearFragment(EntityPlayer player, KnowledgeFragment frag) {
         Map<Integer, ItemStack> fragItems = ItemUtils.findItemsIndexedInInventory(
-                player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-                new ItemStack(ItemsAS.knowledgeFragment),
-                false);
+            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+            new ItemStack(ItemsAS.knowledgeFragment),
+            false);
         for (Map.Entry<Integer, ItemStack> entry : fragItems.entrySet()) {
             ItemStack stack = entry.getValue();
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
@@ -248,10 +258,10 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         }
     }
 
-
     public static void setSeed(ItemStack stack, long seed) {
         if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
-        NBTHelper.getPersistentData(stack).setLong("seed", seed);
+        NBTHelper.getPersistentData(stack)
+            .setLong("seed", seed);
     }
 
     public static Optional<Long> getSeed(ItemStack stack) {

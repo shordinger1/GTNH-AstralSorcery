@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.structure;
 
-import shordinger.wrapper.net.minecraft.util.math.*;
-
 import java.util.Collection;
+
+import shordinger.wrapper.net.minecraft.util.math.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -8,7 +8,16 @@
 
 package shordinger.astralsorcery.common.auxiliary;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
@@ -31,14 +40,6 @@ import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.event.world.WorldEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,11 +61,13 @@ public class CelestialGatewaySystem {
     public GatewayWorldFilter getFilter() {
         File f = FileStorageUtil.getGeneralSubDirectory("gatewayFilter");
         File worldFilter = new File(f, "worldFilter.dat");
-        if(!worldFilter.exists()) {
+        if (!worldFilter.exists()) {
             try {
                 worldFilter.createNewFile();
             } catch (IOException exc) {
-                throw new IllegalStateException("Couldn't create plain world filter file! Are we missing file permissions?", exc);
+                throw new IllegalStateException(
+                    "Couldn't create plain world filter file! Are we missing file permissions?",
+                    exc);
             }
         }
         return new GatewayWorldFilter(worldFilter);
@@ -72,15 +75,22 @@ public class CelestialGatewaySystem {
 
     public void onServerStart() {
         startup = true;
-        Integer[] worlds = DimensionManager.getStaticDimensionIDs(); //Should be loaded during startup = we should grab those.
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        Integer[] worlds = DimensionManager.getStaticDimensionIDs(); // Should be loaded during startup = we should grab
+        // those.
+        MinecraftServer server = FMLCommonHandler.instance()
+            .getMinecraftServerInstance();
         List<Integer> involved = getFilter().getInvolvedWorlds();
         for (Integer id : worlds) {
-            if(id == null || !involved.contains(id)) continue;
+            if (id == null || !involved.contains(id)) continue;
             WorldServer world = server.getWorld(id);
             loadWorldCache(world);
 
-            if(world.getChunkProvider().getLoadedChunkCount() <= 0 && ForgeChunkManager.getPersistentChunksFor(world).size() == 0 && !world.provider.getDimensionType().shouldLoadSpawn()){
+            if (world.getChunkProvider()
+                .getLoadedChunkCount() <= 0
+                && ForgeChunkManager.getPersistentChunksFor(world)
+                .size() == 0
+                && !world.provider.getDimensionType()
+                .shouldLoadSpawn()) {
                 DimensionManager.unloadWorld(world.provider.getDimension());
             }
         }
@@ -90,10 +100,10 @@ public class CelestialGatewaySystem {
 
     @SubscribeEvent
     public void onWorldInit(WorldEvent.Load event) {
-        if(startup) return; //We're already loading up there.
+        if (startup) return; // We're already loading up there.
 
         World world = event.getWorld();
-        if(world.isRemote) return;
+        if (world.isRemote) return;
 
         loadWorldCache(world);
         syncToAll();
@@ -118,34 +128,37 @@ public class CelestialGatewaySystem {
     }
 
     public void addPosition(World world, GatewayCache.GatewayNode pos) {
-        if(world.isRemote) return;
+        if (world.isRemote) return;
 
         Integer dim = world.provider.getDimension();
-        if(!serverCache.containsKey(dim)) {
+        if (!serverCache.containsKey(dim)) {
             forceLoad(dim);
         }
-        if(!serverCache.containsKey(dim)) {
-            AstralSorcery.log.info("Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
+        if (!serverCache.containsKey(dim)) {
+            AstralSorcery.log
+                .info("Couldn't add position for world " + dim + "! - Force loading the world resulted in... nothing.");
             return;
         }
 
         getFilter().appendAndSave(dim);
         List<GatewayCache.GatewayNode> cache = serverCache.get(dim);
-        if(!cache.contains(pos)) {
+        if (!cache.contains(pos)) {
             cache.add(pos);
             syncToAll();
         }
     }
 
     public void removePosition(World world, BlockPos pos) {
-        if(world.isRemote) return;
+        if (world.isRemote) return;
 
         Integer dim = world.provider.getDimension();
-        if(!serverCache.containsKey(dim)) {
+        if (!serverCache.containsKey(dim)) {
             return;
         }
-        if(serverCache.get(dim).remove(pos)) {
-            if(serverCache.get(dim).isEmpty()) {
+        if (serverCache.get(dim)
+            .remove(pos)) {
+            if (serverCache.get(dim)
+                .isEmpty()) {
                 getFilter().removeAndSave(dim);
             }
             syncToAll();
@@ -154,7 +167,7 @@ public class CelestialGatewaySystem {
 
     private void forceLoad(int dim) {
         WorldServer serv = DimensionManager.getWorld(dim);
-        if(serv == null) {
+        if (serv == null) {
             DimensionManager.initDimension(dim);
         }
     }
@@ -178,7 +191,7 @@ public class CelestialGatewaySystem {
         }
 
         public List<Integer> getInvolvedWorlds() {
-            if(cache == null) {
+            if (cache == null) {
                 loadCache();
             }
             return cache;
@@ -191,7 +204,7 @@ public class CelestialGatewaySystem {
                 cache = Lists.newArrayList();
                 for (int i = 0; i < list.tagCount(); i++) {
                     Integer id = list.getIntAt(i);
-                    if(!cache.contains(id)) {
+                    if (!cache.contains(id)) {
                         cache.add(id);
                     }
                 }
@@ -201,10 +214,10 @@ public class CelestialGatewaySystem {
         }
 
         private void appendAndSave(Integer id) {
-            if(cache == null) {
+            if (cache == null) {
                 loadCache();
             }
-            if(!cache.contains(id)) {
+            if (!cache.contains(id)) {
                 cache.add(id);
                 try {
                     NBTTagList list = new NBTTagList();
@@ -214,15 +227,16 @@ public class CelestialGatewaySystem {
                     NBTTagCompound cmp = new NBTTagCompound();
                     cmp.setTag("list", list);
                     CompressedStreamTools.write(cmp, this.gatewayCacheFile);
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
 
         private void removeAndSave(Integer dim) {
-            if(cache == null) {
+            if (cache == null) {
                 loadCache();
             }
-            if(cache.contains(dim)) {
+            if (cache.contains(dim)) {
                 cache.remove(dim);
                 try {
                     NBTTagList list = new NBTTagList();
@@ -232,7 +246,8 @@ public class CelestialGatewaySystem {
                     NBTTagCompound cmp = new NBTTagCompound();
                     cmp.setTag("list", list);
                     CompressedStreamTools.write(cmp, this.gatewayCacheFile);
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
 

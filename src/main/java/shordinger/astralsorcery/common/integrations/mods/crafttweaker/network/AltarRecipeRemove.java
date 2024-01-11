@@ -9,10 +9,10 @@
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
 import crafttweaker.CraftTweakerAPI;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
@@ -69,7 +69,9 @@ public class AltarRecipeRemove implements SerializeableRecipe {
             CraftingAccessManager.tryRemoveAltarRecipeByOutputAndLevel(this.matchOutRemove, this.level);
         } else {
             if (!CraftingAccessManager.tryRemoveAltarRecipe(new ResourceLocation(this.recipeRegistryName))) {
-                CraftTweakerAPI.logError("[AstralSorcery Altar Crafting] Could not find recipe to remove with name " + this.recipeRegistryName);
+                CraftTweakerAPI.logError(
+                    "[AstralSorcery Altar Crafting] Could not find recipe to remove with name "
+                        + this.recipeRegistryName);
             }
         }
     }

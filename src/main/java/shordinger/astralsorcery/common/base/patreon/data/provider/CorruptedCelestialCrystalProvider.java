@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.base.patreon.data.provider;
 
+import java.util.List;
+import java.util.UUID;
+
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectCorruptedCelestialCrystal;
 import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod

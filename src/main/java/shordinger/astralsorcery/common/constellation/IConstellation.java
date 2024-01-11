@@ -8,17 +8,17 @@
 
 package shordinger.astralsorcery.common.constellation;
 
-import shordinger.astralsorcery.common.base.Mods;
+import java.awt.*;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.star.StarConnection;
 import shordinger.astralsorcery.common.constellation.star.StarLocation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +32,7 @@ public interface IConstellation {
     public static final int STAR_GRID_SIZE = 31;
 
     static final Color major = new Color(40, 67, 204);
-    static final Color weak  = new Color(67, 44, 176);
+    static final Color weak = new Color(67, 44, 176);
     static final Color minor = new Color(93, 25, 127);
 
     /**
@@ -68,10 +68,10 @@ public interface IConstellation {
     public Color getConstellationColor();
 
     default public Color getTierRenderColor() {
-        if(this instanceof IMinorConstellation) {
+        if (this instanceof IMinorConstellation) {
             return minor;
         }
-        if(this instanceof IMajorConstellation) {
+        if (this instanceof IMajorConstellation) {
             return major;
         }
         return weak;

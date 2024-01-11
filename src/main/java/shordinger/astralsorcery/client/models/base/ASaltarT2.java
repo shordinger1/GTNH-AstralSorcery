@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.client.models.base;
 
+import org.lwjgl.opengl.GL11;
 import shordinger.wrapper.net.minecraft.client.model.ModelBase;
 import shordinger.wrapper.net.minecraft.client.model.ModelRenderer;
 import shordinger.wrapper.net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +37,7 @@ public class ASaltarT2 extends ModelBase {
         this.hovering1.setRotationPoint(-9.0F, 8.0F, -9.0F);
         this.hovering1.addBox(-6.0F, 0.0F, -6.0F, 6, 8, 6, 0.0F);
         this.setRotateAngle(hovering1, -0.39269908169872414F, 0.0F, 0.39269908169872414F);
-		this.hovering2 = new ModelRenderer(this, 0, 28);
+        this.hovering2 = new ModelRenderer(this, 0, 28);
         this.hovering2.setRotationPoint(9.0F, 8.0F, -9.0F);
         this.hovering2.addBox(0.0F, 0.0F, -6.0F, 6, 8, 6, 0.0F);
         this.setRotateAngle(hovering2, -0.39269908169872414F, 0.0F, -0.39269908169872414F);
@@ -53,8 +53,8 @@ public class ASaltarT2 extends ModelBase {
 
     @Override
     public void render(Entity entity, float jump, float f1, float f2, float f3, float f4, float scale) {
-        renderHovering(hovering1, jump,                1);
-        renderHovering(hovering3, jump + jmpParts,     1);
+        renderHovering(hovering1, jump, 1);
+        renderHovering(hovering3, jump + jmpParts, 1);
         renderHovering(hovering4, jump + jmpParts * 2, 1);
         renderHovering(hovering2, jump + jmpParts * 3, 1);
     }

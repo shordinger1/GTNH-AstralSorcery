@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
+import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
@@ -19,10 +23,6 @@ import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.item.EnumRarity;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +35,7 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
             subItems.add(stack);
@@ -65,7 +65,8 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
     @Override
     @SideOnly(Side.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
-        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
+        return getClientProgress().getTierReached()
+            .isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
     }
 
 }

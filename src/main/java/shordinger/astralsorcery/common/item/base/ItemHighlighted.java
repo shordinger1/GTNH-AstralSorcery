@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.item.base;
 
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-
 import java.awt.*;
+
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

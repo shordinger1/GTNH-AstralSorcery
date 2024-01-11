@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.client.gui.perk.group;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
 import shordinger.astralsorcery.client.gui.perk.PerkRenderGroup;
 import shordinger.astralsorcery.client.util.SpriteLibrary;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod

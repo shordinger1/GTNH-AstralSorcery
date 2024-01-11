@@ -19,28 +19,22 @@ import shordinger.wrapper.net.minecraft.util.DamageSource;
  */
 public class ModIntegrationDraconicEvolution {
 
-    private static String[] matchingTypes = {
-            "de.GuardianFireball",
-            "de.GuardianEnergyBall",
-            "de.GuardianChaosBall",
-            "chaosImplosion",
-            "damage.de.fusionExplode",
-            "de.islandImplode",
-    };
+    private static String[] matchingTypes = {"de.GuardianFireball", "de.GuardianEnergyBall", "de.GuardianChaosBall",
+        "chaosImplosion", "damage.de.fusionExplode", "de.islandImplode",};
 
     private static String chaosDamageClassDescr = "com.brandon3055.draconicevolution.lib.DEDamageSources.DamageSourceChaos";
     private static Class<?> chaosDmgClass;
 
     public static boolean isChaosDamage(DamageSource source) {
-        if(chaosDmgClass != null) {
-            if(chaosDmgClass.isAssignableFrom(source.getClass())) {
+        if (chaosDmgClass != null) {
+            if (chaosDmgClass.isAssignableFrom(source.getClass())) {
                 return true;
             }
         }
         String type = source.damageType;
-        if(type != null) {
+        if (type != null) {
             for (String match : matchingTypes) {
-                if(match != null && match.equalsIgnoreCase(type)) {
+                if (match != null && match.equalsIgnoreCase(type)) {
                     return true;
                 }
             }

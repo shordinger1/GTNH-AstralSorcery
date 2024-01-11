@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
-import shordinger.astralsorcery.common.util.ILocatable;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-
 import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
+import shordinger.astralsorcery.common.util.ILocatable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  */
 public interface IMultiblockDependantTile extends ILocatable {
 
-    //'this' tile needs to be centered on that structure
+    // 'this' tile needs to be centered on that structure
     @Nullable
     public PatternBlockArray getRequiredStructure();
 

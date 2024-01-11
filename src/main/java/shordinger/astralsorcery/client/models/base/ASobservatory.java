@@ -70,7 +70,7 @@ public class ASobservatory extends ModelBase {
         this.textureWidth = 256;
         this.textureHeight = 128;
 
-        //base
+        // base
         this.base = new ModelRenderer(this, 0, 82);
         this.base.setRotationPoint(0.0F, -4.0F, 0.0F);
         this.base.addBox(-12.0F, 18.0F, -16.0F, 24, 6, 28, 0.1F);
@@ -100,7 +100,7 @@ public class ASobservatory extends ModelBase {
         this.base8.setRotationPoint(0.0F, -4.0F, 0.0F);
         this.base8.addBox(-8.0F, 28.0F, -8.0F, 16, 4, 16, 0.0F);
 
-        //seat
+        // seat
         this.seat = new ModelRenderer(this, 144, 28);
         this.seat.setRotationPoint(0.0F, -4.0F, 0.0F);
         this.seat.addBox(-9.0F, 16.0F, 6.0F, 12, 4, 10, 0.0F);
@@ -148,7 +148,7 @@ public class ASobservatory extends ModelBase {
         this.seat14.setRotationPoint(0.0F, -4.0F, 0.0F);
         this.seat14.addBox(-10.0F, -6.0F, 20.0F, 2, 4, 4, 0.0F);
 
-        //tube
+        // tube
         this.tube = new ModelRenderer(this, 0, 32);
         this.tube.setRotationPoint(0.0F, -12.0F, -12.0F);
         this.tube.addBox(-2.0F, -4.0F, -4.0F, 14, 8, 8, 0.0F);

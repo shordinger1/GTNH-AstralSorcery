@@ -8,6 +8,13 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import java.awt.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.base.LiquidInteraction;
 import shordinger.astralsorcery.common.base.Mods;
@@ -28,12 +35,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,7 +66,7 @@ public class CraftingAccessManager {
     }
 
     public static void clearModifications() {
-        //Unregister changes from JEI
+        // Unregister changes from JEI
         removeAll(InfusionRecipeRegistry.mtRecipes);
         removeAll(LightOreTransmutations.mtTransmutations);
         removeAll(WellLiquefaction.mtLiquefactions.values());
@@ -74,7 +75,7 @@ public class CraftingAccessManager {
             removeAll(AltarRecipeRegistry.mtRecipes.get(al));
         }
 
-        //Clear dirty maps
+        // Clear dirty maps
         InfusionRecipeRegistry.mtRecipes.clear();
         InfusionRecipeRegistry.recipes.clear();
         LightOreTransmutations.mtTransmutations.clear();
@@ -84,19 +85,19 @@ public class CraftingAccessManager {
         AltarRecipeRegistry.mtRecipes.clear();
         AltarRecipeRegistry.recipes.clear();
 
-        //Add removed recipes back to JEI
+        // Add removed recipes back to JEI
         for (Object removedPreviously : lastReloadRemovedRecipes) {
             addRecipe(removedPreviously);
         }
         lastReloadRemovedRecipes.clear();
 
-        //Setup registry maps again
+        // Setup registry maps again
         for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
             AltarRecipeRegistry.mtRecipes.put(al, new LinkedList<>());
             AltarRecipeRegistry.recipes.put(al, new LinkedList<>());
         }
 
-        //Loading default configurations how it'd be without Minetweaker
+        // Loading default configurations how it'd be without Minetweaker
         InfusionRecipeRegistry.loadFromFallback();
         AltarRecipeRegistry.loadFromFallback();
         LightOreTransmutations.loadFromFallback();
@@ -111,10 +112,13 @@ public class CraftingAccessManager {
     }
 
     public static void registerMTAltarRecipe(AbstractAltarRecipe recipe) {
-        tryRemoveAltarRecipe(recipe.getNativeRecipe().getRegistryName());
+        tryRemoveAltarRecipe(
+            recipe.getNativeRecipe()
+                .getRegistryName());
 
         TileAltar.AltarLevel al = recipe.getNeededLevel();
-        AltarRecipeRegistry.mtRecipes.get(al).add(recipe);
+        AltarRecipeRegistry.mtRecipes.get(al)
+            .add(recipe);
         addRecipe(recipe);
     }
 
@@ -137,14 +141,19 @@ public class CraftingAccessManager {
     public static void addMTTransmutation(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
         IBlockState stateIn = ItemUtils.createBlockState(in);
         IBlockState stateOut = ItemUtils.createBlockState(out);
-        if(stateIn != null && stateOut != null) {
-            LightOreTransmutations.Transmutation tr = new LightOreTransmutations.Transmutation(stateIn, stateOut, in, out, cost);
+        if (stateIn != null && stateOut != null) {
+            LightOreTransmutations.Transmutation tr = new LightOreTransmutations.Transmutation(
+                stateIn,
+                stateOut,
+                in,
+                out,
+                cost);
             if (cst != null) {
                 tr.setRequiredType(cst);
             }
             tr = LightOreTransmutations.registerTransmutation(tr);
             if (tr != null) {
-                //addRecipe(tr); Is picked up by default logic
+                // addRecipe(tr); Is picked up by default logic
                 LightOreTransmutations.mtTransmutations.add(tr);
             }
         }
@@ -154,11 +163,17 @@ public class CraftingAccessManager {
         markForRemoval(LightOreTransmutations.tryRemoveTransmutation(match, matchMeta));
     }
 
-    public static void addMTLiquefaction(ItemStack catalystIn, Fluid producedIn, float productionMultiplier, float shatterMultiplier, Color color) {
-        if(WellLiquefaction.getLiquefactionEntry(catalystIn) != null) {
+    public static void addMTLiquefaction(ItemStack catalystIn, Fluid producedIn, float productionMultiplier,
+                                         float shatterMultiplier, Color color) {
+        if (WellLiquefaction.getLiquefactionEntry(catalystIn) != null) {
             return;
         }
-        WellLiquefaction.LiquefactionEntry le = new WellLiquefaction.LiquefactionEntry(catalystIn, producedIn, productionMultiplier, shatterMultiplier, color);
+        WellLiquefaction.LiquefactionEntry le = new WellLiquefaction.LiquefactionEntry(
+            catalystIn,
+            producedIn,
+            productionMultiplier,
+            shatterMultiplier,
+            color);
         WellLiquefaction.mtLiquefactions.put(catalystIn, le);
         addRecipe(le);
     }
@@ -167,8 +182,13 @@ public class CraftingAccessManager {
         markForRemoval(WellLiquefaction.tryRemoveLiquefaction(match, fluid));
     }
 
-    public static void addLiquidInteraction(int weight, FluidStack component1, FluidStack component2, float chance1, float chance2, ItemStack output) {
-        LiquidInteraction interaction = new LiquidInteraction(weight, component1, component2, LiquidInteraction.createItemDropAction(chance1, chance2, output));
+    public static void addLiquidInteraction(int weight, FluidStack component1, FluidStack component2, float chance1,
+                                            float chance2, ItemStack output) {
+        LiquidInteraction interaction = new LiquidInteraction(
+            weight,
+            component1,
+            component2,
+            LiquidInteraction.createItemDropAction(chance1, chance2, output));
         LiquidInteraction.mtInteractions.add(interaction);
     }
 
@@ -188,18 +208,16 @@ public class CraftingAccessManager {
     }
 
     /*
-     ******************************************
-     *           JEI interact
-     ******************************************
+     ****************************************** JEI interact
      */
     private static void addRecipe(Object o) {
-        if(!ignoreJEI && Mods.JEI.isPresent()) {
+        if (!ignoreJEI && Mods.JEI.isPresent()) {
             ModIntegrationJEI.addRecipe(o);
         }
     }
 
     private static void removeAll(Collection objects) {
-        if(!ignoreJEI && Mods.JEI.isPresent()) {
+        if (!ignoreJEI && Mods.JEI.isPresent()) {
             for (Object o : objects) {
                 ModIntegrationJEI.removeRecipe(o);
             }
@@ -207,9 +225,9 @@ public class CraftingAccessManager {
     }
 
     private static void markForRemoval(Object o) {
-        if(!ignoreJEI && o != null) {
+        if (!ignoreJEI && o != null) {
             lastReloadRemovedRecipes.add(o);
-            if(Mods.JEI.isPresent()) {
+            if (Mods.JEI.isPresent()) {
                 ModIntegrationJEI.removeRecipe(o);
             }
         }

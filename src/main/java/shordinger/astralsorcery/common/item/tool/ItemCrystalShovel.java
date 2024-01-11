@@ -8,7 +8,10 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
@@ -16,14 +19,8 @@ import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.init.Items;
-import shordinger.wrapper.net.minecraft.item.Item;
-import shordinger.wrapper.net.minecraft.item.ItemSpade;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.item.ItemTool;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +31,19 @@ import java.util.Set;
  */
 public class ItemCrystalShovel extends ItemCrystalToolBase {
 
-    private static final Set<Block> EFFECTIVE_SET = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.CONCRETE_POWDER);
+    private static final Set<Block> EFFECTIVE_SET = Sets.newHashSet(
+        Blocks.CLAY,
+        Blocks.DIRT,
+        Blocks.FARMLAND,
+        Blocks.GRASS,
+        Blocks.GRAVEL,
+        Blocks.MYCELIUM,
+        Blocks.SAND,
+        Blocks.SNOW,
+        Blocks.SNOW_LAYER,
+        Blocks.SOUL_SAND,
+        Blocks.GRASS_PATH,
+        Blocks.CONCRETE_POWDER);
 
     public ItemCrystalShovel() {
         super(1, EFFECTIVE_SET);

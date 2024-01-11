@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
+
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
@@ -16,11 +22,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,7 @@ public class StorageNetwork {
     private CoreArea master = null;
     private Map<BlockPos, AxisAlignedBB> cores = Maps.newHashMap();
 
-    //True if set.
+    // True if set.
     public boolean setMaster(@Nullable BlockPos pos) {
         if (pos == null) {
             this.master = null;
@@ -52,12 +53,12 @@ public class StorageNetwork {
         return master;
     }
 
-    //True if it didn't overwrite a previous one
+    // True if it didn't overwrite a previous one
     public boolean addCore(BlockPos pos, AxisAlignedBB box) {
         return this.cores.put(pos, box) == null;
     }
 
-    //True if it had a position like that
+    // True if it had a position like that
     public boolean removeCore(BlockPos pos) {
         return this.cores.remove(pos) != null;
     }

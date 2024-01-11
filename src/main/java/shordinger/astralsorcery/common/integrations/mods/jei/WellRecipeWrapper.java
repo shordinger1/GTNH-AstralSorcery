@@ -8,17 +8,19 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+
+import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import mezz.jei.api.ingredients.IIngredients;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

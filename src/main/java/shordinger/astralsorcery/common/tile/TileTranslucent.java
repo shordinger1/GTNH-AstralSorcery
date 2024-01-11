@@ -38,23 +38,28 @@ public class TileTranslucent extends TileEntitySynchronized {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if(compound.hasKey("Block") && compound.hasKey("Data")) {
+        if (compound.hasKey("Block") && compound.hasKey("Data")) {
             int data = compound.getInteger("Data");
             Block b = Block.getBlockFromName(compound.getString("Block"));
-            if(b != null) {
+            if (b != null) {
                 fakedState = b.getStateFromMeta(data);
             }
         }
     }
 
-
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if(fakedState != null) {
-            compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
-            compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
+        if (fakedState != null) {
+            compound.setString(
+                "Block",
+                Block.REGISTRY.getNameForObject(fakedState.getBlock())
+                    .toString());
+            compound.setInteger(
+                "Data",
+                fakedState.getBlock()
+                    .getMetaFromState(fakedState));
         }
     }
 

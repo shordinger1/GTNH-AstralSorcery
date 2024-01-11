@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.tile.network;
 
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -31,14 +40,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +55,7 @@ public class TileCrystalLens extends TileTransmissionBase {
 
     private int lensEffectTimeout = 0;
 
-    //So we can tell the client to render beams eventhough the actual connection doesn't exist.
+    // So we can tell the client to render beams eventhough the actual connection doesn't exist.
     private List<BlockPos> occupiedConnections = new LinkedList<>();
 
     @Nullable
@@ -71,32 +72,32 @@ public class TileCrystalLens extends TileTransmissionBase {
         this.lensEffectTimeout = 5;
     }
 
-    //Returns the old one.
+    // Returns the old one.
     @Nullable
     public ItemColoredLens.ColorType setLensColor(ItemColoredLens.ColorType type) {
         ItemColoredLens.ColorType old = this.lensColor;
         this.lensColor = type;
         markForUpdate();
         IPrismTransmissionNode node = getNode();
-        if(node != null) {
+        if (node != null) {
             boolean shouldIgnore = type == ItemColoredLens.ColorType.SPECTRAL;
-            if(node instanceof CrystalTransmissionNode) {
-                if(shouldIgnore != ((CrystalTransmissionNode) node).ignoresBlockCollision()) {
+            if (node instanceof CrystalTransmissionNode) {
+                if (shouldIgnore != ((CrystalTransmissionNode) node).ignoresBlockCollision()) {
                     ((CrystalTransmissionNode) node).updateIgnoreBlockCollisionState(world, shouldIgnore);
                 }
-                if(lensColor != null) {
-                    ((CrystalTransmissionNode) node)     .updateAdditionalLoss(1F - lensColor.getFlowReduction());
+                if (lensColor != null) {
+                    ((CrystalTransmissionNode) node).updateAdditionalLoss(1F - lensColor.getFlowReduction());
                 } else {
-                    ((CrystalTransmissionNode) node)     .updateAdditionalLoss(1F);
+                    ((CrystalTransmissionNode) node).updateAdditionalLoss(1F);
                 }
-            } else if(node instanceof CrystalPrismTransmissionNode) {
-                if(shouldIgnore != ((CrystalPrismTransmissionNode) node).ignoresBlockCollision()) {
+            } else if (node instanceof CrystalPrismTransmissionNode) {
+                if (shouldIgnore != ((CrystalPrismTransmissionNode) node).ignoresBlockCollision()) {
                     ((CrystalPrismTransmissionNode) node).updateIgnoreBlockCollisionState(world, shouldIgnore);
                 }
-                if(lensColor != null) {
-                    ((CrystalPrismTransmissionNode) node)     .updateAdditionalLoss(1F - lensColor.getFlowReduction());
+                if (lensColor != null) {
+                    ((CrystalPrismTransmissionNode) node).updateAdditionalLoss(1F - lensColor.getFlowReduction());
                 } else {
-                    ((CrystalPrismTransmissionNode) node)     .updateAdditionalLoss(1F);
+                    ((CrystalPrismTransmissionNode) node).updateAdditionalLoss(1F);
                 }
             }
         }
@@ -114,7 +115,7 @@ public class TileCrystalLens extends TileTransmissionBase {
 
     public EnumFacing getPlacedAgainst() {
         IBlockState state = world.getBlockState(getPos());
-        if(!(state.getBlock() instanceof BlockLens)) {
+        if (!(state.getBlock() instanceof BlockLens)) {
             return EnumFacing.DOWN;
         }
         return state.getValue(BlockLens.PLACED_AGAINST);
@@ -124,8 +125,8 @@ public class TileCrystalLens extends TileTransmissionBase {
     public void update() {
         super.update();
 
-        if(lensColor != null) {
-            if(world.isRemote) {
+        if (lensColor != null) {
+            if (world.isRemote) {
                 playColorEffects();
             } else {
                 doLensColorEffects(lensColor);
@@ -134,12 +135,12 @@ public class TileCrystalLens extends TileTransmissionBase {
     }
 
     private void doLensColorEffects(ItemColoredLens.ColorType lensColor) {
-        if(getTicksExisted() % 4 != 0) return;
+        if (getTicksExisted() % 4 != 0) return;
 
         this.occupiedConnections.clear();
         markForUpdate();
 
-        if(lensEffectTimeout > 0) {
+        if (lensEffectTimeout > 0) {
             lensEffectTimeout--;
         } else {
             return;
@@ -152,24 +153,28 @@ public class TileCrystalLens extends TileTransmissionBase {
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
-            if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
+            if (lensColor.getType() == ItemColoredLens.TargetType.BLOCK
+                || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 boolean clear = rta.isClear(world);
-                if(!clear && rta.blockHit() != null) {
+                if (!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
                     IBlockState hitState = world.getBlockState(hit);
-                    if (!hit.equals(to.toBlockPos()) || (!hitState.getBlock().equals(BlocksAS.lens) &&
-                            !hitState.getBlock().equals(BlocksAS.lensPrism))) {
-                                lensColor.onBlockOccupyingBeam(world, hit, hitState, str);
-                            }
+                    if (!hit.equals(to.toBlockPos()) || (!hitState.getBlock()
+                        .equals(BlocksAS.lens)
+                        && !hitState.getBlock()
+                        .equals(BlocksAS.lensPrism))) {
+                        lensColor.onBlockOccupyingBeam(world, hit, hitState, str);
+                    }
                     this.occupiedConnections.add(hit);
                 }
             }
-            if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
+            if (lensColor.getType() == ItemColoredLens.TargetType.ENTITY
+                || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
                 float pStr = lensColor == ItemColoredLens.ColorType.FIRE ? str / 2F : str;
-                for(Entity entity : found) {
+                for (Entity entity : found) {
                     lensColor.onEntityInBeam(thisVec, to, entity, pStr);
                 }
             }
@@ -178,24 +183,26 @@ public class TileCrystalLens extends TileTransmissionBase {
 
     @SideOnly(Side.CLIENT)
     private void playColorEffects() {
-        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().player;
-        if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
+        Entity rView = Minecraft.getMinecraft()
+            .getRenderViewEntity();
+        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
         particle.setColor(lensColor.wrappedColor);
         particle.motion(
-                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1));
+            rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
+            rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
+            rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1));
         particle.scale(0.2F);
 
         Vector3 source = new Vector3(this).add(0.5, 0.5, 0.5);
         Color overlay = lensColor.wrappedColor;
-        if(getTicksExisted() % 40 == 0) {
+        if (getTicksExisted() % 40 == 0) {
             for (BlockPos dst : occupiedConnections) {
                 Vector3 to = new Vector3(dst).add(0.5, 0.5, 0.5);
-                EffectLightbeam beam = EffectHandler.getInstance().lightbeam(to, source, 0.6);
+                EffectLightbeam beam = EffectHandler.getInstance()
+                    .lightbeam(to, source, 0.6);
                 beam.setColorOverlay(overlay.getRed() / 255F, overlay.getGreen() / 255F, overlay.getBlue() / 255F, 1F);
             }
         }
@@ -211,7 +218,7 @@ public class TileCrystalLens extends TileTransmissionBase {
             this.properties = null;
         }
         int col = compound.getInteger("color");
-        if(col >= 0 && col < ItemColoredLens.ColorType.values().length) {
+        if (col >= 0 && col < ItemColoredLens.ColorType.values().length) {
             this.lensColor = ItemColoredLens.ColorType.values()[col];
         } else {
             this.lensColor = null;

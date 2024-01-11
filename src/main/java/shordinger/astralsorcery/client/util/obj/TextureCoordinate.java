@@ -15,6 +15,7 @@ package shordinger.astralsorcery.client.util.obj;
  * TextureCoordinate
  */
 public class TextureCoordinate {
+
     public float u, v, w;
 
     public TextureCoordinate(float u, float v) {

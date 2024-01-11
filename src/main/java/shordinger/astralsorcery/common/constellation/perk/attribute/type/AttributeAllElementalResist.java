@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
@@ -18,7 +19,6 @@ import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +46,7 @@ public class AttributeAllElementalResist extends PerkAttributeType {
         DamageSource ds = event.getSource();
         if (isMaybeElementalDamage(ds)) {
             float multiplier = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
+                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
             multiplier -= 1F;
             multiplier = AttributeEvent.postProcessModded(player, this, multiplier);
             multiplier = 1F - MathHelper.clamp(multiplier, 0F, 1F);
@@ -64,9 +64,14 @@ public class AttributeAllElementalResist extends PerkAttributeType {
             return false;
         }
         key = key.toLowerCase();
-        return key.contains("fire") || key.contains("heat") || key.contains("lightning") ||
-                key.contains("cold") || key.contains("freez") || key.contains("discharg") ||
-                key.contains("electr") || key.contains("froze") || key.contains("ice");
+        return key.contains("fire") || key.contains("heat")
+            || key.contains("lightning")
+            || key.contains("cold")
+            || key.contains("freez")
+            || key.contains("discharg")
+            || key.contains("electr")
+            || key.contains("froze")
+            || key.contains("ice");
     }
 
 }

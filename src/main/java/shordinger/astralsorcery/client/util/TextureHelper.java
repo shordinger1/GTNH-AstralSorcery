@@ -22,7 +22,9 @@ import shordinger.wrapper.net.minecraft.util.ResourceLocation;
  */
 public class TextureHelper {
 
-    private static final ResourceLocation blackSpaceholder = new ResourceLocation(AstralSorcery.MODID, "textures/misc/black.png");
+    private static final ResourceLocation blackSpaceholder = new ResourceLocation(
+        AstralSorcery.MODID,
+        "textures/misc/black.png");
     public static ResourceLocation texFontRenderer = new ResourceLocation("textures/font/ascii.png");
 
     public static ResourceLocation getBlockAtlasTexture() {

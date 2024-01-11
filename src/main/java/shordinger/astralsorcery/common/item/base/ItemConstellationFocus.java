@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.item.base;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

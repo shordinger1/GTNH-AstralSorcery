@@ -8,9 +8,10 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +32,11 @@ public class PatchEntityLivingBaseWaterSlowDown extends ClassPatch {
         int index = 0;
         while ((index = peekFirstInstructionAfter(mn, index, Opcodes.FRETURN)) != -1) {
             AbstractInsnNode fRet = mn.instructions.get(index);
-            mn.instructions.insertBefore(fRet, new VarInsnNode(Opcodes.ALOAD, 0)); //thisEntity
-            mn.instructions.insertBefore(fRet, new MethodInsnNode(Opcodes.INVOKESTATIC,
+            mn.instructions.insertBefore(fRet, new VarInsnNode(Opcodes.ALOAD, 0)); // thisEntity
+            mn.instructions.insertBefore(
+                fRet,
+                new MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
                     "hellfirepvp/astralsorcery/common/event/listener/EventHandlerCapeEffects",
                     "getWaterSlowDown",
                     "(FLnet/minecraft/entity/EntityLivingBase;)F",

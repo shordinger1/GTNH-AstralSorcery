@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.client.gui.perk;
 
-import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collection;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +32,7 @@ public interface PerkRender {
     // Rendered with pos_tex_color
     @Nullable
     @SideOnly(Side.CLIENT)
-    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
-                                       PerkTreePoint.AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                       double x, double y, double scale);
+    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx, PerkTreePoint.AllocationStatus status,
+                                              long spriteOffsetTick, float pTicks, double x, double y, double scale);
 
 }

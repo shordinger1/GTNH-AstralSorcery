@@ -8,9 +8,12 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.util;
 
+import java.util.*;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
-import shordinger.astralsorcery.common.container.ContainerAltarBase;
-import shordinger.astralsorcery.common.util.data.Tuple;
+
 import mezz.jei.JustEnoughItems;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -22,12 +25,11 @@ import mezz.jei.network.packets.PacketRecipeTransfer;
 import mezz.jei.startup.StackHelper;
 import mezz.jei.util.Log;
 import mezz.jei.util.Translator;
+import shordinger.astralsorcery.common.container.ContainerAltarBase;
+import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.inventory.Slot;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,21 +41,16 @@ import java.util.*;
 public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> implements IRecipeTransferHandler<C> {
 
     private static final int FILL_CONTAINER_SIZE = 25;
-    private static final Tuple<Integer, Integer>[] mirrorMapping = new Tuple[] {
-            new Tuple<>(2, 4),
-            new Tuple<>(3, 7),
-            new Tuple<>(6, 8)
-    };
+    private static final Tuple<Integer, Integer>[] mirrorMapping = new Tuple[]{new Tuple<>(2, 4), new Tuple<>(3, 7),
+        new Tuple<>(6, 8)};
 
     private final Class<C> containerClass;
     private final StackHelper stackHelper;
     private final IRecipeTransferHandlerHelper handlerHelper;
     private final int maxListSize;
 
-    public TieredAltarRecipeTransferHandler(Class<C> containerClass,
-                                            StackHelper stackHelper,
-                                            IRecipeTransferHandlerHelper handlerHelper,
-                                            int maxListSize) {
+    public TieredAltarRecipeTransferHandler(Class<C> containerClass, StackHelper stackHelper,
+                                            IRecipeTransferHandlerHelper handlerHelper, int maxListSize) {
         this.containerClass = containerClass;
         this.stackHelper = stackHelper;
         this.handlerHelper = handlerHelper;
@@ -67,8 +64,10 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(C container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
-        if (!JEISessionHandler.getInstance().isJeiOnServer()) {
+    public IRecipeTransferError transferRecipe(C container, IRecipeLayout recipeLayout, EntityPlayer player,
+                                               boolean maxTransfer, boolean doTransfer) {
+        if (!JEISessionHandler.getInstance()
+            .isJeiOnServer()) {
             String tooltipMessage = Translator.translateToLocal("jei.tooltip.error.recipe.transfer.no.server");
             return handlerHelper.createUserErrorWithTooltip(tooltipMessage);
         }
@@ -89,8 +88,10 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
 
         int inputCount = 0;
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
-        Map<Integer, ? extends IGuiIngredient<ItemStack>> itemGroup = Maps.newHashMap(itemStackGroup.getGuiIngredients());
-        Iterator<Integer> iterator = itemGroup.keySet().iterator();
+        Map<Integer, ? extends IGuiIngredient<ItemStack>> itemGroup = Maps
+            .newHashMap(itemStackGroup.getGuiIngredients());
+        Iterator<Integer> iterator = itemGroup.keySet()
+            .iterator();
         while (iterator.hasNext()) {
             Integer slotId = iterator.next();
             if (slotId > craftingSlots.size()) {
@@ -99,13 +100,18 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
             }
 
             IGuiIngredient<ItemStack> ingredient = itemGroup.get(slotId);
-            if (ingredient.isInput() && !ingredient.getAllIngredients().isEmpty()) {
+            if (ingredient.isInput() && !ingredient.getAllIngredients()
+                .isEmpty()) {
                 inputCount++;
             }
         }
 
         if (inputCount > craftingSlots.size()) {
-            Log.get().error("Recipe Transfer helper {} does not work for container {}", containerClass, container.getClass());
+            Log.get()
+                .error(
+                    "Recipe Transfer helper {} does not work for container {}",
+                    containerClass,
+                    container.getClass());
             return handlerHelper.createInternalError();
         }
 
@@ -117,7 +123,12 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
             final ItemStack stack = slot.getStack();
             if (!stack.isEmpty()) {
                 if (!slot.canTakeStack(player)) {
-                    Log.get().error("Recipe Transfer helper {} does not work for container {}. Player can't move item out of Crafting Slot number {}", containerClass, container.getClass(), slot.slotNumber);
+                    Log.get()
+                        .error(
+                            "Recipe Transfer helper {} does not work for container {}. Player can't move item out of Crafting Slot number {}",
+                            containerClass,
+                            container.getClass(),
+                            slot.slotNumber);
                     return handlerHelper.createInternalError();
                 }
                 filledCraftSlotCount++;
@@ -140,13 +151,13 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
             return handlerHelper.createUserErrorWithTooltip(message);
         }
 
-        StackHelper.MatchingItemsResult matchingItemsResult = stackHelper.getMatchingItems(availableItemStacks, itemGroup);
+        StackHelper.MatchingItemsResult matchingItemsResult = stackHelper
+            .getMatchingItems(availableItemStacks, itemGroup);
 
         if (matchingItemsResult.missingItems.size() > 0) {
             String message = Translator.translateToLocal("jei.tooltip.error.recipe.transfer.missing");
             return handlerHelper.createUserErrorForSlots(message, matchingItemsResult.missingItems);
         }
-
 
         List<Integer> craftingSlotIndexes = new ArrayList<>(craftingSlots.keySet());
         Collections.sort(craftingSlotIndexes);
@@ -159,7 +170,12 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
             int craftNumber = entry.getKey();
             int slotNumber = craftingSlotIndexes.get(craftNumber);
             if (slotNumber < 0 || slotNumber >= container.inventorySlots.size()) {
-                Log.get().error("Recipes Transfer Helper {} references slot {} outside of the inventory's size {}", containerClass, slotNumber, container.inventorySlots.size());
+                Log.get()
+                    .error(
+                        "Recipes Transfer Helper {} references slot {} outside of the inventory's size {}",
+                        containerClass,
+                        slotNumber,
+                        container.inventorySlots.size());
                 return handlerHelper.createInternalError();
             }
         }
@@ -169,8 +185,14 @@ public class TieredAltarRecipeTransferHandler<C extends ContainerAltarBase> impl
         mirrorSlotGrid(slotMap);
 
         if (doTransfer) {
-            PacketRecipeTransfer packet = new PacketRecipeTransfer(slotMap, craftingSlotIndexes, inventorySlotIndexes, maxTransfer, true);
-            JustEnoughItems.getProxy().sendPacketToServer(packet);
+            PacketRecipeTransfer packet = new PacketRecipeTransfer(
+                slotMap,
+                craftingSlotIndexes,
+                inventorySlotIndexes,
+                maxTransfer,
+                true);
+            JustEnoughItems.getProxy()
+                .sendPacketToServer(packet);
         }
 
         return null;

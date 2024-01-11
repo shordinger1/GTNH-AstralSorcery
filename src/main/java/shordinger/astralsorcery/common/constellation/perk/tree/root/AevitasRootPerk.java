@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
@@ -21,9 +22,14 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.event.world.BlockEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -92,15 +98,21 @@ public class AevitasRootPerk extends RootPerk {
         dim.addFirst(event.getPlacedBlock());
 
         BlockPos pos = event.getPos();
-        Queue<BlockPos> tracked = plInteractMap.computeIfAbsent(player.getUniqueID(), u -> new ArrayDeque<>(trackLength));
+        Queue<BlockPos> tracked = plInteractMap
+            .computeIfAbsent(player.getUniqueID(), u -> new ArrayDeque<>(trackLength));
         if (!tracked.contains(pos)) {
             tracked.add(pos);
 
-            float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
+            float xp = Math.max(
+                event.getPlacedBlock()
+                    .getBlockHardness(event.getWorld(), event.getPos()) / 20F,
+                1);
             xp *= expMultiplier;
             xp *= same;
-            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, xp);
-            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, xp);
+            xp = PerkAttributeHelper.getOrCreateMap(player, side)
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
             xp = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
 
             float expGain = xp;
@@ -122,7 +134,8 @@ public class AevitasRootPerk extends RootPerk {
             return;
         }
 
-        Queue<BlockPos> tracked = plInteractMap.computeIfAbsent(player.getUniqueID(), u -> new ArrayDeque<>(trackLength));
+        Queue<BlockPos> tracked = plInteractMap
+            .computeIfAbsent(player.getUniqueID(), u -> new ArrayDeque<>(trackLength));
         if (tracked.contains(event.getPos())) {
             return;
         }

@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.ItemBlockStorage;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -23,15 +23,19 @@ import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.Messa
  * Created by HellFirePvP
  * Date: 30.04.2018 / 15:30
  */
-public class PktClearBlockStorageStack implements IMessage, IMessageHandler<PktClearBlockStorageStack, IMessage>, ClientReplyPacket {
+public class PktClearBlockStorageStack
+    implements IMessage, IMessageHandler<PktClearBlockStorageStack, IMessage>, ClientReplyPacket {
 
-    public PktClearBlockStorageStack() {}
+    public PktClearBlockStorageStack() {
+    }
 
     @Override
-    public void fromBytes(ByteBuf buf) {}
+    public void fromBytes(ByteBuf buf) {
+    }
 
     @Override
-    public void toBytes(ByteBuf buf) {}
+    public void toBytes(ByteBuf buf) {
+    }
 
     @Override
     public IMessage onMessage(PktClearBlockStorageStack message, MessageContext ctx) {

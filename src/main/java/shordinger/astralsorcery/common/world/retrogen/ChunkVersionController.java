@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.world.retrogen;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraftforge.event.world.ChunkDataEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,29 +47,34 @@ public class ChunkVersionController {
 
     @SubscribeEvent
     public void onChDataLoad(ChunkDataEvent.Load ev) {
-        ChunkPos cp = ev.getChunk().getPos();
+        ChunkPos cp = ev.getChunk()
+            .getPos();
         NBTTagCompound tag = ev.getData();
-        if(tag.hasKey(AS_VERSION_KEY)) {
+        if (tag.hasKey(AS_VERSION_KEY)) {
             versionBuffer.put(cp, tag.getInteger(AS_VERSION_KEY));
         } else {
-            ChunkVersionBuffer buf = WorldCacheManager.getOrLoadData(ev.getWorld(), WorldCacheManager.SaveKey.CHUNK_VERSIONING);
+            ChunkVersionBuffer buf = WorldCacheManager
+                .getOrLoadData(ev.getWorld(), WorldCacheManager.SaveKey.CHUNK_VERSIONING);
             Integer savedVersion = buf.getGenerationVersion(cp);
-            if(savedVersion != null) {
+            if (savedVersion != null) {
                 versionBuffer.put(cp, savedVersion);
             } else {
-                versionBuffer.put(cp, -1); //Can't grab any data...
+                versionBuffer.put(cp, -1); // Can't grab any data...
             }
         }
     }
 
     @SubscribeEvent
     public void onChDataSave(ChunkDataEvent.Save ev) {
-        ChunkPos cp = ev.getChunk().getPos();
+        ChunkPos cp = ev.getChunk()
+            .getPos();
         Integer buf = versionBuffer.get(cp);
-        if(buf != null) {
-            ev.getData().setInteger(AS_VERSION_KEY, buf);
+        if (buf != null) {
+            ev.getData()
+                .setInteger(AS_VERSION_KEY, buf);
         } else {
-            ev.getData().setInteger(AS_VERSION_KEY, -1); //So at least we don't have to look it up somewhere else later.
+            ev.getData()
+                .setInteger(AS_VERSION_KEY, -1); // So at least we don't have to look it up somewhere else later.
         }
     }
 

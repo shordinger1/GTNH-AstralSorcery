@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.data;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import cpw.mods.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod

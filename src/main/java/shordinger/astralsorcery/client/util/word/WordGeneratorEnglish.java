@@ -19,8 +19,9 @@ import java.util.Random;
  */
 public class WordGeneratorEnglish extends RandomWordGenerator {
 
-    private static String[] vows = new String[] { "a", "e", "i", "o", "u" };
-    private static String[] cons = new String[] { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "ph", "qu", "r", "s", "t", "v", "w", "x", "y", "z", "tt", "ch", "sh" };
+    private static String[] vows = new String[]{"a", "e", "i", "o", "u"};
+    private static String[] cons = new String[]{"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "ph",
+        "qu", "r", "s", "t", "v", "w", "x", "y", "z", "tt", "ch", "sh"};
 
     @Override
     public String generateWord(long seed, int length) {

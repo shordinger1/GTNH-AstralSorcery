@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
@@ -15,12 +16,10 @@ import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -60,24 +59,33 @@ public class PktRequestTeleport implements IMessage, IMessageHandler<PktRequestT
     @Override
     public IMessage onMessage(PktRequestTeleport message, MessageContext ctx) {
 
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-            EntityPlayer request = ctx.getServerHandler().player;
-            TileCelestialGateway gate = MiscUtils.getTileAt(request.world, Vector3.atEntityCorner(request).toBlockPos(), TileCelestialGateway.class, false);
-            if(gate != null &&
-                    gate.hasMultiblock() &&
-                    gate.doesSeeSky()) {
-                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-                if (server != null) {
-                    World to = server.getWorld(message.dimId);
-                    if (to != null) {
-                        GatewayCache data = WorldCacheManager.getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
-                        if (MiscUtils.contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(message.pos))) {
-                            AstralSorcery.proxy.scheduleDelayed(() -> MiscUtils.transferEntityTo(request, message.dimId, message.pos));
+        FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .addScheduledTask(() -> {
+                EntityPlayer request = ctx.getServerHandler().player;
+                TileCelestialGateway gate = MiscUtils.getTileAt(
+                    request.world,
+                    Vector3.atEntityCorner(request)
+                        .toBlockPos(),
+                    TileCelestialGateway.class,
+                    false);
+                if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
+                    MinecraftServer server = FMLCommonHandler.instance()
+                        .getMinecraftServerInstance();
+                    if (server != null) {
+                        World to = server.getWorld(message.dimId);
+                        if (to != null) {
+                            GatewayCache data = WorldCacheManager
+                                .getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                            if (MiscUtils
+                                .contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(message.pos))) {
+                                AstralSorcery.proxy.scheduleDelayed(
+                                    () -> MiscUtils.transferEntityTo(request, message.dimId, message.pos));
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
         return null;
     }
 }

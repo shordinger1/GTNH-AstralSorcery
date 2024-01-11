@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.structure;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.structure.change.BlockStateChangeSet;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

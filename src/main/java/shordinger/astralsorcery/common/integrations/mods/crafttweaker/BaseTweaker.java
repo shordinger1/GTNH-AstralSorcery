@@ -39,26 +39,26 @@ public abstract class BaseTweaker {
     @Nullable
     public static FluidStack convertToFluidStack(ILiquidStack stack, boolean capAndLimitToBuckets) {
         FluidStack fs = CraftTweakerMC.getLiquidStack(stack);
-        if(fs != null && capAndLimitToBuckets) {
-            fs.amount = Fluid.BUCKET_VOLUME; //Only full buckets please...
+        if (fs != null && capAndLimitToBuckets) {
+            fs.amount = Fluid.BUCKET_VOLUME; // Only full buckets please...
         }
         return fs;
     }
 
     @Nullable
     public static ItemHandle convertToHandle(IIngredient obj) {
-        if(obj == null) {
+        if (obj == null) {
             return null;
         }
-        if(obj instanceof IItemStack) {
+        if (obj instanceof IItemStack) {
             ItemStack ret = convertToItemStack((IItemStack) obj);
-            if(ret.isEmpty()) return null;
+            if (ret.isEmpty()) return null;
             return new ItemHandle(ret);
-        } else if(obj instanceof ILiquidStack) {
+        } else if (obj instanceof ILiquidStack) {
             FluidStack ret = convertToFluidStack((ILiquidStack) obj, true);
             if (ret == null) return null;
             return new ItemHandle(ret);
-        } else if(obj instanceof IOreDictEntry) {
+        } else if (obj instanceof IOreDictEntry) {
             return new ItemHandle(((IOreDictEntry) obj).getName());
         } else {
             NonNullList<ItemStack> stacks = NonNullList.create();

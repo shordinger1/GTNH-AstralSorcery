@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
 import shordinger.astralsorcery.common.crafting.infusion.recipes.LowConsumptionInfusionRecipe;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,9 +36,9 @@ public class InfusionRecipeRegistry {
 
     private static List<AbstractInfusionRecipe> localFallbackCache = new LinkedList<>();
 
-    //NEVER call this. this should only get called once at post init to compile all recipes for fast access on both
-    //client and serverside!
-    //After this is called, changes to recipe registry might break stuff.
+    // NEVER call this. this should only get called once at post init to compile all recipes for fast access on both
+    // client and serverside!
+    // After this is called, changes to recipe registry might break stuff.
     public static void compileRecipes() {
         compiledRecipes = null;
 
@@ -58,20 +59,20 @@ public class InfusionRecipeRegistry {
     }
 
     public static void cacheLocalRecipes() {
-        if(localFallbackCache.isEmpty()) {
+        if (localFallbackCache.isEmpty()) {
             localFallbackCache.addAll(recipes);
         }
     }
 
     public static void loadFromFallback() {
-        if(!localFallbackCache.isEmpty()) {
+        if (!localFallbackCache.isEmpty()) {
             recipes.addAll(localFallbackCache);
         }
     }
 
     @Nullable
     public static AbstractInfusionRecipe getRecipe(int id) {
-        if(id < 0 || id >= compiledRecipes.length) return null;
+        if (id < 0 || id >= compiledRecipes.length) return null;
         return compiledRecipes[id];
     }
 
@@ -84,7 +85,11 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (!out.isEmpty() && ItemComparator.compare(recipe.getOutputForMatching(), output, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+            if (!out.isEmpty() && ItemComparator.compare(
+                recipe.getOutputForMatching(),
+                output,
+                ItemComparator.Clause.ITEM,
+                ItemComparator.Clause.META_STRICT)) {
                 iterator.remove();
                 return recipe;
             }
@@ -93,7 +98,11 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (!out.isEmpty() && ItemComparator.compare(recipe.getOutputForMatching(), output, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+            if (!out.isEmpty() && ItemComparator.compare(
+                recipe.getOutputForMatching(),
+                output,
+                ItemComparator.Clause.ITEM,
+                ItemComparator.Clause.META_STRICT)) {
                 iterator.remove();
                 return recipe;
             }
@@ -111,7 +120,7 @@ public class InfusionRecipeRegistry {
 
     public static <T extends AbstractInfusionRecipe> T registerInfusionRecipe(T recipe) {
         recipes.add(recipe);
-        if(CraftingAccessManager.hasCompletedSetup()) {
+        if (CraftingAccessManager.hasCompletedSetup()) {
             CraftingAccessManager.compile();
         }
         return recipe;
@@ -120,12 +129,12 @@ public class InfusionRecipeRegistry {
     @Nullable
     public static AbstractInfusionRecipe findMatchingRecipe(TileStarlightInfuser ti) {
         for (AbstractInfusionRecipe rec : recipes) {
-            if(rec.matches(ti)) {
+            if (rec.matches(ti)) {
                 return rec;
             }
         }
         for (AbstractInfusionRecipe rec : mtRecipes) {
-            if(rec.matches(ti)) {
+            if (rec.matches(ti)) {
                 return rec;
             }
         }

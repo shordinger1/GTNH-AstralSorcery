@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EffectHandler;
@@ -31,6 +40,7 @@ import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import shordinger.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBase;
@@ -41,7 +51,6 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -54,14 +63,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,19 +73,10 @@ import java.util.List;
  */
 public class TileStarlightInfuser extends TileReceiverBase implements IWandInteract, IMultiblockDependantTile {
 
-    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
-            new BlockPos(-2, -1, -1),
-            new BlockPos(-2, -1,  0),
-            new BlockPos(-2, -1,  1),
-            new BlockPos( 2, -1, -1),
-            new BlockPos( 2, -1,  0),
-            new BlockPos( 2, -1,  1),
-            new BlockPos(-1, -1, -2),
-            new BlockPos( 0, -1, -2),
-            new BlockPos( 1, -1, -2),
-            new BlockPos(-1, -1,  2),
-            new BlockPos( 0, -1,  2),
-            new BlockPos( 1, -1,  2)};
+    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[]{new BlockPos(-2, -1, -1),
+        new BlockPos(-2, -1, 0), new BlockPos(-2, -1, 1), new BlockPos(2, -1, -1), new BlockPos(2, -1, 0),
+        new BlockPos(2, -1, 1), new BlockPos(-1, -1, -2), new BlockPos(0, -1, -2), new BlockPos(1, -1, -2),
+        new BlockPos(-1, -1, 2), new BlockPos(0, -1, 2), new BlockPos(1, -1, 2)};
 
     private ActiveInfusionTask craftingTask = null;
 
@@ -99,18 +91,18 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     public void update() {
         super.update();
 
-        if((ticksExisted & 15) == 0) {
+        if ((ticksExisted & 15) == 0) {
             updateSkyState();
         }
 
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             updateMultiblockState();
 
-            if(doTryCraft()) {
+            if (doTryCraft()) {
                 markForUpdate();
             }
         } else {
-            if(craftingTask != null) {
+            if (craftingTask != null) {
                 doClientCraftEffects();
             }
         }
@@ -118,20 +110,24 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
     @SideOnly(Side.CLIENT)
     private void doClientCraftEffects() {
-        craftingTask.getRecipeToCraft().onCraftClientTick(this, ClientScheduler.getClientTick(), rand);
+        craftingTask.getRecipeToCraft()
+            .onCraftClientTick(this, ClientScheduler.getClientTick(), rand);
 
-        if(clientOrbitalCrafting == null || ((OrbitalEffectController) clientOrbitalCrafting).isRemoved()) {
+        if (clientOrbitalCrafting == null || ((OrbitalEffectController) clientOrbitalCrafting).isRemoved()) {
             OrbitalPropertiesInfuser prop = new OrbitalPropertiesInfuser(this, false);
-            OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(prop, prop, null);
+            OrbitalEffectController ctrl = EffectHandler.getInstance()
+                .orbital(prop, prop, null);
             ctrl.setOffset(new Vector3(this).add(0.5, 0, 0.5));
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setOrbitRadius(2);
             ctrl.setTicksPerRotation(80);
             clientOrbitalCrafting = ctrl;
         }
-        if(clientOrbitalCraftingMirror == null || ((OrbitalEffectController) clientOrbitalCraftingMirror).isRemoved()) {
+        if (clientOrbitalCraftingMirror == null
+            || ((OrbitalEffectController) clientOrbitalCraftingMirror).isRemoved()) {
             OrbitalPropertiesInfuser prop = new OrbitalPropertiesInfuser(this, true);
-            OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(prop, prop, null);
+            OrbitalEffectController ctrl = EffectHandler.getInstance()
+                .orbital(prop, prop, null);
             ctrl.setOffset(new Vector3(this).add(0.5, 0, 0.5));
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(80);
@@ -143,15 +139,19 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         Vector3 target = new Vector3(this).add(0.5, 0.8, 0.5);
         for (BlockPos bp : craftingTask.getPendingChalicePositions()) {
             for (int i = 0; i < 4; i++) {
-                Vector3 from = new Vector3(bp).add(
-                        -0.2 + rand.nextFloat() * 1.4,
-                         1.1 + rand.nextFloat() * 1.4,
-                        -0.2 + rand.nextFloat() * 1.4);
-                Vector3 mov = target.clone().subtract(from).normalize().multiply(0.05 + 0.05 * rand.nextFloat());
+                Vector3 from = new Vector3(bp)
+                    .add(-0.2 + rand.nextFloat() * 1.4, 1.1 + rand.nextFloat() * 1.4, -0.2 + rand.nextFloat() * 1.4);
+                Vector3 mov = target.clone()
+                    .subtract(from)
+                    .normalize()
+                    .multiply(0.05 + 0.05 * rand.nextFloat());
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-                p.motion(mov.getX(), mov.getY(), mov.getZ()).setMaxAge(30 + rand.nextInt(25));
-                p.gravity(0.004).scale(0.25F).setColor(Color.WHITE);
-                if(rand.nextInt(4) == 0) {
+                p.motion(mov.getX(), mov.getY(), mov.getZ())
+                    .setMaxAge(30 + rand.nextInt(25));
+                p.gravity(0.004)
+                    .scale(0.25F)
+                    .setColor(Color.WHITE);
+                if (rand.nextInt(4) == 0) {
                     p.setColor(IConstellation.major);
                 }
             }
@@ -159,43 +159,45 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private boolean doTryCraft() {
-        if(craftingTask == null) return false;
+        if (craftingTask == null) return false;
 
         AbstractInfusionRecipe altarRecipe = craftingTask.getRecipeToCraft();
-        if(!altarRecipe.matches(this)) {
+        if (!altarRecipe.matches(this)) {
             abortCrafting();
             return true;
         }
-        if(craftingTask.isFinished()) {
+        if (craftingTask.isFinished()) {
             finishCrafting();
             return true;
         }
         boolean changed = false;
-        if(craftingTask.tick(this)) {
+        if (craftingTask.tick(this)) {
             changed = true;
         }
-        craftingTask.getRecipeToCraft().onCraftServerTick(this, craftingTask.getTicksCrafting(), rand);
+        craftingTask.getRecipeToCraft()
+            .onCraftServerTick(this, craftingTask.getTicksCrafting(), rand);
         return changed;
     }
 
     private void finishCrafting() {
-        if(craftingTask == null) return;
+        if (craftingTask == null) return;
 
         AbstractInfusionRecipe altarRecipe = craftingTask.getRecipeToCraft();
         ItemStack out = altarRecipe.getOutput(this);
-        if(!out.isEmpty()) {
+        if (!out.isEmpty()) {
             out = ItemUtils.copyStackWithSize(out, out.getCount());
         }
 
-        if(altarRecipe.mayDeleteInput(this)) {
+        if (altarRecipe.mayDeleteInput(this)) {
             this.stack = ItemStack.EMPTY;
         } else {
             altarRecipe.handleInputDecrement(this);
         }
 
-        if(!out.isEmpty()) {
-            if(out.getCount() > 0) {
-                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
+        if (!out.isEmpty()) {
+            if (out.getCount() > 0) {
+                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out)
+                    .setNoDespawn();
             }
         }
         int size = offsetsLiquidStarlight.length;
@@ -207,24 +209,35 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         while (size > 0) {
             BlockPos offset = offsetsLiquidStarlight[indexes.get(size - 1)];
             size--;
-            if(world.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
-                if(!craftingTask.getSupportingChalices().isEmpty()) {
-                    TileChalice tc = craftingTask.getSupportingChalices().get(rand.nextInt(craftingTask.getSupportingChalices().size()));
-                    if(tc != null) {
-                        tc.getTank().drain(new FluidStack(BlocksAS.fluidLiquidStarlight, 400), true);
+            if (world.rand.nextFloat() < craftingTask.getRecipeToCraft()
+                .getLiquidStarlightConsumptionChance()) {
+                if (!craftingTask.getSupportingChalices()
+                    .isEmpty()) {
+                    TileChalice tc = craftingTask.getSupportingChalices()
+                        .get(
+                            rand.nextInt(
+                                craftingTask.getSupportingChalices()
+                                    .size()));
+                    if (tc != null) {
+                        tc.getTank()
+                            .drain(new FluidStack(BlocksAS.fluidLiquidStarlight, 400), true);
                         tc.markForUpdate();
                     }
                 } else {
                     world.setBlockToAir(getPos().add(offset));
                 }
-                EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
-                if(!altarRecipe.doesConsumeMultiple()) break;
+                EntityFlare.spawnAmbient(
+                    world,
+                    new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                if (!altarRecipe.doesConsumeMultiple()) break;
             }
         }
-        craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
+        craftingTask.getRecipeToCraft()
+            .onCraftServerFinish(this, rand);
         ResearchManager.informCraftingInfusionCompletion(this, craftingTask);
         SoundHelper.playSoundAround(Sounds.craftFinish, world, getPos(), 1F, 1.7F);
-        EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+        EntityFlare
+            .spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
         craftingTask = null;
     }
 
@@ -234,9 +247,9 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
         boolean found = this.structureMatch.matches(getWorld());
         if (found != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(() ->
-                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
-                            " (" + this.hasMultiblock + " -> " + found + ")");
+            LogCategory.STRUCTURE_MATCH.info(
+                () -> "Structure match updated: " + this.getClass()
+                    .getName() + " at " + this.getPos() + " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
         }
@@ -281,15 +294,17 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private void findRecipe(EntityPlayer crafter) {
-        if(craftingTask != null) return;
+        if (craftingTask != null) return;
 
         AbstractInfusionRecipe recipe = InfusionRecipeRegistry.findMatchingRecipe(this);
-        if(recipe instanceof IGatedRecipe) {
-            if(!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
+        if (recipe instanceof IGatedRecipe) {
+            if (!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }
-        if(recipe != null) {
+        if (recipe != null) {
             this.craftingTask = new ActiveInfusionTask(recipe, crafter.getUniqueID());
-            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalicesThatContain(this,
+            this.craftingTask.addChalices(
+                LiquidStarlightChaliceHandler.findNearbyChalicesThatContain(
+                    this,
                     new FluidStack(BlocksAS.fluidLiquidStarlight, this.craftingTask.getChaliceRequiredAmount())));
             markForUpdate();
         }
@@ -306,13 +321,13 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
     @SideOnly(Side.CLIENT)
     public OrbitalEffectController getClientOrbitalCrafting() {
-        if(clientOrbitalCrafting == null) return null;
+        if (clientOrbitalCrafting == null) return null;
         return (OrbitalEffectController) clientOrbitalCrafting;
     }
 
     @SideOnly(Side.CLIENT)
     public OrbitalEffectController getClientOrbitalCraftingMirror() {
-        if(clientOrbitalCraftingMirror == null) return null;
+        if (clientOrbitalCraftingMirror == null) return null;
         return (OrbitalEffectController) clientOrbitalCraftingMirror;
     }
 
@@ -330,11 +345,12 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
         boolean wasNull = this.craftingTask == null;
         this.craftingTask = null;
-        if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
+        if (compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
             int recipeId = compound.getInteger("recipeId");
             AbstractInfusionRecipe recipe = InfusionRecipeRegistry.getRecipe(recipeId);
-            if(recipe == null) {
-                AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
+            if (recipe == null) {
+                AstralSorcery.log.info(
+                    "Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
             } else {
                 UUID uuidCraft = compound.getUniqueId("crafterUUID");
                 int tick = compound.getInteger("recipeTick");
@@ -350,7 +366,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 this.craftingTask.addPendingChalicePositions(tcList);
             }
         }
-        if(!wasNull && this.craftingTask == null) {
+        if (!wasNull && this.craftingTask == null) {
             clientOrbitalCrafting = null;
         }
     }
@@ -363,8 +379,11 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         compound.setBoolean("mbState", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
 
-        if(craftingTask != null) {
-            compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
+        if (craftingTask != null) {
+            compound.setInteger(
+                "recipeId",
+                craftingTask.getRecipeToCraft()
+                    .getUniqueRecipeId());
             compound.setInteger("recipeTick", craftingTask.getTicksCrafting());
             compound.setUniqueId("crafterUUID", craftingTask.getPlayerCraftingUUID());
             NBTTagList chalicePositions = new NBTTagList();
@@ -390,25 +409,41 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     public void onInteract(EntityPlayer playerIn, EnumHand heldHand, ItemStack heldItem) {
-        if(!playerIn.getEntityWorld().isRemote) {
-            if(playerIn.isSneaking()) {
-                if(!stack.isEmpty()) {
+        if (!playerIn.getEntityWorld().isRemote) {
+            if (playerIn.isSneaking()) {
+                if (!stack.isEmpty()) {
                     playerIn.inventory.placeItemBackInInventory(world, stack);
                     stack = ItemStack.EMPTY;
-                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
+                    world.playSound(
+                        null,
+                        pos.getX(),
+                        pos.getY(),
+                        pos.getZ(),
+                        SoundEvents.ENTITY_ITEM_PICKUP,
+                        SoundCategory.PLAYERS,
+                        0.5F,
+                        world.rand.nextFloat() * 0.2F + 0.8F);
                     markForUpdate();
                 }
             } else {
-                if(!heldItem.isEmpty()) {
-                    if(stack.isEmpty()) {
+                if (!heldItem.isEmpty()) {
+                    if (stack.isEmpty()) {
                         this.stack = ItemUtils.copyStackWithSize(heldItem, 1);
-                        if(!playerIn.isCreative()) {
+                        if (!playerIn.isCreative()) {
                             heldItem.setCount(heldItem.getCount() - 1);
                         }
-                        if(heldItem.getCount() <= 0) {
+                        if (heldItem.getCount() <= 0) {
                             playerIn.setHeldItem(heldHand, ItemStack.EMPTY);
                         }
-                        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
+                        world.playSound(
+                            null,
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ(),
+                            SoundEvents.ENTITY_ITEM_PICKUP,
+                            SoundCategory.PLAYERS,
+                            0.5F,
+                            world.rand.nextFloat() * 0.2F + 0.8F);
                         markForUpdate();
                     }
                 }
@@ -418,7 +453,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
     @Override
     public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneak) {
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             findRecipe(player);
         }
     }
@@ -431,7 +466,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-            //No-Op
+            // No-Op
         }
 
         @Override

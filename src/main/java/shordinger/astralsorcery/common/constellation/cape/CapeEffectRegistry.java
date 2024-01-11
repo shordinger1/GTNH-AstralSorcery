@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.cape;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.impl.*;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,7 @@ public class CapeEffectRegistry {
     }
 
     public static void registerCapeArmorEffect(IConstellation cst, Class<? extends CapeArmorEffect> armorEffectClass) {
-        if(getArmorEffect(cst) != null) return;
+        if (getArmorEffect(cst) != null) return;
         armorEffectMap.put(cst, new CapeEffectFactory<>(armorEffectClass));
     }
 

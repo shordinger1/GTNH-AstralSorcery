@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
+import mezz.jei.api.recipe.IRecipeWrapper;
 import shordinger.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,7 +40,7 @@ public class AltarDiscoveryRecipeHandler extends JEIBaseHandler<DiscoveryRecipe>
 
     @Override
     public boolean isRecipeValid(DiscoveryRecipe recipe) {
-        return recipe.getRequiredProgression() == ResearchProgression.BASIC_CRAFT; //Find a better way of filtering..
+        return recipe.getRequiredProgression() == ResearchProgression.BASIC_CRAFT; // Find a better way of filtering..
     }
 
 }

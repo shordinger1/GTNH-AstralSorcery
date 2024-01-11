@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import com.google.common.collect.Lists;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -25,7 +25,7 @@ public abstract class TileSkybound extends TileEntityTick {
     public void update() {
         super.update();
 
-        if((ticksExisted & 15) == 0) {
+        if ((ticksExisted & 15) == 0) {
             updateSkyState(MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
         }
     }

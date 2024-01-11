@@ -28,7 +28,9 @@ public class RenderEntityShootingStar extends Render<EntityShootingStar> {
     }
 
     @Override
-    public void doRender(EntityShootingStar entity, double x, double y, double z, float entityYaw, float partialTicks) {}
+    public void doRender(EntityShootingStar entity, double x, double y, double z, float entityYaw,
+                         float partialTicks) {
+    }
 
     @Override
     protected ResourceLocation getEntityTexture(EntityShootingStar entity) {

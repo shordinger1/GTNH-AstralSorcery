@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.lib.Constellations;
@@ -17,8 +19,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

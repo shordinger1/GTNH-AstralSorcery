@@ -8,11 +8,12 @@
 
 package shordinger.astralsorcery.client.gui.journal;
 
-import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
-import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import java.awt.*;
 
 import javax.annotation.Nullable;
-import java.awt.*;
+
+import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
+import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,33 +42,33 @@ public class PerkTreeSizeHandler extends SizeHandler {
             Point offset = point.getOffset();
             int x = offset.x;
             int y = offset.y;
-            if(x < leftMost) leftMost = x;
-            if(x > rightMost) rightMost = x;
-            if(y > lowerMost) lowerMost = y;
-            if(y < upperMost) upperMost = y;
+            if (x < leftMost) leftMost = x;
+            if (x > rightMost) rightMost = x;
+            if (y > lowerMost) lowerMost = y;
+            if (y < upperMost) upperMost = y;
         }
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }
 
     // --------------------------------------
-    //  Temporary fix to scaling position issues :P
+    // Temporary fix to scaling position issues :P
     // --------------------------------------
 
     public double clampX(double centerX) {
-        if((centerX + widthToBorder) > getTotalWidth()) {
+        if ((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
-        if((centerX - widthToBorder) < 0) {
+        if ((centerX - widthToBorder) < 0) {
             centerX = Math.min(widthToBorder, getMidX());
         }
         return centerX;
     }
 
     public double clampY(double centerY) {
-        if((centerY + heightToBorder) > getTotalHeight()) {
+        if ((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }
-        if((centerY - heightToBorder) < 0) {
+        if ((centerY - heightToBorder) < 0) {
             centerY = Math.min(heightToBorder, getMidY());
         }
         return centerY;

@@ -38,7 +38,8 @@ import java.util.List;
  */
 public class BlockBoreHead extends Block implements BlockCustomName, BlockVariants {
 
-    public static final PropertyEnum<TileBore.BoreType> BORE_TYPE = PropertyEnum.create("type", TileBore.BoreType.class);
+    public static final PropertyEnum<TileBore.BoreType> BORE_TYPE = PropertyEnum
+        .create("type", TileBore.BoreType.class);
 
     public BlockBoreHead() {
         super(Material.IRON, MapColor.GOLD);
@@ -46,7 +47,9 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
         setHardness(10F);
         setResistance(15F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(BORE_TYPE, TileBore.BoreType.LIQUID));
+        setDefaultState(
+            this.blockState.getBaseState()
+                .withProperty(BORE_TYPE, TileBore.BoreType.LIQUID));
     }
 
     @Override
@@ -58,9 +61,9 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
 
     @Override
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
-        return super.canPlaceBlockAt(worldIn, pos) &&
-                side == EnumFacing.DOWN &&
-                worldIn.getBlockState(pos.offset(EnumFacing.UP)).getBlock() instanceof BlockBore;
+        return super.canPlaceBlockAt(worldIn, pos) && side == EnumFacing.DOWN
+            && worldIn.getBlockState(pos.offset(EnumFacing.UP))
+            .getBlock() instanceof BlockBore;
     }
 
     @Override
@@ -84,19 +87,22 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(BORE_TYPE).ordinal();
+        return state.getValue(BORE_TYPE)
+            .ordinal();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(BORE_TYPE,
-                TileBore.BoreType.values()[MathHelper.clamp(meta, 0, TileBore.BoreType.values().length - 1)]);
+        return getDefaultState().withProperty(
+            BORE_TYPE,
+            TileBore.BoreType.values()[MathHelper.clamp(meta, 0, TileBore.BoreType.values().length - 1)]);
     }
 
     @Override

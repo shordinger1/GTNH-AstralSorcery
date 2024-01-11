@@ -8,15 +8,16 @@
 
 package shordinger.astralsorcery.client.util.item;
 
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.*;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,7 +56,9 @@ public class DummyVanillaBakedModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("");
+        return Minecraft.getMinecraft()
+            .getTextureMapBlocks()
+            .getTextureExtry("");
     }
 
     @Override

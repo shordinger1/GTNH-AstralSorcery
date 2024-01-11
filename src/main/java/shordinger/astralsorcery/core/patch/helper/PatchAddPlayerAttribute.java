@@ -8,10 +8,11 @@
 
 package shordinger.astralsorcery.core.patch.helper;
 
-import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
+
+import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,11 +30,11 @@ public class PatchAddPlayerAttribute extends ClassPatch {
     @Override
     public void patch(ClassNode cn) {
         FieldNode entityField = new FieldNode(
-                Opcodes.ACC_PUBLIC,
-                "as_entity",
-                "Lnet/minecraft/entity/EntityLivingBase;",
-                "",
-                null);
+            Opcodes.ACC_PUBLIC,
+            "as_entity",
+            "Lnet/minecraft/entity/EntityLivingBase;",
+            "",
+            null);
         cn.fields.add(entityField);
     }
 

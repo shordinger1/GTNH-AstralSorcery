@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.potion;
 
+import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
@@ -15,10 +19,6 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +42,7 @@ public class PotionCheatDeath extends PotionCustomTexture {
     @Override
     @SideOnly(Side.CLIENT)
     public BindableResource getResource() {
-        if(texBuffer == null) {
+        if (texBuffer == null) {
             texBuffer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath");
         }
         return (BindableResource) texBuffer;
@@ -52,14 +52,14 @@ public class PotionCheatDeath extends PotionCustomTexture {
     public static void playEntityDeathEffect(PktParticleEvent event) {
         for (int i = 0; i < 25; i++) {
             Vector3 at = event.getVec();
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    at.getX(),
-                    at.getY() + rand.nextFloat(),
-                    at.getZ());
-            p.motion((rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(PHOENIX_COLOR);
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(at.getX(), at.getY() + rand.nextFloat(), at.getZ());
+            p.motion(
+                (rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.1F) * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.25F)
+                .setColor(PHOENIX_COLOR);
         }
     }
 

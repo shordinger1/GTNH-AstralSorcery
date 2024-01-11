@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
+import java.awt.*;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityFlareColor;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import shordinger.astralsorcery.common.util.Provider;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod

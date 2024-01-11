@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
@@ -15,8 +17,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +40,8 @@ public class AmuletEnchantment extends DynamicEnchantment {
 
     @SideOnly(Side.CLIENT)
     public String getDescription() {
-        String unlocKey = "amulet.enchantment." + this.type.name().toLowerCase() + ".name";
+        String unlocKey = "amulet.enchantment." + this.type.name()
+            .toLowerCase() + ".name";
         String locLevels = I18n.format("amulet.enchantment.level." + (this.levelAddition == 1 ? "one" : "more"));
         if (this.type.hasEnchantmentTag()) {
             String locEnch = I18n.format(this.enchantment.getName());
@@ -51,11 +52,12 @@ public class AmuletEnchantment extends DynamicEnchantment {
     }
 
     public boolean canMerge(AmuletEnchantment other) {
-        return this.type.equals(other.type) && (!this.type.hasEnchantmentTag() || this.enchantment.equals(other.enchantment));
+        return this.type.equals(other.type)
+            && (!this.type.hasEnchantmentTag() || this.enchantment.equals(other.enchantment));
     }
 
     public void merge(AmuletEnchantment src) {
-        if(canMerge(src)) {
+        if (canMerge(src)) {
             this.levelAddition += src.levelAddition;
         }
     }
@@ -64,8 +66,12 @@ public class AmuletEnchantment extends DynamicEnchantment {
         NBTTagCompound cmp = new NBTTagCompound();
         cmp.setInteger("type", this.type.ordinal());
         cmp.setInteger("level", this.levelAddition);
-        if(this.type.hasEnchantmentTag()) { //Enchantment must not be null here anyway as the type requires a ench to begin with
-            cmp.setString("ench", this.enchantment.getRegistryName().toString());
+        if (this.type.hasEnchantmentTag()) { // Enchantment must not be null here anyway as the type requires a ench to
+            // begin with
+            cmp.setString(
+                "ench",
+                this.enchantment.getRegistryName()
+                    .toString());
         }
         return cmp;
     }
@@ -75,15 +81,16 @@ public class AmuletEnchantment extends DynamicEnchantment {
         int typeId = cmp.getInteger("type");
         Type type = Type.values()[MathHelper.clamp(typeId, 0, Type.values().length - 1)];
         int level = Math.max(0, cmp.getInteger("level"));
-        if(type.hasEnchantmentTag()) {
+        if (type.hasEnchantmentTag()) {
             ResourceLocation res = new ResourceLocation(cmp.getString("ench"));
-            //Disallow dungeontactics enchantments on the prism; see #1302
-            if (res.getResourceDomain().equals("dungeontactics")) {
+            // Disallow dungeontactics enchantments on the prism; see #1302
+            if (res.getResourceDomain()
+                .equals("dungeontactics")) {
                 return null;
             }
 
             Enchantment e = ForgeRegistries.ENCHANTMENTS.getValue(res);
-            if(e != null) {
+            if (e != null) {
                 return new AmuletEnchantment(type, e, level);
             }
         } else {

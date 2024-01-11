@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.data.world.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.world.AstralWorldGenerator;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +37,7 @@ public class ChunkVersionBuffer extends CachedWorldData {
 
     public void markChunkGeneration(ChunkPos c) {
         chunkVersions.put(c, AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION);
-        //markDirty();
+        // markDirty();
     }
 
     @Nullable
@@ -61,10 +62,10 @@ public class ChunkVersionBuffer extends CachedWorldData {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        //for (Map.Entry<ChunkPos, Integer> versionEntry : chunkVersions.entrySet()) {
-        //    ChunkPos cp = versionEntry.getKey();
-        //    compound.setInteger(String.format("%d;%d", cp.chunkXPos, cp.chunkZPos), versionEntry.getValue());
-        //}
+        // for (Map.Entry<ChunkPos, Integer> versionEntry : chunkVersions.entrySet()) {
+        // ChunkPos cp = versionEntry.getKey();
+        // compound.setInteger(String.format("%d;%d", cp.chunkXPos, cp.chunkZPos), versionEntry.getValue());
+        // }
 
     }
 

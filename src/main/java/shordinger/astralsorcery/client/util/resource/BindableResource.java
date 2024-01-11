@@ -8,15 +8,15 @@
 
 package shordinger.astralsorcery.client.util.resource;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.ITextureObject;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.SimpleTexture;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureUtil;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Objects;
 
@@ -56,8 +56,7 @@ public class BindableResource extends AbstractRenderableTexture.Full {
 
     @Deprecated
     public void invalidateAndReload() {
-        if(resource != null)
-            GL11.glDeleteTextures(resource.getGlTextureId());
+        if (resource != null) GL11.glDeleteTextures(resource.getGlTextureId());
         resource = null;
     }
 
@@ -65,15 +64,18 @@ public class BindableResource extends AbstractRenderableTexture.Full {
         if (resource != null || AssetLibrary.reloading) return;
         resource = new SimpleTexture(new ResourceLocation(path));
         try {
-            resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
+            resource.loadTexture(
+                Minecraft.getMinecraft()
+                    .getResourceManager());
         } catch (Exception exc) {
             AstralSorcery.log.warn("[AssetLibrary] Failed to load texture " + path);
-            AstralSorcery.log.warn("[AssetLibrary] Please report this issue; include the message above, the following stacktrace as well as instructions on how to reproduce this!");
+            AstralSorcery.log.warn(
+                "[AssetLibrary] Please report this issue; include the message above, the following stacktrace as well as instructions on how to reproduce this!");
             exc.printStackTrace();
             resource = TextureUtil.MISSING_TEXTURE;
             return;
         }
-        if(AstralSorcery.isRunningInDevEnvironment()) {
+        if (AstralSorcery.isRunningInDevEnvironment()) {
             AstralSorcery.log.info("[AssetLibrary] Allocated " + path + " to " + resource.getGlTextureId());
         }
     }
@@ -84,12 +86,12 @@ public class BindableResource extends AbstractRenderableTexture.Full {
     }
 
     public void bind() {
-        if(AssetLibrary.reloading) return; //we do nothing but wait.
+        if (AssetLibrary.reloading) return; // we do nothing but wait.
         if (resource == null) {
             allocateGlId();
         }
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, resource.getGlTextureId());
-        //GlStateManager.bindTexture(resource.getGlTextureId());
+        // GlStateManager.bindTexture(resource.getGlTextureId());
     }
 
     @Override

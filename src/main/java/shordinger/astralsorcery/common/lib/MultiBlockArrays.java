@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.lib;
 
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
+import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 
 /**
  * This class is part of the Astral Sorcery Mod

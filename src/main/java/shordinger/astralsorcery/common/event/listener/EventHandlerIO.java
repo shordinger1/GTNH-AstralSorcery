@@ -8,7 +8,13 @@
 
 package shordinger.astralsorcery.common.event.listener;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import shordinger.astralsorcery.common.auxiliary.StorageNetworkHandler;
@@ -21,11 +27,6 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.event.world.ChunkEvent;
 import shordinger.wrapper.net.minecraftforge.event.world.WorldEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +42,8 @@ public class EventHandlerIO {
     @SubscribeEvent
     public void onUnload(WorldEvent.Unload event) {
         World w = event.getWorld();
-        ConstellationSkyHandler.getInstance().informWorldUnload(w);
+        ConstellationSkyHandler.getInstance()
+            .informWorldUnload(w);
         StorageNetworkHandler.clearHandler(w);
         if (w.isRemote) {
             clientUnload();
@@ -55,18 +57,23 @@ public class EventHandlerIO {
 
     @SubscribeEvent
     public void onSave(WorldEvent.Save event) {
-        WorldCacheManager.getInstance().doSave(event.getWorld());
+        WorldCacheManager.getInstance()
+            .doSave(event.getWorld());
     }
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        if(!event.getWorld().isRemote) {
+        if (!event.getWorld().isRemote) {
             Iterator<TileOreGenerator> iterator = generatorQueue.iterator();
             while (iterator.hasNext()) {
                 TileOreGenerator gen = iterator.next();
                 BlockPos at = gen.getPos();
-                if(event.getChunk().getPos().equals(new ChunkPos(at))) {
-                    event.getChunk().getTileEntityMap().put(gen.getPos(), gen);
+                if (event.getChunk()
+                    .getPos()
+                    .equals(new ChunkPos(at))) {
+                    event.getChunk()
+                        .getTileEntityMap()
+                        .put(gen.getPos(), gen);
                     iterator.remove();
                 }
             }

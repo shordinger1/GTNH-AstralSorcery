@@ -8,10 +8,10 @@
 
 package shordinger.astralsorcery.common.base.patreon.data;
 
-import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
-
 import java.util.List;
 import java.util.UUID;
+
+import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod

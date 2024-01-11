@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.client.gui.journal;
 
+import java.io.IOException;
+
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.base.GuiWHScreen;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
-
-import java.io.IOException;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,7 +57,8 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
 
     @Override
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
-        Minecraft.getMinecraft().displayGuiScreen(origin);
+        Minecraft.getMinecraft()
+            .displayGuiScreen(origin);
         return true;
     }
 
@@ -77,9 +78,10 @@ public class GuiScreenJournalOverlay extends GuiWHScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        if (Minecraft.getMinecraft().currentScreen != this &&
-                Minecraft.getMinecraft().currentScreen != origin) { //Something changed..
-            Minecraft.getMinecraft().displayGuiScreen(origin);
+        if (Minecraft.getMinecraft().currentScreen != this && Minecraft.getMinecraft().currentScreen != origin) { // Something
+            // changed..
+            Minecraft.getMinecraft()
+                .displayGuiScreen(origin);
         }
     }
 }

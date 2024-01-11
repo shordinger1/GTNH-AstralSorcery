@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.starlight.network;
 
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,11 +39,11 @@ public class StarlightTransmissionHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
-        if(world.isRemote) return;
+        if (world.isRemote) return;
 
         int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
-        if(handle == null) {
+        if (handle == null) {
             handle = new TransmissionWorldHandler(dimId);
             worldHandlers.put(dimId, handle);
         }
@@ -51,7 +52,8 @@ public class StarlightTransmissionHandler implements ITickHandler {
 
     public void serverCleanHandlers() {
         for (int id : worldHandlers.keySet()) {
-            worldHandlers.get(id).clear(id);
+            worldHandlers.get(id)
+                .clear(id);
         }
         worldHandlers.clear();
     }
@@ -59,7 +61,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
     public void informWorldUnload(World world) {
         int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
-        if(handle != null) {
+        if (handle != null) {
             handle.clear(world.provider.getDimension());
         }
         this.worldHandlers.remove(dimId);
@@ -67,7 +69,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
 
     @Nullable
     public TransmissionWorldHandler getWorldHandler(World world) {
-        if(world == null) return null;
+        if (world == null) return null;
         return worldHandlers.get(world.provider.getDimension());
     }
 

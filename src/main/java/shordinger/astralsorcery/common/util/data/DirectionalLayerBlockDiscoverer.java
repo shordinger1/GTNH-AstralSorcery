@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.util.data;
 
-import shordinger.wrapper.net.minecraft.util.EnumFacing;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,13 +42,12 @@ public class DirectionalLayerBlockDiscoverer {
         tryAdd(start, visited);
 
         EnumFacing dir = EnumFacing.NORTH;
-        while ( Math.abs(currentPos.getX() - xPos) <= rad &&
-                Math.abs(currentPos.getY() - yPos) <= rad &&
-                Math.abs(currentPos.getZ() - zPos) <= rad) {
+        while (Math.abs(currentPos.getX() - xPos) <= rad && Math.abs(currentPos.getY() - yPos) <= rad
+            && Math.abs(currentPos.getZ() - zPos) <= rad) {
             currentPos = currentPos.offset(dir, stepWidth);
             tryAdd(currentPos, visited);
             EnumFacing tryDirNext = dir.rotateY();
-            if(!visited.contains(currentPos.offset(tryDirNext, stepWidth))) {
+            if (!visited.contains(currentPos.offset(tryDirNext, stepWidth))) {
                 dir = tryDirNext;
             }
         }
@@ -57,7 +56,7 @@ public class DirectionalLayerBlockDiscoverer {
     }
 
     private void tryAdd(BlockPos at, List<BlockPos> visited) {
-        if(!visited.contains(at)) {
+        if (!visited.contains(at)) {
             visited.add(at);
         }
     }

@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -19,7 +20,6 @@ import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingDamageEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,11 +46,12 @@ public class KeyCullAttack extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 EntityLivingBase attacked = event.getEntityLiving();
                 float actCull = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, cullLife);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, cullLife);
                 float lifePerc = attacked.getHealth() / attacked.getMaxHealth();
                 if (lifePerc < actCull) {
                     attacked.setHealth(0); // Try faithfully...
-                    attacked.getDataManager().set(EntityLivingBase.HEALTH, 0F); // ... then set just it forcefully.
+                    attacked.getDataManager()
+                        .set(EntityLivingBase.HEALTH, 0F); // ... then set just it forcefully.
                 }
             }
         }

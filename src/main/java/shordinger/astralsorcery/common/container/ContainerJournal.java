@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.container;
 
+import java.util.LinkedList;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
 import shordinger.astralsorcery.common.item.ItemJournal;
@@ -17,11 +20,8 @@ import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.inventory.Slot;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.wrapper.InvWrapper;
-
-import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,18 +47,18 @@ public class ContainerJournal extends Container {
             for (int j = 0; j < 9; j++) {
                 int index = j + i * 9 + 9;
 
-                if(index == journalIndex) {
+                if (index == journalIndex) {
                     addSlotToContainer(new ContainerSlotUnclickable(playerInv, index, 8 + j * 18, 84 + i * 18));
                 } else {
-                    addSlotToContainer(                    new Slot(playerInv, index, 8 + j * 18, 84 + i * 18));
+                    addSlotToContainer(new Slot(playerInv, index, 8 + j * 18, 84 + i * 18));
                 }
             }
         }
         for (int i = 0; i < 9; i++) {
-            if(i == journalIndex) {
+            if (i == journalIndex) {
                 addSlotToContainer(new ContainerSlotUnclickable(playerInv, i, 8 + i * 18, 142));
             } else {
-                addSlotToContainer(                    new Slot(playerInv, i, 8 + i * 18, 142));
+                addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
             }
         }
     }
@@ -66,7 +66,7 @@ public class ContainerJournal extends Container {
     private void buildSlots(IItemHandler handle) {
         for (int i = 0; i < 3; i++) {
             for (int xx = 0; xx < 9; xx++) {
-                addSlotToContainer(new ConstellationPaperSlot(handle, this, (i * 9) + xx,8 + xx * 18, 13 + (i * 18)));
+                addSlotToContainer(new ConstellationPaperSlot(handle, this, (i * 9) + xx, 8 + xx * 18, 13 + (i * 18)));
             }
         }
     }
@@ -80,9 +80,10 @@ public class ContainerJournal extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if(!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(itemstack1) != null) {
-                if(index >= 0 && index < 36) {
-                    if(!this.mergeItemStack(itemstack1, 36, 63, false)) {
+            if (!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper
+                && ItemConstellationPaper.getConstellation(itemstack1) != null) {
+                if (index >= 0 && index < 36) {
+                    if (!this.mergeItemStack(itemstack1, 36, 63, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
@@ -122,13 +123,15 @@ public class ContainerJournal extends Container {
     }
 
     void slotChanged() {
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide() == Side.SERVER) {
             LinkedList<IConstellation> saveConstellations = new LinkedList<>();
             for (int i = 36; i < 63; i++) {
-                ItemStack in = inventorySlots.get(i).getStack();
-                if(in.isEmpty()) continue;
+                ItemStack in = inventorySlots.get(i)
+                    .getStack();
+                if (in.isEmpty()) continue;
                 IConstellation c = ItemConstellationPaper.getConstellation(in);
-                if(c != null) {
+                if (c != null) {
                     saveConstellations.add(c);
                 }
             }

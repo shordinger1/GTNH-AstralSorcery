@@ -8,17 +8,18 @@
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.event.APIRegistryEvent;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,20 +52,29 @@ public class PerkTree extends BaseTweaker {
 
     @SubscribeEvent
     public void onPerkRemoval(APIRegistryEvent.PerkPostRemove event) {
-        if (removedPerks.contains(event.getPerk().getRegistryName().toString())) {
+        if (removedPerks.contains(
+            event.getPerk()
+                .getRegistryName()
+                .toString())) {
             event.setRemoved(true);
         }
     }
 
     @SubscribeEvent
     public void onPerkDisable(APIRegistryEvent.PerkDisable event) {
-        if (disabledPerks.contains(event.getPerk().getRegistryName().toString())) {
+        if (disabledPerks.contains(
+            event.getPerk()
+                .getRegistryName()
+                .toString())) {
             event.setPerkDisabled(true);
         }
     }
 
     public static double getMultiplier(AbstractPerk perk) {
-        return perkModifiers.getOrDefault(perk.getRegistryName().toString(), 1.0D);
+        return perkModifiers.getOrDefault(
+            perk.getRegistryName()
+                .toString(),
+            1.0D);
     }
 
 }

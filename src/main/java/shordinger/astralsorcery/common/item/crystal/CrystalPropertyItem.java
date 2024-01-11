@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.item.crystal;
 
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-
 import javax.annotation.Nullable;
+
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

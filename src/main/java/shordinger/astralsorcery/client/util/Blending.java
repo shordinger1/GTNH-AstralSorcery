@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.client.util;
 
-import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 
 /**
  * This class is part of the Astral Sorcery Mod

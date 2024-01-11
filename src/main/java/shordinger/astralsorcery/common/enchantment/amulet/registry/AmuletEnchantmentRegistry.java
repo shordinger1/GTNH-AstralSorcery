@@ -39,7 +39,7 @@ public class AmuletEnchantmentRegistry implements ConfigDataAdapter<WeightedAmul
     public Iterable<WeightedAmuletEnchantment> getDefaultDataSets() {
         List<WeightedAmuletEnchantment> enchantments = new LinkedList<>();
         for (Enchantment e : ForgeRegistries.ENCHANTMENTS.getValues()) {
-            if(!e.isCurse()) { //Cause fck curses on this.
+            if (!e.isCurse()) { // Cause fck curses on this.
                 Enchantment.Rarity rarity = e.getRarity();
                 enchantments.add(new WeightedAmuletEnchantment(e, rarity == null ? 5 : rarity.getWeight()));
             }
@@ -49,15 +49,17 @@ public class AmuletEnchantmentRegistry implements ConfigDataAdapter<WeightedAmul
 
     @Nullable
     public static Enchantment getRandomEnchant() {
-        if(possibleEnchants.isEmpty()) {
+        if (possibleEnchants.isEmpty()) {
             return null;
         }
-        return WeightedRandom.getRandomItem(rand, possibleEnchants).getEnchantment();
+        return WeightedRandom.getRandomItem(rand, possibleEnchants)
+            .getEnchantment();
     }
 
     public static boolean canBeInfluenced(Enchantment ench) {
         for (WeightedAmuletEnchantment e : possibleEnchants) {
-            if(e.getEnchantment().equals(ench)) {
+            if (e.getEnchantment()
+                .equals(ench)) {
                 return true;
             }
         }
@@ -76,15 +78,15 @@ public class AmuletEnchantmentRegistry implements ConfigDataAdapter<WeightedAmul
 
     @Override
     public String getDescription() {
-        return "Defines a whitelist of which enchantments can be rolled and buffed by the enchantment-amulet. The higher the weight, the more likely that roll is selected." +
-                "Format: <enchantment-registry-name>:<weight>";
+        return "Defines a whitelist of which enchantments can be rolled and buffed by the enchantment-amulet. The higher the weight, the more likely that roll is selected."
+            + "Format: <enchantment-registry-name>:<weight>";
     }
 
     @Nullable
     @Override
     public Optional<WeightedAmuletEnchantment> appendDataSet(String str) {
         WeightedAmuletEnchantment ench = WeightedAmuletEnchantment.deserialize(str);
-        if(ench == null) {
+        if (ench == null) {
             return Optional.empty();
         }
         possibleEnchants.add(ench);

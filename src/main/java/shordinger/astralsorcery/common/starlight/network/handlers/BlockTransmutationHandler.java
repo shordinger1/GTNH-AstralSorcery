@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.starlight.network.handlers;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -20,14 +29,6 @@ import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,18 +48,21 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
     }
 
     @Override
-    public boolean isApplicable(World world, BlockPos pos, IBlockState state, @Nullable IWeakConstellation starlightType) {
+    public boolean isApplicable(World world, BlockPos pos, IBlockState state,
+                                @Nullable IWeakConstellation starlightType) {
         return LightOreTransmutations.searchForTransmutation(state) != null;
     }
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType,
+                                 double amount) {
         long ms = System.currentTimeMillis();
 
-        if(!runningTransmutations.containsKey(pos)) {
+        if (!runningTransmutations.containsKey(pos)) {
             IBlockState tryStateIn = world.getBlockState(pos);
             LightOreTransmutations.Transmutation tr = LightOreTransmutations.searchForTransmutation(tryStateIn);
-            if(tr != null && (tr.getRequiredType() == null || tr.getRequiredType().equals(starlightType))) {
+            if (tr != null && (tr.getRequiredType() == null || tr.getRequiredType()
+                .equals(starlightType))) {
                 ActiveTransmutation atr = new ActiveTransmutation();
                 runningTransmutations.put(pos, atr);
                 atr.accCharge = 0D;
@@ -69,25 +73,30 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
             }
         }
         ActiveTransmutation node = runningTransmutations.get(pos);
-        if(LightOreTransmutations.searchForTransmutation(world.getBlockState(pos)) != node.runningTransmutation) {
+        if (LightOreTransmutations.searchForTransmutation(world.getBlockState(pos)) != node.runningTransmutation) {
             runningTransmutations.remove(pos);
             return;
         }
-        //Accept, but don't add charge
-        if (node.runningTransmutation.getRequiredType() != null && !node.runningTransmutation.getRequiredType().equals(starlightType)) {
+        // Accept, but don't add charge
+        if (node.runningTransmutation.getRequiredType() != null && !node.runningTransmutation.getRequiredType()
+            .equals(starlightType)) {
             return;
         }
         long diff = ms - node.lastMSrec;
-        if(diff >= 15_000) node.accCharge = 0;
+        if (diff >= 15_000) node.accCharge = 0;
         node.accCharge += amount;
         node.lastMSrec = ms;
 
         if (ParticleEffectWatcher.INSTANCE.mayFire(world, pos)) {
-            PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.TRANSMUTATION_CHARGE, pos.getX(), pos.getY(), pos.getZ());
+            PktParticleEvent pkt = new PktParticleEvent(
+                PktParticleEvent.ParticleEventType.TRANSMUTATION_CHARGE,
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
         }
 
-        if(node.accCharge >= node.runningTransmutation.getCost()) {
+        if (node.accCharge >= node.runningTransmutation.getCost()) {
             if (!world.setBlockState(pos, node.runningTransmutation.getOutput())) {
                 node.accCharge -= 1000;
             } else {
@@ -102,11 +111,15 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         Random rand = EffectHandler.STATIC_EFFECT_RAND;
 
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                event.getVec().getX() + rand.nextFloat(),
-                event.getVec().getY() + rand.nextFloat(),
-                event.getVec().getZ() + rand.nextFloat());
+            event.getVec()
+                .getX() + rand.nextFloat(),
+            event.getVec()
+                .getY() + rand.nextFloat(),
+            event.getVec()
+                .getZ() + rand.nextFloat());
         p.motion(0, rand.nextFloat() * 0.05, 0);
-        p.scale(0.2F).setColor(Color.WHITE);
+        p.scale(0.2F)
+            .setColor(Color.WHITE);
     }
 
     public static class ActiveTransmutation {

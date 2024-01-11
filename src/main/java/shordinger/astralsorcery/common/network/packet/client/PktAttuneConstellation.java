@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.common.network.packet.client;
 
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
@@ -34,7 +34,6 @@ public class PktAttuneConstellation implements IMessage, IMessageHandler<PktAttu
     public IMajorConstellation attunement = null;
     private int worldId = -1;
     private BlockPos at = BlockPos.ORIGIN;
-
 
     public PktAttuneConstellation() {}
 
@@ -61,14 +60,16 @@ public class PktAttuneConstellation implements IMessage, IMessageHandler<PktAttu
     @Override
     public IMessage onMessage(PktAttuneConstellation message, MessageContext ctx) {
         IMajorConstellation cst = message.attunement;
-        if(cst != null) {
-            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
-                World w = DimensionManager.getWorld(message.worldId);
-                TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, false);
-                if(ta != null) {
-                    ta.askForAttunement(ctx.getServerHandler().player, cst);
-                }
-            });
+        if (cst != null) {
+            FMLCommonHandler.instance()
+                .getMinecraftServerInstance()
+                .addScheduledTask(() -> {
+                    World w = DimensionManager.getWorld(message.worldId);
+                    TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, false);
+                    if (ta != null) {
+                        ta.askForAttunement(ctx.getServerHandler().player, cst);
+                    }
+                });
         }
         return null;
     }

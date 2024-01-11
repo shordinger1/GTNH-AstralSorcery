@@ -8,8 +8,11 @@
 
 package shordinger.astralsorcery.client.util;
 
-import shordinger.astralsorcery.common.util.MiscUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.common.structure.array.BlockArray;
+import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
@@ -31,12 +34,14 @@ import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.WorldType;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,7 +75,8 @@ public class BlockArrayRenderHelper {
     }
 
     public int getDefaultSlice() {
-        return Collections.min(renderAccess.blockRenderData.keySet(), Comparator.comparing(BlockPos::getY)).getY();
+        return Collections.min(renderAccess.blockRenderData.keySet(), Comparator.comparing(BlockPos::getY))
+            .getY();
     }
 
     public boolean hasSlice(int y) {
@@ -83,7 +89,7 @@ public class BlockArrayRenderHelper {
 
     public void render3DSliceGUI(double x, double y, float pTicks, Optional<Integer> slice) {
         GuiScreen scr = Minecraft.getMinecraft().currentScreen;
-        if(scr == null) return;
+        if (scr == null) return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
@@ -101,25 +107,25 @@ public class BlockArrayRenderHelper {
 
         double maxLength = 0;
         double pointDst = max.getX() - min.getX();
-        if(pointDst > maxLength) maxLength = pointDst;
+        if (pointDst > maxLength) maxLength = pointDst;
         pointDst = max.getY() - min.getY();
-        if(pointDst > maxLength) maxLength = pointDst;
+        if (pointDst > maxLength) maxLength = pointDst;
         pointDst = max.getZ() - min.getZ();
-        if(pointDst > maxLength) maxLength = pointDst;
+        if (pointDst > maxLength) maxLength = pointDst;
         maxLength -= 5;
 
-        if(maxLength > 0) {
+        if (maxLength > 0) {
             size = (size - minSize) * (1D - (maxLength / 20D));
         }
 
-        double dr = -5.75*size;
+        double dr = -5.75 * size;
         GlStateManager.translate(dr, dr, dr);
         GlStateManager.rotate((float) rotX, 1, 0, 0);
         GlStateManager.rotate((float) rotY, 0, 1, 0);
         GlStateManager.rotate((float) rotZ, 0, 0, 1);
         GlStateManager.translate(-dr, -dr, -dr);
 
-        GlStateManager.scale(-size*mul, -size*mul, -size*mul);
+        GlStateManager.scale(-size * mul, -size * mul, -size * mul);
 
         VertexFormat blockFormat = DefaultVertexFormats.BLOCK;
 
@@ -140,11 +146,11 @@ public class BlockArrayRenderHelper {
                 }
             }
             BakedBlockData renderData = data.getValue();
-            if(renderData.tileEntity != null) {
+            if (renderData.tileEntity != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
                 renderData.tileEntity.setPos(offset);
             }
-            if(renderData.type != Blocks.AIR) {
+            if (renderData.type != Blocks.AIR) {
                 RenderingUtils.renderBlockSafely(renderAccess, offset, renderData.state, vb);
             }
         }
@@ -158,10 +164,11 @@ public class BlockArrayRenderHelper {
                 }
             }
             BakedBlockData renderData = data.getValue();
-            if(renderData.tileEntity != null && renderData.tesr != null) {
+            if (renderData.tileEntity != null && renderData.tesr != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
                 renderData.tileEntity.setPos(offset);
-                renderData.tesr.render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
+                renderData.tesr
+                    .render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
             }
         }
         renderAccess.slice = Optional.empty();
@@ -178,7 +185,7 @@ public class BlockArrayRenderHelper {
         protected BakedBlockData(Block type, IBlockState state, TileEntity te) {
             super(type, state);
             this.tileEntity = te;
-            if(te != null) {
+            if (te != null) {
                 tesr = TileEntityRendererDispatcher.instance.getRenderer(te);
             }
         }
@@ -191,14 +198,16 @@ public class BlockArrayRenderHelper {
         private Optional<Integer> slice = Optional.empty();
 
         public WorldBlockArrayRenderAccess(BlockArray array) {
-            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : array.getPattern().entrySet()) {
+            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : array.getPattern()
+                .entrySet()) {
                 BlockPos offset = entry.getKey();
                 BlockArray.BlockInformation info = entry.getValue();
-                if(info.type.hasTileEntity(info.state)) {
+                if (info.type.hasTileEntity(info.state)) {
                     TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().world, info.state);
-                    BlockArray.TileEntityCallback callback = array.getTileCallbacks().get(offset);
-                    if(te != null && callback != null) {
-                        if(callback.isApplicable(te)) {
+                    BlockArray.TileEntityCallback callback = array.getTileCallbacks()
+                        .get(offset);
+                    if (te != null && callback != null) {
+                        if (callback.isApplicable(te)) {
                             callback.onPlace(this, offset, te);
                         }
                     }

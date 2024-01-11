@@ -31,12 +31,12 @@ public class ContainerAltarTrait extends ContainerAltarConstellation {
     void bindAltarInventory() {
         super.bindAltarInventory();
 
-        addSlotToContainer(new SlotItemHandler(invHandler, 21,  120,  11)); //Up center
-        addSlotToContainer(new SlotItemHandler(invHandler, 22,  84,  47)); //Left center
-        addSlotToContainer(new SlotItemHandler(invHandler, 23, 156,  47)); //Right center
-        addSlotToContainer(new SlotItemHandler(invHandler, 24, 120,  83)); //Lower center
+        addSlotToContainer(new SlotItemHandler(invHandler, 21, 120, 11)); // Up center
+        addSlotToContainer(new SlotItemHandler(invHandler, 22, 84, 47)); // Left center
+        addSlotToContainer(new SlotItemHandler(invHandler, 23, 156, 47)); // Right center
+        addSlotToContainer(new SlotItemHandler(invHandler, 24, 120, 83)); // Lower center
 
         this.focusSlot = new ConstellationFocusSlot(invHandler, tileAltar, 35, 11);
-        addSlotToContainer(this.focusSlot); //Focus item, not accessible from slot index.
+        addSlotToContainer(this.focusSlot); // Focus item, not accessible from slot index.
     }
 }

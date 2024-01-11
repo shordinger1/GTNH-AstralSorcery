@@ -9,6 +9,7 @@
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
 import com.google.common.collect.Lists;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -20,7 +21,6 @@ import shordinger.astralsorcery.common.crafting.helper.ShapedRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 
@@ -40,7 +40,8 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
     protected ItemStack output;
     protected int starlightRequired, craftingTickTime;
 
-    public BaseAltarRecipe(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
+    public BaseAltarRecipe(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired,
+                           int craftingTickTime) {
         this.name = name;
         this.inputs = inputs;
         this.output = output;
@@ -58,7 +59,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
         this.inputs = new ItemHandle[size];
         for (int i = 0; i < size; i++) {
             boolean defined = buf.readBoolean();
-            if(defined) {
+            if (defined) {
                 this.inputs[i] = ItemHandle.deserialize(buf);
             }
         }
@@ -91,13 +92,15 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
         return fluidInputs;
     }
 
-    protected AbstractAltarRecipe buildRecipeUnsafe(TileAltar.AltarLevel altarLevel, int starlightConsumption, int craftingTickTime, ItemStack out, ItemHandle[] inputs) {
+    protected AbstractAltarRecipe buildRecipeUnsafe(TileAltar.AltarLevel altarLevel, int starlightConsumption,
+                                                    int craftingTickTime, ItemStack out, ItemHandle[] inputs) {
         starlightConsumption = MathHelper.clamp(starlightConsumption, 1, altarLevel.getStarlightMaxStorage());
         final int sConsumption = starlightConsumption;
         List<Integer> fluidStacks = computeFluidConsumptionSlots(inputs);
         switch (altarLevel) {
             case DISCOVERY:
                 return new DiscoveryRecipe(buildNativeRecipe(inputs, out)) {
+
                     @Override
                     public int getPassiveStarlightRequired() {
                         return sConsumption;
@@ -115,6 +118,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                 };
             case ATTUNEMENT:
                 AttunementRecipe rec = new AttunementRecipe(buildNativeRecipe(inputs, out)) {
+
                     @Override
                     public int getPassiveStarlightRequired() {
                         return sConsumption;
@@ -136,11 +140,12 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
                 };
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rec.setAttItem(inputs[al.getSlotId()], al);
                 }
                 return rec;
             case CONSTELLATION_CRAFT:
                 ConstellationRecipe cRec = new ConstellationRecipe(buildNativeRecipe(inputs, out)) {
+
                     @Override
                     public int getPassiveStarlightRequired() {
                         return sConsumption;
@@ -167,18 +172,21 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
                 };
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) cRec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) cRec.setAttItem(inputs[al.getSlotId()], al);
                 }
-                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
+                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot
+                    .values()) {
+                    if (inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
                 }
                 return cRec;
             case TRAIT_CRAFT:
                 TraitRecipe rRec = new TraitRecipe(buildNativeRecipe(inputs, out)) {
+
                     @Override
                     public int getPassiveStarlightRequired() {
                         return sConsumption;
                     }
+
                     @Override
                     public int craftingTickTime() {
                         return craftingTickTime;
@@ -205,16 +213,17 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
                 };
                 for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setAttItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rRec.setAttItem(inputs[al.getSlotId()], al);
                 }
-                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setCstItem(inputs[al.getSlotId()], al);
+                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot
+                    .values()) {
+                    if (inputs[al.getSlotId()] != null) rRec.setCstItem(inputs[al.getSlotId()], al);
                 }
                 for (TraitRecipe.TraitRecipeSlot al : TraitRecipe.TraitRecipeSlot.values()) {
-                    if(inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
+                    if (inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
                 }
                 for (int i = 25; i < inputs.length; i++) {
-                    if(inputs[i] != null) {
+                    if (inputs[i] != null) {
                         rRec.addOuterTraitItem(inputs[i]);
                     }
                 }
@@ -229,7 +238,7 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
         ShapedRecipe.Builder builder = ShapedRecipe.Builder.newShapedRecipe(this.name, out);
         for (int i = 0; i < 9; i++) {
             ItemHandle itemHandle = inputs[i];
-            if(itemHandle == null) continue;
+            if (itemHandle == null) continue;
             ShapedRecipeSlot srs = ShapedRecipeSlot.values()[i];
             builder.addPart(inputs[i], srs);
         }

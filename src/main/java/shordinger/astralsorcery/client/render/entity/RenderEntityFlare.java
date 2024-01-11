@@ -35,7 +35,6 @@ public class RenderEntityFlare extends Render<EntityFlare> {
         return null;
     }
 
-
     public static class Factory implements IRenderFactory<EntityFlare> {
 
         @Override

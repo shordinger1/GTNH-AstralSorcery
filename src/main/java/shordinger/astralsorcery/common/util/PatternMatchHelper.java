@@ -10,7 +10,6 @@ package shordinger.astralsorcery.common.util;
 
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
-import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;

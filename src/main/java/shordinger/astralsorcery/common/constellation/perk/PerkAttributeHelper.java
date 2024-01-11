@@ -8,14 +8,15 @@
 
 package shordinger.astralsorcery.common.constellation.perk;
 
-import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +35,8 @@ public class PerkAttributeHelper {
     @Nonnull
     public static PlayerAttributeMap getOrCreateMap(EntityPlayer player, Side side) {
         if (side == Side.CLIENT) {
-            return playerPerkAttributesClient.computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
+            return playerPerkAttributesClient
+                .computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
         } else {
             return playerPerkAttributes.computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
         }

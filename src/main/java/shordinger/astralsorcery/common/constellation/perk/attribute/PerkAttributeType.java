@@ -8,16 +8,18 @@
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader;
-import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
-import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.relauncher.Side;
+import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader;
+import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,7 +32,7 @@ public class PerkAttributeType {
 
     protected static final Random rand = new Random();
 
-    //May be used by subclasses to more efficiently track who's got a perk applied
+    // May be used by subclasses to more efficiently track who's got a perk applied
     private Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final String type;
@@ -81,16 +83,21 @@ public class PerkAttributeType {
 
     public void onRemove(EntityPlayer player, Side side, boolean removedCompletely) {
         if (removedCompletely) {
-            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).remove(player.getUniqueID());
+            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList())
+                .remove(player.getUniqueID());
         }
     }
 
-    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {}
+    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
+    }
 
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {}
+    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side,
+                             boolean removedCompletely) {
+    }
 
     public boolean hasTypeApplied(EntityPlayer player, Side side) {
-        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
+        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList())
+            .contains(player.getUniqueID());
     }
 
     public final void clear(Side side) {

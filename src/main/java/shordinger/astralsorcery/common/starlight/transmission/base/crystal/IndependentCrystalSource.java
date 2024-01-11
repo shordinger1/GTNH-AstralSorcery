@@ -8,6 +8,9 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.base.crystal;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
@@ -28,9 +31,6 @@ import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 
-import java.util.Map;
-import java.util.function.Function;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -50,7 +50,8 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private boolean enhanced = false;
 
-    public IndependentCrystalSource(CrystalProperties properties, IWeakConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public IndependentCrystalSource(CrystalProperties properties, IWeakConstellation constellation, boolean seesSky,
+                                    boolean hasBeenLinkedBefore, BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
@@ -61,23 +62,27 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     @Override
     public float produceStarlightTick(World world, BlockPos pos) {
         IWeakConstellation cst = getStarlightType();
-        if(cst == null) return 0F;
-        if(crystalProperties == null || type == null) return 0F;
+        if (cst == null) return 0F;
+        if (crystalProperties == null || type == null) return 0F;
 
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-        if(!doesSeeSky || handle == null) {
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
+            .getWorldHandler(world);
+        if (!doesSeeSky || handle == null) {
             return 0F;
         }
 
-        if(posDistribution == -1) {
+        if (posDistribution == -1) {
             posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
         }
 
         Function<Float, Float> distrFunction = getDistributionFunc();
-        double perc = distrFunction.apply(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
+        double perc = distrFunction.apply(
+            ConstellationSkyHandler.getInstance()
+                .getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
         perc *= 1 + (0.3 * posDistribution);
-        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(cst, distrFunction)));
+        return (float) (perc * CrystalCalculations
+            .getCollectionAmt(crystalProperties, handle.getCurrentDistribution(cst, distrFunction)));
     }
 
     public void setEnhanced(boolean enhanced) {
@@ -85,7 +90,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     }
 
     private Function<Float, Float> getDistributionFunc() {
-        if(enhanced) {
+        if (enhanced) {
             return (in) -> 0.6F + (1.1F * in);
         } else {
             return (in) -> 0.2F + (0.8F * in);
@@ -99,14 +104,15 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public void informTileStateChange(IStarlightSource sourceTile) {
-        TileNetworkSkybound tns = MiscUtils.getTileAt(sourceTile.getTrWorld(), sourceTile.getTrPos(), TileNetworkSkybound.class, true);
-        if(tns != null) {
+        TileNetworkSkybound tns = MiscUtils
+            .getTileAt(sourceTile.getTrWorld(), sourceTile.getTrPos(), TileNetworkSkybound.class, true);
+        if (tns != null) {
             this.doesSeeSky = tns.doesSeeSky();
         }
-        if(tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
+        if (tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
             this.structural = true;
         }
-        if(tns instanceof TileCollectorCrystal) {
+        if (tns instanceof TileCollectorCrystal) {
             this.crystalProperties = ((TileCollectorCrystal) tns).getCrystalProperties();
             this.type = ((TileCollectorCrystal) tns).getType();
             this.starlightType = ((TileCollectorCrystal) tns).getConstellation();
@@ -117,14 +123,14 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     public void threadedUpdateProximity(BlockPos thisPos, Map<BlockPos, IIndependentStarlightSource> otherSources) {
         double minDstSq = Double.MAX_VALUE;
         for (BlockPos other : otherSources.keySet()) {
-            if(other.equals(thisPos)) continue;
+            if (other.equals(thisPos)) continue;
             double dstSq = thisPos.distanceSq(other);
-            if(dstSq < minDstSq) {
+            if (dstSq < minDstSq) {
                 minDstSq = dstSq;
             }
         }
         double dst = Math.sqrt(minDstSq);
-        if(dst <= MIN_DST) {
+        if (dst <= MIN_DST) {
             collectionDstMultiplier = dst / MIN_DST;
         } else {
             collectionDstMultiplier = 1;
@@ -152,7 +158,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
-        if(crystalProperties != null) {
+        if (crystalProperties != null) {
             crystalProperties.writeToNBT(compound);
         }
         compound.setBoolean("seesSky", doesSeeSky);

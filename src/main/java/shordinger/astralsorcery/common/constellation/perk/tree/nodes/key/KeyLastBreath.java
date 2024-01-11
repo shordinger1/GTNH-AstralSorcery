@@ -8,6 +8,7 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -21,7 +22,6 @@ import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
 import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,12 +38,23 @@ public class KeyLastBreath extends KeyPerk {
     public KeyLastBreath(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
+
             @Override
             public void loadFromConfig(Configuration cfg) {
-                digSpeedIncrease = cfg.getFloat("HarvestSpeed_Increase", getConfigurationSection(), digSpeedIncrease, 1F, 32F,
-                        "Defines the dig speed multiplier you get additionally to your normal dig speed when being low on health (25% health = 75% of this additional multiplier)");
-                damageIncrease = cfg.getFloat("Damage_Increase", getConfigurationSection(), damageIncrease, 1F, 32F,
-                        "Defines the damage multiplier you get additionally to your normal damage when being low on health (25% health = 75% of this additional multiplier)");
+                digSpeedIncrease = cfg.getFloat(
+                    "HarvestSpeed_Increase",
+                    getConfigurationSection(),
+                    digSpeedIncrease,
+                    1F,
+                    32F,
+                    "Defines the dig speed multiplier you get additionally to your normal dig speed when being low on health (25% health = 75% of this additional multiplier)");
+                damageIncrease = cfg.getFloat(
+                    "Damage_Increase",
+                    getConfigurationSection(),
+                    damageIncrease,
+                    1F,
+                    32F,
+                    "Defines the damage multiplier you get additionally to your normal damage when being low on health (25% health = 75% of this additional multiplier)");
             }
         });
     }
@@ -65,7 +76,7 @@ public class KeyLastBreath extends KeyPerk {
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
                 float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
+                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, damageIncrease);
                 float healthPerc = 1F - (Math.min(player.getHealth(), player.getMaxHealth()) / player.getMaxHealth());
                 event.setAmount(event.getAmount() * (1F + (healthPerc * actIncrease)));
             }
@@ -79,7 +90,7 @@ public class KeyLastBreath extends KeyPerk {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             float actIncrease = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, digSpeedIncrease);
+                .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, digSpeedIncrease);
             float healthPerc = 1F - (Math.min(player.getHealth(), player.getMaxHealth()) / player.getMaxHealth());
             event.setNewSpeed(event.getNewSpeed() * (1F + (healthPerc * actIncrease)));
         }

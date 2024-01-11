@@ -34,17 +34,20 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    /*@Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        if(!world.isRemote) {
-            LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
-            LinkHandler.propagateClick(result, player, world, pos);
-            return EnumActionResult.SUCCESS;
-        } else {
-            player.swingArm(hand);
-            return EnumActionResult.PASS;
-        }
-    }*/
+    /*
+     * @Override
+     * public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
+     * EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+     * if(!world.isRemote) {
+     * LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
+     * LinkHandler.propagateClick(result, player, world, pos);
+     * return EnumActionResult.SUCCESS;
+     * } else {
+     * player.swingArm(hand);
+     * return EnumActionResult.PASS;
+     * }
+     * }
+     */
 
     @Override
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
@@ -52,9 +55,11 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
-        if(!world.isRemote) {
-            LinkHandler.RightClickResult result = LinkHandler.onRightClick(entityPlayer, world, pos, entityPlayer.isSneaking());
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand,
+                                ItemStack stack) {
+        if (!world.isRemote) {
+            LinkHandler.RightClickResult result = LinkHandler
+                .onRightClick(entityPlayer, world, pos, entityPlayer.isSneaking());
             LinkHandler.propagateClick(result, entityPlayer, world, pos);
         } else {
             entityPlayer.swingArm(hand);

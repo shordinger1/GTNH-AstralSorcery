@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.FoodStats;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,9 +29,9 @@ public class KeyReducedFood extends KeyPerk implements IPlayerTickPerk {
 
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
-        if(side == Side.SERVER) {
+        if (side == Side.SERVER) {
             FoodStats stats = player.getFoodStats();
-            if(stats.foodExhaustionLevel > -10F) {
+            if (stats.foodExhaustionLevel > -10F) {
                 stats.addExhaustion(-0.01F);
             }
         }

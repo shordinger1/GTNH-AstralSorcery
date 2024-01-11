@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.network;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.ClientProxy;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
@@ -18,8 +20,6 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +34,7 @@ public class PacketChannel {
 
         @Override
         public void sendToServer(IMessage message) {
-            if(message instanceof ClientReplyPacket && !PacketChannel.canBeSent()) {
+            if (message instanceof ClientReplyPacket && !PacketChannel.canBeSent()) {
                 return;
             }
             super.sendToServer(message);
@@ -49,7 +49,7 @@ public class PacketChannel {
     public static void init() {
         int id = 0;
 
-        //(server -> client)
+        // (server -> client)
         CHANNEL.registerMessage(PktSyncKnowledge.class, PktSyncKnowledge.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncData.class, PktSyncData.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktParticleEvent.class, PktParticleEvent.class, id++, Side.CLIENT);
@@ -61,8 +61,9 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktLightningEffect.class, PktLightningEffect.class, id++, Side.CLIENT);
-        //CHANNEL.registerMessage(PktSyncMinetweakerChanges.class, PktSyncMinetweakerChanges.class, id++, Side.CLIENT);
-        //CHANNEL.registerMessage(PktSyncMinetweakerChanges.Compound.class, PktSyncMinetweakerChanges.Compound.class, id++, Side.CLIENT);
+        // CHANNEL.registerMessage(PktSyncMinetweakerChanges.class, PktSyncMinetweakerChanges.class, id++, Side.CLIENT);
+        // CHANNEL.registerMessage(PktSyncMinetweakerChanges.Compound.class, PktSyncMinetweakerChanges.Compound.class,
+        // id++, Side.CLIENT);
         CHANNEL.registerMessage(PktDualParticleEvent.class, PktDualParticleEvent.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktOreScan.class, PktOreScan.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncCharge.class, PktSyncCharge.class, id++, Side.CLIENT);
@@ -78,7 +79,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktSyncPerkActivity.class, PktSyncPerkActivity.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRequestPerkSealAction.class, PktRequestPerkSealAction.class, id++, Side.CLIENT);
 
-        //(client -> server)
+        // (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.SERVER);
@@ -97,20 +98,27 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktPerkGemModification.class, PktPerkGemModification.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktPlayerStatus.class, PktPlayerStatus.class, id++, Side.SERVER);
 
-        /*Method registerPacket = ReflectionHelper.findMethod(
-                EnumConnectionState.class,
-                EnumConnectionState.PLAY,
-                new String[] { "registerPacket", "func_179245_a", "a" },
-                EnumPacketDirection.class, Class.class);
-        registerPacket.setAccessible(true);
-
-        try {
-            registerPacket.invoke(EnumConnectionState.HANDSHAKING, EnumPacketDirection.CLIENTBOUND, PktWorldHandlerSyncEarly.class);
-        } catch (Exception e) {}*/
+        /*
+         * Method registerPacket = ReflectionHelper.findMethod(
+         * EnumConnectionState.class,
+         * EnumConnectionState.PLAY,
+         * new String[] { "registerPacket", "func_179245_a", "a" },
+         * EnumPacketDirection.class, Class.class);
+         * registerPacket.setAccessible(true);
+         * try {
+         * registerPacket.invoke(EnumConnectionState.HANDSHAKING, EnumPacketDirection.CLIENTBOUND,
+         * PktWorldHandlerSyncEarly.class);
+         * } catch (Exception e) {}
+         */
     }
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, Vec3i pos, double range) {
-        return new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range);
+        return new NetworkRegistry.TargetPoint(
+            world.provider.getDimension(),
+            pos.getX(),
+            pos.getY(),
+            pos.getZ(),
+            range);
     }
 
 }

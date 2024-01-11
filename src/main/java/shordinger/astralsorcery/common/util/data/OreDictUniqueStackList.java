@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.util.data;
 
+import java.util.Iterator;
+
 import shordinger.astralsorcery.common.util.ItemComparator;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-
-import java.util.Iterator;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,10 +38,11 @@ public class OreDictUniqueStackList extends NonNullList<ItemStack> {
                 }
             }
         } else {
-            if(!(o instanceof ItemStack)) return false;
+            if (!(o instanceof ItemStack)) return false;
             ItemStack stack = (ItemStack) o;
             while (it.hasNext()) {
-                if (ItemComparator.compare(it.next(), stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+                if (ItemComparator
+                    .compare(it.next(), stack, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
                     return true;
                 }
             }

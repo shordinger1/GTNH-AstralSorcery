@@ -8,6 +8,11 @@
 
 package shordinger.astralsorcery.client.effect.fx;
 
+import java.awt.*;
+import java.util.function.Function;
+
+import org.lwjgl.opengl.GL11;
+
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -20,10 +25,6 @@ import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,7 +61,10 @@ public class EntityFXFloatingCube extends EntityComplexFX {
     private Function<EntityFXFloatingCube, Color> colorHandler = null;
 
     public EntityFXFloatingCube(IBlockState blockState) {
-        this.tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(blockState);
+        this.tas = Minecraft.getMinecraft()
+            .getBlockRendererDispatcher()
+            .getBlockModelShapes()
+            .getTexture(blockState);
         this.tex = null;
     }
 
@@ -164,8 +168,10 @@ public class EntityFXFloatingCube extends EntityComplexFX {
     }
 
     public EntityFXFloatingCube tumble() {
-        this.rotationDegreeAxis = Vector3.positiveYRandom().multiply(360);
-        this.rotationChange = Vector3.random().multiply(12);
+        this.rotationDegreeAxis = Vector3.positiveYRandom()
+            .multiply(360);
+        this.rotationChange = Vector3.random()
+            .multiply(12);
         return this;
     }
 
@@ -183,16 +189,16 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     public Vector3 getInterpolatedPosition(float percent) {
         return new Vector3(
-                RenderingUtils.interpolate(prevPosition.getX(), position.getX(), percent),
-                RenderingUtils.interpolate(prevPosition.getY(), position.getY(), percent),
-                RenderingUtils.interpolate(prevPosition.getZ(), position.getZ(), percent));
+            RenderingUtils.interpolate(prevPosition.getX(), position.getX(), percent),
+            RenderingUtils.interpolate(prevPosition.getY(), position.getY(), percent),
+            RenderingUtils.interpolate(prevPosition.getZ(), position.getZ(), percent));
     }
 
     public Vector3 getInterpolatedRotation(float percent) {
         return new Vector3(
-                RenderingUtils.interpolate(prevRotationDegreeAxis.getX(), rotationDegreeAxis.getX(), percent),
-                RenderingUtils.interpolate(prevRotationDegreeAxis.getY(), rotationDegreeAxis.getY(), percent),
-                RenderingUtils.interpolate(prevRotationDegreeAxis.getZ(), rotationDegreeAxis.getZ(), percent));
+            RenderingUtils.interpolate(prevRotationDegreeAxis.getX(), rotationDegreeAxis.getX(), percent),
+            RenderingUtils.interpolate(prevRotationDegreeAxis.getY(), rotationDegreeAxis.getY(), percent),
+            RenderingUtils.interpolate(prevRotationDegreeAxis.getZ(), rotationDegreeAxis.getZ(), percent));
     }
 
     @Override
@@ -218,16 +224,21 @@ public class EntityFXFloatingCube extends EntityComplexFX {
             this.position.add(this.motion);
         }
 
-        if(this.tumbleIntensityMultiplier > 0 && this.rotationChange.lengthSquared() > 0) {
+        if (this.tumbleIntensityMultiplier > 0 && this.rotationChange.lengthSquared() > 0) {
             Vector3 degAxis = rotationDegreeAxis.clone();
-            Vector3 modify = this.rotationChange.clone().multiply(tumbleIntensityMultiplier);
+            Vector3 modify = this.rotationChange.clone()
+                .multiply(tumbleIntensityMultiplier);
             this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
             this.rotationDegreeAxis.add(modify);
 
             Vector3 newDegAxis = rotationDegreeAxis;
-            newDegAxis.setX(newDegAxis.getX() % 360D).setY(newDegAxis.getY() % 360D).setZ(newDegAxis.getZ() % 360D);
-            if(!degAxis.add(modify).equals(newDegAxis)) {
-                this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone().subtract(modify);
+            newDegAxis.setX(newDegAxis.getX() % 360D)
+                .setY(newDegAxis.getY() % 360D)
+                .setZ(newDegAxis.getZ() % 360D);
+            if (!degAxis.add(modify)
+                .equals(newDegAxis)) {
+                this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone()
+                    .subtract(modify);
             }
         } else {
             this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
@@ -245,7 +256,7 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         GlStateManager.pushMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        if(blending == null) {
+        if (blending == null) {
             GlStateManager.disableBlend();
         } else {
             GlStateManager.enableBlend();
@@ -253,7 +264,7 @@ public class EntityFXFloatingCube extends EntityComplexFX {
             blending.applyStateManager();
             blending.apply();
         }
-        if(disableDepth) {
+        if (disableDepth) {
             GlStateManager.disableDepth();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
         }
@@ -301,20 +312,28 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         float cG = ((float) c.getGreen()) / 255F;
         float cB = ((float) c.getBlue()) / 255F;
 
-        if(lightCoordX == -1 && lightCoordY == -1) {
-            RenderingUtils.renderTexturedCubeCentralWithColor(new Vector3(), scaleF,
-                    u, v, uLength, vLength,
-                    cR, cG, cB, alpha);
+        if (lightCoordX == -1 && lightCoordY == -1) {
+            RenderingUtils
+                .renderTexturedCubeCentralWithColor(new Vector3(), scaleF, u, v, uLength, vLength, cR, cG, cB, alpha);
         } else {
-            RenderingUtils.renderTexturedCubeCentralWithLightAndColor(new Vector3(), scaleF,
-                    u, v, uLength, vLength,
-                    lightCoordX, lightCoordY,
-                    cR, cG, cB, alpha);
+            RenderingUtils.renderTexturedCubeCentralWithLightAndColor(
+                new Vector3(),
+                scaleF,
+                u,
+                v,
+                uLength,
+                vLength,
+                lightCoordX,
+                lightCoordY,
+                cR,
+                cG,
+                cB,
+                alpha);
         }
 
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
         GlStateManager.enableCull();
-        if(disableDepth) {
+        if (disableDepth) {
             GlStateManager.enableDepth();
         }
         Blending.DEFAULT.applyStateManager();

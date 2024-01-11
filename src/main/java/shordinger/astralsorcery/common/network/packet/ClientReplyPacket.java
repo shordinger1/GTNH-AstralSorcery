@@ -15,5 +15,6 @@ package shordinger.astralsorcery.common.network.packet;
  * Created by HellFirePvP
  * Date: 28.01.2018 / 19:29
  */
-//Marks Client->Server packets that expect a REPLY back from the server optionally.
-public interface ClientReplyPacket {}
+// Marks Client->Server packets that expect a REPLY back from the server optionally.
+public interface ClientReplyPacket {
+}

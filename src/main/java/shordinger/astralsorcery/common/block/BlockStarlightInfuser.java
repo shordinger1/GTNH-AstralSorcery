@@ -14,7 +14,6 @@ import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -55,10 +54,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote && hand.equals(EnumHand.MAIN_HAND)) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote && hand.equals(EnumHand.MAIN_HAND)) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
-            if(infuser != null) {
+            if (infuser != null) {
                 infuser.onInteract(playerIn, hand, playerIn.getHeldItem(hand));
             }
         }
@@ -72,14 +72,19 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if(!worldIn.isRemote) {
+        if (!worldIn.isRemote) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
-            if(infuser != null && !infuser.getInputStack().isEmpty()) {
-                ItemUtils.dropItemNaturally(worldIn,
-                        infuser.getPos().getX() + 0.5,
-                        infuser.getPos().getY() + 1,
-                        infuser.getPos().getZ() + 0.5,
-                        infuser.getInputStack());
+            if (infuser != null && !infuser.getInputStack()
+                .isEmpty()) {
+                ItemUtils.dropItemNaturally(
+                    worldIn,
+                    infuser.getPos()
+                        .getX() + 0.5,
+                    infuser.getPos()
+                        .getY() + 1,
+                    infuser.getPos()
+                        .getZ() + 0.5,
+                    infuser.getInputStack());
             }
         }
 
@@ -107,7 +112,8 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
+                                            EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

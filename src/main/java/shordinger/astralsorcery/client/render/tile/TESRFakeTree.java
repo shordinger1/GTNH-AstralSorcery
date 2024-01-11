@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.client.render.tile;
 
+import java.awt.*;
+
+import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import shordinger.astralsorcery.common.tile.TileFakeTree;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,14 +27,19 @@ import java.awt.*;
 public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
 
     @Override
-    public void render(TileFakeTree te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if(te.getFakedState() == null) return;
+    public void render(TileFakeTree te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
+        if (te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
-        if(x * x + y * y + z * z >= 64 * 64) return;
+        if (x * x + y * y + z * z >= 64 * 64) return;
         Color effect = null;
         if (te.getPlayerEffectRef() != null) {
-            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getPatreonEffects(Side.CLIENT, te.getPlayerEffectRef())
-                    .stream().filter(p -> p instanceof PtEffectTreeBeacon).findFirst().orElse(null);
+            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper
+                .getPatreonEffects(Side.CLIENT, te.getPlayerEffectRef())
+                .stream()
+                .filter(p -> p instanceof PtEffectTreeBeacon)
+                .findFirst()
+                .orElse(null);
             if (pe instanceof PtEffectTreeBeacon) {
                 effect = new Color(((PtEffectTreeBeacon) pe).getColorTranslucentOverlay(), true);
             }

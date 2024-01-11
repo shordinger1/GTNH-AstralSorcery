@@ -8,6 +8,17 @@
 
 package shordinger.astralsorcery.common.integrations;
 
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import mezz.jei.api.*;
+import mezz.jei.api.ingredients.IIngredientBlacklist;
+import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
+import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mezz.jei.startup.StackHelper;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.base.Mods;
@@ -34,18 +45,8 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import mezz.jei.api.*;
-import mezz.jei.api.ingredients.IIngredientBlacklist;
-import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.api.recipe.*;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
-import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import mezz.jei.startup.StackHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -79,10 +80,7 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(
-                ItemsAS.wand,
-                ItemsAS.armorImbuedCape,
-                ItemsAS.shiftingStar);
+        subtypeRegistry.useNbtForSubtypes(ItemsAS.wand, ItemsAS.armorImbuedCape, ItemsAS.shiftingStar);
     }
 
     @Override
@@ -90,18 +88,19 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
-        IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
+        IGuiHelper guiHelper = registry.getJeiHelpers()
+            .getGuiHelper();
 
         registry.addRecipeCategories(
-                new CategoryWell(guiHelper),
-                new CategoryGrindstone(guiHelper),
-                new CategoryInfuser(guiHelper),
-                new CategoryTransmutation(guiHelper),
+            new CategoryWell(guiHelper),
+            new CategoryGrindstone(guiHelper),
+            new CategoryInfuser(guiHelper),
+            new CategoryTransmutation(guiHelper),
 
-                new CategoryAltarTrait(guiHelper),
-                new CategoryAltarConstellation(guiHelper),
-                new CategoryAltarAttunement(guiHelper),
-                new CategoryAltarDiscovery(guiHelper));
+            new CategoryAltarTrait(guiHelper),
+            new CategoryAltarConstellation(guiHelper),
+            new CategoryAltarAttunement(guiHelper),
+            new CategoryAltarDiscovery(guiHelper));
     }
 
     @Override
@@ -111,28 +110,46 @@ public class ModIntegrationJEI implements IModPlugin {
 
         MinecraftForge.EVENT_BUS.register(JEISessionHandler.getInstance());
 
-        hideItems(registry.getJeiHelpers().getIngredientBlacklist());
+        hideItems(
+            registry.getJeiHelpers()
+                .getIngredientBlacklist());
 
         IRecipeTransferRegistry rtr = registry.getRecipeTransferRegistry();
 
-        registerRecipeHandle(registry, WellLiquefaction.LiquefactionEntry.class,   WellRecipeWrapper::new,               idWell);
-        registerRecipeHandle(registry, GrindstoneRecipe.class,                     GrindstoneRecipeWrapper::new,         idGrindstone);
-        registerRecipeHandle(registry, AbstractInfusionRecipe.class,               InfuserRecipeWrapper::new,            idInfuser);
-        registerRecipeHandle(registry, LightOreTransmutations.Transmutation.class, TransmutationRecipeWrapper::new,      idTransmutation);
-        registerRecipeHandle(registry, TraitRecipe.class,                          AltarTraitRecipeWrapper::new,         idAltarTrait);
-        registerRecipeHandle(registry, ConstellationRecipe.class,                  AltarConstellationRecipeWrapper::new, idAltarConstellation);
-        registerRecipeHandle(registry, AttunementRecipe.class,                     AltarAttunementRecipeWrapper::new,    idAltarAttunement);
-        registerRecipeHandle(registry, DiscoveryRecipe.class,                      AltarDiscoveryRecipeWrapper::new,     idAltarDiscovery);
+        registerRecipeHandle(registry, WellLiquefaction.LiquefactionEntry.class, WellRecipeWrapper::new, idWell);
+        registerRecipeHandle(registry, GrindstoneRecipe.class, GrindstoneRecipeWrapper::new, idGrindstone);
+        registerRecipeHandle(registry, AbstractInfusionRecipe.class, InfuserRecipeWrapper::new, idInfuser);
+        registerRecipeHandle(
+            registry,
+            LightOreTransmutations.Transmutation.class,
+            TransmutationRecipeWrapper::new,
+            idTransmutation);
+        registerRecipeHandle(registry, TraitRecipe.class, AltarTraitRecipeWrapper::new, idAltarTrait);
+        registerRecipeHandle(
+            registry,
+            ConstellationRecipe.class,
+            AltarConstellationRecipeWrapper::new,
+            idAltarConstellation);
+        registerRecipeHandle(registry, AttunementRecipe.class, AltarAttunementRecipeWrapper::new, idAltarAttunement);
+        registerRecipeHandle(registry, DiscoveryRecipe.class, AltarDiscoveryRecipeWrapper::new, idAltarDiscovery);
 
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockWell), idWell);
         registry.addRecipeCatalyst(BlockMachine.MachineType.GRINDSTONE.asStack(), idGrindstone);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.lens), idTransmutation);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.lensPrism), idTransmutation);
-        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), idAltarDiscovery);
-        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), idAltarAttunement);
-        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
-        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), idAltarTrait);
+        registry.addRecipeCatalyst(
+            new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()),
+            idAltarDiscovery);
+        registry.addRecipeCatalyst(
+            new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()),
+            idAltarAttunement);
+        registry.addRecipeCatalyst(
+            new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()),
+            idAltarConstellation);
+        registry.addRecipeCatalyst(
+            new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()),
+            idAltarTrait);
 
         addTransferHandlers(rtr, jeiHelpers.recipeTransferHandlerHelper());
 
@@ -143,12 +160,23 @@ public class ModIntegrationJEI implements IModPlugin {
 
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.DISCOVERY), idAltarDiscovery);
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.ATTUNEMENT), idAltarAttunement);
-        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT), idAltarConstellation);
+        registry.addRecipes(
+            AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT),
+            idAltarConstellation);
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.TRAIT_CRAFT), idAltarTrait);
 
-        registry.handleRecipes(RecipeHelper.ShapedIngredientRecipe.class, ASRecipeWrapper.ShapedRecipe::new, VanillaRecipeCategoryUid.CRAFTING);
-        registry.handleRecipes(RecipeHelper.ShapelessIngredientRecipe.class, ASRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
-        registry.handleRecipes(ShapedLightProximityRecipe.class, ASRecipeWrapper.LightRecipe::new, VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(
+            RecipeHelper.ShapedIngredientRecipe.class,
+            ASRecipeWrapper.ShapedRecipe::new,
+            VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(
+            RecipeHelper.ShapelessIngredientRecipe.class,
+            ASRecipeWrapper::new,
+            VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(
+            ShapedLightProximityRecipe.class,
+            ASRecipeWrapper.LightRecipe::new,
+            VanillaRecipeCategoryUid.CRAFTING);
 
         jeiRegistrationPhase = false;
     }
@@ -160,32 +188,42 @@ public class ModIntegrationJEI implements IModPlugin {
         StackHelper sHelper = (StackHelper) stackHelper;
 
         // T1 recipes
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarDiscovery.class,
-                sHelper, trHelper, 9), idAltarDiscovery);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class,
-                sHelper, trHelper, 9), idAltarDiscovery);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
-                sHelper, trHelper, 9), idAltarDiscovery);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
-                sHelper, trHelper, 9), idAltarDiscovery);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarDiscovery.class, sHelper, trHelper, 9),
+            idAltarDiscovery);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class, sHelper, trHelper, 9),
+            idAltarDiscovery);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class, sHelper, trHelper, 9),
+            idAltarDiscovery);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class, sHelper, trHelper, 9),
+            idAltarDiscovery);
 
         // T2 recipes
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class,
-                sHelper, trHelper, 13), idAltarAttunement);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
-                sHelper, trHelper, 13), idAltarAttunement);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
-                sHelper, trHelper, 13), idAltarAttunement);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarAttunement.class, sHelper, trHelper, 13),
+            idAltarAttunement);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class, sHelper, trHelper, 13),
+            idAltarAttunement);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class, sHelper, trHelper, 13),
+            idAltarAttunement);
 
         // T3 recipes
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class,
-                sHelper, trHelper, 21), idAltarConstellation);
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
-                sHelper, trHelper, 21), idAltarConstellation);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarConstellation.class, sHelper, trHelper, 21),
+            idAltarConstellation);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class, sHelper, trHelper, 21),
+            idAltarConstellation);
 
         // T4 recipes
-        rtr.addRecipeTransferHandler(new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class,
-                sHelper, trHelper, 25), idAltarTrait);
+        rtr.addRecipeTransferHandler(
+            new TieredAltarRecipeTransferHandler<>(ContainerAltarTrait.class, sHelper, trHelper, 25),
+            idAltarTrait);
     }
 
     private void hideItems(IIngredientBlacklist blacklist) {
@@ -197,21 +235,25 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockPortalNode));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
-        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+        if (Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.hideJEIGeolosysSample(blacklist);
         }
     }
 
-    private <T> void registerRecipeHandle(IModRegistry registry, Class<T> recipeClass, IRecipeWrapperFactory<T> factory, String categoryId) {
+    private <T> void registerRecipeHandle(IModRegistry registry, Class<T> recipeClass, IRecipeWrapperFactory<T> factory,
+                                          String categoryId) {
         factoryMap.put(recipeClass, new Tuple<>(factory, categoryId));
         registry.handleRecipes(recipeClass, factory, categoryId);
     }
 
     public static boolean addRecipe(Object recipe) {
         Tuple<IRecipeWrapperFactory, String> factoryTuple = findRecipeWrapperFor(recipe);
-        if(factoryTuple != null) {
-            RecipeChange change = new RecipeChange(factoryTuple.key.getRecipeWrapper(recipe), factoryTuple.value, ModificationAction.ADDITION);
-            if(recipeRegistry == null) {
+        if (factoryTuple != null) {
+            RecipeChange change = new RecipeChange(
+                factoryTuple.key.getRecipeWrapper(recipe),
+                factoryTuple.value,
+                ModificationAction.ADDITION);
+            if (recipeRegistry == null) {
                 recipePrimer.add(change);
             } else {
                 change.apply(recipeRegistry);
@@ -224,9 +266,12 @@ public class ModIntegrationJEI implements IModPlugin {
 
     public static boolean removeRecipe(Object recipe) {
         Tuple<IRecipeWrapperFactory, String> factoryTuple = findRecipeWrapperFor(recipe);
-        if(factoryTuple != null) {
-            RecipeChange change = new RecipeChange(factoryTuple.key.getRecipeWrapper(recipe), factoryTuple.value, ModificationAction.REMOVAL);
-            if(recipeRegistry == null) {
+        if (factoryTuple != null) {
+            RecipeChange change = new RecipeChange(
+                factoryTuple.key.getRecipeWrapper(recipe),
+                factoryTuple.value,
+                ModificationAction.REMOVAL);
+            if (recipeRegistry == null) {
                 recipePrimer.add(change);
             } else {
                 change.apply(recipeRegistry);
@@ -274,8 +319,10 @@ public class ModIntegrationJEI implements IModPlugin {
                     break;
             }
         }
-        if((unresolvedRecipes.size() - assignedRecipes) > 0) {
-            AstralSorcery.log.warn("JEI Initialization Ended up with " + (unresolvedRecipes.size() - assignedRecipes) + " unresolvable crafttweaker recipes!");
+        if ((unresolvedRecipes.size() - assignedRecipes) > 0) {
+            AstralSorcery.log.warn(
+                "JEI Initialization Ended up with " + (unresolvedRecipes.size() - assignedRecipes)
+                    + " unresolvable crafttweaker recipes!");
         }
     }
 
@@ -292,7 +339,7 @@ public class ModIntegrationJEI implements IModPlugin {
         }
 
         private void apply(IRecipeRegistry recipeRegistry) {
-            if(action == ModificationAction.ADDITION) {
+            if (action == ModificationAction.ADDITION) {
                 recipeRegistry.addRecipe(this.recipe, this.category);
             } else {
                 recipeRegistry.removeRecipe(this.recipe, this.category);

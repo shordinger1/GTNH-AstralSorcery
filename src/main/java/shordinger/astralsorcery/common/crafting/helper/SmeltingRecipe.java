@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
@@ -15,8 +17,6 @@ import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.FurnaceRecipes;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +35,8 @@ public class SmeltingRecipe extends AbstractRecipeData {
         this.input = input;
         this.exp = exp;
 
-        FurnaceRecipes.instance().addSmeltingRecipe(this.input, this.getOutput(), this.exp);
+        FurnaceRecipes.instance()
+            .addSmeltingRecipe(this.input, this.getOutput(), this.exp);
     }
 
     public ItemStack getInput() {
@@ -92,7 +93,7 @@ public class SmeltingRecipe extends AbstractRecipeData {
         }
 
         public SmeltingRecipe buildAndRegister() {
-            if(registered) {
+            if (registered) {
                 throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             }
             registered = true;

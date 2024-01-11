@@ -31,7 +31,9 @@ import java.util.concurrent.Callable;
  */
 public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> {
 
-    public static final ResourceLocation CAP_AMULETHOLDER_NAME = new ResourceLocation(AstralSorcery.MODID, "cap_item_amulet_holder");
+    public static final ResourceLocation CAP_AMULETHOLDER_NAME = new ResourceLocation(
+        AstralSorcery.MODID,
+        "cap_item_amulet_holder");
 
     @CapabilityInject(AmuletHolderCapability.class)
     public static Capability<AmuletHolderCapability> CAPABILITY_AMULET_HOLDER = null;
@@ -49,7 +51,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound cmp = new NBTTagCompound();
-        if(holderUUID != null) {
+        if (holderUUID != null) {
             cmp.setUniqueId("AS_Amulet_Holder", holderUUID);
         }
         return cmp;
@@ -57,7 +59,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        if(nbt.hasUniqueId("AS_Amulet_Holder")) {
+        if (nbt.hasUniqueId("AS_Amulet_Holder")) {
             this.holderUUID = nbt.getUniqueId("AS_Amulet_Holder");
         } else {
             this.holderUUID = null;

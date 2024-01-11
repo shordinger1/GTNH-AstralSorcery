@@ -8,8 +8,16 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityCrystalTool;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.CrystalPropertyItem;
@@ -28,12 +36,6 @@ import shordinger.wrapper.net.minecraft.item.ItemSword;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,7 +56,7 @@ public class ItemCrystalSword extends ItemSword implements CrystalPropertyItem {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
             setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial));
@@ -129,24 +131,24 @@ public class ItemCrystalSword extends ItemSword implements CrystalPropertyItem {
 
     private void damageProperties(ItemStack stack, int damage) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        if(prop == null) {
+        if (prop == null) {
             stack.setItemDamage(stack.getMaxDamage());
             return;
         }
-        if(prop.getSize() <= 0) {
+        if (prop.getSize() <= 0) {
             super.setDamage(stack, 11);
             return;
         }
-        if(damage < 0) {
+        if (damage < 0) {
             return;
         }
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
-            if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+            if (chance >= rand.nextFloat()) {
+                if (rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
-                if(purity <= rand.nextFloat()) {
-                    if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+                if (purity <= rand.nextFloat()) {
+                    if (rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
                 }
             }
         }
@@ -166,13 +168,19 @@ public class ItemCrystalSword extends ItemSword implements CrystalPropertyItem {
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         Multimap<String, AttributeModifier> modifiers = HashMultimap.create();
-        if(slot == EntityEquipmentSlot.MAINHAND) {
+        if (slot == EntityEquipmentSlot.MAINHAND) {
             ToolCrystalProperties prop = getToolProperties(stack);
-            if(prop != null) {
-                modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                        new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1F + (12F * prop.getEfficiencyMultiplier()), 0));
-                modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                        new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1D, 0));
+            if (prop != null) {
+                modifiers.put(
+                    SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+                    new AttributeModifier(
+                        ATTACK_DAMAGE_MODIFIER,
+                        "Weapon modifier",
+                        1F + (12F * prop.getEfficiencyMultiplier()),
+                        0));
+                modifiers.put(
+                    SharedMonsterAttributes.ATTACK_SPEED.getName(),
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1D, 0));
             }
         }
         return modifiers;

@@ -35,18 +35,22 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> {
 
     private static final ASobservatory modelTelescope = new ASobservatory();
-    private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/observatory");
+    private static final BindableResource texTelescope = AssetLibrary
+        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/observatory");
 
     @Override
-    public void render(TileObservatory te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if(new Vector3(x, y, z).length() >= 64) {
+    public void render(TileObservatory te, double x, double y, double z, float partialTicks, int destroyStage,
+                       float alpha) {
+        if (new Vector3(x, y, z).length() >= 64) {
             return;
         }
 
         Entity ridden;
         EntityPlayer player;
-        if ((player = Minecraft.getMinecraft().player) != null && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null &&
-                ridden instanceof EntityObservatoryHelper && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
+        if ((player = Minecraft.getMinecraft().player) != null
+            && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null
+            && ridden instanceof EntityObservatoryHelper
+            && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
             ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(te, player);
         }
 

@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
@@ -17,8 +19,6 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,11 +33,18 @@ public class ItemChargedCrystalSword extends ItemCrystalSword implements Charged
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
         if (!player.getEntityWorld().isRemote && player instanceof EntityPlayerMP) {
             EntityPlayerMP playerMp = (EntityPlayerMP) player;
-            if(!MiscUtils.isPlayerFakeMP(playerMp) && !player.isSneaking() && !playerMp.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalSword)) {
-                CelestialStrike.play(player, player.getEntityWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCenter(entity));
+            if (!MiscUtils.isPlayerFakeMP(playerMp) && !player.isSneaking()
+                && !playerMp.getCooldownTracker()
+                .hasCooldown(ItemsAS.chargedCrystalSword)) {
+                CelestialStrike.play(
+                    player,
+                    player.getEntityWorld(),
+                    Vector3.atEntityCorner(entity),
+                    Vector3.atEntityCenter(entity));
                 stack.damageItem(1, player);
-                if(!ChargedCrystalToolBase.tryRevertMainHand(playerMp, stack)) {
-                    playerMp.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 80);
+                if (!ChargedCrystalToolBase.tryRevertMainHand(playerMp, stack)) {
+                    playerMp.getCooldownTracker()
+                        .setCooldown(ItemsAS.chargedCrystalSword, 80);
                 }
             }
         }
@@ -49,6 +56,5 @@ public class ItemChargedCrystalSword extends ItemCrystalSword implements Charged
     public Item getInertVariant() {
         return ItemsAS.crystalSword;
     }
-
 
 }

@@ -8,6 +8,15 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityCrystalTool;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.CrystalPropertyItem;
@@ -23,14 +32,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.ItemTool;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -146,24 +147,24 @@ public abstract class ItemCrystalToolBase extends ItemTool implements CrystalPro
 
     private void damageProperties(ItemStack stack, int damage) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        if(prop == null) {
+        if (prop == null) {
             stack.setItemDamage(stack.getMaxDamage());
             return;
         }
-        if(prop.getSize() <= 0) {
+        if (prop.getSize() <= 0) {
             super.setDamage(stack, 11);
             return;
         }
-        if(damage < 0) {
+        if (damage < 0) {
             return;
         }
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
-            if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
+            if (chance >= rand.nextFloat()) {
+                if (rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
-                if(purity <= rand.nextFloat()) {
-                    if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
+                if (purity <= rand.nextFloat()) {
+                    if (rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 }
             }
         }

@@ -8,17 +8,16 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import io.netty.buffer.ByteBuf;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
-import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,25 +71,26 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
     public IMessage onMessage(PktParticleDataEvent message, MessageContext ctx) {
         try {
             EventAction trigger = message.effectType.getTrigger(ctx.side);
-            if(trigger != null) {
+            if (trigger != null) {
                 triggerClientside(trigger, message);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing ParticleEventType " + message.effectType.name() + " at " + xCoord + ", " + yCoord + ", " + zCoord);
+            AstralSorcery.log.warn(
+                "Error executing ParticleEventType " + message.effectType
+                    .name() + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleDataEvent message) {
-        if(Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().world == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 
     public Vector3 getVec() {
         return new Vector3(xCoord, yCoord, zCoord);
     }
-
 
     public static enum ParticleType {
 
@@ -106,7 +106,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
         }
 
         public EventAction getTrigger(Side side) {
-            if(!side.isClient()) return null;
+            if (!side.isClient()) return null;
             return getClientTrigger(this);
         }
 

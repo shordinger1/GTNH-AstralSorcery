@@ -36,7 +36,8 @@ public class MultiblockAltarTrait extends PatternBlockArray {
     }
 
     private void load() {
-        IBlockState mBrick = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
+        IBlockState mBrick = BlocksAS.blockMarble.getDefaultState()
+            .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
 
         addBlock(4, 3, 3, mBrick);
         addBlock(4, 3, -3, mBrick);
@@ -46,7 +47,7 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(3, 3, 4, mBrick);
         addBlock(-3, 3, 4, mBrick);
         addBlock(3, 3, -4, mBrick);
-        addBlock(-3, 3,-4, mBrick);
+        addBlock(-3, 3, -4, mBrick);
 
         addBlock(3, 4, 3, mBrick);
         addBlock(3, 4, 2, mBrick);
@@ -69,7 +70,12 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(1, 4, 3, mBrick);
         addBlock(2, 4, 3, mBrick);
 
-        addBlock(0, 0, 0, BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
+        addBlock(
+            0,
+            0,
+            0,
+            BlocksAS.blockAltar.getDefaultState()
+                .withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
     }
 
 }

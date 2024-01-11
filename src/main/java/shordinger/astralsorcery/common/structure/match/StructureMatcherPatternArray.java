@@ -8,6 +8,12 @@
 
 package shordinger.astralsorcery.common.structure.match;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.structure.*;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.BlockStateChangeSet;
@@ -20,13 +26,6 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,17 +52,23 @@ public class StructureMatcherPatternArray extends StructureMatcher {
             this.structure = (PatternBlockArray) struct;
             this.structureArea = new ObservableAreaBoundingBox(structure.getMin(), structure.getMax());
         } else {
-            throw new IllegalArgumentException("Passed structure matcher key does not have a registered underlying structure pattern: " + structName);
+            throw new IllegalArgumentException(
+                "Passed structure matcher key does not have a registered underlying structure pattern: " + structName);
         }
     }
 
     public void initialize(IBlockAccess world, BlockPos center) {
-        for (BlockPos offset : this.structure.getPattern().keySet()) {
+        for (BlockPos offset : this.structure.getPattern()
+            .keySet()) {
             if (!this.structure.matchSingleBlock(world, center, offset)) {
                 this.mismatches.add(offset);
             }
         }
-        LogCategory.STRUCTURE_MATCH.info(() -> "Structure matcher initialized at " + center + " with " + this.mismatches.size() + " initial mismatches!");
+        LogCategory.STRUCTURE_MATCH.info(
+            () -> "Structure matcher initialized at " + center
+                + " with "
+                + this.mismatches.size()
+                + " initial mismatches!");
     }
 
     @Override
@@ -76,8 +81,8 @@ public class StructureMatcherPatternArray extends StructureMatcher {
         int mismatchesPre = this.mismatches.size();
 
         for (BlockStateChangeSet.StateChange change : changeSet.getChanges()) {
-            if (this.structure.hasBlockAt(change.pos) &&
-                    !this.structure.matchSingleBlockState(change.pos, change.newState)) {
+            if (this.structure.hasBlockAt(change.pos)
+                && !this.structure.matchSingleBlockState(change.pos, change.newState)) {
 
                 this.mismatches.add(change.pos);
             } else {
@@ -88,12 +93,16 @@ public class StructureMatcherPatternArray extends StructureMatcher {
         this.mismatches.removeIf(mismatchPos -> !this.structure.hasBlockAt(mismatchPos));
 
         int mismatchesPost = this.mismatches.size();
-        LogCategory.STRUCTURE_MATCH.info(() -> "Updated structure integrity with " + mismatchesPre + " mismatches before and " + mismatchesPost + " mismatches afterwards.");
+        LogCategory.STRUCTURE_MATCH.info(
+            () -> "Updated structure integrity with " + mismatchesPre
+                + " mismatches before and "
+                + mismatchesPost
+                + " mismatches afterwards.");
         if (mismatchesPost > 0) {
-            LogCategory.STRUCTURE_MATCH.info(() -> "Found mismatches at (relative to center): " +
-                    this.mismatches.stream()
-                            .map(Vec3i::toString)
-                            .collect(Collectors.joining(", ")));
+            LogCategory.STRUCTURE_MATCH.info(
+                () -> "Found mismatches at (relative to center): " + this.mismatches.stream()
+                    .map(Vec3i::toString)
+                    .collect(Collectors.joining(", ")));
         }
         return mismatchesPost <= 0;
     }
@@ -123,7 +132,10 @@ public class StructureMatcherPatternArray extends StructureMatcher {
 
         tag.setTag("mismatchList", tagMismatches);
 
-        tag.setString("structureToMatch", this.structure.getRegistryName().toString());
+        tag.setString(
+            "structureToMatch",
+            this.structure.getRegistryName()
+                .toString());
     }
 
 }

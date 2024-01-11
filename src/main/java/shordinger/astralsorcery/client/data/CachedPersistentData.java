@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.client.data;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +33,7 @@ public abstract class CachedPersistentData {
         return PersistentDataManager.INSTANCE.savePersistentData(this);
     }
 
-    //Return true to indicate 'this' has changed and added data from 'that' and might need saving
+    // Return true to indicate 'this' has changed and added data from 'that' and might need saving
     protected abstract boolean mergeFrom(CachedPersistentData that);
 
     public final PersistentDataManager.PersistentKey getKey() {

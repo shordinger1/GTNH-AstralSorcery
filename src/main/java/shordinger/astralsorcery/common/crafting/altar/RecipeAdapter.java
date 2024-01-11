@@ -29,7 +29,7 @@ public class RecipeAdapter extends InventoryCrafting {
     }
 
     public void fill(ItemStack[] stacks) {
-        if(stacks.length != getWidth() * getHeight()) return; //Ugh... ?
+        if (stacks.length != getWidth() * getHeight()) return; // Ugh... ?
 
         for (int xx = 0; xx < getWidth(); xx++) {
             for (int zz = 0; zz < getHeight(); zz++) {

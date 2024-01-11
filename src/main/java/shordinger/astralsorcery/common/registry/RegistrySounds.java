@@ -8,14 +8,14 @@
 
 package shordinger.astralsorcery.common.registry;
 
+import static hellfirepvp.astralsorcery.common.lib.Sounds.*;
+
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.util.SoundUtils;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.SoundCategory;
 import shordinger.wrapper.net.minecraft.util.SoundEvent;
-
-import static hellfirepvp.astralsorcery.common.lib.Sounds.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,12 +34,14 @@ public class RegistrySounds {
         bookFlip = registerSound("bookFlip", SoundCategory.MASTER);
     }
 
-    /*private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {
-        ResourceLocation res = new ResourceLocation(AstralSorcery.MODID, jsonName);
-        SoundUtils.LoopableSoundEvent se = new SoundUtils.LoopableSoundEvent(res, predefinedCategory);
-        se.setRegistryName(res);
-        return registerSound((T) se);
-    }*/
+    /*
+     * private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {
+     * ResourceLocation res = new ResourceLocation(AstralSorcery.MODID, jsonName);
+     * SoundUtils.LoopableSoundEvent se = new SoundUtils.LoopableSoundEvent(res, predefinedCategory);
+     * se.setRegistryName(res);
+     * return registerSound((T) se);
+     * }
+     */
 
     private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {
         ResourceLocation res = new ResourceLocation(AstralSorcery.MODID, jsonName);

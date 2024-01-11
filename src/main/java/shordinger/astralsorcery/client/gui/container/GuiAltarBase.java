@@ -36,15 +36,16 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
         this.containerAltarBase = (ContainerAltarBase) super.inventorySlots;
     }
 
-    public  AbstractAltarRecipe findCraftableRecipe() {
+    public AbstractAltarRecipe findCraftableRecipe() {
         return findCraftableRecipe(false);
     }
 
     public AbstractAltarRecipe findCraftableRecipe(boolean ignoreStarlightRequirement) {
-        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar, ignoreStarlightRequirement);
-        if(rec != null) {
-            if(rec instanceof IGatedRecipe) {
-                if(((IGatedRecipe) rec).hasProgressionClient()) {
+        AbstractAltarRecipe rec = AltarRecipeRegistry
+            .findMatchingRecipe(containerAltarBase.tileAltar, ignoreStarlightRequirement);
+        if (rec != null) {
+            if (rec instanceof IGatedRecipe) {
+                if (((IGatedRecipe) rec).hasProgressionClient()) {
                     return rec;
                 } else {
                     return null;
@@ -81,14 +82,23 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
         return new ContainerAltarDiscovery(playerInv, tileAltar);
     }
 
-    protected void drawRect(int offsetX, int offsetY, int width, int height, double u, double v, double uLength, double vLength) {
+    protected void drawRect(int offsetX, int offsetY, int width, int height, double u, double v, double uLength,
+                            double vLength) {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, zLevel).tex(u,           v + vLength).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(u + uLength, v + vLength).endVertex();
-        vb.pos(offsetX + width, offsetY,          zLevel).tex(u + uLength, v          ).endVertex();
-        vb.pos(offsetX,         offsetY,          zLevel).tex(u,           v          ).endVertex();
+        vb.pos(offsetX, offsetY + height, zLevel)
+            .tex(u, v + vLength)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel)
+            .tex(u + uLength, v + vLength)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY, zLevel)
+            .tex(u + uLength, v)
+            .endVertex();
+        vb.pos(offsetX, offsetY, zLevel)
+            .tex(u, v)
+            .endVertex();
         tes.draw();
     }
 
@@ -96,10 +106,18 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY,          zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
+        vb.pos(offsetX, offsetY + height, zLevel)
+            .tex(0, 1)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel)
+            .tex(1, 1)
+            .endVertex();
+        vb.pos(offsetX + width, offsetY, zLevel)
+            .tex(1, 0)
+            .endVertex();
+        vb.pos(offsetX, offsetY, zLevel)
+            .tex(0, 0)
+            .endVertex();
         tes.draw();
     }
 

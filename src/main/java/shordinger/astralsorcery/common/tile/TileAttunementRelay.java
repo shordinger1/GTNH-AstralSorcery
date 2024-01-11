@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
@@ -31,9 +35,6 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-
-import javax.annotation.Nullable;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +60,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
     public void updatePositionData(@Nullable BlockPos closestAltar, double dstSqOtherRelay) {
         this.linked = closestAltar;
         dstSqOtherRelay = Math.sqrt(dstSqOtherRelay);
-        if(dstSqOtherRelay <= 1E-4) {
+        if (dstSqOtherRelay <= 1E-4) {
             collectionMultiplier = 1F;
         } else {
             collectionMultiplier = 1F - ((float) (MathHelper.clamp(dstSqOtherRelay, 0, MAX_DST) / MAX_DST));
@@ -71,7 +72,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
     public void update() {
         super.update();
 
-        if((ticksExisted & 15) == 0) {
+        if ((ticksExisted & 15) == 0) {
             updateSkyState();
         }
 
@@ -80,7 +81,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
             updateMultiblockState();
 
             if (!slotted.isEmpty()) {
-                if(!world.isAirBlock(pos.up())) {
+                if (!world.isAirBlock(pos.up())) {
                     ItemStack in = getInventoryHandler().getStackInSlot(0);
                     ItemStack out = ItemUtils.copyStackWithSize(in, in.getCount());
                     ItemUtils.dropItem(world, pos.getX(), pos.getY(), pos.getZ(), out);
@@ -90,17 +91,18 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                 if (hasGlassLens()) {
                     if (linked != null && MiscUtils.isChunkLoaded(world, linked)) {
                         TileAltar ta = MiscUtils.getTileAt(world, linked, TileAltar.class, true);
-                        if(ta == null) {
+                        if (ta == null) {
                             linked = null;
                             markForUpdate();
-                        } else if(hasMultiblock && doesSeeSky()) {
-                            WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
+                        } else if (hasMultiblock && doesSeeSky()) {
+                            WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
+                                .getWorldHandler(getWorld());
                             int yLevel = getPos().getY();
-                            if(handle != null && yLevel > 40) {
+                            if (handle != null && yLevel > 40) {
                                 double coll = 0.3;
 
                                 float dstr;
-                                if(yLevel > 120) {
+                                if (yLevel > 120) {
                                     dstr = 1F;
                                 } else {
                                     dstr = (yLevel - 40) / 80F;
@@ -108,7 +110,8 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
 
                                 coll *= dstr;
                                 coll *= collectionMultiplier;
-                                coll *= (0.2 + (0.8 * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld())));
+                                coll *= (0.2 + (0.8 * ConstellationSkyHandler.getInstance()
+                                    .getCurrentDaytimeDistribution(getWorld())));
                                 ta.receiveStarlight(null, coll);
                             }
                         }
@@ -116,30 +119,37 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
                 }
             }
         } else {
-            if(!slotted.isEmpty() && hasMultiblock) {
+            if (!slotted.isEmpty() && hasMultiblock) {
                 if (hasGlassLens()) {
-                    if(rand.nextInt(3) == 0) {
+                    if (rand.nextInt(3) == 0) {
                         Vector3 at = new Vector3(this);
                         at.add(rand.nextFloat() * 2.6 - 0.8, 0, rand.nextFloat() * 2.6 - 0.8);
                         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
                         p.setAlphaMultiplier(0.7F);
                         p.setMaxAge((int) (30 + rand.nextFloat() * 50));
-                        p.gravity(0.01).scale(0.3F + rand.nextFloat() * 0.1F);
-                        if(rand.nextBoolean()) {
+                        p.gravity(0.01)
+                            .scale(0.3F + rand.nextFloat() * 0.1F);
+                        if (rand.nextBoolean()) {
                             p.setColor(Color.WHITE);
                         }
                     }
 
-                    if(linked != null && doesSeeSky() && rand.nextInt(4) == 0) {
+                    if (linked != null && doesSeeSky() && rand.nextInt(4) == 0) {
                         Vector3 at = new Vector3(this);
-                        Vector3 dir = new Vector3(linked).subtract(new Vector3(this)).normalize().multiply(0.05);
-                        at.add(rand.nextFloat() * 0.4 + 0.3, rand.nextFloat() * 0.3 + 0.1, rand.nextFloat() * 0.4 + 0.3);
+                        Vector3 dir = new Vector3(linked).subtract(new Vector3(this))
+                            .normalize()
+                            .multiply(0.05);
+                        at.add(
+                            rand.nextFloat() * 0.4 + 0.3,
+                            rand.nextFloat() * 0.3 + 0.1,
+                            rand.nextFloat() * 0.4 + 0.3);
                         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
                         p.setAlphaMultiplier(0.7F);
                         p.motion(dir.getX(), dir.getY(), dir.getZ());
                         p.setMaxAge((int) (15 + rand.nextFloat() * 30));
-                        p.gravity(0.015).scale(0.2F + rand.nextFloat() * 0.04F);
-                        if(rand.nextBoolean()) {
+                        p.gravity(0.015)
+                            .scale(0.2F + rand.nextFloat() * 0.04F);
+                        if (rand.nextBoolean()) {
                             p.setColor(Color.WHITE);
                         }
                     }
@@ -150,8 +160,9 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
 
     private void updateMultiblockState() {
         if (!hasGlassLens()) {
-            StructureMatchingBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH);
-            if(buf.removeSubscriber(this.pos)) {
+            StructureMatchingBuffer buf = WorldCacheManager
+                .getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH);
+            if (buf.removeSubscriber(this.pos)) {
                 buf.markDirty();
             }
             if (this.structureMatch != null) {
@@ -164,9 +175,9 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
         }
         boolean found = this.structureMatch.matches(getWorld());
         if (found != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(() ->
-                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
-                            " (" + this.hasMultiblock + " -> " + found + ")");
+            LogCategory.STRUCTURE_MATCH.info(
+                () -> "Structure match updated: " + this.getClass()
+                    .getName() + " at " + this.getPos() + " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
         }
@@ -183,7 +194,11 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
 
     private boolean hasGlassLens() {
         ItemStack slotted = getInventoryHandler().getStackInSlot(0);
-        return ItemComparator.compare(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack(), ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT);
+        return ItemComparator.compare(
+            slotted,
+            ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+            ItemComparator.Clause.ITEM,
+            ItemComparator.Clause.META_STRICT);
     }
 
     public boolean doesSeeSky() {
@@ -209,7 +224,7 @@ public class TileAttunementRelay extends TileInventoryBase implements IMultibloc
         this.canSeeSky = compound.getBoolean("seesSky");
         this.hasMultiblock = compound.getBoolean("mbState");
         this.collectionMultiplier = compound.getFloat("colMultiplier");
-        if(compound.hasKey("linked")) {
+        if (compound.hasKey("linked")) {
             this.linked = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("linked"));
         } else {
             linked = null;

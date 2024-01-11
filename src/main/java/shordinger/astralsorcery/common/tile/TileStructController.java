@@ -8,22 +8,22 @@
 
 package shordinger.astralsorcery.common.tile;
 
+import java.awt.*;
+import java.util.function.Function;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,8 +42,8 @@ public class TileStructController extends TileEntityTick {
     public void update() {
         super.update();
 
-        if(!world.isRemote) {
-            if(ticksExisted % 60 == 0) {
+        if (!world.isRemote) {
+            if (ticksExisted % 60 == 0) {
                 if (this.type == null) {
                     this.world.setBlockToAir(this.pos);
                 } else {
@@ -60,38 +60,59 @@ public class TileStructController extends TileEntityTick {
 
     @SideOnly(Side.CLIENT)
     private void playAmbientEffects() {
-        if(!ConstellationSkyHandler.getInstance().isNight(this.world) || rand.nextInt(5) != 0) return;
-        if(this.type == null) return;
+        if (!ConstellationSkyHandler.getInstance()
+            .isNight(this.world) || rand.nextInt(5) != 0) return;
+        if (this.type == null) return;
 
         if (type == StructType.GATE) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
-            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.2F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.8F);
+            EntityFXFacingParticle p = EffectHelper
+                .genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                .gravity(0.004);
+            p.offset(
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.2F + rand.nextFloat() * 0.1F)
+                .setAlphaMultiplier(0.8F);
             p.motion(
                     rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1)).setMaxAge(30 + rand.nextInt(20));
+                    rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1))
+                .setMaxAge(30 + rand.nextInt(20));
             p.setColor(new Color(0x3C00FF));
 
-            if(rand.nextBoolean()) {
-                Vector3 offset = new Vector3(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
+            if (rand.nextBoolean()) {
+                Vector3 offset = new Vector3(
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                    .gravity(0.004);
                 p.offset(offset.getX(), offset.getY(), offset.getZ());
-                p.scale(0.1F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.8F);
-                p.motion(0, 0, 0).setMaxAge(30 + rand.nextInt(20));
+                p.scale(0.1F + rand.nextFloat() * 0.1F)
+                    .setAlphaMultiplier(0.8F);
+                p.motion(0, 0, 0)
+                    .setMaxAge(30 + rand.nextInt(20));
                 p.setColor(new Color(0x3C00FF));
-                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.004);
+                p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
+                    .gravity(0.004);
                 p.offset(offset.getX(), offset.getY(), offset.getZ());
-                p.scale(0.05F + rand.nextFloat() * 0.05F).setAlphaMultiplier(0.8F);
-                p.motion(0, 0, 0).setMaxAge(30 + rand.nextInt(20));
+                p.scale(0.05F + rand.nextFloat() * 0.05F)
+                    .setAlphaMultiplier(0.8F);
+                p.motion(0, 0, 0)
+                    .setMaxAge(30 + rand.nextInt(20));
                 p.setColor(Color.WHITE);
             }
 
             if (rand.nextInt(35) == 0) {
-                Vector3 posFrom = new Vector3(getPos()).add(0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2);
+                Vector3 posFrom = new Vector3(getPos())
+                    .add(0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2, 0.4 + rand.nextFloat() * 0.2);
                 Vector3 posTo = new Vector3(getPos()).addZ(rand.nextBoolean() ? 2 : -1);
-                posTo.addY(-1 + rand.nextFloat() * 3).addX(rand.nextFloat());
-                EffectHandler.getInstance().lightning(posFrom, posTo).setOverlayColor(new Color(0x3C00FF));
+                posTo.addY(-1 + rand.nextFloat() * 3)
+                    .addX(rand.nextFloat());
+                EffectHandler.getInstance()
+                    .lightning(posFrom, posTo)
+                    .setOverlayColor(new Color(0x3C00FF));
             }
         }
     }

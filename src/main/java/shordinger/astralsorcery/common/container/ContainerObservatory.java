@@ -18,7 +18,7 @@ import shordinger.wrapper.net.minecraft.inventory.Container;
  * Created by HellFirePvP
  * Date: 27.05.2018 / 07:36
  */
-//Dummy container to allow remote opening and easier handling on serverside for dismounting the observatory.
+// Dummy container to allow remote opening and easier handling on serverside for dismounting the observatory.
 public class ContainerObservatory extends Container {
 
     @Override

@@ -8,6 +8,8 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
@@ -18,8 +20,6 @@ import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,11 +38,10 @@ public class WandAttunementRecipe extends TraitRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler,
+                           boolean ignoreStarlightRequirement) {
         ItemStack center = invHandler.getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
-        if(center.isEmpty() ||
-                !(center.getItem() instanceof ItemWand) ||
-                ItemWand.getAugment(center) != null) {
+        if (center.isEmpty() || !(center.getItem() instanceof ItemWand) || ItemWand.getAugment(center) != null) {
             return false;
         }
 

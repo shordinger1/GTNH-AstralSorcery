@@ -8,6 +8,10 @@
 
 package shordinger.astralsorcery.client.effect.fx;
 
+import java.awt.*;
+
+import javax.annotation.Nonnull;
+
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.util.Blending;
@@ -20,9 +24,6 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -69,7 +70,8 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         this.overlayColor = overlayColor;
     }
 
-    public static EntityFXFacingSprite fromSpriteSheet(SpriteSheetResource res, double x, double y, double z, float scale, int rLayer) {
+    public static EntityFXFacingSprite fromSpriteSheet(SpriteSheetResource res, double x, double y, double z,
+                                                       float scale, int rLayer) {
         return new EntityFXFacingSprite(res, x, y, z, scale) {
 
             @Override
@@ -107,18 +109,19 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
     public void tick() {
         super.tick();
 
-        if(maxAge >= 0 && age >= maxAge) {
-            if(refreshFunction != null) {
-                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-                if(rView == null) rView = Minecraft.getMinecraft().player;
-                if(rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
-                    if(refreshFunction.shouldRefresh()) {
+        if (maxAge >= 0 && age >= maxAge) {
+            if (refreshFunction != null) {
+                Entity rView = Minecraft.getMinecraft()
+                    .getRenderViewEntity();
+                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
+                    if (refreshFunction.shouldRefresh()) {
                         age = 0;
                     }
                 }
             }
         }
-        if(positionUpdateFunction != null) {
+        if (positionUpdateFunction != null) {
             this.prevX = this.x;
             this.prevY = this.y;
             this.prevZ = this.z;
@@ -141,11 +144,26 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         GlStateManager.color(1F, 1F, 1F, 1F);
         int frame = getAgeBasedFrame();
         Tuple<Double, Double> uv = spriteSheet.getUVOffset(frame);
-        spriteSheet.getResource().bindTexture();
+        spriteSheet.getResource()
+            .bindTexture();
         double iX = RenderingUtils.interpolate(prevX, x, pTicks);
         double iY = RenderingUtils.interpolate(prevY, y, pTicks);
         double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);
-        RenderingUtils.renderFacingColoredQuad(iX, iY, iZ, pTicks, scale, 0, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier(), c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        RenderingUtils.renderFacingColoredQuad(
+            iX,
+            iY,
+            iZ,
+            pTicks,
+            scale,
+            0,
+            uv.key,
+            uv.value,
+            spriteSheet.getULength() * getULengthMultiplier(),
+            spriteSheet.getVLength() * getVLengthMultiplier(),
+            c.getRed(),
+            c.getGreen(),
+            c.getBlue(),
+            c.getAlpha());
         GlStateManager.disableBlend();
         Blending.DEFAULT.applyStateManager();
         GlStateManager.enableAlpha();

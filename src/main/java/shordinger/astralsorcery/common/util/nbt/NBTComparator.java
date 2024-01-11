@@ -8,13 +8,14 @@
 
 package shordinger.astralsorcery.common.util.nbt;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import shordinger.wrapper.net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,7 +54,7 @@ public class NBTComparator {
             for (int matchIndex = 0; matchIndex < other.tagCount(); matchIndex++) {
                 NBTBase matchNBT = other.get(matchIndex);
 
-                if (!matched.contains(matchIndex)){
+                if (!matched.contains(matchIndex)) {
                     if (compare(thisNbt, matchNBT)) {
                         matched.add(matchIndex);
                         continue lblMatching;

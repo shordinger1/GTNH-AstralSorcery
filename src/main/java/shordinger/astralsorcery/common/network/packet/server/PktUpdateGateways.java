@@ -8,20 +8,20 @@
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
-import shordinger.astralsorcery.common.data.world.data.GatewayCache;
-import shordinger.astralsorcery.common.util.ByteBufUtils;
-import io.netty.buffer.ByteBuf;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
-import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.netty.buffer.ByteBuf;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
+import shordinger.astralsorcery.common.data.world.data.GatewayCache;
+import shordinger.astralsorcery.common.util.ByteBufUtils;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,7 +73,8 @@ public class PktUpdateGateways implements IMessage, IMessageHandler<PktUpdateGat
 
     @Override
     public IMessage onMessage(PktUpdateGateways message, MessageContext ctx) {
-        AstralSorcery.proxy.scheduleClientside(() -> CelestialGatewaySystem.instance.updateClientCache(message.positions));
+        AstralSorcery.proxy
+            .scheduleClientside(() -> CelestialGatewaySystem.instance.updateClientCache(message.positions));
         return null;
     }
 }

@@ -8,10 +8,20 @@
 
 package shordinger.astralsorcery.common.util;
 
-import shordinger.astralsorcery.common.util.data.Vector3;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.nio.charset.Charset;
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
@@ -19,15 +29,6 @@ import shordinger.wrapper.net.minecraft.network.PacketBuffer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.nio.charset.Charset;
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -136,7 +137,7 @@ public class ByteBufUtils {
     public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {
         boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
-        if(defined) {
+        if (defined) {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
@@ -146,7 +147,7 @@ public class ByteBufUtils {
     @Nonnull
     public static ItemStack readItemStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
-        if(defined) {
+        if (defined) {
             return new ItemStack(readNBTTag(byteBuf));
         } else {
             return ItemStack.EMPTY;
@@ -156,7 +157,7 @@ public class ByteBufUtils {
     public static void writeFluidStack(ByteBuf byteBuf, @Nullable FluidStack stack) {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
-        if(defined) {
+        if (defined) {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
@@ -166,7 +167,7 @@ public class ByteBufUtils {
     @Nullable
     public static FluidStack readFluidStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
-        if(defined) {
+        if (defined) {
             return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
         } else {
             return null;

@@ -8,12 +8,12 @@
 
 package shordinger.astralsorcery.core;
 
+import cpw.mods.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import shordinger.wrapper.net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import shordinger.wrapper.net.minecraftforge.fml.relauncher.IFMLCallHook;
 import shordinger.wrapper.net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 

@@ -8,16 +8,17 @@
 
 package shordinger.astralsorcery.common.auxiliary;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StorageNetworkBuffer;
 import shordinger.astralsorcery.common.tile.TileStorageCore;
 import shordinger.astralsorcery.common.tile.storage.StorageNetwork;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,7 +29,7 @@ import java.util.Map;
  */
 public class StorageNetworkHandler {
 
-    //private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
+    // private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
     private static Map<Integer, NetworkHelper> mappingHelpers = new HashMap<>();
 
     public static NetworkHelper getHandler(World world) {
@@ -57,11 +58,11 @@ public class StorageNetworkHandler {
         }
 
         public void addCore(TileStorageCore core) {
-            //TODO fusion logic
+            // TODO fusion logic
         }
 
         public void removeCore(TileStorageCore core) {
-            //TODO division logic
+            // TODO division logic
         }
 
     }
