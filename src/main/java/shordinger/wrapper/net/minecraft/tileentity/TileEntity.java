@@ -37,6 +37,7 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
     protected BlockPos pos = BlockPos.ORIGIN;
     protected boolean tileEntityInvalid;
     private int blockMetadata = -1;
+
     /**
      * the Block type that this TileEntity is contained within
      */
