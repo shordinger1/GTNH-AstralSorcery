@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,8 +26,7 @@ public class AltarRecipeAttunement extends BaseAltarRecipe {
         super(null, null, null, 0, 0);
     }
 
-    public AltarRecipeAttunement(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired,
-                                 int craftingTickTime) {
+    public AltarRecipeAttunement(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime) {
         super(name, inputs, output, starlightRequired, craftingTickTime);
     }
 
@@ -39,12 +38,13 @@ public class AltarRecipeAttunement extends BaseAltarRecipe {
     @Override
     public void applyRecipe() {
         CraftingAccessManager.registerMTAltarRecipe(
-            buildRecipeUnsafe(
-                TileAltar.AltarLevel.ATTUNEMENT,
-                this.starlightRequired,
-                this.craftingTickTime,
-                this.output,
-                this.inputs));
+                buildRecipeUnsafe(
+                        TileAltar.AltarLevel.ATTUNEMENT,
+                        this.starlightRequired,
+                        this.craftingTickTime,
+                        this.output,
+                        this.inputs)
+        );
     }
 
 }

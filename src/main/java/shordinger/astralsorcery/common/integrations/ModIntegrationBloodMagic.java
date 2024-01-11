@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 public class ModIntegrationBloodMagic {
 
     public static void sendIMC() {
-        // Teleposer blacklist
+        //Teleposer blacklist
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.attunementRelay);
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.celestialGateway);
         Mods.BLOODMAGIC.sendIMC("teleposerBlacklist", BlocksAS.blockFakeTree);

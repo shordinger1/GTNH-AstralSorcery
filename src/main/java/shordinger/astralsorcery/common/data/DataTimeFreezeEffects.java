@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data;
 
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -32,9 +32,9 @@ import java.util.Map;
 public class DataTimeFreezeEffects extends AbstractData {
 
     private Map<Integer, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
-    private final Map<Integer, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
+    private Map<Integer, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
 
-    private final List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
+    private List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
@@ -46,9 +46,8 @@ public class DataTimeFreezeEffects extends AbstractData {
     }
 
     public void server_removeEffect(int dimId, TimeStopEffectHelper effectHelper) {
-        if (serverActiveFreezeZones.containsKey(dimId)) {
-            serverActiveFreezeZones.get(dimId)
-                .remove(effectHelper);
+        if(serverActiveFreezeZones.containsKey(dimId)) {
+            serverActiveFreezeZones.get(dimId).remove(effectHelper);
         }
         scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.REMOVE, dimId, effectHelper));
         markDirty();
@@ -62,8 +61,8 @@ public class DataTimeFreezeEffects extends AbstractData {
 
     @Nullable
     public List<TimeStopEffectHelper> client_getTimeStopEffects(World world) {
-        if (world.provider == null) return null;
-        return client_getTimeStopEffects(world.provider.dimensionId);
+        if(world.provider == null) return null;
+        return client_getTimeStopEffects(world.provider.getDimension());
     }
 
     @Nullable
@@ -74,14 +73,12 @@ public class DataTimeFreezeEffects extends AbstractData {
     private void client_applyChange(ServerSyncAction action) {
         switch (action.type) {
             case ADD:
-                List<TimeStopEffectHelper> zones = clientActiveFreezeZones
-                    .computeIfAbsent(action.dimId, (id) -> new LinkedList<>());
+                List<TimeStopEffectHelper> zones = clientActiveFreezeZones.computeIfAbsent(action.dimId, (id) -> new LinkedList<>());
                 zones.add(action.involvedEffect);
                 break;
             case REMOVE:
-                if (clientActiveFreezeZones.containsKey(action.dimId)) {
-                    clientActiveFreezeZones.get(action.dimId)
-                        .remove(action.involvedEffect);
+                if(clientActiveFreezeZones.containsKey(action.dimId)) {
+                    clientActiveFreezeZones.get(action.dimId).remove(action.involvedEffect);
                 }
                 break;
             case CLEAR:
@@ -127,21 +124,21 @@ public class DataTimeFreezeEffects extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if (!(serverData instanceof DataTimeFreezeEffects)) return;
+        if(!(serverData instanceof DataTimeFreezeEffects)) return;
 
         NBTTagCompound buf = ((DataTimeFreezeEffects) serverData).clientReadBuffer;
-        if (buf.getBoolean("sync_all")) {
+        if(buf.getBoolean("sync_all")) {
             NBTTagCompound dims = buf.getCompoundTag("dimensions");
-            for (Object key : dims.func_150296_c()) {
+            for (String key : dims.getKeySet()) {
                 int dimId;
                 try {
-                    dimId = Integer.parseInt((String) key);
+                    dimId = Integer.parseInt(key);
                 } catch (Exception exc) {
                     continue;
                 }
                 List<TimeStopEffectHelper> effectList = new LinkedList<>();
                 clientActiveFreezeZones.put(dimId, effectList);
-                NBTTagList effects = dims.getTagList((String) key, Constants.NBT.TAG_COMPOUND);
+                NBTTagList effects = dims.getTagList(key, Constants.NBT.TAG_COMPOUND);
                 for (int i = 0; i < effects.tagCount(); i++) {
                     NBTTagCompound cmp = effects.getCompoundTagAt(i);
                     effectList.add(TimeStopEffectHelper.deserializeNBT(cmp));
@@ -166,7 +163,7 @@ public class DataTimeFreezeEffects extends AbstractData {
         private final ActionType type;
 
         private final int dimId;
-        private final TimeStopEffectHelper involvedEffect;
+        private TimeStopEffectHelper involvedEffect;
 
         private ServerSyncAction(ActionType type, int dimId, TimeStopEffectHelper involvedEffect) {
             this.type = type;
@@ -179,22 +176,27 @@ public class DataTimeFreezeEffects extends AbstractData {
             out.setInteger("type", type.ordinal());
             out.setInteger("dimId", dimId);
             switch (type) {
-                case ADD, REMOVE -> out.setTag("effectTag", involvedEffect.serializeNBT());
-                default -> {
-                }
+                case ADD:
+                case REMOVE:
+                    out.setTag("effectTag", involvedEffect.serializeNBT());
+                    break;
+                default:
+                    break;
             }
             return out;
         }
 
         private static ServerSyncAction deserializeNBT(NBTTagCompound cmp) {
-            ActionType type = ActionType.values()[MathHelper
-                .clamp(cmp.getInteger("type"), 0, ActionType.values().length - 1)];
+            ActionType type = ActionType.values()[MathHelper.clamp(cmp.getInteger("type"), 0, ActionType.values().length - 1)];
             int dimId = cmp.getInteger("dimId");
             TimeStopEffectHelper helper = null;
             switch (type) {
-                case ADD, REMOVE -> helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompoundTag("effectTag"));
-                default -> {
-                }
+                case ADD:
+                case REMOVE:
+                    helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompoundTag("effectTag"));
+                    break;
+                default:
+                    break;
             }
             return new ServerSyncAction(type, dimId, helper);
         }

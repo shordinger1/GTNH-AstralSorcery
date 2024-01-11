@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.resource;
 
-import java.awt.*;
-import java.util.Objects;
-
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.common.util.data.Tuple;
+
+import java.awt.*;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,7 +30,7 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
     private final AbstractRenderableTexture resource;
 
     public SpriteSheetResource(AbstractRenderableTexture resource, int rows, int columns) {
-        if (rows <= 0 || columns <= 0)
+        if(rows <= 0 || columns <= 0)
             throw new IllegalArgumentException("Can't instantiate a sprite sheet without any rows or columns!");
 
         frameCount = rows * columns;

@@ -1,14 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
-
-import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,7 +18,7 @@ import java.util.Objects;
 public class Tuple<K, V> {
 
     public final K key;
-    public V value;
+    public final V value;
 
     public Tuple(K key, V value) {
         this.key = key;
@@ -41,7 +39,7 @@ public class Tuple<K, V> {
         if (o == null || getClass() != o.getClass()) return false;
 
         Tuple tuple = (Tuple) o;
-        return (Objects.equals(key, tuple.key)) && (Objects.equals(value, tuple.value));
+        return (key == null ? tuple.key == null : key.equals(tuple.key)) && (value == null ? tuple.value == null : value.equals(tuple.value));
     }
 
     @Override
@@ -53,6 +51,9 @@ public class Tuple<K, V> {
 
     @Override
     public String toString() {
-        return "Tuple{" + "key=" + key + ", value=" + value + '}';
+        return "Tuple{" +
+                "key=" + key +
+                ", value=" + value +
+                '}';
     }
 }

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -25,9 +25,9 @@ public class AltarRecipeEffectRecovery {
     public static void attemptRecipeRecovery() {
         for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
             for (AbstractAltarRecipe ar : AltarRecipeRegistry.getRecipesForLevel(al)) {
-                if (!(ar instanceof ISpecialCraftingEffects)) {
+                if(!(ar instanceof ISpecialCraftingEffects)) {
                     ISpecialCraftingEffects eff = AltarRecipeRegistry.shouldHaveSpecialEffects(ar);
-                    if (eff != null) {
+                    if(eff != null) {
                         ar.setSpecialEffectRecovery(eff.copyNewEffectInstance());
                     }
                 }

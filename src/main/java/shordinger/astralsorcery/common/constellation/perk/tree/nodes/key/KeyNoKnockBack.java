@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +32,7 @@ public class KeyNoKnockBack extends KeyPerk {
 
     @SubscribeEvent
     public void onKnockBack(LivingKnockBackEvent event) {
-        EntityLivingBase attacked = event.entityLiving;
+        EntityLivingBase attacked = event.getEntityLiving();
         if (attacked instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) attacked;
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;

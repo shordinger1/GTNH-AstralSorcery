@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.container;
 
-import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraft.inventory.Container;
+import shordinger.wrapper.net.minecraft.inventory.Slot;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,44 +48,40 @@ public abstract class ContainerAltarBase extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (this instanceof ContainerAltarTrait && index < 36
-                && itemstack1.getItem() instanceof ItemConstellationFocus
-                && ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
-                if (this.mergeItemStack(
-                    itemstack1,
-                    ((ContainerAltarTrait) this).focusSlot.slotNumber,
-                    ((ContainerAltarTrait) this).focusSlot.slotNumber + 1,
-                    false)) {
+            if (this instanceof ContainerAltarTrait && index >= 0 && index < 36 &&
+                    itemstack1.getItem() instanceof ItemConstellationFocus &&
+                    ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
+                if (this.mergeItemStack(itemstack1, ((ContainerAltarTrait) this).focusSlot.slotNumber, ((ContainerAltarTrait) this).focusSlot.slotNumber + 1, false)) {
                     return itemstack;
                 }
             }
-            if (index < 27) {
+            if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
-            } else if (index < 36) {
+            } else if (index >= 27 && index < 36) {
                 if (!this.mergeItemStack(itemstack1, 0, 27, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             slot.onTake(playerIn, itemstack1);
@@ -97,8 +93,7 @@ public abstract class ContainerAltarBase extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         BlockPos pos = this.tileAltar.getPos();
-        if (this.tileAltar.getWorld()
-            .getTileEntity(pos) != this.tileAltar) {
+        if (this.tileAltar.getWorld().getTileEntity(pos) != this.tileAltar) {
             return false;
         } else {
             return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;

@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.fx;
 
-import java.awt.*;
-import java.util.Random;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.fluids.FluidStack;
-
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,8 +42,7 @@ public class EntityFXFluidFountain extends EntityComplexFX {
     public static EntityFXFluidFountain spawnAt(Vector3 pos, FluidStack fluid) {
         TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(fluid);
         EntityFXFluidFountain f = new EntityFXFluidFountain(pos, 60, tas, fluid);
-        EffectHandler.getInstance()
-            .registerFX(f);
+        EffectHandler.getInstance().registerFX(f);
         return f;
     }
 
@@ -54,30 +52,20 @@ public class EntityFXFluidFountain extends EntityComplexFX {
 
         EntityFXFloatingCube cube = new EntityFXFloatingCube(tas);
         cube.setPosition(offset);
-        cube.setTextureSubSizePercentage(1F / 16F)
-            .setMaxAge(40 + rand.nextInt(40));
-        cube.setScale(0.1F)
-            .tumble();
+        cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(40 + rand.nextInt(40));
+        cube.setScale(0.1F).tumble();
         Vector3 v = Vector3.positiveYRandom();
-        v.setY(v.getY() * 8)
-            .normalize()
-            .multiply(
-                new Vector3(
-                    0.01F + rand.nextFloat() * 0.015F,
-                    0.09F + rand.nextFloat() * 0.015F,
-                    0.01F + rand.nextFloat() * 0.015F));
+        v.setY(v.getY() * 8).normalize().multiply(new Vector3(
+                0.01F + rand.nextFloat() * 0.015F,
+                0.09F + rand.nextFloat() * 0.015F,
+                0.01F + rand.nextFloat() * 0.015F));
         cube.setMotion(v);
         cube.setMotionController((c, motion) -> motion.setY(motion.getY() - 0.003F));
-        cube.setColorHandler(
-            cb -> new Color(
-                fluidStack.getFluid()
-                    .getColor(fluidStack)));
-        EffectHandler.getInstance()
-            .registerFX(cube);
+        cube.setColorHandler(cb -> new Color(fluidStack.getFluid().getColor(fluidStack)));
+        EffectHandler.getInstance().registerFX(cube);
     }
 
     @Override
-    public void render(float pTicks) {
-    }
+    public void render(float pTicks) {}
 
 }

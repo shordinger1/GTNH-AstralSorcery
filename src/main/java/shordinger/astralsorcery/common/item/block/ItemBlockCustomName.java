@@ -1,18 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.block.BlockCustomName;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.ItemBlock;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,7 +24,7 @@ public class ItemBlockCustomName extends ItemBlock {
 
     public ItemBlockCustomName(Block block) {
         super(block);
-        setHasSubtypes(true); // Normally the case if you're using multi-type blocks.
+        setHasSubtypes(true); //Normally the case if you're using multi-type blocks.
     }
 
     @Override

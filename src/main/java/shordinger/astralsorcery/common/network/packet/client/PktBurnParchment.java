@@ -1,30 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiMapDrawing;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,14 +32,12 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  * Created by HellFirePvP
  * Date: 30.04.2017 / 22:20
  */
-public class PktBurnParchment
-    implements IMessage, IMessageHandler<PktBurnParchment, PktBurnParchment>, ClientReplyPacket {
+public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchment, PktBurnParchment>, ClientReplyPacket {
 
     public int dimId;
     public BlockPos tablePos;
 
-    public PktBurnParchment() {
-    }
+    public PktBurnParchment() {}
 
     public PktBurnParchment(int dimid, BlockPos tablePos) {
         this.tablePos = tablePos;
@@ -61,13 +58,12 @@ public class PktBurnParchment
 
     @Override
     public PktBurnParchment onMessage(PktBurnParchment message, MessageContext ctx) {
-        if (ctx.side == Side.SERVER) {
+        if(ctx.side == Side.SERVER) {
             World world = DimensionManager.getWorld(message.dimId);
-            if (world != null) {
-                TileMapDrawingTable tmt = MiscUtils
-                    .getTileAt(world, message.tablePos, TileMapDrawingTable.class, false);
-                if (tmt != null) {
-                    if (tmt.burnParchment()) {
+            if(world != null) {
+                TileMapDrawingTable tmt = MiscUtils.getTileAt(world, message.tablePos, TileMapDrawingTable.class, false);
+                if(tmt != null) {
+                    if(tmt.burnParchment()) {
                         return new PktBurnParchment(-1, BlockPos.ORIGIN);
                     }
                 }
@@ -81,11 +77,9 @@ public class PktBurnParchment
 
     @SideOnly(Side.CLIENT)
     private void closeTable() {
-        if (Minecraft.getMinecraft().currentScreen != null
-            && Minecraft.getMinecraft().currentScreen instanceof GuiMapDrawing) {
-            AstralSorcery.proxy.scheduleClientside(
-                () -> Minecraft.getMinecraft()
-                    .displayGuiScreen(null));
+        if(Minecraft.getMinecraft().currentScreen != null &&
+                Minecraft.getMinecraft().currentScreen instanceof GuiMapDrawing) {
+            AstralSorcery.proxy.scheduleClientside(() -> Minecraft.getMinecraft().displayGuiScreen(null));
         }
     }
 

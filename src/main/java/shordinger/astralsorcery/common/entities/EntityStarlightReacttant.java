@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.entities;
 
-import net.minecraft.entity.Entity;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import shordinger.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,17 +25,15 @@ public interface EntityStarlightReacttant {
 
     default public boolean isInLiquidStarlight(Entity e) {
         BlockPos at = e.getPosition();
-        IBlockState state = e.getEntityWorld()
-            .getBlockState(at);
-        if (!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
+        IBlockState state = e.getEntityWorld().getBlockState(at);
+        if(!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
             return false;
         }
-        if (!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(e.getEntityWorld(), at)) {
+        if(!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(e.getEntityWorld(), at)) {
             return false;
         }
-        state = e.getEntityWorld()
-            .getBlockState(at.down());
-        return state.isSideSolid(e.getEntityWorld(), at.down(), ForgeDirection.UP);
+        state = e.getEntityWorld().getBlockState(at.down());
+        return state.isSideSolid(e.getEntityWorld(), at.down(), EnumFacing.UP);
     }
 
 }

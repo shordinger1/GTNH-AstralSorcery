@@ -1,18 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.obj;
 
-import shordinger.astralsorcery.migration.BufferBuilder;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * HellFirePvP@Admin
@@ -21,10 +20,9 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  * Face
  */
 public class Face {
-
     public Vertex[] vertices;
     public Vertex[] vertexNormals;
-    // public Vertex faceNormal;
+    //public Vertex faceNormal;
     public TextureCoordinate[] textureCoordinates;
 
     @SideOnly(Side.CLIENT)
@@ -34,12 +32,11 @@ public class Face {
 
     @SideOnly(Side.CLIENT)
     public void addFaceForRender(BufferBuilder vb, float textureOffset) {
-        /*
-         * if (faceNormal == null) {
-         * faceNormal = this.calculateFaceNormal();
-         * }
-         * vb.normal(faceNormal.x, faceNormal.y, faceNormal.z);
-         */
+        /*if (faceNormal == null) {
+            faceNormal = this.calculateFaceNormal();
+        }
+
+        vb.normal(faceNormal.x, faceNormal.y, faceNormal.z);*/
 
         float averageU = 0F;
         float averageV = 0F;
@@ -69,31 +66,20 @@ public class Face {
                     offsetV = -offsetV;
                 }
 
-                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z)
-                    .tex(textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV)
-                    .endVertex();
-                // tessellator.addVertexWithUV(vertices[i].x, vertices[i].y, vertices[i].z, textureCoordinates[i].u +
-                // offsetU, textureCoordinates[i].v + offsetV);
+                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z).tex(textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV).endVertex();
+                //tessellator.addVertexWithUV(vertices[i].x, vertices[i].y, vertices[i].z, textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV);
             } else {
-                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z)
-                    .endVertex();
-                // tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
+                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z).endVertex();
+                //tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
             }
 
         }
     }
 
     public Vertex calculateFaceNormal() {
-        Vector3 v1 = new Vector3(
-            vertices[1].x - vertices[0].x,
-            vertices[1].y - vertices[0].y,
-            vertices[1].z - vertices[0].z);
-        Vector3 v2 = new Vector3(
-            vertices[2].x - vertices[0].x,
-            vertices[2].y - vertices[0].y,
-            vertices[2].z - vertices[0].z);
-        Vector3 normalVector = v1.crossProduct(v2)
-            .normalize();
+        Vector3 v1 = new Vector3(vertices[1].x - vertices[0].x, vertices[1].y - vertices[0].y, vertices[1].z - vertices[0].z);
+        Vector3 v2 = new Vector3(vertices[2].x - vertices[0].x, vertices[2].y - vertices[0].y, vertices[2].z - vertices[0].z);
+        Vector3 normalVector = v1.crossProduct(v2).normalize();
 
         return new Vertex((float) normalVector.getX(), (float) normalVector.getY(), (float) normalVector.getZ());
     }

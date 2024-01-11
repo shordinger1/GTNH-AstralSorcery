@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import javax.annotation.Nullable;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
+import shordinger.wrapper.net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,24 +81,21 @@ public enum Mods {
 
     @Nullable
     public Class<?> getExtendedPlayerClass() {
-        if (!isPresent()) return null;
+        if(!isPresent()) return null;
 
         switch (this) {
             case GALACTICRAFT_CORE:
-                if (gcPlayerClass == null) {
+                if(gcPlayerClass == null) {
                     try {
-                        gcPlayerClass = Class
-                            .forName("micdoodle8.mods.galacticraft.core.entities.player.GCEntityPlayerMP");
-                    } catch (Exception ignored) {
-                    }
+                        gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCEntityPlayerMP");
+                    } catch (Exception ignored) {}
                 }
                 return gcPlayerClass;
             case UNIVERSALREMOTE:
-                if (urPlayerClass == null) {
+                if(urPlayerClass == null) {
                     try {
                         urPlayerClass = Class.forName("clayborn.universalremote.hooks.entity.HookedEntityPlayerMP");
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 }
                 return urPlayerClass;
             default:

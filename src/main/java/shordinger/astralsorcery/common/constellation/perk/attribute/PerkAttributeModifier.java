@@ -1,32 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,10 +42,10 @@ public class PerkAttributeModifier {
     protected final String attributeType;
     protected float value;
 
-    // Cannot be converted to anything else.
+    //Cannot be converted to anything else.
     private boolean absolute = false;
 
-    // Cached in case the value of the modifier actually is supposed to change down the road.
+    //Cached in case the value of the modifier actually is supposed to change down the road.
     protected double ctMultiplier = 1.0D;
 
     private Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
@@ -69,8 +67,7 @@ public class PerkAttributeModifier {
         this.id = id;
     }
 
-    protected void initModifier() {
-    }
+    protected void initModifier() {}
 
     protected void setAbsolute() {
         this.absolute = true;
@@ -103,8 +100,7 @@ public class PerkAttributeModifier {
      * Use this method for creating extra Modifiers depending on a given modifier.
      */
     @Nonnull
-    public PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode,
-                                                     float value) {
+    public PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode, float value) {
         PerkAttributeModifier modifier = getCachedAttributeModifier(converter, attributeType, mode);
         if (modifier == null) {
             modifier = this.createModifier(AttributeTypeRegistry.getType(attributeType), attributeType, mode, value);
@@ -115,23 +111,18 @@ public class PerkAttributeModifier {
     }
 
     @Nullable
-    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType,
-                                                               Mode mode) {
-        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters
-            .computeIfAbsent(converter, (c) -> HashBasedTable.create());
+    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         return cachedModifiers.get(attributeType, mode);
     }
 
-    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode,
-                                      PerkAttributeModifier modifier) {
-        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters
-            .computeIfAbsent(converter, (c) -> HashBasedTable.create());
+    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode, PerkAttributeModifier modifier) {
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         cachedModifiers.put(attributeType, mode, modifier);
     }
 
     @Nonnull
-    protected PerkAttributeModifier createModifier(@Nullable PerkAttributeType type, String attributeType, Mode mode,
-                                                   float value) {
+    protected PerkAttributeModifier createModifier(@Nullable PerkAttributeType type, String attributeType, Mode mode, float value) {
         if (type != null) {
             return type.createModifier(value, mode);
         } else {
@@ -187,15 +178,12 @@ public class PerkAttributeModifier {
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedAttributeValue() {
-        return getMode()
-            .stringifyValue(getValueForDisplay(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress));
+        return getMode().stringifyValue(getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress));
     }
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedModifierName() {
-        return I18n.format(
-            getMode().getUnlocalizedModifierName(
-                getValueForDisplay(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)));
+        return I18n.format(getMode().getUnlocalizedModifierName(getValueForDisplay(Minecraft.getMinecraft().player, ResearchManager.clientProgress)));
     }
 
     @SideOnly(Side.CLIENT)
@@ -209,11 +197,10 @@ public class PerkAttributeModifier {
         if (!hasDisplayString()) {
             return null;
         }
-        return String.format(
-            getAttributeDisplayFormat(),
-            getLocalizedAttributeValue(),
-            getLocalizedModifierName(),
-            I18n.format(getUnlocalizedAttributeName()));
+        return String.format(getAttributeDisplayFormat(),
+                getLocalizedAttributeValue(),
+                getLocalizedModifierName(),
+                I18n.format(getUnlocalizedAttributeName()));
     }
 
     @Override
@@ -260,7 +247,7 @@ public class PerkAttributeModifier {
         public String getUnlocalizedModifierName(float number) {
             boolean positive;
             if (this == ADDITION) {
-                positive = number > 0; // 0 would be kinda... weird as addition/subtraction modifier...
+                positive = number > 0; //0 would be kinda... weird as addition/subtraction modifier...
             } else {
                 int nbr = Math.round(number * 100);
                 positive = this == STACKING_MULTIPLY ? nbr > 100 : nbr > 0;

@@ -1,19 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraftforge.common.MinecraftForge;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.perk.attribute.type.VanillaAttributeType;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -64,11 +64,10 @@ public class AttributeTypeRegistry {
 
     private static Map<String, PerkAttributeType> typeMap = new HashMap<>();
 
-    AttributeTypeRegistry() {
-    }
+    AttributeTypeRegistry() {}
 
     public static void registerPerkType(PerkAttributeType type) {
-        if (typeMap.putIfAbsent(type.getTypeString(), type) == null) {
+        if(typeMap.putIfAbsent(type.getTypeString(), type) == null) {
             type.init();
             MinecraftForge.EVENT_BUS.register(type);
         }
@@ -98,11 +97,10 @@ public class AttributeTypeRegistry {
 
     @Nullable
     public static PerkAttributeType findType(IAttribute vanillaType) {
-        return MiscUtils.iterativeSearch(
-            typeMap.values(),
-            type -> type instanceof VanillaAttributeType && ((VanillaAttributeType) type).getAttribute() != null
-                && ((VanillaAttributeType) type).getAttribute()
-                .equals(vanillaType));
+        return MiscUtils.iterativeSearch(typeMap.values(),
+                type -> type instanceof VanillaAttributeType &&
+                ((VanillaAttributeType) type).getAttribute() != null &&
+                ((VanillaAttributeType) type).getAttribute().equals(vanillaType));
     }
 
 }

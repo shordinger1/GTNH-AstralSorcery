@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 
 import java.util.UUID;
 
@@ -24,12 +24,9 @@ import java.util.UUID;
  */
 public class AttributeTypeMeleeAttackDamage extends VanillaAttributeType {
 
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_ID = UUID
-        .fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID
-        .fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
-    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID
-        .fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
+    private static final UUID MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
 
     public AttributeTypeMeleeAttackDamage() {
         super(AttributeTypeRegistry.ATTR_TYPE_MELEE_DAMAGE);
@@ -48,17 +45,14 @@ public class AttributeTypeMeleeAttackDamage extends VanillaAttributeType {
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
         switch (mode) {
-            case ADDITION -> {
+            case ADDITION:
                 return MELEE_ATTACK_DAMAGE_BOOST_ADD_ID;
-            }
-            case ADDED_MULTIPLY -> {
+            case ADDED_MULTIPLY:
                 return MELEE_ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID;
-            }
-            case STACKING_MULTIPLY -> {
+            case STACKING_MULTIPLY:
                 return MELEE_ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID;
-            }
-            default -> {
-            }
+            default:
+                break;
         }
         return null;
     }

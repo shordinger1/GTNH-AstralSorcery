@@ -1,23 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.helper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
+import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -44,7 +44,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     @SideOnly(Side.CLIENT)
     public NonNullList<ItemStack> getExpectedStackForRender(int row, int column) {
         ItemHandle handle = abstractRecipe.getExpectedStack(row, column);
-        if (handle == null) return NonNullList.create();
+        if(handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -58,7 +58,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     @SideOnly(Side.CLIENT)
     public NonNullList<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot) {
         ItemHandle handle = abstractRecipe.getExpectedStack(slot);
-        if (handle == null) return NonNullList.create();
+        if(handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -71,12 +71,8 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     private NonNullList<ItemStack> refactorSubItems(NonNullList<ItemStack> applicableItems) {
         NonNullList<ItemStack> out = NonNullList.create();
         for (ItemStack oreDictIn : applicableItems) {
-            if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                oreDictIn.getItem()
-                    .getSubItems(
-                        oreDictIn.getItem()
-                            .getCreativeTab(),
-                        out);
+            if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
+                oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
             } else {
                 out.add(oreDictIn);
             }

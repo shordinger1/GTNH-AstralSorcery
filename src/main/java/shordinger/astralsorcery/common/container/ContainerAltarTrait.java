@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraftforge.items.SlotItemHandler;
-
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraftforge.items.SlotItemHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,12 +31,12 @@ public class ContainerAltarTrait extends ContainerAltarConstellation {
     void bindAltarInventory() {
         super.bindAltarInventory();
 
-        addSlotToContainer(new SlotItemHandler(invHandler, 21, 120, 11)); // Up center
-        addSlotToContainer(new SlotItemHandler(invHandler, 22, 84, 47)); // Left center
-        addSlotToContainer(new SlotItemHandler(invHandler, 23, 156, 47)); // Right center
-        addSlotToContainer(new SlotItemHandler(invHandler, 24, 120, 83)); // Lower center
+        addSlotToContainer(new SlotItemHandler(invHandler, 21,  120,  11)); //Up center
+        addSlotToContainer(new SlotItemHandler(invHandler, 22,  84,  47)); //Left center
+        addSlotToContainer(new SlotItemHandler(invHandler, 23, 156,  47)); //Right center
+        addSlotToContainer(new SlotItemHandler(invHandler, 24, 120,  83)); //Lower center
 
         this.focusSlot = new ConstellationFocusSlot(invHandler, tileAltar, 35, 11);
-        addSlotToContainer(this.focusSlot); // Focus item, not accessible from slot index.
+        addSlotToContainer(this.focusSlot); //Focus item, not accessible from slot index.
     }
 }

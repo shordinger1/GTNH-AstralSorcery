@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
 
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,14 +29,12 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
 
     @Override
-    public void render(TileChalice te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileChalice te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         Fluid filled = te.getHeldFluid();
-        if (filled != null && te.getFluidAmount() > 0) {
+        if(filled != null && te.getFluidAmount() > 0) {
             TileChalice.DrawSize size = te.getDrawSize();
-            FluidStack fs = te.getTank()
-                .getFluid();
-            if (fs != null) {
+            FluidStack fs = te.getTank().getFluid();
+            if(fs != null) {
                 TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(fs);
                 Vector3 rot = getInterpolatedRotation(te, partialTicks);
 
@@ -50,7 +47,7 @@ public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
                 double uOffset = tas.getMinU() + ulength / 2D - uPart / 2D;
                 double vOffset = tas.getMinV() + vlength / 2D - vPart / 2D;
 
-                if (size == TileChalice.DrawSize.SMALL) {
+                if(size == TileChalice.DrawSize.SMALL) {
                     uOffset = tas.getMinU();
                     vOffset = tas.getMinV();
                 }
@@ -66,8 +63,7 @@ public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
                 TextureHelper.setActiveTextureToAtlasSprite();
                 RenderHelper.enableGUIStandardItemLighting();
 
-                RenderingUtils
-                    .renderTexturedCubeCentral(new Vector3(0, 0, 0), size.partTexture, uOffset, vOffset, uPart, vPart);
+                RenderingUtils.renderTexturedCubeCentral(new Vector3(0, 0, 0), size.partTexture, uOffset, vOffset, uPart, vPart);
 
                 GlStateManager.enableCull();
                 GlStateManager.popMatrix();
@@ -77,9 +73,9 @@ public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
 
     private Vector3 getInterpolatedRotation(TileChalice tc, float percent) {
         return new Vector3(
-            RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getX(), tc.rotationDegreeAxis.getX(), percent),
-            RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getY(), tc.rotationDegreeAxis.getY(), percent),
-            RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getZ(), tc.rotationDegreeAxis.getZ(), percent));
+                RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getX(), tc.rotationDegreeAxis.getX(), percent),
+                RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getY(), tc.rotationDegreeAxis.getY(), percent),
+                RenderingUtils.interpolate(tc.prevRotationDegreeAxis.getZ(), tc.rotationDegreeAxis.getZ(), percent));
     }
 
 }

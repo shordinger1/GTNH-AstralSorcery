@@ -1,21 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import net.minecraft.util.ResourceLocation;
-
 import com.google.common.collect.ImmutableSet;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.lib.ItemsAS;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.world.storage.loot.LootEntryItem;
+import shordinger.wrapper.net.minecraft.world.storage.loot.LootTableList;
+import shordinger.wrapper.net.minecraft.world.storage.loot.conditions.LootCondition;
+import shordinger.wrapper.net.minecraft.world.storage.loot.functions.LootFunction;
+import shordinger.wrapper.net.minecraftforge.event.LootTableLoadEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,19 +29,10 @@ import shordinger.astralsorcery.common.lib.ItemsAS;
  */
 public class LootTableUtil {
 
-    public static final ResourceLocation LOOT_TABLE_SHRINE = new ResourceLocation(
-        Tags.MODID.toLowerCase(),
-        "chest_shrine");
-    public static final ResourceLocation LOOT_TABLE_SHOOTING_STAR = new ResourceLocation(
-        Tags.MODID.toLowerCase(),
-        "shooting_star");
+    public static final ResourceLocation LOOT_TABLE_SHRINE = new ResourceLocation(AstralSorcery.MODID.toLowerCase(), "chest_shrine");
+    public static final ResourceLocation LOOT_TABLE_SHOOTING_STAR = new ResourceLocation(AstralSorcery.MODID.toLowerCase(), "shooting_star");
 
-    private static final ImmutableSet<ResourceLocation> constellationPaperTables = ImmutableSet.of(
-        LootTableList.CHESTS_STRONGHOLD_LIBRARY,
-        LootTableList.CHESTS_ABANDONED_MINESHAFT,
-        LootTableList.CHESTS_JUNGLE_TEMPLE,
-        LootTableList.CHESTS_DESERT_PYRAMID,
-        LootTableList.CHESTS_IGLOO_CHEST);
+    private static final ImmutableSet<ResourceLocation> constellationPaperTables = ImmutableSet.of(LootTableList.CHESTS_STRONGHOLD_LIBRARY, LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_JUNGLE_TEMPLE, LootTableList.CHESTS_DESERT_PYRAMID, LootTableList.CHESTS_IGLOO_CHEST);
 
     public static void initLootTable() {
         LootTableList.register(LOOT_TABLE_SHRINE);
@@ -48,17 +42,9 @@ public class LootTableUtil {
     @SubscribeEvent
     public void onLootLoad(LootTableLoadEvent event) {
         ResourceLocation name = event.getName();
-        if (constellationPaperTables.contains(name)) {
-            event.getTable()
-                .getPool("main")
-                .addEntry(
-                    new LootEntryItem(
-                        ItemsAS.constellationPaper,
-                        Config.constellationPaperRarity,
-                        Config.constellationPaperQuality,
-                        new LootFunction[0],
-                        new LootCondition[0],
-                        "astralsorcery:constellation_paper"));
+        if(constellationPaperTables.contains(name)) {
+            event.getTable().getPool("main").addEntry(new LootEntryItem(ItemsAS.constellationPaper, Config.constellationPaperRarity, Config.constellationPaperQuality,
+                    new LootFunction[0], new LootCondition[0], "astralsorcery:constellation_paper"));
         }
     }
 

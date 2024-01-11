@@ -1,18 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.container;
-
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.client.util.TextureHelper;
@@ -23,6 +17,10 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,10 +31,8 @@ import shordinger.astralsorcery.common.util.data.Tuple;
  */
 public class GuiAltarDiscovery extends GuiAltarBase {
 
-    private static final BindableResource texAltarDiscovery = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guialtar1");
-    private static final BindableResource texBlack = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    private static final BindableResource texAltarDiscovery = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar1");
+    private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarDiscovery(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);
@@ -52,7 +48,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         AbstractAltarRecipe rec = findCraftableRecipe();
-        if (rec != null) {
+        if(rec != null) {
             ItemStack out = rec.getOutputForRender();
             zLevel = 10F;
             itemRender.zLevel = 10F;
@@ -92,7 +88,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
         drawRect(guiLeft + 6, guiTop + 69, 165, 10);
 
         float percFilled;
-        if (containerAltarBase.tileAltar.getMultiblockState()) {
+        if(containerAltarBase.tileAltar.getMultiblockState()) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
         } else {
@@ -100,42 +96,29 @@ public class GuiAltarDiscovery extends GuiAltarBase {
             percFilled = 1.0F;
         }
 
-        if (percFilled > 0) {
+        if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
-            spriteStarlight.getResource()
-                .bindTexture();
+            spriteStarlight.getResource().bindTexture();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(
-                guiLeft + 6,
-                guiTop + 69,
-                (int) (165 * percFilled),
-                10,
-                uvOffset.key,
-                uvOffset.value,
-                spriteStarlight.getULength() * percFilled,
-                spriteStarlight.getVLength());
+            drawRect(guiLeft + 6, guiTop + 69, (int) (165 * percFilled), 10,
+                    uvOffset.key, uvOffset.value,
+                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());
 
             AbstractAltarRecipe aar = findCraftableRecipe(true);
-            if (aar != null) {
+            if(aar != null) {
                 int req = aar.getPassiveStarlightRequired();
                 int has = containerAltarBase.tileAltar.getStarlightStored();
-                if (has < req) {
+                if(has < req) {
                     int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
                     float percReq = (float) (req - has) / (float) max;
                     int from = (int) (165 * percFilled);
                     int to = (int) (165 * percReq);
                     GL11.glColor4f(0.2F, 0.5F, 1.0F, 0.4F);
 
-                    drawRect(
-                        guiLeft + 6 + from,
-                        guiTop + 69,
-                        to,
-                        10,
-                        uvOffset.key + spriteStarlight.getULength() * percFilled,
-                        uvOffset.value,
-                        spriteStarlight.getULength() * percReq,
-                        spriteStarlight.getVLength());
+                    drawRect(guiLeft + 6 + from, guiTop + 69, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
                 }
             }
         }

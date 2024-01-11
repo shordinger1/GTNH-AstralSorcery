@@ -2,7 +2,7 @@
  * HellFirePvP / Astral Sorcery 2018
  *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -12,8 +12,7 @@ import java.awt.*;
 
 public class ColorUtil {
 
-    private ColorUtil() {
-    }
+    private ColorUtil() {}
 
     /**
      * http://www.compuphase.com/cmetric.htm
@@ -44,10 +43,8 @@ public class ColorUtil {
 
         final double grey1 = (color1[0] + color1[1] + color1[2]) / 3;
         final double grey2 = (color2[0] + color2[1] + color2[2]) / 3;
-        final double greyDistance1 = Math.abs(grey1 - color1[0]) + Math.abs(grey1 - color1[1])
-            + Math.abs(grey1 - color1[2]);
-        final double greyDistance2 = Math.abs(grey2 - color2[0]) + Math.abs(grey2 - color2[1])
-            + Math.abs(grey2 - color2[2]);
+        final double greyDistance1 = Math.abs(grey1 - color1[0]) + Math.abs(grey1 - color1[1]) + Math.abs(grey1 - color1[2]);
+        final double greyDistance2 = Math.abs(grey2 - color2[0]) + Math.abs(grey2 - color2[1]) + Math.abs(grey2 - color2[2]);
         final double greyDistance = greyDistance1 - greyDistance2;
 
         return colorDistance + (greyDistance * greyDistance / 10.0);

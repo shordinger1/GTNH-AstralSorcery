@@ -1,28 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.charge;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktSyncCharge;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,28 +37,21 @@ public class PlayerChargeHandler implements ITickHandler {
     private Map<EntityPlayer, Float> chargeMap = new HashMap<>();
     public float clientCharge = 0F;
 
-    private PlayerChargeHandler() {
-    }
+    private PlayerChargeHandler() {}
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        if (context[1] == Side.SERVER) {
+        if(context[1] == Side.SERVER) {
             EntityPlayer pl = (EntityPlayer) context[0];
             float charge = getCharge(pl);
-            if (charge < 1F) {
-                if (pl.isCreative()) {
+            if(charge < 1F) {
+                if(pl.isCreative()) {
                     charge = 1F;
                 } else {
                     float chargeGain = 0.01F;
-                    float dayMult = ConstellationSkyHandler.getInstance()
-                        .getCurrentDaytimeDistribution(pl.getEntityWorld());
+                    float dayMult = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(pl.getEntityWorld());
                     chargeGain *= (0.5F + dayMult * 0.5F);
-                    if (MiscUtils.canSeeSky(
-                        pl.getEntityWorld(),
-                        pl.getPosition()
-                            .up(),
-                        false,
-                        false)) {
+                    if (MiscUtils.canSeeSky(pl.getEntityWorld(), pl.getPosition().up(), false, false)) {
                         chargeGain *= 6F;
                     }
                     charge = MathHelper.clamp(charge + chargeGain, 0F, 1F);
@@ -77,9 +69,9 @@ public class PlayerChargeHandler implements ITickHandler {
     }
 
     public float getCharge(EntityPlayer player) {
-        if (!chargeMap.containsKey(player)) {
+        if(!chargeMap.containsKey(player)) {
             setCharge(player, 1F);
-            if (player instanceof EntityPlayerMP) {
+            if(player instanceof EntityPlayerMP) {
                 PktSyncCharge ch = new PktSyncCharge(1F);
                 PacketChannel.CHANNEL.sendTo(ch, (EntityPlayerMP) player);
             }

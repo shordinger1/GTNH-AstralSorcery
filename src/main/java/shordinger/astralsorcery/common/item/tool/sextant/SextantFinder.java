@@ -1,29 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool.sextant;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.google.common.collect.Iterables;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
@@ -32,7 +17,20 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.world.data.StructureGenBuffer;
 import shordinger.astralsorcery.common.util.StructureFinder;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.common.BiomeDictionary;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,23 +42,19 @@ import shordinger.astralsorcery.migration.block.BlockPos;
 public class SextantFinder {
 
     private static boolean initialized = false;
-    private static final List<TargetObject> selectableTargets = new LinkedList<>();
+    private static List<TargetObject> selectableTargets = new LinkedList<>();
 
     public static void register(TargetObject object) {
         for (TargetObject to : selectableTargets) {
-            if (to.getRegistryName()
-                .equalsIgnoreCase(object.getRegistryName())) {
-                throw new IllegalArgumentException(
-                    "Duplicate Sextant Target: " + to.getRegistryName()
-                        + " - tried to add: "
-                        + object.getRegistryName());
+            if (to.getRegistryName().equalsIgnoreCase(object.getRegistryName())) {
+                throw new IllegalArgumentException("Duplicate Sextant Target: " + to.getRegistryName() + " - tried to add: " + object.getRegistryName());
             }
         }
         selectableTargets.add(object);
     }
 
     public static void initialize() {
-        if (initialized) return;
+        if(initialized) return;
 
         register(SextantTargets.TARGET_MOUNTAIN_SHRINE);
         register(SextantTargets.TARGET_DESERT_SHRINE);
@@ -89,7 +83,7 @@ public class SextantFinder {
     @Nonnull
     public static TargetObject getOrReturnFirst(String registryName) {
         TargetObject to = getByName(registryName);
-        if (to != null) {
+        if(to != null) {
             return to;
         }
         return getFirst();
@@ -98,8 +92,7 @@ public class SextantFinder {
     @Nullable
     public static TargetObject getByName(String registryName) {
         for (TargetObject to : selectableTargets) {
-            if (to.getRegistryName()
-                .equalsIgnoreCase(registryName)) {
+            if (to.getRegistryName().equalsIgnoreCase(registryName)) {
                 return to;
             }
         }
@@ -124,8 +117,7 @@ public class SextantFinder {
         return selectableTargets;
     }
 
-    public static class RegisterEvent extends Event {
-    }
+    public static class RegisterEvent extends Event {}
 
     public static abstract class TargetObject {
 
@@ -164,14 +156,11 @@ public class SextantFinder {
         private final String name;
         private final int color;
 
-        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName,
-                              boolean advanced, int color) {
+        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName, boolean advanced, int color) {
             this(texLocation, iconName, targetName, advanced, color, 0, 0, 1, 1);
         }
 
-        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName,
-                              boolean advanced, int color, double iconUOffset, double iconVOffset, double iconULength,
-                              double iconVLength) {
+        public ASTargetObject(AssetLoader.TextureLocation texLocation, String iconName, String targetName, boolean advanced, int color, double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
             this.query = new TextureSubQuery(texLocation, iconName, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.advanced = advanced;
             this.name = targetName;
@@ -186,10 +175,8 @@ public class SextantFinder {
         @Override
         public boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress) {
             if (progress == null) return false;
-            return (!advanced && progress.getTierReached()
-                .isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT))
-                || (ItemSextant.isAdvanced(stack) && progress.getTierReached()
-                .isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
+            return (!advanced && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) ||
+                    (ItemSextant.isAdvanced(stack) && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
         }
 
         @Nonnull
@@ -209,25 +196,14 @@ public class SextantFinder {
 
         private final StructureGenBuffer.StructureType structureType;
 
-        public ASStructure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                           boolean advanced, StructureGenBuffer.StructureType type) {
+        public ASStructure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, StructureGenBuffer.StructureType type) {
             super(texLocation, iconName, targetName, advanced, color);
             this.structureType = type;
         }
 
-        public ASStructure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                           boolean advanced, StructureGenBuffer.StructureType type, double iconUOffset, double iconVOffset,
-                           double iconULength, double iconVLength) {
-            super(
-                texLocation,
-                iconName,
-                targetName,
-                advanced,
-                color,
-                iconUOffset,
-                iconVOffset,
-                iconULength,
-                iconVLength);
+        public ASStructure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, StructureGenBuffer.StructureType type,
+                           double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+            super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.structureType = type;
         }
 
@@ -242,25 +218,14 @@ public class SextantFinder {
 
         private final String structureName;
 
-        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                         boolean advanced, String structureName) {
+        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, String structureName) {
             super(texLocation, iconName, targetName, advanced, color);
             this.structureName = structureName;
         }
 
-        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                         boolean advanced, String structureName, double iconUOffset, double iconVOffset, double iconULength,
-                         double iconVLength) {
-            super(
-                texLocation,
-                iconName,
-                targetName,
-                advanced,
-                color,
-                iconUOffset,
-                iconVOffset,
-                iconULength,
-                iconVLength);
+        public Structure(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, String structureName,
+                double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+            super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.structureName = structureName;
         }
 
@@ -275,25 +240,14 @@ public class SextantFinder {
 
         private final BiomeDictionary.Type biomeType;
 
-        public Biome(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                     boolean advanced, BiomeDictionary.Type biomeType) {
+        public Biome(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, BiomeDictionary.Type biomeType) {
             super(texLocation, iconName, targetName, advanced, color);
             this.biomeType = biomeType;
         }
 
-        public Biome(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color,
-                     boolean advanced, BiomeDictionary.Type biomeType, double iconUOffset, double iconVOffset,
-                     double iconULength, double iconVLength) {
-            super(
-                texLocation,
-                iconName,
-                targetName,
-                advanced,
-                color,
-                iconUOffset,
-                iconVOffset,
-                iconULength,
-                iconVLength);
+        public Biome(AssetLoader.TextureLocation texLocation, String iconName, String targetName, int color, boolean advanced, BiomeDictionary.Type biomeType,
+                     double iconUOffset, double iconVOffset, double iconULength, double iconVLength) {
+            super(texLocation, iconName, targetName, advanced, color, iconUOffset, iconVOffset, iconULength, iconVLength);
             this.biomeType = biomeType;
         }
 

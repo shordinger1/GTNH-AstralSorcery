@@ -1,31 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHealEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,15 +43,13 @@ public class KeyCleanseBadPotions extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onHeal(LivingHealEvent event) {
-        EntityLivingBase entity = event.entityLiving;
+        EntityLivingBase entity = event.getEntityLiving();
         if (entity instanceof EntityPlayer && !entity.world.isRemote) {
             EntityPlayer player = (EntityPlayer) entity;
             List<PotionEffect> badEffects = player.getActivePotionEffects()
-                .stream()
-                .filter(
-                    p -> p.getPotion()
-                        .isBadEffect())
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(p -> p.getPotion().isBadEffect())
+                    .collect(Collectors.toList());
             if (badEffects.isEmpty()) {
                 return;
             }
@@ -61,8 +58,8 @@ public class KeyCleanseBadPotions extends KeyPerk {
             if (prog.hasPerkEffect(this)) {
                 float inclChance = 0.1F;
                 inclChance = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, inclChance);
-                float chance = getChance(event.ammount) * inclChance;
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, inclChance);
+                float chance = getChance(event.getAmount()) * inclChance;
                 if (rand.nextFloat() < chance) {
                     player.removePotionEffect(effect.getPotion());
                 }

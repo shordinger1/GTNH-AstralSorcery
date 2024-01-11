@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.models.base;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.client.model.ModelBase;
+import shordinger.wrapper.net.minecraft.client.model.ModelRenderer;
+import shordinger.wrapper.net.minecraft.entity.Entity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +43,7 @@ public class ASlens extends ModelBase {
         this.lens = new ModelRenderer(this, 0, 0);
         this.lens.setRotationPoint(0.0F, 14.0F, 0.0F);
         this.lens.addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1, 0.0F);
-        // this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
+        //this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
     }
 
     @Override

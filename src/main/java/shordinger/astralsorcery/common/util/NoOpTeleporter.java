@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.Teleporter;
-import net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.world.Teleporter;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,13 +25,13 @@ public class NoOpTeleporter extends Teleporter {
         super(worldIn);
     }
 
-    // @Override
-    // public void placeInPortal(Entity entityIn, float rotationYaw) {}
-    //
-    // @Override
-    // public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
-    // return true;
-    // }
+    @Override
+    public void placeInPortal(Entity entityIn, float rotationYaw) {}
+
+    @Override
+    public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
+        return true;
+    }
 
     @Override
     public boolean makePortal(Entity entityIn) {
@@ -39,7 +39,6 @@ public class NoOpTeleporter extends Teleporter {
     }
 
     @Override
-    public void removeStalePortalLocations(long worldTime) {
-    }
+    public void removeStalePortalLocations(long worldTime) {}
 
 }

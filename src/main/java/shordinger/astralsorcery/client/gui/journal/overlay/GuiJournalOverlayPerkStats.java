@@ -1,31 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.journal.overlay;
 
-import java.awt.*;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournalOverlay;
 import shordinger.astralsorcery.client.util.Blending;
@@ -44,7 +28,22 @@ import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader
 import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
 import shordinger.astralsorcery.common.constellation.perk.reader.PlayerAttributeInterpreter;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
+import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,8 +54,8 @@ import shordinger.astralsorcery.migration.MathHelper;
  */
 public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
 
-    public static final BindableResource texturePerkStatOverlay = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
+    public static final BindableResource texturePerkStatOverlay =
+            AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guicontippaper_blank");
     private static final int HEADER_WIDTH = 190;
     private static final int DEFAULT_WIDTH = 175;
 
@@ -76,13 +75,13 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
 
         statistics.clear();
 
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         PlayerAttributeInterpreter interpreter = PlayerAttributeInterpreter.defaultInterpreter(player);
 
         AttributeTypeRegistry.getTypes()
-            .stream()
-            .filter(t -> t instanceof VanillaAttributeType)
-            .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
+                .stream()
+                .filter(t -> t instanceof VanillaAttributeType)
+                .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
 
         for (PerkAttributeType type : AttributeTypeRegistry.getTypes()) {
             if (type.hasTypeApplied(player, Side.CLIENT)) {
@@ -108,12 +107,8 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
 
         GlStateManager.disableDepth();
         texturePerkStatOverlay.bindTexture();
-        drawTexturedRect(
-            guiLeft + guiWidth / 2 - width / 2,
-            guiTop + guiHeight / 2 - height / 2,
-            width,
-            height,
-            texturePerkStatOverlay);
+        drawTexturedRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2,
+                width, height, texturePerkStatOverlay);
         GlStateManager.enableDepth();
 
         drawHeader();
@@ -136,7 +131,7 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
         for (int i = 0; i < split.size(); i++) {
             String s = split.get(i);
 
-            double offsetLeft = (double) width / 2 - (fr.getStringWidth(s) * 1.4) / 2;
+            double offsetLeft = width / 2 - (fr.getStringWidth(s) * 1.4) / 2;
             GlStateManager.pushMatrix();
             GlStateManager.translate(offsetLeft, i * step, 0);
             GlStateManager.scale(1.4, 1.4, 1.4);
@@ -151,7 +146,7 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
     }
 
     private void drawPageText(int mouseX, int mouseY) {
-        if (nameStrWidth == -1 || valueStrWidth == -1 || suffixStrWidth == -1) {
+        if(nameStrWidth == -1 || valueStrWidth == -1 || suffixStrWidth == -1) {
             buildDisplayWidth();
         }
 
@@ -162,25 +157,25 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
         int line = 0;
         for (PerkStatistic stat : statistics) {
             GlStateManager.disableDepth();
-            fontRenderer.drawString(
-                I18n.format(stat.getUnlocPerkTypeName()),
-                offsetX,
-                offsetY + (line * 10),
-                0xEE333333,
-                false);
-            fontRenderer
-                .drawString(stat.getPerkValue(), offsetX + nameStrWidth, offsetY + (line * 10), 0xEE333333, false);
+            fontRenderer.drawString(I18n.format(stat.getUnlocPerkTypeName()),
+                    offsetX, offsetY + (line * 10),
+                    0xEE333333, false);
+            fontRenderer.drawString(stat.getPerkValue(),
+                    offsetX + nameStrWidth, offsetY + (line * 10),
+                    0xEE333333, false);
 
             GlStateManager.enableDepth();
             int strLength = fontRenderer.getStringWidth(stat.getPerkValue());
-            Rectangle rctValue = new Rectangle(offsetX + nameStrWidth, offsetY + (line * 10), strLength, 8);
+            Rectangle rctValue = new Rectangle(offsetX + nameStrWidth, offsetY + (line * 10),
+                    strLength, 8);
             valueStrMap.put(rctValue, stat);
 
-            if (!stat.getSuffix()
-                .isEmpty()) {
+            if (!stat.getSuffix().isEmpty()) {
                 line++;
                 GlStateManager.disableDepth();
-                fontRenderer.drawString(stat.getSuffix(), offsetX + 25, offsetY + (line * 10), 0xEE333333, false);
+                fontRenderer.drawString(stat.getSuffix(),
+                        offsetX + 25, offsetY + (line * 10),
+                        0xEE333333, false);
                 GlStateManager.enableDepth();
             }
             line++;
@@ -202,51 +197,29 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
             return;
         }
 
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         PlayerAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
 
         List<String> information = Lists.newArrayList();
-        information.add(
-            I18n.format(
-                "perk.reader.description.head",
+        information.add(I18n.format("perk.reader.description.head",
                 AttributeReader.formatDecimal(reader.getDefaultValue(attrMap, player, Side.CLIENT))));
-        information.add(
-            I18n.format(
-                "perk.reader.description.addition",
-                AttributeReader.formatDecimal(
-                    reader.getModifierValueForMode(attrMap, player, Side.CLIENT, PerkAttributeModifier.Mode.ADDITION)
-                        - 1)));
-        information.add(
-            I18n.format(
-                "perk.reader.description.increase",
-                AttributeReader.formatDecimal(
-                    reader.getModifierValueForMode(
-                        attrMap,
-                        player,
-                        Side.CLIENT,
+        information.add(I18n.format("perk.reader.description.addition",
+                AttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Side.CLIENT,
+                        PerkAttributeModifier.Mode.ADDITION) - 1)));
+        information.add(I18n.format("perk.reader.description.increase",
+                AttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Side.CLIENT,
                         PerkAttributeModifier.Mode.ADDED_MULTIPLY))));
-        information.add(
-            I18n.format(
-                "perk.reader.description.moreless",
-                AttributeReader.formatDecimal(
-                    reader.getModifierValueForMode(
-                        attrMap,
-                        player,
-                        Side.CLIENT,
+        information.add(I18n.format("perk.reader.description.moreless",
+                AttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, Side.CLIENT,
                         PerkAttributeModifier.Mode.STACKING_MULTIPLY))));
 
-        if (!stat.getSuffix()
-            .isEmpty()
-            || !stat.getPostProcessInfo()
-            .isEmpty()) {
+        if (!stat.getSuffix().isEmpty() || !stat.getPostProcessInfo().isEmpty()) {
             information.add("");
         }
-        if (!stat.getSuffix()
-            .isEmpty()) {
+        if (!stat.getSuffix().isEmpty()) {
             information.add(stat.getSuffix());
         }
-        if (!stat.getPostProcessInfo()
-            .isEmpty()) {
+        if (!stat.getPostProcessInfo().isEmpty()) {
             information.add(stat.getPostProcessInfo());
         }
 

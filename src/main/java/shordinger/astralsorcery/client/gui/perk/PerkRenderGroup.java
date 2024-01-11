@@ -1,26 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.perk;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import shordinger.astralsorcery.common.util.MiscUtils;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,10 +52,7 @@ public class PerkRenderGroup {
 
     @Nullable
     public BatchPerkContext.TextureObjectGroup getGroup(AbstractRenderableTexture texture) {
-        return MiscUtils.iterativeSearch(
-            addedGroups,
-            grp -> grp.getResource()
-                .equals(texture));
+        return MiscUtils.iterativeSearch(addedGroups, grp -> grp.getResource().equals(texture));
     }
 
     @Override

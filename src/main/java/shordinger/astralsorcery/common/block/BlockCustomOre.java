@@ -1,24 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.base.RockCrystalHandler;
@@ -28,13 +17,25 @@ import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.IStringSerializable;
-import shordinger.astralsorcery.migration.block.AstralBlock;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.BlockRenderLayer;
-import shordinger.astralsorcery.migration.block.BlockStateContainer;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,7 +48,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 18:03
  */
-public class BlockCustomOre extends AstralBlock implements BlockCustomName, BlockVariants {
+public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
 
     public static boolean allowCrystalHarvest = false;
     private static final Random rand = new Random();
@@ -66,8 +67,7 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
 
-        if (state.getValue(ORE_TYPE)
-            .equals(OreType.ROCK_CRYSTAL)) {
+        if(state.getValue(ORE_TYPE).equals(OreType.ROCK_CRYSTAL)) {
             RockCrystalHandler.INSTANCE.removeOre(worldIn, pos, true);
         }
     }
@@ -87,8 +87,7 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta])
-            : getDefaultState();
+        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta]) : getDefaultState();
     }
 
     @Override
@@ -97,11 +96,9 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
     }
 
     @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state,
-                             @Nullable TileEntity te, @Nullable ItemStack stack) {
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
         OreType type = state.getValue(ORE_TYPE);
-        if (type != OreType.ROCK_CRYSTAL
-            || (allowCrystalHarvest || (securityCheck(worldIn, player) && checkSafety(worldIn, pos)))) {
+        if(type != OreType.ROCK_CRYSTAL || (allowCrystalHarvest || (securityCheck(worldIn, player) && checkSafety(worldIn, pos)))) {
             super.harvestBlock(worldIn, player, pos, state, te, stack);
         }
     }
@@ -112,28 +109,27 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         switch (type) {
-            case ROCK_CRYSTAL -> {
-                if (world instanceof World
-                    && (allowCrystalHarvest
-                    || (checkSafety((World) world, pos) && securityCheck((World) world, harvesters.get())))) {
+            case ROCK_CRYSTAL:
+                if(world != null && world instanceof World && (allowCrystalHarvest || (checkSafety((World) world, pos) && securityCheck((World) world, harvesters.get())))) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     for (int i = 0; i < (fortune + 1); i++) {
-                        if (((World) world).rand.nextBoolean()) {
+                        if(((World) world).rand.nextBoolean()) {
                             drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                         }
                     }
-                    if (((World) world).rand.nextBoolean()) {
+                    if(((World) world).rand.nextBoolean()) {
                         drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     }
                 }
-            }
-            case STARMETAL -> drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
-            default -> {
-            }
+                break;
+            case STARMETAL:
+                drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
+                break;
+            default:
+                break;
         }
     }
 
@@ -150,6 +146,7 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
     }
+
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -185,8 +182,8 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
     @Override
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         OreType ot = state.getValue(ORE_TYPE);
-        if (ot == OreType.ROCK_CRYSTAL) {
-            if (Config.rockCrystalOreSilkTouchHarvestable) {
+        if(ot == OreType.ROCK_CRYSTAL) {
+            if(Config.rockCrystalOreSilkTouchHarvestable) {
                 return true;
             }
         }
@@ -195,19 +192,15 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(ORE_TYPE)
-            .getName();
+        return state.getValue(ORE_TYPE).getName();
     }
 
     @SideOnly(Side.CLIENT)
     public static void playStarmetalOreEffects(PktParticleEvent event) {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-            event.getVec()
-                .getX() + rand.nextFloat(),
-            event.getVec()
-                .getY() + rand.nextFloat(),
-            event.getVec()
-                .getZ() + rand.nextFloat());
+                event.getVec().getX() + rand.nextFloat(),
+                event.getVec().getY() + rand.nextFloat(),
+                event.getVec().getZ() + rand.nextFloat());
         p.motion(0, rand.nextFloat() * 0.05, 0);
         p.scale(0.2F);
     }
@@ -236,5 +229,6 @@ public class BlockCustomOre extends AstralBlock implements BlockCustomName, Bloc
             return name().toLowerCase();
         }
     }
+
 
 }

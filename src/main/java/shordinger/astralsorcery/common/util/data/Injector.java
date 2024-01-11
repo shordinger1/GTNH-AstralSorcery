@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
+
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -84,8 +84,7 @@ public class Injector {
             Constructor constructor = clazz.getDeclaredConstructor(classes);
             object = constructor.newInstance(params);
             return (T) object;
-        } catch (Exception e) {// NoSuchMethodException | InvocationTargetException | InstantiationException |
-            // IllegalAccessException
+        } catch (Exception e) {//NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException
             e.printStackTrace();
         }
         return null;
@@ -103,7 +102,7 @@ public class Injector {
         try {
             Method method = clazz.getDeclaredMethod(name, classes);
             return invokeMethod(method, params);
-        } catch (Exception e) {// NoSuchMethodException | ClassCastException
+        } catch (Exception e) {//NoSuchMethodException | ClassCastException
             e.printStackTrace();
         }
         return null;
@@ -113,8 +112,9 @@ public class Injector {
         try {
             method.setAccessible(true);
             Object result = method.invoke(object, params);
-            if (result != null) return (T) result;
-        } catch (Exception e) {// InvocationTargetException | IllegalAccessException | ClassCastException
+            if (result != null)
+                return (T) result;
+        } catch (Exception e) {//InvocationTargetException | IllegalAccessException | ClassCastException
             e.printStackTrace();
         }
         return null;
@@ -122,7 +122,8 @@ public class Injector {
 
     private Class[] extractClasses(Object... objects) {
         Class[] classes = new Class[objects.length];
-        for (int i = 0; i < objects.length; i++) classes[i] = objects[i].getClass();
+        for (int i = 0; i < objects.length; i++)
+            classes[i] = objects[i].getClass();
         return classes;
     }
 
@@ -146,7 +147,7 @@ public class Injector {
             field.setAccessible(true);
             field.set(object, value);
             return true;
-        } catch (Exception e) {// IllegalAccessException | NoSuchFieldException
+        } catch (Exception e) {//IllegalAccessException | NoSuchFieldException
             e.printStackTrace();
             return false;
         }
@@ -165,8 +166,9 @@ public class Injector {
         try {
             field.setAccessible(true);
             Object result = field.get(object);
-            if (result != null) return (T) result;
-        } catch (Exception e) {// IllegalAccessException | ClassCastException
+            if (result != null)
+                return (T) result;
+        } catch (Exception e) {//IllegalAccessException | ClassCastException
             e.printStackTrace();
         }
         return null;
@@ -182,16 +184,14 @@ public class Injector {
 
     public static Method findMethod(Class clazz, Class returnType, Class[] paramTypes) {
         for (Method m : clazz.getDeclaredMethods()) {
-            if (Arrays.equals(m.getParameterTypes(), paramTypes) && m.getReturnType()
-                .equals(returnType)) {
+            if (Arrays.equals(m.getParameterTypes(), paramTypes) && m.getReturnType().equals(returnType)) {
                 return m;
             }
         }
         return null;
     }
 
-    public static <E> Method findMethod(Class<? super E> clazz, String methodName, String methodObfName,
-                                        Class<?>... methodTypes) {
+    public static <E> Method findMethod(Class<? super E> clazz, String methodName, String methodObfName, Class<?>... methodTypes) {
         return ReflectionHelper.findMethod(clazz, methodName, methodObfName, methodTypes);
     }
 
@@ -201,8 +201,7 @@ public class Injector {
 
     public static Field findField(Class clazz, Class type) {
         for (Field f : clazz.getDeclaredFields()) {
-            if (f.getType()
-                .equals(type)) {
+            if (f.getType().equals(type)) {
                 return f;
             }
         }
@@ -219,7 +218,8 @@ public class Injector {
     }
 
     public static Method getMethod(String name, Class clazz, Class... classes) {
-        if (clazz == null) return null;
+        if (clazz == null)
+            return null;
 
         try {
             return clazz.getDeclaredMethod(name, classes);

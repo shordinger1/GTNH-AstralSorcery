@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
  */
 public interface DynamicPerkRender {
 
-    public void renderAt(PerkTreePoint.AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
-                         double scale);
+    public void renderAt(PerkTreePoint.AllocationStatus status, long spriteOffsetTick, float pTicks,
+                              double x, double y, double scale);
 
 }

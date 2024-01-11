@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -11,13 +11,14 @@ package shordinger.astralsorcery.common.crafting.helper;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.util.RecipeItemHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.client.util.RecipeItemHelper;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
+import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,6 +68,7 @@ public class FluidIngredient extends Ingredient {
         }
         return this.itemArray;
     }
+
 
     @Override
     @Nonnull

@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.helper;
 
+import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
+import shordinger.wrapper.net.minecraftforge.oredict.ShapedOreRecipe;
+
 import java.util.Iterator;
-
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import shordinger.astralsorcery.migration.NonNullList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,13 +28,11 @@ import shordinger.astralsorcery.migration.NonNullList;
  */
 public class RecipeHelper {
 
-    public static BasePlainRecipe getShapelessOreDictRecipe(ResourceLocation name, ItemStack output,
-                                                            NonNullList<Ingredient> craftingComponents) {
+    public static BasePlainRecipe getShapelessOreDictRecipe(ResourceLocation name, ItemStack output, NonNullList<Ingredient> craftingComponents) {
         return new ShapelessIngredientRecipe(name, output, craftingComponents);
     }
 
-    public static BasePlainRecipe getShapedOredictRecipe(ResourceLocation name, ItemStack output,
-                                                         ShapeMap.Baked craftingComponents) {
+    public static BasePlainRecipe getShapedOredictRecipe(ResourceLocation name, ItemStack output, ShapeMap.Baked craftingComponents) {
         return new ShapedIngredientRecipe(name, output, craftingComponents);
     }
 
@@ -60,8 +57,7 @@ public class RecipeHelper {
                     boolean inRecipe = false;
                     Iterator<Ingredient> req = required.iterator();
                     while (req.hasNext()) {
-                        if (req.next()
-                            .apply(slot)) {
+                        if (req.next().apply(slot)) {
                             inRecipe = true;
                             req.remove();
                             break;

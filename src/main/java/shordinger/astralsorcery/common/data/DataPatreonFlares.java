@@ -1,29 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data;
 
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,11 +30,11 @@ import java.util.stream.Collectors;
  */
 public class DataPatreonFlares extends AbstractData {
 
-    private final Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresClient = new HashMap<>();
+    private Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresClient = new HashMap<>();
 
-    private final Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresServer = new HashMap<>();
-    private final List<UUID> flareAdditions = new LinkedList<>();
-    private final List<UUID> flareRemovals = new LinkedList<>();
+    private Map<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> patreonFlaresServer = new HashMap<>();
+    private List<UUID> flareAdditions = new LinkedList<>();
+    private List<UUID> flareRemovals = new LinkedList<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
@@ -62,24 +57,18 @@ public class DataPatreonFlares extends AbstractData {
     }
 
     public Collection<Collection<PatreonPartialEntity>> getEntities(Side side) {
-        return side == Side.CLIENT ? patreonFlaresClient.values()
-            .stream()
-            .map(Map::values)
-            .collect(Collectors.toList())
-            : patreonFlaresServer.values()
-            .stream()
-            .map(Map::values)
-            .collect(Collectors.toList());
+        return side == Side.CLIENT ? patreonFlaresClient.values().stream().map(Map::values).collect(Collectors.toList()) :
+                patreonFlaresServer.values().stream().map(Map::values).collect(Collectors.toList());
     }
 
-    // Only actually called when there's an entity to be provided.
+    //Only actually called when there's an entity to be provided.
     public PatreonPartialEntity createEntity(EntityPlayer player, PatreonEffectHelper.PatreonEffect value) {
         UUID owner = player.getUniqueID();
         PatreonPartialEntity entity = value.createEntity(owner);
         entity.setPositionNear(player);
 
         patreonFlaresServer.computeIfAbsent(owner, o -> new HashMap<>())
-            .put(value, entity);
+                .put(value, entity);
         flareRemovals.remove(owner);
         if (!flareAdditions.contains(owner)) {
             flareAdditions.add(owner);
@@ -123,24 +112,18 @@ public class DataPatreonFlares extends AbstractData {
     @Override
     public void writeAllDataToPacket(NBTTagCompound compound) {
         NBTTagList entries = new NBTTagList();
-        for (Map.Entry<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> flares : this.patreonFlaresServer
-            .entrySet()) {
+        for (Map.Entry<UUID, Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity>> flares : this.patreonFlaresServer.entrySet()) {
             NBTTagCompound tag = new NBTTagCompound();
 
             tag.setUniqueId("owner", flares.getKey());
 
             NBTTagList flareList = new NBTTagList();
-            for (Map.Entry<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> flareEntry : flares.getValue()
-                .entrySet()) {
+            for (Map.Entry<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> flareEntry : flares.getValue().entrySet()) {
                 NBTTagCompound containerTag = new NBTTagCompound();
-                containerTag.setUniqueId(
-                    "id",
-                    flareEntry.getKey()
-                        .getId());
+                containerTag.setUniqueId("id", flareEntry.getKey().getId());
 
                 NBTTagCompound flareTag = new NBTTagCompound();
-                flareEntry.getValue()
-                    .writeToNBT(flareTag);
+                flareEntry.getValue().writeToNBT(flareTag);
                 containerTag.setTag("data", flareTag);
 
                 flareList.appendTag(containerTag);
@@ -167,14 +150,10 @@ public class DataPatreonFlares extends AbstractData {
             NBTTagList flareList = new NBTTagList();
             for (Map.Entry<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> flareEntry : flares.entrySet()) {
                 NBTTagCompound containerTag = new NBTTagCompound();
-                containerTag.setUniqueId(
-                    "id",
-                    flareEntry.getKey()
-                        .getId());
+                containerTag.setUniqueId("id", flareEntry.getKey().getId());
 
                 NBTTagCompound flareTag = new NBTTagCompound();
-                flareEntry.getValue()
-                    .writeToNBT(flareTag);
+                flareEntry.getValue().writeToNBT(flareTag);
                 containerTag.setTag("data", flareTag);
 
                 flareList.appendTag(containerTag);
@@ -202,10 +181,9 @@ public class DataPatreonFlares extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if (!(serverData instanceof DataPatreonFlares)) return;
+        if (serverData == null || !(serverData instanceof DataPatreonFlares)) return;
 
-        NBTTagList add = ((DataPatreonFlares) serverData).clientReadBuffer
-            .getTagList("flareAdditions", Constants.NBT.TAG_COMPOUND);
+        NBTTagList add = ((DataPatreonFlares) serverData).clientReadBuffer.getTagList("flareAdditions", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < add.tagCount(); i++) {
             NBTTagCompound cmp = add.getCompoundTagAt(i);
             UUID owner = cmp.getUniqueId("owner");
@@ -218,37 +196,27 @@ public class DataPatreonFlares extends AbstractData {
                 NBTTagCompound flareTag = containerTag.getCompoundTag("data");
 
                 PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getPatreonEffects(Side.SERVER, owner)
-                    .stream()
-                    .filter(
-                        p -> p.getId()
-                            .equals(effectId) && p.hasPartialEntity())
-                    .findFirst()
-                    .orElse(null);
+                        .stream().filter(p -> p.getId().equals(effectId) && p.hasPartialEntity()).findFirst().orElse(null);
                 if (pe != null) {
-                    PatreonPartialEntity entity = this.patreonFlaresClient.computeIfAbsent(owner, o -> new HashMap<>())
-                        .get(pe);
+                    PatreonPartialEntity entity = this.patreonFlaresClient.computeIfAbsent(owner, o -> new HashMap<>()).get(pe);
                     if (entity == null) {
                         entity = pe.createEntity(owner);
                         if (entity == null) {
-                            throw new IllegalStateException(
-                                "FATAL ERROR: Eventhough a PatreonEffect guaranteed a proper partial entity, it was unable to provide one!");
+                            throw new IllegalStateException("FATAL ERROR: Eventhough a PatreonEffect guaranteed a proper partial entity, it was unable to provide one!");
                         }
-                        this.patreonFlaresClient.get(owner)
-                            .put(pe, entity);
+                        this.patreonFlaresClient.get(owner).put(pe, entity);
                     }
                     entity.readFromNBT(flareTag);
                 }
             }
         }
 
-        NBTTagList remove = ((DataPatreonFlares) serverData).clientReadBuffer
-            .getTagList("flareRemovals", Constants.NBT.TAG_COMPOUND);
+        NBTTagList remove = ((DataPatreonFlares) serverData).clientReadBuffer.getTagList("flareRemovals", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < remove.tagCount(); i++) {
             NBTTagCompound cmp = remove.getCompoundTagAt(i);
             UUID owner = cmp.getUniqueId("owner");
 
-            Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> flares = this.patreonFlaresClient
-                .remove(owner);
+            Map<PatreonEffectHelper.PatreonEffect, PatreonPartialEntity> flares = this.patreonFlaresClient.remove(owner);
             if (flares != null) {
                 for (PatreonPartialEntity flare : flares.values()) {
                     flare.setRemoved(true);
@@ -256,8 +224,8 @@ public class DataPatreonFlares extends AbstractData {
             }
         }
     }
-
     public static class Provider extends ProviderAutoAllocate<DataPatreonFlares> {
+
 
         public Provider(String key) {
             super(key);

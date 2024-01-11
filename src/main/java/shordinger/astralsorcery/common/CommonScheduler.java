@@ -1,21 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common;
 
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.astralsorcery.common.util.Counter;
+import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import cpw.mods.fml.common.gameevent.TickEvent;
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
-
-import shordinger.astralsorcery.common.util.data.Tuple;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,26 +29,26 @@ public class CommonScheduler implements ITickHandler {
     private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private final LinkedList<Tuple<Runnable, Integer>> queue = new LinkedList<>();
-    private final LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
+    private LinkedList<Tuple<Runnable, Counter>> queue = new LinkedList<>();
+    private LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         inTick = true;
         synchronized (lock) {
             inTick = true;
-            Iterator<Tuple<Runnable, Integer>> iterator = queue.iterator();
+            Iterator<Tuple<Runnable, Counter>> iterator = queue.iterator();
             while (iterator.hasNext()) {
-                Tuple<Runnable, Integer> r = iterator.next();
-                r.value--;
-                if (r.value <= 0) {
+                Tuple<Runnable, Counter> r = iterator.next();
+                r.value.decrement();
+                if(r.value.value <= 0) {
                     r.key.run();
                     iterator.remove();
                 }
             }
             inTick = false;
             for (Tuple<Runnable, Integer> wait : waiting) {
-                queue.addLast(new Tuple<>(wait.key, wait.value));
+                queue.addLast(new Tuple<>(wait.key, new Counter(wait.value)));
             }
         }
         waiting.clear();
@@ -71,10 +71,10 @@ public class CommonScheduler implements ITickHandler {
 
     public void addRunnable(Runnable r, int tickDelay) {
         synchronized (lock) {
-            if (inTick) {
+            if(inTick) {
                 waiting.addLast(new Tuple<>(r, tickDelay));
             } else {
-                queue.addLast(new Tuple<>(r, tickDelay));
+                queue.addLast(new Tuple<>(r, new Counter(tickDelay)));
             }
         }
     }

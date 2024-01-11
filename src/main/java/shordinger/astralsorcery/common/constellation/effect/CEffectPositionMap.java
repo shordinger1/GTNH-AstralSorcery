@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTBase;
-
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
+import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,11 +21,9 @@ import shordinger.astralsorcery.common.util.ILocatable;
  * Created by HellFirePvP
  * Date: 01.11.2016 / 01:24
  */
-public abstract class CEffectPositionMap<K extends NBTBase, V extends NBTBase>
-    extends CEffectPositionListGen<GenListEntries.PosDefinedTuple<K, V>> {
+public abstract class CEffectPositionMap<K extends NBTBase, V extends NBTBase> extends CEffectPositionListGen<GenListEntries.PosDefinedTuple<K, V>> {
 
-    public CEffectPositionMap(@Nullable ILocatable origin, IMajorConstellation c, String cfgName, int maxCount,
-                              Verifier verifier) {
+    public CEffectPositionMap(@Nullable ILocatable origin, IMajorConstellation c, String cfgName, int maxCount, Verifier verifier) {
         super(origin, c, cfgName, maxCount, verifier, GenListEntries.PosDefinedTuple::new);
     }
 

@@ -1,21 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,14 +60,12 @@ public class StorageKey {
 
         StorageKey that = (StorageKey) o;
 
-        return (item.getHasSubtypes() || metadata == that.metadata) && item.getUnlocalizedName()
-            .equals(that.item.getUnlocalizedName());
+        return (item.getHasSubtypes() || metadata == that.metadata) && item.getRegistryName().equals(that.item.getRegistryName());
     }
 
     @Override
     public int hashCode() {
-        int result = item.getUnlocalizedName()
-            .hashCode();
+        int result = item.getRegistryName().hashCode();
         if (item.getHasSubtypes()) {
             result = 31 * result + metadata;
         }
@@ -76,17 +75,17 @@ public class StorageKey {
     @Nonnull
     public NBTTagCompound serialize() {
         NBTTagCompound keyTag = new NBTTagCompound();
-        keyTag.setString("name", item.getUnlocalizedName());
+        keyTag.setString("name", item.getRegistryName().toString());
         keyTag.setInteger("meta", metadata);
         return keyTag;
     }
 
-    // If the item in question does no longer exist in the registry, return null.
+    //If the item in question does no longer exist in the registry, return null.
     @Nullable
     public static StorageKey deserialize(NBTTagCompound nbt) {
         ResourceLocation rl = new ResourceLocation(nbt.getString("name"));
         Item i = ForgeRegistries.ITEMS.getValue(rl);
-        if (i == null) {
+        if (i == null || i == Items.AIR) {
             return null;
         }
         int meta = nbt.getInteger("meta");

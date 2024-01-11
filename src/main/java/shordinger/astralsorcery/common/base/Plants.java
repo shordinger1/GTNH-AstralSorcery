@@ -1,23 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.*;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
 import com.google.common.collect.Lists;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import shordinger.astralsorcery.migration.block.IBlockState;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,10 +57,10 @@ public enum Plants {
     }
 
     private Plants(ResourceLocation key, Mods owningMod, boolean computeAll) {
-        if (owningMod.isPresent()) {
+        if(owningMod.isPresent()) {
             Block b = ForgeRegistries.BLOCKS.getValue(key);
-            if (b != null && b != Blocks.AIR) {
-                if (computeAll) {
+            if(b != null && b != Blocks.AIR) {
+                if(computeAll) {
                     potentialBlockStates.addAll(buildStates(b));
                 } else {
                     potentialBlockStates.add(b.getDefaultState());
@@ -72,9 +70,8 @@ public enum Plants {
     }
 
     private static List<IBlockState> buildStates(Block block) {
-        List<IBlockState> available = block.getBlockState()
-            .getValidStates();
-        if (available.isEmpty()) {
+        List<IBlockState> available = block.getBlockState().getValidStates();
+        if(available.isEmpty()) {
             available = new LinkedList<>();
             available.add(block.getDefaultState());
         }
@@ -86,8 +83,8 @@ public enum Plants {
     }
 
     private IBlockState getRandomState_Rec() {
-        if (potentialBlockStates.isEmpty()) {
-            return getAnyRandomState(); // Unloaded mod. rec call.
+        if(potentialBlockStates.isEmpty()) {
+            return getAnyRandomState(); //Unloaded mod. rec call.
         }
         return potentialBlockStates.get(rand.nextInt(potentialBlockStates.size()));
     }
@@ -98,10 +95,10 @@ public enum Plants {
 
     public static boolean matchesAny(IBlockState test) {
         for (Plants plant : values()) {
-            if (plant.potentialBlockStates.isEmpty()) continue;
+            if(plant.potentialBlockStates.isEmpty()) continue;
 
             for (IBlockState state : plant.potentialBlockStates) {
-                if (state.equals(test)) {
+                if(state.equals(test)) {
                     return true;
                 }
             }

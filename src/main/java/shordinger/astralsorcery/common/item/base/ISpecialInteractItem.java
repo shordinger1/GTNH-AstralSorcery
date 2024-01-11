@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.base;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +26,6 @@ public interface ISpecialInteractItem {
 
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack);
 
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
-                                ItemStack stack);
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack);
 
 }

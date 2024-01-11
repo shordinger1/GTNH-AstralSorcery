@@ -1,35 +1,48 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
-import java.util.Map;
-import java.util.UUID;
-
-import net.minecraft.client.Minecraft;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.ClientScheduler;
+import shordinger.astralsorcery.client.util.AirBlockRenderWorld;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Biomes;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.WorldType;
+import shordinger.wrapper.net.minecraftforge.client.event.RenderPlayerEvent;
+import shordinger.wrapper.net.minecraftforge.client.event.RenderWorldLastEvent;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,11 +63,17 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     private final Map<BlockPos, IBlockState> pattern;
 
     /*
-     * Based on X = 2
-     * variable in Z and Y direction, X towards and from player
+    Based on X = 2
+    variable in Z and Y direction, X towards and from player
      */
-    public PtEffectBlockRing(UUID sessionEffectId, PatreonEffectHelper.FlareColor chosenColor, UUID playerUUID,
-                             float distance, float rotationAngle, int repeats, int tickRotationSpeed, Map<BlockPos, IBlockState> pattern) {
+    public PtEffectBlockRing(UUID sessionEffectId,
+                             PatreonEffectHelper.FlareColor chosenColor,
+                             UUID playerUUID,
+                             float distance,
+                             float rotationAngle,
+                             int repeats,
+                             int tickRotationSpeed,
+                             Map<BlockPos, IBlockState> pattern) {
         super(sessionEffectId, chosenColor);
 
         this.playerUUID = playerUUID;
@@ -76,11 +95,9 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderLast(RenderWorldLastEvent event) {
-        EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
-        if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && // First person
-            pl != null
-            && pl.getUniqueID()
-            .equals(playerUUID)) {
+        EntityPlayer pl = Minecraft.getMinecraft().player;
+        if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && //First person
+                pl != null && pl.getUniqueID().equals(playerUUID)) {
 
             float alpha = 1F;
             if (pl.rotationPitch >= 35F) {
@@ -94,8 +111,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     @SideOnly(Side.CLIENT)
     public void onRenderPost(RenderPlayerEvent.Post ev) {
         EntityPlayer player = ev.getEntityPlayer();
-        if (!player.getUniqueID()
-            .equals(playerUUID)) {
+        if (!player.getUniqueID().equals(playerUUID)) {
             return;
         }
 
@@ -138,13 +154,9 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
                 GlStateManager.scale(0.09, 0.09, 0.09);
                 GlStateManager.color(1F, 1F, 1F, alphaMultiplier);
 
-                RenderingUtils.renderTexturedCubeCentral(
-                    new Vector3(),
-                    1F,
-                    tas.getMinU(),
-                    tas.getMinV(),
-                    tas.getMaxU() - tas.getMinU(),
-                    tas.getMaxV() - tas.getMinV());
+                RenderingUtils.renderTexturedCubeCentral(new Vector3(), 1F,
+                        tas.getMinU(), tas.getMinV(),
+                        tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV());
 
                 GlStateManager.popMatrix();
             }

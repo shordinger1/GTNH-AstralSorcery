@@ -1,23 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk;
 
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,14 +29,12 @@ public class PerkAttributeHelper {
     private static Map<UUID, PlayerAttributeMap> playerPerkAttributes = new HashMap<>();
     private static Map<UUID, PlayerAttributeMap> playerPerkAttributesClient = new HashMap<>();
 
-    private PerkAttributeHelper() {
-    }
+    private PerkAttributeHelper() {}
 
     @Nonnull
     public static PlayerAttributeMap getOrCreateMap(EntityPlayer player, Side side) {
         if (side == Side.CLIENT) {
-            return playerPerkAttributesClient
-                .computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
+            return playerPerkAttributesClient.computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
         } else {
             return playerPerkAttributes.computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
         }

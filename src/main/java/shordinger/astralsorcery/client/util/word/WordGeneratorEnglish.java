@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -19,9 +19,8 @@ import java.util.Random;
  */
 public class WordGeneratorEnglish extends RandomWordGenerator {
 
-    private static String[] vows = new String[]{"a", "e", "i", "o", "u"};
-    private static String[] cons = new String[]{"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "ph",
-        "qu", "r", "s", "t", "v", "w", "x", "y", "z", "tt", "ch", "sh"};
+    private static String[] vows = new String[] { "a", "e", "i", "o", "u" };
+    private static String[] cons = new String[] { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "ph", "qu", "r", "s", "t", "v", "w", "x", "y", "z", "tt", "ch", "sh" };
 
     @Override
     public String generateWord(long seed, int length) {

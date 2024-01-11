@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import net.minecraft.item.ItemStack;
-
-import mezz.jei.api.recipe.IRecipeWrapper;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
+import mezz.jei.api.recipe.IRecipeWrapper;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

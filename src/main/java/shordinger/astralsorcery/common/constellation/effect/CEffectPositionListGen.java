@@ -1,29 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,16 +30,14 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  * Created by HellFirePvP
  * Date: 08.11.2016 / 20:11
  */
-public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CEffectGenListEntry>
-    extends ConstellationEffect {
+public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CEffectGenListEntry> extends ConstellationEffect {
 
     protected final Function<BlockPos, T> elementProvider;
     protected final int maxCount;
     protected final Verifier verifier;
     private List<T> elements = new ArrayList<>();
 
-    public CEffectPositionListGen(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName,
-                                  int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
+    public CEffectPositionListGen(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
         super(origin, constellation, cfgName);
         this.elementProvider = emptyElementProvider;
         this.maxCount = maxCount;
@@ -57,7 +53,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         this.elements.clear();
     }
 
-    // Returns only null if empty.
+    //Returns only null if empty.
     @Nullable
     public T getRandomElement(Random rand) {
         return elements.isEmpty() ? null : elements.get(rand.nextInt(elements.size()));
@@ -65,8 +61,8 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     @Nullable
     public T getRandomElementByChance(Random rand) {
-        if (elements.isEmpty()) return null;
-        if (rand.nextInt(Math.max((maxCount - elements.size()) / 4, 0) + 1) == 0) {
+        if(elements.isEmpty()) return null;
+        if(rand.nextInt(Math.max((maxCount - elements.size()) / 4, 0) + 1) == 0) {
             return getRandomElement(rand);
         }
         return null;
@@ -77,21 +73,21 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
     }
 
     public boolean offerNewElement(T element) {
-        if (maxCount <= elements.size()) return false;
-        if (containsElementAt(element.pos())) return false;
+        if(maxCount <= elements.size()) return false;
+        if(containsElementAt(element.getPos())) return false;
         return elements.add(element);
     }
 
     public boolean findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
-        if (maxCount > elements.size()) {
+        if(maxCount > elements.size()) {
             double searchRange = prop.getSize();
             double offX = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             BlockPos at = pos.add(offX, offY, offZ);
-            if (MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
+            if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
                 T element = newElement(world, at);
-                if (element != null) {
+                if(element != null) {
                     elements.add(element);
                 }
                 return true;
@@ -101,15 +97,16 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
     }
 
     public boolean findNewPositionAt(World world, BlockPos pos, BlockPos at, ConstellationEffectProperties prop) {
-        if (maxCount > elements.size()) {
+        if(maxCount > elements.size()) {
             double searchRange = prop.getSize();
-            if (Math.abs(pos.getX() - at.getX()) > searchRange || Math.abs(pos.getY() - at.getY()) > searchRange
-                || Math.abs(pos.getZ() - at.getZ()) > searchRange) {
+            if (Math.abs(pos.getX() - at.getX()) > searchRange ||
+                    Math.abs(pos.getY() - at.getY()) > searchRange ||
+                    Math.abs(pos.getZ() - at.getZ()) > searchRange) {
                 return false;
             }
-            if (MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
+            if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
                 T element = newElement(world, at);
-                if (element != null) {
+                if(element != null) {
                     elements.add(element);
                 }
                 return true;
@@ -124,8 +121,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     private boolean containsElementAt(BlockPos pos) {
         for (T e : elements) {
-            if (e.pos()
-                .equals(pos)) return true;
+            if(e.getPos().equals(pos)) return true;
         }
         return false;
     }
@@ -138,7 +134,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
             NBTTagCompound tag = list.getCompoundTagAt(i);
             BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
             T element = elementProvider.apply(pos);
-            if (element != null) {
+            if(element != null) {
                 element.readFromNBT(tag);
                 elements.add(element);
             }
@@ -150,7 +146,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         NBTTagList listPositions = new NBTTagList();
         for (T elem : elements) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTHelper.writeBlockPosToNBT(elem.pos(), tag);
+            NBTHelper.writeBlockPosToNBT(elem.getPos(), tag);
             elem.writeToNBT(tag);
             listPositions.appendTag(tag);
         }
@@ -165,7 +161,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     public static interface CEffectGenListEntry {
 
-        public BlockPos pos();
+        public BlockPos getPos();
 
         public void readFromNBT(NBTTagCompound nbt);
 

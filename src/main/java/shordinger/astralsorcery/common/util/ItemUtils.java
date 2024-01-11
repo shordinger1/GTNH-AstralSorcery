@@ -1,41 +1,45 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import static shordinger.astralsorcery.common.util.ItemComparator.Clause.*;
-
-import java.util.*;
-import java.util.function.Predicate;
+import com.google.common.collect.Lists;
+import shordinger.astralsorcery.common.base.Mods;
+import shordinger.astralsorcery.common.integrations.ModIntegrationBotania;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidActionResult;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
+import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidHandler;
+import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidTankProperties;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandlerModifiable;
+import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
+import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Predicate;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.google.common.collect.Lists;
-import com.gtnewhorizons.modularui.api.forge.IItemHandler;
-import com.gtnewhorizons.modularui.api.forge.IItemHandlerModifiable;
-import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
-
-import shordinger.astralsorcery.common.base.Mods;
-import shordinger.astralsorcery.common.integrations.ModIntegrationBotania;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import static hellfirepvp.astralsorcery.common.util.ItemComparator.Clause.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,8 +58,8 @@ public class ItemUtils {
         ei.motionX = 0;
         ei.motionY = 0;
         ei.motionZ = 0;
-        world.spawnEntityInWorld(ei);
-        ei.delayBeforeCanPickup = 10;
+        world.spawnEntity(ei);
+        ei.setDefaultPickupDelay();
         return ei;
     }
 
@@ -63,8 +67,8 @@ public class ItemUtils {
         if (world.isRemote) return null;
         EntityItem ei = new EntityItem(world, x, y, z, stack);
         applyRandomDropOffset(ei);
-        world.spawnEntityInWorld(ei);
-        ei.delayBeforeCanPickup = 10;
+        world.spawnEntity(ei);
+        ei.setDefaultPickupDelay();
         return ei;
     }
 
@@ -74,18 +78,18 @@ public class ItemUtils {
         item.motionZ = rand.nextFloat() * 0.3F - 0.15D;
     }
 
+    @Nonnull
     public static ItemStack createBlockStack(IBlockState state) {
         Item i = Item.getItemFromBlock(state.getBlock());
-        if (i == null) return null;
-        int meta = state.getBlock()
-            .damageDropped(state);
+        if (i == Items.AIR) return ItemStack.EMPTY;
+        int meta = state.getBlock().damageDropped(state);
         return new ItemStack(i, 1, meta);
     }
 
     @Nullable
     public static IBlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
-        if (b == null) return null;
+        if (b == Blocks.AIR) return null;
         try {
             return b.getStateFromMeta(stack.getMetadata());
         } catch (Exception exc) {
@@ -97,65 +101,56 @@ public class ItemUtils {
         List<ItemStack> out = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (s.stackSize!=0 && s.getItem() == i) out.add(copyStackWithSize(s, s.stackSize));
+            if (!s.isEmpty() && s.getItem() == i)
+                out.add(copyStackWithSize(s, s.getCount()));
         }
         return out;
     }
 
-    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match,
-                                                                 boolean strict) {
+    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match, boolean strict) {
         return findItemsInInventory(handler, match, strict);
     }
 
-    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match,
-                                                                   boolean strict) {
-        return findItemsInInventory(
-            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            match,
-            strict);
+    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
+        return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match, strict);
     }
 
     public static Collection<ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
         List<ItemStack> stacksOut = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ? ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)
-                : ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
-                stacksOut.add(copyStackWithSize(s, s.stackSize));
+            if (strict ?
+                    ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
+                    ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT)) {
+                stacksOut.add(copyStackWithSize(s, s.getCount()));
             }
         }
         return stacksOut;
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player,
-                                                                            Predicate<ItemStack> match) {
-        return findItemsIndexedInInventory(
-            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            match);
+    public static Map<Integer, ItemStack> findItemsIndexedInPlayerInventory(EntityPlayer player, Predicate<ItemStack> match) {
+        return findItemsIndexedInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match);
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match,
-                                                                      boolean strict) {
-        return findItemsIndexedInInventory(
-            handler,
-            (s) -> strict ? ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)
-                : ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT));
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        return findItemsIndexedInInventory(handler,
+                (s) -> strict ?
+                        ItemComparator.compare(s, match, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE) :
+                        ItemComparator.compare(s, match, ItemComparator.Clause.ITEM, ItemComparator.Clause.META_STRICT));
     }
 
-    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler,
-                                                                      Predicate<ItemStack> match) {
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, Predicate<ItemStack> match) {
         Map<Integer, ItemStack> stacksOut = new HashMap<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
             if (match.test(s)) {
-                stacksOut.put(j, copyStackWithSize(s, s.stackSize));
+                stacksOut.put(j, copyStackWithSize(s, s.getCount()));
             }
         }
         return stacksOut;
     }
 
-    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack,
-                                                     ItemStack toConsume, boolean simulate) {
+    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
         int consumed = 0;
         if (Mods.BOTANIA.isPresent()) {
             IBlockState consumeState = createBlockState(toConsume);
@@ -163,38 +158,33 @@ public class ItemUtils {
                 Block b = consumeState.getBlock();
                 int meta = b.damageDropped(consumeState);
 
-                for (int i = 0; i < toConsume.stackSize; i++) {
-                    ItemStack res = ModIntegrationBotania
-                        .requestFromInventory(player, requestingItemStack, b, meta, !simulate);
+                for (int i = 0; i < toConsume.getCount(); i++) {
+                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, !simulate);
                     if (!res.isEmpty()) {
                         consumed++;
                     }
                 }
             }
         }
-        ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.stackSize - consumed);
-        return tryConsume.isEmpty() || consumeFromInventory(
-            (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            tryConsume,
-            simulate);
+        ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
+        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);
     }
 
     public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
-        return handler instanceof IItemHandlerModifiable
-            && consumeFromInventory((IItemHandlerModifiable) handler, toConsume, simulate);
+        return handler instanceof IItemHandlerModifiable && consumeFromInventory((IItemHandlerModifiable) handler, toConsume, simulate);
     }
 
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
         Map<Integer, ItemStack> contents = findItemsIndexedInInventory(handler, toConsume, false);
         if (contents.isEmpty()) return false;
 
-        int cAmt = toConsume.stackSize;
+        int cAmt = toConsume.getCount();
         for (int slot : contents.keySet()) {
             ItemStack inSlot = contents.get(slot);
-            int toRemove = cAmt > inSlot.stackSize ? inSlot.stackSize : cAmt;
+            int toRemove = cAmt > inSlot.getCount() ? inSlot.getCount() : cAmt;
             cAmt -= toRemove;
             if (!simulate) {
-                handler.setStackInSlot(slot, copyStackWithSize(inSlot, inSlot.stackSize - toRemove));
+                handler.setStackInSlot(slot, copyStackWithSize(inSlot, inSlot.getCount() - toRemove));
             }
             if (cAmt <= 0) {
                 break;
@@ -207,7 +197,7 @@ public class ItemUtils {
         if (worldIn.isRemote) return;
         for (int i = 0; i < handle.getSlots(); i++) {
             ItemStack stack = handle.getStackInSlot(i);
-            if (stack == null || stack.stackSize == 0) continue;
+            if (stack.isEmpty()) continue;
             dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
     }
@@ -220,25 +210,23 @@ public class ItemUtils {
         return FluidUtil.tryEmptyContainer(stack, FluidHandlerVoid.INSTANCE, fluidStack.amount, null, doDrain);
     }
 
-    /*
-     * public static void decrStackInInventory(ItemStack[] stacks, int slot) {
-     * if(slot < 0 || slot >= stacks.length) return;
-     * ItemStack st = stacks[slot];
-     * if(st == null) return;
-     * st.stackSize--;
-     * if(st.stackSize <= 0) {
-     * stacks[slot] = null;
-     * }
-     * }
-     */
+    /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
+        if(slot < 0 || slot >= stacks.length) return;
+        ItemStack st = stacks[slot];
+        if(st == null) return;
+        st.getCount()--;
+        if(st.getCount() <= 0) {
+            stacks[slot] = null;
+        }
+    }*/
 
     public static void decrStackInInventory(ItemStackHandler handler, int slot) {
         if (slot < 0 || slot >= handler.getSlots()) return;
         ItemStack st = handler.getStackInSlot(slot);
-        if (st == null || st.stackSize == 0) return;
-        st.stackSize--;
-        if (st.stackSize <= 0) {
-            handler.setStackInSlot(slot, null);
+        if (st.isEmpty()) return;
+        st.setCount(st.getCount() - 1);
+        if (st.getCount() <= 0) {
+            handler.setStackInSlot(slot, ItemStack.EMPTY);
         }
     }
 
@@ -253,37 +241,37 @@ public class ItemUtils {
 
         for (int i = start; i < end; i++) {
             ItemStack in = handler.getStackInSlot(i);
-            if (in == null || in.stackSize == 0) {
-                int added = Math.min(stack.stackSize, max);
-                stack.stackSize -= added;
+            if (in.isEmpty()) {
+                int added = Math.min(stack.getCount(), max);
+                stack.setCount(stack.getCount() - added);
                 handler.insertItem(i, copyStackWithSize(stack, added), false);
                 return true;
             } else {
                 if (ItemComparator.compare(stack, in, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)) {
 
-                    int space = max - in.stackSize;
-                    int added = Math.min(stack.stackSize, space);
-                    stack.stackSize -= added;
-                    handler.getStackInSlot(i).stackSize += added;
-                    if (stack.stackSize <= 0) return true;
+                    int space = max - in.getCount();
+                    int added = Math.min(stack.getCount(), space);
+                    stack.setCount(stack.getCount() - added);
+                    handler.getStackInSlot(i).setCount(handler.getStackInSlot(i).getCount() + added);
+                    if (stack.getCount() <= 0)
+                        return true;
                 }
             }
         }
-        return stack.stackSize == 0;
+        return stack.getCount() == 0;
     }
 
-    public static boolean hasInventorySpace(@Nonnull ItemStack stack, IItemHandler handler, int rangeMin,
-                                            int rangeMax) {
-        int size = stack.stackSize;
+    public static boolean hasInventorySpace(@Nonnull ItemStack stack, IItemHandler handler, int rangeMin, int rangeMax) {
+        int size = stack.getCount();
         int max = stack.getMaxStackSize();
         for (int i = rangeMin; i < rangeMax && size > 0; i++) {
             ItemStack in = handler.getStackInSlot(i);
-            if (in == null || in.stackSize == 0) {
+            if (in.isEmpty()) {
                 size -= max;
             } else {
                 if (ItemComparator.compare(stack, in, ITEM, META_STRICT, NBT_STRICT, CAPABILITIES_COMPATIBLE)) {
 
-                    int space = max - in.stackSize;
+                    int space = max - in.getCount();
                     size -= space;
                 }
             }
@@ -292,9 +280,9 @@ public class ItemUtils {
     }
 
     public static ItemStack copyStackWithSize(@Nonnull ItemStack stack, int amount) {
-        if (stack.stackSize == 0 || amount <= 0) return null;
+        if (stack.isEmpty() || amount <= 0) return ItemStack.EMPTY;
         ItemStack s = stack.copy();
-        s.stackSize = amount;
+        s.setCount(amount);
         return s;
     }
 
@@ -302,7 +290,7 @@ public class ItemUtils {
         namePart = namePart.toLowerCase();
         List<String> oreNames = getOreDictNames(stack);
         for (String s : oreNames) {
-            if (s.contains(namePart)) return true;
+            if(s.contains(namePart)) return true;
         }
         return false;
     }
@@ -319,16 +307,14 @@ public class ItemUtils {
     private static List<String> getOreDictNames(ItemStack stack) {
         List<String> out = Lists.newArrayList();
         for (int id : OreDictionary.getOreIDs(stack)) {
-            out.add(
-                OreDictionary.getOreName(id)
-                    .toLowerCase());
+            out.add(OreDictionary.getOreName(id).toLowerCase());
         }
         return out;
     }
 
     private static class FluidHandlerVoid implements IFluidHandler {
 
-        private static final FluidHandlerVoid INSTANCE = new FluidHandlerVoid();
+        private static FluidHandlerVoid INSTANCE = new FluidHandlerVoid();
 
         @Override
         public IFluidTankProperties[] getTankProperties() {

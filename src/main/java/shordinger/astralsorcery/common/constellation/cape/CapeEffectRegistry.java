@@ -1,35 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.cape;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.impl.*;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectArmara;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectBootes;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectHorologium;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectLucerna;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectMineralis;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectVicio;
 import shordinger.astralsorcery.common.data.config.Config;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +34,7 @@ public class CapeEffectRegistry {
     }
 
     public static void registerCapeArmorEffect(IConstellation cst, Class<? extends CapeArmorEffect> armorEffectClass) {
-        if (getArmorEffect(cst) != null) return;
+        if(getArmorEffect(cst) != null) return;
         armorEffectMap.put(cst, new CapeEffectFactory<>(armorEffectClass));
     }
 

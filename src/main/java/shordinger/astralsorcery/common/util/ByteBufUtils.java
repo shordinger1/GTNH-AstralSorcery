@@ -1,35 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-
+import shordinger.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.network.PacketBuffer;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.nio.charset.Charset;
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,13 +63,13 @@ public class ByteBufUtils {
     }
 
     public static void writeString(PacketBuffer buf, String toWrite) {
-        byte[] str = toWrite.getBytes(StandardCharsets.UTF_8);
+        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
 
     public static void writeString(ByteBuf buf, String toWrite) {
-        byte[] str = toWrite.getBytes(StandardCharsets.UTF_8);
+        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
@@ -80,14 +78,14 @@ public class ByteBufUtils {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes, StandardCharsets.UTF_8);
+        return new String(strBytes, Charset.forName("UTF-8"));
     }
 
     public static String readString(ByteBuf buf) {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes, StandardCharsets.UTF_8);
+        return new String(strBytes, Charset.forName("UTF-8"));
     }
 
     public static void writeResourceLocation(ByteBuf buf, ResourceLocation key) {
@@ -136,9 +134,9 @@ public class ByteBufUtils {
     }
 
     public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {
-        boolean defined = stack.stackSize!=0;
+        boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
-        if (defined) {
+        if(defined) {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
@@ -148,17 +146,17 @@ public class ByteBufUtils {
     @Nonnull
     public static ItemStack readItemStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
-        if (defined) {
+        if(defined) {
             return new ItemStack(readNBTTag(byteBuf));
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     public static void writeFluidStack(ByteBuf byteBuf, @Nullable FluidStack stack) {
         boolean defined = stack != null;
         byteBuf.writeBoolean(defined);
-        if (defined) {
+        if(defined) {
             NBTTagCompound tag = new NBTTagCompound();
             stack.writeToNBT(tag);
             writeNBTTag(byteBuf, tag);
@@ -168,7 +166,7 @@ public class ByteBufUtils {
     @Nullable
     public static FluidStack readFluidStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
-        if (defined) {
+        if(defined) {
             return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
         } else {
             return null;
@@ -178,16 +176,14 @@ public class ByteBufUtils {
     public static void writeNBTTag(ByteBuf byteBuf, @Nonnull NBTTagCompound tag) {
         try (DataOutputStream dos = new DataOutputStream(new ByteBufOutputStream(byteBuf))) {
             CompressedStreamTools.write(tag, dos);
-        } catch (Exception ignored) {
-        }
+        } catch (Exception exc) {}
     }
 
     @Nonnull
     public static NBTTagCompound readNBTTag(ByteBuf byteBuf) {
         try (DataInputStream dis = new DataInputStream(new ByteBufInputStream(byteBuf))) {
             return CompressedStreamTools.read(dis);
-        } catch (Exception ignored) {
-        }
+        } catch (Exception exc) {}
         throw new IllegalStateException("Could not load NBT Tag from incoming byte buffer!");
     }
 

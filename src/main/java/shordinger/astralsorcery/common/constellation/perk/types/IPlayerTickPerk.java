@@ -1,16 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.types;
 
-import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,7 +20,7 @@ import cpw.mods.fml.relauncher.Side;
  */
 public interface IPlayerTickPerk {
 
-    // The player being ticked definitely has the perk unlocked
+    //The player being ticked definitely has the perk unlocked
     public void onPlayerTick(EntityPlayer player, Side side);
 
 }

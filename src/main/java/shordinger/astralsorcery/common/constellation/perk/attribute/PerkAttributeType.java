@@ -1,26 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
-import java.util.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader;
+import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
-import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader;
-import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,8 +30,8 @@ public class PerkAttributeType {
 
     protected static final Random rand = new Random();
 
-    // May be used by subclasses to more efficiently track who's got a perk applied
-    private final Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
+    //May be used by subclasses to more efficiently track who's got a perk applied
+    private Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final String type;
     private final boolean isOnlyMultiplicative;
@@ -60,8 +57,7 @@ public class PerkAttributeType {
         return String.format("perk.attribute.%s.name", getTypeString());
     }
 
-    protected void init() {
-    }
+    protected void init() {}
 
     @Nullable
     public AttributeReader getReader() {
@@ -85,21 +81,16 @@ public class PerkAttributeType {
 
     public void onRemove(EntityPlayer player, Side side, boolean removedCompletely) {
         if (removedCompletely) {
-            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList())
-                .remove(player.getUniqueID());
+            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).remove(player.getUniqueID());
         }
     }
 
-    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-    }
+    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {}
 
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side,
-                             boolean removedCompletely) {
-    }
+    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {}
 
     public boolean hasTypeApplied(EntityPlayer player, Side side) {
-        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList())
-            .contains(player.getUniqueID());
+        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
     }
 
     public final void clear(Side side) {

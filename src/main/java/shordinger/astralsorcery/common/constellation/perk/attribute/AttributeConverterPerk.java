@@ -1,20 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.constellation.perk.ProgressGatedPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.IConverterProvider;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.*;
 import java.util.Collections;
@@ -45,14 +46,7 @@ public abstract class AttributeConverterPerk extends ProgressGatedPerk implement
     }
 
     public <T> T addRangedConverter(double radius, PerkConverter converter) {
-        this.converters.add(
-            converter.asRangedConverter(
-                new Point.Double(
-                    this.getOffset()
-                        .getX(),
-                    this.getOffset()
-                        .getY()),
-                radius));
+        this.converters.add(converter.asRangedConverter(new Point.Double(this.getOffset().getX(), this.getOffset().getY()), radius));
         return (T) this;
     }
 
@@ -66,10 +60,8 @@ public abstract class AttributeConverterPerk extends ProgressGatedPerk implement
     }
 
     @Override
-    public void applyPerkLogic(EntityPlayer player, Side side) {
-    }
+    public void applyPerkLogic(EntityPlayer player, Side side) {}
 
     @Override
-    public void removePerkLogic(EntityPlayer player, Side side) {
-    }
+    public void removePerkLogic(EntityPlayer player, Side side) {}
 }

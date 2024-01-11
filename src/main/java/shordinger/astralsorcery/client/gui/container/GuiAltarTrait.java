@@ -1,22 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.container;
-
-import java.awt.*;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.sky.RenderAstralSkybox;
@@ -34,6 +24,14 @@ import shordinger.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,10 +44,8 @@ public class GuiAltarTrait extends GuiAltarBase {
 
     private static final Random rand = new Random();
 
-    private static final BindableResource texAltarTrait = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guialtar4");
-    private static final BindableResource texBlack = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    private static final BindableResource texAltarTrait = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar4");
+    private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarTrait(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);
@@ -65,7 +61,7 @@ public class GuiAltarTrait extends GuiAltarBase {
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         AbstractAltarRecipe rec = findCraftableRecipe();
-        if (rec != null) {
+        if(rec != null) {
             ItemStack out = rec.getOutputForRender();
             zLevel = 10F;
             itemRender.zLevel = 10F;
@@ -89,8 +85,8 @@ public class GuiAltarTrait extends GuiAltarBase {
             TextureHelper.refreshTextureBindState();
         }
 
-        float pTicks = Minecraft.getMinecraft()
-            .getRenderPartialTicks();
+        float pTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+
 
         RenderAstralSkybox.TEX_STAR_1.bind();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -105,9 +101,7 @@ public class GuiAltarTrait extends GuiAltarBase {
             int y = rand.nextInt(54);
 
             GL11.glPushMatrix();
-            float brightness = 0.3F
-                + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + rand.nextInt(20)))
-                * 0.6F;
+            float brightness = 0.3F + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
             GL11.glColor4f(brightness, brightness, brightness, brightness);
             drawRect(15 + x, 39 + y, 5, 5);
             GL11.glColor4f(1, 1, 1, 1);
@@ -118,8 +112,7 @@ public class GuiAltarTrait extends GuiAltarBase {
         TextureHelper.refreshTextureBindState();
 
         IConstellation c = containerAltarBase.tileAltar.getFocusedConstellation();
-        if (c != null && containerAltarBase.tileAltar.getMultiblockState()
-            && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+        if(c != null && containerAltarBase.tileAltar.getMultiblockState() && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
             rand.setSeed(0x61FF25A5B7C24109L);
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -132,17 +125,12 @@ public class GuiAltarTrait extends GuiAltarBase {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
 
-            RenderConstellation
-                .renderConstellationIntoGUI(c, 16, 41, zLevel, 58, 58, 2, new RenderConstellation.BrightnessFunction() {
-
-                    @Override
-                    public float getBrightness() {
-                        return RenderConstellation.conCFlicker(
-                            Minecraft.getMinecraft().theWorld.getTotalWorldTime(),
-                            pTicks,
-                            5 + rand.nextInt(5));
-                    }
-                }, true, false);
+            RenderConstellation.renderConstellationIntoGUI(c, 16, 41, zLevel, 58, 58, 2, new RenderConstellation.BrightnessFunction() {
+                @Override
+                public float getBrightness() {
+                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getTotalWorldTime(), pTicks, 5 + rand.nextInt(5));
+                }
+            }, true, false);
 
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -166,7 +154,7 @@ public class GuiAltarTrait extends GuiAltarBase {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         float percFilled;
-        if (containerAltarBase.tileAltar.getMultiblockState()) {
+        if(containerAltarBase.tileAltar.getMultiblockState()) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
         } else {
@@ -177,51 +165,37 @@ public class GuiAltarTrait extends GuiAltarBase {
         texBlack.bind();
         drawRect(guiLeft + 11, guiTop + 104, 232, 10);
 
-        if (percFilled > 0) {
+        if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
-            spriteStarlight.getResource()
-                .bindTexture();
+            spriteStarlight.getResource().bindTexture();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(
-                guiLeft + 11,
-                guiTop + 104,
-                (int) (232 * percFilled),
-                10,
-                uvOffset.key,
-                uvOffset.value,
-                spriteStarlight.getULength() * percFilled,
-                spriteStarlight.getVLength());
+            drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,
+                    uvOffset.key, uvOffset.value,
+                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());
 
             AbstractAltarRecipe aar = findCraftableRecipe(true);
-            if (aar != null) {
+            if(aar != null) {
                 int req = aar.getPassiveStarlightRequired();
                 int has = containerAltarBase.tileAltar.getStarlightStored();
-                if (has < req) {
+                if(has < req) {
                     int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
                     float percReq = (float) (req - has) / (float) max;
                     int from = (int) (232 * percFilled);
                     int to = (int) (232 * percReq);
                     GL11.glColor4f(0.2F, 0.5F, 1.0F, 0.4F);
 
-                    drawRect(
-                        guiLeft + 11 + from,
-                        guiTop + 104,
-                        to,
-                        10,
-                        uvOffset.key + spriteStarlight.getULength() * percFilled,
-                        uvOffset.value,
-                        spriteStarlight.getULength() * percReq,
-                        spriteStarlight.getVLength());
+                    drawRect(guiLeft + 11 + from, guiTop + 104, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
                 }
             }
 
             ActiveCraftingTask task = containerAltarBase.tileAltar.getActiveCraftingTask();
-            if (task != null && task.getState() != ActiveCraftingTask.CraftingState.ACTIVE) {
-                int req = task.getRecipeToCraft()
-                    .getPassiveStarlightRequired();
+            if(task != null && task.getState() != ActiveCraftingTask.CraftingState.ACTIVE) {
+                int req = task.getRecipeToCraft().getPassiveStarlightRequired();
                 int has = containerAltarBase.tileAltar.getStarlightStored();
-                if (has < req) {
+                if(has < req) {
                     int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
                     float percReq = (float) (req - has) / (float) max;
                     int from = (int) (232 * percFilled);
@@ -231,15 +205,9 @@ public class GuiAltarTrait extends GuiAltarBase {
                     Color c = new Color(0xFFCC00);
                     GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
 
-                    drawRect(
-                        guiLeft + 11 + from,
-                        guiTop + 104,
-                        to,
-                        10,
-                        uvOffset.key + spriteStarlight.getULength() * percFilled,
-                        uvOffset.value,
-                        spriteStarlight.getULength() * percReq,
-                        spriteStarlight.getVLength());
+                    drawRect(guiLeft + 11 + from, guiTop + 104, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
                     GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
                     GL11.glDisable(GL11.GL_ALPHA_TEST);
                 }

@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidRegistry;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,8 +29,7 @@ public class WellRecipeRemove implements SerializeableRecipe {
     private ItemStack matchIn;
     private Fluid fluidOut;
 
-    WellRecipeRemove() {
-    }
+    WellRecipeRemove() {}
 
     public WellRecipeRemove(ItemStack matchIn, @Nullable Fluid fluidOut) {
         this.matchIn = matchIn;

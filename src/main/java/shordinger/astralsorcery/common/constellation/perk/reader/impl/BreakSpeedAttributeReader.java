@@ -1,26 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.reader.impl;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeBreakSpeed;
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
+import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,7 +40,7 @@ public class BreakSpeedAttributeReader extends FlatAttributeReader {
         AttributeBreakSpeed.evaluateBreakSpeedWithoutPerks = true;
         float speed;
         try {
-            speed = player.getBreakSpeed(Blocks.cobblestone.getDefaultState(), BlockPos.ORIGIN);
+            speed = player.getDigSpeed(Blocks.COBBLESTONE.getDefaultState(), BlockPos.ORIGIN);
         } finally {
             AttributeBreakSpeed.evaluateBreakSpeedWithoutPerks = false;
         }
@@ -50,16 +50,18 @@ public class BreakSpeedAttributeReader extends FlatAttributeReader {
     @Override
     public PerkStatistic getStatistics(PlayerAttributeMap statMap, EntityPlayer player) {
         Float limit = AttributeTypeLimiter.INSTANCE.getMaxLimit(this.attribute);
-        String limitStr = limit == null ? "" : I18n.format("perk.reader.limit.percent", MathHelper.floor(limit * 100F));
+        String limitStr = limit == null ? "" :
+                I18n.format("perk.reader.limit.percent", MathHelper.floor(limit * 100F));
 
-        double value = player.getBreakSpeed(Blocks.cobblestone.getDefaultState(), BlockPos.ORIGIN);
+        double value = player.getDigSpeed(Blocks.COBBLESTONE.getDefaultState(), BlockPos.ORIGIN);
 
         String postProcess = "";
         double post = AttributeEvent.postProcessModded(player, this.attribute, value);
-        if (Math.abs(value - post) > 1E-4 && (limit == null || Math.abs(post - limit) > 1E-4)) {
+        if (Math.abs(value - post) > 1E-4 &&
+                (limit == null || Math.abs(post - limit) > 1E-4)) {
             if (Math.abs(post) >= 1E-4) {
-                postProcess = I18n
-                    .format("perk.reader.postprocess.default", (post >= 0 ? "+" : "") + formatDecimal(post));
+                postProcess = I18n.format("perk.reader.postprocess.default",
+                        (post >= 0 ? "+" : "") + formatDecimal(post));
             }
             value = post;
         }

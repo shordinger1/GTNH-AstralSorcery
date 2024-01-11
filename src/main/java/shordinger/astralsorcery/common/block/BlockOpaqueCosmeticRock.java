@@ -1,27 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.IStringSerializable;
-import shordinger.astralsorcery.migration.block.AstralBlock;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.BlockStateContainer;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,7 +30,7 @@ import shordinger.astralsorcery.migration.NonNullList;
  * Created by HellFirePvP
  * Date: 12.05.2016 / 16:58
  */
-public class BlockOpaqueCosmeticRock extends AstralBlock implements BlockCustomName {
+public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
 
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
@@ -56,8 +56,7 @@ public class BlockOpaqueCosmeticRock extends AstralBlock implements BlockCustomN
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta])
-            : getDefaultState();
+        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta]) : getDefaultState();
     }
 
     @Override

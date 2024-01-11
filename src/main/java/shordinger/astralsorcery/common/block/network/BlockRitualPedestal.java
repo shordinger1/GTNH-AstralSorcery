@@ -1,34 +1,35 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block.network;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import shordinger.astralsorcery.migration.NonNullList;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
+import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +40,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public class BlockRitualPedestal extends BlockStarlightNetwork {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 13D / 16D, 1);
+    private static final AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 13D/16D, 1);
 
     public BlockRitualPedestal() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -77,56 +78,45 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileRitualPedestal ped = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if (ped != null && !worldIn.isRemote) {
-            ItemUtils.dropItem(
-                worldIn,
-                pos.getX() + 0.5,
-                pos.getY() + 0.8,
-                pos.getZ() + 0.5,
-                ItemUtils.copyStackWithSize(
-                    ped.getCatalystCache(),
-                    ped.getCatalystCache()
-                        .getCount()));
+        if(ped != null && !worldIn.isRemote) {
+            ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(ped.getCatalystCache(), ped.getCatalystCache().getCount()));
         }
 
         super.breakBlock(worldIn, pos, state);
     }
 
-    /*
-     * @Override
-     * @SideOnly(Side.CLIENT)
-     * public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-     * RenderingUtils.playBlockBreakParticles(pos,
-     * BlocksAS.blockMarble.getDefaultState()
-     * .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
-     * return true;
-     * }
-     * @Override
-     * @SideOnly(Side.CLIENT)
-     * public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
-     * return true;
-     * }
-     */
+    /*@Override
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        RenderingUtils.playBlockBreakParticles(pos,
+                BlocksAS.blockMarble.getDefaultState()
+                        .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
+        return true;
+    }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
+    @SideOnly(Side.CLIENT)
+    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+        return true;
+    }*/
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if (pedestal == null) {
+        if(pedestal == null) {
             return false;
         }
         if (worldIn.isRemote) {
             return true;
         }
-        ItemStack heldItem = playerIn.getHeldItem();
+        ItemStack heldItem = playerIn.getHeldItem(hand);
 
         ItemStack in = pedestal.getCurrentPedestalCrystal();
         if (!heldItem.isEmpty() && in.isEmpty() && ItemTunedCrystalBase.getMainConstellation(heldItem) != null) {
@@ -134,7 +124,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             return true;
         }
         if (!in.isEmpty() && playerIn.isSneaking()) {
-            pedestal.placeCrystalIntoPedestal(null);
+            pedestal.placeCrystalIntoPedestal(ItemStack.EMPTY);
             playerIn.inventory.placeItemBackInInventory(worldIn, in);
         }
         return true;
@@ -146,27 +136,18 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if (te != null && !worldIn.isRemote) {
             BlockPos toCheck = pos.up();
             IBlockState other = worldIn.getBlockState(toCheck);
-            if (other.isSideSolid(worldIn, toCheck, ForgeDirection.DOWN)) {
-                ItemUtils.dropItem(
-                    worldIn,
-                    pos.getX() + 0.5,
-                    pos.getY() + 0.8,
-                    pos.getZ() + 0.5,
-                    ItemUtils.copyStackWithSize(
-                        te.getCatalystCache(),
-                        te.getCatalystCache()
-                            .getCount()));
-                te.placeCrystalIntoPedestal(null);
+            if (other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
+                ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, ItemUtils.copyStackWithSize(te.getCatalystCache(), te.getCatalystCache().getCount()));
+                te.placeCrystalIntoPedestal(ItemStack.EMPTY);
                 te.markForUpdate();
             }
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-                                ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if (te != null && !worldIn.isRemote) {
+        if(te != null && !worldIn.isRemote) {
             if (placer instanceof EntityPlayer) {
                 te.setOwner(placer.getUniqueID());
             }
@@ -174,8 +155,8 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
-        return side == ForgeDirection.DOWN;
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.DOWN;
     }
 
     @Override

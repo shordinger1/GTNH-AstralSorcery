@@ -1,21 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -27,10 +20,17 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ import java.util.Random;
  */
 public class AttunementRecipe extends DiscoveryRecipe {
 
-    private final Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
+    private Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
 
     protected AttunementRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -94,8 +94,8 @@ public class AttunementRecipe extends DiscoveryRecipe {
     @Nonnull
     public List<ItemStack> getAttItems(AttunementAltarSlot slot) {
         ItemHandle handle = additionalSlots.get(slot);
-        if (handle != null) {
-            return Collections.singletonList(handle.getApplicableItems());
+        if(handle != null) {
+            return handle.getApplicableItems();
         }
         return Lists.newArrayList();
     }
@@ -106,18 +106,16 @@ public class AttunementRecipe extends DiscoveryRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler,
-                           boolean ignoreStarlightRequirement) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         for (AttunementAltarSlot slot : AttunementAltarSlot.values()) {
             ItemHandle expected = additionalSlots.get(slot);
-            if (expected != null) {
+            if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
-                if (!expected.matchCrafting(altarItem)) {
+                if(!expected.matchCrafting(altarItem)) {
                     return false;
                 }
             } else {
-                if (!invHandler.getStackInSlot(slot.slotId)
-                    .isEmpty()) return false;
+                if(!invHandler.getStackInSlot(slot.slotId).isEmpty()) return false;
             }
         }
 
@@ -135,7 +133,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
         for (AttunementRecipe.AttunementAltarSlot slot : AttunementRecipe.AttunementAltarSlot.values()) {
             int slotId = slot.getSlotId();
-            if (mayDecrement(ta, slot)) {
+            if(mayDecrement(ta, slot)) {
                 ItemUtils.decrStackInInventory(inventory, slotId);
             } else {
                 handleItemConsumption(ta, slot);
@@ -148,14 +146,14 @@ public class AttunementRecipe extends DiscoveryRecipe {
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 
-        if (state == ActiveCraftingTask.CraftingState.ACTIVE) {
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
             Vector3 pos = new Vector3(altar).add(0.5, 0.5, 0.5);
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
             particle.motion(
-                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+                    rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.1  * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
             particle.scale(0.2F);
         }
     }

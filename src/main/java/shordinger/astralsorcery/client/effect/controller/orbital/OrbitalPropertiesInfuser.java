@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.controller.orbital;
 
-import java.awt.*;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,8 +24,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  * Created by HellFirePvP
  * Date: 11.12.2016 / 18:13
  */
-public class OrbitalPropertiesInfuser
-    implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect {
+public class OrbitalPropertiesInfuser implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect {
 
     private static final Random rand = new Random();
 
@@ -40,38 +38,39 @@ public class OrbitalPropertiesInfuser
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
-        return infuser.canCraft()
-            && (mirrored ? infuser.getClientOrbitalCraftingMirror() : infuser.getClientOrbitalCrafting()) != null
-            && infuser.getCraftingTask() != null;
+        return infuser.canCraft() && (mirrored ? infuser.getClientOrbitalCraftingMirror() : infuser.getClientOrbitalCrafting()) != null && infuser.getCraftingTask() != null;
     }
 
     @Override
     public void doPointTickEffect(OrbitalEffectController ctrl, Vector3 pos) {
-        if (!Minecraft.isFancyGraphicsEnabled()) return;
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
-        p.motion(
-            (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-            (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-            (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+        if(!Minecraft.isFancyGraphicsEnabled()) return;
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                pos.getX(),
+                pos.getY(),
+                pos.getZ());
+        p.motion((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                 (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                 (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
         p.setMaxAge(25);
-        p.scale(0.2F)
-            .gravity(0.004);
+        p.scale(0.2F).gravity(0.004);
 
-        if (rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+        if(rand.nextBoolean()) {
+            p = EffectHelper.genericFlareParticle(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ());
             p.motion(0, 0.03 + (rand.nextFloat() * 0.04F), 0);
             p.setMaxAge(35);
-            p.scale(0.25F)
-                .gravity(0.004)
-                .setColor(Color.WHITE);
+            p.scale(0.25F).gravity(0.004).setColor(Color.WHITE);
         }
-        if (rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+        if(rand.nextBoolean()) {
+            p = EffectHelper.genericFlareParticle(
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ());
             p.motion(0, 0.03 + (rand.nextFloat() * 0.04F), 0);
             p.setMaxAge(35);
-            p.scale(0.15F)
-                .gravity(0.004)
-                .setColor(Color.WHITE);
+            p.scale(0.15F).gravity(0.004).setColor(Color.WHITE);
         }
     }
 

@@ -1,35 +1,34 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.world.data;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
+import shordinger.astralsorcery.common.tile.TileStorageCore;
 import shordinger.astralsorcery.common.tile.storage.StorageNetwork;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,16 +41,15 @@ public class StorageNetworkBuffer extends CachedWorldData {
 
     private static final Random rand = new Random();
 
-    private final Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
-    private final Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
+    private Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
+    private Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
 
     public StorageNetworkBuffer() {
         super(WorldCacheManager.SaveKey.STORAGE_BUFFER);
     }
 
     @Override
-    public void updateTick(World world) {
-    }
+    public void updateTick(World world) {}
 
     @Nullable
     public StorageNetwork getNetwork(BlockPos masterPos) {
@@ -64,15 +62,14 @@ public class StorageNetworkBuffer extends CachedWorldData {
         for (StorageNetwork network : this.rawNetworks.values()) {
             for (StorageNetwork.CoreArea core : network.getCores()) {
                 AxisAlignedBB box = core.getRealBox();
-                ChunkPos from = Vector3.getMin(box)
-                    .toChunkPos();
-                ChunkPos to = Vector3.getMax(box)
-                    .toChunkPos();
+                ChunkPos from = Vector3.getMin(box).toChunkPos();
+                ChunkPos to   = Vector3.getMax(box).toChunkPos();
 
                 for (int chX = from.x; chX <= to.x; chX++) {
                     for (int chZ = from.z; chZ <= to.z; chZ++) {
-                        this.availableNetworks.computeIfAbsent(new ChunkPos(chX, chZ), pos -> Lists.newArrayList())
-                            .add(network);
+                        this.availableNetworks
+                                .computeIfAbsent(new ChunkPos(chX, chZ), pos -> Lists.newArrayList())
+                                .add(network);
                     }
                 }
             }
@@ -88,17 +85,14 @@ public class StorageNetworkBuffer extends CachedWorldData {
             NBTTagCompound tag = networks.getCompoundTagAt(i);
             StorageNetwork net = new StorageNetwork();
             net.readFromNBT(tag);
-            if (net.getCores()
-                .isEmpty()) {
-                continue; // No network..
+            if (net.getCores().isEmpty()) {
+                continue; //No network..
             }
             StorageNetwork.CoreArea master = net.getMaster();
             if (master == null) {
                 master = MiscUtils.getRandomEntry(net.getCores(), rand);
             }
-            if (master != null) {
-                this.rawNetworks.put(master.getPos(), net);
-            }
+            this.rawNetworks.put(master.getPos(), net);
         }
 
         this.rebuildAccessContext();

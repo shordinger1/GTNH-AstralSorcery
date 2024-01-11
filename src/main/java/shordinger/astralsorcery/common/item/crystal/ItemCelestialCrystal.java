@@ -1,21 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.crystal;
 
-import java.awt.*;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.item.base.render.ItemGatedVisibility;
@@ -23,7 +15,14 @@ import shordinger.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +35,7 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (this.isInCreativeTab(tab)) {
+        if(this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
             subItems.add(stack);
@@ -66,8 +65,7 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
     @Override
     @SideOnly(Side.CLIENT)
     public boolean isSupposedToSeeInRender(ItemStack stack) {
-        return getClientProgress().getTierReached()
-            .isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
+        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
     }
 
 }

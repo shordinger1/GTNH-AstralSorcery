@@ -1,25 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.gtnewhorizons.modularui.api.forge.IItemHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,7 +29,7 @@ import com.gtnewhorizons.modularui.api.forge.IItemHandler;
  */
 public class StorageCache {
 
-    private final Map<StorageKey, List<StoredItemStack>> content = Maps.newHashMap();
+    private Map<StorageKey, List<StoredItemStack>> content = Maps.newHashMap();
 
     public int getTotalItemCount() {
         int i = 0;
@@ -51,7 +50,7 @@ public class StorageCache {
     }
 
     public boolean add(ItemStack stack) {
-        if (stack.stackSize==0) {
+        if (stack.isEmpty()) {
             return false;
         }
         StorageKey key = new StorageKey(stack);
@@ -60,8 +59,7 @@ public class StorageCache {
                 return true;
             }
         }
-        content.get(key)
-            .add(new StoredItemStack(stack));
+        content.get(key).add(new StoredItemStack(stack));
         return true;
     }
 
@@ -93,17 +91,17 @@ public class StorageCache {
 
         for (StoredItemStack stack : stacks) {
             ItemStack sample = stack.getTemplateStack();
-            int amountToRemove = sample.stackSize;
+            int amountToRemove = sample.getCount();
 
             ItemStack notInserted = inv.insertItem(slot, sample, simulate);
-            int addedCount = amountToRemove - notInserted.stackSize;
+            int addedCount = amountToRemove - notInserted.getCount();
 
             if (addedCount > 0) {
                 if (!simulate) {
                     if (!stack.removeAmount(addedCount)) {
                         return false;
                     }
-                    if (stack.stackSize==0) {
+                    if (stack.isEmpty()) {
                         stacks.remove(stack);
                     }
                 }
@@ -114,7 +112,7 @@ public class StorageCache {
         return false;
     }
 
-    // True if anything has been transferred.
+    //True if anything has been transferred.
     public boolean attemptTransferInto(StorageKey key, IItemHandler inv, boolean simulate) {
         if (content.isEmpty()) return false;
 
@@ -128,10 +126,10 @@ public class StorageCache {
         for (int i = 0; i < inv.getSlots(); i++) {
             for (StoredItemStack stack : stacks) {
                 ItemStack sample = stack.getTemplateStack();
-                int amountToRemove = sample.stackSize;
+                int amountToRemove = sample.getCount();
 
                 ItemStack notInserted = inv.insertItem(i, sample, simulate);
-                int addedCount = amountToRemove - notInserted.stackSize;
+                int addedCount = amountToRemove - notInserted.getCount();
 
                 if (addedCount > 0) {
                     change = true;
@@ -141,7 +139,7 @@ public class StorageCache {
                     if (!stack.removeAmount(addedCount)) {
                         return false;
                     }
-                    if (stack.stackSize==0) {
+                    if (stack.isEmpty()) {
                         stacks.remove(stack);
                         continue lblSlots;
                     }

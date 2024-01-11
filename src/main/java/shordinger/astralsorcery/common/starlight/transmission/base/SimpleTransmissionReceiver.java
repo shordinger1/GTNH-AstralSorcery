@@ -1,29 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
+import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
-import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +35,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     private BlockPos thisPos;
 
-    private final Set<BlockPos> sourcesToThis = new HashSet<>();
+    private Set<BlockPos> sourcesToThis = new HashSet<>();
 
     public SimpleTransmissionReceiver(BlockPos thisPos) {
         this.thisPos = thisPos;
@@ -49,7 +48,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        sourcesToThis.add(source);
+        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override
@@ -64,7 +63,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Override
     public List<BlockPos> getSources() {
-        return new LinkedList<>(sourcesToThis);
+        return sourcesToThis.stream().collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Nullable

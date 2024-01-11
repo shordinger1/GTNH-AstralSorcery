@@ -1,17 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.ICooldownPerk;
@@ -19,6 +15,9 @@ import shordinger.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktSyncStepAssist;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,15 +35,15 @@ public class KeyStepAssist extends KeyPerk implements IPlayerTickPerk, ICooldown
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side == Side.SERVER) {
-            if (!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {
+            if(!PerkEffectHelper.EVENT_INSTANCE.isCooldownActiveForPlayer(player, this)) {
                 player.stepHeight += 0.5F;
             } else {
-                if (player.stepHeight < 1.1F) {
+                if(player.stepHeight < 1.1F) {
                     player.stepHeight = 1.1F;
                 }
             }
             PerkEffectHelper.EVENT_INSTANCE.forceSetCooldownForPlayer(player, this, 20);
-            if (MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
+            if(MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
                 PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
                 PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
             }
@@ -54,11 +53,11 @@ public class KeyStepAssist extends KeyPerk implements IPlayerTickPerk, ICooldown
     @Override
     public void handleCooldownTimeout(EntityPlayer player) {
         player.stepHeight -= 0.5F;
-        if (player.stepHeight < 0.6F) {
+        if(player.stepHeight < 0.6F) {
             player.stepHeight = 0.6F;
         }
 
-        if (player instanceof EntityPlayerMP && MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
+        if(player instanceof EntityPlayerMP && MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
             PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
             PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
         }

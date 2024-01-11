@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core.patch.helper;
 
+import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
-
-import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,13 +30,9 @@ public class PatchPostProcessAttributes extends ClassPatch {
         MethodNode mn = getMethodLazy(cn, "computeValue", "func_111129_g");
         int instr = peekFirstInstructionAfter(mn, 0, Opcodes.DRETURN);
         while (instr != -1) {
-            AbstractInsnNode ain = mn.instructions.get(instr)
-                .getPrevious();
-            mn.instructions.insert(
-                ain,
-                new MethodInsnNode(
-                    Opcodes.INVOKESTATIC,
-                    "shordinger/astralsorcery/common/event/AttributeEvent",
+            AbstractInsnNode ain = mn.instructions.get(instr).getPrevious();
+            mn.instructions.insert(ain, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                    "hellfirepvp/astralsorcery/common/event/AttributeEvent",
                     "postProcessVanilla",
                     "(DLnet/minecraft/entity/ai/attributes/ModifiableAttributeInstance;)D",
                     false));

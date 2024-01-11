@@ -1,18 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
-
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.models.base.ASaltarAT;
@@ -21,7 +15,11 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,12 +31,10 @@ import shordinger.astralsorcery.migration.MathHelper;
 public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunementAltar> {
 
     private static final ASaltarAT modelAttunementAltar = new ASaltarAT();
-    private static final BindableResource texModelAttunementAltar = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarattunement");
+    private static final BindableResource texModelAttunementAltar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarattunement");
 
     @Override
-    public void render(TileAttunementAltar te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileAttunementAltar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
@@ -56,23 +52,23 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
         GL11.glPopMatrix();
 
         float startY = -1.5F;
-        float endY = -0.5F;
+        float endY   = -0.5F;
         float tickPartY = (endY - startY) / ((float) TileAttunementAltar.MAX_START_ANIMATION_TICK);
 
         float prevPosY = endY + (te.prevActivationTick * tickPartY);
-        float posY = endY + (te.activationTick * tickPartY);
+        float posY     = endY + (te.activationTick     * tickPartY);
         double framePosY = RenderingUtils.interpolate(prevPosY, posY, partialTicks);
 
         double generalAnimationTick = ClientScheduler.getClientTick() / 4D;
-        if (te.animate) {
-            if (te.tesrLocked) {
+        if(te.animate) {
+            if(te.tesrLocked) {
                 te.tesrLocked = false;
             }
         } else {
-            if (te.tesrLocked) {
+            if(te.tesrLocked) {
                 generalAnimationTick = 7.25D;
             } else {
-                if (Math.abs((generalAnimationTick % TileAttunementAltar.MAX_START_ANIMATION_SPIN) - 7.25D) <= 0.3125) {
+                if(Math.abs((generalAnimationTick % TileAttunementAltar.MAX_START_ANIMATION_SPIN) - 7.25D) <= 0.3125) {
                     generalAnimationTick = 7.25D;
                     te.tesrLocked = true;
                 }
@@ -84,7 +80,7 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
         for (int i = 1; i < 9; i++) {
             float incrementer = (spinDur / 8) * i;
 
-            double aFrame = generalAnimationTick + incrementer;
+            double aFrame =     generalAnimationTick + incrementer;
             double prevAFrame = generalAnimationTick + incrementer - 1;
             double renderFrame = RenderingUtils.interpolate(prevAFrame, aFrame, 0);
 
@@ -99,13 +95,11 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
             GL11.glScaled(0.0625, 0.0625, 0.0625);
             GL11.glRotated(180, 1, 0, 0);
 
-            modelAttunementAltar.renderHovering(
-                xOffset,
-                zOffset,
-                (float) RenderingUtils.interpolate(
-                    ((float) te.prevActivationTick) / TileAttunementAltar.MAX_START_ANIMATION_TICK,
-                    ((float) te.activationTick) / TileAttunementAltar.MAX_START_ANIMATION_TICK,
-                    partialTicks));
+            modelAttunementAltar.renderHovering(xOffset, zOffset,
+                    (float) RenderingUtils.interpolate(
+                            ((float) te.prevActivationTick) / TileAttunementAltar.MAX_START_ANIMATION_TICK,
+                            ((float) te.activationTick    ) / TileAttunementAltar.MAX_START_ANIMATION_TICK,
+                            partialTicks));
 
             GL11.glPopMatrix();
         }

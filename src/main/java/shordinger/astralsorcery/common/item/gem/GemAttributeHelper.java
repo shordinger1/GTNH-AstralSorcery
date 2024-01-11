@@ -1,29 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.gem;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
-
 import com.google.common.collect.Maps;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,24 +34,23 @@ public class GemAttributeHelper {
     private static final Random rand = new Random();
 
     private static Map<String, Integer> weightedModifiers = new HashMap<String, Integer>() {
-
         {
-            put(AttributeTypeRegistry.ATTR_TYPE_HEALTH, 12);
-            put(AttributeTypeRegistry.ATTR_TYPE_MOVESPEED, 8);
-            put(AttributeTypeRegistry.ATTR_TYPE_ARMOR, 8);
-            put(AttributeTypeRegistry.ATTR_TYPE_REACH, 4);
-            put(AttributeTypeRegistry.ATTR_TYPE_ATTACK_SPEED, 2);
-            put(AttributeTypeRegistry.ATTR_TYPE_MELEE_DAMAGE, 8);
-            put(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE, 8);
-            put(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY, 2);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_HARVEST_SPEED, 2);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_CHANCE, 4);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_MULTIPLIER, 4);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST, 2);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_DODGE, 2);
-            put(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, 1);
+            put(AttributeTypeRegistry.ATTR_TYPE_HEALTH,                    12);
+            put(AttributeTypeRegistry.ATTR_TYPE_MOVESPEED,                 8);
+            put(AttributeTypeRegistry.ATTR_TYPE_ARMOR,                     8);
+            put(AttributeTypeRegistry.ATTR_TYPE_REACH,                     4);
+            put(AttributeTypeRegistry.ATTR_TYPE_ATTACK_SPEED,              2);
+            put(AttributeTypeRegistry.ATTR_TYPE_MELEE_DAMAGE,              8);
+            put(AttributeTypeRegistry.ATTR_TYPE_PROJ_DAMAGE,               8);
+            put(AttributeTypeRegistry.ATTR_TYPE_LIFE_RECOVERY,             2);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_HARVEST_SPEED,         2);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_CHANCE,           4);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_CRIT_MULTIPLIER,       4);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST,  2);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_DODGE,                 2);
+            put(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP,              1);
 
-            // TC runic shielding
+            //TC runic shielding
             put(AstralSorcery.MODID + ".compat.thaumcraft.runicshield", 2);
         }
     };
@@ -84,8 +80,7 @@ public class GemAttributeHelper {
     }
 
     public static boolean rollGem(ItemStack gem, Random random) {
-        if (!ItemPerkGem.getModifiers(gem)
-            .isEmpty()) {
+        if (!ItemPerkGem.getModifiers(gem).isEmpty()) {
             return false;
         }
         ItemPerkGem.GemType gemType = ItemPerkGem.getGemType(gem);
@@ -98,10 +93,8 @@ public class GemAttributeHelper {
         for (int i = 0; i < rolls; i++) {
             String type = null;
             if (allowDuplicateTypes) {
-                type = MiscUtils.getWeightedRandomEntry(
-                    configuredModifiers.keySet(),
-                    random,
-                    s -> configuredModifiers.getOrDefault(s, 1));
+                type = MiscUtils.getWeightedRandomEntry(configuredModifiers.keySet(),
+                        random, s -> configuredModifiers.getOrDefault(s, 1));
             } else {
                 List<String> keys = new ArrayList<>(configuredModifiers.keySet());
                 while (!keys.isEmpty() && type == null) {
@@ -109,8 +102,7 @@ public class GemAttributeHelper {
                     if (item != null) {
                         boolean foundType = false;
                         for (GemAttributeModifier m : mods) {
-                            if (m.getAttributeType()
-                                .equals(item)) {
+                            if (m.getAttributeType().equals(item)) {
                                 foundType = true;
                             }
                         }
@@ -129,31 +121,23 @@ public class GemAttributeHelper {
             boolean isNegative = allowNegativeModifiers && random.nextFloat() < chanceNegative;
             boolean isMultiplicative = allowMoreLessModifiers && random.nextFloat() < chanceMultiplicative;
 
-            float lower = isNegative ? (isMultiplicative ? lessModifierLower : decModifierLower)
-                : (isMultiplicative ? moreModifierLower : incModifierLower);
-            float higher = isNegative ? (isMultiplicative ? lessModifierHigher : decModifierHigher)
-                : (isMultiplicative ? moreModifierHigher : incModifierHigher);
+            float lower = isNegative ? (isMultiplicative ? lessModifierLower : decModifierLower) : (isMultiplicative ? moreModifierLower : incModifierLower);
+            float higher = isNegative ? (isMultiplicative ? lessModifierHigher : decModifierHigher) : (isMultiplicative ? moreModifierHigher : incModifierHigher);
 
             float value;
             if (lower > higher) {
                 value = lower;
             } else {
-                value = lower
-                    + (MathHelper.clamp(random.nextFloat() * gemType.amplifierModifier, 0F, 1F) * (higher - lower));
+                value = lower + (MathHelper.clamp(random.nextFloat() * gemType.amplifierModifier, 0F, 1F) * (higher - lower));
             }
 
-            PerkAttributeModifier.Mode mode = isMultiplicative ? PerkAttributeModifier.Mode.STACKING_MULTIPLY
-                : PerkAttributeModifier.Mode.ADDED_MULTIPLY;
+            PerkAttributeModifier.Mode mode = isMultiplicative ? PerkAttributeModifier.Mode.STACKING_MULTIPLY : PerkAttributeModifier.Mode.ADDED_MULTIPLY;
             float rValue = isMultiplicative ? 1F + value : value;
 
             if (allowDuplicateTypes) {
                 String fType = type;
-                GemAttributeModifier existing = MiscUtils.iterativeSearch(
-                    mods,
-                    mod -> mod.getAttributeType()
-                        .equals(fType)
-                        && mod.getMode()
-                        .equals(mode));
+                GemAttributeModifier existing = MiscUtils.iterativeSearch(mods,
+                        mod -> mod.getAttributeType().equals(fType) && mod.getMode().equals(mode));
                 if (existing != null) {
                     mods.remove(existing);
                     float combinedValue;
@@ -163,13 +147,8 @@ public class GemAttributeHelper {
                         combinedValue = existing.getFlatValue() + rValue;
                     }
                     if (combinedValue != 0F) {
-                        mods.add(
-                            new GemAttributeModifier(
-                                UUID.randomUUID(),
-                                type,
-                                mode,
-                                isMultiplicative ? combinedValue + 1 : combinedValue));
-                    } // If == 0 -> don't re-add anything.
+                        mods.add(new GemAttributeModifier(UUID.randomUUID(), type, mode, isMultiplicative ? combinedValue + 1 : combinedValue));
+                    } //If == 0 -> don't re-add anything.
                 } else {
                     mods.add(new GemAttributeModifier(UUID.randomUUID(), type, mode, rValue));
                 }
@@ -217,128 +196,55 @@ public class GemAttributeHelper {
 
             List<String> flattened = MiscUtils.flatten(weightedModifiers, (key, weight) -> key + "=" + weight);
             String[] arr = flattened.toArray(new String[flattened.size()]);
-            String[] configuredList = cfg.getStringList(
-                getKey() + "WeightedModifiers",
-                getConfigurationSection(),
-                arr,
-                "List of weighted modifiers the gem may roll. Format: 'modifier=weight'");
+            String[] configuredList = cfg.getStringList(getKey() + "WeightedModifiers", getConfigurationSection(),
+                    arr, "List of weighted modifiers the gem may roll. Format: 'modifier=weight'");
             fillModifiers(configuredList);
 
-            allowDuplicateTypes = cfg.getBoolean(
-                getKey() + "AllowDuplicateTypes",
-                getConfigurationSection(),
-                allowDuplicateTypes,
-                "If this is set to true, the same type of modifier (e.g. maxhealth) can roll multiple times");
-            chance3Modifiers = cfg.getFloat(
-                getKey() + "Chance3Modifiers",
-                getConfigurationSection(),
-                chance3Modifiers,
-                0F,
-                1F,
-                "Defines the chance the gem can roll a 3rd modifier. The lower this chance, the rarer.");
-            chance4Modifiers = cfg.getFloat(
-                getKey() + "Chance4Modifiers",
-                getConfigurationSection(),
-                chance4Modifiers,
-                0F,
-                1F,
-                "Defines the chance the gem can roll a 4th modifier. A 3rd modifier MUST be rolled before and the chances are independent of each other. The lower this chance, the rarer.");
+            allowDuplicateTypes = cfg.getBoolean(getKey() + "AllowDuplicateTypes", getConfigurationSection(), allowDuplicateTypes,
+                    "If this is set to true, the same type of modifier (e.g. maxhealth) can roll multiple times");
+            chance3Modifiers = cfg.getFloat(getKey() + "Chance3Modifiers", getConfigurationSection(), chance3Modifiers, 0F, 1F,
+                    "Defines the chance the gem can roll a 3rd modifier. The lower this chance, the rarer.");
+            chance4Modifiers = cfg.getFloat(getKey() + "Chance4Modifiers", getConfigurationSection(), chance4Modifiers, 0F, 1F,
+                    "Defines the chance the gem can roll a 4th modifier. A 3rd modifier MUST be rolled before and the chances are independent of each other. The lower this chance, the rarer.");
 
-            allowNegativeModifiers = cfg.getBoolean(
-                getKey() + "AllowNegativeModifier",
-                getConfigurationSection(),
-                allowNegativeModifiers,
-                "If this is set to true, a modifier may roll negative instead of positive, depending on the configured chance (see ChanceNegativeModifier)");
-            chanceNegative = cfg.getFloat(
-                getKey() + "ChanceNegativeModifier",
-                getConfigurationSection(),
-                chanceNegative,
-                0F,
-                1F,
-                "If 'AllowNegativeModifier' is set to true, this defines the chance a given modifier may be negative instead of positive.");
+            allowNegativeModifiers = cfg.getBoolean(getKey() + "AllowNegativeModifier", getConfigurationSection(), allowNegativeModifiers,
+                    "If this is set to true, a modifier may roll negative instead of positive, depending on the configured chance (see ChanceNegativeModifier)");
+            chanceNegative = cfg.getFloat(getKey() + "ChanceNegativeModifier", getConfigurationSection(), chanceNegative, 0F, 1F,
+                    "If 'AllowNegativeModifier' is set to true, this defines the chance a given modifier may be negative instead of positive.");
 
-            allowMoreLessModifiers = cfg.getBoolean(
-                getKey() + "AllowMoreLessModifier",
-                getConfigurationSection(),
-                allowMoreLessModifiers,
-                "If this is set to true, a modifier may roll to be 'more'/'less' instead of 'increased'/'decreased', depending on the configured chance (see ChanceMoreLessModifier)");
-            chanceMultiplicative = cfg.getFloat(
-                getKey() + "ChanceMoreLessModifier",
-                getConfigurationSection(),
-                chanceMultiplicative,
-                0F,
-                1F,
-                "If 'AllowMoreLessModifier' is set to true, this defines the chance a given modifier may be 'more'/'less' instead of 'increased'/'decreased'.");
+            allowMoreLessModifiers = cfg.getBoolean(getKey() + "AllowMoreLessModifier", getConfigurationSection(), allowMoreLessModifiers,
+                    "If this is set to true, a modifier may roll to be 'more'/'less' instead of 'increased'/'decreased', depending on the configured chance (see ChanceMoreLessModifier)");
+            chanceMultiplicative = cfg.getFloat(getKey() + "ChanceMoreLessModifier", getConfigurationSection(), chanceMultiplicative, 0F, 1F,
+                    "If 'AllowMoreLessModifier' is set to true, this defines the chance a given modifier may be 'more'/'less' instead of 'increased'/'decreased'.");
 
             String section = getConfigurationSection() + ".ranges";
 
-            incModifierLower = cfg.getFloat(
-                "Increased_Lower_Bound",
-                section,
-                incModifierLower,
-                0F,
-                1F,
-                "Defines the lower bound an 'increased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
-            incModifierHigher = cfg.getFloat(
-                "Increased_Higher_Bound",
-                section,
-                incModifierHigher,
-                0F,
-                1F,
-                "Defines the lower bound an 'increased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            incModifierLower = cfg.getFloat("Increased_Lower_Bound", section, incModifierLower, 0F, 1F,
+                    "Defines the lower bound an 'increased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            incModifierHigher = cfg.getFloat("Increased_Higher_Bound", section, incModifierHigher, 0F, 1F,
+                    "Defines the lower bound an 'increased' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
 
-            decModifierLower = cfg.getFloat(
-                "Decreased_Lower_Bound",
-                section,
-                decModifierLower,
-                -1F,
-                0F,
-                "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
-            decModifierHigher = cfg.getFloat(
-                "Decreased_Higher_Bound",
-                section,
-                decModifierHigher,
-                -1F,
-                0F,
-                "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
+            decModifierLower = cfg.getFloat("Decreased_Lower_Bound", section, decModifierLower, -1F, 0F,
+                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
+            decModifierHigher = cfg.getFloat("Decreased_Higher_Bound", section, decModifierHigher, -1F, 0F,
+                    "Defines the lower bound an 'decreased' modifier can roll. Value is in percent (-0.01 means 1% decreased, -0.1 means 10% decreased, ...)");
 
-            moreModifierLower = cfg.getFloat(
-                "More_Lower_Bound",
-                section,
-                moreModifierLower,
-                0F,
-                1F,
-                "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
-            moreModifierHigher = cfg.getFloat(
-                "More_Higher_Bound",
-                section,
-                moreModifierHigher,
-                0F,
-                1F,
-                "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            moreModifierLower = cfg.getFloat("More_Lower_Bound", section, moreModifierLower, 0F, 1F,
+                    "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
+            moreModifierHigher = cfg.getFloat("More_Higher_Bound", section, moreModifierHigher, 0F, 1F,
+                    "Defines the lower bound an 'more' modifier can roll. Value is in percent (0.01 means 1%, 0.1 means 10%, ...)");
 
-            lessModifierLower = cfg.getFloat(
-                "Less_Lower_Bound",
-                section,
-                lessModifierLower,
-                -1F,
-                0F,
-                "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
-            lessModifierHigher = cfg.getFloat(
-                "Less_Higher_Bound",
-                section,
-                lessModifierHigher,
-                -1F,
-                0F,
-                "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
+            lessModifierLower = cfg.getFloat("Less_Lower_Bound", section, lessModifierLower, -1F, 0F,
+                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
+            lessModifierHigher = cfg.getFloat("Less_Higher_Bound", section, lessModifierHigher, -1F, 0F,
+                    "Defines the lower bound an 'less' modifier can roll. Value is in percent (-0.01 means 1% less, -0.1 means 10% less, ...)");
         }
 
         private void fillModifiers(String[] configuredList) {
             for (String s : configuredList) {
                 String[] spl = s.split("=");
                 if (spl.length != 2) {
-                    AstralSorcery.log.info(
-                        "Ignoring wrong format for gem attribute modifier: " + s + " (Too many/not enough '=' found!)");
+                    AstralSorcery.log.info("Ignoring wrong format for gem attribute modifier: " + s + " (Too many/not enough '=' found!)");
                     continue;
                 }
 
@@ -348,11 +254,7 @@ public class GemAttributeHelper {
                 try {
                     weight = Integer.parseInt(strWeight);
                 } catch (NumberFormatException exc) {
-                    AstralSorcery.log.info(
-                        "Ignoring wrong format for gem attribute modifier: " + s
-                            + " (The weight '"
-                            + strWeight
-                            + "' is not an integer number!)");
+                    AstralSorcery.log.info("Ignoring wrong format for gem attribute modifier: " + s + " (The weight '" + strWeight + "' is not an integer number!)");
                     continue;
                 }
 

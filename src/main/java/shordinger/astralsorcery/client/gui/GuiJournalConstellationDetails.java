@@ -1,29 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui;
-
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -38,13 +21,6 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.constellation.*;
-import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
-import shordinger.astralsorcery.common.constellation.IConstellation;
-import shordinger.astralsorcery.common.constellation.IConstellationSpecialShowup;
-import shordinger.astralsorcery.common.constellation.IMajorConstellation;
-import shordinger.astralsorcery.common.constellation.IMinorConstellation;
-import shordinger.astralsorcery.common.constellation.IWeakConstellation;
-import shordinger.astralsorcery.common.constellation.MoonPhase;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import shordinger.astralsorcery.common.crafting.altar.recipes.CapeAttunementRecipe;
@@ -55,6 +31,21 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.lib.RecipesAS;
 import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.util.SoundHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,12 +56,9 @@ import shordinger.astralsorcery.common.util.SoundHelper;
  */
 public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
-    private static final BindableResource texBlack = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MISC, "black");
-    private static final BindableResource texBg = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
-    private static final BindableResource texArrow = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
+    private static final BindableResource texBlack   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    private static final BindableResource texBg      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
+    private static final BindableResource texArrow   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private IConstellation constellation;
     private GuiJournalConstellationCluster origin;
@@ -97,19 +85,17 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         boolean has = false;
         for (String strConstellation : ResearchManager.clientProgress.getKnownConstellations()) {
             IConstellation ce = ConstellationRegistry.getConstellationByName(strConstellation);
-            if (ce != null && ce.equals(c)) {
+            if(ce != null && ce.equals(c)) {
                 has = true;
                 break;
             }
         }
         this.detailed = has;
         ProgressionTier playerProgress = ResearchManager.clientProgress.getTierReached();
-        if (has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress)
-            || EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(playerProgress))) {
+        if(has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(playerProgress))) {
             this.doublePages++;
 
-            if (EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress)
-                && !(constellation instanceof IMinorConstellation)) {
+            if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress) && !(constellation instanceof IMinorConstellation)) {
                 this.doublePages++;
             }
         }
@@ -127,19 +113,17 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void buildCapeText() {
-        if (EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchManager.clientProgress.getTierReached())) {
+        if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchManager.clientProgress.getTierReached())) {
             String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";
             String textEnch = I18n.format(unlocEnch);
-            if (!unlocEnch.equals(textEnch)) {
+            if(!unlocEnch.equals(textEnch)) {
                 String head = I18n.format("gui.journal.cst.capeeffect");
                 locTextCapeEffect.add(head);
                 locTextCapeEffect.add("");
 
                 List<String> lines = new LinkedList<>();
                 for (String segment : textEnch.split("<NL>")) {
-                    lines.addAll(
-                        Minecraft.getMinecraft().fontRenderer
-                            .listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
                     lines.add("");
                 }
                 locTextCapeEffect.addAll(lines);
@@ -149,19 +133,17 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void buildEnchText() {
-        if (EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchManager.clientProgress.getTierReached())) {
+        if(EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchManager.clientProgress.getTierReached())) {
             String unlocEnch = constellation.getUnlocalizedName() + ".enchantments";
             String textEnch = I18n.format(unlocEnch);
-            if (!unlocEnch.equals(textEnch)) {
+            if(!unlocEnch.equals(textEnch)) {
                 String head = I18n.format("gui.journal.cst.enchantments");
                 locTextRitualEnch.add(head);
                 locTextRitualEnch.add("");
 
                 List<String> lines = new LinkedList<>();
                 for (String segment : textEnch.split("<NL>")) {
-                    lines.addAll(
-                        Minecraft.getMinecraft().fontRenderer
-                            .listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
                     lines.add("");
                 }
                 locTextRitualEnch.addAll(lines);
@@ -171,20 +153,18 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void buildRitualText() {
-        if (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchManager.clientProgress.getTierReached())) {
+        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchManager.clientProgress.getTierReached())) {
             if (constellation instanceof IMinorConstellation) {
                 String unlocRitual = constellation.getUnlocalizedName() + ".trait";
                 String textRitual = I18n.format(unlocRitual);
-                if (!unlocRitual.equals(textRitual)) {
+                if(!unlocRitual.equals(textRitual)) {
                     String head = I18n.format("gui.journal.cst.ritual.trait");
                     locTextRitualEnch.add(head);
                     locTextRitualEnch.add("");
 
                     List<String> lines = new LinkedList<>();
                     for (String segment : textRitual.split("<NL>")) {
-                        lines.addAll(
-                            Minecraft.getMinecraft().fontRenderer
-                                .listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                        lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
                         lines.add("");
                     }
                     locTextRitualEnch.addAll(lines);
@@ -192,16 +172,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             } else {
                 String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
                 String textRitual = I18n.format(unlocRitual);
-                if (!unlocRitual.equals(textRitual)) {
+                if(!unlocRitual.equals(textRitual)) {
                     String head = I18n.format("gui.journal.cst.ritual");
                     locTextRitualEnch.add(head);
                     locTextRitualEnch.add("");
 
                     List<String> lines = new LinkedList<>();
                     for (String segment : textRitual.split("<NL>")) {
-                        lines.addAll(
-                            Minecraft.getMinecraft().fontRenderer
-                                .listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                        lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
                         lines.add("");
                     }
                     locTextRitualEnch.addAll(lines);
@@ -213,12 +191,11 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void buildMainText() {
         String unloc = constellation.getUnlocalizedName() + ".effect";
         String text = I18n.format(unloc);
-        if (unloc.equals(text)) return;
+        if(unloc.equals(text)) return;
 
         List<String> lines = new LinkedList<>();
         for (String segment : text.split("<NL>")) {
-            lines.addAll(
-                Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+            lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
             lines.add("");
         }
         locTextMain.addAll(lines);
@@ -229,14 +206,13 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testActivePhases() {
-        if (Minecraft.getMinecraft().theWorld == null) return;
-        WorldSkyHandler handler = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().theWorld);
-        if (handler == null) return;
+        if(Minecraft.getMinecraft().world == null) return;
+        WorldSkyHandler handler = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
+        if(handler == null) return;
         for (MoonPhase phase : this.phases) {
             List<IConstellation> active = handler.getConstellationsForMoonPhase(phase);
-            if (active != null && !active.isEmpty()) {
-                if (active.contains(constellation)) {
+            if(active != null && !active.isEmpty()) {
+                if(active.contains(constellation)) {
                     activePhases.add(phase);
                 }
             }
@@ -305,12 +281,12 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
 
         CapeAttunementRecipe recipe = RecipesAS.capeCraftingRecipes.get(this.constellation);
-        if (recipe != null) {
+        if(recipe != null) {
             lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
 
             GlStateManager.pushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            lastFramePage.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
             lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GlStateManager.popMatrix();
@@ -330,14 +306,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.popMatrix();
         GlStateManager.enableDepth();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        if (EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(prog)) {
+        if(EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(prog)) {
             ConstellationPaperRecipe recipe = RecipesAS.paperCraftingRecipes.get(this.constellation);
-            if (recipe != null) {
+            if(recipe != null) {
                 lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
 
                 GlStateManager.pushMatrix();
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                lastFramePage.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
                 lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
                 GL11.glPopAttrib();
                 GlStateManager.popMatrix();
@@ -349,14 +325,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.disableDepth();
         rectNext = null;
         rectPrev = null;
-        if (doublePageID - 1 >= 0) {
+        if(doublePageID - 1 >= 0) {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
             GlStateManager.pushMatrix();
             GlStateManager.translate(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0.5F;
-            if (rectPrev.contains(mouse)) {
+            if(rectPrev.contains(mouse)) {
                 uFrom = 0.5F;
                 GlStateManager.scale(1.1, 1.1, 1.1);
             } else {
@@ -370,14 +346,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
-        if (doublePageID + 1 <= doublePages) {
+        if(doublePageID + 1 <= doublePages) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
             GlStateManager.pushMatrix();
             GlStateManager.translate(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0F;
-            if (rectNext.contains(mouse)) {
+            if(rectNext.contains(mouse)) {
                 uFrom = 0.5F;
                 GlStateManager.scale(1.1, 1.1, 1.1);
             } else {
@@ -398,37 +374,21 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void drawCstBackground() {
         texBlack.bind();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder bb = tes.getBuffer();
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bb.pos(guiLeft + 15, guiTop + 240, zLevel)
-            .tex(0, 1)
-            .endVertex();
-        bb.pos(guiLeft + 200, guiTop + 240, zLevel)
-            .tex(1, 1)
-            .endVertex();
-        bb.pos(guiLeft + 200, guiTop + 10, zLevel)
-            .tex(1, 0)
-            .endVertex();
-        bb.pos(guiLeft + 15, guiTop + 10, zLevel)
-            .tex(0, 0)
-            .endVertex();
+        bb.pos(guiLeft + 15,  guiTop + 240, zLevel).tex(0, 1).endVertex();
+        bb.pos(guiLeft + 200, guiTop + 240, zLevel).tex(1, 1).endVertex();
+        bb.pos(guiLeft + 200, guiTop + 10,  zLevel).tex(1, 0).endVertex();
+        bb.pos(guiLeft + 15,  guiTop + 10,  zLevel).tex(0, 0).endVertex();
         tes.draw();
         GlStateManager.color(0.8F, 0.8F, 1F, 0.7F);
         texBg.bind();
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bb.pos(guiLeft + 35, guiTop + guiHeight - 10, zLevel)
-            .tex(0.3, 0.9)
-            .endVertex();
-        bb.pos(guiLeft + 35 + 170, guiTop + guiHeight - 10, zLevel)
-            .tex(0.7, 0.9)
-            .endVertex();
-        bb.pos(guiLeft + 35 + 170, guiTop + 10, zLevel)
-            .tex(0.7, 0.1)
-            .endVertex();
-        bb.pos(guiLeft + 35, guiTop + 10, zLevel)
-            .tex(0.3, 0.1)
-            .endVertex();
+        bb.pos(guiLeft + 35,       guiTop + guiHeight - 10, zLevel).tex(0.3, 0.9).endVertex();
+        bb.pos(guiLeft + 35 + 170, guiTop + guiHeight - 10, zLevel).tex(0.7, 0.9).endVertex();
+        bb.pos(guiLeft + 35 + 170, guiTop + 10,             zLevel).tex(0.7, 0.1).endVertex();
+        bb.pos(guiLeft + 35,       guiTop + 10,             zLevel).tex(0.3, 0.1).endVertex();
         tes.draw();
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
@@ -436,8 +396,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void drawExtendedInformation() {
         float br = 0.8666F;
         GlStateManager.color(br, br, br, 0.8F);
-        String info = I18n.format(constellation.getUnlocalizedInfo())
-            .toUpperCase();
+        String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
         info = detailed ? info : "???";
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
@@ -454,7 +413,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
 
-        if (detailed && !locTextMain.isEmpty()) {
+        if(detailed && !locTextMain.isEmpty()) {
             int offsetX = 220, offsetY = 77;
             for (String s : locTextMain) {
                 GlStateManager.pushMatrix();
@@ -470,37 +429,37 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             }
         }
 
-        /*
-         * texArrow.bind();
-         * fontRenderer.font_size_multiplicator = 0.06F;
-         * String pref = I18n.translateToLocal("constraint.description");
-         * fontRenderer.drawString(pref, guiLeft + 228, guiTop + 60, zLevel, null, 0.7F, 0);
-         * texArrow.bind();
-         * fontRenderer.font_size_multiplicator = 0.05F;
-         * SizeConstraint sc = constellation.getSizeConstraint();
-         * String trSize = I18n.translateToLocal(sc.getUnlocalizedName());
-         * fontRenderer.drawString("- " + trSize, guiLeft + 228, guiTop + 85, zLevel, null, 0.7F, 0);
-         * List<RitualConstraint> constrList = constellation.getConstraints();
-         * for (int i = 0; i < constrList.size(); i++) {
-         * RitualConstraint cstr = constrList.get(i);
-         * String str = I18n.translateToLocal(cstr.getUnlocalizedName());
-         * texArrow.bind();
-         * fontRenderer.font_size_multiplicator = 0.05F;
-         * fontRenderer.drawString("- " + str, guiLeft + 228, guiTop + 107 + (i * 22), zLevel, null, 0.7F, 0);
-         * }
-         */
+        /*texArrow.bind();
+        fontRenderer.font_size_multiplicator = 0.06F;
+        String pref = I18n.translateToLocal("constraint.description");
+        fontRenderer.drawString(pref, guiLeft + 228, guiTop + 60, zLevel, null, 0.7F, 0);
+
+        texArrow.bind();
+        fontRenderer.font_size_multiplicator = 0.05F;
+        SizeConstraint sc = constellation.getSizeConstraint();
+        String trSize = I18n.translateToLocal(sc.getUnlocalizedName());
+        fontRenderer.drawString("- " + trSize, guiLeft + 228, guiTop + 85, zLevel, null, 0.7F, 0);
+
+        List<RitualConstraint> constrList = constellation.getConstraints();
+        for (int i = 0; i < constrList.size(); i++) {
+            RitualConstraint cstr = constrList.get(i);
+            String str = I18n.translateToLocal(cstr.getUnlocalizedName());
+            texArrow.bind();
+            fontRenderer.font_size_multiplicator = 0.05F;
+            fontRenderer.drawString("- " + str, guiLeft + 228, guiTop + 107 + (i * 22), zLevel, null, 0.7F, 0);
+        }*/
     }
 
     private void drawPhaseInformation() {
-        if (this.phases.isEmpty()) {
+        if(this.phases.isEmpty()) {
             testPhases();
             testActivePhases();
-            if (this.phases.isEmpty()) {
+            if(this.phases.isEmpty()) {
                 return;
             }
         }
 
-        if (constellation instanceof IConstellationSpecialShowup) {
+        if(constellation instanceof IConstellationSpecialShowup) {
             GlStateManager.disableDepth();
             double scale = 1.8;
             TextureHelper.refreshTextureBindState();
@@ -516,7 +475,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             GlStateManager.color(1, 1, 1, 1);
             TextureHelper.refreshTextureBindState();
             GlStateManager.enableDepth();
-        } else if (ResearchManager.clientProgress.hasConstellationDiscovered(constellation.getUnlocalizedName())) {
+        } else if(ResearchManager.clientProgress.hasConstellationDiscovered(constellation.getUnlocalizedName())) {
             GlStateManager.enableBlend();
             Blending.DEFAULT.applyStateManager();
             GlStateManager.color(0.7F, 0.7F, 0.7F, 0.6F);
@@ -525,9 +484,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             int offsetY = 199 + guiTop;
             for (int i = 0; i < phases.size(); i++) {
                 MoonPhase ph = phases.get(i);
-                if (!this.activePhases.contains(ph)) {
-                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph)
-                        .bind();
+                if(!this.activePhases.contains(ph)) {
+                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
                     drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
                 }
             }
@@ -535,9 +493,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             GlStateManager.color(1F, 1F, 1F, 1F);
             for (int i = 0; i < phases.size(); i++) {
                 MoonPhase ph = phases.get(i);
-                if (this.activePhases.contains(ph)) {
-                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph)
-                        .bind();
+                if(this.activePhases.contains(ph)) {
+                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
                     drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
                 }
             }
@@ -552,8 +509,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             int offsetY = 199 + guiTop;
             for (int i = 0; i < phases.size(); i++) {
                 MoonPhase ph = phases.get(i);
-                MoonPhaseRenderHelper.getMoonPhaseTexture(ph)
-                    .bind();
+                MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
                 drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
             }
             TextureHelper.refreshTextureBindState();
@@ -563,8 +519,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void drawConstellation(float partial) {
         float br = 0.866F;
         GlStateManager.color(br, br, br, 0.8F);
-        String name = I18n.format(constellation.getUnlocalizedName())
-            .toUpperCase();
+        String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double width = fr.getStringWidth(name);
@@ -580,9 +535,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
         String dstInfo = "astralsorcery.journal.constellation.dst.";
-        if (constellation instanceof IMajorConstellation) {
+        if(constellation instanceof IMajorConstellation) {
             dstInfo += "major";
-        } else if (constellation instanceof IWeakConstellation) {
+        } else if(constellation instanceof IWeakConstellation) {
             dstInfo += "weak";
         } else {
             dstInfo += "minor";
@@ -608,25 +563,15 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         Blending.DEFAULT.apply();
 
         boolean known = ResearchManager.clientProgress.hasConstellationDiscovered(constellation.getUnlocalizedName());
-        RenderConstellation.renderConstellationIntoGUI(
-            known ? constellation.getConstellationColor() : constellation.getTierRenderColor(),
-            constellation,
-            guiLeft + 40,
-            guiTop + 60,
-            zLevel,
-            150,
-            150,
-            2F,
-            new RenderConstellation.BrightnessFunction() {
-
-                @Override
-                public float getBrightness() {
-                    return 0.3F + 0.7F * RenderConstellation
-                        .conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10));
-                }
-            },
-            true,
-            false);
+        RenderConstellation.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,
+                guiLeft + 40, guiTop + 60, zLevel,
+                150, 150, 2F,
+                new RenderConstellation.BrightnessFunction() {
+            @Override
+            public float getBrightness() {
+                return 0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10));
+            }
+        }, true, false);
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
@@ -637,7 +582,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.pushMatrix();
         GlStateManager.translate(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
         float uFrom = 0F, vFrom = 0.5F;
-        if (rectBack.contains(mouse)) {
+        if(rectBack.contains(mouse)) {
             uFrom = 0.5F;
             GlStateManager.scale(1.1, 1.1, 1.1);
         } else {
@@ -654,8 +599,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     @Override
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
-        Minecraft.getMinecraft()
-            .displayGuiScreen(origin);
+        Minecraft.getMinecraft().displayGuiScreen(origin);
         return true;
     }
 
@@ -663,32 +607,31 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseButton != 0) return;
+        if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if (handleBookmarkClick(p)) {
             return;
         }
 
-        if (rectBack != null && rectBack.contains(p)) {
-            Minecraft.getMinecraft()
-                .displayGuiScreen(origin);
+        if(rectBack != null && rectBack.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(origin);
             return;
         }
-        if (rectPrev != null && rectPrev.contains(p)) {
-            if (doublePageID >= 1) {
+        if(rectPrev != null && rectPrev.contains(p)) {
+            if(doublePageID >= 1) {
                 this.doublePageID--;
             }
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
-        if (rectNext != null && rectNext.contains(p)) {
-            if (doublePageID <= doublePages - 1) {
+        if(rectNext != null && rectNext.contains(p)) {
+            if(doublePageID <= doublePages - 1) {
                 this.doublePageID++;
             }
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
-        if (doublePageID != 0 && lastFramePage != null) {
+        if(doublePageID != 0 && lastFramePage != null) {
             lastFramePage.propagateMouseClick(mouseX, mouseY);
         }
     }

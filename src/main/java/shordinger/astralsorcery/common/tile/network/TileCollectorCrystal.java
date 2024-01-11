@@ -1,34 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.network;
 
-import java.awt.*;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -51,7 +31,6 @@ import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import shordinger.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
@@ -60,8 +39,26 @@ import shordinger.astralsorcery.common.tile.base.TileSourceBase;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.text.Style;
+import shordinger.wrapper.net.minecraft.util.text.TextComponentTranslation;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,13 +67,19 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 13:25
  */
-public class TileCollectorCrystal extends TileSourceBase
-    implements IMultiblockDependantTile, IStructureAreaOfInfluence {
+public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile, IStructureAreaOfInfluence {
 
     private static final UUID DUMMY_UUID = UUID.fromString("0cd550cc-8341-4b96-8d1e-d4a12deb8ca3");
-    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[]{new BlockPos(-1, -4, -1),
-        new BlockPos(0, -4, -1), new BlockPos(1, -4, -1), new BlockPos(1, -4, 0), new BlockPos(1, -4, 1),
-        new BlockPos(0, -4, 1), new BlockPos(-1, -4, 1), new BlockPos(-1, -4, 0),};
+    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
+            new BlockPos(-1, -4, -1),
+            new BlockPos( 0, -4, -1),
+            new BlockPos( 1, -4, -1),
+            new BlockPos( 1, -4,  0),
+            new BlockPos( 1, -4,  1),
+            new BlockPos( 0, -4,  1),
+            new BlockPos(-1, -4,  1),
+            new BlockPos(-1, -4,  0),
+    };
 
     private static final Random rand = new Random();
 
@@ -94,22 +97,22 @@ public class TileCollectorCrystal extends TileSourceBase
     public void update() {
         super.update();
 
-        if (!world.isRemote) {
-            if (ticksExisted > 4 && associatedType == null) {
+        if(!world.isRemote) {
+            if(ticksExisted > 4 && associatedType == null) {
                 if (!getWorld().setBlockToAir(getPos())) {
                     return;
                 }
             }
-            if (type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
                 if (this.structureMatch == null) {
-                    this.structureMatch = PatternMatchHelper
-                        .getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+                    this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(),
+                            getRequiredStructure());
                 }
                 boolean found = this.structureMatch.matches(getWorld());
                 if (found != this.multiBlockPresent) {
-                    LogCategory.STRUCTURE_MATCH.info(
-                        () -> "Structure match updated: " + this.getClass()
-                            .getName() + " at " + this.getPos() + " (" + this.multiBlockPresent + " -> " + found + ")");
+                    LogCategory.STRUCTURE_MATCH.info(() ->
+                            "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                                    " (" + this.multiBlockPresent + " -> " + found + ")");
                     this.multiBlockPresent = found;
                     setEnhanced(found);
                     markForUpdate();
@@ -117,19 +120,18 @@ public class TileCollectorCrystal extends TileSourceBase
             }
         } else {
             if (!doesSeeSky()) {
-                EntityFXFacingParticle p = EffectHelper
-                    .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
-                p.motion(
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.04F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
-                p.scale(0.2F)
-                    .setMaxAge(35);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                        getPos().getX() + 0.5,
+                        getPos().getY() + 0.5,
+                        getPos().getZ() + 0.5);
+                p.motion((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                         (rand.nextFloat() * 0.04F) * (rand.nextBoolean() ? 1 : -1),
+                         (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+                p.scale(0.2F).setMaxAge(35);
                 Color c = Color.WHITE;
-                if (type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                    if (playerRef != null && MiscUtils.contains(
-                        PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef),
-                        pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+                if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                    if (playerRef != null &&
+                            MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
                         c = Color.RED;
                     } else {
                         c = Color.CYAN;
@@ -137,8 +139,7 @@ public class TileCollectorCrystal extends TileSourceBase
                 }
                 p.setColor(c);
             } else {
-                if (isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL
-                    && associatedType != null) {
+                if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && associatedType != null) {
                     playEnhancedEffects();
                 }
             }
@@ -148,7 +149,7 @@ public class TileCollectorCrystal extends TileSourceBase
     @Nullable
     @Override
     public PatternBlockArray getRequiredStructure() {
-        if (type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             return MultiBlockArrays.patternCollectorEnhancement;
         }
         return null;
@@ -162,20 +163,19 @@ public class TileCollectorCrystal extends TileSourceBase
 
     @SideOnly(Side.CLIENT)
     private void playEnhancedEffects() {
-        if (Minecraft.isFancyGraphicsEnabled()) {
-            EntityFXFacingParticle p = EffectHelper
-                .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
-            p.motion(
-                (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
-                (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
-                (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F)
-                .setMaxAge(25);
+        if(Minecraft.isFancyGraphicsEnabled()) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    getPos().getX() + 0.5,
+                    getPos().getY() + 0.5,
+                    getPos().getZ() + 0.5);
+            p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.25F).setMaxAge(25);
 
             Color c = Color.CYAN;
-            if (playerRef != null && MiscUtils.contains(
-                PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef),
-                pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
+            if (playerRef != null &&
+                    MiscUtils.contains(PatreonEffectHelper.getPatreonEffects(Side.CLIENT, playerRef), pe -> pe instanceof PtEffectCorruptedCelestialCrystal)) {
                 c = Color.RED;
             }
             p.setColor(c);
@@ -183,17 +183,16 @@ public class TileCollectorCrystal extends TileSourceBase
 
         for (int i = 0; i < orbitals.length; i++) {
             OrbitalEffectController ctrl = (OrbitalEffectController) orbitals[i];
-            if (ctrl == null) {
+            if(ctrl == null) {
                 OrbitalEffectCollector prop = new OrbitalEffectCollector(this);
-                ctrl = EffectHandler.getInstance()
-                    .orbital(prop, null, null);
+                ctrl = EffectHandler.getInstance().orbital(prop, null, null);
                 ctrl.setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
                 ctrl.setOrbitRadius(0.8 + rand.nextFloat() * 0.4);
                 ctrl.setOrbitAxis(Vector3.random());
                 ctrl.setTicksPerRotation(60);
                 orbitals[i] = ctrl;
             } else {
-                if (ctrl.canRemove() || ctrl.isRemoved()) {
+                if(ctrl.canRemove() || ctrl.isRemoved()) {
                     orbitals[i] = null;
                 }
             }
@@ -202,24 +201,17 @@ public class TileCollectorCrystal extends TileSourceBase
         BlockPos randomPos = offsetsLiquidStarlight[rand.nextInt(offsetsLiquidStarlight.length)].add(pos);
         Vector3 from = new Vector3(randomPos).add(rand.nextFloat(), 0.8, rand.nextFloat());
         Vector3 to = new Vector3(this).add(0.5, 0.5, 0.5);
-        Vector3 mov = to.clone()
-            .subtract(from)
-            .normalize()
-            .multiply(0.1);
+        Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1);
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-        p.motion(mov.getX(), mov.getY(), mov.getZ())
-            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-        p.gravity(0.004)
-            .scale(0.25F)
-            .setMaxAge(30 + rand.nextInt(10));
+        p.motion(mov.getX(), mov.getY(), mov.getZ()).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        p.gravity(0.004).scale(0.25F).setMaxAge(30 + rand.nextInt(10));
         Color c;
         switch (rand.nextInt(4)) {
             case 0:
                 c = Color.WHITE;
                 break;
             case 1:
-                c = associatedType.getConstellationColor()
-                    .brighter();
+                c = associatedType.getConstellationColor().brighter();
                 break;
             case 2:
             default:
@@ -228,22 +220,18 @@ public class TileCollectorCrystal extends TileSourceBase
         }
         p.setColor(c);
 
-        if (usedCrystalProperties != null
-            && (usedCrystalProperties.getPurity() > 90 || usedCrystalProperties.getCollectiveCapability() > 90)
-            && rand.nextInt(100) == 0) {
+        if(usedCrystalProperties != null && (usedCrystalProperties.getPurity() > 90 || usedCrystalProperties.getCollectiveCapability() > 90) && rand.nextInt(100) == 0) {
             AstralSorcery.proxy.fireLightning(world, to, from, c);
         }
     }
 
     @Override
     public boolean onSelect(EntityPlayer player) {
-        if (player.isSneaking()) {
+        if(player.isSneaking()) {
             for (BlockPos linkTo : Lists.newArrayList(getLinkedPositions())) {
                 tryUnlink(player, linkTo);
             }
-            player.sendMessage(
-                new TextComponentTranslation("misc.link.unlink.all")
-                    .setStyle(new Style().setColor(TextFormatting.GREEN)));
+            player.sendMessage(new TextComponentTranslation("misc.link.unlink.all").setStyle(new Style().setColor(TextFormatting.GREEN)));
             return false;
         }
         return true;
@@ -267,7 +255,7 @@ public class TileCollectorCrystal extends TileSourceBase
 
     @Override
     public int getDimensionId() {
-        return this.getWorld().provider.dimensionId;
+        return this.getWorld().provider.getDimension();
     }
 
     public boolean isPlayerMade() {
@@ -290,8 +278,7 @@ public class TileCollectorCrystal extends TileSourceBase
         return associatedTrait;
     }
 
-    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait,
-                        CrystalProperties properties, @Nullable UUID player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, @Nullable UUID player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.associatedTrait = trait;
         this.playerRef = player;
@@ -303,7 +290,7 @@ public class TileCollectorCrystal extends TileSourceBase
     }
 
     public void setEnhanced(boolean enhanced) {
-        if (!world.isRemote && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(!world.isRemote && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             this.multiBlockPresent = enhanced;
             WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
             IIndependentStarlightSource source = handle.getSourceAt(getPos());
@@ -321,14 +308,11 @@ public class TileCollectorCrystal extends TileSourceBase
 
     @SideOnly(Side.CLIENT)
     public static void breakParticles(PktParticleEvent event) {
-        BlockPos at = event.getVec()
-            .toBlockPos();
-        EffectHandler.getInstance()
-            .registerFX(new EntityFXBurst(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 3F));
+        BlockPos at = event.getVec().toBlockPos();
+        EffectHandler.getInstance().registerFX(new EntityFXBurst(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 3F));
     }
 
-    public static void breakDamage(World world, BlockPos pos) {
-    }
+    public static void breakDamage(World world, BlockPos pos) {}
 
     public BlockCollectorCrystalBase.CollectorCrystalType getType() {
         return type;
@@ -346,17 +330,15 @@ public class TileCollectorCrystal extends TileSourceBase
         if (compound.hasUniqueId("playerRef")) {
             this.playerRef = compound.getUniqueId("playerRef");
         } else if (compound.hasKey("player") && compound.getBoolean("player")) {
-            this.playerRef = DUMMY_UUID; // Legacy data conversion..
+            this.playerRef = DUMMY_UUID; //Legacy data conversion..
         } else {
             this.playerRef = null;
         }
         this.associatedType = (IWeakConstellation) IConstellation.readFromNBT(compound);
-        this.associatedTrait = (IMinorConstellation) IConstellation
-            .readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
+        this.associatedTrait = (IMinorConstellation) IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
-        this.multiBlockPresent = compound.hasKey("enhanced") ? compound.getBoolean("enhanced")
-            : compound.getBoolean("multiBlockPresent");
+        this.multiBlockPresent = compound.hasKey("enhanced") ? compound.getBoolean("enhanced") : compound.getBoolean("multiBlockPresent");
     }
 
     @Override
@@ -375,7 +357,7 @@ public class TileCollectorCrystal extends TileSourceBase
         if (usedCrystalProperties != null) {
             usedCrystalProperties.writeToNBT(compound);
         }
-        if (type != null) {
+        if(type != null) {
             compound.setInteger("collectorType", type.ordinal());
         }
         compound.setBoolean("multiBlockPresent", multiBlockPresent);
@@ -383,8 +365,7 @@ public class TileCollectorCrystal extends TileSourceBase
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return Block.FULL_BLOCK_AABB.grow(1)
-            .offset(getPos());
+        return Block.FULL_BLOCK_AABB.grow(1).offset(getPos());
     }
 
     @Nullable

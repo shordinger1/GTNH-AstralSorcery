@@ -1,25 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,8 +28,8 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
  */
 public class DataActiveCelestials extends AbstractData {
 
-    private final Map<Integer, List<IConstellation>> activeConstellations = new HashMap<>();
-    private final List<Integer> updateRequested = new LinkedList<>();
+    private Map<Integer, List<IConstellation>> activeConstellations = new HashMap<>();
+    private List<Integer> updateRequested = new LinkedList<>();
 
     @Nullable
     public Collection<IConstellation> getActiveConstellations(int dimId) {
@@ -46,7 +44,7 @@ public class DataActiveCelestials extends AbstractData {
     }
 
     private void requestUpdate(int dimId) {
-        if (!updateRequested.contains(dimId)) updateRequested.add(dimId);
+        if(!updateRequested.contains(dimId)) updateRequested.add(dimId);
         markDirty();
     }
 
@@ -67,7 +65,7 @@ public class DataActiveCelestials extends AbstractData {
     private void addDimensionConstellations(int dimId, NBTTagCompound mainCompound) {
         NBTTagList list = new NBTTagList();
         Collection<IConstellation> csts = getActiveConstellations(dimId);
-        if (csts != null) {
+        if(csts != null) {
             for (IConstellation c : csts) {
                 list.appendTag(new NBTTagString(c.getUnlocalizedName()));
             }
@@ -77,17 +75,16 @@ public class DataActiveCelestials extends AbstractData {
 
     @Override
     public void readRawFromPacket(NBTTagCompound compound) {
-        for (Object dimIdStr : compound.func_150296_c()) {
+        for (String dimIdStr : compound.getKeySet()) {
             int dimId;
             try {
-                dimId = Integer.parseInt((String) dimIdStr);
+                dimId = Integer.parseInt(dimIdStr);
             } catch (Exception exc) {
-                AstralSorcery.log
-                    .warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
+                AstralSorcery.log.warn("Received ConstellationUpdate packet with a non-integer dimensionId: " + dimIdStr);
                 AstralSorcery.log.warn("Skipping...");
                 continue;
             }
-            NBTTagList list = compound.getTagList((String) dimIdStr, 8);
+            NBTTagList list = compound.getTagList(dimIdStr, 8);
             List<IConstellation> toUpdate = new LinkedList<>();
             if (list.tagCount() != 0) {
                 for (int i = 0; i < list.tagCount(); i++) {
@@ -109,7 +106,9 @@ public class DataActiveCelestials extends AbstractData {
         if (!(serverData instanceof DataActiveCelestials)) return;
 
         Map<Integer, List<IConstellation>> update = ((DataActiveCelestials) serverData).activeConstellations;
-        this.activeConstellations.putAll(update);
+        for (Map.Entry<Integer, List<IConstellation>> entry : update.entrySet()) {
+            this.activeConstellations.put(entry.getKey(), entry.getValue());
+        }
     }
 
     public static class Provider extends ProviderAutoAllocate<DataActiveCelestials> {

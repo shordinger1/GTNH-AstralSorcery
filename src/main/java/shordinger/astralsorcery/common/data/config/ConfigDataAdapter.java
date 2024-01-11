@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.config;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +33,7 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
      * Try add a entry to the data-set. The return value defines what happened:
      * - null: Adding the element failed due to an error in the format
      * - Empty optional: Adding the element failed, however reason being contextual information or pack-configurations.
-     * Does not omit the generic format-error message, suggesting the method already gave appropiate information
+     *          Does not omit the generic format-error message, suggesting the method already gave appropiate information
      * - Optional with value: Everything went fine.
      */
     @Nullable

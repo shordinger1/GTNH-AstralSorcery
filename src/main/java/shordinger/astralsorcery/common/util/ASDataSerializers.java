@@ -1,17 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fluids.FluidStack;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.network.PacketBuffer;
+import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
+import shordinger.wrapper.net.minecraft.network.datasync.DataSerializer;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.registries.DataSerializerEntry;
 
 import java.io.IOException;
 
@@ -25,7 +29,6 @@ import java.io.IOException;
 public class ASDataSerializers {
 
     public static DataSerializer<Long> LONG = new DataSerializer<Long>() {
-
         @Override
         public void write(PacketBuffer buf, Long value) {
             buf.writeLongLE(value);
@@ -48,7 +51,6 @@ public class ASDataSerializers {
     };
 
     public static DataSerializer<Vector3> VECTOR = new DataSerializer<Vector3>() {
-
         @Override
         public void write(PacketBuffer buf, Vector3 value) {
             buf.writeDouble(value.getX());
@@ -73,7 +75,6 @@ public class ASDataSerializers {
     };
 
     public static DataSerializer<FluidStack> FLUID = new DataSerializer<FluidStack>() {
-
         @Override
         public void write(PacketBuffer buf, FluidStack value) {
             buf.writeBoolean(value != null);
@@ -99,12 +100,9 @@ public class ASDataSerializers {
     };
 
     public static void registerSerializers() {
-        CommonProxy.registryPrimer.register(
-            new DataSerializerEntry(ASDataSerializers.FLUID).setRegistryName(AstralSorcery.MODID, "serializer_fluid"));
-        CommonProxy.registryPrimer.register(
-            new DataSerializerEntry(ASDataSerializers.LONG).setRegistryName(AstralSorcery.MODID, "serializer_long"));
-        CommonProxy.registryPrimer.register(
-            new DataSerializerEntry(ASDataSerializers.VECTOR).setRegistryName(AstralSorcery.MODID, "serializer_vec3d"));
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.FLUID).setRegistryName(AstralSorcery.MODID, "serializer_fluid"));
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.LONG).setRegistryName(AstralSorcery.MODID, "serializer_long"));
+        CommonProxy.registryPrimer.register(new DataSerializerEntry(ASDataSerializers.VECTOR).setRegistryName(AstralSorcery.MODID, "serializer_vec3d"));
     }
 
 }

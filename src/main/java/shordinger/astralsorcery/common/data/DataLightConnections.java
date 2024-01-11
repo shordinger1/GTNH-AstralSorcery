@@ -1,19 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data;
 
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -34,49 +34,57 @@ public class DataLightConnections extends AbstractData {
     private final Object lock = new Object();
 
     public boolean clientReceivingData = false;
-    private final Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
-    private final Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
+    private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
+    private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
 
-    // Boolean flag: true=addition, false=removal
-    private final Map<Integer, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
+    //Boolean flag: true=addition, false=removal
+    private Map<Integer, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
-    public void updateNewConnectionsThreaded(int dimensionId,
-                                             List<TransmissionChain.LightConnection> newlyAddedConnections) {
-        Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.computeIfAbsent(dimensionId, k -> new HashMap<>());
+    public void updateNewConnectionsThreaded(int dimensionId, List<TransmissionChain.LightConnection> newlyAddedConnections) {
+        Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.get(dimensionId);
+        if(posBufferDim == null) {
+            posBufferDim = new HashMap<>();
+            serverPosBuffer.put(dimensionId, posBufferDim);
+        }
         for (TransmissionChain.LightConnection c : newlyAddedConnections) {
             BlockPos start = c.getStart();
             BlockPos end = c.getEnd();
-            List<BlockPos> endpoints = posBufferDim.computeIfAbsent(start, k -> new LinkedList<>());
-            if (!endpoints.contains(end)) endpoints.add(end);
+            List<BlockPos> endpoints = posBufferDim.get(start);
+            if(endpoints == null) {
+                endpoints = new LinkedList<>();
+                posBufferDim.put(start, endpoints);
+            }
+            if(!endpoints.contains(end)) endpoints.add(end);
         }
         notifyConnectionAdd(dimensionId, newlyAddedConnections);
-        if (newlyAddedConnections.size() > 0) {
+        if(newlyAddedConnections.size() > 0) {
             markDirty();
         }
     }
 
-    public void removeOldConnectionsThreaded(int dimensionId,
-                                             List<TransmissionChain.LightConnection> invalidConnections) {
+    public void removeOldConnectionsThreaded(int dimensionId, List<TransmissionChain.LightConnection> invalidConnections) {
         Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.get(dimensionId);
-        if (posBufferDim != null) {
+        if(posBufferDim != null) {
             for (TransmissionChain.LightConnection c : invalidConnections) {
                 BlockPos start = c.getStart();
                 List<BlockPos> ends = posBufferDim.get(start);
-                if (ends == null) continue;
-                ends.remove(c.getEnd());
-                if (ends.isEmpty()) posBufferDim.remove(start);
+                if(ends == null) continue;
+                if(ends.contains(c.getEnd())) {
+                    ends.remove(c.getEnd());
+                }
+                if(ends.isEmpty()) posBufferDim.remove(start);
             }
         }
         notifyConnectionRemoval(dimensionId, invalidConnections);
-        if (invalidConnections.size() > 0) {
+        if(invalidConnections.size() > 0) {
             markDirty();
         }
     }
 
     public void clearDimensionPositions(int dimId) {
-        if (serverPosBuffer.remove(dimId) != null) {
+        if(serverPosBuffer.remove(dimId) != null) {
             setDimClearFlag(dimId);
             markDirty();
         }
@@ -84,15 +92,23 @@ public class DataLightConnections extends AbstractData {
 
     private void setDimClearFlag(int dim) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dim, k -> new LinkedList<>());
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dim);
+            if(ch == null) {
+                ch = new LinkedList<>();
+                serverChangeBuffer.put(dim, ch);
+            }
             ch.clear();
-            ch.add(new Tuple<>(null, false)); // null, false -> clear
+            ch.add(new Tuple<>(null, false)); //null, false -> clear
         }
     }
 
     private void notifyConnectionAdd(int dimid, List<TransmissionChain.LightConnection> added) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dimid);
+            if(ch == null) {
+                ch = new LinkedList<>();
+                serverChangeBuffer.put(dimid, ch);
+            }
             for (TransmissionChain.LightConnection l : added) {
                 ch.add(new Tuple<>(l, true));
             }
@@ -101,7 +117,11 @@ public class DataLightConnections extends AbstractData {
 
     private void notifyConnectionRemoval(int dimid, List<TransmissionChain.LightConnection> removal) {
         synchronized (lock) {
-            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.computeIfAbsent(dimid, k -> new LinkedList<>());
+            LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> ch = serverChangeBuffer.get(dimid);
+            if (ch == null) {
+                ch = new LinkedList<>();
+                serverChangeBuffer.put(dimid, ch);
+            }
             for (TransmissionChain.LightConnection l : removal) {
                 ch.add(new Tuple<>(l, false));
             }
@@ -124,7 +144,7 @@ public class DataLightConnections extends AbstractData {
             NBTTagList dataList = new NBTTagList();
             for (BlockPos pos : dat.keySet()) {
                 List<BlockPos> connections = dat.get(pos);
-                if (connections == null) continue;
+                if(connections == null) continue;
                 for (BlockPos end : connections) {
                     NBTTagCompound cmp = new NBTTagCompound();
                     cmp.setLong("sta", pos.toLong());
@@ -134,7 +154,7 @@ public class DataLightConnections extends AbstractData {
                 }
             }
 
-            compound.setTag(String.valueOf(dimId), dataList);
+            compound.setTag("" + dimId, dataList);
         }
     }
 
@@ -143,10 +163,10 @@ public class DataLightConnections extends AbstractData {
         synchronized (lock) {
             for (int dimId : serverChangeBuffer.keySet()) {
                 LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>> changes = serverChangeBuffer.get(dimId);
-                if (!changes.isEmpty()) {
+                if(!changes.isEmpty()) {
                     NBTTagList list = new NBTTagList();
                     for (Tuple<TransmissionChain.LightConnection, Boolean> tpl : changes) {
-                        if (tpl.key == null) {
+                        if(tpl.key == null) {
                             list = new NBTTagList();
                             NBTTagCompound cm = new NBTTagCompound();
                             cm.setBoolean("clear", true);
@@ -155,19 +175,13 @@ public class DataLightConnections extends AbstractData {
                         }
 
                         NBTTagCompound cmp = new NBTTagCompound();
-                        cmp.setLong(
-                            "sta",
-                            tpl.key.getStart()
-                                .toLong());
-                        cmp.setLong(
-                            "end",
-                            tpl.key.getEnd()
-                                .toLong());
+                        cmp.setLong("sta", tpl.key.getStart().toLong());
+                        cmp.setLong("end", tpl.key.getEnd().toLong());
                         cmp.setBoolean("s", tpl.value);
                         list.appendTag(cmp);
                     }
 
-                    compound.setTag(String.valueOf(dimId), list);
+                    compound.setTag("" + dimId, list);
                 }
             }
             serverChangeBuffer.clear();
@@ -181,21 +195,21 @@ public class DataLightConnections extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if (!(serverData instanceof DataLightConnections)) return;
+        if(!(serverData instanceof DataLightConnections)) return;
 
         clientReceivingData = true;
         try {
-            for (Object dimStr : ((DataLightConnections) serverData).clientReadBuffer.func_150296_c()) {
-                int dimId = Integer.parseInt((String) dimStr);
-                NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList((String) dimStr, 10);
+            for (String dimStr : ((DataLightConnections) serverData).clientReadBuffer.getKeySet()) {
+                int dimId = Integer.parseInt(dimStr);
+                NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList(dimStr, 10);
                 Map<BlockPos, List<BlockPos>> connectionMap = clientPosBuffer.get(dimId);
-                if (connectionMap == null) {
+                if(connectionMap == null) {
                     connectionMap = new ConcurrentHashMap<>();
                     clientPosBuffer.put(dimId, connectionMap);
                 }
                 for (int i = 0; i < list.tagCount(); i++) {
                     NBTTagCompound connection = list.getCompoundTagAt(i);
-                    if (connection.hasKey("clear")) {
+                    if(connection.hasKey("clear")) {
                         clientPosBuffer.remove(dimId);
                         break;
                     }
@@ -204,24 +218,24 @@ public class DataLightConnections extends AbstractData {
                     BlockPos end = BlockPos.fromLong(connection.getLong("end"));
                     boolean set = connection.getBoolean("s");
                     List<BlockPos> to = connectionMap.get(start);
-                    if (set) {
-                        if (to == null) {
+                    if(set) {
+                        if(to == null) {
                             to = new LinkedList<>();
                             connectionMap.put(start, to);
                         }
-                        if (!to.contains(end)) {
+                        if(!to.contains(end)) {
                             to.add(end);
                         }
                     } else {
-                        if (to != null) {
+                        if(to != null) {
                             to.remove(end);
-                            if (to.isEmpty()) {
+                            if(to.isEmpty()) {
                                 connectionMap.remove(start);
                             }
                         }
                     }
                 }
-                if (connectionMap.isEmpty()) {
+                if(connectionMap.isEmpty()) {
                     clientPosBuffer.remove(dimId);
                 }
             }
@@ -242,5 +256,6 @@ public class DataLightConnections extends AbstractData {
         }
 
     }
+
 
 }

@@ -1,23 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.geolosys;
-
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.orestages.api.OreTiersAPI;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
 import shordinger.astralsorcery.client.util.item.IItemRenderer;
@@ -26,8 +15,17 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import net.darkhax.gamestages.GameStageHelper;
+import net.darkhax.orestages.api.OreTiersAPI;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.Tuple;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,23 +34,19 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  * Created by HellFirePvP
  * Date: 03.10.2017 / 17:39
  */
-public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeolosysSampleCluster>
-    implements IItemRenderer {
+public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeolosysSampleCluster> implements IItemRenderer {
 
     private static int dlC1 = -1;
-    private static final BindableResource texCelestialCrystals = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "c_crystal_tex_colorless");
+    private static final BindableResource texCelestialCrystals = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "c_crystal_tex_colorless");
 
-    private static int[] rotMapping = new int[]{45, 135, 270, 90, 315, 0, 180, 225};
+    private static int[] rotMapping = new int[] { 45, 135, 270, 90, 315, 0, 180, 225 };
 
     @Override
-    public void render(TileGeolosysSampleCluster te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileGeolosysSampleCluster te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         IBlockState relevantState = ModIntegrationGeolosys.geolosysSample.getDefaultState();
-        if (OreTiersAPI.hasReplacement(relevantState)) {
+        if(OreTiersAPI.hasReplacement(relevantState)) {
             Tuple<String, IBlockState> info = OreTiersAPI.getStageInfo(relevantState);
-            if (info != null && Minecraft.getMinecraft().thePlayer != null
-                && !GameStageHelper.hasStage(Minecraft.getMinecraft().thePlayer, info.getFirst())) {
+            if(info != null && Minecraft.getMinecraft().player != null && !GameStageHelper.hasStage(Minecraft.getMinecraft().player, info.getFirst())) {
                 return;
             }
         }
@@ -84,7 +78,7 @@ public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeo
         texCelestialCrystals.bind();
         int dlSelected = dlC1;
         WavefrontObject obj = OBJModelLibrary.crystalsStage1;
-        if (dlSelected == -1) {
+        if(dlSelected == -1) {
             dlSelected = GLAllocation.generateDisplayLists(1);
             dlC1 = dlSelected;
             GL11.glNewList(dlSelected, GL11.GL_COMPILE);
@@ -102,7 +96,7 @@ public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeo
         GL11.glTranslated(0.5, 0.25, 0.5);
         GL11.glScalef(0.2F, 0.2F, 0.2F);
         GL11.glRotated(-10, 0, 0, 1);
-        GL11.glRotated(20, 1, 0, 0);
+        GL11.glRotated( 20, 1, 0, 0);
         GL11.glRotated(-70, 0, 1, 0);
         GL11.glDisable(GL11.GL_CULL_FACE);
         RenderHelper.disableStandardItemLighting();

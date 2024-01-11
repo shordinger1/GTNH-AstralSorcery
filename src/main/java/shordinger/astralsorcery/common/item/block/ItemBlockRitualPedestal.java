@@ -1,16 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.block;
 
-import net.minecraft.item.ItemBlock;
-
 import shordinger.astralsorcery.common.lib.BlocksAS;
+import shordinger.wrapper.net.minecraft.item.ItemBlock;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,13 +24,12 @@ public class ItemBlockRitualPedestal extends ItemBlock {
         super(BlocksAS.ritualPedestal);
     }
 
-    /*
-     * public static void setBeaconType(ItemStack stack, boolean isPlayerBeacon) {
-     * NBTHelper.getData(stack).setBoolean("playerBeacon", isPlayerBeacon);
-     * }
-     * public static boolean isPlayerBeacon(ItemStack stack) {
-     * return NBTHelper.getData(stack).getBoolean("playerBeacon");
-     * }
-     */
+    /*public static void setBeaconType(ItemStack stack, boolean isPlayerBeacon) {
+        NBTHelper.getData(stack).setBoolean("playerBeacon", isPlayerBeacon);
+    }
+
+    public static boolean isPlayerBeacon(ItemStack stack) {
+        return NBTHelper.getData(stack).getBoolean("playerBeacon");
+    }*/
 
 }

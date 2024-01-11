@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -32,17 +32,14 @@ public class EntityFXCrystalBurst extends EntityFXFacingSprite implements ICompl
     private static SpriteSheetResource getSprite(int burstId) {
         burstId = Math.abs(burstId) % 3;
         switch (burstId) {
-            case 0 -> {
+            case 0:
                 return SpriteLibrary.spriteCelestialBurst1;
-            }
-            case 1 -> {
+            case 1:
                 return SpriteLibrary.spriteCelestialBurst2;
-            }
-            case 2 -> {
+            case 2:
                 return SpriteLibrary.spriteCelestialBurst3;
-            }
-            default -> {
-            }
+            default:
+                break;
         }
         return SpriteLibrary.spriteCelestialBurst1;
     }

@@ -1,30 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
 import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,12 +32,12 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public enum TreeTypes {
 
-    OAK("minecraft", "log", "leaves", "sapling", new int[]{0, 4, 8, 12}, new int[]{0, 4, 8, 12}, 0),
-    SPRUCE("minecraft", "log", "leaves", "sapling", new int[]{1, 5, 9, 13}, new int[]{1, 5, 9, 13}, 1),
-    BIRCH("minecraft", "log", "leaves", "sapling", new int[]{2, 6, 10, 14}, new int[]{2, 6, 10, 14}, 2),
-    JUNGLE("minecraft", "log", "leaves", "sapling", new int[]{3, 7, 11, 15}, new int[]{3, 7, 11, 15}, 3),
-    ACACIA("minecraft", "log2", "leaves2", "sapling", new int[]{0, 4, 8, 12}, new int[]{0, 4, 8, 12}, 4),
-    DARK_OAK("minecraft", "log2", "leaves2", "sapling", new int[]{1, 5, 9, 13}, new int[]{1, 5, 9, 13}, 5),
+    OAK("minecraft", "log", "leaves", "sapling", new int[] {0, 4, 8, 12}, new int[] {0, 4, 8, 12}, 0),
+    SPRUCE("minecraft", "log", "leaves", "sapling", new int[] {1, 5, 9, 13}, new int[] {1, 5, 9, 13}, 1),
+    BIRCH("minecraft", "log", "leaves", "sapling", new int[] {2, 6, 10, 14}, new int[] {2, 6, 10, 14}, 2),
+    JUNGLE("minecraft", "log", "leaves", "sapling", new int[] {3, 7, 11, 15}, new int[] {3, 7, 11, 15}, 3),
+    ACACIA("minecraft", "log2", "leaves2", "sapling", new int[] {0, 4, 8, 12}, new int[] {0, 4, 8, 12}, 4),
+    DARK_OAK("minecraft", "log2", "leaves2", "sapling", new int[] {1, 5, 9, 13}, new int[] {1, 5, 9, 13}, 5),
 
     SLIME(Mods.TICONSTRUCT, "slime_congealed", "slime_leaves", "slime_sapling", null, null, null);
 
@@ -59,39 +56,19 @@ public enum TreeTypes {
     private BlockStateCheck leavesCheck;
     private BlockStateCheck saplingCheck;
 
-    TreeTypes(Mods parentMod, String resBlockName, String resLeavesName, String resSaplingName, @Nullable int[] logMeta,
-              @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
-        this(
-            parentMod.modid,
-            new ResourceLocation(parentMod.modid, resBlockName),
-            new ResourceLocation(parentMod.modid, resLeavesName),
-            new ResourceLocation(parentMod.modid, resSaplingName),
-            logMeta,
-            leaveMeta,
-            saplingMeta);
+    TreeTypes(Mods parentMod, String resBlockName, String resLeavesName, String resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
+        this(parentMod.modid, new ResourceLocation(parentMod.modid, resBlockName), new ResourceLocation(parentMod.modid, resLeavesName), new ResourceLocation(parentMod.modid, resSaplingName), logMeta, leaveMeta, saplingMeta);
     }
 
-    TreeTypes(Mods parentMod, ResourceLocation resBlockName, ResourceLocation resLeavesName,
-              ResourceLocation resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta,
-              @Nullable Integer saplingMeta) {
+    TreeTypes(Mods parentMod, ResourceLocation resBlockName, ResourceLocation resLeavesName, ResourceLocation resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
         this(parentMod.modid, resBlockName, resLeavesName, resSaplingName, logMeta, leaveMeta, saplingMeta);
     }
 
-    TreeTypes(String parentModId, String resBlockName, String resLeavesName, String resSaplingName,
-              @Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
-        this(
-            parentModId,
-            new ResourceLocation(parentModId, resBlockName),
-            new ResourceLocation(parentModId, resLeavesName),
-            new ResourceLocation(parentModId, resSaplingName),
-            logMeta,
-            leaveMeta,
-            saplingMeta);
+    TreeTypes(String parentModId, String resBlockName, String resLeavesName, String resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
+        this(parentModId, new ResourceLocation(parentModId, resBlockName), new ResourceLocation(parentModId, resLeavesName), new ResourceLocation(parentModId, resSaplingName), logMeta, leaveMeta, saplingMeta);
     }
 
-    TreeTypes(String parentModId, ResourceLocation resBlockName, ResourceLocation resLeavesName,
-              ResourceLocation resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta,
-              @Nullable Integer saplingMeta) {
+    TreeTypes(String parentModId, ResourceLocation resBlockName, ResourceLocation resLeavesName, ResourceLocation resSaplingName, @Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
         this.parentModId = parentModId;
         this.resBlockName = resBlockName;
         this.resLeavesName = resLeavesName;
@@ -102,8 +79,7 @@ public enum TreeTypes {
 
     private void load(@Nullable int[] logMeta, @Nullable int[] leaveMeta, @Nullable Integer saplingMeta) {
         if (!Loader.isModLoaded(this.parentModId) && !this.parentModId.equals("minecraft")) {
-            AstralSorcery.log
-                .info("Not loading tree type " + name() + " as the mod " + this.parentModId + " is not loaded.");
+            AstralSorcery.log.info("Not loading tree type " + name() + " as the mod " + this.parentModId + " is not loaded.");
             return;
         }
 
@@ -112,16 +88,13 @@ public enum TreeTypes {
         Block sapling = ForgeRegistries.BLOCKS.getValue(this.resSaplingName);
 
         if (isEmpty(log) || isEmpty(leaf) || isEmpty(sapling)) {
-            AstralSorcery.log
-                .info("Not loading tree type " + name() + " as its blocks don't exist in the currently loaded mods.");
+            AstralSorcery.log.info("Not loading tree type " + name() + " as its blocks don't exist in the currently loaded mods.");
             return;
         }
 
         logCheck = logMeta == null ? new BlockStateCheck.Block(log) : new BlockStateCheck.AnyMeta(log, logMeta);
-        leavesCheck = leaveMeta == null ? new BlockStateCheck.Block(leaf)
-            : new BlockStateCheck.AnyMeta(leaf, leaveMeta);
-        saplingCheck = saplingMeta == null ? new BlockStateCheck.Block(sapling)
-            : new BlockStateCheck.Meta(sapling, saplingMeta);
+        leavesCheck = leaveMeta == null ? new BlockStateCheck.Block(leaf) : new BlockStateCheck.AnyMeta(leaf, leaveMeta);
+        saplingCheck = saplingMeta == null ? new BlockStateCheck.Block(sapling) : new BlockStateCheck.Meta(sapling, saplingMeta);
 
         if (logMeta == null) {
             this.logStates.add(log.getDefaultState());
@@ -189,21 +162,19 @@ public enum TreeTypes {
 
     @Nullable
     public static TreeTypes getTree(World world, BlockPos pos) {
-        return getTree(world, pos, WorldHelper.getBlockState(world, pos));
+        return getTree(world, pos, world.getBlockState(pos));
     }
 
     @Nullable
     public static TreeTypes getTree(World world, BlockPos pos, IBlockState blockToTest) {
         for (TreeTypes type : values()) {
-            if (type.exists()
-                && (type.logCheck.isStateValid(blockToTest) || type.leavesCheck.isStateValid(blockToTest))) {
+            if (type.exists() && (type.logCheck.isStateValid(blockToTest) || type.leavesCheck.isStateValid(blockToTest))) {
                 return type;
             }
         }
         return null;
     }
 
-    public static void init() {
-    } // Well... all static here.
+    public static void init() {} //Well... all static here.
 
 }

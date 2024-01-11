@@ -1,24 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.useables;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-
-import com.gtnewhorizons.modularui.api.forge.IItemHandler;
-
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandlerModifiable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,17 +37,13 @@ public class ItemPerkSeal extends Item {
         return getPlayerSealCount(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
     }
 
-    public static int getPlayerSealCount(IItemHandler inv) {// TODO ???
+    public static int getPlayerSealCount(IItemHandler inv) {
         return ItemUtils.findItemsInInventory(inv, new ItemStack(ItemsAS.perkSeal), false)
-            .stream()
-            .mapToInt(ItemStack::getCount)
-            .sum();
+                .stream().mapToInt(ItemStack::getCount).sum();
     }
 
     public static boolean useSeal(EntityPlayer player, boolean simulate) {
-        return useSeal(
-            (IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            simulate);
+        return useSeal((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), simulate);
     }
 
     public static boolean useSeal(IItemHandlerModifiable inv, boolean simulate) {

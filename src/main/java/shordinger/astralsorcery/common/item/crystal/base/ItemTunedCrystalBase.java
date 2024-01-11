@@ -1,28 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.crystal.base;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IMinorConstellation;
@@ -33,6 +18,19 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.base.ItemConstellationFocus;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,30 +49,24 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase implement
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         Optional<Boolean> out = addCrystalPropertyToolTip(stack, tooltip);
-        if (GuiScreen.isShiftKeyDown() && out.isPresent()) {
+        if(GuiScreen.isShiftKeyDown() && out.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
 
             IWeakConstellation c = getMainConstellation(stack);
-            if (c != null) {
-                if (EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier)
-                    && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                    tooltip.add(
-                        TextFormatting.GRAY + I18n
-                            .format("crystal.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
-                } else if (!out.get()) {
+            if(c != null) {
+                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
+                } else if(!out.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                     out = Optional.of(true);
                 }
             }
 
             IMinorConstellation tr = getTrait(stack);
-            if (tr != null) {
-                if (EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier)
-                    && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
-                    tooltip.add(
-                        TextFormatting.GRAY
-                            + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
-                } else if (!out.get()) {
+            if(tr != null) {
+                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
+                } else if(!out.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
             }

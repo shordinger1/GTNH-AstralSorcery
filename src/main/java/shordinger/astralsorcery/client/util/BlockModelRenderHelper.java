@@ -1,37 +1,35 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.BitSet;
-import java.util.List;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BlockFluidRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.EntityRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.BakedQuad;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
+import shordinger.wrapper.net.minecraft.client.renderer.color.BlockColors;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureUtil;
+import shordinger.wrapper.net.minecraft.crash.CrashReport;
+import shordinger.wrapper.net.minecraft.crash.CrashReportCategory;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.ReportedException;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.Vec3d;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockFluidRenderer;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.ReportedException;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
+import java.util.BitSet;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,16 +44,12 @@ public class BlockModelRenderHelper {
 
     private static BlockFluidRenderer getFluidRenderer() {
         if (bfr == null) {
-            bfr = new BlockFluidRenderer(
-                new BlockColorsOverride(
-                    Minecraft.getMinecraft()
-                        .getBlockColors()));
+            bfr = new BlockFluidRenderer(new BlockColorsOverride(Minecraft.getMinecraft().getBlockColors()));
         }
         return bfr;
     }
 
-    public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb,
-                                                 int color) {
+    public static void renderBlockModelWithColor(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vb, int color) {
         try {
             EnumBlockRenderType type = state.getRenderType();
             if (type == EnumBlockRenderType.INVISIBLE) return;
@@ -63,12 +57,8 @@ public class BlockModelRenderHelper {
 
             switch (type) {
                 case MODEL:
-                    IBakedModel model = Minecraft.getMinecraft()
-                        .getBlockRendererDispatcher()
-                        .getBlockModelShapes()
-                        .getModelForState(state);
-                    state = state.getBlock()
-                        .getExtendedState(state, world, pos);
+                    IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
+                    state = state.getBlock().getExtendedState(state, world, pos);
                     renderModelFlat(world, model, state, pos, vb, true, MathHelper.getPositionRandom(pos), color);
                     break;
                 case LIQUID:
@@ -82,21 +72,15 @@ public class BlockModelRenderHelper {
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block in world");
             CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being tesselated");
-            CrashReportCategory.addBlockInfo(
-                crashreportcategory,
-                pos,
-                state.getBlock(),
-                state.getBlock()
-                    .getMetaFromState(state));
+            CrashReportCategory.addBlockInfo(crashreportcategory, pos, state.getBlock(), state.getBlock().getMetaFromState(state));
             throw new ReportedException(crashreport);
         }
     }
 
-    private static void renderModelFlat(IBlockAccess worldIn, IBakedModel modelIn, IBlockState stateIn, BlockPos posIn,
-                                        BufferBuilder buffer, boolean checkSides, long rand, int color) {
+    private static void renderModelFlat(IBlockAccess worldIn, IBakedModel modelIn, IBlockState stateIn, BlockPos posIn, BufferBuilder buffer, boolean checkSides, long rand, int color) {
         BitSet bitset = new BitSet(3);
 
-        for (ForgeDirection enumfacing : ForgeDirection.values()) {
+        for (EnumFacing enumfacing : EnumFacing.values()) {
             List<BakedQuad> sidedQuads = modelIn.getQuads(stateIn, enumfacing, rand);
             if (!sidedQuads.isEmpty() && (!checkSides || stateIn.shouldSideBeRendered(worldIn, posIn, enumfacing))) {
                 int i = stateIn.getPackedLightmapCoords(worldIn, posIn.offset(enumfacing));
@@ -105,16 +89,17 @@ public class BlockModelRenderHelper {
         }
         List<BakedQuad> quads = modelIn.getQuads(stateIn, null, rand);
         if (!quads.isEmpty()) {
-            renderQuadsFlat(worldIn, stateIn, posIn, -1, true, buffer, quads, bitset, color);
+            renderQuadsFlat(worldIn, stateIn, posIn, -1, true, buffer, quads, bitset,  color);
         }
     }
 
     private static void renderQuadsFlat(IBlockAccess blockAccessIn, IBlockState stateIn, BlockPos posIn,
-                                        int brightnessIn, boolean ownBrightness, BufferBuilder buffer, List<BakedQuad> list, BitSet bitSet, int color) {
-        BlockPos vec3d = stateIn.getOffset(blockAccessIn, posIn);
-        double d0 = (double) posIn.getX() + vec3d.x;
-        double d1 = (double) posIn.getY() + vec3d.y;
-        double d2 = (double) posIn.getZ() + vec3d.z;
+                                 int brightnessIn, boolean ownBrightness, BufferBuilder buffer,
+                                 List<BakedQuad> list, BitSet bitSet, int color) {
+        Vec3d vec3d = stateIn.getOffset(blockAccessIn, posIn);
+        double d0 = (double)posIn.getX() + vec3d.x;
+        double d1 = (double)posIn.getY() + vec3d.y;
+        double d2 = (double)posIn.getZ() + vec3d.z;
         int i = 0;
 
         for (int j = list.size(); i < j; ++i) {
@@ -133,10 +118,10 @@ public class BlockModelRenderHelper {
                 color = TextureUtil.anaglyphColor(color);
             }
 
-            float red = (float) (color >> 16 & 255) / 255F;
-            float green = (float) (color >> 8 & 255) / 255F;
-            float blue = (float) (color & 255) / 255F;
-            if (bakedquad.shouldApplyDiffuseLighting()) {
+            float red   = (float) (color >> 16  & 255) / 255F;
+            float green = (float) (color >> 8   & 255) / 255F;
+            float blue  = (float) (color        & 255) / 255F;
+            if(bakedquad.shouldApplyDiffuseLighting()) {
                 float diffuse = net.minecraftforge.client.model.pipeline.LightUtil.diffuseLight(bakedquad.getFace());
                 red *= diffuse;
                 green *= diffuse;
@@ -151,8 +136,8 @@ public class BlockModelRenderHelper {
         }
     }
 
-    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, ForgeDirection face,
-                                       @Nullable float[] quadBounds, BitSet boundsFlags) {
+    private static void fillQuadBounds(IBlockState stateIn, int[] vertexData, EnumFacing face, @Nullable float[] quadBounds, BitSet boundsFlags)
+    {
         float f = 32.0F;
         float f1 = 32.0F;
         float f2 = 32.0F;
@@ -173,19 +158,19 @@ public class BlockModelRenderHelper {
         }
 
         if (quadBounds != null) {
-            quadBounds[ForgeDirection.WEST.getIndex()] = f;
-            quadBounds[ForgeDirection.EAST.getIndex()] = f3;
-            quadBounds[ForgeDirection.DOWN.getIndex()] = f1;
-            quadBounds[ForgeDirection.UP.getIndex()] = f4;
-            quadBounds[ForgeDirection.NORTH.getIndex()] = f2;
-            quadBounds[ForgeDirection.SOUTH.getIndex()] = f5;
-            int j = ForgeDirection.values().length;
-            quadBounds[ForgeDirection.WEST.getIndex() + j] = 1.0F - f;
-            quadBounds[ForgeDirection.EAST.getIndex() + j] = 1.0F - f3;
-            quadBounds[ForgeDirection.DOWN.getIndex() + j] = 1.0F - f1;
-            quadBounds[ForgeDirection.UP.getIndex() + j] = 1.0F - f4;
-            quadBounds[ForgeDirection.NORTH.getIndex() + j] = 1.0F - f2;
-            quadBounds[ForgeDirection.SOUTH.getIndex() + j] = 1.0F - f5;
+            quadBounds[EnumFacing.WEST.getIndex()] = f;
+            quadBounds[EnumFacing.EAST.getIndex()] = f3;
+            quadBounds[EnumFacing.DOWN.getIndex()] = f1;
+            quadBounds[EnumFacing.UP.getIndex()] = f4;
+            quadBounds[EnumFacing.NORTH.getIndex()] = f2;
+            quadBounds[EnumFacing.SOUTH.getIndex()] = f5;
+            int j = EnumFacing.values().length;
+            quadBounds[EnumFacing.WEST.getIndex() + j] = 1.0F - f;
+            quadBounds[EnumFacing.EAST.getIndex() + j] = 1.0F - f3;
+            quadBounds[EnumFacing.DOWN.getIndex() + j] = 1.0F - f1;
+            quadBounds[EnumFacing.UP.getIndex() + j] = 1.0F - f4;
+            quadBounds[EnumFacing.NORTH.getIndex() + j] = 1.0F - f2;
+            quadBounds[EnumFacing.SOUTH.getIndex() + j] = 1.0F - f5;
         }
 
         switch (face) {
@@ -227,13 +212,13 @@ public class BlockModelRenderHelper {
         }
 
         @Override
-        public int colorMultiplier(IBlockState state, @Nullable IBlockAccess blockAccess, @Nullable BlockPos pos,
-                                   int tintIndex) {
-            if (override != -1) {
+        public int colorMultiplier(IBlockState state, @Nullable IBlockAccess blockAccess, @Nullable BlockPos pos, int tintIndex) {
+            if(override != -1) {
                 return override;
             }
             return prev.colorMultiplier(state, blockAccess, pos, tintIndex);
         }
     }
+
 
 }

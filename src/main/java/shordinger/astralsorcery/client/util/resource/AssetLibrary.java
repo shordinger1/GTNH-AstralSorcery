@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.resource;
 
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.sky.RenderSkybox;
 import shordinger.astralsorcery.client.util.TexturePreloader;
+import shordinger.wrapper.net.minecraft.client.resources.IResourceManager;
+import shordinger.wrapper.net.minecraft.client.resources.IResourceManagerReloadListener;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -32,15 +32,14 @@ public class AssetLibrary implements IResourceManagerReloadListener {
 
     private static Map<AssetLoader.SubLocation, Map<String, BindableResource>> loadedTextures = new HashMap<>();
 
-    private AssetLibrary() {
-    }
+    private AssetLibrary() {}
 
     public static BindableResource loadTexture(AssetLoader.TextureLocation location, String name) {
-        if (name.endsWith(".png")) {
+        if(name.endsWith(".png")) {
             throw new IllegalArgumentException("Tried to loadTexture with appended .png from the AssetLibrary!");
         }
         Map<String, BindableResource> resources = loadedTextures.computeIfAbsent(location, l -> new HashMap<>());
-        if (resources.containsKey(name)) {
+        if(resources.containsKey(name)) {
             return resources.get(name);
         }
         BindableResource res = AssetLoader.load(AssetLoader.AssetLocation.TEXTURES, location, name, ".png");
@@ -50,12 +49,12 @@ public class AssetLibrary implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(@Nullable IResourceManager resourceManager) {
-        if (reloading) return;
+        if(reloading) return;
         reloading = true;
         AstralSorcery.log.info("[AssetLibrary] Refreshing and Invalidating Resources");
         for (Map<String, BindableResource> map : loadedTextures.values()) {
             for (BindableResource res : map.values()) {
-                res.invalidateAndReload(); // Massively unloading all textures.
+                res.invalidateAndReload(); //Massively unloading all textures.
             }
         }
         reloading = false;

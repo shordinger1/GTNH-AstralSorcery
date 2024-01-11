@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -23,17 +23,19 @@ import shordinger.astralsorcery.common.util.OreDictAlias;
 public class TelescopeRecipe extends AttunementRecipe {
 
     public TelescopeRecipe() {
-        super(
-            shapedRecipe("telescope", BlockMachine.MachineType.TELESCOPE.asStack())
-                .addPart(ItemsAS.handTelescope, ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS, ShapedRecipeSlot.CENTER)
-                .addPart(OreDictAlias.ITEM_GOLD_INGOT, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT)
-                .addPart(
-                    OreDictAlias.ITEM_STICKS,
-                    ShapedRecipeSlot.LOWER_LEFT,
-                    ShapedRecipeSlot.LOWER_CENTER,
-                    ShapedRecipeSlot.LOWER_RIGHT)
-                .unregisteredAccessibleShapedRecipe());
+        super(shapedRecipe("telescope", BlockMachine.MachineType.TELESCOPE.asStack())
+                .addPart(ItemsAS.handTelescope,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(OreDictAlias.ITEM_STICKS,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.mappings;
 
+import shordinger.astralsorcery.common.constellation.IConstellation;
+import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.common.constellation.IConstellation;
-import shordinger.astralsorcery.common.util.data.Vector3;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +32,7 @@ public class ClientConstellationPositionMapping {
 
     private Map<IConstellation, RenderPosition> activePositions = new HashMap<>();
 
-    // Collection should be sorted: Major ones first, Minor ones later.
+    //Collection should be sorted: Major ones first, Minor ones later.
     public void updatePositions(LinkedList<IConstellation> activeConstellations) {
         activePositions.clear();
         for (int i = 0; i < Math.min(activeConstellations.size(), availablePositions.size()); i++) {
@@ -45,23 +45,23 @@ public class ClientConstellationPositionMapping {
     }
 
     static {
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.2, -0.2, 0, 5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.2, -0.2, -0.05, 5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(0, -0.2, -0.2, 8));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4, -0.6, 0.5, 18));
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.3, -0.5, 0.5, 19));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.2,  -0.2,     0,   5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.2,  -0.2,  -0.05,  5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -0.2,  -0.2,   8));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -0.6,   0.5,  18));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.3,  -0.5,   0.5,  19));
 
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.15, -0.2, -0.1, 5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.05, -0.3, 0.4, 10));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3, -0.3, 0.1, 10));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3, -0.4, -0.35, 15));
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.4, -0.4, 0.2, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.2,  -0.1,   5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.05, -0.3,   0.4,  10));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.3,   0.1,  10));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.4,  -0.35, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.4,  -0.4,   0.2,  15));
 
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.15, -0.5, 0.2, 15));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5, -1.1, -0.2, 32));
-        availablePositions.add(RenderPosition.createRenderInfoFor(0.5, -1.1, -0.2, 30));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4, -1.3, 0.5, 35));
-        availablePositions.add(RenderPosition.createRenderInfoFor(0, -1.1, -0.5, 28));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.5,   0.2,  15));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  32));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.5,  -1.1,  -0.2,  30));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -1.3,   0.5,  35));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -1.1,  -0.5,  28));
     }
 
     public static class RenderPosition {

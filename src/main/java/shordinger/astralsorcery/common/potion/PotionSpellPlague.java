@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.potion;
 
-import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,20 +37,20 @@ public class PotionSpellPlague extends PotionCustomTexture {
 
     @Override
     public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
-        // if(entityLivingBaseIn.hasCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null)) {
-        // SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
-        // if(plague != null){
-        // plague.onTick(entityLivingBaseIn);
-        // PotionApplyEvent pe = entityLivingBaseIn.getActivePotionEffect(this);
-        // if(pe != null) {
-        // if(plague.onTick(entityLivingBaseIn)) {
-        // pe.duration = 1;
-        // } else {
-        // pe.duration = 100000;
-        // }
-        // }
-        // }
-        // }
+        //if(entityLivingBaseIn.hasCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null)) {
+        //    SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
+        //    if(plague != null){
+        //        plague.onTick(entityLivingBaseIn);
+        //        PotionApplyEvent pe = entityLivingBaseIn.getActivePotionEffect(this);
+        //        if(pe != null) {
+        //            if(plague.onTick(entityLivingBaseIn)) {
+        //                pe.duration = 1;
+        //            } else {
+        //                pe.duration = 100000;
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     @Override
@@ -67,7 +66,7 @@ public class PotionSpellPlague extends PotionCustomTexture {
     @Override
     @SideOnly(Side.CLIENT)
     public BindableResource getResource() {
-        if (texBuffer == null) {
+        if(texBuffer == null) {
             texBuffer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_spellplague");
         }
         return (BindableResource) texBuffer;

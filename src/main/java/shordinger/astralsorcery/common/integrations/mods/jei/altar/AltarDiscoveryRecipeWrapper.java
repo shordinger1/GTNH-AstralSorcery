@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
-import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -62,15 +62,12 @@ public class AltarDiscoveryRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        /*
-         * FontRenderer fr = minecraft.fontRenderer;
-         * String toWrite = IGuiRenderablePage.GUI_INTERFACE.getDescriptionFromStarlightAmount(I18n.format(
-         * "astralsorcery.journal.recipe.amt.desc"),
-         * recipe.getPassiveStarlightRequired(), TileAltar.AltarLevel.DISCOVERY.getStarlightMaxStorage());
-         * int w = fr.getStringWidth(toWrite);
-         * fr.drawString(toWrite, recipeWidth / 2 - w / 2 + 1, recipeHeight + 1, 0xCCCCFF);
-         * fr.drawString(toWrite, recipeWidth / 2 - w / 2, recipeHeight, 0x0044EE);
-         */
+        /*FontRenderer fr = minecraft.fontRenderer;
+        String toWrite = IGuiRenderablePage.GUI_INTERFACE.getDescriptionFromStarlightAmount(I18n.format("astralsorcery.journal.recipe.amt.desc"),
+                recipe.getPassiveStarlightRequired(), TileAltar.AltarLevel.DISCOVERY.getStarlightMaxStorage());
+        int w = fr.getStringWidth(toWrite);
+        fr.drawString(toWrite, recipeWidth / 2 - w / 2 + 1, recipeHeight + 1, 0xCCCCFF);
+        fr.drawString(toWrite, recipeWidth / 2 - w / 2, recipeHeight, 0x0044EE);*/
     }
 
     @Nullable

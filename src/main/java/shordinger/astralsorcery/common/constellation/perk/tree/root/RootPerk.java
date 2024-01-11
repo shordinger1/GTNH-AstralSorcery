@@ -1,15 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.config.Configuration;
 
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
@@ -21,6 +18,8 @@ import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePointCons
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,16 +39,10 @@ public class RootPerk extends AttributeModifierPerk {
         setRequireDiscoveredConstellation(constellation);
         this.constellation = constellation;
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, "root_" + name) {
-
             @Override
             public void loadFromConfig(Configuration cfg) {
-                expMultiplier = cfg.getFloat(
-                    "Exp_Multiplier",
-                    getConfigurationSection(),
-                    expMultiplier,
-                    0F,
-                    1024F,
-                    "Sets the exp multiplier exp gained from this root-perk are multiplied by. (So higher multiplier -> more exp)");
+                expMultiplier = cfg.getFloat("Exp_Multiplier", getConfigurationSection(), expMultiplier, 0F, 1024F,
+                        "Sets the exp multiplier exp gained from this root-perk are multiplied by. (So higher multiplier -> more exp)");
 
                 RootPerk.this.loadAdditionalConfigurations(cfg);
             }
@@ -58,11 +51,8 @@ public class RootPerk extends AttributeModifierPerk {
 
     @Override
     protected PerkTreePoint<? extends RootPerk> initPerkTreePoint() {
-        return new PerkTreePointConstellation<>(
-            this,
-            getOffset(),
-            constellation,
-            PerkTreePointConstellation.ROOT_SPRITE_SIZE);
+        return new PerkTreePointConstellation<>(this, getOffset(),
+                constellation, PerkTreePointConstellation.ROOT_SPRITE_SIZE);
     }
 
     @Override
@@ -72,8 +62,7 @@ public class RootPerk extends AttributeModifierPerk {
         expMultiplier *= multiplier;
     }
 
-    protected void loadAdditionalConfigurations(Configuration cfg) {
-    }
+    protected void loadAdditionalConfigurations(Configuration cfg) {}
 
     public IConstellation getConstellation() {
         return constellation;

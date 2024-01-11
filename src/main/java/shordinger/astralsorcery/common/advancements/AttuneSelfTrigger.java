@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -10,11 +10,11 @@ package shordinger.astralsorcery.common.advancements;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.advancements.instances.ConstellationInstance;
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod

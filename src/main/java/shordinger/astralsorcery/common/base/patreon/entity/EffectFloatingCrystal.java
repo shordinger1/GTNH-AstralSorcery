@@ -1,19 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
@@ -25,6 +19,12 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -41,8 +41,7 @@ public class EffectFloatingCrystal extends EntityComplexFX {
 
     private RefreshFunction refreshFunction;
     private PositionController positionUpdateFunction;
-    private AbstractRenderableTexture texCrystal = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_blue");
+    private AbstractRenderableTexture texCrystal = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_blue");
     private Color colorTheme = Color.WHITE;
 
     private double x, y, z;
@@ -72,19 +71,18 @@ public class EffectFloatingCrystal extends EntityComplexFX {
     public void tick() {
         super.tick();
 
-        if (maxAge >= 0 && age >= maxAge) {
-            if (refreshFunction != null) {
-                Entity rView = Minecraft.getMinecraft()
-                    .getRenderViewEntity();
-                if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
-                if (rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
-                    if (refreshFunction.shouldRefresh()) {
+        if(maxAge >= 0 && age >= maxAge) {
+            if(refreshFunction != null) {
+                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+                if(rView == null) rView = Minecraft.getMinecraft().player;
+                if(rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
+                    if(refreshFunction.shouldRefresh()) {
                         age = 0;
                     }
                 }
             }
         }
-        if (positionUpdateFunction != null) {
+        if(positionUpdateFunction != null) {
             this.prevX = this.x;
             this.prevY = this.y;
             this.prevZ = this.z;
@@ -103,17 +101,9 @@ public class EffectFloatingCrystal extends EntityComplexFX {
         double iY = RenderingUtils.interpolate(prevY, y, pTicks);
         double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);
         long seed = 0x515F1EB654AB915EL;
-        RenderingUtils.renderLightRayEffects(
-            iX + tr.getX(),
-            iY + 0.2 + tr.getY(),
-            iZ + tr.getZ(),
-            this.colorTheme,
-            seed,
-            ClientScheduler.getClientTick(),
-            10,
-            1.4F,
-            50,
-            25);
+        RenderingUtils.renderLightRayEffects(iX + tr.getX(), iY + 0.2 + tr.getY(), iZ + tr.getZ(),
+                this.colorTheme, seed, ClientScheduler.getClientTick(),
+                10, 1.4F, 50, 25);
 
         GlStateManager.pushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
@@ -141,7 +131,7 @@ public class EffectFloatingCrystal extends EntityComplexFX {
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.05F, 0.05F, 0.05F);
         tex.bindTexture();
-        if (dlCrystal == -1) {
+        if(dlCrystal == -1) {
             dlCrystal = GLAllocation.generateDisplayLists(1);
             GlStateManager.glNewList(dlCrystal, GL11.GL_COMPILE);
             OBJModelLibrary.bigCrystal.renderAll(true);

@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.starlight.IIndependentStarlightSource;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +43,7 @@ public abstract class SimpleIndependentSource implements IIndependentStarlightSo
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        if (starlightType != null) {
+        if(starlightType != null) {
             starlightType.writeToNBT(compound);
         }
     }

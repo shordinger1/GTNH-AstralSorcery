@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR})
 public @interface ASMCallHook {
-    // Interface to note a method is being directly referenced through bytecode manipulation
-    // to avoid renaming or deleting methods on accident
+    //Interface to note a method is being directly referenced through bytecode manipulation
+    //to avoid renaming or deleting methods on accident
 }

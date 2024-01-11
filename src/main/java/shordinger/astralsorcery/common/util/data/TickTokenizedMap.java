@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
-import java.util.EnumSet;
-import java.util.Iterator;
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nonnull;
-
-import cpw.mods.fml.common.gameevent.TickEvent;
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import java.util.EnumSet;
+import java.util.Iterator;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,10 +22,9 @@ import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 11:25
  */
-public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> extends TokenizedMap<K, V>
-    implements ITickHandler {
+public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> extends TokenizedMap<K, V> implements ITickHandler {
 
-    private final EnumSet<TickEvent.Type> tickTypes;
+    private EnumSet<TickEvent.Type> tickTypes;
 
     public TickTokenizedMap(@Nonnull TickEvent.Type first, TickEvent.Type... restTypes) {
         this.tickTypes = EnumSet.of(first, restTypes);
@@ -37,12 +35,9 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
         Iterator<Entry<K, V>> iteratorEntries = entrySet().iterator();
         while (iteratorEntries.hasNext()) {
             Entry<K, V> entry = iteratorEntries.next();
-            entry.getValue()
-                .tick();
-            if (entry.getValue()
-                .getRemainingTimeout() <= 0) {
-                entry.getValue()
-                    .onTimeout();
+            entry.getValue().tick();
+            if(entry.getValue().getRemainingTimeout() <= 0) {
+                entry.getValue().onTimeout();
                 iteratorEntries.remove();
             }
         }
@@ -93,8 +88,7 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
         }
 
         @Override
-        public void onTimeout() {
-        }
+        public void onTimeout() {}
 
         @Override
         @Nonnull

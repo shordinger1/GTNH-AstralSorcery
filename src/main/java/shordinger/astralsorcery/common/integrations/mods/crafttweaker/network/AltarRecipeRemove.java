@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
 import crafttweaker.CraftTweakerAPI;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,8 +30,7 @@ public class AltarRecipeRemove implements SerializeableRecipe {
 
     private String recipeRegistryName;
 
-    AltarRecipeRemove() {
-    }
+    AltarRecipeRemove() {}
 
     public AltarRecipeRemove(String recipeRegistryName) {
         this.recipeRegistryName = recipeRegistryName;
@@ -70,9 +69,7 @@ public class AltarRecipeRemove implements SerializeableRecipe {
             CraftingAccessManager.tryRemoveAltarRecipeByOutputAndLevel(this.matchOutRemove, this.level);
         } else {
             if (!CraftingAccessManager.tryRemoveAltarRecipe(new ResourceLocation(this.recipeRegistryName))) {
-                CraftTweakerAPI.logError(
-                    "[AstralSorcery Altar Crafting] Could not find recipe to remove with name "
-                        + this.recipeRegistryName);
+                CraftTweakerAPI.logError("[AstralSorcery Altar Crafting] Could not find recipe to remove with name " + this.recipeRegistryName);
             }
         }
     }

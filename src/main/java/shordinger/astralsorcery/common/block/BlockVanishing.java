@@ -1,39 +1,40 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.tile.TileVanishing;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityLiving;
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -56,8 +57,7 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-    }
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {}
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -80,7 +80,7 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -90,9 +90,7 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
-    }
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
 
     @Override
     public int quantityDropped(Random random) {
@@ -101,7 +99,7 @@ public class BlockVanishing extends BlockContainer {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
+        return Items.AIR;
     }
 
     @Override
@@ -122,14 +120,12 @@ public class BlockVanishing extends BlockContainer {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos,
-                                    EntityLiving.SpawnPlacementType type) {
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
 
@@ -148,17 +144,11 @@ public class BlockVanishing extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 4; i++) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                pos.getX() + rand.nextFloat(),
-                pos.getY() + 0.7 + rand.nextFloat() * 0.3,
-                pos.getZ() + rand.nextFloat());
-            p.gravity(0.004)
-                .scale(0.3F + rand.nextFloat() * 0.2F)
-                .setMaxAge(45 + rand.nextInt(20));
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
-                .setAlphaMultiplier(1F);
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + rand.nextFloat(), pos.getY() + 0.7 + rand.nextFloat() * 0.3, pos.getZ() + rand.nextFloat());
+            p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(45 + rand.nextInt(20));
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(1F);
             p.motion(0, -rand.nextFloat() * 0.001, 0);
-            if (rand.nextInt(6) == 0) {
+            if(rand.nextInt(6) == 0) {
                 p.setColor(Color.WHITE);
                 p.scale(0.1F + rand.nextFloat() * 0.1F);
             } else {

@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.data;
 
-import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +33,7 @@ public abstract class CachedPersistentData {
         return PersistentDataManager.INSTANCE.savePersistentData(this);
     }
 
-    // Return true to indicate 'this' has changed and added data from 'that' and might need saving
+    //Return true to indicate 'this' has changed and added data from 'that' and might need saving
     protected abstract boolean mergeFrom(CachedPersistentData that);
 
     public final PersistentDataManager.PersistentKey getKey() {
@@ -45,8 +44,7 @@ public abstract class CachedPersistentData {
 
     public abstract void writeToNBT(NBTTagCompound cmp);
 
-    public void clearCreativeCaches() {
-    }
+    public void clearCreativeCaches() {}
 
     public final void setCreativeFlag() {
         creative = true;

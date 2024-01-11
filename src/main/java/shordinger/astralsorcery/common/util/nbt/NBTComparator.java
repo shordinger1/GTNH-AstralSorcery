@@ -1,21 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.nbt;
 
-import java.util.ArrayList;
-import java.util.List;
+import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 public class NBTComparator {
 
     public static boolean contains(@Nonnull NBTTagCompound thisCompound, @Nonnull NBTTagCompound otherCompound) {
-        for (String key : thisCompound.func_150296_c()) {
+        for (String key : thisCompound.getKeySet()) {
             if (!otherCompound.hasKey(key, thisCompound.getTagId(key))) {
                 return false;
             }
@@ -54,7 +53,7 @@ public class NBTComparator {
             for (int matchIndex = 0; matchIndex < other.tagCount(); matchIndex++) {
                 NBTBase matchNBT = other.get(matchIndex);
 
-                if (!matched.contains(matchIndex)) {
+                if (!matched.contains(matchIndex)){
                     if (compare(thisNbt, matchNBT)) {
                         matched.add(matchIndex);
                         continue lblMatching;

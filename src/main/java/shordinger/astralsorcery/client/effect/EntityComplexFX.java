@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect;
 
-import java.util.function.Function;
-
-import net.minecraft.entity.Entity;
-
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.EntityUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -95,8 +94,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
         FADE_OUT,
         PYRAMID;
 
-        AlphaFunction() {
-        }
+        AlphaFunction() {}
 
         public float getAlpha(int age, int maxAge) {
             switch (this) {
@@ -117,8 +115,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
     public static interface RenderOffsetController {
 
-        public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion,
-                                            float pTicks);
+        public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion, float pTicks);
 
     }
 
@@ -145,12 +142,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
             @Override
             public Vector3 updateMotion(T fx, Vector3 motion) {
                 if (target.isDead) return motion;
-                EntityUtils.applyVortexMotion(
-                    (v) -> positionFunction.apply(fx),
-                    motion::add,
-                    Vector3.atEntityCorner(target),
-                    256,
-                    1);
+                EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, Vector3.atEntityCorner(target), 256, 1);
                 return motion.multiply(0.9);
             }
 
@@ -160,8 +152,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
     public static interface ScaleFunction<T extends IComplexEffect> {
 
-        public static final ScaleFunction<IComplexEffect> IDENTITY = (ScaleFunction<IComplexEffect>) (fx, pos, pTicks,
-                                                                                                      scaleIn) -> scaleIn;
+        public static final ScaleFunction<IComplexEffect> IDENTITY = (ScaleFunction<IComplexEffect>) (fx, pos, pTicks, scaleIn) -> scaleIn;
 
         public float getScale(T fx, Vector3 pos, float pTicks, float scaleIn);
 
@@ -170,7 +161,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
             @Override
             public float getScale(T fx, Vector3 pos, float pTicks, float scaleIn) {
                 float prevAge = Math.max(0F, ((float) fx.getAge() - 1)) / ((float) fx.getMaxAge());
-                float currAge = Math.max(0F, ((float) fx.getAge())) / ((float) fx.getMaxAge());
+                float currAge = Math.max(0F, ((float) fx.getAge()))     / ((float) fx.getMaxAge());
                 return (float) (scaleIn * (1 - (RenderingUtils.interpolate(prevAge, currAge, pTicks))));
             }
 

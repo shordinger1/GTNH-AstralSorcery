@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.cape;
 
-import java.lang.reflect.Constructor;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.lang.reflect.Constructor;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,8 +28,7 @@ public class CapeEffectFactory<V extends CapeArmorEffect> {
         try {
             v = effect.getDeclaredConstructor(NBTTagCompound.class);
             v.setAccessible(true);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         this.ctor = v;
     }
 

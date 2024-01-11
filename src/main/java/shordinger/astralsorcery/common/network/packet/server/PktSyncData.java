@@ -1,32 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import static shordinger.astralsorcery.migration.PacketBufferWrapper.readCompoundTag;
-import static shordinger.astralsorcery.migration.PacketBufferWrapper.writeCompoundTag;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.AbstractData;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.network.PacketBuffer;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,8 +53,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
             String key = ByteBufUtils.readString(pb);
 
             byte providerId = pb.readByte();
-            AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry
-                .getProvider(providerId);
+            AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
             if (provider == null) {
                 AstralSorcery.log.warn("Provider for ID " + providerId + " doesn't exist! Skipping...");
                 continue;
@@ -66,7 +61,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
             NBTTagCompound cmp;
             try {
-                cmp = readCompoundTag(pb);
+                cmp = pb.readCompoundTag();
             } catch (IOException e) {
                 AstralSorcery.log.warn("Provider Compound of " + providerId + " threw an IOException! Skipping...");
                 AstralSorcery.log.warn("Exception message: " + e.getMessage());
@@ -98,7 +93,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
             byte providerId = dat.getProviderID();
             pb.writeByte(providerId);
-            writeCompoundTag(pb, cmp);
+            pb.writeCompoundTag(cmp);
         }
     }
 

@@ -1,19 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.charge.PlayerChargeHandler;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,8 +26,7 @@ public class PktSyncCharge implements IMessage, IMessageHandler<PktSyncCharge, I
 
     public float charge = 1F;
 
-    public PktSyncCharge() {
-    }
+    public PktSyncCharge() {}
 
     public PktSyncCharge(float charge) {
         this.charge = charge;

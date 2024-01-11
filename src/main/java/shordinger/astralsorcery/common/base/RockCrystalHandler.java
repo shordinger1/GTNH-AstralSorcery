@@ -1,37 +1,35 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.*;
-import java.util.concurrent.Callable;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityInject;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import shordinger.wrapper.net.minecraftforge.common.util.INBTSerializable;
+import shordinger.wrapper.net.minecraftforge.event.AttachCapabilitiesEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,9 +40,7 @@ import shordinger.astralsorcery.migration.ChunkPos;
  */
 public class RockCrystalHandler {
 
-    private static final ResourceLocation CAP_ROCKCRYSTAL_NAME = new ResourceLocation(
-        AstralSorcery.MODID,
-        "cap_chunk_rock_crystal_position");
+    private static final ResourceLocation CAP_ROCKCRYSTAL_NAME = new ResourceLocation(AstralSorcery.MODID, "cap_chunk_rock_crystal_position");
     public static RockCrystalHandler INSTANCE = new RockCrystalHandler();
 
     @CapabilityInject(RockCrystalPositions.class)
@@ -148,13 +144,13 @@ public class RockCrystalHandler {
         private final RockCrystalPositions defaultImpl = new RockCrystalPositions();
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable ForgeDirection facing) {
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
             return capability.equals(CAPABILITY_CHUNK_ROCK_CRYSTALS);
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable ForgeDirection facing) {
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
             return hasCapability(capability, facing) ? CAPABILITY_CHUNK_ROCK_CRYSTALS.cast(defaultImpl) : null;
         }
 
@@ -170,7 +166,6 @@ public class RockCrystalHandler {
     }
 
     public static class ChunkFluidEntryFactory implements Callable<RockCrystalPositions> {
-
         @Override
         public RockCrystalPositions call() throws Exception {
             return new RockCrystalPositions();

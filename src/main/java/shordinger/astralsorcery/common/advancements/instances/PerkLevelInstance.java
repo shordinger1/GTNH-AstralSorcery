@@ -1,22 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.advancements.instances;
 
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.JsonUtils;
-import net.minecraft.util.ResourceLocation;
-
 import com.google.gson.JsonObject;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.wrapper.net.minecraft.advancements.critereon.AbstractCriterionInstance;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.util.JsonUtils;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,8 +38,7 @@ public class PerkLevelInstance extends AbstractCriterionInstance {
     }
 
     public boolean test(EntityPlayerMP player) {
-        return ResearchManager.getProgress(player, Side.SERVER)
-            .getPerkLevel(player) >= this.levelNeeded;
+        return ResearchManager.getProgress(player, Side.SERVER).getPerkLevel(player) >= this.levelNeeded;
     }
 
 }

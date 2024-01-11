@@ -1,14 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
-
-import net.minecraft.item.ItemStack;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IItemStack;
@@ -17,7 +15,8 @@ import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.InfusionRecipeAdd;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.InfusionRecipeRemove;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -34,11 +33,10 @@ public class InfusionRecipe extends BaseTweaker {
     protected static final String name = "AstralSorcery Starlight Infusion";
 
     @ZenMethod
-    public static void addInfusion(IItemStack input, IItemStack output, boolean consumeMultiple,
-                                   float consumptionChance, int craftingTickTime) {
+    public static void addInfusion(IItemStack input, IItemStack output, boolean consumeMultiple, float consumptionChance, int craftingTickTime) {
         ItemHandle in = convertToHandle(input);
         ItemStack out = convertToItemStack(output);
-        if (in == null || out.isEmpty()) {
+        if(in == null || out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe due to invalid input/output.");
             return;
         }
@@ -46,14 +44,13 @@ public class InfusionRecipe extends BaseTweaker {
         consumptionChance = MathHelper.clamp(consumptionChance, 0F, 1F);
         craftingTickTime = Math.max(1, craftingTickTime);
 
-        ModIntegrationCrafttweaker.recipeModifications
-            .add(new InfusionRecipeAdd(in, out, consumeMultiple, consumptionChance, craftingTickTime));
+        ModIntegrationCrafttweaker.recipeModifications.add(new InfusionRecipeAdd(in, out, consumeMultiple, consumptionChance, craftingTickTime));
     }
 
     @ZenMethod
     public static void removeInfusion(IItemStack output) {
         ItemStack out = convertToItemStack(output);
-        if (out.isEmpty()) {
+        if(out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-remoal due to invalid output.");
             return;
         }

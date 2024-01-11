@@ -1,33 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.common.util.data.WorldBlockPos;
+import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,26 +39,22 @@ public class TreeCaptureHelper {
 
     public static List<WorldBlockPos> oneTimeCatches = Lists.newLinkedList();
 
-    private static final List<WeakReference<TreeWatcher>> watchers = Lists.newLinkedList();
-    private static final Map<WeakReference<TreeWatcher>, List<WorldBlockPos>> cachedEntries = Maps.newHashMap();
+    private static List<WeakReference<TreeWatcher>> watchers = Lists.newLinkedList();
+    private static Map<WeakReference<TreeWatcher>, List<WorldBlockPos>> cachedEntries = Maps.newHashMap();
 
-    private TreeCaptureHelper() {
-    }
+    private TreeCaptureHelper() {}
 
     @SubscribeEvent
     public void onTreeGrowth(SaplingGrowTreeEvent event) {
-        LogCategory.TREE_BEACON.info(
-            () -> "Captured tree growth at " + new BlockPos(event.x, event.y, event.z)
-                + " in dim "
-                + event.world.provider.dimensionId);
-        WorldBlockPos pos = new WorldBlockPos(event.world, new BlockPos(event.x, event.y, event.z));
-        if (oneTimeCatches.contains(pos)) {
+        LogCategory.TREE_BEACON.info(() -> "Captured tree growth at " + event.getPos() + " in dim " + event.getWorld().provider.getDimension());
+        WorldBlockPos pos = new WorldBlockPos(event.getWorld(), event.getPos());
+        if(oneTimeCatches.contains(pos)) {
             LogCategory.TREE_BEACON.info(() -> "Expected growth at " + pos + " - skipping!");
             oneTimeCatches.remove(pos);
             return;
         }
 
-        if (watchers.isEmpty()) return;
+        if(watchers.isEmpty()) return;
         Iterator<WeakReference<TreeWatcher>> iterator = watchers.iterator();
         while (iterator.hasNext()) {
             WeakReference<TreeWatcher> watch = iterator.next();
@@ -72,15 +65,8 @@ public class TreeCaptureHelper {
                 continue;
             }
             if (watcher.watches(pos)) {
-                LogCategory.TREE_BEACON.info(
-                    () -> "TreeWatcher at " + watcher.center
-                        + " watches "
-                        + pos
-                        + " - with squared radius: "
-                        + watcher.watchRadiusSq
-                        + " (real: "
-                        + Math.sqrt(watcher.watchRadiusSq)
-                        + ")");
+                LogCategory.TREE_BEACON.info(() -> "TreeWatcher at " + watcher.center + " watches " + pos +
+                        " - with squared radius: " + watcher.watchRadiusSq + " (real: " + Math.sqrt(watcher.watchRadiusSq) + ")");
                 addWatch(watch, pos);
                 event.setResult(Event.Result.DENY);
             }
@@ -96,7 +82,7 @@ public class TreeCaptureHelper {
                 iterator.remove();
                 continue;
             }
-            if (other.equals(watcher)) return;
+            if(other.equals(watcher)) return;
         }
         LogCategory.TREE_BEACON.info(() -> "New watcher offered and added at " + watcher.center);
         watchers.add(new WeakReference<>(watcher));
@@ -104,8 +90,8 @@ public class TreeCaptureHelper {
 
     @Nonnull
     public static List<WorldBlockPos> getAndClearCachedEntries(@Nullable TreeWatcher watcher) {
-        if (watcher == null) return Lists.newArrayList();
-        if (watchers.isEmpty()) return Lists.newArrayList();
+        if(watcher == null) return Lists.newArrayList();
+        if(watchers.isEmpty()) return Lists.newArrayList();
         Iterator<WeakReference<TreeWatcher>> iterator = watchers.iterator();
         while (iterator.hasNext()) {
             WeakReference<TreeWatcher> itW = iterator.next();
@@ -115,13 +101,10 @@ public class TreeCaptureHelper {
                 iterator.remove();
                 continue;
             }
-            if (watcher.equals(watch)) {
+            if(watcher.equals(watch)) {
                 List<WorldBlockPos> pos = cachedEntries.get(itW);
                 cachedEntries.remove(itW);
-                LogCategory.TREE_BEACON.info(
-                    () -> "Fetched " + (pos == null ? 0 : pos.size())
-                        + " cached, captured positions for watcher at "
-                        + watcher.center);
+                LogCategory.TREE_BEACON.info(() -> "Fetched " + (pos == null ? 0 : pos.size()) + " cached, captured positions for watcher at " + watcher.center);
                 return pos == null ? Lists.newArrayList() : pos;
             }
         }
@@ -134,11 +117,10 @@ public class TreeCaptureHelper {
 
         LogCategory.TREE_BEACON.info(() -> "Captured " + pos + " - TreeWatcher in total watches " + entries.size());
 
-        Iterator<WeakReference<TreeWatcher>> iterator = cachedEntries.keySet()
-            .iterator();
+        Iterator<WeakReference<TreeWatcher>> iterator = cachedEntries.keySet().iterator();
         while (iterator.hasNext()) {
             WeakReference<TreeWatcher> wrT = iterator.next();
-            if (wrT.get() == null) {
+            if(wrT.get() == null) {
                 LogCategory.TREE_BEACON.info(() -> "An empty TreeWatcher was removed from the entry cache");
                 iterator.remove();
             }
@@ -152,11 +134,11 @@ public class TreeCaptureHelper {
         private final double watchRadiusSq;
 
         public TreeWatcher(TileEntity te, double watchRadius) {
-            this(te.getWorldObj(), new BlockPos(te), watchRadius);
+            this(te.getWorld(), te.getPos(), watchRadius);
         }
 
         public TreeWatcher(World world, BlockPos center, double watchRadius) {
-            this(world.provider.dimensionId, center, watchRadius);
+            this(world.provider.getDimension(), center, watchRadius);
         }
 
         public TreeWatcher(int dimId, BlockPos center, double watchRadius) {
@@ -166,7 +148,7 @@ public class TreeCaptureHelper {
         }
 
         public boolean watches(WorldBlockPos pos) {
-            return pos.getWorld().provider.dimensionId == dimId && center.distanceSq(pos) <= watchRadiusSq;
+            return pos.getWorld().provider.getDimension() == dimId && center.distanceSq(pos) <= watchRadiusSq;
         }
     }
 

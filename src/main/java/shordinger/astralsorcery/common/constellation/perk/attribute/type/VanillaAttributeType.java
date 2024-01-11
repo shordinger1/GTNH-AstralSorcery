@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import java.util.UUID;
-
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.AttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttributeInstance;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -50,11 +49,10 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
         super.onModeApply(player, mode, side);
 
-        IAttributeInstance attr = player.getAttributeMap()
-            .getAttributeInstance(getAttribute());
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
 
-        // The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
-        // Remove minecraft's dummy instances in case we're on a dedicated server.
+        //The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
+        //Remove minecraft's dummy instances in case we're on a dedicated server.
         if (side == Side.CLIENT) {
             AttributeModifier modifier;
             if ((modifier = attr.getModifier(getID(mode))) != null) {
@@ -68,34 +66,13 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
 
         switch (mode) {
             case ADDITION:
-                attr.applyModifier(
-                    new DynamicPlayerAttributeModifier(
-                        getID(mode),
-                        getDescription() + " Add",
-                        getTypeString(),
-                        mode,
-                        player,
-                        side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Add", getTypeString(), mode, player, side));
                 break;
             case ADDED_MULTIPLY:
-                attr.applyModifier(
-                    new DynamicPlayerAttributeModifier(
-                        getID(mode),
-                        getDescription() + " Multiply Add",
-                        getTypeString(),
-                        mode,
-                        player,
-                        side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Multiply Add", getTypeString(), mode, player, side));
                 break;
             case STACKING_MULTIPLY:
-                attr.applyModifier(
-                    new DynamicPlayerAttributeModifier(
-                        getID(mode),
-                        getDescription() + " Stack Add",
-                        getTypeString(),
-                        mode,
-                        player,
-                        side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Stack Add", getTypeString(), mode, player, side));
                 break;
             default:
                 break;
@@ -103,24 +80,27 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     }
 
     @Override
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side,
-                             boolean removedCompletely) {
+    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {
         super.onModeRemove(player, mode, side, removedCompletely);
 
-        IAttributeInstance attr = player.getAttributeMap()
-            .getAttributeInstance(getAttribute());
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
         switch (mode) {
-            case ADDITION -> attr.removeModifier(getID(mode));
-            case ADDED_MULTIPLY -> attr.removeModifier(getID(mode));
-            case STACKING_MULTIPLY -> attr.removeModifier(getID(mode));
-            default -> {
-            }
+            case ADDITION:
+                attr.removeModifier(getID(mode));
+                break;
+            case ADDED_MULTIPLY:
+                attr.removeModifier(getID(mode));
+                break;
+            case STACKING_MULTIPLY:
+                attr.removeModifier(getID(mode));
+                break;
+            default:
+                break;
         }
     }
 
     public void refreshAttribute(EntityPlayer player) {
-        IAttributeInstance attr = player.getAttributeMap()
-            .getAttributeInstance(getAttribute());
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
         double base = attr.getBaseValue();
         if (base == 0) {
             attr.setBaseValue(1);

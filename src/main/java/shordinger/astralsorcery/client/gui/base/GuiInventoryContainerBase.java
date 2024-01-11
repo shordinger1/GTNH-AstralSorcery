@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.base;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiContainer;
+import shordinger.wrapper.net.minecraft.inventory.Container;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,9 +44,8 @@ public abstract class GuiInventoryContainerBase extends GuiContainer {
     public void updateScreen() {
         super.updateScreen();
 
-        if (te.isInvalid()) {
-            Minecraft.getMinecraft()
-                .displayGuiScreen(null);
+        if(te.isInvalid()) {
+            Minecraft.getMinecraft().displayGuiScreen(null);
         }
     }
 }

@@ -1,20 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -22,6 +15,12 @@ import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,16 +36,10 @@ public class KeyNoArmor extends KeyPerk {
     public KeyNoArmor(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
-
             @Override
             public void loadFromConfig(Configuration cfg) {
-                dmgReductionMultiplier = cfg.getFloat(
-                    "ReductionMultiplier",
-                    getConfigurationSection(),
-                    dmgReductionMultiplier,
-                    0.05F,
-                    1F,
-                    "The multiplier that is applied to damage the player receives. The lower the more damage is negated.");
+                dmgReductionMultiplier = cfg.getFloat("ReductionMultiplier", getConfigurationSection(), dmgReductionMultiplier, 0.05F, 1F,
+                        "The multiplier that is applied to damage the player receives. The lower the more damage is negated.");
             }
         });
     }
@@ -60,24 +53,24 @@ public class KeyNoArmor extends KeyPerk {
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
-        if (!(event.entityLiving instanceof EntityPlayer)) {
+        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
             return;
         }
 
-        EntityPlayer player = (EntityPlayer) event.entityLiving;
-        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
-                if (stack.stackSize!=0) {
+                if(!stack.isEmpty()) {
                     eq++;
                 }
             }
             if (eq < 2) {
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-                event.setAmount(event.ammount * (dmgReductionMultiplier * (1F / effMulti)));
+                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+                event.setAmount(event.getAmount() * (dmgReductionMultiplier * (1F / effMulti)));
             }
         }
     }

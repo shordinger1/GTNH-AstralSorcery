@@ -1,22 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.fragment;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.util.ResourceLocation;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,11 +25,10 @@ import com.google.common.collect.Maps;
  */
 public class KnowledgeFragmentManager {
 
-    private static final KnowledgeFragmentManager INSTANCE = new KnowledgeFragmentManager();
-    private final Map<ResourceLocation, KnowledgeFragment> fragments = Maps.newHashMap();
+    private static KnowledgeFragmentManager INSTANCE = new KnowledgeFragmentManager();
+    private Map<ResourceLocation, KnowledgeFragment> fragments = Maps.newHashMap();
 
-    private KnowledgeFragmentManager() {
-    }
+    private KnowledgeFragmentManager() {}
 
     public static KnowledgeFragmentManager getInstance() {
         return INSTANCE;

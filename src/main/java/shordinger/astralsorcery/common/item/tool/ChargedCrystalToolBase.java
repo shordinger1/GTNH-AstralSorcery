@@ -1,21 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -38,10 +38,8 @@ public interface ChargedCrystalToolBase {
         ToolCrystalProperties prop = getToolProperties(stack);
         ItemStack inert = new ItemStack(((ChargedCrystalToolBase) stack.getItem()).getInertVariant());
         applyToolProperties(inert, prop);
-        if (stack.hasTagCompound()) {
-            inert.setTagCompound(
-                (NBTTagCompound) stack.getTagCompound()
-                    .copy());
+        if(stack.hasTagCompound()) {
+            inert.setTagCompound(stack.getTagCompound().copy());
         }
         return inert;
     }
@@ -55,7 +53,7 @@ public interface ChargedCrystalToolBase {
         int c = tag.getInteger("chCount");
         c++;
         tag.setInteger("chCount", c);
-        if (c >= Config.revertStart) {
+        if(c >= Config.revertStart) {
             return chRand.nextInt(Config.revertChance) == 0;
         } else {
             return false;
@@ -63,18 +61,17 @@ public interface ChargedCrystalToolBase {
     }
 
     public static void removeChargeRevertCounter(ItemStack stack) {
-        NBTHelper.getPersistentData(stack)
-            .removeTag("chCount");
+        NBTHelper.getPersistentData(stack).removeTag("chCount");
     }
 
     public static boolean tryRevertMainHand(EntityPlayer player, ItemStack stack) {
-        if (shouldRevert(stack)) {
+        if(shouldRevert(stack)) {
             ItemStack inert = getAsInertVariant(stack);
             removeChargeRevertCounter(inert);
-            player.setHeldItem(, inert);
-            return false;
+            player.setHeldItem(EnumHand.MAIN_HAND, inert);
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static void applyToolProperties(ItemStack stack, ToolCrystalProperties properties) {

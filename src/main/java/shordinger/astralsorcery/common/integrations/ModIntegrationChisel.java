@@ -1,21 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-
 import shordinger.astralsorcery.common.base.Mods;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockMarble;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.common.event.FMLInterModComms;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,12 +27,12 @@ public class ModIntegrationChisel {
 
     public static void sendVariantIMC() {
         for (BlockMarble.MarbleBlockType type : BlockMarble.MarbleBlockType.values()) {
-            if (type.obtainableInCreative()) {
+            if(type.obtainableInCreative()) {
                 sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.MARBLE);
             }
         }
         for (BlockBlackMarble.BlackMarbleBlockType type : BlockBlackMarble.BlackMarbleBlockType.values()) {
-            if (type.obtainableInCreative()) {
+            if(type.obtainableInCreative()) {
                 sendVariantMapping(type.asBlock(), type.asStack(), ChiselGroup.SOOTY_MARBLE);
             }
         }
@@ -43,15 +42,8 @@ public class ModIntegrationChisel {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("group", group.group);
         tag.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
-        tag.setString(
-            "block",
-            state.getBlock()
-                .getRegistryName()
-                .toString());
-        tag.setInteger(
-            "meta",
-            state.getBlock()
-                .getMetaFromState(state));
+        tag.setString("block", state.getBlock().getRegistryName().toString());
+        tag.setInteger("meta", state.getBlock().getMetaFromState(state));
         FMLInterModComms.sendMessage(Mods.CHISEL.modid, "add_variation", tag);
     }
 

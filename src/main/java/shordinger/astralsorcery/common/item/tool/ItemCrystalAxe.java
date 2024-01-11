@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.util.Set;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-
 import com.google.common.collect.Sets;
-
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +39,7 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+        if(this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
             setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));

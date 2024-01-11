@@ -1,21 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.WorldType;
+import shordinger.wrapper.net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
 
@@ -63,7 +63,7 @@ public class AirBlockRenderWorld implements IBlockAccess {
     }
 
     @Override
-    public int getStrongPower(BlockPos pos, ForgeDirection direction) {
+    public int getStrongPower(BlockPos pos, EnumFacing direction) {
         return 0;
     }
 
@@ -73,7 +73,7 @@ public class AirBlockRenderWorld implements IBlockAccess {
     }
 
     @Override
-    public boolean isSideSolid(BlockPos pos, ForgeDirection side, boolean _default) {
+    public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
         return _default;
     }
 

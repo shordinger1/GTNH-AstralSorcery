@@ -1,35 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
@@ -41,11 +19,7 @@ import shordinger.astralsorcery.client.effect.light.EffectLightbeam;
 import shordinger.astralsorcery.client.util.PositionedLoopSound;
 import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.client.util.camera.ClientCameraFlightHelper;
-import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
-import shordinger.astralsorcery.common.constellation.IConstellation;
-import shordinger.astralsorcery.common.constellation.IMajorConstellation;
-import shordinger.astralsorcery.common.constellation.IMinorConstellation;
-import shordinger.astralsorcery.common.constellation.IWeakConstellation;
+import shordinger.astralsorcery.common.constellation.*;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import shordinger.astralsorcery.common.constellation.star.StarConnection;
@@ -54,6 +28,8 @@ import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
+import shordinger.astralsorcery.common.data.world.WorldCacheManager;
+import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import shordinger.astralsorcery.common.entities.EntityFlare;
 import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
@@ -67,23 +43,38 @@ import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import shordinger.astralsorcery.common.network.packet.server.PktAttunementAltarState;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
-import shordinger.astralsorcery.common.util.EntityUtils;
-import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.util.PatternMatchHelper;
-import shordinger.astralsorcery.common.util.SoundHelper;
+import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
-import shordinger.astralsorcery.migration.WorldHelper;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.SoundCategory;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -97,8 +88,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private static final Random rand = new Random();
     private static final Function<ItemStack, Boolean> crystalAcceptor = stack -> {
 
-        if (!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
-        if (stack.getCount() != 1) return false;
+        if(!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
+        if(stack.getCount() != 1) return false;
 
         IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
         IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);
@@ -106,8 +97,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     };
     private static final Function<ItemStack, Boolean> traitAcceptor = stack -> {
 
-        if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return false;
-        if (stack.getCount() != 1) return false;
+        if(!(stack.getItem() instanceof ItemTunedCrystalBase)) return false;
+        if(stack.getCount() != 1) return false;
 
         IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
         IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);
@@ -121,18 +112,18 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private ChangeSubscriber<StructureMatcherPatternArray> structureMatch = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
-    // Attunement related
-    private int mode = 0; // 0 == idle, 1 == att_player, 2 == att_crystal
+    //Attunement related
+    private int mode = 0; //0 == idle, 1 == att_player, 2 == att_crystal
     private int serverSyncAttTick = 0;
     private int entityIdActive = -1;
-    private Entity activeEntity = null; // Unsynced
+    private Entity activeEntity = null; //Unsynced
 
     private int playerAttunementWaitTick = -1;
 
-    // Chunk load caching
+    //Chunk load caching
     private Map<BlockPos, Boolean> unloadCache = new HashMap<>();
 
-    // Sound & Visuals around the TE
+    //Sound & Visuals around the TE
     private Object activeSound = null;
     private List<Object> starSprites = new LinkedList<>();
     private IConstellation highlight = null;
@@ -140,7 +131,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private Object spriteCrystalAttunement = null;
     private int spawnedOrbitalsForCrystal = -1;
 
-    // TESR flags
+    //TESR flags
     public static final int MAX_START_ANIMATION_TICK = 60;
     public static final int MAX_START_ANIMATION_SPIN = 100;
     public int activationTick = 0;
@@ -151,112 +142,98 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private Object clientActiveCameraFlight = null;
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
     @Override
     public void update() {
         super.update();
 
-        if (world.isRemote) {
+        if(world.isRemote) {
             renderEffects();
         } else {
-            if (getTicksExisted() % 10 == 0) {
-                if (activeFound == null) {
+            if(getTicksExisted() % 10 == 0) {
+                if(activeFound == null) {
                     searchForConstellation();
                 } else {
                     matchActiveConstellation();
                 }
             }
-            if ((ticksExisted & 15) == 0) {
+            if((ticksExisted & 15) == 0) {
                 updateSkyState();
             }
 
             updateMultiblockState();
 
-            if (activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
+            if(activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
                 searchForConstellation();
             }
 
-            if (activeFound != null && hasMultiblock) {
-                if (mode != 0 && activeEntity == null) {
+            if(activeFound != null && hasMultiblock) {
+                if(mode != 0 && activeEntity == null) {
                     activeEntity = world.getEntityByID(entityIdActive);
-                    if (activeEntity == null) return;
+                    if(activeEntity == null) return;
                 }
 
-                if (mode == 0) {
-                    if (ConstellationSkyHandler.getInstance()
-                        .isNight(world)) {
+                if(mode == 0) {
+                    if(ConstellationSkyHandler.getInstance().isNight(world)) {
                         checkForAttunements();
                     }
-                } else if (mode == 1) {
-                    // No isNight check since well.. we don't wanna kick him from the camera flight
-                    if (!(activeEntity instanceof EntityPlayer) || activeEntity.isDead
-                        || Vector3.atEntityCorner(activeEntity)
-                        .distance(new Vector3(this)) > 4) {
+                } else if(mode == 1) {
+                    //No isNight check since well.. we don't wanna kick him from the camera flight
+                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead || Vector3.atEntityCorner(activeEntity).distance(new Vector3(this)) > 4) {
                         setAttunementState(0, null);
                     } else {
                         if (ConfigEntryAttunementAltar.doAttunementTimeout) {
                             if (playerAttunementWaitTick > 0) {
                                 playerAttunementWaitTick--;
                             }
-                            if (playerAttunementWaitTick == 0) {
+                            if(playerAttunementWaitTick == 0) {
                                 setAttunementState(0, null);
                                 return;
                             }
                         }
 
                         this.serverSyncAttTick++;
-                        if (EventHandlerEntity.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
+                        if(EventHandlerEntity.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
                             EventHandlerEntity.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
                         } else {
                             EventHandlerEntity.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
                         }
                         markForUpdate();
                     }
-                } else if (mode == 2) {
-                    // isNight check is sufficient since the constellation persists through a night.
-                    if (activeEntity.isDead || !(activeEntity instanceof EntityItem)
-                        || !(EntityUtils.selectItemStack(crystalAcceptor)
-                        .apply(activeEntity)
-                        || EntityUtils.selectItemStack(traitAcceptor)
-                        .apply(activeEntity))
-                        || !ConstellationSkyHandler.getInstance()
-                        .isNight(worldObj)) {
+                } else if(mode == 2) {
+                    //isNight check is sufficient since the constellation persists through a night.
+                    if(activeEntity.isDead ||
+                            !(activeEntity instanceof EntityItem) ||
+                            !(EntityUtils.selectItemStack(crystalAcceptor).apply(activeEntity) ||
+                                    EntityUtils.selectItemStack(traitAcceptor).apply(activeEntity)) ||
+                            !ConstellationSkyHandler.getInstance().isNight(world)) {
                         setAttunementState(0, null);
                     } else {
-                        // Sync up with the clients so everyone "has the same effects"
-                        // Not exactly great in terms of amount of syncs, but well...
-                        // The things you/accept do for pretty & consistent effects...
+                        //Sync up with the clients so everyone "has the same effects"
+                        //Not exactly great in terms of amount of syncs, but well...
+                        //The things you/accept do for pretty & consistent effects...
                         serverSyncAttTick++;
-                        if (serverSyncAttTick % 4 == 0) {
+                        if(serverSyncAttTick % 4 == 0) {
                             markForUpdate();
                         }
 
                         Vector3 crystalHoverPos = new Vector3(this).add(0.5, 1.4, 0.5);
-                        activeEntity
-                            .setPosition(crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ());
+                        activeEntity.setPosition(crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ());
                         ((EntityItem) activeEntity).setNoDespawn();
 
-                        if (serverSyncAttTick >= TICKS_CRYSTAL_ATTUNEMENT) {
+                        if(serverSyncAttTick >= TICKS_CRYSTAL_ATTUNEMENT) {
                             ItemStack tunedStack;
-                            if (EntityUtils.selectItemStack(crystalAcceptor)
-                                .apply(activeEntity) && activeFound instanceof IWeakConstellation) {
+                            if(EntityUtils.selectItemStack(crystalAcceptor).apply(activeEntity) && activeFound instanceof IWeakConstellation) {
                                 ItemStack current = ((EntityItem) activeEntity).getItem();
-                                Item tuned = ((ItemRockCrystalBase) Objects.requireNonNull(current.getItem())).getTunedItemVariant();
+                                Item tuned = ((ItemRockCrystalBase) current.getItem()).getTunedItemVariant();
                                 tunedStack = new ItemStack(tuned);
-                                ItemTunedCrystalBase
-                                    .applyMainConstellation(tunedStack, (IWeakConstellation) activeFound);
-                                CrystalProperties.applyCrystalProperties(
-                                    tunedStack,
-                                    Objects.requireNonNull(CrystalProperties.getCrystalProperties(current)));
-                            } else if (EntityUtils.selectItemStack(traitAcceptor)
-                                .apply(activeEntity) && activeFound instanceof IMinorConstellation) {
-                                ItemStack current = ((EntityItem) activeEntity).getEntityItem();
+                                ItemTunedCrystalBase.applyMainConstellation(tunedStack, (IWeakConstellation) activeFound);
+                                CrystalProperties.applyCrystalProperties(tunedStack, CrystalProperties.getCrystalProperties(current));
+                            } else if(EntityUtils.selectItemStack(traitAcceptor).apply(activeEntity) && activeFound instanceof IMinorConstellation) {
+                                ItemStack current = ((EntityItem) activeEntity).getItem();
                                 tunedStack = ItemUtils.copyStackWithSize(current, 1);
-                                if (tunedStack != null) {
-                                    ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
-                                }
+                                ItemTunedCrystalBase.applyTrait(tunedStack, (IMinorConstellation) activeFound);
                             } else {
                                 activeEntity.setDead();
                                 setAttunementState(0, null);
@@ -266,26 +243,17 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                             String thrower = ((EntityItem) activeEntity).getThrower();
                             if (thrower != null && !thrower.isEmpty()) {
                                 EntityPlayer player = this.world.getPlayerEntityByName(thrower);
-                                if (player instanceof EntityPlayerMP) {
+                                if (player != null && player instanceof EntityPlayerMP) {
                                     AdvancementTriggers.ATTUNE_CRYSTAL.trigger((EntityPlayerMP) player, activeFound);
                                 }
                             }
 
                             activeEntity.setDead();
 
-                            ItemUtils.dropItem(
-                                worldObj,
-                                crystalHoverPos.getX(),
-                                crystalHoverPos.getY(),
-                                crystalHoverPos.getZ(),
-                                tunedStack);
+                            ItemUtils.dropItem(world, crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ(), tunedStack);
                             setAttunementState(0, null);
-                            EntityFlare.spawnAmbient(
-                                worldObj,
-                                new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
-                            EntityFlare.spawnAmbient(
-                                worldObj,
-                                new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             SoundHelper.playSoundAround(Sounds.craftFinish, world, pos, 2.5F, 1.6F);
                         }
                     }
@@ -311,29 +279,23 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     }
 
     private void checkForAttunements() {
-        if ((ticksExisted & 31) != 0) return;
+        if((ticksExisted & 31) != 0) return;
 
-        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1)
-            .offset(getPos());
+        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos());
 
-        if (activeFound instanceof IMajorConstellation) {
+        if(activeFound instanceof IMajorConstellation) {
             Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
-            List players = worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, box);
-            if (!players.isEmpty()) {
-                EntityPlayerMP pl = EntityUtils
-                    .selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
+            List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+            if(!players.isEmpty()) {
+                EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
                 if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
                     PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                    if (prog.isValid() && prog.getAttunedConstellation() == null
-                        && prog.getResearchProgression()
-                        .contains(ResearchProgression.ATTUNEMENT)
-                        && prog.getKnownConstellations()
-                        .contains(activeFound.getUnlocalizedName())) {
+                    if (prog.isValid() &&
+                            prog.getAttunedConstellation() == null &&
+                            prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
+                            prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
 
-                        PktAttunementAltarState state = new PktAttunementAltarState(
-                            pl.getEntityId(),
-                            world.provider.dimensionId,
-                            getPos());
+                        PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
                         PacketChannel.CHANNEL.sendTo(state, pl);
                         return;
                     }
@@ -342,13 +304,11 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         }
 
         List<EntityItem> unfilteredItems = world.getEntitiesWithinAABB(EntityItem.class, box);
-        if (unfilteredItems.size() == 1) {
+        if(unfilteredItems.size() == 1) {
             EntityItem item = unfilteredItems.get(0);
-            if (EntityUtils.selectItemStack(crystalAcceptor)
-                .apply(item) && this.activeFound instanceof IWeakConstellation) {
+            if(EntityUtils.selectItemStack(crystalAcceptor).apply(item) && this.activeFound instanceof IWeakConstellation) {
                 setAttunementState(2, item);
-            } else if (EntityUtils.selectItemStack(traitAcceptor)
-                .apply(item) && this.activeFound instanceof IMinorConstellation) {
+            } else if(EntityUtils.selectItemStack(traitAcceptor).apply(item) && this.activeFound instanceof IMinorConstellation) {
                 setAttunementState(2, item);
             }
         }
@@ -367,22 +327,22 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         for (int xx = -7; xx <= 7; xx++) {
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
-                if (MiscUtils.isChunkLoaded(worldObj, new ChunkPos(other))) {
-                    boolean see = MiscUtils.canSeeSky(worldObj, other, true, false);
+                if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
+                    boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
-                    if (!see) {
+                    if(!see) {
                         seesSky = false;
                         break lbl;
                     }
-                } else if (unloadCache.containsKey(other)) {
-                    if (!unloadCache.get(other)) {
+                } else if(unloadCache.containsKey(other)) {
+                    if(!unloadCache.get(other)) {
                         seesSky = false;
                         break lbl;
                     }
                 } else {
                     boolean see = MiscUtils.canSeeSky(this.getWorld(), other, true, false);
                     unloadCache.put(other, see);
-                    if (!see) {
+                    if(!see) {
                         seesSky = false;
                         break lbl;
                     }
@@ -391,20 +351,21 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         }
         boolean update = doesSeeSky != seesSky;
         this.doesSeeSky = seesSky;
-        if (update) {
+        if(update) {
             markForUpdate();
         }
     }
 
     private void updateMultiblockState() {
         if (structureMatch == null) {
-            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(), getRequiredStructure());
+            this.structureMatch = PatternMatchHelper.getOrCreateMatcher(getWorld(), getPos(),
+                    getRequiredStructure());
         }
         boolean found = this.structureMatch.matches(this.getWorld());
         if (found != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(
-                () -> "Structure match updated: " + this.getClass()
-                    .getName() + " at " + this.getPos() + " (" + this.hasMultiblock + " -> " + found + ")");
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + found + ")");
             this.hasMultiblock = found;
             markForUpdate();
         }
@@ -412,74 +373,60 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     private void matchActiveConstellation() {
         boolean valid = true;
-        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(world);
-        if (wsh == null) {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        if(wsh == null) {
             valid = false;
-        } else if (!wsh.getActiveConstellations()
-            .contains(activeFound) || wsh.getCurrentDistribution(activeFound, (f) -> f) < 0.65) {
+        } else if(!wsh.getActiveConstellations().contains(activeFound) ||
+                wsh.getCurrentDistribution(activeFound, (f) -> f) < 0.65) {
             valid = false;
         }
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
-            if (pos.equals(getPos())) continue;
-            IBlockState state = WorldHelper.getBlockState(worldObj, pos);
-            if (!state.getBlock()
-                .equals(BlocksAS.attunementRelay)
-                && !(pos.subtract(this.pos)
-                .equals(BlockPos.ORIGIN)
-                && state.getBlock()
-                .equals(BlocksAS.attunementAltar))) {
+            if(pos.equals(getPos())) continue;
+            IBlockState state = world.getBlockState(pos);
+            if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
+                    !(pos.subtract(this.pos).equals(BlockPos.ORIGIN) && state.getBlock().equals(BlocksAS.attunementAltar))) {
                 valid = false;
             }
-            if (state.getBlock()
-                .equals(BlocksAS.attunementRelay)) {
-                TileAttunementRelay tar = MiscUtils.getTileAt(worldObj, pos, TileAttunementRelay.class, true);
-                if (tar != null) {
-                    ItemStack in = tar.getInventoryHandler()
-                        .getStackInSlot(0);
-                    if (!in.isEmpty()) {
-                        ItemUtils.dropItemNaturally(worldObj, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, in);
-                        tar.getInventoryHandler()
-                            .setStackInSlot(0, null);
+            if(state.getBlock().equals(BlocksAS.attunementRelay)) {
+                TileAttunementRelay tar = MiscUtils.getTileAt(world, pos, TileAttunementRelay.class, true);
+                if(tar != null) {
+                    ItemStack in = tar.getInventoryHandler().getStackInSlot(0);
+                    if(!in.isEmpty()) {
+                        ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, in);
+                        tar.getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
                     }
                 }
             }
         }
-        if (!valid) {
+        if(!valid) {
             activeFound = null;
             markForUpdate();
         }
     }
 
     private void searchForConstellation() {
-        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(worldObj);
-        if (wsh == null) return;
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        if(wsh == null) return;
         IConstellation match = null;
         for (IConstellation attuneable : ConstellationRegistry.getAllConstellations()) {
             List<BlockPos> positions = translateConstellationPositions(attuneable);
             boolean valid = true;
             for (BlockPos pos : positions) {
-                if (pos.equals(getPos())) continue;
-                IBlockState state = WorldHelper.getBlockState(worldObj, pos);
-                if (!state.getBlock()
-                    .equals(BlocksAS.attunementRelay)
-                    && !(pos.subtract(this.pos)
-                    .equals(BlockPos.ORIGIN)
-                    && state.getBlock()
-                    .equals(BlocksAS.attunementAltar))) {
+                if(pos.equals(getPos())) continue;
+                IBlockState state = world.getBlockState(pos);
+                if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
+                        !(pos.subtract(this.pos).equals(BlockPos.ORIGIN) && state.getBlock().equals(BlocksAS.attunementAltar))) {
                     valid = false;
                 }
             }
-            if (valid) {
+            if(valid) {
                 match = attuneable;
                 break;
             }
         }
-        if (match != null) {
-            if (wsh.getActiveConstellations()
-                .contains(match) && wsh.isActive(match)) {
+        if(match != null) {
+            if(wsh.getActiveConstellations().contains(match) && wsh.isActive(match)) {
                 activeFound = match;
                 markForUpdate();
             }
@@ -487,29 +434,24 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     }
 
     public void markPlayerStartCameraFlight(EntityPlayer pl) {
-        if (mode == 0) {
+        if(mode == 0) {
             setAttunementState(1, pl);
             pl.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
-            this.playerAttunementWaitTick = TICKS_PLAYER_ATTUNEMENT + 200; // Depends on the camera flight... awkwardly
-            // enough.. client has a bit more time to
-            // answer too.
+            this.playerAttunementWaitTick = TICKS_PLAYER_ATTUNEMENT + 200; //Depends on the camera flight... awkwardly enough.. client has a bit more time to answer too.
         }
     }
 
     public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
-        if (mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
+        if(mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
             PlayerProgress prog = ResearchManager.getProgress(playerEntity, Side.SERVER);
-            if (prog.isValid() && prog.getAttunedConstellation() == null
-                && prog.getResearchProgression()
-                .contains(ResearchProgression.ATTUNEMENT)
-                && prog.getKnownConstellations()
-                .contains(cst.getUnlocalizedName())) {
+            if(prog.isValid() &&
+                    prog.getAttunedConstellation() == null &&
+                    prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
+                    prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
                 ResearchManager.setAttunedConstellation(playerEntity, cst);
 
                 for (int i = 0; i < 6; i++) {
-                    EntityFlare.spawnAmbient(
-                        world,
-                        new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                 }
             }
         }
@@ -523,53 +465,42 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         this.playerAttunementWaitTick = -1;
         this.mode = mode;
         switch (mode) {
-            case 0 -> {
+            case 0:
                 this.entityIdActive = -1;
                 this.activeEntity = null;
-            }
-            case 1, 2 -> {
+                break;
+            case 1:
+            case 2:
                 this.entityIdActive = trigger.getEntityId();
                 this.activeEntity = trigger;
-            }
-            default -> {
-            }
+                break;
+            default:
+                break;
         }
         markForUpdate();
     }
 
     @SideOnly(Side.CLIENT)
     public boolean tryStartCameraFlight() {
-        if (cameraFlightActive || !isClientCloseEnough()) {
+        if(cameraFlightActive || !isClientCloseEnough()) {
             return false;
         }
 
         Vector3 offset = new Vector3(this).add(0, 6, 0);
-        ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(
-            offset.clone()
-                .add(4, 0, 4),
-            new Vector3(this).add(0.5, 0.5, 0.5));
-        builder
-            .addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(5, 0.025), 200, 2);
-        builder
-            .addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(10, -0.01), 200, 2);
+        ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
+        builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
+        builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(10, -0.01) , 200, 2);
         builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
         builder.setStopDelegate(createAttunementDelegate());
 
         OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement(this, true);
-        OrbitalEffectController ctrl = EffectHandler.getInstance()
-            .orbital(att, att, null);
-        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-            .setOrbitRadius(3)
-            .setTicksPerRotation(80)
-            .setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+        OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(att, att, null);
+        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                .setTicksPerRotation(80).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
 
-        ctrl = EffectHandler.getInstance()
-            .orbital(att, att, null);
-        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-            .setOrbitRadius(3)
-            .setTicksPerRotation(80)
-            .setTickOffset(40)
-            .setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+        ctrl = EffectHandler.getInstance().orbital(att, att, null);
+        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                .setTicksPerRotation(80).setTickOffset(40).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
 
         this.clientActiveCameraFlight = builder.finishAndStart();
         this.cameraFlightActive = true;
@@ -578,25 +509,22 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private boolean isClientCloseEnough() {
-        List<EntityPlayer> players = world.getEntitiesWithinAABB(
-            EntityPlayer.class,
-            new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1)
-                .offset(getPos()));
-        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().thePlayer);
+        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos()));
+        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
     }
 
     private void checkClientEffectIntegrity() {
-        if (clientActiveCameraFlight != null) {
+        if(clientActiveCameraFlight != null) {
             checkCameraClient();
         }
-        if (spawnedOrbitalsForCrystal != entityIdActive) {
+        if(spawnedOrbitalsForCrystal != entityIdActive) {
             spawnedOrbitalsForCrystal = -1;
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void checkCameraClient() {
-        if (mode != 1 || entityIdActive != Minecraft.getMinecraft().thePlayer.getEntityId()) {
+        if(mode != 1 || entityIdActive != Minecraft.getMinecraft().player.getEntityId()) {
             ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
             clientActiveCameraFlight = null;
         }
@@ -604,138 +532,112 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void renderEffects() {
-        if (highlightActive > 0) {
+        if(highlightActive > 0) {
             highlightActive--;
         }
 
-        if (activeFound == null) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            if (player != null && player.getDistanceSq(getPos()) <= 250) {
+        if(activeFound == null) {
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            if(player != null && player.getDistanceSq(getPos()) <= 250) {
                 IConstellation held = null;
-                if (!player.getHeldItemMainhand()
-                    .isEmpty()
-                    && player.getHeldItemMainhand()
-                    .getItem() instanceof ItemConstellationPaper) {
+                if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemMainhand());
-                    if (cst != null) {
+                    if(cst != null) {
                         held = cst;
                     }
                 }
-                if (held == null && !player.getHeldItemOffhand()
-                    .isEmpty()
-                    && player.getHeldItemOffhand()
-                    .getItem() instanceof ItemConstellationPaper) {
+                if(held == null && !player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemOffhand());
-                    if (cst != null) {
+                    if(cst != null) {
                         held = cst;
                     }
                 }
-                if (held != null
-                    && ResearchManager.clientProgress.hasConstellationDiscovered(held.getUnlocalizedName())) {
+                if(held != null && ResearchManager.clientProgress.hasConstellationDiscovered(held.getUnlocalizedName())) {
                     highlightConstellation(held);
                 }
             }
         }
 
-        if (mode != 2) {
+        if(mode != 2) {
             spriteCrystalAttunement = null;
         }
 
-        if (!hasMultiblock || !doesSeeSky) {
+        if(!hasMultiblock || !doesSeeSky) {
             starSprites.clear();
             activeSound = null;
             animate = false;
 
             prevActivationTick = activationTick;
-            if (activationTick > 0) {
+            if(activationTick > 0) {
                 activationTick--;
             }
 
-            if (clientActiveCameraFlight != null) {
+            if(clientActiveCameraFlight != null) {
                 ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
                 clientActiveCameraFlight = null;
             }
 
-        } else if (activeFound == null || !ConstellationSkyHandler.getInstance()
-            .isNight(world)) {
+        } else if(activeFound == null || !ConstellationSkyHandler.getInstance().isNight(world)) {
             starSprites.clear();
             activeSound = null;
             animate = false;
 
             prevActivationTick = activationTick;
-            if (activationTick > 0) {
+            if(activationTick > 0) {
                 activationTick--;
             }
-            if (clientActiveCameraFlight != null) {
+            if(clientActiveCameraFlight != null) {
                 ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
                 clientActiveCameraFlight = null;
             }
 
             spawnAmbientParticles();
-            if (highlight != null && highlightActive > 0) {
-                float night = ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+            if(highlight != null && highlightActive > 0) {
+                float night = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
                 List<BlockPos> positions = translateConstellationPositions(highlight);
                 for (BlockPos pos : positions) {
-                    if (rand.nextBoolean()) continue;
-                    EntityFXFacingParticle p = EffectHelper
-                        .genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)
-                        .gravity(0.01);
-                    p.offset(
-                        rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1));
+                    if(rand.nextBoolean()) continue;
+                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.01);
+                    p.offset(rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1));
                     p.scale(0.4F + rand.nextFloat() * 0.1F);
                     p.setAlphaMultiplier(0.5F * night);
                 }
             }
         } else {
-            if (Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
-                if (activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
-                    activeSound = SoundHelper.playSoundLoopClient(
-                        Sounds.attunement,
-                        new Vector3(this).add(0.5, 0.5, 0.5),
-                        0.2F,
-                        0.8F,
-                        () -> isInvalid() || activeFound == null
-                            || !ConstellationSkyHandler.getInstance()
-                            .isNight(worldObj)
-                            || Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
+            if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
+                if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
+                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.2F, 0.8F,
+                            () -> isInvalid() ||
+                                    activeFound == null ||
+                                    !ConstellationSkyHandler.getInstance().isNight(world) ||
+                                    Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
                 }
             }
 
-            if (mode == 1 && clientActiveCameraFlight == null) {
+            if(mode == 1 && clientActiveCameraFlight == null) {
                 playPlayerAttenuationEffects(serverSyncAttTick);
                 serverSyncAttTick++;
             }
-            if (mode == 2 && entityIdActive != -1) {
+            if(mode == 2 && entityIdActive != -1) {
                 Entity e = world.getEntityByID(entityIdActive);
-                if (e != null && !e.isDead
-                    && e instanceof EntityItem
-                    && (EntityUtils.selectItemStack(crystalAcceptor)
-                    .apply(e)
-                    || EntityUtils.selectItemStack(traitAcceptor)
-                    .apply(e))) {
-                    /*
-                     * if(spriteCrystalAttunement == null) {
-                     * EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2,
-                     * pos.getX(), pos.getY(), pos.getZ(), 2.5F, 2);
-                     * EffectHandler.getInstance().registerFX(sprite);
-                     * spriteCrystalAttunement = sprite;
-                     * sprite.setRefreshFunc(() -> {
-                     * if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
-                     * Entity ent = world.getEntityByID(entityIdActive);
-                     * return ent != null && !ent.isDead && ent instanceof EntityItem &&
-                     * EntityUtils.selectItemStack(crystalAcceptor).applyServer(ent);
-                     * });
-                     * sprite.setPositionUpdateFunction((v) -> {
-                     * if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
-                     * Entity ent = world.getEntityByID(entityIdActive);
-                     * if(ent == null || ent.isDead) return v;
-                     * return new Vector3(ent).addY(0.5);
-                     * });
-                     * }
-                     */
+                if(e != null && !e.isDead && e instanceof EntityItem &&
+                        (EntityUtils.selectItemStack(crystalAcceptor).apply(e) || EntityUtils.selectItemStack(traitAcceptor).apply(e))) {
+                    /*if(spriteCrystalAttunement == null) {
+                        EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, pos.getX(), pos.getY(), pos.getZ(), 2.5F, 2);
+                        EffectHandler.getInstance().registerFX(sprite);
+                        spriteCrystalAttunement = sprite;
+                        sprite.setRefreshFunc(() -> {
+                            if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
+                            Entity ent = world.getEntityByID(entityIdActive);
+                            return ent != null && !ent.isDead && ent instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).applyServer(ent);
+                        });
+                        sprite.setPositionUpdateFunction((v) -> {
+                            if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
+                            Entity ent = world.getEntityByID(entityIdActive);
+                            if(ent == null || ent.isDead) return v;
+                            return new Vector3(ent).addY(0.5);
+                        });
+                    }*/
 
                     Vector3 crystalHoverPos = new Vector3(this).add(0.5, 1.4, 0.5);
                     e.setPosition(crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ());
@@ -744,7 +646,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                     playCrystalAttenuationEffects(serverSyncAttTick);
                     serverSyncAttTick++;
                 } else {
-                    if (spriteCrystalAttunement != null) {
+                    if(spriteCrystalAttunement != null) {
                         spriteCrystalAttunement = null;
                     }
                 }
@@ -752,22 +654,21 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
             animate = true;
             prevActivationTick = activationTick;
-            if (activationTick < MAX_START_ANIMATION_TICK) {
+            if(activationTick < MAX_START_ANIMATION_TICK) {
                 activationTick++;
             }
 
-            // TODO this stuff, downwards
-            for (Object o : starSprites) {
+            //TODO this stuff, downwards
+            for(Object o : starSprites) {
                 EntityFXFacingSprite p = (EntityFXFacingSprite) o;
-                if (p.isRemoved()) {
-                    EffectHandler.getInstance()
-                        .registerFX(p);
+                if(p.isRemoved()) {
+                    EffectHandler.getInstance().registerFX(p);
                 }
             }
-            if (starSprites.isEmpty()) {
+            if(starSprites.isEmpty()) {
                 addStarSprites();
             }
-            if (getTicksExisted() % 53 == 0) {
+            if(getTicksExisted() % 53 == 0) {
                 addConnectionBeams();
             }
             spawnAmbientParticles();
@@ -779,15 +680,10 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     @SideOnly(Side.CLIENT)
     private ClientCameraFlightHelper.StopDelegate createAttunementDelegate() {
         return () -> {
-            if (clientActiveCameraFlight != null
-                && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()
-                && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).wasForciblyStopped()) {
-                if (activeFound != null) {
-                    PacketChannel.CHANNEL.sendToServer(
-                        new PktAttuneConstellation(
-                            (IMajorConstellation) activeFound,
-                            worldObj.provider.dimensionId,
-                            getPos()));
+            if(clientActiveCameraFlight != null && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()
+                    && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).wasForciblyStopped()) {
+                if(activeFound != null) {
+                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation((IMajorConstellation) activeFound, world.provider.getDimension(), getPos()));
                     SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }
             }
@@ -799,15 +695,13 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     @SideOnly(Side.CLIENT)
     private ClientCameraFlightHelper.TickDelegate createFloatDelegate(Vector3 offsetPos) {
         return (renderView, focusedEntity) -> {
-            if (focusedEntity == null) return;
+            if(focusedEntity == null) return;
 
             float floatTick = (ClientScheduler.getClientTick() % 40) / 40F;
             float sin = MathHelper.sin((float) (floatTick * 2 * Math.PI)) / 2F + 0.5F;
             focusedEntity.setAlwaysRenderNameTag(false);
-            focusedEntity
-                .setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
-            focusedEntity
-                .setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
+            focusedEntity.setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
+            focusedEntity.setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
             focusedEntity.rotationYawHead = 0;
             focusedEntity.prevRotationYawHead = 0;
             focusedEntity.setVelocity(0, 0, 0);
@@ -818,10 +712,10 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void playPlayerAttenuationEffects(int cameraFlightTick) {
-        if (activeFound == null) return;
+        if(activeFound == null) return;
 
-        if (cameraFlightTick >= 0 && cameraFlightTick <= 800) {
-            if (cameraFlightTick % 30 == 0) {
+        if(cameraFlightTick >= 0 && cameraFlightTick <= 800) {
+            if(cameraFlightTick % 30 == 0) {
                 List<BlockPos> offsets = translateConstellationPositions(activeFound);
                 Color ov = new Color(0x2100FD);
                 float cR = ov.getRed() / 255F;
@@ -830,70 +724,50 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 for (BlockPos effectPos : offsets) {
                     Vector3 from = new Vector3(effectPos).add(0.5, -0.1, 0.5);
                     MiscUtils.applyRandomOffset(from, rand, 0.1F);
-                    EffectLightbeam lightbeam = EffectHandler.getInstance()
-                        .lightbeam(
-                            from.clone()
-                                .addY(6),
-                            from,
-                            1.5F);
+                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
                     lightbeam.setAlphaMultiplier(0.8F);
                     lightbeam.setColorOverlay(cR, cG, cB, 0.2F);
                     lightbeam.setMaxAge(64);
                 }
             }
         }
-        if (cameraFlightTick >= 200) {
+        if(cameraFlightTick >= 200) {
             for (int i = 0; i < 2; i++) {
                 List<BlockPos> offsets = translateConstellationPositions(activeFound);
                 BlockPos pos = offsets.get(rand.nextInt(offsets.size()));
                 Vector3 offset = new Vector3(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5)
-                    .subtract(offset);
-                EntityFXFacingParticle p = EffectHelper
-                    .genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
-                p.setColor(Color.WHITE)
-                    .scale(0.3F + rand.nextFloat() * 0.1F)
-                    .gravity(0.004)
-                    .motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5).subtract(offset);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
             }
         }
-        if (cameraFlightTick >= 350) {
+        if(cameraFlightTick >= 350) {
             for (int i = 0; i < 3; i++) {
                 Vector3 from = new Vector3(this).add(0.5, 0.5, 0.5);
                 from.addX(rand.nextFloat() * 6F * (rand.nextBoolean() ? 1 : -1));
                 from.addZ(rand.nextFloat() * 6F * (rand.nextBoolean() ? 1 : -1));
-                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5)
-                    .subtract(from);
+                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5).subtract(from);
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-                p.setColor(Color.WHITE)
-                    .scale(0.3F + rand.nextFloat() * 0.1F)
-                    .gravity(0.004)
-                    .motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
             }
         }
-        if (cameraFlightTick >= 500) {
+        if(cameraFlightTick >= 500) {
             for (int i = 0; i < 4; i++) {
                 Vector3 at = new Vector3(this).add(0.5, 0.1, 0.5);
                 at.addX(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
                 at.addZ(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
                 p.setAlphaMultiplier(0.7F);
-                if (rand.nextBoolean()) p.setColor(Color.WHITE);
+                if(rand.nextBoolean()) p.setColor(Color.WHITE);
                 p.setMaxAge((int) (30 + rand.nextFloat() * 50));
-                p.gravity(0.05)
-                    .scale(0.3F + rand.nextFloat() * 0.1F);
+                p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
             }
         }
-        if (cameraFlightTick >= 600) {
-            if (cameraFlightTick % 5 == 0) {
+        if(cameraFlightTick >= 600) {
+            if(cameraFlightTick % 5 == 0) {
                 Vector3 from = new Vector3(this).add(0.5, -0.1, 0.5);
                 MiscUtils.applyRandomOffset(from, rand, 0.3F);
-                EffectLightbeam lightbeam = EffectHandler.getInstance()
-                    .lightbeam(
-                        from.clone()
-                            .addY(8),
-                        from,
-                        2.4F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(8), from, 2.4F);
                 lightbeam.setAlphaMultiplier(0.8F);
                 lightbeam.setMaxAge(64);
             }
@@ -902,10 +776,10 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void playCrystalAttenuationEffects(int runTick) {
-        if (activeFound == null) return;
+        if(activeFound == null) return;
 
-        if (runTick >= 0 && runTick <= TICKS_CRYSTAL_ATTUNEMENT) {
-            if (runTick % 30 == 0) {
+        if(runTick >= 0 && runTick <= TICKS_CRYSTAL_ATTUNEMENT) {
+            if(runTick % 30 == 0) {
                 List<BlockPos> offsets = translateConstellationPositions(activeFound);
                 Color ov = new Color(0x2100FD);
                 float cR = ov.getRed() / 255F;
@@ -914,12 +788,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 for (BlockPos effectPos : offsets) {
                     Vector3 from = new Vector3(effectPos).add(0.5, -0.1, 0.5);
                     MiscUtils.applyRandomOffset(from, rand, 0.1F);
-                    EffectLightbeam lightbeam = EffectHandler.getInstance()
-                        .lightbeam(
-                            from.clone()
-                                .addY(6),
-                            from,
-                            1.5F);
+                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
                     lightbeam.setAlphaMultiplier(0.8F);
                     lightbeam.setColorOverlay(cR, cG, cB, 0.2F);
                     lightbeam.setMaxAge(64);
@@ -927,148 +796,106 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             }
         }
 
-        if (runTick >= 0) {
-            if (spawnedOrbitalsForCrystal == -1) {
+        if(runTick >= 0) {
+            if(spawnedOrbitalsForCrystal == -1) {
                 spawnedOrbitalsForCrystal = entityIdActive;
 
                 OrbitalPropertiesAttunement attunement = new OrbitalPropertiesAttunement(this, false);
                 attunement.setPersistanceRequests(3);
-                OrbitalEffectController ctrl = EffectHandler.getInstance()
-                    .orbital(attunement, attunement, null);
-                ctrl.setTicksPerRotation(80)
-                    .setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-                    .setOffset(new Vector3(this).add(0.5, 0, 0.5))
-                    .setOrbitRadius(2);
+                OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(80).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(2);
 
                 attunement = new OrbitalPropertiesAttunement(this, false);
                 attunement.setPersistanceRequests(3);
-                ctrl = EffectHandler.getInstance()
-                    .orbital(attunement, attunement, null);
-                ctrl.setTicksPerRotation(80)
-                    .setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-                    .setOffset(new Vector3(this).add(0.5, 0, 0.5))
-                    .setOrbitRadius(2);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(80).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(2);
                 ctrl.setTickOffset(40);
 
                 attunement = new OrbitalPropertiesAttunement(this, false);
                 attunement.setPersistanceRequests(12);
-                ctrl = EffectHandler.getInstance()
-                    .orbital(attunement, attunement, null);
-                ctrl.setTicksPerRotation(20)
-                    .setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-                    .setOffset(new Vector3(this).add(0.5, 0, 0.5))
-                    .setOrbitRadius(1);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(20).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(1);
 
                 attunement = new OrbitalPropertiesAttunement(this, false);
                 attunement.setPersistanceRequests(2);
-                ctrl = EffectHandler.getInstance()
-                    .orbital(attunement, attunement, null);
-                ctrl.setTicksPerRotation(120)
-                    .setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-                    .setOffset(new Vector3(this).add(0.5, 0, 0.5))
-                    .setOrbitRadius(3.5);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(120).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(3.5);
                 ctrl.setTickOffset(40);
 
                 attunement = new OrbitalPropertiesAttunement(this, false);
                 attunement.setPersistanceRequests(2);
-                ctrl = EffectHandler.getInstance()
-                    .orbital(attunement, attunement, null);
-                ctrl.setTicksPerRotation(120)
-                    .setOrbitAxis(Vector3.RotAxis.Y_AXIS)
-                    .setOffset(new Vector3(this).add(0.5, 0, 0.5))
-                    .setOrbitRadius(3.5);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(120).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(3.5);
                 ctrl.setTickOffset(100);
             }
         }
 
-        if (runTick >= 200) {
+        if(runTick >= 200) {
             for (int i = 0; i < 2; i++) {
                 List<BlockPos> offsets = translateConstellationPositions(activeFound);
                 BlockPos pos = offsets.get(rand.nextInt(offsets.size()));
                 Vector3 offset = new Vector3(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5)
-                    .subtract(offset);
-                EntityFXFacingParticle p = EffectHelper
-                    .genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
-                p.setColor(Color.WHITE)
-                    .scale(0.3F + rand.nextFloat() * 0.1F)
-                    .gravity(0.004)
-                    .motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5).subtract(offset);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
             }
         }
 
-        if (runTick >= 225) {
-            if (spriteCrystalAttunement == null) {
-                Entity ee = worldObj.getEntityByID(entityIdActive);
-                if (ee != null) {
+        if(runTick >= 225) {
+            if(spriteCrystalAttunement == null) {
+                Entity ee = world.getEntityByID(entityIdActive);
+                if(ee != null) {
                     Vector3 posV = Vector3.atEntityCorner(ee);
-                    EntityFXFacingSprite sprite = EntityFXFacingSprite
-                        .fromSpriteSheet(SpriteLibrary.spriteStar2, posV.getX(), posV.getY(), posV.getZ(), 2.5F, 2);
-                    EffectHandler.getInstance()
-                        .registerFX(sprite);
+                    EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, posV.getX(), posV.getY(), posV.getZ(), 2.5F, 2);
+                    EffectHandler.getInstance().registerFX(sprite);
                     spriteCrystalAttunement = sprite;
                     sprite.setRefreshFunc(() -> {
-                        if (isInvalid() || mode != 2 || entityIdActive == -1) return false;
+                        if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
                         Entity ent = world.getEntityByID(entityIdActive);
-                        return ent != null && !ent.isDead
-                            && ent instanceof EntityItem
-                            && (EntityUtils.selectItemStack(crystalAcceptor)
-                            .apply(ent)
-                            || EntityUtils.selectItemStack(traitAcceptor)
-                            .apply(ent));
+                        return ent != null && !ent.isDead && ent instanceof EntityItem &&
+                                (EntityUtils.selectItemStack(crystalAcceptor).apply(ent) || EntityUtils.selectItemStack(traitAcceptor).apply(ent));
                     });
                     sprite.setPositionUpdateFunction((fx, v, m) -> {
-                        if (isInvalid() || mode != 2 || entityIdActive == -1) return v;
-                        Entity ent = worldObj.getEntityByID(entityIdActive);
-                        if (ent == null || ent.isDead) return v;
-                        return Vector3.atEntityCorner(ent)
-                            .addY(ent.height * 2);
+                        if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
+                        Entity ent = world.getEntityByID(entityIdActive);
+                        if(ent == null || ent.isDead) return v;
+                        return Vector3.atEntityCorner(ent).addY(ent.height * 2);
                     });
                 }
             }
         }
 
-        if (runTick >= 250) {
+        if(runTick >= 250) {
             for (int i = 0; i < 3; i++) {
                 Vector3 from = new Vector3(this).add(0.5, 0.5, 0.5);
                 from.addX(rand.nextFloat() * 6.5F * (rand.nextBoolean() ? 1 : -1));
                 from.addZ(rand.nextFloat() * 6.5F * (rand.nextBoolean() ? 1 : -1));
-                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5)
-                    .subtract(from);
+                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5).subtract(from);
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-                p.setColor(Color.WHITE)
-                    .scale(0.3F + rand.nextFloat() * 0.1F)
-                    .gravity(0.004)
-                    .motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
             }
         }
 
-        if (runTick >= 350) {
-            if (runTick % 5 == 0) {
+        if(runTick >= 350) {
+            if(runTick % 5 == 0) {
                 Vector3 from = new Vector3(this).add(0.5, -0.1, 0.5);
                 MiscUtils.applyRandomOffset(from, rand, 0.3F);
-                EffectLightbeam lightbeam = EffectHandler.getInstance()
-                    .lightbeam(
-                        from.clone()
-                            .addY(8),
-                        from,
-                        2.4F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(8), from, 2.4F);
                 lightbeam.setAlphaMultiplier(0.8F);
                 lightbeam.setMaxAge(64);
             }
         }
 
-        if (runTick >= 400) {
+        if(runTick >= 400) {
             for (int i = 0; i < 4; i++) {
                 Vector3 at = new Vector3(this).add(0.5, 0.1, 0.5);
                 at.addX(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
                 at.addZ(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
                 p.setAlphaMultiplier(0.7F);
-                if (rand.nextBoolean()) p.setColor(Color.WHITE);
+                if(rand.nextBoolean()) p.setColor(Color.WHITE);
                 p.setMaxAge((int) (30 + rand.nextFloat() * 50));
-                p.gravity(0.05)
-                    .scale(0.3F + rand.nextFloat() * 0.1F);
+                p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
             }
         }
 
@@ -1076,27 +903,25 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void spawnAmbientActiveParticles() {
-        if (rand.nextInt(3) == 0) {
+        if(rand.nextInt(3) == 0) {
             Vector3 at = new Vector3(this).add(0, 0.1, 0);
             at.add(rand.nextFloat() * 3 - 1, 0, rand.nextFloat() * 3 - 1);
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
             p.setAlphaMultiplier(0.7F);
             p.setMaxAge((int) (30 + rand.nextFloat() * 50));
-            p.gravity(0.05)
-                .scale(0.3F + rand.nextFloat() * 0.1F);
+            p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void spawnAmbientParticles() {
-        if (rand.nextBoolean()) {
+        if(rand.nextBoolean()) {
             Vector3 at = new Vector3(this).add(0, 0.01, 0);
             at.add(rand.nextFloat() * 15 - 7, 0, rand.nextFloat() * 15 - 7);
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
             p.setAlphaMultiplier(0.7F);
             p.setColor(Color.WHITE);
-            p.gravity(0.004)
-                .scale(0.3F + rand.nextFloat() * 0.1F);
+            p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.1F);
         }
     }
 
@@ -1109,14 +934,10 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         float cB = ov.getBlue() / 255F;
         float alpha = 0.2F;
         for (Tuple<BlockPos, BlockPos> connection : connectionTuples) {
-            Vector3 from = new Vector3(connection.key).add(0.5, 0.5, 0.5);
-            Vector3 to = new Vector3(connection.value).add(0.5, 0.5, 0.5);
-            EffectHandler.getInstance()
-                .lightbeam(from, to, 1.1)
-                .setColorOverlay(cR, cG, cB, alpha);
-            EffectHandler.getInstance()
-                .lightbeam(to, from, 1.1)
-                .setColorOverlay(cR, cG, cB, alpha);
+            Vector3 from = new Vector3(connection.key)  .add(0.5, 0.5, 0.5);
+            Vector3 to   = new Vector3(connection.value).add(0.5, 0.5, 0.5);
+            EffectHandler.getInstance().lightbeam(from, to, 1.1).setColorOverlay(cR, cG, cB, alpha);
+            EffectHandler.getInstance().lightbeam(to, from, 1.1).setColorOverlay(cR, cG, cB, alpha);
         }
     }
 
@@ -1124,15 +945,8 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
     private void addStarSprites() {
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
-            EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(
-                SpriteLibrary.spriteStar1,
-                pos.getX() + 0.5,
-                pos.getY() + 0.55,
-                pos.getZ() + 0.5,
-                1.5F,
-                2);
-            EffectHandler.getInstance()
-                .registerFX(sprite);
+            EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.55, pos.getZ() + 0.5, 1.5F, 2);
+            EffectHandler.getInstance().registerFX(sprite);
             starSprites.add(sprite);
             sprite.setRefreshFunc(() -> starSprites.contains(sprite) && !isInvalid());
         }
@@ -1149,10 +963,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         for (StarConnection c : cst.getStarConnections()) {
             StarLocation from = c.from;
             StarLocation to = c.to;
-            offsetPositions.add(
-                new Tuple<>(
-                    new BlockPos(from.x / 2 - 7, 0, from.y / 2 - 7).add(getPos()),
-                    new BlockPos(to.x / 2 - 7, 0, to.y / 2 - 7).add(getPos())));
+            offsetPositions.add(new Tuple<>(new BlockPos(from.x / 2 - 7, 0, from.y / 2 - 7).add(getPos()), new BlockPos(to.x / 2 - 7, 0, to.y / 2 - 7).add(getPos())));
         }
         return offsetPositions;
     }
@@ -1191,8 +1002,13 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         this.doesSeeSky = compound.getBoolean("skState");
 
         IConstellation prev = activeFound;
-        activeFound = IConstellation.readFromNBT(compound);
-        if (!Objects.equals(prev, activeFound)) {
+        IConstellation found = IConstellation.readFromNBT(compound);
+        if(found == null) {
+            activeFound = null;
+        } else {
+            activeFound = found;
+        }
+        if (prev == null ? activeFound != null : !prev.equals(activeFound)) {
             starSprites.clear();
         }
     }
@@ -1209,36 +1025,43 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         }
     }
 
-    /*
-     * public static class TransmissionReceiverAttunementAltar extends SimpleTransmissionReceiver {
-     * public TransmissionReceiverAttunementAltar(@Nonnull BlockPos thisPos) {
-     * super(thisPos);
-     * }
-     * @Override
-     * public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-     * if(isChunkLoaded) {
-     * TileAttunementAltar ta = MiscUtils.getTileAt(world, getLocationPos(), TileAttunementAltar.class, false);
-     * if(ta != null) {
-     * ta.receiveStarlight(type, amount);
-     * }
-     * }
-     * }
-     * @Override
-     * public TransmissionClassRegistry.TransmissionProvider getProvider() {
-     * return new AttunementAltarReceiverProvider();
-     * }
-     * }
-     * public static class AttunementAltarReceiverProvider implements TransmissionClassRegistry.TransmissionProvider {
-     * @Override
-     * public TransmissionReceiverAttunementAltar provideEmptyNode() {
-     * return new TransmissionReceiverAttunementAltar(null);
-     * }
-     * @Override
-     * public String getIdentifier() {
-     * return AstralSorcery.MODID + ":TransmissionReceiverAttunementAltar";
-     * }
-     * }
-     */
+    /*public static class TransmissionReceiverAttunementAltar extends SimpleTransmissionReceiver {
+
+        public TransmissionReceiverAttunementAltar(@Nonnull BlockPos thisPos) {
+            super(thisPos);
+        }
+
+        @Override
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
+            if(isChunkLoaded) {
+                TileAttunementAltar ta = MiscUtils.getTileAt(world, getLocationPos(), TileAttunementAltar.class, false);
+                if(ta != null) {
+                    ta.receiveStarlight(type, amount);
+                }
+            }
+        }
+
+        @Override
+        public TransmissionClassRegistry.TransmissionProvider getProvider() {
+            return new AttunementAltarReceiverProvider();
+        }
+
+    }
+
+    public static class AttunementAltarReceiverProvider implements TransmissionClassRegistry.TransmissionProvider {
+
+        @Override
+        public TransmissionReceiverAttunementAltar provideEmptyNode() {
+            return new TransmissionReceiverAttunementAltar(null);
+        }
+
+        @Override
+        public String getIdentifier() {
+            return AstralSorcery.MODID + ":TransmissionReceiverAttunementAltar";
+        }
+
+    }*/
+
 
     public static class ConfigEntryAttunementAltar extends ConfigEntry {
 
@@ -1252,11 +1075,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            doAttunementTimeout = cfg.getBoolean(
-                "doAttunementTimeout",
-                getConfigurationSection(),
-                doAttunementTimeout,
-                "Set this to 'false' to disable the timeout waiting for a player to attune. This can solve issues with players having high latency or a bad ingame performance.");
+            doAttunementTimeout = cfg.getBoolean("doAttunementTimeout", getConfigurationSection(), doAttunementTimeout, "Set this to 'false' to disable the timeout waiting for a player to attune. This can solve issues with players having high latency or a bad ingame performance.");
         }
     }
 }

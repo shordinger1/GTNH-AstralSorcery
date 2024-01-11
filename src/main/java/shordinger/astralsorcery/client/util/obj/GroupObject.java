@@ -1,21 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.obj;
 
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.VertexFormat;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
-
-import shordinger.astralsorcery.migration.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * HellFirePvP@Admin
@@ -24,7 +23,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  * GroupObject
  */
 public class GroupObject {
-
     public String name;
     public ArrayList<Face> faces = new ArrayList<Face>();
     public int glDrawingMode;
@@ -45,12 +43,10 @@ public class GroupObject {
     @SideOnly(Side.CLIENT)
     public void render(VertexFormat vf) {
         if (faces.size() > 0) {
-            BufferBuilder vb = Tessellator.instance
-                .getBuffer();
+            BufferBuilder vb = Tessellator.getInstance().getBuffer();
             vb.begin(glDrawingMode, vf);
             render(vb);
-            Tessellator.instance
-                .draw();
+            Tessellator.getInstance().draw();
         }
     }
 

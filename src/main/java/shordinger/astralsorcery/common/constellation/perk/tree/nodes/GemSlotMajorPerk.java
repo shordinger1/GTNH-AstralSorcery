@@ -1,26 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
-import java.util.Collection;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreeGem;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +45,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
         Collection<PerkAttributeModifier> mods = super.getModifiers(player, side);
         if (!modifiersDisabled(player, side)) {
             ItemStack contained = getContainedItem(player, side);
-            if (contained.stackSize!=0 && contained.getItem() instanceof ItemPerkGem) {
+            if (!contained.isEmpty() && contained.getItem() instanceof ItemPerkGem) {
                 mods.addAll(ItemPerkGem.getModifiers(contained));
             }
         }

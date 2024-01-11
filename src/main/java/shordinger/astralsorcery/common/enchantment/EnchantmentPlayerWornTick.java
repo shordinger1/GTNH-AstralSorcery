@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment;
 
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import shordinger.wrapper.net.minecraft.enchantment.EnumEnchantmentType;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,12 +21,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
  */
 public abstract class EnchantmentPlayerWornTick extends EnchantmentBase {
 
-    public EnchantmentPlayerWornTick(String name, Rarity rarityIn, EnumEnchantmentType typeIn,
-                                     EntityEquipmentSlot... slots) {
+    public EnchantmentPlayerWornTick(String name, Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
         super(name, rarityIn, typeIn, slots);
     }
 
-    public void onWornTick(boolean isClient, EntityPlayer base, int level) {
-    }
+    public void onWornTick(boolean isClient, EntityPlayer base, int level) {}
 
 }

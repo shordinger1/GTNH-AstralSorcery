@@ -1,31 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktRequestSextantTarget;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,12 +41,11 @@ public class UISextantCache {
     private static Map<SextantFinder.TargetObject, Long> wait = new HashMap<>();
     private static Map<Tuple<ChunkPos, Integer>, List<CachedSextantResult>> sextantCache = new HashMap<>();
 
-    private UISextantCache() {
-    }
+    private UISextantCache() {}
 
     public static void addTarget(SextantFinder.TargetObject to, BlockPos pos, int dim) {
-        if (Minecraft.getMinecraft().thePlayer == null) return;
-        BlockPos at = Minecraft.getMinecraft().thePlayer.getPosition();
+        if (Minecraft.getMinecraft().player == null) return;
+        BlockPos at = Minecraft.getMinecraft().player.getPosition();
         ChunkPos chAt = new ChunkPos(at);
 
         Tuple<ChunkPos, Integer> key = new Tuple<>(chAt, dim);

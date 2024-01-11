@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -13,11 +13,11 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.oredict.IOreDictEntry;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,26 +39,26 @@ public abstract class BaseTweaker {
     @Nullable
     public static FluidStack convertToFluidStack(ILiquidStack stack, boolean capAndLimitToBuckets) {
         FluidStack fs = CraftTweakerMC.getLiquidStack(stack);
-        if (fs != null && capAndLimitToBuckets) {
-            fs.amount = Fluid.BUCKET_VOLUME; // Only full buckets please...
+        if(fs != null && capAndLimitToBuckets) {
+            fs.amount = Fluid.BUCKET_VOLUME; //Only full buckets please...
         }
         return fs;
     }
 
     @Nullable
     public static ItemHandle convertToHandle(IIngredient obj) {
-        if (obj == null) {
+        if(obj == null) {
             return null;
         }
-        if (obj instanceof IItemStack) {
+        if(obj instanceof IItemStack) {
             ItemStack ret = convertToItemStack((IItemStack) obj);
-            if (ret.isEmpty()) return null;
+            if(ret.isEmpty()) return null;
             return new ItemHandle(ret);
-        } else if (obj instanceof ILiquidStack) {
+        } else if(obj instanceof ILiquidStack) {
             FluidStack ret = convertToFluidStack((ILiquidStack) obj, true);
             if (ret == null) return null;
             return new ItemHandle(ret);
-        } else if (obj instanceof IOreDictEntry) {
+        } else if(obj instanceof IOreDictEntry) {
             return new ItemHandle(((IOreDictEntry) obj).getName());
         } else {
             NonNullList<ItemStack> stacks = NonNullList.create();

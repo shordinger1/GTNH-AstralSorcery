@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -25,8 +25,7 @@ public class JournalPageEmpty implements IJournalPage {
     public static class Render implements IGuiRenderablePage {
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        }
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
 
     }
 

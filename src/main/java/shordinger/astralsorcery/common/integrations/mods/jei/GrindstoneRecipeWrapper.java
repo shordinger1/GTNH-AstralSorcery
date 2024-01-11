@@ -1,26 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-
 import com.google.common.collect.Lists;
-
-import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,25 +36,18 @@ public class GrindstoneRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(
-            ItemStack.class,
-            recipe.getInputForRender()
-                .getApplicableItemsForRender());
-        ingredients.setOutput(
-            ItemStack.class,
-            recipe.getOutputForRender()
-                .getApplicableItemsForRender());
+        ingredients.setInput(ItemStack.class, recipe.getInputForRender().getApplicableItemsForRender());
+        ingredients.setOutput(ItemStack.class, recipe.getOutputForRender().getApplicableItemsForRender());
     }
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        if (minecraft.fontRenderer != null) {
-            if (recipe.getChanceToDoubleOutput() > 1E-4) {
+        if(minecraft.fontRenderer != null) {
+            if(recipe.getChanceToDoubleOutput() > 1E-4) {
                 int displChance = Math.round(recipe.getChanceToDoubleOutput() * 100);
                 String out = I18n.format("misc.grindstone.double", displChance + "%");
                 int length = minecraft.fontRenderer.getStringWidth(out);
-                minecraft.fontRenderer
-                    .drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
+                minecraft.fontRenderer.drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
             }
         }
     }

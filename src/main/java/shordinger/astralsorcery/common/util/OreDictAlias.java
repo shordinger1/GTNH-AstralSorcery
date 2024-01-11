@@ -1,12 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
+
+import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -17,9 +19,11 @@ package shordinger.astralsorcery.common.util;
  */
 public class OreDictAlias {
 
-    private static final String[] DYE_COLORS_BY_META = new String[]{"dyeWhite", "dyeOrange", "dyeMagenta",
-        "dyeLightBlue", "dyeYellow", "dyeLime", "dyePink", "dyeGray", "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
-        "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack"};
+    private static final String[] DYE_COLORS_BY_META = new String[] {
+            "dyeWhite", "dyeOrange", "dyeMagenta", "dyeLightBlue",
+            "dyeYellow", "dyeLime", "dyePink", "dyeGray",
+            "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
+            "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack" };
 
     public static String ITEM_ENDERPEARL = "enderpearl";
     public static String ITEM_DIAMOND = "gemDiamond";

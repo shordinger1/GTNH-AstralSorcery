@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.cape.impl;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.config.Configuration;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import shordinger.astralsorcery.common.lib.Constellations;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,57 +81,15 @@ public class CapeEffectPelotrio extends CapeArmorEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceSpawnPick = cfg.getFloat(
-            getKey() + "Chance_Pickaxe",
-            getConfigurationSection(),
-            chanceSpawnPick,
-            0,
-            1,
-            "Defines the chance of a spectral pickaxe spawning that's mining for you for a bit when you mine a block.");
-        chanceSpawnAxe = cfg.getFloat(
-            getKey() + "Chance_Axe",
-            getConfigurationSection(),
-            chanceSpawnAxe,
-            0,
-            1,
-            "Defines the chance of a spectral axe spawning that's chopping logs and leaves for you for a bit when you break a log or leaf.");
-        chanceSpawnSword = cfg.getFloat(
-            getKey() + "Chance_Sword",
-            getConfigurationSection(),
-            chanceSpawnSword,
-            0,
-            1,
-            "Defines the chance of a spectral sword spawning that fights mobs nearby for a bit when you attack a mob.");
+        chanceSpawnPick = cfg.getFloat(getKey() + "Chance_Pickaxe", getConfigurationSection(), chanceSpawnPick, 0, 1, "Defines the chance of a spectral pickaxe spawning that's mining for you for a bit when you mine a block.");
+        chanceSpawnAxe = cfg.getFloat(getKey() + "Chance_Axe", getConfigurationSection(), chanceSpawnAxe, 0, 1, "Defines the chance of a spectral axe spawning that's chopping logs and leaves for you for a bit when you break a log or leaf.");
+        chanceSpawnSword = cfg.getFloat(getKey() + "Chance_Sword", getConfigurationSection(), chanceSpawnSword, 0, 1, "Defines the chance of a spectral sword spawning that fights mobs nearby for a bit when you attack a mob.");
 
-        swordAttackDamage = cfg.getFloat(
-            getKey() + "Sword_Attack",
-            getConfigurationSection(),
-            swordAttackDamage,
-            0.1F,
-            32F,
-            "Defines the damage the sword does per attack");
+        swordAttackDamage = cfg.getFloat(getKey() + "Sword_Attack", getConfigurationSection(), swordAttackDamage, 0.1F, 32F, "Defines the damage the sword does per attack");
 
-        ticksSwordAttacks = cfg.getInt(
-            getKey() + "Ticks_Sword",
-            getConfigurationSection(),
-            ticksSwordAttacks,
-            1,
-            100,
-            "Definies how many ticks are at least between sword attacks the sword makes");
-        ticksBreakBlockAxe = cfg.getInt(
-            getKey() + "Ticks_Axe",
-            getConfigurationSection(),
-            ticksBreakBlockAxe,
-            1,
-            100,
-            "Definies how long an axe is going to need to break a leaf or log");
-        ticksBreakBlockPick = cfg.getInt(
-            getKey() + "Ticks_Pickaxe",
-            getConfigurationSection(),
-            ticksBreakBlockPick,
-            1,
-            100,
-            "Definies how long a pickaxe needs to break a block");
+        ticksSwordAttacks = cfg.getInt(getKey() + "Ticks_Sword", getConfigurationSection(), ticksSwordAttacks, 1, 100, "Definies how many ticks are at least between sword attacks the sword makes");
+        ticksBreakBlockAxe = cfg.getInt(getKey() + "Ticks_Axe", getConfigurationSection(), ticksBreakBlockAxe, 1, 100, "Definies how long an axe is going to need to break a leaf or log");
+        ticksBreakBlockPick = cfg.getInt(getKey() + "Ticks_Pickaxe", getConfigurationSection(), ticksBreakBlockPick, 1, 100, "Definies how long a pickaxe needs to break a block");
     }
 
 }

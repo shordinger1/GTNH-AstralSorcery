@@ -1,21 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
@@ -23,6 +15,14 @@ import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttribut
 import shordinger.astralsorcery.common.constellation.perk.attribute.modifier.AttributeModifierCritChance;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.projectile.EntityArrow;
+import shordinger.wrapper.net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import shordinger.wrapper.net.minecraftforge.event.entity.player.CriticalHitEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 
@@ -56,7 +56,7 @@ public class AttributeCritChance extends PerkAttributeType {
                     return;
                 }
                 float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
+                        .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
                 critChance = AttributeEvent.postProcessModded(player, this, critChance);
                 critChance /= 100.0F;
                 if (critChance >= rand.nextFloat()) {
@@ -71,14 +71,14 @@ public class AttributeCritChance extends PerkAttributeType {
         if (event.isVanillaCritical() || event.getResult() == Event.Result.ALLOW) {
             return;
         }
-        EntityPlayer player = event.entityPlayer;
+        EntityPlayer player = event.getEntityPlayer();
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         if (!hasTypeApplied(player, side)) {
             return;
         }
 
         float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
-            .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
+                .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 0F);
         critChance = AttributeEvent.postProcessModded(player, this, critChance);
         critChance /= 100.0F;
         if (critChance >= rand.nextFloat()) {

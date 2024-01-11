@@ -1,16 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.item.ItemStack;
 
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
@@ -18,6 +14,9 @@ import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -1,36 +1,37 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.init.Biomes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
-
+import shordinger.astralsorcery.client.render.tile.TESRTranslucentBlock;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
+import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
+import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.init.Biomes;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.Vec3i;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldType;
 import org.lwjgl.opengl.GL11;
 
-import shordinger.astralsorcery.common.structure.array.BlockArray;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,12 +52,12 @@ public class StructureMatchPreview {
 
     public void tick() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        if (pattern != null && Minecraft.getMinecraft().thePlayer != null) {
+        if (pattern != null && Minecraft.getMinecraft().player != null) {
             BlockPos at = tile.getLocationPos();
-            BlockPos v = pattern.getSize();
+            Vec3i v = pattern.getSize();
             int maxDim = Math.max(Math.max(v.getX(), v.getY()), v.getZ());
             maxDim = Math.max(9, maxDim);
-            if (Minecraft.getMinecraft().thePlayer.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
+            if (Minecraft.getMinecraft().player.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
                 resetTimeout();
                 return;
             }
@@ -71,14 +72,12 @@ public class StructureMatchPreview {
     @Nullable
     public Integer getPreviewSlice() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         if (pattern == null || world == null) {
             return null;
         }
-        int minY = pattern.getMin()
-            .getY();
-        for (int y = minY; y <= pattern.getMax()
-            .getY(); y++) {
+        int minY = pattern.getMin().getY();
+        for (int y = minY; y <= pattern.getMax().getY(); y++) {
             if (!pattern.matchesSlice(world, tile.getLocationPos(), y)) {
                 return y;
             }
@@ -87,34 +86,32 @@ public class StructureMatchPreview {
     }
 
     public boolean shouldBeRemoved() {
-        return timeout <= 0 || tile.getRequiredStructure() == null
-            || Minecraft.getMinecraft().theWorld == null
-            || Minecraft.getMinecraft().theWorld.provider.dimensionId
-            != ((TileEntity) tile).getWorld().provider.dimensionId
-            || tile.getRequiredStructure()
-            .matches(Minecraft.getMinecraft().theWorld, ((TileEntity) tile).getPos())
-            || ((TileEntity) tile).isInvalid();
+        return timeout <= 0 ||
+                tile.getRequiredStructure() == null ||
+                Minecraft.getMinecraft().world == null ||
+                Minecraft.getMinecraft().world.provider.getDimension() != ((TileEntity) tile).getWorld().provider.getDimension() ||
+                tile.getRequiredStructure().matches(Minecraft.getMinecraft().world, ((TileEntity) tile).getPos()) ||
+                ((TileEntity) tile).isInvalid();
     }
 
     public boolean isOriginatingFrom(IMultiblockDependantTile tile) {
         if (!(tile instanceof TileEntity)) return false;
         if (shouldBeRemoved()) return false;
-        return ((TileEntity) this.tile).getPos()
-            .equals(((TileEntity) tile).getPos());
+        return ((TileEntity) this.tile).getPos().equals(((TileEntity) tile).getPos());
     }
 
     public void renderPreview(float partialTicks) {
         PatternBlockArray pba = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         Integer slice = getPreviewSlice();
-        if (shouldBeRemoved() || pba == null || slice == null || world == null) {
+        if(shouldBeRemoved() || pba == null || slice == null || world == null) {
             return;
         }
 
         BlockPos center = tile.getLocationPos();
 
         IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, WorldType.DEBUG_ALL_BLOCK_STATES);
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
         TextureHelper.setActiveTextureToAtlasSprite();
@@ -127,8 +124,7 @@ public class StructureMatchPreview {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
         GlStateManager.translate(center.getX(), center.getY(), center.getZ());
 
-        for (Map.Entry<BlockPos, BlockArray.BlockInformation> patternEntry : pba.getPatternSlice(slice)
-            .entrySet()) {
+        for (Map.Entry<BlockPos, BlockArray.BlockInformation> patternEntry : pba.getPatternSlice(slice).entrySet()) {
             BlockPos offset = patternEntry.getKey();
             BlockArray.BlockInformation info = patternEntry.getValue();
 
@@ -136,7 +132,7 @@ public class StructureMatchPreview {
                 continue;
             }
 
-            IBlockState state = WorldHelper.getBlockState(world, center.add(offset));
+            IBlockState state = world.getBlockState(center.add(offset));
 
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             GlStateManager.pushMatrix();
@@ -144,8 +140,7 @@ public class StructureMatchPreview {
             GlStateManager.translate(0.125, 0.125, 0.125);
             GlStateManager.scale(0.75, 0.75, 0.75);
 
-            if (state.getBlock()
-                .isAir(state, world, center.add(offset))) {
+            if (state.getBlock().isAir(state, world, center.add(offset))) {
                 RenderingUtils.renderBlockSafely(airWorld, BlockPos.ORIGIN, info.state, vb);
             } else {
                 RenderingUtils.renderBlockSafelyWithOptionalColor(airWorld, BlockPos.ORIGIN, info.state, vb, 16711680);

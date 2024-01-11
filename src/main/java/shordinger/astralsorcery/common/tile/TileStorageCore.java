@@ -1,21 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
-
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
 
 import shordinger.astralsorcery.common.auxiliary.StorageNetworkHandler;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
@@ -23,7 +14,14 @@ import shordinger.astralsorcery.common.tile.storage.IStorageNetworkTile;
 import shordinger.astralsorcery.common.tile.storage.StorageCache;
 import shordinger.astralsorcery.common.tile.storage.StorageKey;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,21 +53,18 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     public void onLoad() {
         super.onLoad();
 
-        StorageNetworkHandler.getHandler(getWorld())
-            .addCore(this);
+        StorageNetworkHandler.getHandler(getWorld()).addCore(this);
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
 
-        StorageNetworkHandler.getHandler(getWorld())
-            .removeCore(this);
+        StorageNetworkHandler.getHandler(getWorld()).removeCore(this);
     }
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
     @Override
     public TileStorageCore getAssociatedCore() {
@@ -100,7 +95,7 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     }
 
     public boolean insertIntoStorage(ItemStack stack) {
-        return stack.stackSize!=0 && this.storageCache.add(stack);
+        return !stack.isEmpty() && this.storageCache.add(stack);
     }
 
     @Override

@@ -1,22 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry;
 
-import static net.minecraft.advancements.CriteriaTriggers.register;
-import static shordinger.astralsorcery.common.lib.AdvancementTriggers.*;
-
 import shordinger.astralsorcery.common.advancements.*;
-import shordinger.astralsorcery.common.advancements.AltarCraftTrigger;
-import shordinger.astralsorcery.common.advancements.AttuneCrystalTrigger;
-import shordinger.astralsorcery.common.advancements.AttuneSelfTrigger;
-import shordinger.astralsorcery.common.advancements.DiscoverConstellationTrigger;
-import shordinger.astralsorcery.common.advancements.PerkLevelTrigger;
+
+import static hellfirepvp.astralsorcery.common.lib.AdvancementTriggers.*;
+import static net.minecraft.advancements.CriteriaTriggers.register;
 
 /**
  * This class is part of the Astral Sorcery Mod

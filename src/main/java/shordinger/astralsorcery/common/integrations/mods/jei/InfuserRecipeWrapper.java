@@ -1,30 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.UniversalBucket;
-
 import com.google.common.collect.Lists;
-
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IStackHelper;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IStackHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.common.ForgeModContainer;
+import shordinger.wrapper.net.minecraftforge.fluids.UniversalBucket;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,18 +49,10 @@ public class InfuserRecipeWrapper extends JEIBaseWrapper {
                 ingredients.setInputs(ItemStack.class, stacks);
                 break;
             case STACK:
-                ingredients.setInput(
-                    ItemStack.class,
-                    inputHandle.getApplicableItems()
-                        .get(0));
+                ingredients.setInput(ItemStack.class, inputHandle.getApplicableItems().get(0));
                 break;
             case FLUID:
-                ingredients.setInput(
-                    ItemStack.class,
-                    UniversalBucket.getFilledBucket(
-                        ForgeModContainer.getInstance().universalBucket,
-                        inputHandle.getFluidTypeAndAmount()
-                            .getFluid()));
+                ingredients.setInput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, inputHandle.getFluidTypeAndAmount().getFluid()));
                 break;
             default:
                 break;
@@ -73,8 +62,7 @@ public class InfuserRecipeWrapper extends JEIBaseWrapper {
     }
 
     @Override
-    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    }
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
 
     @Nullable
     @Override

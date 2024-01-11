@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core.patch.hook;
 
+import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
-
-import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,18 +28,14 @@ public class PatchRunicShieldingHook extends ClassPatch {
     @Override
     public void patch(ClassNode cn) {
         MethodNode mn = getMethodLazy(cn, "handleRunicArmor", "handleRunicArmor");
-        AbstractInsnNode getStaticMaxCharge = findFirstInstructionAfter(
-            mn,
-            0,
-            (ain) -> ain.getOpcode() == Opcodes.GETSTATIC && ain instanceof FieldInsnNode
-                && ((FieldInsnNode) ain).name.equals("lastMaxCharge")).getPrevious();
+        AbstractInsnNode getStaticMaxCharge = findFirstInstructionAfter(mn, 0,
+                (ain) -> ain.getOpcode() == Opcodes.GETSTATIC &&
+                ain instanceof FieldInsnNode &&
+                ((FieldInsnNode) ain).name.equals("lastMaxCharge")).getPrevious();
 
         mn.instructions.insert(getStaticMaxCharge, new VarInsnNode(Opcodes.ISTORE, 1));
-        mn.instructions.insert(
-            getStaticMaxCharge,
-            new MethodInsnNode(
-                Opcodes.INVOKESTATIC,
-                "shordinger/astralsorcery/common/event/RunicShieldingCalculateEvent",
+        mn.instructions.insert(getStaticMaxCharge, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                "hellfirepvp/astralsorcery/common/event/RunicShieldingCalculateEvent",
                 "fire",
                 "(Lnet/minecraft/entity/player/EntityPlayer;I)I",
                 false));

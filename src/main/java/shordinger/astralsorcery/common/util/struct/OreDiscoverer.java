@@ -1,27 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.struct;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.BlockOre;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-
 import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.block.BlockOre;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +46,7 @@ public class OreDiscoverer {
                     for (int y = 0; y < highest; y++) {
                         pooledPos.setY(y);
                         IBlockState at = c.getBlockState(pooledPos);
-                        if (successfulOres.contains(at)) {
+                        if(successfulOres.contains(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
                         } else if (isOre(at)) {
                             out.addBlock(new BlockPos(pooledPos), at);
@@ -63,7 +62,7 @@ public class OreDiscoverer {
     }
 
     private static boolean isOre(IBlockState state) {
-        if (state.getBlock() instanceof BlockOre) { // WELL that's easy enough.
+        if (state.getBlock() instanceof BlockOre) { //WELL that's easy enough.
             return true;
         }
         ItemStack blockStack = ItemUtils.createBlockStack(state);
@@ -71,3 +70,4 @@ public class OreDiscoverer {
     }
 
 }
+

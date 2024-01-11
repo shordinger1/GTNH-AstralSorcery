@@ -1,15 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IItemStack;
@@ -18,6 +15,8 @@ import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.WellRecipeAdd;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.WellRecipeRemove;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -47,8 +46,7 @@ public class WellRecipe extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addLiquefaction(IItemStack input, ILiquidStack output, float productionMultiplier,
-                                       float shatterMultiplier, int colorhex) {
+    public static void addLiquefaction(IItemStack input, ILiquidStack output, float productionMultiplier, float shatterMultiplier, int colorhex) {
         ItemStack in = convertToItemStack(input);
         if (in.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input itemstack.");
@@ -61,8 +59,7 @@ public class WellRecipe extends BaseTweaker {
             return;
         }
 
-        ModIntegrationCrafttweaker.recipeModifications
-            .add(new WellRecipeAdd(in, fs.getFluid(), productionMultiplier, shatterMultiplier, colorhex));
+        ModIntegrationCrafttweaker.recipeModifications.add(new WellRecipeAdd(in, fs.getFluid(), productionMultiplier, shatterMultiplier, colorhex));
     }
 
 }

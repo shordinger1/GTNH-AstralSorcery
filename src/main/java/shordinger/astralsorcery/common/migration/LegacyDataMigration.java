@@ -1,24 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.migration;
 
+import shordinger.astralsorcery.common.base.RockCrystalHandler;
+import shordinger.astralsorcery.common.data.world.WorldCacheManager;
+import shordinger.astralsorcery.common.data.world.data.RockCrystalBuffer;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
-
-import shordinger.astralsorcery.common.base.RockCrystalHandler;
-import shordinger.astralsorcery.common.data.world.WorldCacheManager;
-import shordinger.astralsorcery.common.data.world.data.RockCrystalBuffer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,16 +38,15 @@ public class LegacyDataMigration {
             int totalChunkCount = crystalData.size();
 
             if (totalChunkCount > 0) {
-                msgOut.accept("Migrating rock crystal data for dimension " + world.provider.dimensionId);
+                msgOut.accept("Migrating rock crystal data for dimension " + world.provider.getDimension());
                 msgOut.accept(totalChunkCount + " chunks of crystals found!");
 
-                boolean keepingLoaded = DimensionManager.keepDimensionLoaded(world.provider.dimensionId, true);
+                boolean keepingLoaded = DimensionManager.keepDimensionLoaded(world.provider.getDimension(), true);
 
                 int chunkCount = 0;
                 int migrated = 0;
                 int failed = 0;
-                Iterator<List<BlockPos>> iterator = crystalData.values()
-                    .iterator();
+                Iterator<List<BlockPos>> iterator = crystalData.values().iterator();
                 while (iterator.hasNext()) {
                     List<BlockPos> positionList = iterator.next();
                     chunkCount++;
@@ -69,19 +69,16 @@ public class LegacyDataMigration {
                     }
 
                     if (chunkCount % 100 == 0) {
-                        world.getChunkProvider()
-                            .queueUnloadAll();
-                        world.getChunkProvider()
-                            .tick();
+                        world.getChunkProvider().queueUnloadAll();
+                        world.getChunkProvider().tick();
                     }
                 }
 
                 if (keepingLoaded) {
-                    DimensionManager.keepDimensionLoaded(world.provider.dimensionId, false);
+                    DimensionManager.keepDimensionLoaded(world.provider.getDimension(), false);
                 }
 
-                msgOut.accept(
-                    "Migrated " + migrated + " entries successfully. " + failed + " entries failed to be transferred!");
+                msgOut.accept("Migrated " + migrated + " entries successfully. " + failed + " entries failed to be transferred!");
             }
 
             data.markDirty();

@@ -1,31 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.CommonProxy;
@@ -39,19 +21,37 @@ import shordinger.astralsorcery.common.tile.TileGrindstone;
 import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.NonNullList;
-import shordinger.astralsorcery.migration.WorldHelper;
-import shordinger.astralsorcery.migration.block.AstralBlockContainer;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.init.SoundEvents;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-
-import static shordinger.astralsorcery.common.block.BlockMachine.MachineType.TELESCOPE;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,7 +60,7 @@ import static shordinger.astralsorcery.common.block.BlockMachine.MachineType.TEL
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:11
  */
-public class BlockMachine extends AstralBlockContainer implements BlockCustomName, BlockVariants {
+public class BlockMachine extends BlockContainer implements BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
@@ -77,43 +77,47 @@ public class BlockMachine extends AstralBlockContainer implements BlockCustomNam
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        IBlockState state = WorldHelper.getBlockState(world, pos);
-        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
-            RenderingUtils.playBlockBreakParticles(
-                pos.up(),
-                BlocksAS.blockMachine.getDefaultState()
-                    .withProperty(MACHINE_TYPE, TELESCOPE));
+        IBlockState state = world.getBlockState(pos);
+        switch (state.getValue(MACHINE_TYPE)) {
+            case TELESCOPE:
+                RenderingUtils.playBlockBreakParticles(pos.up(), BlocksAS.blockMachine.getDefaultState().withProperty(MACHINE_TYPE, MachineType.TELESCOPE));
         }
         return false;
     }
 
     @Override
     public String getHarvestTool(IBlockState state) {
-        if (!(state.getBlock() instanceof BlockMachine)) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
             return super.getHarvestTool(state);
         }
         MachineType t = state.getValue(MACHINE_TYPE);
-        return switch (t) {
-            case TELESCOPE -> "axe";
-            case GRINDSTONE -> "pickaxe";
-        };
+        switch (t) {
+            case TELESCOPE:
+                return "axe";
+            case GRINDSTONE:
+                return "pickaxe";
+        }
+        return super.getHarvestTool(state);
     }
 
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
-        if (!(state.getBlock() instanceof BlockMachine)) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
             return super.getSoundType(state, world, pos, entity);
         }
         MachineType t = state.getValue(MACHINE_TYPE);
-        return switch (t) {
-            case TELESCOPE -> SoundType.WOOD;
-            case GRINDSTONE -> SoundType.STONE;
-        };
+        switch (t) {
+            case TELESCOPE:
+                return SoundType.WOOD;
+            case GRINDSTONE:
+                return SoundType.STONE;
+        }
+        return super.getSoundType(state, world, pos, entity);
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        if (!(state.getBlock() instanceof BlockMachine)) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
             return super.getBoundingBox(state, source, pos);
         }
         MachineType t = state.getValue(MACHINE_TYPE);
@@ -157,199 +161,168 @@ public class BlockMachine extends AstralBlockContainer implements BlockCustomNam
         MachineType type = state.getValue(MACHINE_TYPE);
         if (type != MachineType.GRINDSTONE) return;
         TileGrindstone tgr = MiscUtils.getTileAt(worldIn, pos, TileGrindstone.class, true);
-        if (tgr == null || tgr.getGrindingItem()
-            .isEmpty()) return;
-        ItemUtils
-            .dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
+        if(tgr == null || tgr.getGrindingItem().isEmpty()) return;
+        ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player,
-                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if (type == TELESCOPE) {
-            if (player.worldObj.isRemote) {
-                AstralSorcery.proxy
-                    .openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, pos.getX(), pos.getY(), pos.getZ());
+        if (type == MachineType.TELESCOPE) {
+            if (player.world.isRemote) {
+                AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;
     }
 
     public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
-        EntityPlayer player = event.entityPlayer;
+        EntityPlayer player = event.getEntityPlayer();
         if (player instanceof EntityPlayerMP && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             return false;
         }
 
-        World world = event.world;
+        EnumHand hand = event.getHand();
+        World world = event.getWorld();
         BlockPos pos = event.getPos();
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = world.getBlockState(pos);
         MachineType type = state.getValue(MACHINE_TYPE);
         int posX = pos.getX();
         int posY = pos.getY();
         int posZ = pos.getZ();
-        if (Objects.requireNonNull(type) == MachineType.GRINDSTONE) {
-            TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
-            if (tgr != null) {
-                ItemStack grind = tgr.getGrindingItem();
-                if (!world.isRemote) {
-                    if (!grind.isEmpty()) {
-                        if (player.isSneaking()) {
-                            player.inventory.placeItemBackInInventory(world, grind);
+        switch (type) {
+            case GRINDSTONE:
+                TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
+                if(tgr != null) {
+                    if(!world.isRemote) {
+                        ItemStack grind = tgr.getGrindingItem();
+                        if(!grind.isEmpty()) {
+                            if(player.isSneaking()) {
+                                player.inventory.placeItemBackInInventory(world, grind);
 
-                            tgr.setGrindingItem(null);
-                        } else {
-                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
-                            if (recipe != null) {
-                                GrindstoneRecipe.GrindResult result = recipe.grind(grind);
-                                switch (result.getType()) {
-                                    case SUCCESS -> tgr.setGrindingItem(grind); // Update
-                                    case ITEMCHANGE -> tgr.setGrindingItem(result.getStack());
-                                    case FAIL_BREAK_ITEM -> {
-                                        tgr.setGrindingItem(null);
-                                        world.playSound(
-                                            null,
-                                            posX,
-                                            posY,
-                                            posZ,
-                                            SoundEvents.ENTITY_ITEM_BREAK,
-                                            SoundCategory.PLAYERS,
-                                            0.5F,
-                                            world.rand.nextFloat() * 0.2F + 0.8F);
+                                tgr.setGrindingItem(ItemStack.EMPTY);
+                            } else {
+                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                                if(recipe != null) {
+                                    GrindstoneRecipe.GrindResult result = recipe.grind(grind);
+                                    switch (result.getType()) {
+                                        case SUCCESS:
+                                            tgr.setGrindingItem(grind); //Update
+                                            break;
+                                        case ITEMCHANGE:
+                                            tgr.setGrindingItem(result.getStack());
+                                            break;
+                                        case FAIL_BREAK_ITEM:
+                                            tgr.setGrindingItem(ItemStack.EMPTY);
+                                            world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
+                                            break;
                                     }
+                                    tgr.playWheelEffect();
+                                } else if(SwordSharpenHelper.canBeSharpened(grind)) {
+                                    if(rand.nextInt(40) == 0) {
+                                        SwordSharpenHelper.setSwordSharpened(grind);
+                                    }
+                                    tgr.playWheelEffect();
                                 }
-                                tgr.playWheelEffect();
-                            } else if (SwordSharpenHelper.canBeSharpened(grind)) {
-                                if (rand.nextInt(40) == 0) {
-                                    SwordSharpenHelper.setSwordSharpened(grind);
+                            }
+                        } else {
+                            ItemStack stack = player.getHeldItem(hand);
+
+                            if(!stack.isEmpty()) {
+                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
+                                if(recipe != null) {
+                                    ItemStack toSet = stack.copy();
+                                    toSet.setCount(1);
+                                    tgr.setGrindingItem(toSet);
+                                    world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
+
+                                    if(!player.isCreative()) {
+                                        stack.setCount(stack.getCount() - 1);
+                                    }
+                                } else if(SwordSharpenHelper.canBeSharpened(stack) && !SwordSharpenHelper.isSwordSharpened(stack)) {
+                                    ItemStack toSet = stack.copy();
+                                    toSet.setCount(1);
+                                    tgr.setGrindingItem(toSet);
+                                    world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
+
+                                    if(!player.isCreative()) {
+                                        stack.setCount(stack.getCount() - 1);
+                                    }
+                                } else if(player.isSneaking()) {
+                                    return false;
                                 }
-                                tgr.playWheelEffect();
                             }
                         }
                     } else {
-                        ItemStack stack = player.getHeldItem();
-
-                        if (stack.stackSize != 0) {
-                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
-                            if (recipe != null) {
-                                ItemStack toSet = stack.copy();
-                                toSet.setCount(1);
-                                tgr.setGrindingItem(toSet);
-                                world.playSound(
-                                    null,
-                                    posX,
-                                    posY,
-                                    posZ,
-                                    SoundEvents.ENTITY_ITEM_PICKUP,
-                                    SoundCategory.PLAYERS,
-                                    0.5F,
-                                    world.rand.nextFloat() * 0.2F + 0.8F);
-
-                                if (!player.isCreative()) {
-                                    stack.setCount(stack.getCount() - 1);
+                        ItemStack grind = tgr.getGrindingItem();
+                        if(!grind.isEmpty()) {
+                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                            if(recipe != null) {
+                                for (int j = 0; j < 8; j++) {
+                                    world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
                                 }
-                            } else if (SwordSharpenHelper.canBeSharpened(stack)
-                                && !SwordSharpenHelper.isSwordSharpened(stack)) {
-                                ItemStack toSet = stack.copy();
-                                toSet.setCount(1);
-                                tgr.setGrindingItem(toSet);
-                                world.playSound(
-                                    null,
-                                    posX,
-                                    posY,
-                                    posZ,
-                                    SoundEvents.ENTITY_ITEM_PICKUP,
-                                    SoundCategory.PLAYERS,
-                                    0.5F,
-                                    world.rand.nextFloat() * 0.2F + 0.8F);
-
-                                if (!player.isCreative()) {
-                                    stack.setCount(stack.getCount() - 1);
+                            } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
+                                for (int j = 0; j < 8; j++) {
+                                    world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
                                 }
-                            } else if (player.isSneaking()) {
+                            } else if(player.isSneaking()) {
                                 return false;
                             }
                         }
                     }
-                } else {
-                    if (!grind.isEmpty()) {
-                        GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
-                        if (recipe != null) {
-                            for (int j = 0; j < 8; j++) {
-                                world.spawnParticle(
-                                    EnumParticleTypes.CRIT,
-                                    posX + 0.5,
-                                    posY + 0.8,
-                                    posZ + 0.4,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
-                            }
-                        } else if (SwordSharpenHelper.canBeSharpened(grind)
-                            && !SwordSharpenHelper.isSwordSharpened(grind)) {
-                            for (int j = 0; j < 8; j++) {
-                                world.spawnParticle(
-                                    EnumParticleTypes.CRIT,
-                                    posX + 0.5,
-                                    posY + 0.8,
-                                    posZ + 0.4,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
-                            }
-                        } else if (player.isSneaking()) {
-                            return false;
-                        }
-                    }
                 }
-            }
-            return true;
+                return true;
         }
         return false;
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-                                ItemStack stack) {
-        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
-            worldIn.setBlockState(
-                pos.up(),
-                BlocksAS.blockStructural.getDefaultState()
-                    .withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE_STRUCT));
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        switch (state.getValue(MACHINE_TYPE)) {
+            case TELESCOPE:
+                worldIn.setBlockState(pos.up(), BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.TELESCOPE_STRUCT));
+                break;
         }
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
-            if (world.isAirBlock(pos.up())) {
-                world.setBlockToAir(pos);
-            }
+        switch (state.getValue(MACHINE_TYPE)) {
+            case TELESCOPE:
+                if(world.isAirBlock(pos.up())) {
+                    world.setBlockToAir(pos);
+                }
+                break;
         }
         super.neighborChanged(state, world, pos, blockIn, fromPos);
     }
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        if (!(world instanceof World)) {
+        if(!(world instanceof World)) {
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = WorldHelper.getBlockState(world, pos);
-        if (state.getValue(MACHINE_TYPE).equals(TELESCOPE)) {
-            if (world.isAirBlock(pos.up())) {
-                ((World) world).setBlockToAir(pos);
-            }
+        IBlockState state = world.getBlockState(pos);
+        switch (state.getValue(MACHINE_TYPE)) {
+            case TELESCOPE:
+                if(world.isAirBlock(pos.up())) {
+                    ((World) world).setBlockToAir(pos);
+                }
+                break;
         }
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < MachineType.values().length
-            ? getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta])
-            : getDefaultState();
+        return meta < MachineType.values().length ? getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta]) : getDefaultState();
     }
 
     @Override
@@ -359,13 +332,12 @@ public class BlockMachine extends AstralBlockContainer implements BlockCustomNam
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -422,8 +394,7 @@ public class BlockMachine extends AstralBlockContainer implements BlockCustomNam
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(MACHINE_TYPE)
-            .getName();
+        return state.getValue(MACHINE_TYPE).getName();
     }
 
     public static enum MachineType implements IStringSerializable, IVariantTileProvider {

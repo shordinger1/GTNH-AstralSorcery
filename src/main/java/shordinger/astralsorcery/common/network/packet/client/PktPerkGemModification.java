@@ -1,29 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.client;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.GemSlotPerk;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,8 +38,7 @@ public class PktPerkGemModification implements IMessageHandler<PktPerkGemModific
     private ResourceLocation perkKey;
     private int slotId = -1;
 
-    public PktPerkGemModification() {
-    }
+    public PktPerkGemModification() {}
 
     public static PktPerkGemModification insertItem(AbstractPerk perk, int slotId) {
         PktPerkGemModification pkt = new PktPerkGemModification();
@@ -73,38 +71,34 @@ public class PktPerkGemModification implements IMessageHandler<PktPerkGemModific
 
     @Override
     public IMessage onMessage(PktPerkGemModification pkt, MessageContext ctx) {
-        FMLCommonHandler.instance()
-            .getMinecraftServerInstance()
-            .addScheduledTask(() -> {
-                AbstractPerk perk = PerkTree.PERK_TREE.getPerk(pkt.perkKey);
-                if (perk == null || !(perk instanceof GemSlotPerk)) { // Exclusively for socketable gem perks.
-                    return;
-                }
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            AbstractPerk perk = PerkTree.PERK_TREE.getPerk(pkt.perkKey);
+            if (perk == null || !(perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
+                return;
+            }
 
-                EntityPlayer player = ctx.getServerHandler().player;
-                switch (pkt.action) {
-                    case 0:
-                        ItemStack stack = player.inventory.getStackInSlot(pkt.slotId);
-                        ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
-                        if (!toInsert.isEmpty() && toInsert.getItem() instanceof ItemPerkGem
-                            && !ItemPerkGem.getModifiers(toInsert)
-                            .isEmpty()
-                            && !((GemSlotPerk) perk).hasItem(player, Side.SERVER)
-                            && ((GemSlotPerk) perk).setContainedItem(player, Side.SERVER, toInsert)) {
-                            player.inventory.setInventorySlotContents(
-                                pkt.slotId,
-                                ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
-                        }
-                        break;
-                    case 1:
-                        if (((GemSlotPerk) perk).hasItem(player, Side.SERVER)) {
-                            ((GemSlotPerk) perk).dropItemToPlayer(player);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            });
+            EntityPlayer player = ctx.getServerHandler().player;
+            switch (pkt.action) {
+                case 0:
+                    ItemStack stack = player.inventory.getStackInSlot(pkt.slotId);
+                    ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
+                    if (!toInsert.isEmpty() &&
+                            toInsert.getItem() instanceof ItemPerkGem &&
+                            !ItemPerkGem.getModifiers(toInsert).isEmpty() &&
+                            !((GemSlotPerk) perk).hasItem(player, Side.SERVER) &&
+                            ((GemSlotPerk) perk).setContainedItem(player, Side.SERVER, toInsert)) {
+                        player.inventory.setInventorySlotContents(pkt.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
+                    }
+                    break;
+                case 1:
+                    if (((GemSlotPerk) perk).hasItem(player, Side.SERVER)) {
+                        ((GemSlotPerk) perk).dropItemToPlayer(player);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
         return null;
     }
 

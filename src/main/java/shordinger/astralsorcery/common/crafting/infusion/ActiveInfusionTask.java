@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fluids.FluidStack;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileChalice;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -39,7 +39,7 @@ public class ActiveInfusionTask {
     private final UUID playerCraftingUUID;
     private int ticksCrafting = 0;
 
-    private final List<TileChalice> supportingChalices = new LinkedList<>();
+    private List<TileChalice> supportingChalices = new LinkedList<>();
     private List<BlockPos> pendingChalicePositions = new LinkedList<>();
 
     public ActiveInfusionTask(AbstractInfusionRecipe recipeToCraft, UUID playerCraftingUUID) {
@@ -52,9 +52,9 @@ public class ActiveInfusionTask {
     }
 
     public int getChaliceRequiredAmount() {
-        return recipeToCraft.doesConsumeMultiple()
-            ? MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400 * 12)
-            : MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400);
+        return recipeToCraft.doesConsumeMultiple() ?
+                MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400 * 12) :
+                MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400);
     }
 
     public UUID getPlayerCraftingUUID() {
@@ -63,10 +63,7 @@ public class ActiveInfusionTask {
 
     @Nullable
     public EntityPlayer tryGetCraftingPlayerServer() {
-        return FMLCommonHandler.instance()
-            .getMinecraftServerInstance()
-            .getPlayerList()
-            .getPlayerByUUID(playerCraftingUUID);
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerCraftingUUID);
     }
 
     public boolean tick(TileStarlightInfuser infuser) {
@@ -74,8 +71,8 @@ public class ActiveInfusionTask {
         boolean change = this.pendingChalicePositions.size() > 0;
 
         for (BlockPos bp : this.pendingChalicePositions) {
-            TileChalice test = MiscUtils.getTileAt(infuser.getWorldObj(), bp, TileChalice.class, true);
-            if (test != null) {
+            TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), bp, TileChalice.class, true);
+            if(test != null) {
                 this.supportingChalices.add(test);
             }
         }
@@ -89,13 +86,11 @@ public class ActiveInfusionTask {
                 iterator.remove();
                 change = true;
             } else {
-                TileChalice test = MiscUtils.getTileAt(infuser.getWorldObj(), tc.getPos(), TileChalice.class, true);
-                if (test == null || test.getTank() == null
-                    || test.getTank()
-                    .getFluid() == null
-                    || !test.getTank()
-                    .getFluid()
-                    .containsFluid(fl)) {
+                TileChalice test = MiscUtils.getTileAt(infuser.getWorld(), tc.getPos(), TileChalice.class, true);
+                if(test == null ||
+                        test.getTank() == null ||
+                        test.getTank().getFluid() == null ||
+                        !test.getTank().getFluid().containsFluid(fl)) {
                     iterator.remove();
                     change = true;
                 }
@@ -116,7 +111,7 @@ public class ActiveInfusionTask {
         return supportingChalices;
     }
 
-    // Used on clientside for rendering since we don't resolve the tile there
+    //Used on clientside for rendering since we don't resolve the tile there
     @SideOnly(Side.CLIENT)
     public List<BlockPos> getPendingChalicePositions() {
         return pendingChalicePositions;
@@ -127,8 +122,8 @@ public class ActiveInfusionTask {
     }
 
     public boolean isFinished() {
-        return ticksCrafting >= (recipeToCraft.craftingTickTime()
-            * (recipeToCraft.canBeSupportedByChalice() && !supportingChalices.isEmpty() ? 0.3F : 1F));
+        return ticksCrafting >= (recipeToCraft.craftingTickTime() *
+                (recipeToCraft.canBeSupportedByChalice() && !supportingChalices.isEmpty() ? 0.3F : 1F));
     }
 
     public void forceTick(int tick) {

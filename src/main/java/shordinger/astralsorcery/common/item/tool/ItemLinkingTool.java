@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.auxiliary.link.LinkHandler;
 import shordinger.astralsorcery.common.item.base.ISpecialInteractItem;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,20 +34,17 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    /*
-     * @Override
-     * public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos,
-     * ForgeDirection side, float hitX, float hitY, float hitZ) {
-     * if(!world.isRemote) {
-     * LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
-     * LinkHandler.propagateClick(result, player, world, pos);
-     * return EnumActionResult.SUCCESS;
-     * } else {
-     * player.swingArm(hand);
-     * return EnumActionResult.PASS;
-     * }
-     * }
-     */
+    /*@Override
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        if(!world.isRemote) {
+            LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
+            LinkHandler.propagateClick(result, player, world, pos);
+            return EnumActionResult.SUCCESS;
+        } else {
+            player.swingArm(hand);
+            return EnumActionResult.PASS;
+        }
+    }*/
 
     @Override
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
@@ -56,11 +52,9 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
-                                ItemStack stack) {
-        if (!world.isRemote) {
-            LinkHandler.RightClickResult result = LinkHandler
-                .onRightClick(entityPlayer, world, pos, entityPlayer.isSneaking());
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
+        if(!world.isRemote) {
+            LinkHandler.RightClickResult result = LinkHandler.onRightClick(entityPlayer, world, pos, entityPlayer.isSneaking());
             LinkHandler.propagateClick(result, entityPlayer, world, pos);
         } else {
             entityPlayer.swingArm(hand);

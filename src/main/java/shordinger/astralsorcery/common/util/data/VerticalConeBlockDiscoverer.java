@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,9 +33,9 @@ public class VerticalConeBlockDiscoverer {
         List<BlockPos> out = new LinkedList<>();
 
         int lX = MathHelper.floor(offset.getX() - flatRadius);
-        int hX = MathHelper.ceil(offset.getX() + flatRadius);
+        int hX =  MathHelper.ceil(offset.getX() + flatRadius);
         int lZ = MathHelper.floor(offset.getZ() - flatRadius);
-        int hZ = MathHelper.ceil(offset.getZ() + flatRadius);
+        int hZ =  MathHelper.ceil(offset.getZ() + flatRadius);
 
         Vector3 center = new Vector3(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5);
         for (int yy = offset.getY(); yy >= Math.max(0, offset.getY() - lengthDown); yy--) {
@@ -47,7 +47,7 @@ public class VerticalConeBlockDiscoverer {
                     double dX = center.getX() - at.getX();
                     double dZ = center.getZ() - at.getZ();
                     double dstCur = Math.sqrt(dX * dX + dZ * dZ);
-                    if (dstCur <= dstAllowed) {
+                    if(dstCur <= dstAllowed) {
                         out.add(new BlockPos(at.toBlockPos()));
                     }
                 }

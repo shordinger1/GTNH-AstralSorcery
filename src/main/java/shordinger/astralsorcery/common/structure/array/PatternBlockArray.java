@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure.array;
 
-import java.util.Map;
+import shordinger.astralsorcery.common.structure.MatchableStructure;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.common.structure.MatchableStructure;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,8 +45,8 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
-            IBlockState state = WorldHelper.getBlockState(world, at);
-            if (!info.matcher.isStateValid(state)) {
+            IBlockState state = world.getBlockState(at);
+            if(!info.matcher.isStateValid(state)) {
                 return false;
             }
         }
@@ -54,12 +54,11 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
     }
 
     public boolean matchesSlice(World world, BlockPos center, int slice) {
-        for (Map.Entry<BlockPos, BlockInformation> entry : this.getPatternSlice(slice)
-            .entrySet()) {
+        for (Map.Entry<BlockPos, BlockInformation> entry : this.getPatternSlice(slice).entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
-            IBlockState state = WorldHelper.getBlockState(world, at);
-            if (!info.matcher.isStateValid(state)) {
+            IBlockState state = world.getBlockState(at);
+            if(!info.matcher.isStateValid(state)) {
                 return false;
             }
         }
@@ -67,16 +66,16 @@ public class PatternBlockArray extends BlockArray implements MatchableStructure 
     }
 
     public boolean matchSingleBlockState(BlockPos offset, IBlockState state) {
-        if (!pattern.containsKey(offset)) return false;
+        if(!pattern.containsKey(offset)) return false;
         BlockInformation info = pattern.get(offset);
         return info.matcher.isStateValid(state);
     }
 
     public boolean matchSingleBlock(IBlockAccess world, BlockPos center, BlockPos offset) {
-        if (!pattern.containsKey(offset)) return false;
+        if(!pattern.containsKey(offset)) return false;
         BlockInformation info = pattern.get(offset);
         BlockPos at = center.add(offset);
-        IBlockState state = WorldHelper.getBlockState(world, at);
+        IBlockState state = world.getBlockState(at);
         return info.matcher.isStateValid(state);
     }
 

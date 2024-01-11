@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.models.base;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.client.model.ModelBase;
+import shordinger.wrapper.net.minecraft.client.model.ModelRenderer;
+import shordinger.wrapper.net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -41,7 +41,7 @@ public class ASaltarT3 extends ModelBase {
         this.hovering1.setRotationPoint(-9.0F, 8.0F, -9.0F);
         this.hovering1.addBox(-9.0F, 0.0F, -9.0F, 9, 6, 9, 0.0F);
         this.setRotateAngle(hovering1, -0.39269908169872414F, 0.0F, 0.39269908169872414F);
-        this.hovering2 = new ModelRenderer(this, 0, 15);
+		this.hovering2 = new ModelRenderer(this, 0, 15);
         this.hovering2.setRotationPoint(9.0F, 8.0F, -9.0F);
         this.hovering2.addBox(0.0F, 0.0F, -9.0F, 9, 6, 9, 0.0F);
         this.setRotateAngle(hovering2, -0.39269908169872414F, 0.0F, -0.39269908169872414F);
@@ -65,7 +65,7 @@ public class ASaltarT3 extends ModelBase {
         this.subhovering3.setRotationPoint(0.0F, 8.0F, 12.0F);
         this.subhovering3.addBox(-3.0F, 0.0F, 0.0F, 6, 6, 6, 0.0F);
         this.setRotateAngle(subhovering3, 0.39269908169872414F, 0.0F, 0.0F);
-        this.subhovering4 = new ModelRenderer(this, 40, 36);
+		this.subhovering4 = new ModelRenderer(this, 40, 36);
         this.subhovering4.setRotationPoint(-12.0F, 8.0F, 0.0F);
         this.subhovering4.addBox(-6.0F, 0.0F, -3.0F, 6, 6, 6, 0.0F);
         this.setRotateAngle(subhovering4, 0.0F, 0.0F, 0.39269908169872414F);
@@ -73,14 +73,14 @@ public class ASaltarT3 extends ModelBase {
 
     @Override
     public void render(Entity entity, float jump, float f1, float f2, float f3, float f4, float scale) {
-        renderHovering(subhovering3, jump, 1);
-        renderHovering(subhovering1, jump + jmpParts, 1);
-        renderHovering(hovering4, jump + jmpParts * 2, 1);
+        renderHovering(subhovering3, jump,                1);
+        renderHovering(subhovering1, jump + jmpParts,     1);
+        renderHovering(hovering4,    jump + jmpParts * 2, 1);
         renderHovering(subhovering2, jump + jmpParts * 3, 1);
-        renderHovering(hovering1, jump + jmpParts * 4, 1);
-        renderHovering(hovering2, jump + jmpParts * 5, 1);
+        renderHovering(hovering1,    jump + jmpParts * 4, 1);
+        renderHovering(hovering2,    jump + jmpParts * 5, 1);
         renderHovering(subhovering4, jump + jmpParts * 6, 1);
-        renderHovering(hovering3, jump + jmpParts * 7, 1);
+        renderHovering(hovering3,    jump + jmpParts * 7, 1);
     }
 
     private void renderHovering(ModelRenderer model, float jump, float scale) {

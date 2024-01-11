@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.projectile.EntityArrow;
+import shordinger.wrapper.net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,16 +35,17 @@ public class AttributeArrowSpeed extends PerkAttributeType {
 
     @SubscribeEvent
     public void onArrowFire(EntityJoinWorldEvent event) {
-        if (event.entity instanceof EntityArrow arrow) {
-            if (arrow.shootingEntity instanceof EntityPlayer player) {
-                Side side = player.worldObj.isRemote ? Side.CLIENT : Side.SERVER;
+        if (event.getEntity() instanceof EntityArrow) {
+            EntityArrow arrow = (EntityArrow) event.getEntity();
+            if (arrow.shootingEntity != null && arrow.shootingEntity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) arrow.shootingEntity;
+                Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
                 if (!hasTypeApplied(player, side)) {
                     return;
                 }
 
                 Vector3 motion = new Vector3(arrow.motionX, arrow.motionY, arrow.motionZ);
-                float mul = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
+                float mul = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, ResearchManager.getProgress(player, side), getTypeString(), 1F);
                 mul = AttributeEvent.postProcessModded(player, this, mul);
                 motion.multiply(mul);
                 arrow.motionX = motion.getX();

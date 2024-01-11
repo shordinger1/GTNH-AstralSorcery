@@ -1,26 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.entities;
 
 import com.google.common.collect.Iterables;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.sound.SoundEvent;
 import shordinger.astralsorcery.common.container.ContainerObservatory;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
+import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
+import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;
+import shordinger.wrapper.net.minecraft.util.SoundEvent;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,8 +39,7 @@ import java.util.UUID;
  */
 public class EntityObservatoryHelper extends Entity {
 
-    private static final DataParameter<BlockPos> FIXED = EntityDataManager
-        .createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
+    private static DataParameter<BlockPos> FIXED = EntityDataManager.createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
 
     public EntityObservatoryHelper(World worldIn) {
         super(worldIn);
@@ -62,7 +65,7 @@ public class EntityObservatoryHelper extends Entity {
 
     @Nullable
     public TileObservatory tryGetObservatory() {
-        return MiscUtils.getTileAt(worldObj, getFixedObservatoryPos(), TileObservatory.class, false);
+        return MiscUtils.getTileAt(this.world, getFixedObservatoryPos(), TileObservatory.class, false);
     }
 
     @Override
@@ -72,32 +75,32 @@ public class EntityObservatoryHelper extends Entity {
         this.noClip = true;
 
         TileObservatory to;
-        if ((to = isOnTelescope()) == null) {
-            if (!worldObj.isRemote) {
+        if((to = isOnTelescope()) == null) {
+            if(!world.isRemote) {
                 setDead();
             }
             return;
         }
         List<Entity> passengers = getPassengers();
-        if (!to.isUsable()) {
+        if(!to.isUsable()) {
             passengers.forEach(Entity::dismountRidingEntity);
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if (riding instanceof EntityPlayer) {
+        if(riding != null && riding instanceof EntityPlayer) {
             applyObservatoryRotationsFrom(to, (EntityPlayer) riding);
         }
     }
 
     public void applyObservatoryRotationsFrom(TileObservatory to, EntityPlayer riding) {
-        if (riding.openContainer instanceof ContainerObservatory) {
-            // Adjust observatory pitch and jaw to player head
+        if (riding.openContainer != null && riding.openContainer instanceof ContainerObservatory) {
+            //Adjust observatory pitch and jaw to player head
             this.rotationYaw = riding.rotationYawHead;
             this.prevRotationYaw = riding.prevRotationYawHead;
             this.rotationPitch = riding.rotationPitch;
             this.prevRotationPitch = riding.prevRotationPitch;
-        } else {
-            // Adjust observatory to player-body
+        } else  {
+            //Adjust observatory to player-body
             this.rotationYaw = riding.renderYawOffset;
             this.prevRotationYaw = riding.prevRenderYawOffset;
         }
@@ -108,12 +111,12 @@ public class EntityObservatoryHelper extends Entity {
     @Nullable
     private TileObservatory isOnTelescope() {
         BlockPos fixed = getFixedObservatoryPos();
-        TileObservatory to = MiscUtils.getTileAt(worldObj, fixed, TileObservatory.class, true);
+        TileObservatory to = MiscUtils.getTileAt(this.world, fixed, TileObservatory.class, true);
         if (to == null) {
             return null;
         }
         UUID helper = to.getEntityHelperRef();
-        if (helper == null || !helper.equals(this.entityUniqueID)) {
+        if(helper == null || !helper.equals(this.entityUniqueID)) {
             return null;
         }
         return to;
@@ -121,7 +124,7 @@ public class EntityObservatoryHelper extends Entity {
 
     @Override
     protected boolean canBeRidden(Entity entityIn) {
-        if (!super.canBeRidden(entityIn)) return false;
+        if(!super.canBeRidden(entityIn)) return false;
         TileObservatory to = isOnTelescope();
         return to != null && to.isUsable();
     }
@@ -162,12 +165,10 @@ public class EntityObservatoryHelper extends Entity {
     }
 
     @Override
-    public void playSound(SoundEvent soundIn, float volume, float pitch) {
-    }
+    public void playSound(SoundEvent soundIn, float volume, float pitch) {}
 
     @Override
-    protected void playStepSound(BlockPos pos, Block blockIn) {
-    }
+    protected void playStepSound(BlockPos pos, Block blockIn) {}
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
@@ -185,10 +186,8 @@ public class EntityObservatoryHelper extends Entity {
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
-    }
+    protected void readEntityFromNBT(NBTTagCompound compound) {}
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
-    }
+    protected void writeEntityToNBT(NBTTagCompound compound) {}
 }

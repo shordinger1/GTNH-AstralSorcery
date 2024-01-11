@@ -1,31 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,8 +71,8 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     @Override
     public IMessage onMessage(PktProgressionUpdate message, MessageContext ctx) {
         AstralSorcery.proxy.scheduleClientside(() -> {
-            if (message.isPresent) {
-                if (message.isProg) {
+            if(message.isPresent) {
+                if(message.isProg) {
                     addProgressChatMessage();
                 } else {
                     addResearchChatMessage(message.tier);
@@ -87,10 +86,9 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     @SideOnly(Side.CLIENT)
     private void closeAndRefreshJournal() {
         GuiScreen open = Minecraft.getMinecraft().currentScreen;
-        if (open != null) {
-            if (open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
-                Minecraft.getMinecraft()
-                    .displayGuiScreen(null);
+        if(open != null) {
+            if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
+                Minecraft.getMinecraft().displayGuiScreen(null);
             }
         }
 
@@ -103,13 +101,13 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
         String tr = I18n.format(prog.getUnlocalizedName());
         String out = I18n.format("progress.gain.research.chat", tr);
         out = TextFormatting.AQUA + out;
-        Minecraft.getMinecraft().thePlayer.sendMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
     }
 
     @SideOnly(Side.CLIENT)
     private void addProgressChatMessage() {
         String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
-        Minecraft.getMinecraft().thePlayer.sendMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
     }
 
 }

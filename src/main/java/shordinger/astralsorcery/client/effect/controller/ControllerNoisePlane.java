@@ -1,15 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.controller;
-
-import java.awt.*;
-import java.util.Random;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.effect.EffectHandler;
@@ -17,7 +14,10 @@ import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,19 +46,12 @@ public class ControllerNoisePlane implements EntityComplexFX.RenderOffsetControl
     }
 
     public EntityFXFacingParticle setupParticle() {
-        FXPlanarEffect p = new FXPlanarEffect(
-            0,
-            0,
-            0,
-            T_RAND.nextFloat() * 360F,
-            ringSize * 0.9F + T_RAND.nextFloat() * ringSize * 0.2F);
-        p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
-            .setAlphaMultiplier(0.75F)
-            .setColor(Color.WHITE);
-        p.setRenderOffsetController(this)
-            .gravity(0.004);
-        EffectHandler.getInstance()
-            .registerFX(p);
+        FXPlanarEffect p = new FXPlanarEffect(0, 0, 0,
+                T_RAND.nextFloat() * 360F,
+                ringSize * 0.9F + T_RAND.nextFloat() * ringSize * 0.2F);
+        p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(0.75F).setColor(Color.WHITE);
+        p.setRenderOffsetController(this).gravity(0.004);
+        EffectHandler.getInstance().registerFX(p);
         return p;
     }
 
@@ -71,14 +64,14 @@ public class ControllerNoisePlane implements EntityComplexFX.RenderOffsetControl
     }
 
     private void checkRotations() {
-        if (ClientScheduler.getClientTick() >= targetSample) {
+        if(ClientScheduler.getClientTick() >= targetSample) {
             buildRotations();
         }
     }
 
     private void buildRotations() {
         this.lastSample = ClientScheduler.getClientTick();
-        if (this.rotationDeg != null) {
+        if(this.rotationDeg != null) {
             this.prevRotationDeg = this.rotationDeg;
         } else {
             this.prevRotationDeg = Vector3.positiveYRandom();
@@ -99,22 +92,18 @@ public class ControllerNoisePlane implements EntityComplexFX.RenderOffsetControl
 
     private Vector3 getInterpolatedVectorRotation(float percent, Vector3 vZero, Vector3 vOne) {
         return new Vector3(
-            RenderingUtils.interpolate(vZero.getX(), vOne.getX(), percent),
-            RenderingUtils.interpolate(vZero.getY(), vOne.getY(), percent),
-            RenderingUtils.interpolate(vZero.getZ(), vOne.getZ(), percent));
+                RenderingUtils.interpolate(vZero.getX(), vOne.getX(), percent),
+                RenderingUtils.interpolate(vZero.getY(), vOne.getY(), percent),
+                RenderingUtils.interpolate(vZero.getZ(), vOne.getZ(), percent));
     }
 
     @Override
-    public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion,
-                                        float pTicks) {
-        if (!(fx instanceof FXPlanarEffect)) {
+    public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion, float pTicks) {
+        if(!(fx instanceof FXPlanarEffect)) {
             return currentRenderPos;
         }
         Vector3 angle = getCurrentRotationDegree(pTicks);
-        Vector3 v = angle.clone()
-            .perpendicular()
-            .normalize()
-            .multiply(((FXPlanarEffect) fx).initialDistance);
+        Vector3 v = angle.clone().perpendicular().normalize().multiply(((FXPlanarEffect) fx).initialDistance);
         v.rotate(Math.toRadians(((FXPlanarEffect) fx).degreeRotation), angle);
         return currentRenderPos.add(v);
     }

@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.starlight.IIndependentStarlightSource;
 import shordinger.astralsorcery.common.starlight.IStarlightSource;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +48,7 @@ public class SimpleTransmissionSourceNode extends SimplePrismTransmissionNode im
 
         @Override
         public String getIdentifier() {
-            return Tags.MODID + ":SimpleTransmissionSourceNode";
+            return AstralSorcery.MODID + ":SimpleTransmissionSourceNode";
         }
 
     }

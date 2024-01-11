@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.base;
 
-import java.util.Random;
-
 import shordinger.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,11 +27,11 @@ public abstract class TileNetwork extends TileEntityTick {
     public void update() {
         super.update();
 
-        if (world.isRemote) {
+        if(world.isRemote) {
             return;
         }
 
-        if (!isNetworkInformed && !TransmissionNetworkHelper.isTileInNetwork(this)) {
+        if(!isNetworkInformed && !TransmissionNetworkHelper.isTileInNetwork(this)) {
             TransmissionNetworkHelper.informNetworkTilePlacement(this);
             isNetworkInformed = true;
         }
@@ -43,7 +43,7 @@ public abstract class TileNetwork extends TileEntityTick {
     }
 
     public void onBreak() {
-        if (world.isRemote) return;
+        if(world.isRemote) return;
         TransmissionNetworkHelper.informNetworkTileRemoval(this);
         isNetworkInformed = false;
     }

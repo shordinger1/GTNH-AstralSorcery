@@ -1,21 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.Objects;
-
-import javax.annotation.Nullable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
 import shordinger.astralsorcery.client.gui.perk.PerkRender;
 import shordinger.astralsorcery.client.gui.perk.PerkRenderGroup;
@@ -26,7 +18,14 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,7 +36,7 @@ import shordinger.astralsorcery.migration.BufferBuilder;
  */
 public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
 
-    private final Point offset;
+    private Point offset;
     private final T perk;
     private int renderSize;
 
@@ -74,8 +73,9 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
-    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx, AllocationStatus status, long spriteOffsetTick,
-                                              float pTicks, double x, double y, double scale) {
+    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+                                       AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                       double x, double y, double scale) {
         SpriteSheetResource tex = getFlareSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
@@ -95,33 +95,47 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(size * u * 2)
-                .addY(size * v * 2);
+            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
             vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
-                .color(1F, 1F, 1F, 1F)
-                .endVertex();
+                    .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
+                    .color(1F, 1F, 1F, 1F)
+                    .endVertex();
         }
 
         return new Rectangle.Double(-size, -size, size * 2, size * 2);
     }
 
     protected SpriteSheetResource getFlareSprite(AllocationStatus status) {
-        SpriteSheetResource tex = switch (status) {
-            case ALLOCATED -> SpriteLibrary.spritePerkActive;
-            case UNLOCKABLE -> SpriteLibrary.spritePerkActivateable;
-            default -> SpriteLibrary.spritePerkInactive;
-        };
+        SpriteSheetResource tex;
+        switch (status) {
+            case ALLOCATED:
+                tex = SpriteLibrary.spritePerkActive;
+                break;
+            case UNLOCKABLE:
+                tex = SpriteLibrary.spritePerkActivateable;
+                break;
+            case UNALLOCATED:
+            default:
+                tex = SpriteLibrary.spritePerkInactive;
+                break;
+        }
         return tex;
     }
 
     protected SpriteSheetResource getHaloSprite(AllocationStatus status) {
-        SpriteSheetResource tex = switch (status) {
-            case ALLOCATED -> SpriteLibrary.spriteHalo5;
-            case UNLOCKABLE -> SpriteLibrary.spriteHalo6;
-            default -> SpriteLibrary.spriteHalo4;
-        };
+        SpriteSheetResource tex;
+        switch (status) {
+            case ALLOCATED:
+                tex = SpriteLibrary.spriteHalo5;
+                break;
+            case UNLOCKABLE:
+                tex = SpriteLibrary.spriteHalo6;
+                break;
+            case UNALLOCATED:
+            default:
+                tex = SpriteLibrary.spriteHalo4;
+                break;
+        }
         return tex;
     }
 

@@ -1,38 +1,39 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.geolosys;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-import shordinger.astralsorcery.migration.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -58,8 +59,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-    }
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {}
 
     @Override
     public boolean causesSuffocation(IBlockState state) {
@@ -92,9 +92,10 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
-        if (replaceable) {
+        if(replaceable) {
             BlockPos down = pos.down();
-            if (!worldIn.isSideSolid(down, ForgeDirection.UP)) replaceable = false;
+            if(!worldIn.isSideSolid(down, EnumFacing.UP))
+                replaceable = false;
         }
         return replaceable;
     }
@@ -105,11 +106,8 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-                                  EntityPlayer player) {
-        return super.getPickBlock(WorldHelper.getBlockState(world, pos), target, world, pos, player); // Waila fix. wtf.
-        // why waila.
-        // why.
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
     }
 
     @Override
@@ -120,7 +118,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -128,7 +126,7 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if (!downState.isSideSolid(worldIn, down, ForgeDirection.UP)) {
+        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
@@ -138,12 +136,9 @@ public class BlockGeolosysSampleCluster extends BlockContainer {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileGeolosysSampleCluster te = MiscUtils.getTileAt(worldIn, pos, TileGeolosysSampleCluster.class, true);
-        if (te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(
-                PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
-                pos.getX(),
-                pos.getY(),
-                pos.getZ());
+        if(te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
+                    pos.getX(), pos.getY(), pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
         }
         super.breakBlock(worldIn, pos, state);

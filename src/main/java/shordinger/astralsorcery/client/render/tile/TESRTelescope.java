@@ -1,24 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
-
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.models.base.AStelescope;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.tile.TileTelescope;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,32 +28,20 @@ import shordinger.astralsorcery.common.tile.TileTelescope;
 public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
 
     private static final AStelescope modelTelescope = new AStelescope();
-    private static final BindableResource texTelescope = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/telescope");
+    private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/telescope");
 
     @Override
-    public void render(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5, y + 1.28, z + 0.5);
         GlStateManager.rotate(180, 1, 0, 0);
         GlStateManager.rotate(180, 0, 1, 0);
-        GlStateManager.rotate(
-            te.getRotation()
-                .ordinal() * 45,
-            0,
-            1,
-            0);
+        GlStateManager.rotate(te.getRotation().ordinal() * 45, 0, 1, 0);
         GlStateManager.scale(0.0625, 0.0625, 0.0625);
 
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(
-            (te.getRotation()
-                .ordinal()) * 45 + 152.0F,
-            0.0F,
-            1.0F,
-            0.0F);
+        GlStateManager.rotate((te.getRotation().ordinal()) * 45 + 152.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(165.0F, 1.0F, 0.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GlStateManager.popMatrix();

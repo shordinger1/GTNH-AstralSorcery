@@ -1,27 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.cape;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.Random;
@@ -39,7 +39,7 @@ public abstract class CapeArmorEffect extends ConfigEntry {
 
     private NBTTagCompound data = new NBTTagCompound();
 
-    // MUST BE OVERWRITTEN, WITH NBTTAGCMP AS ONLY PARAM!
+    //MUST BE OVERWRITTEN, WITH NBTTAGCMP AS ONLY PARAM!
     protected CapeArmorEffect(NBTTagCompound cmp, String key) {
         super(Section.CAPE, key);
         this.data = cmp;
@@ -56,43 +56,41 @@ public abstract class CapeArmorEffect extends ConfigEntry {
 
     public final void flush(EntityLivingBase entity) {
         ItemStack is = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!is.isEmpty()) {
+        if(!is.isEmpty()) {
             NBTTagCompound cmp = NBTHelper.getPersistentData(is);
             flush(cmp);
         }
     }
 
     public final void flush(NBTTagCompound out) {
-        for (String key : this.data.func_150296_c()) {
+        for (String key : this.data.getKeySet()) {
             out.setTag(key, out.getTag(key));
         }
     }
 
     @SideOnly(Side.CLIENT)
     protected void playConstellationCapeSparkles(EntityPlayer pl, float strength) {
-        if (pl == Minecraft.getMinecraft().thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+        if (pl == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
             strength *= 0.1F;
         }
-        if (rand.nextFloat() < strength) {
+        if(rand.nextFloat() < strength) {
             Color c = getAssociatedConstellation().getConstellationColor();
-            if (c != null) {
+            if(c != null) {
                 double x = pl.posX + rand.nextFloat() * pl.width - (pl.width / 2);
                 double y = pl.posY + rand.nextFloat() * (pl.height / 2) + 0.2;
                 double z = pl.posZ + rand.nextFloat() * pl.width - (pl.width / 2);
 
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-                p.setColor(c)
-                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                p.setColor(c).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
                 p.scale(rand.nextFloat() * 0.5F + 0.3F);
-                if (rand.nextInt(3) == 0) {
+                if(rand.nextInt(3) == 0) {
                     p.setColor(IConstellation.weak);
                 }
                 p.setMaxAge(30 + rand.nextInt(20));
 
-                if (rand.nextFloat() < 0.8F) {
+                if(rand.nextFloat() < 0.8F) {
                     p = EffectHelper.genericFlareParticle(x, y, z);
-                    p.setColor(Color.WHITE)
-                        .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                    p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
                     p.scale(rand.nextFloat() * 0.2F + 0.1F);
                     p.setMaxAge(20 + rand.nextInt(10));
                 }

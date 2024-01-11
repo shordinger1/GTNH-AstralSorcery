@@ -1,36 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -40,8 +17,27 @@ import shordinger.astralsorcery.common.network.packet.server.PktProgressionUpdat
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.TextFormatting;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.server.MinecraftServer;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -79,7 +75,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
             tooltip.add(I18n.format("misc.knowledge.missing"));
         } else {
             String name = getKnowledgeOwnerName(stack);
-            if (name != null) {
+            if(name != null) {
                 tooltip.add(I18n.format("misc.knowledge.inscribed", (TextFormatting.BLUE + name)));
             }
         }
@@ -88,11 +84,9 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
         if (isCreative(stack) || getKnowledgeOwnerName(stack) != null) {
-            return new ModelResourceLocation(
-                new ResourceLocation(
-                    suggestedDefaultLocation.getResourceDomain(),
+            return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
                     suggestedDefaultLocation.getResourcePath() + "_written"),
-                suggestedDefaultLocation.getVariant());
+                    suggestedDefaultLocation.getVariant());
         }
         return suggestedDefaultLocation;
     }
@@ -101,15 +95,14 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     public List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation) {
         List<ResourceLocation> out = new LinkedList<>();
         out.add(defaultLocation);
-        out.add(
-            new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_written"));
+        out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_written"));
         return out;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if (stack.stackSize==0 || worldIn.isRemote) {
+        if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
         if (!isCreative(stack) && (playerIn.isSneaking() || getKnowledge(stack) == null)) {
@@ -121,10 +114,9 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos,
-                                      ForgeDirection facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem();
-        if (stack.stackSize==0 || worldIn.isRemote) {
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty() || worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         }
         if (!isCreative(stack) && (player.isSneaking() || getKnowledge(stack) == null)) {
@@ -144,13 +136,11 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
             ResearchManager.forceMaximizeAll(player);
             return;
         }
-        if (canInscribeKnowledge(stack, player)) return; // Means it's either empty or the player that has incsribed the
-        // knowledge is trying to use it.
+        if (canInscribeKnowledge(stack, player)) return; //Means it's either empty or the player that has incsribed the knowledge is trying to use it.
         PlayerProgress progress = getKnowledge(stack);
         if (progress == null) return;
         ProgressionTier prev = progress.getTierReached();
-        if (ResearchManager.mergeApplyPlayerprogress(progress, player) && progress.getTierReached()
-            .isThisLater(prev)) {
+        if (ResearchManager.mergeApplyPlayerprogress(progress, player) && progress.getTierReached().isThisLater(prev)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
@@ -170,8 +160,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
             return null;
         }
         UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
-        return server.getPlayerList()
-            .getPlayerByUUID(owner);
+        return server.getPlayerList().getPlayerByUUID(owner);
     }
 
     @Nullable
@@ -208,8 +197,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
             return true;
         }
         UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
-        return player.getUniqueID()
-            .equals(owner);
+        return player.getUniqueID().equals(owner);
     }
 
     public void setKnowledge(ItemStack stack, EntityPlayer player, PlayerProgress progress) {
@@ -218,7 +206,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
         NBTTagCompound knowledge = new NBTTagCompound();
         progress.storeKnowledge(knowledge);
         NBTTagCompound compound = NBTHelper.getPersistentData(stack);
-        compound.setString("knowledgeOwnerName", player.getDisplayName());
+        compound.setString("knowledgeOwnerName", player.getName());
         compound.setUniqueId("knowledgeOwnerUUID", player.getUniqueID());
         compound.setTag("knowledgeTag", knowledge);
     }
@@ -232,8 +220,7 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     private void setCreative(ItemStack stack) {
-        NBTHelper.getPersistentData(stack)
-            .setBoolean("creativeKnowledge", true);
+        NBTHelper.getPersistentData(stack).setBoolean("creativeKnowledge", true);
     }
 
 }

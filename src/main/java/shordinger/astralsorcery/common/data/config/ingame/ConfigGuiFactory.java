@@ -1,21 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.config.ingame;
 
-import java.util.Set;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.config.ingame.screen.GuiConfigOverview;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraftforge.fml.client.IModGuiFactory;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,8 +28,7 @@ import shordinger.astralsorcery.common.data.config.ingame.screen.GuiConfigOvervi
 public class ConfigGuiFactory implements IModGuiFactory {
 
     @Override
-    public void initialize(Minecraft minecraftInstance) {
-    }
+    public void initialize(Minecraft minecraftInstance) {}
 
     @Override
     public boolean hasConfigGui() {

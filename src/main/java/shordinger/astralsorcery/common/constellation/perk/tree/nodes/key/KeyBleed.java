@@ -1,22 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
@@ -25,7 +16,15 @@ import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,23 +41,12 @@ public class KeyBleed extends KeyPerk {
     public KeyBleed(String name, int x, int y) {
         super(name, x, y);
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
-
             @Override
             public void loadFromConfig(Configuration cfg) {
-                bleedDuration = cfg.getInt(
-                    "BleedDuration",
-                    getConfigurationSection(),
-                    bleedDuration,
-                    5,
-                    400,
-                    "Defines the duration of the bleeding effect when applied. Refreshes this duration when a it is applied again");
-                bleedChance = cfg.getFloat(
-                    "BleedChance",
-                    getConfigurationSection(),
-                    bleedChance,
-                    0.01F,
-                    1F,
-                    "Defines the base chance a bleed can/is applied when an entity is being hit by this entity");
+                bleedDuration = cfg.getInt("BleedDuration", getConfigurationSection(), bleedDuration, 5, 400,
+                        "Defines the duration of the bleeding effect when applied. Refreshes this duration when a it is applied again");
+                bleedChance = cfg.getFloat("BleedChance", getConfigurationSection(), bleedChance, 0.01F, 1F,
+                        "Defines the base chance a bleed can/is applied when an entity is being hit by this entity");
             }
         });
     }
@@ -73,26 +61,23 @@ public class KeyBleed extends KeyPerk {
 
     @SubscribeEvent
     public void onAttack(LivingHurtEvent event) {
-        DamageSource source = event.source;
+        DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                EntityLivingBase target = event.entityLiving;
+                EntityLivingBase target = event.getEntityLiving();
 
                 float chance = bleedChance;
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
+                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_CHANCE, chance);
                 if (rand.nextFloat() < chance) {
-                    int stackCap = 3; // So the "real" stackcap is 'amplifier = 3' that means we always have to be lower
-                    // than this value.
-                    stackCap = Math.round(
-                        PerkAttributeHelper.getOrCreateMap(player, side)
+                    int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
+                    stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS, stackCap));
                     int duration = bleedDuration;
-                    duration = Math.round(
-                        PerkAttributeHelper.getOrCreateMap(player, side)
+                    duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION, duration));
 
                     int setAmplifier = 0;
@@ -103,8 +88,7 @@ public class KeyBleed extends KeyPerk {
                         }
                     }
 
-                    target.addPotionEffect(
-                        new PotionEffect(RegistryPotions.potionBleed, duration, setAmplifier, false, true));
+                    target.addPotionEffect(new PotionEffect(RegistryPotions.potionBleed, duration, setAmplifier, false, true));
                 }
             }
         }

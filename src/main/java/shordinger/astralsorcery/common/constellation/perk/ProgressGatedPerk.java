@@ -1,28 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk;
 
-import java.util.Collection;
-import java.util.function.BiFunction;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collection;
+import java.util.function.BiFunction;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,22 +48,17 @@ public class ProgressGatedPerk extends AbstractPerk {
     }
 
     public void addRequireProgress(ResearchProgression progression) {
-        addResearchPreRequisite(
-            ((player, progress) -> progress.getResearchProgression()
-                .contains(progression)));
+        addResearchPreRequisite(((player, progress) -> progress.getResearchProgression().contains(progression)));
     }
 
     public void addRequireTier(ProgressionTier tier) {
-        addResearchPreRequisite(
-            ((player, progress) -> progress.getTierReached()
-                .isThisLaterOrEqual(tier)));
+        addResearchPreRequisite(((player, progress) -> progress.getTierReached().isThisLaterOrEqual(tier)));
     }
 
     public void addResearchPreRequisite(BiFunction<EntityPlayer, PlayerProgress, Boolean> unlockFunction) {
         BiFunction<EntityPlayer, PlayerProgress, Boolean> prev = this.unlockFunction;
-        this.unlockFunction = (player, progress) -> prev.apply(player, progress)
-            && unlockFunction.apply(player, progress);
-        disableTooltipCaching(); // Cannot cache as it may change.
+        this.unlockFunction = (player, progress) -> prev.apply(player, progress) && unlockFunction.apply(player, progress);
+        disableTooltipCaching(); //Cannot cache as it may change.
     }
 
     @Override
@@ -86,7 +81,7 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @SideOnly(Side.CLIENT)
     public final boolean canSeeClient() {
-        return canSee(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
+        return canSee(Minecraft.getMinecraft().player, Side.CLIENT);
     }
 
     public final boolean canSee(EntityPlayer player, Side side) {
@@ -102,11 +97,9 @@ public class ProgressGatedPerk extends AbstractPerk {
     }
 
     @Override
-    protected void applyPerkLogic(EntityPlayer player, Side side) {
-    }
+    protected void applyPerkLogic(EntityPlayer player, Side side) {}
 
     @Override
-    protected void removePerkLogic(EntityPlayer player, Side side) {
-    }
+    protected void removePerkLogic(EntityPlayer player, Side side) {}
 
 }

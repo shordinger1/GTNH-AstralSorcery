@@ -1,24 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.root;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.stats.StatBase;
-import net.minecraft.stats.StatList;
-import net.minecraft.stats.StatisticsManager;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
@@ -28,6 +17,16 @@ import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.PlayerActivityManager;
 import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.stats.StatBase;
+import shordinger.wrapper.net.minecraft.stats.StatList;
+import shordinger.wrapper.net.minecraft.stats.StatisticsManager;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,14 +48,10 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
         super.removePerkLogic(player, side);
 
         if (side == Side.SERVER) {
-            this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>())
-                .remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>())
-                .remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>())
-                .remove(player.getUniqueID());
-            this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>())
-                .remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
+            this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).remove(player.getUniqueID());
         }
     }
 
@@ -79,14 +74,10 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             int flown = manager.readStat(StatList.FLY_ONE_CM);
             int elytra = manager.readStat(StatList.AVIATE_ONE_CM);
 
-            int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>())
-                .computeIfAbsent(uuid, u -> walked);
-            int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>())
-                .computeIfAbsent(uuid, u -> sprint);
-            int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>())
-                .computeIfAbsent(uuid, u -> flown);
-            int lastElytra = this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>())
-                .computeIfAbsent(uuid, u -> elytra);
+            int lastWalked = this.moveTrackMap.computeIfAbsent(StatList.WALK_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> walked);
+            int lastSprint = this.moveTrackMap.computeIfAbsent(StatList.SPRINT_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> sprint);
+            int lastFly = this.moveTrackMap.computeIfAbsent(StatList.FLY_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> flown);
+            int lastElytra = this.moveTrackMap.computeIfAbsent(StatList.AVIATE_ONE_CM, s -> new HashMap<>()).computeIfAbsent(uuid, u -> elytra);
 
             float added = 0;
 
@@ -95,8 +86,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                 if (added >= 500F) {
                     added = 500F;
                 }
-                this.moveTrackMap.get(StatList.WALK_ONE_CM)
-                    .put(uuid, walked);
+                this.moveTrackMap.get(StatList.WALK_ONE_CM).put(uuid, walked);
             }
             if (sprint > lastSprint) {
                 added += Math.min(sprint - lastSprint, 500F);
@@ -104,23 +94,20 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
                     added = 500F;
                 }
                 added *= 1.2F;
-                this.moveTrackMap.get(StatList.SPRINT_ONE_CM)
-                    .put(uuid, sprint);
+                this.moveTrackMap.get(StatList.SPRINT_ONE_CM).put(uuid, sprint);
             }
             if (flown > lastFly) {
                 added += Math.min(flown - lastFly, 500F);
                 added *= 0.4F;
-                this.moveTrackMap.get(StatList.FLY_ONE_CM)
-                    .put(uuid, flown);
+                this.moveTrackMap.get(StatList.FLY_ONE_CM).put(uuid, flown);
             }
             if (elytra > lastElytra) {
                 added += Math.min(elytra - lastElytra, 500F);
                 added *= 0.8F;
-                this.moveTrackMap.get(StatList.AVIATE_ONE_CM)
-                    .put(uuid, flown);
+                this.moveTrackMap.get(StatList.AVIATE_ONE_CM).put(uuid, flown);
             }
 
-            if (PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
+            if (!PlayerActivityManager.INSTANCE.isPlayerActiveServer(player)) {
                 return;
             }
 
@@ -129,14 +116,12 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
 
                 added *= 0.025F;
                 added *= expMultiplier;
-                added = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
-                added = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, added);
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
                 added = AttributeEvent.postProcessModded(player, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
 
                 float xpGain = added;
-                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getDisplayName() + " (Vicio)");
+                LogCategory.PERKS.info(() -> "Grant " + xpGain + " exp to " + player.getName() + " (Vicio)");
 
                 ResearchManager.modifyExp(player, xpGain);
             }

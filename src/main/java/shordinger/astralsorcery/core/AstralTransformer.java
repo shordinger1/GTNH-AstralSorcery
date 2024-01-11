@@ -1,19 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core;
 
-import net.minecraft.launchwrapper.IClassTransformer;
+import shordinger.astralsorcery.core.transform.AstralPatchTransformer;
+import shordinger.wrapper.net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
-import shordinger.astralsorcery.core.transform.AstralPatchTransformer;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
  */
 public class AstralTransformer implements IClassTransformer {
 
-    private static final List<SubClassTransformer> subTransformers = new LinkedList<>();
+    private static List<SubClassTransformer> subTransformers = new LinkedList<>();
 
     public AstralTransformer() throws IOException {
         loadSubTransformers();
@@ -35,19 +37,19 @@ public class AstralTransformer implements IClassTransformer {
 
     private void loadSubTransformers() throws IOException {
         subTransformers.add(new AstralPatchTransformer());
-        // subTransformers.add(new TransformerSideStrippable());
+        //subTransformers.add(new TransformerSideStrippable());
     }
 
     private boolean isTransformationRequired(String trName) {
         for (SubClassTransformer transformer : subTransformers) {
-            if (transformer.isTransformRequired(trName)) return true;
+            if(transformer.isTransformRequired(trName)) return true;
         }
         return false;
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
-        if (!isTransformationRequired(transformedName)) return bytes;
+        if(!isTransformationRequired(transformedName)) return bytes;
 
         ClassNode node = new ClassNode();
         ClassReader reader = new ClassReader(bytes);
@@ -61,7 +63,7 @@ public class AstralTransformer implements IClassTransformer {
                 AstralCore.log.warn("Transformer added information:");
                 subTransformer.addErrorInformation();
                 asmException.printStackTrace();
-                throw asmException; // Rethrow
+                throw asmException; //Rethrow
             }
         }
 
@@ -69,19 +71,19 @@ public class AstralTransformer implements IClassTransformer {
         node.accept(writer);
         bytes = writer.toByteArray();
 
-        // if (false) {
-        // try {
-        // File f = new File("C:/ASTestClasses/" + transformedName + ".class");
-        // f.getParentFile()
-        // .mkdirs();
-        // f.createNewFile();
-        // FileOutputStream out = new FileOutputStream(f);
-        // out.write(bytes);
-        // out.close();
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
-        // }
+        if (false) {
+            try {
+                File f = new File("C:/ASTestClasses/" + transformedName + ".class");
+                f.getParentFile().mkdirs();
+                f.createNewFile();
+                FileOutputStream out = new FileOutputStream(f);
+                out.write(bytes);
+                out.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         return bytes;
     }

@@ -1,19 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
-
-import net.minecraft.client.Minecraft;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 
 import shordinger.astralsorcery.client.models.base.ASobservatory;
 import shordinger.astralsorcery.client.util.Blending;
@@ -25,6 +18,12 @@ import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.entities.EntityObservatoryHelper;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,22 +35,18 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> {
 
     private static final ASobservatory modelTelescope = new ASobservatory();
-    private static final BindableResource texTelescope = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/observatory");
+    private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/observatory");
 
     @Override
-    public void render(TileObservatory te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
-        if (new Vector3(x, y, z).length() >= 64) {
+    public void render(TileObservatory te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        if(new Vector3(x, y, z).length() >= 64) {
             return;
         }
 
         Entity ridden;
         EntityPlayer player;
-        if ((player = Minecraft.getMinecraft().thePlayer) != null
-            && (ridden = Minecraft.getMinecraft().thePlayer.getRidingEntity()) != null
-            && ridden instanceof EntityObservatoryHelper
-            && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
+        if ((player = Minecraft.getMinecraft().player) != null && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null &&
+                ridden instanceof EntityObservatoryHelper && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
             ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(te, player);
         }
 

@@ -1,20 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.light;
 
-import net.minecraft.client.Minecraft;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
 import shordinger.astralsorcery.client.util.Blending;
@@ -22,6 +15,13 @@ import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -49,11 +49,8 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     public EffectLightbeam(Vector3 from, Vector3 to, double fromSize, double toSize) {
         this.from = from;
         this.to = to;
-        this.aim = to.clone()
-            .subtract(from);
-        this.aimPerp = aim.clone()
-            .perpendicular()
-            .normalize();
+        this.aim = to.clone().subtract(from);
+        this.aimPerp = aim.clone().perpendicular().normalize();
         this.fromSize = fromSize;
         this.toSize = toSize;
     }
@@ -125,10 +122,9 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
 
     @Override
     public void render(float pTicks) {
-        Entity rView = Minecraft.getMinecraft()
-            .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
-        if (rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > distanceCapSq) return;
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) rView = Minecraft.getMinecraft().player;
+        if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > distanceCapSq) return;
 
         float tr = alphaFunction.getAlpha(age, maxAge);
         tr *= 0.6;
@@ -143,17 +139,16 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
         Blending.PREALPHA.applyStateManager();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
-        if (lighting) {
+        if(lighting) {
             GlStateManager.disableLighting();
         }
-        SpriteLibrary.spriteLightbeam.getResource()
-            .bindTexture();
+        SpriteLibrary.spriteLightbeam.getResource().bindTexture();
 
         renderCurrentTextureAroundAxis(Math.toRadians(0F));
         renderCurrentTextureAroundAxis(Math.toRadians(120F));
         renderCurrentTextureAroundAxis(Math.toRadians(240F));
 
-        if (lighting) {
+        if(lighting) {
             GlStateManager.enableLighting();
         }
         Blending.DEFAULT.applyStateManager();
@@ -173,14 +168,11 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     }
 
     private void renderCurrentTextureAroundAxis(double angle) {
-        Vector3 perp = aimPerp.clone()
-            .rotate(angle, aim)
-            .normalize();
-        Vector3 perpFrom = perp.clone()
-            .multiply(fromSize);
+        Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
+        Vector3 perpFrom = perp.clone().multiply(fromSize);
         Vector3 perpTo = perp.multiply(toSize);
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
@@ -190,30 +182,14 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         double uWidth = SpriteLibrary.spriteLightbeam.getULength();
         double vHeight = SpriteLibrary.spriteLightbeam.getVLength();
 
-        Vector3 vec = from.clone()
-            .add(
-                perpFrom.clone()
-                    .multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(u, v + vHeight)
-            .endVertex();
-        vec = from.clone()
-            .add(perpFrom);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(u + uWidth, v + vHeight)
-            .endVertex();
-        vec = to.clone()
-            .add(perpTo);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(u + uWidth, v)
-            .endVertex();
-        vec = to.clone()
-            .add(
-                perpTo.clone()
-                    .multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(u, v)
-            .endVertex();
+        Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).endVertex();
+        vec = from.clone().add(perpFrom);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).endVertex();
+        vec = to.clone().add(perpTo);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .endVertex();
+        vec = to.clone().add(perpTo.clone().multiply(-1));
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .endVertex();
 
         tes.draw();
     }

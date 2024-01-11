@@ -1,25 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
-import java.awt.*;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityFlareColor;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import shordinger.astralsorcery.common.util.Provider;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod

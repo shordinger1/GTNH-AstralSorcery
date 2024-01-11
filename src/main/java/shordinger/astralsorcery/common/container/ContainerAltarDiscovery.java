@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraft.inventory.Slot;
+import shordinger.wrapper.net.minecraftforge.items.SlotItemHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,7 +29,7 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
-            addSlotToContainer(new SlotItemHandler(invHandler, xx, 62 + xx * 18, 11));
+            addSlotToContainer(new SlotItemHandler(invHandler,     xx, 62 + xx * 18, 11));
         }
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new SlotItemHandler(invHandler, 3 + xx, 62 + xx * 18, 29));

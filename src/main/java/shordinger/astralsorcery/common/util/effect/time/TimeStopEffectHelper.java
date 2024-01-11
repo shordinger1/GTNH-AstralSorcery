@@ -1,31 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.effect.time;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.ITickable;
-import net.minecraft.world.chunk.Chunk;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -33,8 +15,24 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EntitySelectors;
+import shordinger.wrapper.net.minecraft.util.ITickable;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +41,7 @@ import shordinger.astralsorcery.migration.MathHelper;
  * Created by HellFirePvP
  * Date: 17.10.2017 / 22:55
  */
-// Shell class for rendering and syncing over network.
+//Shell class for rendering and syncing over network.
 public class TimeStopEffectHelper {
 
     private static Random rand = new Random();
@@ -54,8 +52,7 @@ public class TimeStopEffectHelper {
     private TimeStopZone.EntityTargetController targetController;
     private boolean reducedParticles;
 
-    private TimeStopEffectHelper(@Nonnull BlockPos position, float range,
-                                 TimeStopZone.EntityTargetController targetController, boolean reducedParticles) {
+    private TimeStopEffectHelper(@Nonnull BlockPos position, float range, TimeStopZone.EntityTargetController targetController, boolean reducedParticles) {
         this.position = position;
         this.range = range;
         this.targetController = targetController;
@@ -89,30 +86,20 @@ public class TimeStopEffectHelper {
 
     @SideOnly(Side.CLIENT)
     public static void playEntityParticles(PktParticleEvent ev) {
-        playEntityParticles(
-            ev.getVec()
-                .getX(),
-            ev.getVec()
-                .getY(),
-            ev.getVec()
-                .getZ());
+        playEntityParticles(ev.getVec().getX(), ev.getVec().getY(), ev.getVec().getZ());
     }
 
     @SideOnly(Side.CLIENT)
     static void playEntityParticles(double x, double y, double z) {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-        p.setColor(Color.WHITE)
-            .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-        p.scale(rand.nextFloat() * 0.5F + 0.3F)
-            .gravity(0.004);
+        p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
         p.setMaxAge(40 + rand.nextInt(20));
 
-        if (rand.nextFloat() < 0.9F) {
+        if(rand.nextFloat() < 0.9F) {
             p = EffectHelper.genericFlareParticle(x, y, z);
-            p.setColor(Color.WHITE)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-            p.scale(rand.nextFloat() * 0.2F + 0.1F)
-                .gravity(0.004);
+            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.scale(rand.nextFloat() * 0.2F + 0.1F).gravity(0.004);
             p.setMaxAge(30 + rand.nextInt(10));
         }
     }
@@ -120,14 +107,12 @@ public class TimeStopEffectHelper {
     @SideOnly(Side.CLIENT)
     public void playClientTickEffect() {
         Random rand = new Random();
-        List<EntityLivingBase> entities = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(
-            EntityLivingBase.class,
-            new AxisAlignedBB(-range, -range, -range, range, range, range)
-                .offset(position.getX(), position.getY(), position.getZ()),
-            EntitySelectors.withinRange(position.getX(), position.getY(), position.getZ(), range));
+        List<EntityLivingBase> entities = Minecraft.getMinecraft().world.getEntitiesWithinAABB(EntityLivingBase.class,
+                new AxisAlignedBB(-range, -range, -range, range, range, range).offset(position.getX(), position.getY(), position.getZ()),
+                EntitySelectors.withinRange(position.getX(), position.getY(), position.getZ(), range));
         for (EntityLivingBase e : entities) {
-            if (e != null && !e.isDead && targetController.shouldFreezeEntity(e)) {
-                if (reducedParticles && rand.nextInt(5) == 0) continue;
+            if(e != null && !e.isDead && targetController.shouldFreezeEntity(e)) {
+                if(reducedParticles && rand.nextInt(5) == 0) continue;
                 playEntityParticles(e);
             }
         }
@@ -139,42 +124,29 @@ public class TimeStopEffectHelper {
 
         for (int xx = minX; xx <= maxX; ++xx) {
             for (int zz = minZ; zz <= maxZ; ++zz) {
-                Chunk ch = Minecraft.getMinecraft().theWorld.getChunkFromChunkCoords(xx, zz);
-                if (!ch.isEmpty()) {
+                Chunk ch = Minecraft.getMinecraft().world.getChunkFromChunkCoords(xx, zz);
+                if(!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
-                        if (reducedParticles && rand.nextInt(5) == 0) continue;
+                        if(reducedParticles && rand.nextInt(5) == 0) continue;
                         TileEntity te = teEntry.getValue();
-                        if (te != null && te instanceof ITickable
-                            && position.getDistance(
-                            te.getPos()
-                                .getX(),
-                            te.getPos()
-                                .getY(),
-                            te.getPos()
-                                .getZ())
-                            <= range) {
+                        if(te != null &&
+                                te instanceof ITickable &&
+                                position.getDistance(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()) <= range) {
 
-                            double x = te.getPos()
-                                .getX() + rand.nextFloat();
-                            double y = te.getPos()
-                                .getY() + rand.nextFloat();
-                            double z = te.getPos()
-                                .getZ() + rand.nextFloat();
+                            double x = te.getPos().getX() + rand.nextFloat();
+                            double y = te.getPos().getY() + rand.nextFloat();
+                            double z = te.getPos().getZ() + rand.nextFloat();
 
                             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-                            p.setColor(Color.WHITE)
-                                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                            p.scale(rand.nextFloat() * 0.5F + 0.3F)
-                                .gravity(0.004);
+                            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                            p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
                             p.setMaxAge(40 + rand.nextInt(20));
 
-                            if (rand.nextFloat() < 0.9F) {
+                            if(rand.nextFloat() < 0.9F) {
                                 p = EffectHelper.genericFlareParticle(x, y, z);
-                                p.setColor(Color.WHITE)
-                                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                                p.scale(rand.nextFloat() * 0.2F + 0.1F)
-                                    .gravity(0.004);
+                                p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                                p.scale(rand.nextFloat() * 0.2F + 0.1F).gravity(0.004);
                                 p.setMaxAge(30 + rand.nextInt(10));
                             }
                         }
@@ -185,42 +157,29 @@ public class TimeStopEffectHelper {
 
         Vector3 pos;
         for (int i = 0; i < 10; i++) {
-            if (reducedParticles && rand.nextInt(5) == 0) continue;
-            pos = Vector3.random()
-                .normalize()
-                .multiply(rand.nextFloat() * range)
-                .add(position);
+            if(reducedParticles && rand.nextInt(5) == 0) continue;
+            pos = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
 
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-            p.setColor(Color.WHITE)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-            p.scale(rand.nextFloat() * 0.5F + 0.3F)
-                .gravity(0.004);
+            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
             p.setMaxAge(40 + rand.nextInt(20));
 
-            if (rand.nextFloat() < 0.9F) {
+            if(rand.nextFloat() < 0.9F) {
                 p = EffectHelper.genericFlareParticle(x, y, z);
-                p.setColor(Color.WHITE)
-                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                p.scale(rand.nextFloat() * 0.2F + 0.1F)
-                    .gravity(0.004);
+                p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                p.scale(rand.nextFloat() * 0.2F + 0.1F).gravity(0.004);
                 p.setMaxAge(30 + rand.nextInt(10));
             }
         }
-        if (rand.nextInt(4) == 0) {
-            if (!reducedParticles || rand.nextInt(5) == 0) {
-                Vector3 rand1 = Vector3.random()
-                    .normalize()
-                    .multiply(rand.nextFloat() * range)
-                    .add(position);
-                Vector3 rand2 = Vector3.random()
-                    .normalize()
-                    .multiply(rand.nextFloat() * range)
-                    .add(position);
-                AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().theWorld, rand1, rand2, Color.WHITE);
+        if(rand.nextInt(4) == 0) {
+            if(!reducedParticles || rand.nextInt(5) == 0) {
+                Vector3 rand1 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
+                Vector3 rand2 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
+                AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().world, rand1, rand2, Color.WHITE);
             }
         }
     }
@@ -240,11 +199,7 @@ public class TimeStopEffectHelper {
         BlockPos at = NBTHelper.readBlockPosFromNBT(cmp);
         float range = cmp.getFloat("range");
         boolean reducedParticles = cmp.getBoolean("reducedParticles");
-        return new TimeStopEffectHelper(
-            at,
-            range,
-            TimeStopZone.EntityTargetController.deserializeNBT(cmp.getCompoundTag("targetController")),
-            reducedParticles);
+        return new TimeStopEffectHelper(at, range, TimeStopZone.EntityTargetController.deserializeNBT(cmp.getCompoundTag("targetController")), reducedParticles);
     }
 
     @Override
@@ -254,7 +209,8 @@ public class TimeStopEffectHelper {
 
         TimeStopEffectHelper that = (TimeStopEffectHelper) o;
 
-        return Float.compare(that.range, range) == 0 && position.equals(that.position);
+        return Float.compare(that.range, range) == 0 &&
+                position.equals(that.position);
     }
 
     @Override

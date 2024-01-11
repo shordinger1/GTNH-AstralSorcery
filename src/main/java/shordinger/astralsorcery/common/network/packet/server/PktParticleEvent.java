@@ -1,31 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import net.minecraft.client.Minecraft;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectEvorsio;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectPelotrio;
+import shordinger.astralsorcery.common.constellation.effect.aoe.*;
 import shordinger.astralsorcery.common.entities.EntityFlare;
 import shordinger.astralsorcery.common.entities.EntityItemStardust;
 import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
@@ -33,20 +19,21 @@ import shordinger.astralsorcery.common.item.tool.wand.ItemWand;
 import shordinger.astralsorcery.common.item.wand.ItemArchitectWand;
 import shordinger.astralsorcery.common.potion.PotionCheatDeath;
 import shordinger.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
-import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.common.tile.TileCelestialCrystals;
-import shordinger.astralsorcery.common.tile.TileGemCrystals;
-import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
-import shordinger.astralsorcery.common.tile.TileOreGenerator;
-import shordinger.astralsorcery.common.tile.TileTreeBeacon;
-import shordinger.astralsorcery.common.tile.TileWell;
+import shordinger.astralsorcery.common.tile.*;
 import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.CelestialStrike;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.util.math.Vec3i;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,10 +49,9 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
     private double additionalDataDouble = 0.0D;
     private long additionalDataLong = 0L;
 
-    public PktParticleEvent() {
-    }
+    public PktParticleEvent() {}
 
-    public PktParticleEvent(ParticleEventType type, BlockPos vec) {
+    public PktParticleEvent(ParticleEventType type, Vec3i vec) {
         this(type, vec.getX(), vec.getY(), vec.getZ());
     }
 
@@ -121,25 +107,18 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         try {
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
-            if (trigger != null) {
+            if(trigger != null) {
                 AstralSorcery.proxy.scheduleClientside(() -> triggerClientside(trigger, message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn(
-                "Error executing ParticleEventType " + message.typeOrdinal
-                    + " at "
-                    + xCoord
-                    + ", "
-                    + yCoord
-                    + ", "
-                    + zCoord);
+            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleEvent message) {
-        if (Minecraft.getMinecraft().theWorld == null) return;
+        if(Minecraft.getMinecraft().world == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 
@@ -149,7 +128,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     public static enum ParticleEventType {
 
-        // DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
+        //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
         COLLECTOR_BURST,
         GEM_CRYSTAL_BURST,
         CELESTIAL_CRYSTAL_BURST,
@@ -185,8 +164,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         FLARE_PROC,
         RT_DEBUG;
 
-        // GOD I HATE THIS PART
-        // But i can't do this in the ctor because server-client stuffs.
+        //GOD I HATE THIS PART
+        //But i can't do this in the ctor because server-client stuffs.
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(ParticleEventType type) {
             switch (type) {
@@ -259,7 +238,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         }
 
         public EventAction getTrigger(Side side) {
-            if (!side.isClient()) return null;
+            if(!side.isClient()) return null;
             return getClientTrigger(this);
         }
 

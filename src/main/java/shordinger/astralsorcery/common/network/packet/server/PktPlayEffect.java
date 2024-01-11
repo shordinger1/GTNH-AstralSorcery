@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.tile.TileGrindstone;
 import shordinger.astralsorcery.common.util.BlockBreakAssist;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,8 +33,7 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
     public int data = 0;
     public BlockPos pos;
 
-    public PktPlayEffect() {
-    }
+    public PktPlayEffect() {}
 
     public PktPlayEffect(EffectType type, BlockPos pos) {
         this.typeOrdinal = (byte) type.ordinal();
@@ -60,24 +59,23 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
         try {
             EffectType type = EffectType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
-            if (trigger != null) {
+            if(trigger != null) {
                 AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
-            AstralSorcery.log
-                .warn("Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());
+            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());
         }
         return null;
     }
 
     public static enum EffectType {
 
-        // DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
+        //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
         GRINDSTONE_WHEEL,
         BEAM_BREAK;
 
-        // GOD I HATE THIS PART
-        // But i can't do this in the ctor because server-client stuffs.
+        //GOD I HATE THIS PART
+        //But i can't do this in the ctor because server-client stuffs.
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(EffectType type) {
             switch (type) {
@@ -92,7 +90,7 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
         }
 
         public EventAction getTrigger(Side side) {
-            if (!side.isClient()) return null;
+            if(!side.isClient()) return null;
             return getClientTrigger(this);
         }
 

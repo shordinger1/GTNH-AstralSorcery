@@ -1,27 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.entity;
-
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.Blending;
@@ -35,6 +20,18 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.entities.EntityGrapplingHook;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.entity.Render;
+import shordinger.wrapper.net.minecraft.client.renderer.entity.RenderManager;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,21 +50,20 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
     }
 
     @Override
-    public void doRender(EntityGrapplingHook entity, double x, double y, double z, float entityYaw,
-                         float partialTicks) {
-        if (texConn == null) {
+    public void doRender(EntityGrapplingHook entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        if(texConn == null) {
             texConn = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flaresmall");
         }
 
         float alphaMultiplier = 1;
-        if (entity.isDespawning()) {
+        if(entity.isDespawning()) {
             alphaMultiplier = Math.max(0, 0.5F - entity.despawnPercentage(partialTicks));
         }
-        if (alphaMultiplier <= 1E-4) {
+        if(alphaMultiplier <= 1E-4) {
             return;
         }
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder bb = tes.getBuffer();
 
         GlStateManager.disableAlpha();
@@ -80,27 +76,13 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Vector3 iPosE = RenderingUtils.interpolatePosition(entity, partialTicks);
 
+
         SpriteSheetResource sprite = SpriteLibrary.spriteHook;
-        sprite.getResource()
-            .bindTexture();
+        sprite.getResource().bindTexture();
         Tuple<Double, Double> currentUV = sprite.getUVOffset(ClientScheduler.getClientTick() + entity.ticksExisted);
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        RenderingUtils.renderFacingQuadVB(
-            bb,
-            iPosE.getX(),
-            iPosE.getY(),
-            iPosE.getZ(),
-            partialTicks,
-            1.3F,
-            0F,
-            currentUV.key,
-            currentUV.value,
-            sprite.getULength(),
-            sprite.getVLength(),
-            1F,
-            1F,
-            1F,
-            alphaMultiplier);
+        RenderingUtils.renderFacingQuadVB(bb, iPosE.getX(), iPosE.getY(), iPosE.getZ(), partialTicks, 1.3F, 0F,
+                currentUV.key, currentUV.value, sprite.getULength(), sprite.getVLength(), 1F, 1F, 1F, alphaMultiplier);
         tes.draw();
 
         GlStateManager.enableCull();
@@ -119,22 +101,9 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
         bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         GlStateManager.color(1F, 1F, 1F, 1F);
         for (Vector3 pos : drawPoints) {
-            RenderingUtils.renderFacingQuadVB(
-                bb,
-                iPosE.getX() + pos.getX(),
-                iPosE.getY() + pos.getY(),
-                iPosE.getZ() + pos.getZ(),
-                partialTicks,
-                0.25F,
-                0,
-                0,
-                0,
-                1,
-                1,
-                0.2F,
-                0.15F,
-                0.7F,
-                0.8F * alphaMultiplier);
+            RenderingUtils.renderFacingQuadVB(bb, iPosE.getX() + pos.getX(), iPosE.getY() + pos.getY(), iPosE.getZ() + pos.getZ(),
+                    partialTicks, 0.25F, 0, 0, 0, 1, 1,
+                    0.2F, 0.15F, 0.7F, 0.8F * alphaMultiplier);
         }
         GlStateManager.enableCull();
         tes.draw();

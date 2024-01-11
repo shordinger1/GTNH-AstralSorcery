@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.network;
 
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+import shordinger.wrapper.net.minecraftforge.event.world.ChunkEvent;
+import shordinger.wrapper.net.minecraftforge.event.world.WorldEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,8 +25,7 @@ public class TransmissionChunkTracker {
 
     private static final TransmissionChunkTracker instance = new TransmissionChunkTracker();
 
-    private TransmissionChunkTracker() {
-    }
+    private TransmissionChunkTracker() {}
 
     public static TransmissionChunkTracker getInstance() {
         return instance;
@@ -35,35 +33,32 @@ public class TransmissionChunkTracker {
 
     @SubscribeEvent
     public void onChLoad(ChunkEvent.Load event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
-            .getWorldHandler(event.world);
-        if (handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
+        if(handle != null) {
             Chunk ch = event.getChunk();
-            handle.informChunkLoad(new ChunkPos(ch.xPosition, ch.zPosition));
+            handle.informChunkLoad(new ChunkPos(ch.x, ch.z));
         }
     }
 
     @SubscribeEvent
     public void onChUnload(ChunkEvent.Unload event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
-            .getWorldHandler(event.world);
-        if (handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
+        if(handle != null) {
             Chunk ch = event.getChunk();
-            handle.informChunkUnload(new ChunkPos(ch.xPosition, ch.zPosition));
+            handle.informChunkUnload(new ChunkPos(ch.x, ch.z));
         }
     }
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        // StarlightTransmissionHandler.getInstance().informWorldUnload(event.world);
-        // StarlightUpdateHandler.getInstance().informWorldUnload(event.world);
+        //StarlightTransmissionHandler.getInstance().informWorldUnload(event.getWorld());
+        //StarlightUpdateHandler.getInstance().informWorldUnload(event.getWorld());
     }
 
     @SubscribeEvent
     public void onWorldLoad(WorldEvent.Load event) {
-        if (event.world.isRemote) return;
-        StarlightUpdateHandler.getInstance()
-            .informWorldLoad(event.world);
+        if(event.getWorld().isRemote) return;
+        StarlightUpdateHandler.getInstance().informWorldLoad(event.getWorld());
     }
 
 }

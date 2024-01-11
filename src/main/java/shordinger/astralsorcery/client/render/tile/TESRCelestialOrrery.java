@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.tile.TileCelestialOrrery;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,8 +26,7 @@ public class TESRCelestialOrrery extends TileEntitySpecialRenderer<TileCelestial
     public static final BindableResource texSmoke = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "smoke");
 
     @Override
-    public void render(TileCelestialOrrery te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileCelestialOrrery te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
     }
 

@@ -1,29 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import java.util.*;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.entities.EntityShootingStar;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,8 +38,7 @@ public class ShootingStarHandler implements ITickHandler {
     // Yes this cache is not at all "safe" or whatever, but since the
     private Map<UUID, List<Integer>> fleetingServerCache = Maps.newHashMap();
 
-    private ShootingStarHandler() {
-    }
+    private ShootingStarHandler() {}
 
     public static ShootingStarHandler getInstance() {
         return instance;
@@ -53,34 +50,24 @@ public class ShootingStarHandler implements ITickHandler {
         if (side == Side.SERVER) {
             EntityPlayer player = (EntityPlayer) context[0];
             World w = player.getEntityWorld();
-            if (w.provider.isNether() || !w.provider.hasSkyLight() || !w.provider.isSurfaceWorld()) {
+            if (w.provider.isNether() ||
+                    !w.provider.hasSkyLight() ||
+                    !w.provider.isSurfaceWorld()) {
                 return;
             }
 
             int midnight = Math.round(Config.dayLength * 0.75F);
             int tfHalf = Config.dayLength / 12;
             int ch = Config.dayLength / 8;
-            int dayTime = (int) (player.getEntityWorld()
-                .getWorldTime() % Config.dayLength);
+            int dayTime = (int) (player.getEntityWorld().getWorldTime() % Config.dayLength);
             if (dayTime >= (midnight - tfHalf) && dayTime <= (midnight + tfHalf)) {
                 if (rand.nextInt(ch) == 0) {
-                    List<Integer> handledDays = fleetingServerCache
-                        .getOrDefault(player.getUniqueID(), Lists.newArrayList());
-                    int day = (int) (player.getEntityWorld()
-                        .getWorldTime() / Config.dayLength);
+                    List<Integer> handledDays = fleetingServerCache.getOrDefault(player.getUniqueID(), Lists.newArrayList());
+                    int day = (int) (player.getEntityWorld().getWorldTime() / Config.dayLength);
                     if (!handledDays.contains(day)) {
-                        Vector3 movement = Vector3.positiveYRandom()
-                            .setY(0)
-                            .normalize()
-                            .multiply(0.2);
-                        EntityShootingStar star = new EntityShootingStar(
-                            player.getEntityWorld(),
-                            player.posX,
-                            560,
-                            player.posZ,
-                            movement);
-                        player.getEntityWorld()
-                            .spawnEntity(star);
+                        Vector3 movement = Vector3.positiveYRandom().setY(0).normalize().multiply(0.2);
+                        EntityShootingStar star = new EntityShootingStar(player.getEntityWorld(), player.posX, 560, player.posZ, movement);
+                        player.getEntityWorld().spawnEntity(star);
                         handledDays.add(day);
                         fleetingServerCache.put(player.getUniqueID(), handledDays);
                     }
@@ -119,16 +106,8 @@ public class ShootingStarHandler implements ITickHandler {
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            enabled = cfg.getBoolean(
-                "enabled",
-                this.getConfigurationSection(),
-                enabled,
-                "Set to false to disable shooting stars from spawning");
-            doExplosion = cfg.getBoolean(
-                "doExplosion",
-                this.getConfigurationSection(),
-                doExplosion,
-                "Set to true to make shooting stars do a little explosion where they land");
+            enabled = cfg.getBoolean("enabled", this.getConfigurationSection(), enabled, "Set to false to disable shooting stars from spawning");
+            doExplosion = cfg.getBoolean("doExplosion", this.getConfigurationSection(), doExplosion, "Set to true to make shooting stars do a little explosion where they land");
         }
     }
 }

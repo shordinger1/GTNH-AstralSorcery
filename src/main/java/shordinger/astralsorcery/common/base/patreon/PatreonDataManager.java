@@ -2,11 +2,17 @@
  * HellFirePvP / Astral Sorcery 2018
  *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.common.base.patreon.data.PatreonEffectData;
+import shordinger.astralsorcery.common.base.patreon.data.PatreonEffectType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,13 +21,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.UUID;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.astralsorcery.common.base.patreon.data.PatreonEffectData;
-import shordinger.astralsorcery.common.base.patreon.data.PatreonEffectType;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,12 +71,11 @@ public class PatreonDataManager {
                 }
 
                 try {
-                    PatreonEffectHelper.PatreonEffect pe = type.getProvider()
-                        .buildEffect(plUuid, entry.getParameters());
+                    PatreonEffectHelper.PatreonEffect pe =
+                            type.getProvider().buildEffect(plUuid, entry.getParameters());
 
                     pe.initialize();
-                    PatreonEffectHelper.effectMap.computeIfAbsent(plUuid, uuid -> new ArrayList<>())
-                        .add(pe);
+                    PatreonEffectHelper.effectMap.computeIfAbsent(plUuid, uuid -> new ArrayList<>()).add(pe);
                 } catch (Exception exc) {
                     skipped++;
                 }
@@ -88,25 +86,25 @@ public class PatreonDataManager {
             }
             AstralSorcery.log.info("Patreon effect loading finished.");
 
-            // UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
-            // PatreonEffectHelper.PatreonEffect pe = new PtEffectCorruptedCelestialCrystal(
-            // UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e44d1"),
-            // PatreonEffectHelper.FlareColor.FIRE);
-            // PatreonEffectHelper.PatreonEffect pe =
-            // new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
-            // PatreonEffectHelper.FlareColor.WATER, hellfire,
-            // new Color(Integer.parseInt("14287086")));
-            // PatreonEffectHelper.PatreonEffect pe =
-            // new PtEffectBlockRing(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
-            // PatreonEffectHelper.FlareColor.WATER,
-            // hellfire,
-            // 4,
-            // 7.5F,
-            // 8,
-            // 5000,
-            // new HashMap<>());
-            // pe.initialize();
-            // PatreonEffectHelper.effectMap.get(hellfire).add(pe);
+            //UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
+            //PatreonEffectHelper.PatreonEffect pe = new PtEffectCorruptedCelestialCrystal(
+            //        UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e44d1"),
+            //        PatreonEffectHelper.FlareColor.FIRE);
+            //PatreonEffectHelper.PatreonEffect pe =
+            //        new PtEffectCrystalFootprint(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+            //                PatreonEffectHelper.FlareColor.WATER, hellfire,
+            //                new Color(Integer.parseInt("14287086")));
+            //PatreonEffectHelper.PatreonEffect pe =
+            //        new PtEffectBlockRing(UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+            //                PatreonEffectHelper.FlareColor.WATER,
+            //                hellfire,
+            //                4,
+            //                7.5F,
+            //                8,
+            //                5000,
+            //                new HashMap<>());
+            //pe.initialize();
+            //PatreonEffectHelper.effectMap.get(hellfire).add(pe);
 
             PatreonEffectHelper.loadingFinished = true;
         });

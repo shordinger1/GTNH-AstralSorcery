@@ -1,21 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 
 import java.util.UUID;
-
-import static shordinger.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackSpeed.getUuid;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,6 +44,16 @@ public class AttributeTypeMaxHealth extends VanillaAttributeType {
 
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
-        return getUuid(mode, MAX_HEALTH_ADD_ID, MAX_HEALTH_ADD_MULTIPLY_ID, MAX_HEALTH_STACK_MULTIPLY_ID);
+        switch (mode) {
+            case ADDITION:
+                return MAX_HEALTH_ADD_ID;
+            case ADDED_MULTIPLY:
+                return MAX_HEALTH_ADD_MULTIPLY_ID;
+            case STACKING_MULTIPLY:
+                return MAX_HEALTH_STACK_MULTIPLY_ID;
+            default:
+                break;
+        }
+        return null;
     }
 }

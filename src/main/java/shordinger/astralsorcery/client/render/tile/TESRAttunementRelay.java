@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.tile.TileAttunementRelay;
 import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,8 +24,7 @@ import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
 public class TESRAttunementRelay extends TileEntitySpecialRenderer<TileAttunementRelay> {
 
     @Override
-    public void render(TileAttunementRelay te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileAttunementRelay te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         TileInventoryBase.ItemHandlerTile iht = te.getInventoryHandler();
         if (iht == null) return;
         ItemStack in = iht.getStackInSlot(0);

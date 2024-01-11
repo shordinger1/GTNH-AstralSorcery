@@ -1,15 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.item;
 
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -29,7 +29,7 @@ public class AstralTEISR extends TileEntityItemStackRenderer {
 
     @Override
     public void renderByItem(ItemStack itemStackIn) {
-        if (ItemRenderRegistry.shouldHandleItemRendering(itemStackIn)) {
+        if(ItemRenderRegistry.shouldHandleItemRendering(itemStackIn)) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             ItemRenderRegistry.renderItemStack(itemStackIn);
             GL11.glPopAttrib();

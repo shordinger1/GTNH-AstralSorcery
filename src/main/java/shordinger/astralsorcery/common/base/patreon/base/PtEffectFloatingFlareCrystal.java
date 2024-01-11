@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.base;
 
-import java.awt.*;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityFlareCrystal;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,7 +30,8 @@ public class PtEffectFloatingFlareCrystal extends PatreonEffectHelper.PatreonEff
     private PatreonEffectHelper.FlareColor flareColor;
     private TextureQuery crystalTexture;
 
-    public PtEffectFloatingFlareCrystal(UUID uniqueId, Color colorTheme, PatreonEffectHelper.FlareColor flareColor,
+    public PtEffectFloatingFlareCrystal(UUID uniqueId, Color colorTheme,
+                                        PatreonEffectHelper.FlareColor flareColor,
                                         TextureQuery crystalTexture) {
         super(uniqueId, null);
         this.colorTheme = colorTheme;
@@ -47,8 +47,9 @@ public class PtEffectFloatingFlareCrystal extends PatreonEffectHelper.PatreonEff
     @Nullable
     @Override
     public PatreonPartialEntity createEntity(UUID playerUUID) {
-        return new PartialEntityFlareCrystal(this.flareColor, playerUUID).setQueryTexture(this.crystalTexture)
-            .setColorTheme(this.colorTheme);
+        return new PartialEntityFlareCrystal(this.flareColor, playerUUID)
+                .setQueryTexture(this.crystalTexture)
+                .setColorTheme(this.colorTheme);
     }
 
 }

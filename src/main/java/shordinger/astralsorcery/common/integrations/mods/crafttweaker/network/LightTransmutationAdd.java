@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,8 +31,7 @@ public class LightTransmutationAdd implements SerializeableRecipe {
     private double cost;
     private IWeakConstellation cst;
 
-    LightTransmutationAdd() {
-    }
+    LightTransmutationAdd() {}
 
     public LightTransmutationAdd(ItemStack in, ItemStack out, double cost, @Nullable IWeakConstellation cst) {
         this.in = in;

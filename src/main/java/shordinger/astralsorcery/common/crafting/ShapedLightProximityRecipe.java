@@ -1,31 +1,32 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerWorkbench;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import shordinger.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.data.DataLightBlockEndpoints;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiCrafting;
+import shordinger.wrapper.net.minecraft.inventory.Container;
+import shordinger.wrapper.net.minecraft.inventory.ContainerWorkbench;
+import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
+import shordinger.wrapper.net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,21 +50,25 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inv, World world) {
-        if (!vanillaMatch(inv)) return false;
+        if(!vanillaMatch(inv)) return false;
 
         Container c = inv.eventHandler;
-        if (!(c instanceof ContainerWorkbench workbench)) return false;
+        if (!(c instanceof ContainerWorkbench)) return false;
+        ContainerWorkbench workbench = (ContainerWorkbench) c;
         BlockPos pos = workbench.pos;
         if (pos == null) return false;
         if (world.isRemote) {
             GuiScreen sc = Minecraft.getMinecraft().currentScreen;
-            if (!(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
-            return ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition);
+            if (sc == null || !(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
+            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                    .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition))
+                return false;
         } else {
-            return ((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
-                .doesPositionReceiveStarlightServer(world, pos);
+            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                    .doesPositionReceiveStarlightServer(world, pos))
+                return false;
         }
+        return true;
     }
 
     private boolean vanillaMatch(InventoryCrafting inv) {

@@ -1,38 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -49,30 +24,8 @@ import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.client.gui.journal.bookmark.BookmarkProvider;
 import shordinger.astralsorcery.client.models.obj.OBJModelLibrary;
-import shordinger.astralsorcery.client.render.entity.RenderEntityFlare;
-import shordinger.astralsorcery.client.render.entity.RenderEntityHook;
-import shordinger.astralsorcery.client.render.entity.RenderEntityItemHighlight;
-import shordinger.astralsorcery.client.render.entity.RenderEntityNoOp;
-import shordinger.astralsorcery.client.render.entity.RenderEntityShootingStar;
-import shordinger.astralsorcery.client.render.entity.RenderEntityStarburst;
-import shordinger.astralsorcery.client.render.entity.RenderLiquidSpark;
-import shordinger.astralsorcery.client.render.entity.RenderSpectralTool;
-import shordinger.astralsorcery.client.render.tile.TESRAltar;
-import shordinger.astralsorcery.client.render.tile.TESRAttunementAltar;
-import shordinger.astralsorcery.client.render.tile.TESRAttunementRelay;
-import shordinger.astralsorcery.client.render.tile.TESRChalice;
-import shordinger.astralsorcery.client.render.tile.TESRCollectorCrystal;
-import shordinger.astralsorcery.client.render.tile.TESRFakeTree;
-import shordinger.astralsorcery.client.render.tile.TESRGrindstone;
-import shordinger.astralsorcery.client.render.tile.TESRLens;
-import shordinger.astralsorcery.client.render.tile.TESRMapDrawingTable;
-import shordinger.astralsorcery.client.render.tile.TESRObservatory;
-import shordinger.astralsorcery.client.render.tile.TESRPrismLens;
-import shordinger.astralsorcery.client.render.tile.TESRRitualPedestal;
-import shordinger.astralsorcery.client.render.tile.TESRStarlightInfuser;
-import shordinger.astralsorcery.client.render.tile.TESRTelescope;
-import shordinger.astralsorcery.client.render.tile.TESRTranslucentBlock;
-import shordinger.astralsorcery.client.render.tile.TESRWell;
+import shordinger.astralsorcery.client.render.entity.*;
+import shordinger.astralsorcery.client.render.tile.*;
 import shordinger.astralsorcery.client.util.ItemColorizationHelper;
 import shordinger.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import shordinger.astralsorcery.client.util.camera.ClientCameraManager;
@@ -96,16 +49,7 @@ import shordinger.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.common.entities.EntityFlare;
-import shordinger.astralsorcery.common.entities.EntityGrapplingHook;
-import shordinger.astralsorcery.common.entities.EntityIlluminationSpark;
-import shordinger.astralsorcery.common.entities.EntityItemExplosionResistant;
-import shordinger.astralsorcery.common.entities.EntityItemHighlighted;
-import shordinger.astralsorcery.common.entities.EntityLiquidSpark;
-import shordinger.astralsorcery.common.entities.EntityNocturnalSpark;
-import shordinger.astralsorcery.common.entities.EntityShootingStar;
-import shordinger.astralsorcery.common.entities.EntitySpectralTool;
-import shordinger.astralsorcery.common.entities.EntityStarburst;
+import shordinger.astralsorcery.common.entities.*;
 import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import shordinger.astralsorcery.common.item.base.IMetaItem;
 import shordinger.astralsorcery.common.item.base.IOBJItem;
@@ -114,25 +58,38 @@ import shordinger.astralsorcery.common.item.base.render.ItemDynamicColor;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryBlocks;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.common.tile.TileAttunementAltar;
-import shordinger.astralsorcery.common.tile.TileAttunementRelay;
-import shordinger.astralsorcery.common.tile.TileChalice;
-import shordinger.astralsorcery.common.tile.TileFakeTree;
-import shordinger.astralsorcery.common.tile.TileGrindstone;
-import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
-import shordinger.astralsorcery.common.tile.TileObservatory;
-import shordinger.astralsorcery.common.tile.TileRitualPedestal;
-import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
-import shordinger.astralsorcery.common.tile.TileTelescope;
-import shordinger.astralsorcery.common.tile.TileTranslucent;
-import shordinger.astralsorcery.common.tile.TileWell;
+import shordinger.astralsorcery.common.tile.*;
 import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelBakery;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import shordinger.wrapper.net.minecraft.client.renderer.color.BlockColors;
+import shordinger.wrapper.net.minecraft.client.renderer.color.ItemColors;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.client.resources.IReloadableResourceManager;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.client.event.ModelRegistryEvent;
+import shordinger.wrapper.net.minecraftforge.client.model.ModelLoader;
+import shordinger.wrapper.net.minecraftforge.client.model.ModelLoaderRegistry;
+import shordinger.wrapper.net.minecraftforge.client.model.obj.OBJLoader;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fml.client.registry.ClientRegistry;
+import shordinger.wrapper.net.minecraftforge.fml.client.registry.RenderingRegistry;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -147,7 +104,7 @@ import java.util.List;
  */
 public class ClientProxy extends CommonProxy {
 
-    // Marks if the client is connected and received all server data from AS' serverside
+    //Marks if the client is connected and received all server data from AS' serverside
     public static boolean connected = false;
     private final ClientScheduler scheduler = new ClientScheduler();
 
@@ -165,14 +122,12 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(this);
         try {
-            ((IReloadableResourceManager) Minecraft.getMinecraft()
-                .getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
+            ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
         } catch (Exception exc) {
-            AstralSorcery.log.warn(
-                "Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
+            AstralSorcery.log.warn("Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
             AssetLibrary.resReloadInstance.onResourceManagerReload(null);
         }
-        ModelLoaderRegistry.registerLoader(new DummyModelLoader()); // IItemRenderer Hook ModelLoader
+        ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
         OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
 
         super.preInit();
@@ -191,16 +146,14 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerPendingIBlockColorBlocks() {
-        BlockColors colors = Minecraft.getMinecraft()
-            .getBlockColors();
+        BlockColors colors = Minecraft.getMinecraft().getBlockColors();
         for (BlockDynamicColor b : RegistryBlocks.pendingIBlockColorBlocks) {
             colors.registerBlockColorHandler(b::getColorMultiplier, (Block) b);
         }
     }
 
     private void registerPendingIItemColorItems() {
-        ItemColors colors = Minecraft.getMinecraft()
-            .getItemColors();
+        ItemColors colors = Minecraft.getMinecraft().getItemColors();
         for (ItemDynamicColor i : RegistryItems.pendingDynamicColorItems) {
             colors.registerItemColorHandler(i::getColorForItemStack, (Item) i);
         }
@@ -213,9 +166,9 @@ public class ClientProxy extends CommonProxy {
     private void registerFluidRender(Fluid f) {
         RegistryBlocks.FluidCustomModelMapper mapper = new RegistryBlocks.FluidCustomModelMapper(f);
         Block block = f.getBlock();
-        if (block != null) {
+        if(block != null) {
             Item item = Item.getItemFromBlock(block);
-            if (item != null) {
+            if (item != Items.AIR) {
                 ModelLoader.registerItemVariants(item);
                 ModelLoader.setCustomMeshDefinition(item, mapper);
             } else {
@@ -240,89 +193,67 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new ClientGatewayHandler());
 
-        GuiScreenJournal.addBookmark(
-            new BookmarkProvider(
-                "gui.journal.bm.research.name",
-                10,
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.research.name", 10,
                 GuiJournalProgression::getJournalInstance,
                 () -> true));
-        GuiScreenJournal.addBookmark(
-            new BookmarkProvider(
-                "gui.journal.bm.constellations.name",
-                20,
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.constellations.name", 20,
                 GuiJournalConstellationCluster::getConstellationScreen,
-                () -> !ResearchManager.clientProgress.getSeenConstellations()
-                    .isEmpty()));
-        GuiScreenJournal.addBookmark(
-            new BookmarkProvider(
-                "gui.journal.bm.perks.name",
-                30,
+                () -> !ResearchManager.clientProgress.getSeenConstellations().isEmpty()));
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.perks.name", 30,
                 GuiJournalPerkTree::new,
                 () -> ResearchManager.clientProgress.getAttunedConstellation() != null));
-        GuiScreenJournal.addBookmark(
-            new BookmarkProvider(
-                "gui.journal.bm.knowledge.name",
-                40,
+        GuiScreenJournal.addBookmark(new BookmarkProvider("gui.journal.bm.knowledge.name", 40,
                 GuiJournalKnowledgeIndex::new,
                 () -> !((KnowledgeFragmentData) PersistentDataManager.INSTANCE
-                    .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS)).getAllFragments()
-                    .isEmpty()));
+                        .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS))
+                        .getAllFragments().isEmpty()));
     }
 
     @Override
     public void postInit() {
         super.postInit();
 
-        TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); // Wrapping TEISR
+        TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping TEISR
 
-        // TexturePreloader.doPreloadRoutine();
+        //TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();
 
-        ((IReloadableResourceManager) Minecraft.getMinecraft()
-            .getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
 
-        // Clears tooltip on langfile change or texture changes
-        ((IReloadableResourceManager) Minecraft.getMinecraft()
-            .getResourceManager()).registerReloadListener(
-            (mgr) -> PerkTree.PERK_TREE.getPerkPoints()
-                .stream()
-                .map(PerkTreePoint::getPerk)
-                .forEach(AbstractPerk::clearClientCaches));
+        //Clears tooltip on langfile change or texture changes
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager())
+                .registerReloadListener((mgr) -> PerkTree.PERK_TREE.getPerkPoints().stream().map(PerkTreePoint::getPerk).forEach(AbstractPerk::clearClientCaches));
 
         JournalRecipeDisplayRecovery.attemptRecipeRecovery();
     }
 
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        if (id < 0 || id >= EnumGuiId.values().length) return null; // Out of range.
+        if(id < 0 || id >= EnumGuiId.values().length) return null; //Out of range.
         EnumGuiId guiType = EnumGuiId.values()[id];
         return ClientGuiHandler.openGui(guiType, player, world, x, y, z);
     }
 
     public void registerItemRenderers() {
-        // RenderTransformsHelper.init();
+        //RenderTransformsHelper.init();
 
         ItemRendererFilteredTESR blockMachineRender = new ItemRendererFilteredTESR();
-        blockMachineRender
-            .addRender(BlockMachine.MachineType.TELESCOPE.getMeta(), new TESRTelescope(), new TileTelescope());
-        blockMachineRender
-            .addRender(BlockMachine.MachineType.GRINDSTONE.getMeta(), new TESRGrindstone(), new TileGrindstone());
+        blockMachineRender.addRender(BlockMachine.MachineType.TELESCOPE.getMeta(), new TESRTelescope(), new TileTelescope());
+        blockMachineRender.addRender(BlockMachine.MachineType.GRINDSTONE.getMeta(), new TESRGrindstone(), new TileGrindstone());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockMachine), blockMachineRender);
 
-        // ItemRenderRegistry.registerCameraTransforms(Item.getItemFromBlock(BlocksAS.blockMachine),
-        // RenderTransformsHelper.BLOCK_TRANSFORMS);
+        //ItemRenderRegistry.registerCameraTransforms(Item.getItemFromBlock(BlocksAS.blockMachine), RenderTransformsHelper.BLOCK_TRANSFORMS);
 
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
-        ItemRenderRegistry
-            .register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
 
-        if (Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleItemRenderer();
         }
 
-        // ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
+        //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
     }
 
     @Override
@@ -356,7 +287,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileMapDrawingTable.class, new TESRMapDrawingTable());
         registerTESR(TileChalice.class, new TESRChalice());
         registerTESR(TileObservatory.class, new TESRObservatory());
-        if (Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleRender();
         }
     }
@@ -366,26 +297,19 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerEntityRenderers() {
-        // RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
-        // RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new
-        // RenderEntityGrindstone.Factory());
-        RenderingRegistry
-            .registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
+        //RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
+        //RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new RenderEntityGrindstone.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityFlare.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityStarburst.class, new RenderEntityStarburst.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityNoOp.Factory<>());
-        RenderingRegistry
-            .registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityNoOp.Factory<>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityHook.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntitySpectralTool.class, new RenderSpectralTool.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityLiquidSpark.class, new RenderLiquidSpark.Factory());
-        // RenderingRegistry.registerEntityRenderingHandler(SpellProjectile.class, new
-        // RenderEntitySpellProjectile.Factory());
-        RenderingRegistry
-            .registerEntityRenderingHandler(EntityShootingStar.class, new RenderEntityShootingStar.Factory());
-        RenderingRegistry.registerEntityRenderingHandler(
-            EntityItemExplosionResistant.class,
-            new RenderEntityItemHighlight.Factory());
+        //RenderingRegistry.registerEntityRenderingHandler(SpellProjectile.class, new RenderEntitySpellProjectile.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityShootingStar.class, new RenderEntityShootingStar.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityItemExplosionResistant.class, new RenderEntityItemHighlight.Factory());
     }
 
     public void registerDisplayInformationInit() {
@@ -393,31 +317,25 @@ public class ClientProxy extends CommonProxy {
             if (modelEntry.variant) {
                 registerVariantName(modelEntry.item, modelEntry.name);
             }
-            if (modelEntry.item instanceof IOBJItem) {
-                if (!((IOBJItem) modelEntry.item).hasOBJAsSubmodelDefinition()) {
+            if(modelEntry.item instanceof IOBJItem) {
+                if(!((IOBJItem) modelEntry.item).hasOBJAsSubmodelDefinition()) {
                     String[] models = ((IOBJItem) modelEntry.item).getOBJModelNames();
-                    if (models != null) {
+                    if(models != null) {
                         for (String modelDef : models) {
-                            ModelResourceLocation mrl = new ModelResourceLocation(
-                                AstralSorcery.MODID + ":obj/" + modelDef + ".obj",
-                                "inventory");
+                            ModelResourceLocation mrl = new ModelResourceLocation(AstralSorcery.MODID + ":obj/" + modelDef + ".obj", "inventory");
                             ModelBakery.registerItemVariants(modelEntry.item, mrl);
                             ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata, mrl);
                         }
                     }
-                } else { // We expect a wrapper in the blockstates..
-                    ModelResourceLocation mrl = new ModelResourceLocation(
-                        AstralSorcery.MODID + ":obj/" + modelEntry.name,
-                        "inventory");
+                } else { //We expect a wrapper in the blockstates..
+                    ModelResourceLocation mrl = new ModelResourceLocation(AstralSorcery.MODID + ":obj/" + modelEntry.name, "inventory");
                     ModelBakery.registerItemVariants(modelEntry.item, mrl);
                     ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata, mrl);
                 }
             } else {
                 Item item = modelEntry.item;
-                ModelResourceLocation def = new ModelResourceLocation(
-                    AstralSorcery.MODID + ":" + modelEntry.name,
-                    "inventory");
-                if (item instanceof INBTModel) {
+                ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+                if(item instanceof INBTModel) {
                     List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
                     ResourceLocation[] arr = new ResourceLocation[out.size()];
                     arr = out.toArray(arr);
@@ -430,17 +348,15 @@ public class ClientProxy extends CommonProxy {
         }
 
         for (RenderInfoBlock modelEntry : blockRegister) {
-            if (modelEntry.block instanceof BlockDynamicStateMapper) {
-                if (((BlockDynamicStateMapper) modelEntry.block).handleRegisterStateMapper()) {
+            if(modelEntry.block instanceof BlockDynamicStateMapper) {
+                if(((BlockDynamicStateMapper) modelEntry.block).handleRegisterStateMapper()) {
                     ((BlockDynamicStateMapper) modelEntry.block).registerStateMapper();
                 }
             }
 
             Item item = Item.getItemFromBlock(modelEntry.block);
-            ModelResourceLocation def = new ModelResourceLocation(
-                AstralSorcery.MODID + ":" + modelEntry.name,
-                "inventory");
-            if (item instanceof INBTModel) {
+            ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+            if(item instanceof INBTModel) {
                 List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
                 ResourceLocation[] arr = new ResourceLocation[out.size()];
                 arr = out.toArray(arr);
@@ -454,9 +370,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void fireLightning(World world, Vector3 from, Vector3 to, Color overlay) {
-        EffectLightning lightning = EffectHandler.getInstance()
-            .lightning(from, to);
-        if (overlay != null) {
+        EffectLightning lightning = EffectHandler.getInstance().lightning(from, to);
+        if(overlay != null) {
             lightning.setOverlayColor(overlay);
         }
     }

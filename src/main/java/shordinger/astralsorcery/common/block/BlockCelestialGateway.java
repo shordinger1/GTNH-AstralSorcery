@@ -1,23 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
-
-import javax.annotation.Nullable;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
@@ -25,11 +14,25 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.AstralBlockContainer;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,19 +41,13 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  * Created by HellFirePvP
  * Date: 16.04.2017 / 18:46
  */
-public class BlockCelestialGateway extends AstralBlockContainer implements BlockStructureObserver {
+public class BlockCelestialGateway extends BlockContainer implements BlockStructureObserver {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(
-        1D / 16D,
-        0D / 16D,
-        1D / 16D,
-        15D / 16D,
-        1D / 16D,
-        10D / 15D);
+    private static final AxisAlignedBB box = new AxisAlignedBB(1D / 16D, 0D / 16D, 1D / 16D, 15D / 16D, 1D / 16D, 10D / 15D);
 
     public BlockCelestialGateway() {
-        super(Material.rock);
-        //setSoundType(SoundType.STONE);
+        super(Material.ROCK, MapColor.BLACK);
+        setSoundType(SoundType.STONE);
         setHardness(4F);
         setResistance(40F);
         setHarvestLevel("pickaxe", 2);
@@ -63,10 +60,9 @@ public class BlockCelestialGateway extends AstralBlockContainer implements Block
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-                                ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileCelestialGateway gateway = MiscUtils.getTileAt(worldIn, pos, TileCelestialGateway.class, true);
-        if (gateway != null) {
+        if(gateway != null) {
             if (stack.hasDisplayName()) {
                 gateway.setGatewayName(stack.getDisplayName());
             }
@@ -107,8 +103,7 @@ public class BlockCelestialGateway extends AstralBlockContainer implements Block
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

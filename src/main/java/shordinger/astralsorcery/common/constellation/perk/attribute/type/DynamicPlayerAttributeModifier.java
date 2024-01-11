@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import java.util.UUID;
-
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.AttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,13 +30,11 @@ public class DynamicPlayerAttributeModifier extends AttributeModifier {
     private Side side;
     private String type;
 
-    public DynamicPlayerAttributeModifier(UUID idIn, String nameIn, String typeIn, PerkAttributeModifier.Mode mode,
-                                          EntityPlayer player, Side side) {
+    public DynamicPlayerAttributeModifier(UUID idIn, String nameIn, String typeIn, PerkAttributeModifier.Mode mode, EntityPlayer player, Side side) {
         this(idIn, nameIn, typeIn, mode.getVanillaAttributeOperation(), player, side);
     }
 
-    public DynamicPlayerAttributeModifier(UUID idIn, String nameIn, String typeIn, int operationIn, EntityPlayer player,
-                                          Side side) {
+    public DynamicPlayerAttributeModifier(UUID idIn, String nameIn, String typeIn, int operationIn, EntityPlayer player, Side side) {
         super(idIn, nameIn, 0, operationIn);
         this.setSaved(false);
         this.player = player;
@@ -49,6 +46,6 @@ public class DynamicPlayerAttributeModifier extends AttributeModifier {
     public double getAmount() {
         PerkAttributeModifier.Mode mode = PerkAttributeModifier.Mode.fromVanillaAttributeOperation(getOperation());
         return PerkAttributeHelper.getOrCreateMap(player, side)
-            .getModifier(player, ResearchManager.getProgress(player, side), type, mode) - 1;
+                .getModifier(player, ResearchManager.getProgress(player, side), type, mode) - 1;
     }
 }

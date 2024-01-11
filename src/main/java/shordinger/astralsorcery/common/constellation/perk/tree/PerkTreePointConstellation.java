@@ -1,22 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree;
 
-import java.awt.*;
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
 import shordinger.astralsorcery.client.gui.perk.DynamicPerkRender;
 import shordinger.astralsorcery.client.gui.perk.PerkRenderGroup;
@@ -30,8 +21,15 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,8 +47,7 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
 
     private final int perkSpriteSize;
 
-    public PerkTreePointConstellation(T perk, Point offset, IConstellation associatedConstellation,
-                                      int perkSpriteSize) {
+    public PerkTreePointConstellation(T perk, Point offset, IConstellation associatedConstellation, int perkSpriteSize) {
         super(perk, offset);
         this.associatedConstellation = associatedConstellation;
         this.perkSpriteSize = perkSpriteSize;
@@ -66,12 +63,10 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
-                         double scale) {
+    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y, double scale) {
         if (this.associatedConstellation != null) {
-            PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
-            if (!prog.getKnownConstellations()
-                .contains(this.associatedConstellation.getUnlocalizedName())) {
+            PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+            if (!prog.getKnownConstellations().contains(this.associatedConstellation.getUnlocalizedName())) {
                 return;
             }
             Color overlay = Color.WHITE;
@@ -93,24 +88,15 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
             int fX = (int) Math.round(x);
             int fY = (int) Math.round(y);
 
-            RenderConstellation.renderConstellationIntoGUI(
-                overlay,
-                this.associatedConstellation,
-                fX - size,
-                fY - size,
-                0,
-                size * 2,
-                size * 2,
-                1.5 * scale,
-                new RenderConstellation.BrightnessFunction() {
-
-                    @Override
-                    public float getBrightness() {
-                        return 0.75F;
-                    }
-                },
-                true,
-                false);
+            RenderConstellation.renderConstellationIntoGUI(overlay, this.associatedConstellation,
+                    fX - size, fY - size, 0,
+                    size * 2, size * 2, 1.5 * scale,
+                    new RenderConstellation.BrightnessFunction() {
+                        @Override
+                        public float getBrightness() {
+                            return 0.75F;
+                        }
+                    }, true, false);
 
         }
     }
@@ -118,8 +104,9 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
-    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx, AllocationStatus status, long spriteOffsetTick,
-                                              float pTicks, double x, double y, double scale) {
+    public Rectangle.Double renderPerkAtBatch(BatchPerkContext drawCtx,
+                                       AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                       double x, double y, double scale) {
         SpriteSheetResource tex = getHaloSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
@@ -143,13 +130,10 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(haloSize * u * 2)
-                .addY(haloSize * v * 2);
+            Vector3 pos = starVec.clone().addX(haloSize * u * 2).addY(haloSize * v * 2);
             vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
-                .color(1F, 1F, 1F, 1F)
-                .endVertex();
+                    .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
+                    .color(1F, 1F, 1F, 1F).endVertex();
         }
 
         super.renderPerkAtBatch(drawCtx, status, spriteOffsetTick, pTicks, x, y, scale);

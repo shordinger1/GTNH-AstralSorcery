@@ -1,17 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.reader.impl;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
@@ -20,7 +16,11 @@ import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,7 +40,7 @@ public class AddedPercentageAttributeReader extends AttributeReader {
     }
 
     public <T extends AddedPercentageAttributeReader> T setDefaultValue(float defaultValue) {
-        if (!attribute.isMultiplicative()) { // Percentage modifiers with a non-zero base make no sense
+        if (!attribute.isMultiplicative()) { //Percentage modifiers with a non-zero base make no sense
             this.defaultValue = defaultValue;
         }
         return (T) this;
@@ -52,10 +52,9 @@ public class AddedPercentageAttributeReader extends AttributeReader {
     }
 
     @Override
-    public double getModifierValueForMode(PlayerAttributeMap statMap, EntityPlayer player, Side side,
-                                          PerkAttributeModifier.Mode mode) {
-        double value = statMap
-            .getModifier(player, ResearchManager.getProgress(player, side), this.attribute.getTypeString(), mode);
+    public double getModifierValueForMode(PlayerAttributeMap statMap, EntityPlayer player, Side side, PerkAttributeModifier.Mode mode) {
+        double value = statMap.getModifier(player, ResearchManager.getProgress(player, side),
+                this.attribute.getTypeString(), mode);
         if (mode == PerkAttributeModifier.Mode.ADDITION) {
             value /= 100.0;
             value += 1;
@@ -67,13 +66,11 @@ public class AddedPercentageAttributeReader extends AttributeReader {
     @SideOnly(Side.CLIENT)
     public PerkStatistic getStatistics(PlayerAttributeMap statMap, EntityPlayer player) {
         Float limit = AttributeTypeLimiter.INSTANCE.getMaxLimit(this.attribute);
-        String limitStr = limit == null ? "" : I18n.format("perk.reader.limit.percent", MathHelper.floor(limit * 100F));
+        String limitStr = limit == null ? "" :
+                I18n.format("perk.reader.limit.percent", MathHelper.floor(limit * 100F));
 
-        double value = statMap.modifyValue(
-            player,
-            ResearchManager.getProgress(player, Side.CLIENT),
-            this.attribute.getTypeString(),
-            (float) getDefaultValue(statMap, player, Side.CLIENT));
+        double value = statMap.modifyValue(player, ResearchManager.getProgress(player, Side.CLIENT),
+                this.attribute.getTypeString(), (float) getDefaultValue(statMap, player, Side.CLIENT));
 
         if (attribute.isMultiplicative()) {
             value -= 1F;
@@ -81,11 +78,11 @@ public class AddedPercentageAttributeReader extends AttributeReader {
 
         String postProcess = "";
         double postValue = AttributeEvent.postProcessModded(player, this.attribute, value);
-        if (Math.abs(value - postValue) > 1E-4 && (limit == null || Math.abs(postValue - limit) > 1E-4)) {
+        if (Math.abs(value - postValue) > 1E-4 &&
+                (limit == null || Math.abs(postValue - limit) > 1E-4)) {
             if (Math.abs(postValue) >= 1E-4) {
-                postProcess = I18n.format(
-                    "perk.reader.postprocess.default",
-                    (postValue >= 0 ? "+" : "") + formatDecimal(postValue) + "%");
+                postProcess = I18n.format("perk.reader.postprocess.default",
+                        (postValue >= 0 ? "+" : "") + formatDecimal(postValue) + "%");
             }
             value = postValue;
         }

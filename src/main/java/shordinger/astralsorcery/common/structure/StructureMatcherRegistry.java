@@ -1,22 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure;
 
-import java.util.Map;
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.common.util.Provider;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.util.ResourceLocation;
-
-import com.google.common.collect.Maps;
-
-import shordinger.astralsorcery.common.util.Provider;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,10 +26,9 @@ public class StructureMatcherRegistry {
 
     public static final StructureMatcherRegistry INSTANCE = new StructureMatcherRegistry();
 
-    private final Map<ResourceLocation, Provider<StructureMatcher>> matcherRegistry = Maps.newHashMap();
+    private Map<ResourceLocation, Provider<StructureMatcher>> matcherRegistry = Maps.newHashMap();
 
-    private StructureMatcherRegistry() {
-    }
+    private StructureMatcherRegistry() {}
 
     public void register(Provider<StructureMatcher> matchProvider) {
         StructureMatcher match = matchProvider.provide();

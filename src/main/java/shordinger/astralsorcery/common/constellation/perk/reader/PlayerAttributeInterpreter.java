@@ -1,26 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.reader;
 
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,10 +29,10 @@ import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttribut
 @SideOnly(Side.CLIENT)
 public class PlayerAttributeInterpreter {
 
-    private final Map<String, AttributeReader> attributeReaderOverrides = Maps.newHashMap();
+    private Map<String, AttributeReader> attributeReaderOverrides = Maps.newHashMap();
 
     private PlayerAttributeMap attributeMap;
-    private final EntityPlayer player;
+    private EntityPlayer player;
 
     private PlayerAttributeInterpreter(PlayerAttributeMap attributeMap, EntityPlayer player) {
         this.attributeMap = attributeMap;
@@ -54,8 +51,7 @@ public class PlayerAttributeInterpreter {
     @Nullable
     public PerkStatistic getValue(String typeString) {
         if (attributeReaderOverrides.containsKey(typeString)) {
-            return attributeReaderOverrides.get(typeString)
-                .getStatistics(attributeMap, player);
+            return attributeReaderOverrides.get(typeString).getStatistics(attributeMap, player);
         } else {
             AttributeReader reader = AttributeReaderRegistry.getReader(typeString);
             if (reader != null) {

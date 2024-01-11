@@ -1,15 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.inventory.Container;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,7 +18,7 @@ import net.minecraft.inventory.Container;
  * Created by HellFirePvP
  * Date: 27.05.2018 / 07:36
  */
-// Dummy container to allow remote opening and easier handling on serverside for dismounting the observatory.
+//Dummy container to allow remote opening and easier handling on serverside for dismounting the observatory.
 public class ContainerObservatory extends Container {
 
     @Override

@@ -1,18 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.client.util.RenderConstellation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -21,7 +17,11 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import shordinger.astralsorcery.migration.NonNullList;
+import mezz.jei.api.ingredients.IIngredients;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -83,27 +83,16 @@ public class AltarTraitRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        if (recipe.getRequiredConstellation() != null) {
+        if(recipe.getRequiredConstellation() != null) {
             GlStateManager.disableAlpha();
-            RenderConstellation.renderConstellationIntoGUI(
-                recipe.getRequiredConstellation()
-                    .getConstellationColor(),
-                recipe.getRequiredConstellation(),
-                0,
-                40,
-                0,
-                recipeWidth,
-                recipeHeight - 40,
-                2F,
-                new RenderConstellation.BrightnessFunction() {
-
-                    @Override
-                    public float getBrightness() {
-                        return 0.5F;
-                    }
-                },
-                true,
-                false);
+            RenderConstellation.renderConstellationIntoGUI(recipe.getRequiredConstellation().getConstellationColor(), recipe.getRequiredConstellation(),
+                    0, 40, 0,
+                    recipeWidth, recipeHeight - 40, 2F, new RenderConstellation.BrightnessFunction() {
+                        @Override
+                        public float getBrightness() {
+                            return 0.5F;
+                        }
+                    }, true, false);
             GlStateManager.enableAlpha();
         }
     }

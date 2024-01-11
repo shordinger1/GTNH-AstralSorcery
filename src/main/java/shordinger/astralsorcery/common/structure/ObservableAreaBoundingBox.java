@@ -1,19 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure;
 
+import shordinger.wrapper.net.minecraft.util.math.*;
+
 import java.util.Collection;
-
-import net.minecraft.util.AxisAlignedBB;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,9 +21,9 @@ import shordinger.astralsorcery.migration.ChunkPos;
  */
 public class ObservableAreaBoundingBox implements ObservableArea {
 
-    private final AxisAlignedBB boundingBox;
+    private AxisAlignedBB boundingBox;
 
-    public ObservableAreaBoundingBox(BlockPos min, BlockPos max) {
+    public ObservableAreaBoundingBox(Vec3i min, Vec3i max) {
         this(new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ()));
     }
 
@@ -35,13 +32,13 @@ public class ObservableAreaBoundingBox implements ObservableArea {
     }
 
     @Override
-    public Collection<ChunkPos> getAffectedChunks(BlockPos offset) {
+    public Collection<ChunkPos> getAffectedChunks(Vec3i offset) {
         return calculateAffectedChunks(this.boundingBox, offset);
     }
 
     @Override
     public boolean observes(BlockPos pos) {
-        return boundingBox.contains(new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
+        return boundingBox.contains(new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
     }
 
 }

@@ -1,36 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon;
 
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.client.util.resource.*;
+import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
+import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
+import shordinger.astralsorcery.common.data.config.Config;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.client.util.resource.*;
-import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import shordinger.astralsorcery.client.util.resource.AssetLibrary;
-import shordinger.astralsorcery.client.util.resource.AssetLoader;
-import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
-import shordinger.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
-import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
-import shordinger.astralsorcery.common.data.config.Config;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +40,7 @@ public class PatreonEffectHelper {
     @Nonnull
     public static List<PatreonEffect> getPatreonEffects(Side side, UUID uuid) {
         if (side == Side.CLIENT && !Config.enablePatreonEffects) {
-            return Collections.emptyList(); // That config is to be applied clientside
+            return Collections.emptyList(); //That config is to be applied clientside
         }
         if (!loadingFinished) {
             return Collections.emptyList();
@@ -59,13 +52,11 @@ public class PatreonEffectHelper {
         if (!loadingFinished) {
             return Maps.newHashMap();
         }
-        Collection<UUID> playerUUIDs = players.stream()
-            .map(Entity::getUniqueID)
-            .collect(Collectors.toList());
+        Collection<UUID> playerUUIDs = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         return effectMap.entrySet()
-            .stream()
-            .filter(e -> playerUUIDs.contains(e.getKey()))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .stream()
+                .filter(e -> playerUUIDs.contains(e.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static class PatreonEffect {
@@ -92,8 +83,7 @@ public class PatreonEffectHelper {
             return sessionEffectId;
         }
 
-        public void initialize() {
-        }
+        public void initialize() {}
 
         @Nullable
         public PatreonPartialEntity createEntity(UUID playerUUID) {
@@ -149,8 +139,7 @@ public class PatreonEffectHelper {
 
         @SideOnly(Side.CLIENT)
         public SpriteSheetResource getTexture() {
-            AbstractRenderableTexture texture = AssetLibrary
-                .loadTexture(AssetLoader.TextureLocation.EFFECT, "patreonflares/" + name().toLowerCase());
+            AbstractRenderableTexture texture = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "patreonflares/" + name().toLowerCase());
             return new SpriteSheetResource(texture, 1, 48);
         }
 

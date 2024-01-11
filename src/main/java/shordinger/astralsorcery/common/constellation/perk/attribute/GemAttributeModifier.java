@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -11,12 +11,12 @@ package shordinger.astralsorcery.common.constellation.perk.attribute;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +36,7 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     private final UUID uuid;
     private PerkAttributeModifier actualModifier = null;
 
-    private static final Map<UUID, Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>>> gemConverterCache = Maps
-        .newHashMap();
+    private static Map<UUID, Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>>> gemConverterCache = Maps.newHashMap();
 
     public GemAttributeModifier(UUID uniqueId, String type, Mode mode, float value) {
         super(type, mode, value);
@@ -55,33 +54,23 @@ public class GemAttributeModifier extends PerkAttributeModifier {
     @Override
     public PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
         PerkAttributeModifier mod = super.convertModifier(attributeType, mode, value);
-        GemAttributeModifier gemMod = new GemAttributeModifier(
-            this.getUniqueId(),
-            mod.getAttributeType(),
-            mod.getMode(),
-            mod.getFlatValue());
+        GemAttributeModifier gemMod = new GemAttributeModifier(this.getUniqueId(), mod.getAttributeType(), mod.getMode(), mod.getFlatValue());
         gemMod.setId(mod.getId());
         return gemMod;
     }
 
     @Override
     @Nullable
-    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType,
-                                                               Mode mode) {
-        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache
-            .computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
-        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache
-            .computeIfAbsent(converter, (c) -> HashBasedTable.create());
+    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, String attributeType, Mode mode) {
+        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache.computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         return cachedModifiers.get(attributeType, mode);
     }
 
     @Override
-    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode,
-                                      PerkAttributeModifier modifier) {
-        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache
-            .computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
-        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache
-            .computeIfAbsent(converter, (c) -> HashBasedTable.create());
+    protected void addModifierToCache(PerkConverter converter, String attributeType, Mode mode, PerkAttributeModifier modifier) {
+        Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> modifierCache = gemConverterCache.computeIfAbsent(this.getUniqueId(), (u) -> new HashMap<>());
+        Table<String, Mode, PerkAttributeModifier> cachedModifiers = modifierCache.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         cachedModifiers.put(attributeType, mode, modifier);
     }
 

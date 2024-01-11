@@ -1,18 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core.patch.helper;
 
+import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
-
-import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,11 +29,11 @@ public class PatchAddPlayerAttribute extends ClassPatch {
     @Override
     public void patch(ClassNode cn) {
         FieldNode entityField = new FieldNode(
-            Opcodes.ACC_PUBLIC,
-            "as_entity",
-            "Lnet/minecraft/entity/EntityLivingBase;",
-            "",
-            null);
+                Opcodes.ACC_PUBLIC,
+                "as_entity",
+                "Lnet/minecraft/entity/EntityLivingBase;",
+                "",
+                null);
         cn.fields.add(entityField);
     }
 

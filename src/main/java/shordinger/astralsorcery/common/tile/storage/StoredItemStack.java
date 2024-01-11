@@ -1,20 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.storage;
 
+import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import shordinger.astralsorcery.common.util.ItemUtils;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,7 +30,7 @@ public class StoredItemStack {
     private int amount;
 
     StoredItemStack(ItemStack stack) {
-        this(stack, stack.stackSize);
+        this(stack, stack.getCount());
     }
 
     private StoredItemStack(ItemStack stack, int amount) {
@@ -62,11 +63,9 @@ public class StoredItemStack {
             return false;
         } else if (stack.hasTagCompound() ^ other.stack.hasTagCompound()) {
             return false;
-        } else if (stack.hasTagCompound() && !stack.getTagCompound()
-            .equals(other.stack.getTagCompound())) {
+        } else if (stack.hasTagCompound() && !stack.getTagCompound().equals(other.stack.getTagCompound())) {
             return false;
-        } else if (stack.getItem()
-            .getHasSubtypes() && stack.getMetadata() != other.stack.getMetadata()) {
+        } else if (stack.getItem().getHasSubtypes() && stack.getMetadata() != other.stack.getMetadata()) {
             return false;
         } else if (!stack.areCapsCompatible(other.stack)) {
             return false;
@@ -81,11 +80,9 @@ public class StoredItemStack {
             return false;
         } else if (stack.hasTagCompound() ^ other.hasTagCompound()) {
             return false;
-        } else if (stack.hasTagCompound() && !stack.getTagCompound()
-            .equals(other.getTagCompound())) {
+        } else if (stack.hasTagCompound() && !stack.getTagCompound().equals(other.getTagCompound())) {
             return false;
-        } else if (stack.getItem()
-            .getHasSubtypes() && stack.getMetadata() != other.getMetadata()) {
+        } else if (stack.getItem().getHasSubtypes() && stack.getMetadata() != other.getMetadata()) {
             return false;
         } else if (!stack.areCapsCompatible(other)) {
             return false;
@@ -106,7 +103,7 @@ public class StoredItemStack {
     @Nullable
     public static StoredItemStack deserialize(NBTTagCompound cmp) {
         ItemStack stack = new ItemStack(cmp.getCompoundTag("item"));
-        if (stack.stackSize==0) {
+        if (stack.isEmpty()) {
             return null;
         }
         int amount = cmp.getInteger("amount");

@@ -1,20 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
-import java.util.Random;
+import shordinger.astralsorcery.common.util.WRItemObject;
+import shordinger.wrapper.net.minecraft.util.WeightedRandom;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.util.WeightedRandom;
-
-import shordinger.astralsorcery.common.util.WRItemObject;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,7 +29,7 @@ public class NonDuplicateCappedWeightedList<T> extends NonDuplicateCappedList<WR
 
     @Nullable
     public WRItemObject<T> getRandomElement() {
-        return WeightedRandom.getRandomItem(rand, this.elements);
+        return WeightedRandom.getRandomItem(NonDuplicateCappedList.rand, this.elements);
     }
 
     @Nullable

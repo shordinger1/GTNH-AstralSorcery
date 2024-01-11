@@ -1,21 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.auxiliary.link;
 
-import java.util.List;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +22,7 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 17:18
  */
-// Interface for linking a TileEntity, which should implement this interface, to any other block for whatever reason.
+//Interface for linking a TileEntity, which should implement this interface, to any other block for whatever reason.
 public interface ILinkableTile {
 
     /**
@@ -47,10 +45,10 @@ public interface ILinkableTile {
 
     /**
      * Defines if this Tile does accept other tiles linking to it.
-     * <p>
+     *
      * True to allow other tiles to create links to this tile
      * False to deny any tile to link to this tile.
-     * <p>
+     *
      * Returns true by default.
      */
     default public boolean doesAcceptLinks() {
@@ -69,6 +67,7 @@ public interface ILinkableTile {
      * Informs that a player right-clicked the tile to start the linking process.
      *
      * @param player the player starting to create a link
+     *
      * @return boolean true if the select actually selected it, false for any other selection modification
      */
     default public boolean onSelect(EntityPlayer player) {
@@ -80,7 +79,7 @@ public interface ILinkableTile {
      * and this tile's onSelect()
      *
      * @param player the player trying to create the link.
-     * @param other  the other block this tile is supposed to link to.
+     * @param other the other block this tile is supposed to link to.
      * @return true, if and only if a allowed/correct link can be created, false otherwise
      */
     public boolean tryLink(EntityPlayer player, BlockPos other);
@@ -89,9 +88,8 @@ public interface ILinkableTile {
      * Called when a player shift-right-clicks a block that is linked to this tile.
      *
      * @param player the player trying to undo the link.
-     * @param other  the other block this tile has a link to.
-     * @return true, if the link got removed, which, in case this is actually linked to the given block, should always
-     *         happen
+     * @param other the other block this tile has a link to.
+     * @return true, if the link got removed, which, in case this is actually linked to the given block, should always happen
      */
     public boolean tryUnlink(EntityPlayer player, BlockPos other);
 

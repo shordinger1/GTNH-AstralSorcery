@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.block;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,8 +34,7 @@ public class ItemBlockAltar extends ItemBlockCustomName {
     }
 
     @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, ForgeDirection side,
-                                float hitX, float hitY, float hitZ, IBlockState newState) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         BlockAltar.AltarType type = newState.getValue(BlockAltar.ALTAR_TYPE);
         switch (type) {
             case ALTAR_1:
@@ -49,9 +47,7 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                 for (int xx = -1; xx <= 1; xx++) {
                     for (int zz = -1; zz <= 1; zz++) {
                         mut.setPos(pos.getX() + xx, pos.getY(), pos.getZ() + zz);
-                        if (!world.isAirBlock(mut) && !WorldHelper.getBlockState(world, mut)
-                            .getBlock()
-                            .isReplaceable(world, mut)) {
+                        if (!world.isAirBlock(mut) && !world.getBlockState(mut).getBlock().isReplaceable(world, mut)) {
                             mut.release();
                             return false;
                         }

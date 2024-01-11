@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.constellation;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,37 +29,30 @@ public class PerkUlteria extends ConstellationPerk {
         setCategory(CATEGORY_FOCUS);
 
         float perPoint = 0.05F;
-        this.addModifier(
-            new PerkAttributeModifier(
-                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP,
-                PerkAttributeModifier.Mode.STACKING_MULTIPLY,
-                1F + perPoint) {
+        this.addModifier(new PerkAttributeModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 1F + perPoint) {
+            @Override
+            protected void initModifier() {
+                super.initModifier();
 
-                @Override
-                protected void initModifier() {
-                    super.initModifier();
+                this.setAbsolute();
+            }
 
-                    this.setAbsolute();
-                }
+            @Override
+            public float getValue(EntityPlayer player, PlayerProgress progress) {
+                return 1F + (perPoint * progress.getAvailablePerkPoints(player));
+            }
 
-                @Override
-                public float getValue(EntityPlayer player, PlayerProgress progress) {
-                    return 1F + (perPoint * progress.getAvailablePerkPoints(player));
-                }
-
-                @Override
-                public boolean hasDisplayString() {
-                    return false;
-                }
-            });
+            @Override
+            public boolean hasDisplayString() {
+                return false;
+            }
+        });
     }
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        return super.mayUnlockPerk(progress, player) && !MiscUtils.contains(
-            progress.getAppliedPerks(),
-            perk -> perk.getCategory()
-                .equals(CATEGORY_FOCUS));
+        return super.mayUnlockPerk(progress, player) &&
+                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
     }
 
 }

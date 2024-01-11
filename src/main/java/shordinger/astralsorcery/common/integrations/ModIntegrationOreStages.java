@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -10,14 +10,13 @@ package shordinger.astralsorcery.common.integrations;
 
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.orestages.api.OreTiersAPI;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.common.Optional;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.Tuple;
+import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,10 +30,10 @@ public class ModIntegrationOreStages {
     @SideOnly(Side.CLIENT)
     @Optional.Method(modid = "orestages")
     public static boolean canSeeOreClient(IBlockState test) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        if (player == null) return false;
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player == null) return false;
         Tuple<String, IBlockState> replacement;
-        if ((replacement = OreTiersAPI.getStageInfo(test)) != null) {
+        if((replacement = OreTiersAPI.getStageInfo(test)) != null) {
             return GameStageHelper.clientHasStage(player, replacement.getFirst());
         }
         return true;

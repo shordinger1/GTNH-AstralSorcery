@@ -1,28 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.fragment;
 
-import java.util.*;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalConstellationDetails;
 import shordinger.astralsorcery.client.gui.journal.GuiJournalPages;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -34,6 +22,15 @@ import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +44,7 @@ public abstract class KnowledgeFragment {
     private static final Predicate<PlayerProgress> TRUE = (p) -> true;
 
     private final ResourceLocation name;
-    private final String unlocPrefix;
+    private String unlocPrefix;
     private Predicate<PlayerProgress> canSeeTest = TRUE;
     private Predicate<PlayerProgress> canDiscoverTest = TRUE;
 
@@ -57,78 +54,74 @@ public abstract class KnowledgeFragment {
     }
 
     public static KnowledgeFragment onConstellations(String name, IConstellation... constellations) {
-        return onConstellations(new ResourceLocation(Tags.MODID, name), constellations);
+        return onConstellations(new ResourceLocation(AstralSorcery.MODID, name), constellations);
     }
 
     public static KnowledgeFragment onConstellations(ResourceLocation name, IConstellation... constellations) {
         List<IConstellation> cst = Arrays.asList(constellations);
         IConstellation c = Iterables.getFirst(cst, null);
         return new KnowledgeFragment(name, c == null ? "" : c.getUnlocalizedName()) {
-
             @Override
             @SideOnly(Side.CLIENT)
             public boolean isVisible(GuiScreenJournal journalGui) {
-                return journalGui instanceof GuiJournalConstellationDetails && MiscUtils
-                    .contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
+                return journalGui instanceof GuiJournalConstellationDetails &&
+                        MiscUtils.contains(cst, n -> n.equals(((GuiJournalConstellationDetails) journalGui).getConstellation()));
             }
         }
-            // Any involved constellation discovered
-            .setCanSeeTest(prog -> {
-                for (IConstellation con : cst) {
-                    if (prog.hasConstellationDiscovered(con)) {
-                        return true;
-                    }
+        // Any involved constellation discovered
+        .setCanSeeTest(prog -> {
+            for (IConstellation con : cst) {
+                if (prog.hasConstellationDiscovered(con)) {
+                    return true;
                 }
-                return false;
-            });
+            }
+            return false;
+        });
     }
 
     public static KnowledgeFragment onResearchNodes(String name, ResearchNode... nodes) {
-        return onResearchNodes(new ResourceLocation(Tags.MODID, name), nodes);
+        return onResearchNodes(new ResourceLocation(AstralSorcery.MODID, name), nodes);
     }
 
     private static KnowledgeFragment onResearchNodes(ResourceLocation name, ResearchNode... nodes) {
         List<ResearchNode> nds = Arrays.asList(nodes);
         ResearchNode nd = Iterables.getFirst(nds, null);
         return new KnowledgeFragment(name, nd == null ? "" : nd.getUnLocalizedName()) {
-
             @Override
             @SideOnly(Side.CLIENT)
             public boolean isVisible(GuiScreenJournal journalGui) {
-                return journalGui instanceof GuiJournalPages
-                    && MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
+                return journalGui instanceof GuiJournalPages &&
+                        MiscUtils.contains(nds, n -> n.equals(((GuiJournalPages) journalGui).getResearchNode()));
             }
         }
-            // Any preconditions visible
-            .setCanSeeTest(prog -> {
-                for (ResearchNode n : nds) {
-                    if (!n.canSee(prog)) {
-                        continue;
-                    }
-                    for (ResearchProgression rProg : ResearchProgression.findProgression(n)) {
-                        if (prog.getResearchProgression()
-                            .contains(rProg)) {
-                            return true;
-                        }
+        // Any preconditions visible
+        .setCanSeeTest(prog -> {
+            for (ResearchNode n : nds) {
+                if (!n.canSee(prog)) {
+                    continue;
+                }
+                for (ResearchProgression rProg : ResearchProgression.findProgression(n)) {
+                    if (prog.getResearchProgression().contains(rProg)) {
+                        return true;
                     }
                 }
-                return false;
-            })
-            // All preconditions visible
-            .setCanDiscoverTest(prog -> {
-                for (ResearchNode n : nds) {
-                    if (!n.canSee(prog)) {
+            }
+            return false;
+        })
+        // All preconditions visible
+        .setCanDiscoverTest(prog -> {
+            for (ResearchNode n : nds) {
+                if (!n.canSee(prog)) {
+                    return false;
+                }
+                for (ResearchProgression rProg : ResearchProgression.findProgression(n)) {
+                    if (!prog.getResearchProgression().contains(rProg)) {
                         return false;
                     }
-                    for (ResearchProgression rProg : ResearchProgression.findProgression(n)) {
-                        if (!prog.getResearchProgression()
-                            .contains(rProg)) {
-                            return false;
-                        }
-                    }
                 }
-                return true;
-            });
+            }
+            return true;
+        });
     }
 
     public KnowledgeFragment setCanSeeTest(Predicate<PlayerProgress> canSeeTest) {
@@ -142,8 +135,7 @@ public abstract class KnowledgeFragment {
     }
 
     public static Predicate<PlayerProgress> hasTier(ProgressionTier tier) {
-        return (p) -> p.getTierReached()
-            .isThisLaterOrEqual(tier);
+        return (p) -> p.getTierReached().isThisLaterOrEqual(tier);
     }
 
     public static Predicate<PlayerProgress> discoveredConstellation(IConstellation cst) {
@@ -186,15 +178,15 @@ public abstract class KnowledgeFragment {
         return phases;
     }
 
-    // If the content of the knowledge fragment can be seen at the current progress
-    // Might be earlier than #canDiscover
+    //If the content of the knowledge fragment can be seen at the current progress
+    //Might be earlier than #canDiscover
     public boolean canSee(PlayerProgress progress) {
         return canSeeTest.test(progress);
     }
 
-    // If the knowledge fragment can be discovered at this stage
-    // Might be later than #canSee
-    // Always includes #canSee
+    //If the knowledge fragment can be discovered at this stage
+    //Might be later than #canSee
+    //Always includes #canSee
     public boolean canDiscover(PlayerProgress progress) {
         return canSeeTest.test(progress) && canDiscoverTest.test(progress);
     }
@@ -220,9 +212,10 @@ public abstract class KnowledgeFragment {
 
     @SideOnly(Side.CLIENT)
     public boolean isFullyPresent() {
-        return I18n.hasKey(getUnlocalizedName()) && I18n.hasKey(getUnlocalizedBookmark())
-            && I18n.hasKey(getUnlocalizedPage())
-            && (this.unlocPrefix.isEmpty() || I18n.hasKey(this.unlocPrefix));
+        return I18n.hasKey(getUnlocalizedName()) &&
+                I18n.hasKey(getUnlocalizedBookmark()) &&
+                I18n.hasKey(getUnlocalizedPage()) &&
+                (this.unlocPrefix.isEmpty() || I18n.hasKey(this.unlocPrefix));
     }
 
     @SideOnly(Side.CLIENT)
@@ -242,8 +235,7 @@ public abstract class KnowledgeFragment {
 
     @SideOnly(Side.CLIENT)
     public String getLocalizedIndexName() {
-        return this.unlocPrefix.isEmpty() ? this.getLocalizedName()
-            : String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
+        return this.unlocPrefix.isEmpty() ? this.getLocalizedName() : String.format("%s: %s", I18n.format(this.unlocPrefix), this.getLocalizedName());
     }
 
     public ResourceLocation getRegistryName() {

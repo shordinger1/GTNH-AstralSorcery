@@ -1,47 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry;
 
-import static shordinger.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
-import static shordinger.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
-import static shordinger.astralsorcery.common.lib.Constellations.*;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Random;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-
 import shordinger.astralsorcery.common.constellation.ConstellationBase;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.MoonPhase;
 import shordinger.astralsorcery.common.constellation.cape.impl.*;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectArmara;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectBootes;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectHorologium;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectLucerna;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectMineralis;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
-import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectVicio;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import shordinger.astralsorcery.common.constellation.star.StarLocation;
@@ -50,6 +20,23 @@ import shordinger.astralsorcery.common.event.APIRegistryEvent;
 import shordinger.astralsorcery.common.item.useables.ItemUsableDust;
 import shordinger.astralsorcery.common.lib.EnchantmentsAS;
 import shordinger.astralsorcery.common.util.OreDictAlias;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.init.Enchantments;
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.init.MobEffects;
+import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Random;
+
+import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
+import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
+import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,7 +58,7 @@ public class RegistryConstellations {
     public static void initMapEffects() {
         registerMapEffects();
 
-        // registerSpellEffects();
+        //registerSpellEffects();
 
         registerCapeEffects();
     }
@@ -96,127 +83,114 @@ public class RegistryConstellations {
         registerCapeArmorEffect(bootes, CapeEffectBootes.class);
     }
 
-    // private static void registerSpellEffects() {
-    // registerControllerEffect(discidia, EffectControllerDiscidia::new);
-    // registerControllerEffect(aevitas, EffectControllerAevitas::new);
-    // }
+    //private static void registerSpellEffects() {
+    //    registerControllerEffect(discidia, EffectControllerDiscidia::new);
+    //    registerControllerEffect(aevitas,  EffectControllerAevitas::new);
+    //}
 
     private static void registerMapEffects() {
-        registerMapEffect(
-            discidia,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 7),
-                new EnchantmentMapEffect(Enchantments.POWER, 3, 7)),
-            Arrays.asList(new PotionMapEffect(MobEffects.STRENGTH, 0, 3)));
-        registerMapEffect(
-            armara,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.PROTECTION, 3, 5)),
-            Arrays.asList(new PotionMapEffect(MobEffects.RESISTANCE)));
-        registerMapEffect(
-            vicio,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 3, 5)),
-            Arrays.asList(new PotionMapEffect(MobEffects.SPEED, 1, 3)));
-        registerMapEffect(
-            aevitas,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.MENDING, 1, 3)),
-            Arrays.asList(new PotionMapEffect(MobEffects.REGENERATION, 0, 3)));
-        registerMapEffect(
-            evorsio,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.EFFICIENCY, 3, 5)),
-            Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 1, 3)));
+        registerMapEffect(discidia,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 7),
+                        new EnchantmentMapEffect(Enchantments.POWER, 3, 7)),
+                Arrays.asList(new PotionMapEffect(MobEffects.STRENGTH, 0, 3)));
+        registerMapEffect(armara,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.PROTECTION, 3, 5)),
+                Arrays.asList(new PotionMapEffect(MobEffects.RESISTANCE)));
+        registerMapEffect(vicio,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 3, 5)),
+                Arrays.asList(new PotionMapEffect(MobEffects.SPEED, 1, 3)));
+        registerMapEffect(aevitas,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.MENDING, 1, 3)),
+                Arrays.asList(new PotionMapEffect(MobEffects.REGENERATION, 0, 3)));
+        registerMapEffect(evorsio,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.EFFICIENCY, 3, 5)),
+                Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 1, 3)));
 
-        registerMapEffect(
-            lucerna,
-            Arrays.asList(new EnchantmentMapEffect(EnchantmentsAS.enchantmentNightVision, 1, 1)),
-            Arrays.asList(new PotionMapEffect(MobEffects.NIGHT_VISION)));
-        registerMapEffect(
-            mineralis,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.FORTUNE, 1, 3)),
-            Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 0, 3)));
-        registerMapEffect(
-            horologium,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.FORTUNE, 4, 6),
-                new EnchantmentMapEffect(Enchantments.LOOTING, 3, 5)),
-            Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 5, 8), new PotionMapEffect(MobEffects.SPEED, 1, 4)));
-        registerMapEffect(
-            octans,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.RESPIRATION, 2, 4)),
-            Arrays.asList(new PotionMapEffect(MobEffects.WATER_BREATHING, 2, 4)));
-        registerMapEffect(
-            bootes,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
-            Arrays.asList(new PotionMapEffect(MobEffects.SATURATION, 2, 5)));
-        registerMapEffect(
-            fornax,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.FIRE_ASPECT, 1, 3),
-                new EnchantmentMapEffect(Enchantments.FLAME, 1, 2),
-                new EnchantmentMapEffect(EnchantmentsAS.enchantmentScorchingHeat, 1, 1)),
-            Arrays.asList(new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0)));
-        registerMapEffect(
-            pelotrio,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.INFINITY, 1, 1),
-                new EnchantmentMapEffect(Enchantments.LURE, 4, 6)),
-            Arrays.asList(
-                new PotionMapEffect(MobEffects.REGENERATION, 2, 4),
-                new PotionMapEffect(MobEffects.ABSORPTION, 1, 4)));
+        registerMapEffect(lucerna,
+                Arrays.asList(new EnchantmentMapEffect(EnchantmentsAS.enchantmentNightVision, 1, 1)),
+                Arrays.asList(new PotionMapEffect(MobEffects.NIGHT_VISION)));
+        registerMapEffect(mineralis,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.FORTUNE, 1, 3)),
+                Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 0, 3)));
+        registerMapEffect(horologium,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.FORTUNE, 4, 6),
+                        new EnchantmentMapEffect(Enchantments.LOOTING, 3, 5)),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.HASTE, 5, 8),
+                        new PotionMapEffect(MobEffects.SPEED, 1, 4)));
+        registerMapEffect(octans,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.RESPIRATION, 2, 4)),
+                Arrays.asList(new PotionMapEffect(MobEffects.WATER_BREATHING, 2, 4)));
+        registerMapEffect(bootes,
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
+                Arrays.asList(new PotionMapEffect(MobEffects.SATURATION, 2, 5)));
+        registerMapEffect(fornax,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.FIRE_ASPECT, 1, 3),
+                        new EnchantmentMapEffect(Enchantments.FLAME, 1, 2),
+                        new EnchantmentMapEffect(EnchantmentsAS.enchantmentScorchingHeat, 1, 1)),
+                Arrays.asList(new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0)));
+        registerMapEffect(pelotrio,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.INFINITY, 1, 1),
+                        new EnchantmentMapEffect(Enchantments.LURE, 4, 6)),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.REGENERATION, 2, 4),
+                        new PotionMapEffect(MobEffects.ABSORPTION, 1, 4)));
 
-        registerMapEffect(
-            gelu,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.FROST_WALKER),
-                new EnchantmentMapEffect(Enchantments.FEATHER_FALLING),
-                new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4)),
-            Arrays.asList(
-                new PotionMapEffect(MobEffects.RESISTANCE, 1, 2),
-                new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0),
-                new PotionMapEffect(MobEffects.SLOWNESS, 0, 1)));
-        registerMapEffect(
-            ulteria,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 3).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompatibility()),
-            Arrays.asList(
-                new PotionMapEffect(MobEffects.ABSORPTION, 0, 2),
-                new PotionMapEffect(MobEffects.REGENERATION, 1, 1),
-                new PotionMapEffect(MobEffects.WEAKNESS, 1, 2)));
-        registerMapEffect(
-            alcara,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 7),
-                new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
-            Arrays.asList(
-                new PotionMapEffect(MobEffects.LUCK, 2, 4),
-                new PotionMapEffect(MobEffects.INVISIBILITY, 0, 1),
-                new PotionMapEffect(MobEffects.HUNGER, 1, 2)));
-        registerMapEffect(
-            vorux,
-            Arrays.asList(
-                new EnchantmentMapEffect(Enchantments.SMITE, 4, 7).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 7).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 4).setIgnoreCompatibility(),
-                new EnchantmentMapEffect(Enchantments.POWER, 3, 4).setIgnoreCompatibility()),
-            Arrays.asList(
-                new PotionMapEffect(MobEffects.STRENGTH, 2, 3),
-                new PotionMapEffect(MobEffects.RESISTANCE, 0, 1),
-                new PotionMapEffect(MobEffects.MINING_FATIGUE, 1, 3)));
+        registerMapEffect(gelu,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.FROST_WALKER),
+                        new EnchantmentMapEffect(Enchantments.FEATHER_FALLING),
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4)
+                        ),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.RESISTANCE, 1, 2),
+                        new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0),
+                        new PotionMapEffect(MobEffects.SLOWNESS, 0, 1)));
+        registerMapEffect(ulteria,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 3).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompatibility()),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.ABSORPTION, 0, 2),
+                        new PotionMapEffect(MobEffects.REGENERATION, 1, 1),
+                        new PotionMapEffect(MobEffects.WEAKNESS, 1, 2)));
+        registerMapEffect(alcara,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 7),
+                        new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.LUCK, 2, 4),
+                        new PotionMapEffect(MobEffects.INVISIBILITY, 0, 1),
+                        new PotionMapEffect(MobEffects.HUNGER, 1, 2)));
+        registerMapEffect(vorux,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 7).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 7).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 4).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.POWER, 3, 4).setIgnoreCompatibility()),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.STRENGTH, 2, 3),
+                        new PotionMapEffect(MobEffects.RESISTANCE, 0, 1),
+                        new PotionMapEffect(MobEffects.MINING_FATIGUE, 1, 3)));
     }
 
     private static void registerConstellations() {
-        // Major
+        //Major
         ConstellationRegistry.registerConstellation(discidia);
         ConstellationRegistry.registerConstellation(armara);
         ConstellationRegistry.registerConstellation(vicio);
         ConstellationRegistry.registerConstellation(aevitas);
         ConstellationRegistry.registerConstellation(evorsio);
 
-        // Weak
+        //Weak
         ConstellationRegistry.registerConstellation(lucerna);
         ConstellationRegistry.registerConstellation(mineralis);
         ConstellationRegistry.registerConstellation(horologium);
@@ -225,7 +199,7 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(fornax);
         ConstellationRegistry.registerConstellation(pelotrio);
 
-        // Minor
+        //Minor
         ConstellationRegistry.registerConstellation(gelu);
         ConstellationRegistry.registerConstellation(ulteria);
         ConstellationRegistry.registerConstellation(alcara);
@@ -257,6 +231,7 @@ public class RegistryConstellations {
         evorsio.addSignatureItem(new ItemHandle(new ItemStack(Items.FLINT)));
         evorsio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
         evorsio.addSignatureItem(new ItemHandle(new ItemStack(Blocks.TNT)));
+
 
         lucerna.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GLOWSTONE_DUST));
         lucerna.addSignatureItem(new ItemHandle(new ItemStack(Blocks.TORCH)));
@@ -292,6 +267,7 @@ public class RegistryConstellations {
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
         pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_EGG));
+
 
         gelu.addSignatureItem(new ItemHandle(new ItemStack(Items.SNOWBALL)));
         gelu.addSignatureItem(new ItemHandle(new ItemStack(Blocks.ICE)));
@@ -356,9 +332,9 @@ public class RegistryConstellations {
         armara.addConnection(sl5, sl7);
 
         vicio = new ConstellationBase.Major("vicio", new Color(0x00BDAD));
-        sl1 = vicio.addStar(3, 8);
+        sl1 = vicio.addStar(3,  8);
         sl2 = vicio.addStar(13, 9);
-        sl3 = vicio.addStar(6, 23);
+        sl3 = vicio.addStar(6,  23);
         sl4 = vicio.addStar(14, 16);
         sl5 = vicio.addStar(23, 24);
         sl6 = vicio.addStar(22, 16);
@@ -438,13 +414,11 @@ public class RegistryConstellations {
         mineralis.addConnection(sl1, sl4);
 
         horologium = new ConstellationBase.WeakSpecial("horologium", new Color(0x7D16B4)) {
-
             @Override
             public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
                 long rSeed;
-                if (world.isRemote) {
-                    Optional<Long> testSeed = ConstellationSkyHandler.getInstance()
-                        .getSeedIfPresent(world);
+                if(world.isRemote) {
+                    Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
                     if (!testSeed.isPresent()) {
                         return false;
                     }
@@ -509,7 +483,6 @@ public class RegistryConstellations {
         fornax.addConnection(sl2, sl5);
 
         pelotrio = new ConstellationBase.WeakSpecial("pelotrio", new Color(0xEC006B)) {
-
             @Override
             public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
                 return handle.getCurrentMoonPhase() == MoonPhase.NEW || handle.getCurrentMoonPhase() == MoonPhase.FULL;
@@ -517,9 +490,9 @@ public class RegistryConstellations {
 
             @Override
             public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showingUp) {
-                if (showingUp) return 1F;
+                if(showingUp) return 1F;
                 MoonPhase current = handle.getCurrentMoonPhase();
-                if (current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
+                if(current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
                     return 0.5F;
                 }
                 return 0.75F;
@@ -539,12 +512,7 @@ public class RegistryConstellations {
         pelotrio.addConnection(sl4, sl6);
         pelotrio.addConnection(sl6, sl3);
 
-        gelu = new ConstellationBase.Minor(
-            "gelu",
-            new Color(0x758BA8),
-            MoonPhase.NEW,
-            MoonPhase.WAXING1_4,
-            MoonPhase.WAXING1_2);
+        gelu = new ConstellationBase.Minor("gelu", new Color(0x758BA8), MoonPhase.NEW, MoonPhase.WAXING1_4, MoonPhase.WAXING1_2);
         sl1 = gelu.addStar(8, 7);
         sl2 = gelu.addStar(28, 8);
         sl3 = gelu.addStar(23, 21);
@@ -557,12 +525,7 @@ public class RegistryConstellations {
         gelu.addConnection(sl2, sl5);
         gelu.addConnection(sl4, sl6);
 
-        ulteria = new ConstellationBase.Minor(
-            "ulteria",
-            new Color(0x347463),
-            MoonPhase.WANING1_2,
-            MoonPhase.WANING3_4,
-            MoonPhase.NEW);
+        ulteria = new ConstellationBase.Minor("ulteria", new Color(0x347463), MoonPhase.WANING1_2, MoonPhase.WANING3_4, MoonPhase.NEW);
         sl1 = ulteria.addStar(14, 9);
         sl2 = ulteria.addStar(17, 16);
         sl3 = ulteria.addStar(25, 19);
@@ -587,12 +550,7 @@ public class RegistryConstellations {
         alcara.addConnection(sl4, sl5);
         alcara.addConnection(sl4, sl6);
 
-        vorux = new ConstellationBase.Minor(
-            "vorux",
-            new Color(0xA8881E),
-            MoonPhase.FULL,
-            MoonPhase.WAXING3_4,
-            MoonPhase.WANING3_4);
+        vorux = new ConstellationBase.Minor("vorux", new Color(0xA8881E), MoonPhase.FULL, MoonPhase.WAXING3_4, MoonPhase.WANING3_4);
         sl1 = vorux.addStar(3, 21);
         sl2 = vorux.addStar(7, 7);
         sl3 = vorux.addStar(14, 15);

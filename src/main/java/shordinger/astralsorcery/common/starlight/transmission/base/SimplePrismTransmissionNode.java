@@ -1,21 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
 import shordinger.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import shordinger.astralsorcery.common.starlight.network.TransmissionWorldHandler;
@@ -24,7 +17,13 @@ import shordinger.astralsorcery.common.starlight.transmission.NodeConnection;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,11 +36,11 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     private boolean ignoreBlockCollision = false;
 
-    private final Map<BlockPos, PrismNext> nextNodes = new HashMap<>();
+    private Map<BlockPos, PrismNext> nextNodes = new HashMap<>();
 
     private BlockPos thisPos;
 
-    private final Set<BlockPos> sourcesToThis = new HashSet<>();
+    private Set<BlockPos> sourcesToThis = new HashSet<>();
 
     public SimplePrismTransmissionNode(BlockPos thisPos) {
         this.thisPos = thisPos;
@@ -54,18 +53,17 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     public void updateIgnoreBlockCollisionState(World world, boolean ignoreBlockCollision) {
         this.ignoreBlockCollision = ignoreBlockCollision;
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
-            .getWorldHandler(world);
-        if (handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+        if(handle != null) {
             boolean anyChange = false;
             for (PrismNext next : nextNodes.values()) {
                 boolean oldState = next.reachable;
                 next.reachable = ignoreBlockCollision || next.rayAssist.isClear(world);
-                if (next.reachable != oldState) {
+                if(next.reachable != oldState) {
                     anyChange = true;
                 }
             }
-            if (anyChange) {
+            if(anyChange) {
                 handle.notifyTransmissionNodeChange(this);
             }
         }
@@ -94,14 +92,14 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     public boolean notifyBlockChange(World world, BlockPos at) {
         boolean anyChange = false;
         for (PrismNext next : nextNodes.values()) {
-            if (next.notifyBlockPlace(world, thisPos, at)) anyChange = true;
+            if(next.notifyBlockPlace(world, thisPos, at)) anyChange = true;
         }
         return anyChange;
     }
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        if (!sourcesToThis.contains(source)) sourcesToThis.add(source);
+        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override
@@ -120,8 +118,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     @Override
     public List<BlockPos> getSources() {
-        return sourcesToThis.stream()
-            .collect(Collectors.toCollection(LinkedList::new));
+        return sourcesToThis.stream().collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
@@ -145,7 +142,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             NBTTagCompound tag = nextList.getCompoundTagAt(i);
             BlockPos next = NBTHelper.readBlockPosFromNBT(tag);
             boolean oldState = tag.getBoolean("rayState");
-            addLink(null, next, false, oldState); // Rebuild link.
+            addLink(null, next, false, oldState); //Rebuild link.
         }
     }
 
@@ -181,12 +178,11 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
         private final BlockPos pos;
         private RaytraceAssist rayAssist = null;
 
-        private PrismNext(SimplePrismTransmissionNode parent, World world, BlockPos start, BlockPos end,
-                          boolean doRayTest, boolean oldRayState) {
+        private PrismNext(SimplePrismTransmissionNode parent, World world, BlockPos start, BlockPos end, boolean doRayTest, boolean oldRayState) {
             this.parent = parent;
             this.pos = end;
             this.rayAssist = new RaytraceAssist(start, end);
-            if (doRayTest) {
+            if(doRayTest) {
                 this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);
             } else {
                 this.reachable = oldRayState;
@@ -197,7 +193,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
         private boolean notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
             double dstStart = connect.distanceSq(at.getX(), at.getY(), at.getZ());
             double dstEnd = pos.distanceSq(at.getX(), at.getY(), at.getZ());
-            if (dstStart > distanceSq || dstEnd > distanceSq) return false;
+            if(dstStart > distanceSq || dstEnd > distanceSq) return false;
             boolean oldState = this.reachable;
             this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);
             return this.reachable != oldState;
@@ -229,7 +225,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
         @Override
         public String getIdentifier() {
-            return Tags.MODID + ":SimplePrismTransmissionNode";
+            return AstralSorcery.MODID + ":SimplePrismTransmissionNode";
         }
 
     }

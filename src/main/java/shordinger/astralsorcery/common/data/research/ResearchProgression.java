@@ -1,21 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.research;
 
-import java.util.*;
+import com.google.common.collect.Lists;
+import shordinger.astralsorcery.AstralSorcery;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
-
-import shordinger.astralsorcery.Tags;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,11 +29,12 @@ public enum ResearchProgression {
     ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
     CONSTELLATION(3, ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
     RADIANCE(4, ProgressionTier.TRAIT_CRAFT, CONSTELLATION),
-    BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE);
+    BRILLIANCE(5, ProgressionTier.BRILLIANCE, RADIANCE)
+    ;
 
     private final int progressId;
-    private final List<ResearchProgression> preConditions = new LinkedList<>();
-    private final List<ResearchNode> researchNodes = new LinkedList<>();
+    private List<ResearchProgression> preConditions = new LinkedList<>();
+    private List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
     private final String unlocName;
 
@@ -50,21 +49,15 @@ public enum ResearchProgression {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
         this.progressId = id;
-        this.unlocName = Tags.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
+        this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
     }
 
     void addResearchToGroup(ResearchNode res) {
         for (ResearchNode node : researchNodes) {
-            if (node.renderPosX == res.renderPosX && node.renderPosZ == res.renderPosZ) {
-                throw new IllegalArgumentException(
-                    "Tried to register 2 Research Nodes at the same position at x=" + res.renderPosX
-                        + ", z="
-                        + res.renderPosZ
-                        + "! "
-                        + "Present: "
-                        + node.getUnLocalizedName()
-                        + " - Tried to set: "
-                        + res.getUnLocalizedName());
+            if(node.renderPosX == res.renderPosX &&
+                    node.renderPosZ == res.renderPosZ) {
+                throw new IllegalArgumentException("Tried to register 2 Research Nodes at the same position at x=" + res.renderPosX + ", z=" + res.renderPosZ + "! " +
+                        "Present: " + node.getUnLocalizedName() + " - Tried to set: " + res.getUnLocalizedName());
             }
         }
         this.researchNodes.add(res);
@@ -78,18 +71,17 @@ public enum ResearchProgression {
         return new Registry(this);
     }
 
-    /*
-     * public boolean tryStepTo(EntityPlayer player, boolean force) {
-     * return (force || canStepTo(player)) && ResearchManager.forceUnsafeResearchStep(player, this);
-     * }
-     * public boolean canStepTo(EntityPlayer player) {
-     * PlayerProgress progress = ResearchManager.getProgress(player);
-     * if(progress == null) return false;
-     * List<ResearchProgression> playerResearchProgression = progress.getResearchProgression();
-     * ProgressionTier playerTier = progress.getTierReached();
-     * return playerTier.isThisLaterOrEqual(requiredProgress) && playerResearchProgression.containsAll(preConditions);
-     * }
-     */
+    /*public boolean tryStepTo(EntityPlayer player, boolean force) {
+        return (force || canStepTo(player)) && ResearchManager.forceUnsafeResearchStep(player, this);
+    }
+
+    public boolean canStepTo(EntityPlayer player) {
+        PlayerProgress progress = ResearchManager.getProgress(player);
+        if(progress == null) return false;
+        List<ResearchProgression> playerResearchProgression = progress.getResearchProgression();
+        ProgressionTier playerTier = progress.getTierReached();
+        return playerTier.isThisLaterOrEqual(requiredProgress) && playerResearchProgression.containsAll(preConditions);
+    }*/
 
     public ProgressionTier getRequiredProgress() {
         return requiredProgress;
@@ -119,8 +111,7 @@ public enum ResearchProgression {
     public static ResearchNode findNode(String name) {
         for (ResearchProgression prog : values()) {
             for (ResearchNode node : prog.getResearchNodes()) {
-                if (node.getSimpleName()
-                    .equals(name)) {
+                if (node.getSimpleName().equals(name)) {
                     return node;
                 }
             }
@@ -132,8 +123,7 @@ public enum ResearchProgression {
     public static Collection<ResearchProgression> findProgression(ResearchNode n) {
         Collection<ResearchProgression> progressions = Lists.newArrayList();
         for (ResearchProgression prog : values()) {
-            if (prog.getResearchNodes()
-                .contains(n)) {
+            if (prog.getResearchNodes().contains(n)) {
                 progressions.add(prog);
             }
         }

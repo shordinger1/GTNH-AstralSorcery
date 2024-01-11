@@ -1,39 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.constellation.effect.aoe.*;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectArmara;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectBootes;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectEvorsio;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectPelotrio;
-import shordinger.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.event.APIRegistryEvent;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.ILocatable;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,19 +34,19 @@ public class ConstellationEffectRegistry {
     private static Map<IWeakConstellation, ConstellationEffect> singleRenderInstances = new HashMap<>();
 
     public static void init() {
-        register(Constellations.aevitas, CEffectAevitas::new);
-        register(Constellations.discidia, CEffectDiscidia::new);
-        register(Constellations.armara, CEffectArmara::new);
-        register(Constellations.vicio, CEffectVicio::new);
-        register(Constellations.evorsio, CEffectEvorsio::new);
+        register(Constellations.aevitas,    CEffectAevitas::new);
+        register(Constellations.discidia,   CEffectDiscidia::new);
+        register(Constellations.armara,     CEffectArmara::new);
+        register(Constellations.vicio,      CEffectVicio::new);
+        register(Constellations.evorsio,    CEffectEvorsio::new);
 
-        register(Constellations.mineralis, CEffectMineralis::new);
-        register(Constellations.lucerna, CEffectLucerna::new);
-        register(Constellations.bootes, CEffectBootes::new);
+        register(Constellations.mineralis,  CEffectMineralis::new);
+        register(Constellations.lucerna,    CEffectLucerna::new);
+        register(Constellations.bootes,     CEffectBootes::new);
         register(Constellations.horologium, CEffectHorologium::new);
-        register(Constellations.octans, CEffectOctans::new);
-        register(Constellations.fornax, CEffectFornax::new);
-        register(Constellations.pelotrio, CEffectPelotrio::new);
+        register(Constellations.octans,     CEffectOctans::new);
+        register(Constellations.fornax,     CEffectFornax::new);
+        register(Constellations.pelotrio,   CEffectPelotrio::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
@@ -99,7 +85,7 @@ public class ConstellationEffectRegistry {
     @Nullable
     public static ConstellationEffect getEffect(IWeakConstellation c, ILocatable origin) {
         ConstellationEffectProvider p = providerMap.get(c);
-        if (p != null) {
+        if(p != null) {
             return p.provideEffectInstance(origin);
         }
         return null;

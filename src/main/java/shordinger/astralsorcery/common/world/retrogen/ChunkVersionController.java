@@ -1,26 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.world.retrogen;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.event.world.ChunkDataEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.ChunkVersionBuffer;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraftforge.event.world.ChunkDataEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,10 +31,9 @@ public class ChunkVersionController {
     private static final String AS_VERSION_KEY = "AS-ChunkGen-Version";
     public static ChunkVersionController instance = new ChunkVersionController();
 
-    private final Map<ChunkPos, Integer> versionBuffer = new ConcurrentHashMap<>();
+    private Map<ChunkPos, Integer> versionBuffer = new ConcurrentHashMap<>();
 
-    private ChunkVersionController() {
-    }
+    private ChunkVersionController() {}
 
     @Nullable
     public Integer getGenerationVersion(ChunkPos pos) {
@@ -50,28 +46,30 @@ public class ChunkVersionController {
 
     @SubscribeEvent
     public void onChDataLoad(ChunkDataEvent.Load ev) {
-        ChunkPos cp = ev.getChunk()
-            .getPos();
+        ChunkPos cp = ev.getChunk().getPos();
         NBTTagCompound tag = ev.getData();
-        if (tag.hasKey(AS_VERSION_KEY)) {
+        if(tag.hasKey(AS_VERSION_KEY)) {
             versionBuffer.put(cp, tag.getInteger(AS_VERSION_KEY));
         } else {
-            ChunkVersionBuffer buf = WorldCacheManager
-                .getOrLoadData(ev.world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
+            ChunkVersionBuffer buf = WorldCacheManager.getOrLoadData(ev.getWorld(), WorldCacheManager.SaveKey.CHUNK_VERSIONING);
             Integer savedVersion = buf.getGenerationVersion(cp);
-            // Can't grab any data...
-            versionBuffer.put(cp, Objects.requireNonNullElse(savedVersion, -1));
+            if(savedVersion != null) {
+                versionBuffer.put(cp, savedVersion);
+            } else {
+                versionBuffer.put(cp, -1); //Can't grab any data...
+            }
         }
     }
 
     @SubscribeEvent
     public void onChDataSave(ChunkDataEvent.Save ev) {
-        ChunkPos cp = ev.getChunk()
-            .getPos();
+        ChunkPos cp = ev.getChunk().getPos();
         Integer buf = versionBuffer.get(cp);
-        // So at least we don't have to look it up somewhere else later.
-        ev.getData()
-            .setInteger(AS_VERSION_KEY, Objects.requireNonNullElse(buf, -1));
+        if(buf != null) {
+            ev.getData().setInteger(AS_VERSION_KEY, buf);
+        } else {
+            ev.getData().setInteger(AS_VERSION_KEY, -1); //So at least we don't have to look it up somewhere else later.
+        }
     }
 
 }

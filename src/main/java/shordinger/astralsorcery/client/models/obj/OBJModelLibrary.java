@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -28,7 +28,6 @@ public class OBJModelLibrary {
         return AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, name);
     }
 
-    public static void init() {
-    } // To invoke static initializer for fields
+    public static void init() {} //To invoke static initializer for fields
 
 }

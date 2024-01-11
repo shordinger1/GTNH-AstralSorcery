@@ -1,28 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
 import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import shordinger.astralsorcery.common.network.packet.server.PktPlayEffect;
 import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -40,17 +40,16 @@ public class BlockBreakAssist {
     private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
     public static BreakEntry addProgress(World world, BlockPos pos, float expectedHardness, float percStrength) {
-        TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.dimensionId);
-        if (map == null) {
+        TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.getDimension());
+        if(map == null) {
             map = new TickTokenizedMap<>(TickEvent.Type.SERVER);
-            TickManager.getInstance()
-                .register(map);
-            breakMap.put(world.provider.dimensionId, map);
+            TickManager.getInstance().register(map);
+            breakMap.put(world.provider.getDimension(), map);
         }
 
         BreakEntry breakProgress = map.get(pos);
-        if (breakProgress == null) {
-            breakProgress = new BreakEntry(expectedHardness, world, pos, WorldHelper.getBlockState(world, pos));
+        if(breakProgress == null) {
+            breakProgress = new BreakEntry(expectedHardness, world, pos, world.getBlockState(pos));
             map.put(pos, breakProgress);
         }
 
@@ -64,8 +63,7 @@ public class BlockBreakAssist {
         RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, Block.getStateById(pktPlayEffect.data));
     }
 
-    public static class BreakEntry
-        implements TickTokenizedMap.TickMapToken<Float>, CEffectPositionListGen.CEffectGenListEntry {
+    public static class BreakEntry implements TickTokenizedMap.TickMapToken<Float>,CEffectPositionListGen.CEffectGenListEntry {
 
         private float breakProgress;
         private final World world;
@@ -97,17 +95,11 @@ public class BlockBreakAssist {
 
         @Override
         public void onTimeout() {
-            if (breakProgress > 0) return;
+            if(breakProgress > 0) return;
 
-            IBlockState nowAt = WorldHelper.getBlockState(world, pos);
+            IBlockState nowAt = world.getBlockState(pos);
             if (MiscUtils.matchStateExact(expected, nowAt)) {
-                MiscUtils.breakBlockWithoutPlayer(
-                    (WorldServer) world,
-                    pos,
-                    WorldHelper.getBlockState(world, pos),
-                    true,
-                    true,
-                    true);
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, world.getBlockState(pos), true, true, true);
             }
         }
 
@@ -117,7 +109,7 @@ public class BlockBreakAssist {
         }
 
         @Override
-        public BlockPos pos() {
+        public BlockPos getPos() {
             return pos;
         }
 

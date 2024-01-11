@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -31,8 +31,8 @@ public interface IComplexEffect {
 
     public void tick();
 
-    // Valid layers: 0, 1, 2
-    // Lower layers are rendered first.
+    //Valid layers: 0, 1, 2
+    //Lower layers are rendered first.
     default public int getLayer() {
         return 0;
     }
@@ -44,7 +44,6 @@ public interface IComplexEffect {
 
     }
 
-    public static interface PreventRemoval {
-    }
+    public static interface PreventRemoval {}
 
 }

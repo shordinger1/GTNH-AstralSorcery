@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.helper;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.util.ResourceLocation;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.FurnaceRecipes;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,8 +35,7 @@ public class SmeltingRecipe extends AbstractRecipeData {
         this.input = input;
         this.exp = exp;
 
-        FurnaceRecipes.instance()
-            .addSmeltingRecipe(this.input, this.getOutput(), this.exp);
+        FurnaceRecipes.instance().addSmeltingRecipe(this.input, this.getOutput(), this.exp);
     }
 
     public ItemStack getInput() {
@@ -55,7 +53,7 @@ public class SmeltingRecipe extends AbstractRecipeData {
         private final ResourceLocation entry;
         private final ItemStack output;
 
-        private ItemStack input = null;
+        private ItemStack input = ItemStack.EMPTY;
         private float exp = 1F;
 
         private Builder(String name, @Nonnull ItemStack output) {
@@ -94,7 +92,7 @@ public class SmeltingRecipe extends AbstractRecipeData {
         }
 
         public SmeltingRecipe buildAndRegister() {
-            if (registered) {
+            if(registered) {
                 throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             }
             registered = true;

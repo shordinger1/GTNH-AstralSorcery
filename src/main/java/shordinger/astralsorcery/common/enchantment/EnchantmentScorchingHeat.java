@@ -1,15 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment;
 
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.enchantment.EnumEnchantmentType;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,6 +21,6 @@ import net.minecraft.item.EnumRarity;
 public class EnchantmentScorchingHeat extends EnchantmentBase {
 
     public EnchantmentScorchingHeat() {
-        super("as.smelting", EnumRarity.epic, EnumEnchantmentType.digger, EntityEquipmentSlot);
+        super("as.smelting", Rarity.VERY_RARE, EnumEnchantmentType.DIGGER, EntityEquipmentSlot.MAINHAND);
     }
 }

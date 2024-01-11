@@ -1,16 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.controller;
-
-import java.awt.*;
-
-import net.minecraft.client.Minecraft;
 
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.IComplexEffect;
@@ -21,7 +17,10 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,8 +50,9 @@ public class InfluenceSizePreview implements IComplexEffect {
 
     @Override
     public boolean canRemove() {
-        return fadeOutTicks <= 0 || Minecraft.getMinecraft().theWorld == null
-            || Minecraft.getMinecraft().theWorld.provider.dimensionId != tile.getDimensionId();
+        return fadeOutTicks <= 0 ||
+                Minecraft.getMinecraft().world == null ||
+                Minecraft.getMinecraft().world.provider.getDimension() != tile.getDimensionId();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             this.fadeOutTicks = Math.min(MAX_LIFE, this.fadeOutTicks + 1);
         }
 
-        if (this.fadeOutTicks > 0 && this.tile != null) {
+        if(this.fadeOutTicks > 0 && this.tile != null) {
             BlockPos spawnAt = this.tile.getActualRenderOffsetPos();
             float radius = (float) this.tile.getRadius();
             radius *= 1.25F;
@@ -97,17 +97,15 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     protected boolean needsFadeOut() {
-        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
+        if (Minecraft.getMinecraft().player == null ||
+                Minecraft.getMinecraft().world == null) {
             return true;
         }
-        IStructureAreaOfInfluence aoe = EffectHandler.getInstance()
-            .getCurrentActiveAOEView();
+        IStructureAreaOfInfluence aoe = EffectHandler.getInstance().getCurrentActiveAOEView();
         if (aoe == null || !aoe.equals(this.tile)) {
             return true;
         }
-        if (MiscUtils
-            .getTileAt(Minecraft.getMinecraft().theWorld, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false)
-            == null) {
+        if (MiscUtils.getTileAt(Minecraft.getMinecraft().world, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false) == null) {
             return true;
         }
         double rad;
@@ -115,7 +113,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             return true;
         }
         BlockPos offset = this.tile.getActualRenderOffsetPos();
-        double dst = Minecraft.getMinecraft().thePlayer.getDistance(offset.getX(), offset.getY(), offset.getZ());
+        double dst = Minecraft.getMinecraft().player.getDistance(offset.getX(), offset.getY(), offset.getZ());
         if (dst <= 4) {
             return false;
         }
@@ -133,8 +131,7 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     private EntityFXFloatingCube setupCube(BlockPos at, float radius) {
-        EntityFXFloatingCube cube = new EntityFXFloatingCube(
-            AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "core_edge"));
+        EntityFXFloatingCube cube = new EntityFXFloatingCube(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "core_edge"));
         cube.setRefreshFunction(() -> !isRemoved());
 
         cube.setAlphaMultiplier(0F);
@@ -143,8 +140,7 @@ public class InfluenceSizePreview implements IComplexEffect {
         cube.setTumbleIntensityMultiplier(0.06F);
         cube.setBlendMode(Blending.DEFAULT);
         cube.tumble();
-        EffectHandler.getInstance()
-            .registerFX(cube);
+        EffectHandler.getInstance().registerFX(cube);
         return cube;
     }
 
@@ -154,7 +150,6 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     @Override
-    public void render(float pTicks) {
-    }
+    public void render(float pTicks) {}
 
 }

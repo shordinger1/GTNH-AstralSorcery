@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -22,12 +22,16 @@ import shordinger.astralsorcery.common.util.OreDictAlias;
 public class GrindstoneRecipe extends DiscoveryRecipe {
 
     public GrindstoneRecipe() {
-        super(
-            shapedRecipe("grindstone", BlockMachine.MachineType.GRINDSTONE.asStack())
-                .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.CENTER)
-                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(OreDictAlias.ITEM_STICKS, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.LOWER_LEFT)
-                .unregisteredAccessibleShapedRecipe());
+        super(shapedRecipe("grindstone", BlockMachine.MachineType.GRINDSTONE.asStack())
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(OreDictAlias.ITEM_STICKS,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

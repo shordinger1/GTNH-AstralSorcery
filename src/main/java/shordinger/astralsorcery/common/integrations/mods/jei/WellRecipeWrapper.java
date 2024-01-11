@@ -1,27 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.google.common.collect.Lists;
-
-import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,8 +42,7 @@ public class WellRecipeWrapper extends JEIBaseWrapper {
     }
 
     @Override
-    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    }
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
 
     @Nullable
     @Override

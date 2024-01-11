@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
-import java.util.Objects;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.Vec3i;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +35,7 @@ public class WorldBlockPos extends BlockPos {
     }
 
     public static WorldBlockPos wrap(TileEntity te) {
-        return new WorldBlockPos(te.getWorldObj(), te.getPos());
+        return new WorldBlockPos(te.getWorld(), te.getPos());
     }
 
     public static WorldBlockPos wrap(World world, BlockPos pos) {
@@ -47,7 +47,7 @@ public class WorldBlockPos extends BlockPos {
     }
 
     public IBlockState getStateAt() {
-        return WorldHelper.getBlockState(world, this);
+        return world.getBlockState(this);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class WorldBlockPos extends BlockPos {
     }
 
     @Override
-    public WorldBlockPos add(BlockPos vec) {
+    public WorldBlockPos add(Vec3i vec) {
         return wrap(world, super.add(vec));
     }
 

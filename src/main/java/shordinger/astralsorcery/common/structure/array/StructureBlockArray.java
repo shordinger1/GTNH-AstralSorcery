@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure.array;
 
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
 import java.util.Map;
-
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +25,7 @@ public class StructureBlockArray extends BlockArray {
 
     public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
         Map<BlockPos, IBlockState> result = super.placeInWorld(world, center);
-        if (processor != null) {
+        if(processor != null) {
             for (Map.Entry<BlockPos, IBlockState> entry : result.entrySet())
                 processor.process(world, entry.getKey(), entry.getValue());
         }

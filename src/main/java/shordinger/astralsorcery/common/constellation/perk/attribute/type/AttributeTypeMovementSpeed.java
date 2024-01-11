@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 
 import java.util.UUID;
 
@@ -44,7 +44,17 @@ public class AttributeTypeMovementSpeed extends VanillaAttributeType {
 
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
-        return getUuid(mode, MOVE_SPEED_ADD_ID, MOVE_SPEED_ADD_MULTIPLY_ID, MOVE_SPEED_STACK_MULTIPLY_ID);
+        switch (mode) {
+            case ADDITION:
+                return MOVE_SPEED_ADD_ID;
+            case ADDED_MULTIPLY:
+                return MOVE_SPEED_ADD_MULTIPLY_ID;
+            case STACKING_MULTIPLY:
+                return MOVE_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
+        }
+        return null;
     }
 
 }

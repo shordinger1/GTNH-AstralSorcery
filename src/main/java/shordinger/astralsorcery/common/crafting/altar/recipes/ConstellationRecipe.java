@@ -1,32 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
-
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
@@ -38,6 +20,21 @@ import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,10 +45,14 @@ import shordinger.astralsorcery.common.util.data.Vector3;
  */
 public class ConstellationRecipe extends AttunementRecipe {
 
-    private static final Vector3[] offsetPillars = new Vector3[]{new Vector3(4, 3, 4), new Vector3(-4, 3, 4),
-        new Vector3(4, 3, -4), new Vector3(-4, 3, -4)};
+    private static Vector3[] offsetPillars = new Vector3[] {
+            new Vector3( 4, 3,  4),
+            new Vector3(-4, 3,  4),
+            new Vector3( 4, 3, -4),
+            new Vector3(-4, 3, -4)
+    };
 
-    private final Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
+    private Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -100,7 +101,7 @@ public class ConstellationRecipe extends AttunementRecipe {
     @Nonnull
     public List<ItemStack> getCstItems(ConstellationAtlarSlot slot) {
         ItemHandle handle = matchStacks.get(slot);
-        if (handle != null) {
+        if(handle != null) {
             return handle.getApplicableItems();
         }
         return Lists.newArrayList();
@@ -122,7 +123,7 @@ public class ConstellationRecipe extends AttunementRecipe {
 
         for (ConstellationRecipe.ConstellationAtlarSlot slot : ConstellationRecipe.ConstellationAtlarSlot.values()) {
             int slotId = slot.getSlotId();
-            if (mayDecrement(ta, slot)) {
+            if(mayDecrement(ta, slot)) {
                 ItemUtils.decrStackInInventory(inventory, slotId);
             } else {
                 handleItemConsumption(ta, slot);
@@ -131,18 +132,16 @@ public class ConstellationRecipe extends AttunementRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler,
-                           boolean ignoreStarlightRequirement) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         for (ConstellationAtlarSlot slot : ConstellationAtlarSlot.values()) {
             ItemHandle expected = matchStacks.get(slot);
-            if (expected != null) {
+            if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
-                if (!expected.matchCrafting(altarItem)) {
+                if(!expected.matchCrafting(altarItem)) {
                     return false;
                 }
             } else {
-                if (!invHandler.getStackInSlot(slot.slotId)
-                    .isEmpty()) return false;
+                if(!invHandler.getStackInSlot(slot.slotId).isEmpty()) return false;
             }
         }
         return super.matches(altar, invHandler, ignoreStarlightRequirement);
@@ -153,19 +152,15 @@ public class ConstellationRecipe extends AttunementRecipe {
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 
-        if (state == ActiveCraftingTask.CraftingState.ACTIVE) {
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
             Vector3 altarVec = new Vector3(altar);
-            Vector3 thisAltar = altarVec.clone()
-                .add(0.5, 0.5, 0.5);
+            Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
             for (int i = 0; i < 4; i++) {
                 Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
-                dir.multiply(rand.nextFloat())
-                    .add(thisAltar.clone());
+                dir.multiply(rand.nextFloat()).add(thisAltar.clone());
 
                 EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
-                particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat()))
-                    .scale(0.2F + (0.2F * rand.nextFloat()))
-                    .gravity(0.004);
+                particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
             }
         }
 

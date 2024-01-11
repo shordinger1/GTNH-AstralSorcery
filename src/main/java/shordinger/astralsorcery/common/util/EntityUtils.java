@@ -1,34 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
+import com.google.common.base.Predicate;
+import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityList;
+import shordinger.wrapper.net.minecraft.entity.EntityLiving;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.storage.loot.LootTable;
+import shordinger.wrapper.net.minecraftforge.event.ForgeEventFactory;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
-
-import com.google.common.base.Predicate;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,27 +40,19 @@ public class EntityUtils {
 
     private static final Method getLootTableMethod;
 
-    public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey,
-                                             boolean respectConditions, @Nullable Function<Entity, Void> preCheckEntity) {
+    public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey, boolean respectConditions, @Nullable Function<Entity, Void> preCheckEntity) {
         Entity entity = EntityList.createEntityByIDFromName(entityKey, world);
-        if (entity == null) {
+        if(entity == null) {
             return false;
         }
-        entity.setLocationAndAngles(
-            at.getX() + 0.5,
-            at.getY() + 0.5,
-            at.getZ() + 0.5,
-            world.rand.nextFloat() * 360.0F,
-            0.0F);
+        entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
         if (preCheckEntity != null) {
             preCheckEntity.apply(entity);
         }
-        if (respectConditions) {
-            if (entity instanceof EntityLiving) {
-                Event.Result canSpawn = ForgeEventFactory
-                    .canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F);
-                if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT
-                    || (!((EntityLiving) entity).getCanSpawnHere() || !((EntityLiving) entity).isNotColliding()))) {
+        if(respectConditions) {
+            if(entity instanceof EntityLiving) {
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, null);
+                if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || (!((EntityLiving) entity).getCanSpawnHere() || !((EntityLiving) entity).isNotColliding()))) {
                     return false;
                 }
             }
@@ -71,13 +62,11 @@ public class EntityUtils {
 
     public static boolean doesEntityHaveSpace(World world, Entity entity) {
         return !world.containsAnyLiquid(entity.getEntityBoundingBox())
-            && world.getCollisionBoxes(entity, entity.getEntityBoundingBox())
-            .isEmpty()
-            && world.checkNoEntityCollision(entity.getEntityBoundingBox(), entity);
+                && world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()
+                && world.checkNoEntityCollision(entity.getEntityBoundingBox(), entity);
     }
 
-    public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction,
-                                         Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
+    public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction, Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
         Vector3 pos = getPositionFunction.apply(null);
         double diffX = (to.getX() - pos.getX()) / vortexRange;
         double diffY = (to.getY() - pos.getY()) / vortexRange;
@@ -93,13 +82,12 @@ public class EntityUtils {
         }
     }
 
-    @SafeVarargs
     public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {
         return (Predicate<Entity>) entity -> {
-            if (entity == null || entity.isDead) return false;
+            if(entity == null || entity.isDead) return false;
             Class<? extends Entity> clazz = entity.getClass();
             for (Class<? extends Entity> test : entities) {
-                if (test.isAssignableFrom(clazz)) return true;
+                if(test.isAssignableFrom(clazz)) return true;
             }
             return false;
         };
@@ -107,46 +95,43 @@ public class EntityUtils {
 
     public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
         return (Predicate<Entity>) entity -> {
-            if (entity == null || entity.isDead) return false;
-            if (!(entity instanceof EntityItem)) return false;
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
             ItemStack i = ((EntityItem) entity).getItem();
-            if (i.isEmpty()) return false;
-            return itemClass.isAssignableFrom(
-                i.getItem()
-                    .getClass());
+            if(i.isEmpty()) return false;
+            return itemClass.isAssignableFrom(i.getItem().getClass());
         };
     }
 
     public static Predicate<? super Entity> selectItem(Item item) {
         return (Predicate<Entity>) entity -> {
-            if (entity == null || entity.isDead) return false;
-            if (!(entity instanceof EntityItem)) return false;
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
             ItemStack i = ((EntityItem) entity).getItem();
-            if (i.isEmpty()) return false;
-            return i.getItem()
-                .equals(item);
+            if(i.isEmpty()) return false;
+            return i.getItem().equals(item);
         };
     }
 
     public static Predicate<? super Entity> selectItemStack(Function<ItemStack, Boolean> acceptor) {
         return entity -> {
-            if (entity == null || entity.isDead) return false;
-            if (!(entity instanceof EntityItem)) return false;
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
             ItemStack i = ((EntityItem) entity).getItem();
-            if (i.isEmpty()) return false;
+            if(i.isEmpty()) return false;
             return acceptor.apply(i);
         };
     }
 
     @Nullable
     public static <T> T selectClosest(Collection<T> elements, Function<T, Double> dstFunc) {
-        if (elements.isEmpty()) return null;
+        if(elements.isEmpty()) return null;
 
         double dstClosest = Double.MAX_VALUE;
         T closestElement = null;
         for (T element : elements) {
             double dst = dstFunc.apply(element);
-            if (dst < dstClosest) {
+            if(dst < dstClosest) {
                 closestElement = element;
                 dstClosest = dst;
             }
@@ -157,11 +142,10 @@ public class EntityUtils {
     @Nullable
     public static LootTable getLootTable(EntityLiving entity) {
         ResourceLocation table = entity.deathLootTable;
-        if (getLootTableMethod == null) return null;
+        if(getLootTableMethod == null) return null;
         try {
             if (table == null) table = (ResourceLocation) getLootTableMethod.invoke(entity);
-            return entity.world.getLootTableManager()
-                .getLootTableFromLocation(table);
+            return entity.world.getLootTableManager().getLootTableFromLocation(table);
         } catch (Exception e) {
             return null;
         }
@@ -171,8 +155,7 @@ public class EntityUtils {
         Method m = null;
         try {
             m = ReflectionHelper.findMethod(EntityLiving.class, "getLootTable", "func_184647_J");
-        } catch (Exception exc) {
-        }
+        } catch (Exception exc) {}
         getLootTableMethod = m;
     }
 

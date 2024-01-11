@@ -1,30 +1,31 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import java.util.Iterator;
-import java.util.Random;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingDropsEvent;
+import shordinger.wrapper.net.minecraftforge.event.world.BlockEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,21 +42,20 @@ public class KeyMagnetDrops extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDropLoot(LivingDropsEvent event) {
-        DamageSource source = event.source;
+        DamageSource source = event.getSource();
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                event.getDrops()
-                    .removeIf(item -> this.attemptPickup(player, item));
+                event.getDrops().removeIf(item -> this.attemptPickup(player, item));
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDropHarvest(BlockEvent.HarvestDropsEvent event) {
-        World world = event.world;
+        World world = event.getWorld();
         if (world.isRemote) {
             return;
         }
@@ -72,8 +72,7 @@ public class KeyMagnetDrops extends KeyPerk {
         // Simulate normal drop-logic to see what/which drops to try add before
         // setting chances to 1 with remaining not-capturable drops
         Random r = world.rand;
-        Iterator<ItemStack> iterator = event.getDrops()
-            .iterator();
+        Iterator<ItemStack> iterator = event.getDrops().iterator();
         while (iterator.hasNext()) {
             ItemStack drop = iterator.next();
             if (r.nextFloat() <= event.getDropChance()) {
@@ -88,15 +87,14 @@ public class KeyMagnetDrops extends KeyPerk {
     }
 
     private boolean attemptPickup(EntityPlayer player, EntityItem item) {
-        if (item.getItem()
-            .isEmpty()) {
+        if (item.getItem().isEmpty()) {
             return false;
         }
         item.setNoPickupDelay();
         try {
             item.onCollideWithPlayer(player);
         } catch (Exception ignored) {
-            // Guess some mod could run into an issue here...
+            //Guess some mod could run into an issue here...
         }
         if (!item.isDead) {
             item.setDefaultPickupDelay();

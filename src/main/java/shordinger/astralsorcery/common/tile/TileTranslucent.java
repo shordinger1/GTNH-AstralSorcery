@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +23,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public class TileTranslucent extends TileEntitySynchronized {
 
-    private IBlockState fakedState = Blocks.air.getDefaultState();
+    private IBlockState fakedState = Blocks.AIR.getDefaultState();
 
     public IBlockState getFakedState() {
         return fakedState;
@@ -39,28 +38,23 @@ public class TileTranslucent extends TileEntitySynchronized {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasKey("Block") && compound.hasKey("Data")) {
+        if(compound.hasKey("Block") && compound.hasKey("Data")) {
             int data = compound.getInteger("Data");
             Block b = Block.getBlockFromName(compound.getString("Block"));
-            if (b != null) {
+            if(b != null) {
                 fakedState = b.getStateFromMeta(data);
             }
         }
     }
 
+
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if (fakedState != null) {
-            compound.setString(
-                "Block",
-                Block.REGISTRY.getNameForObject(fakedState.getBlock())
-                    .toString());
-            compound.setInteger(
-                "Data",
-                fakedState.getBlock()
-                    .getMetaFromState(fakedState));
+        if(fakedState != null) {
+            compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
+            compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
         }
     }
 

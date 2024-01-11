@@ -1,21 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
-
-import net.minecraft.client.Minecraft;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.models.base.ASgrindstone;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -24,6 +15,13 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.tile.TileGrindstone;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,12 +33,10 @@ import shordinger.astralsorcery.common.tile.TileGrindstone;
 public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
 
     private static final ASgrindstone modelGrindstone = new ASgrindstone();
-    private static final BindableResource texGrindstone = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindstone");
+    private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindstone");
 
     @Override
-    public void render(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
@@ -58,7 +54,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
         GL11.glPopAttrib();
 
         ItemStack grind = te.getGrindingItem();
-        if (!grind.isEmpty()) {
+        if(!grind.isEmpty()) {
             TextureHelper.refreshTextureBindState();
             TextureHelper.setActiveTextureToAtlasSprite();
 
@@ -70,9 +66,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
             GL11.glRotated(135, 0, 0, 1);
 
             RenderHelper.enableStandardItemLighting();
-            Minecraft.getMinecraft()
-                .getRenderItem()
-                .renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
+            Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
             RenderHelper.disableStandardItemLighting();
             GL11.glPopMatrix();
             GL11.glPopAttrib();
@@ -82,7 +76,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
     private void renderModel(TileGrindstone te, float partialTicks) {
         texGrindstone.bind();
         double oldDeg = (((double) te.prevTickWheelAnimation) / (20D) * 360) % 360;
-        double newDeg = (((double) te.tickWheelAnimation) / (20D) * 360) % 360;
+        double newDeg = (((double) te.tickWheelAnimation)     / (20D) * 360) % 360;
         modelGrindstone.render(null, (float) RenderingUtils.interpolate(oldDeg, newDeg, partialTicks), 0, 0, 0, 0, 1);
     }
 

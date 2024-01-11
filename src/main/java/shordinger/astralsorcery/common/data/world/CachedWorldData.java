@@ -1,14 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.world;
 
-import net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,19 +44,17 @@ public abstract class CachedWorldData implements IWorldRelatedData {
         return key;
     }
 
-    public void onLoad(World world) {
-    }
+    public void onLoad(World world) {}
 
     /*
-     * public final <T extends CachedWorldData> T initializeAndGet(World world) {
-     * String id = getSaveKey().getIdentifier();
-     * CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
-     * if (data == null) {
-     * data = constructNewData();
-     * world.getPerWorldStorage().setData(id, data);
-     * }
-     * return (T) data;
-     * }
-     */
+    public final <T extends CachedWorldData> T initializeAndGet(World world) {
+        String id = getSaveKey().getIdentifier();
+        CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
+        if (data == null) {
+            data = constructNewData();
+            world.getPerWorldStorage().setData(id, data);
+        }
+        return (T) data;
+    }*/
 
 }

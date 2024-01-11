@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.item;
 
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,17 +33,9 @@ public class ItemRendererFilteredTESR implements IItemRenderer {
 
     @Override
     public void render(ItemStack stack) {
-        if (renderMap.containsKey(stack.getItemDamage())) {
+        if(renderMap.containsKey(stack.getItemDamage())) {
             TEISRProperties prop = renderMap.get(stack.getItemDamage());
-            prop.tesr.render(
-                prop.renderTile,
-                0,
-                0,
-                0,
-                Minecraft.getMinecraft()
-                    .getRenderPartialTicks(),
-                0,
-                1F);
+            prop.tesr.render(prop.renderTile, 0, 0, 0, Minecraft.getMinecraft().getRenderPartialTicks(), 0, 1F);
         }
     }
 

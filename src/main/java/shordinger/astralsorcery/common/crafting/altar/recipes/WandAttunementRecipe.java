@@ -1,18 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
-
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.item.ItemStack;
 
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
@@ -23,6 +17,9 @@ import shordinger.astralsorcery.common.item.tool.wand.WandAugment;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,10 +38,11 @@ public class WandAttunementRecipe extends TraitRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler,
-                           boolean ignoreStarlightRequirement) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         ItemStack center = invHandler.getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
-        if (center.isEmpty() || !(center.getItem() instanceof ItemWand) || ItemWand.getAugment(center) != null) {
+        if(center.isEmpty() ||
+                !(center.getItem() instanceof ItemWand) ||
+                ItemWand.getAugment(center) != null) {
             return false;
         }
 
@@ -55,7 +53,7 @@ public class WandAttunementRecipe extends TraitRecipe {
     @Override
     public ItemStack getOutputForRender() {
         ItemStack cPaper = new ItemStack(ItemsAS.wand);
-        ItemWand.setAugment(cPaper, Objects.requireNonNull(WandAugment.getByConstellation(cst)));
+        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
         return cPaper;
     }
 
@@ -63,7 +61,7 @@ public class WandAttunementRecipe extends TraitRecipe {
     @Override
     public ItemStack getOutputForMatching() {
         ItemStack cPaper = new ItemStack(ItemsAS.wand);
-        ItemWand.setAugment(cPaper, Objects.requireNonNull(WandAugment.getByConstellation(cst)));
+        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
         return cPaper;
     }
 

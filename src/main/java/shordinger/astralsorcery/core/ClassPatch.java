@@ -1,20 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core;
 
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.tree.*;
 
-import cpw.mods.fml.relauncher.Side;
+import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +25,7 @@ public abstract class ClassPatch {
 
     public boolean writeAsClassFile = false;
 
-    private final String className;// , classNameObf;
+    private final String className;//, classNameObf;
 
     public ClassPatch(String className) {
         this.className = className;
@@ -37,10 +35,7 @@ public abstract class ClassPatch {
         try {
             patch(node);
         } catch (ASMTransformationException exc) {
-            throw new ASMTransformationException(
-                "Failed to applyServer ASM Transformation ClassPatch " + getClass().getSimpleName()
-                    .toUpperCase(),
-                exc);
+            throw new ASMTransformationException("Failed to applyServer ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase(), exc);
         }
     }
 
@@ -63,8 +58,7 @@ public abstract class ClassPatch {
         }
         AstralCore.log.warn("[AstralTransformer] Find method will fail. Printing all methods as debug...");
         for (MethodNode found : cn.methods) {
-            AstralCore.log
-                .warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
+            AstralCore.log.warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
         }
         throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
     }
@@ -78,12 +72,10 @@ public abstract class ClassPatch {
         }
         AstralCore.log.warn("[AstralTransformer] Find method will fail. Printing all methods as debug...");
         for (MethodNode found : cn.methods) {
-            AstralCore.log
-                .warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
+            AstralCore.log.warn("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
         }
         throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
     }
-
     @Nonnull
     public AbstractInsnNode findNthInstruction(MethodNode mn, int n, int opCode) {
         return findNthInstructionAfter(mn, n, 0, opCode);
@@ -109,17 +101,18 @@ public abstract class ClassPatch {
     public AbstractInsnNode findFirstInstructionAfter(MethodNode mn, int startingIndex, int opCode) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
-            if (ain.getOpcode() == opCode) return ain;
+            if (ain.getOpcode() == opCode)
+                return ain;
         }
         throw new ASMTransformationException("Couldn't find Instruction with opcode " + opCode);
     }
 
     @Nonnull
-    public static AbstractInsnNode findFirstInstructionAfter(MethodNode mn, int startIndex,
-                                                             Predicate<AbstractInsnNode> check) {
+    public static AbstractInsnNode findFirstInstructionAfter(MethodNode mn, int startIndex, Predicate<AbstractInsnNode> check) {
         for (int i = startIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
-            if (check.test(ain)) return ain;
+            if (check.test(ain))
+                return ain;
         }
         throw new ASMTransformationException("Couldn't find Instruction with opcode with custom matching...");
     }
@@ -127,7 +120,8 @@ public abstract class ClassPatch {
     public static int peekFirstInstructionAfter(MethodNode mn, int startingIndex, int opCode) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
-            if (ain.getOpcode() == opCode) return i;
+            if (ain.getOpcode() == opCode)
+                return i;
         }
         return -1;
     }
@@ -135,65 +129,46 @@ public abstract class ClassPatch {
     public static int peekFirstInstructionAfter(MethodNode mn, int startIndex, Predicate<AbstractInsnNode> check) {
         for (int i = startIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
-            if (check.test(ain)) return i;
+            if (check.test(ain))
+                return i;
         }
         return -1;
     }
 
     @Nonnull
-    public static MethodInsnNode getFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                                         String sig, int startingIndex) {
+    public static MethodInsnNode getFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain instanceof MethodInsnNode) {
-                MethodInsnNode min = (MethodInsnNode) ain;
-                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf))
-                    && min.desc.equals(sig)) {
+                MethodInsnNode min = (MethodInsnNode)ain;
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
                     return min;
                 }
             }
         }
-        throw new ASMTransformationException(
-            "Couldn't find method Instruction: owner=" + owner
-                + " nameDeobf="
-                + nameDeobf
-                + " nameObf="
-                + nameObf
-                + " signature="
-                + sig);
+        throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " nameDeobf=" + nameDeobf + " nameObf=" + nameObf + " signature=" + sig);
     }
 
     @Nonnull
-    public static MethodInsnNode getFirstMethodCallBefore(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                                          String sig, int startingIndex) {
+    public static MethodInsnNode getFirstMethodCallBefore(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
         for (int i = startingIndex; i >= 0; i--) {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain instanceof MethodInsnNode) {
                 MethodInsnNode min = (MethodInsnNode) ain;
-                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf))
-                    && min.desc.equals(sig)) {
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
                     return min;
                 }
             }
         }
-        throw new ASMTransformationException(
-            "Couldn't find method Instruction: owner=" + owner
-                + " nameDeobf="
-                + nameDeobf
-                + " nameObf="
-                + nameObf
-                + " signature="
-                + sig);
+        throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " nameDeobf=" + nameDeobf + " nameObf=" + nameObf + " signature=" + sig);
     }
 
-    public static int peekFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                               String sig, int startingIndex) {
+    public static int peekFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain instanceof MethodInsnNode) {
-                MethodInsnNode min = (MethodInsnNode) ain;
-                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf))
-                    && min.desc.equals(sig)) {
+                MethodInsnNode min = (MethodInsnNode)ain;
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
                     return i;
                 }
             }
@@ -202,20 +177,17 @@ public abstract class ClassPatch {
     }
 
     @Nonnull
-    public static MethodInsnNode getFirstMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                                    String sig) {
+    public static MethodInsnNode getFirstMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig) {
         return getNthMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, 0, 0);
     }
 
     @Nonnull
-    public static MethodInsnNode getNthMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                                  String sig, int n) {
+    public static MethodInsnNode getNthMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int n) {
         return getNthMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, n, 0);
     }
 
     @Nonnull
-    public static MethodInsnNode getNthMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf,
-                                                       String sig, int n, int startingIndex) {
+    public static MethodInsnNode getNthMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int n, int startingIndex) {
         MethodInsnNode node = getFirstMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, startingIndex);
         int currentIndex = mn.instructions.indexOf(node) + 1;
         for (int i = 0; i <= (n - 1); i++) {
@@ -229,7 +201,7 @@ public abstract class ClassPatch {
     public static LabelNode getFirstLabelBefore(MethodNode mn, int startIndex) {
         for (int i = startIndex; i >= 0; i--) {
             AbstractInsnNode isn = mn.instructions.get(i);
-            if (isn instanceof LabelNode) return (LabelNode) isn;
+            if(isn instanceof LabelNode) return (LabelNode) isn;
         }
         throw new ASMTransformationException("Couldn't find LabelNode before index " + startIndex);
     }
@@ -238,7 +210,7 @@ public abstract class ClassPatch {
     public static LabelNode getNextLabelAfter(MethodNode mn, int startIndex) {
         for (int i = startIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode isn = mn.instructions.get(i);
-            if (isn instanceof LabelNode) return (LabelNode) isn;
+            if(isn instanceof LabelNode) return (LabelNode) isn;
         }
         throw new ASMTransformationException("Couldn't find LabelNode after index " + startIndex);
     }

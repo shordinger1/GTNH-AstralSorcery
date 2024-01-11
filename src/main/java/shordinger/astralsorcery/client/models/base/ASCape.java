@@ -1,16 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.models.base;
 
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import shordinger.astralsorcery.client.util.ModelArmorBase;
+import shordinger.wrapper.net.minecraft.client.model.ModelRenderer;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 
 import javax.annotation.Nonnull;
 
@@ -99,7 +100,7 @@ public class ASCape extends ModelArmorBase {
         makeRenderCascade();
     }
 
-    // Build hierarchy so a single rendercall cascades down
+    //Build hierarchy so a single rendercall cascades down
     private void makeRenderCascade() {
         this.bodyReplacement = new ModelRenderer(this);
         this.bodyReplacement.addChild(this.bodyAnchor);
@@ -125,8 +126,7 @@ public class ASCape extends ModelArmorBase {
     }
 
     @Override
-    public void render(@Nonnull Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
-                       float netHeadYaw, float headPitch, float scale) {
+    public void render(@Nonnull Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
         bodyAnchor.showModel = true;
         armRAnchor.showModel = true;

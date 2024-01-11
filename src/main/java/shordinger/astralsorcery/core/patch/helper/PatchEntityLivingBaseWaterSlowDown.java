@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core.patch.helper;
 
+import shordinger.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
-
-import shordinger.astralsorcery.core.ClassPatch;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,12 +31,9 @@ public class PatchEntityLivingBaseWaterSlowDown extends ClassPatch {
         int index = 0;
         while ((index = peekFirstInstructionAfter(mn, index, Opcodes.FRETURN)) != -1) {
             AbstractInsnNode fRet = mn.instructions.get(index);
-            mn.instructions.insertBefore(fRet, new VarInsnNode(Opcodes.ALOAD, 0)); // thisEntity
-            mn.instructions.insertBefore(
-                fRet,
-                new MethodInsnNode(
-                    Opcodes.INVOKESTATIC,
-                    "shordinger/astralsorcery/common/event/listener/EventHandlerCapeEffects",
+            mn.instructions.insertBefore(fRet, new VarInsnNode(Opcodes.ALOAD, 0)); //thisEntity
+            mn.instructions.insertBefore(fRet, new MethodInsnNode(Opcodes.INVOKESTATIC,
+                    "hellfirepvp/astralsorcery/common/event/listener/EventHandlerCapeEffects",
                     "getWaterSlowDown",
                     "(FLnet/minecraft/entity/EntityLivingBase;)F",
                     false));

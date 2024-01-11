@@ -1,21 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.projectile.EntityThrowable;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 
@@ -45,7 +46,7 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     public void onUpdate() {
         super.onUpdate();
 
-        if (worldObj.isRemote) {
+        if(world.isRemote) {
             playEffects();
         }
     }
@@ -55,12 +56,10 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
         EntityFXFacingParticle particle;
         for (int i = 0; i < 6; i++) {
             particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-            particle
-                .motion(
+            particle.motion(
                     0.04F - rand.nextFloat() * 0.08F,
                     0.04F - rand.nextFloat() * 0.08F,
-                    0.04F - rand.nextFloat() * 0.08F)
-                .scale(0.25F);
+                    0.04F - rand.nextFloat() * 0.08F).scale(0.25F);
             randomizeColor(particle);
         }
         particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
@@ -74,11 +73,17 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     @SideOnly(Side.CLIENT)
     private void randomizeColor(EntityFXFacingParticle particle) {
         switch (rand.nextInt(3)) {
-            case 0 -> particle.setColor(Color.WHITE);
-            case 1 -> particle.setColor(new Color(0xFEFF9E));
-            case 2 -> particle.setColor(new Color(0xFFE539));
-            default -> {
-            }
+            case 0:
+                particle.setColor(Color.WHITE);
+                break;
+            case 1:
+                particle.setColor(new Color(0xFEFF9E));
+                break;
+            case 2:
+                particle.setColor(new Color(0xFFE539));
+                break;
+            default:
+                break;
         }
     }
 
@@ -86,20 +91,10 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
     protected void onImpact(RayTraceResult result) {
         if (!world.isRemote) {
             if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                if (world.mayPlace(
-                    BlocksAS.blockVolatileLight,
-                    result.getBlockPos()
-                        .offset(result.sideHit),
-                    false,
-                    result.sideHit,
-                    null)) {
-                    world.setBlockState(
-                        result.getBlockPos()
-                            .offset(result.sideHit),
-                        BlocksAS.blockVolatileLight.getDefaultState(),
-                        3);
+                if (world.mayPlace(BlocksAS.blockVolatileLight, result.getBlockPos().offset(result.sideHit), false, result.sideHit, null)) {
+                    world.setBlockState(result.getBlockPos().offset(result.sideHit), BlocksAS.blockVolatileLight.getDefaultState(), 3);
                 }
-            } else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
+            } else if(result.typeOfHit == RayTraceResult.Type.ENTITY) {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }

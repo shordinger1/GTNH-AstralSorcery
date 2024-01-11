@@ -1,15 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.data.provider;
-
-import java.util.List;
-import java.util.UUID;
 
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.SpriteQuery;
@@ -17,6 +14,9 @@ import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectFixedSprite;
 import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
 import shordinger.astralsorcery.common.util.data.Vector3;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,10 +34,12 @@ public class SpecificPatreonHaloEffectProvider implements EffectProvider<PtEffec
         if (!"null".equals(effectParameters.get(1))) {
             fc = PatreonEffectHelper.FlareColor.valueOf(effectParameters.get(1));
         }
-        return new PtEffectFixedSprite(uniqueId, fc, new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo3", 4, 8))
-            .setPositionFunction(
-                player -> Vector3.atEntityCenter(player)
-                    .setY((player.posY + 48 < 256) ? player.posY + 48 : 256));
+        return new PtEffectFixedSprite(
+                uniqueId,
+                fc,
+                new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo3", 4, 8)
+        ).setPositionFunction(player ->
+                Vector3.atEntityCenter(player).setY((player.posY + 48 < 256) ? player.posY + 48 : 256));
     }
 
 }

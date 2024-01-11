@@ -1,23 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.network;
 
+import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.world.World;
-
-import cpw.mods.fml.common.gameevent.TickEvent;
-import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,10 +27,9 @@ import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 public class StarlightTransmissionHandler implements ITickHandler {
 
     private static final StarlightTransmissionHandler instance = new StarlightTransmissionHandler();
-    private final Map<Integer, TransmissionWorldHandler> worldHandlers = new HashMap<>();
+    private Map<Integer, TransmissionWorldHandler> worldHandlers = new HashMap<>();
 
-    private StarlightTransmissionHandler() {
-    }
+    private StarlightTransmissionHandler() {}
 
     public static StarlightTransmissionHandler getInstance() {
         return instance;
@@ -41,11 +38,11 @@ public class StarlightTransmissionHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
-        if (world.isRemote) return;
+        if(world.isRemote) return;
 
-        int dimId = world.provider.dimensionId;
+        int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
-        if (handle == null) {
+        if(handle == null) {
             handle = new TransmissionWorldHandler(dimId);
             worldHandlers.put(dimId, handle);
         }
@@ -54,25 +51,24 @@ public class StarlightTransmissionHandler implements ITickHandler {
 
     public void serverCleanHandlers() {
         for (int id : worldHandlers.keySet()) {
-            worldHandlers.get(id)
-                .clear(id);
+            worldHandlers.get(id).clear(id);
         }
         worldHandlers.clear();
     }
 
     public void informWorldUnload(World world) {
-        int dimId = world.provider.dimensionId;
+        int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
-        if (handle != null) {
-            handle.clear(world.provider.dimensionId);
+        if(handle != null) {
+            handle.clear(world.provider.getDimension());
         }
         this.worldHandlers.remove(dimId);
     }
 
     @Nullable
     public TransmissionWorldHandler getWorldHandler(World world) {
-        if (world == null) return null;
-        return worldHandlers.get(world.provider.dimensionId);
+        if(world == null) return null;
+        return worldHandlers.get(world.provider.getDimension());
     }
 
     @Override

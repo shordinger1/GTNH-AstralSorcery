@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 
 import java.util.UUID;
 
@@ -26,8 +26,7 @@ public class AttributeTypeArmorToughness extends VanillaAttributeType {
 
     private static final UUID ARMOR_TOUGHNESS_ADD_ID = UUID.fromString("36DD43BF-0ACB-94AB-809B-D07F0FB060D5");
     private static final UUID ARMOR_TOUGHNESS_ADD_MULTIPLY_ID = UUID.fromString("36DD43BF-0ACB-40E4-809B-D07F0FB060D5");
-    private static final UUID ARMOR_TOUGHNESS_STACK_MULTIPLY_ID = UUID
-        .fromString("36DD43BF-0ACB-FF51-809B-D07F0FB060D5");
+    private static final UUID ARMOR_TOUGHNESS_STACK_MULTIPLY_ID = UUID.fromString("36DD43BF-0ACB-FF51-809B-D07F0FB060D5");
 
     public AttributeTypeArmorToughness() {
         super(AttributeTypeRegistry.ATTR_TYPE_ARMOR_TOUGHNESS);
@@ -46,17 +45,14 @@ public class AttributeTypeArmorToughness extends VanillaAttributeType {
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
         switch (mode) {
-            case ADDITION -> {
+            case ADDITION:
                 return ARMOR_TOUGHNESS_ADD_ID;
-            }
-            case ADDED_MULTIPLY -> {
+            case ADDED_MULTIPLY:
                 return ARMOR_TOUGHNESS_ADD_MULTIPLY_ID;
-            }
-            case STACKING_MULTIPLY -> {
+            case STACKING_MULTIPLY:
                 return ARMOR_TOUGHNESS_STACK_MULTIPLY_ID;
-            }
-            default -> {
-            }
+            default:
+                break;
         }
         return null;
     }

@@ -1,19 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.registry;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraftforge.common.MinecraftForge;
 
 import shordinger.astralsorcery.common.event.StarlightNetworkEvent;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
@@ -23,11 +16,11 @@ import shordinger.astralsorcery.common.starlight.transmission.base.SimpleTransmi
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import shordinger.astralsorcery.common.tile.*;
-import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.common.tile.TileRitualPedestal;
-import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
-import shordinger.astralsorcery.common.tile.TileTreeBeacon;
-import shordinger.astralsorcery.common.tile.TileWell;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,8 +35,7 @@ public class TransmissionClassRegistry {
 
     private static Map<String, TransmissionProvider> providerMap = new HashMap<>();
 
-    private TransmissionClassRegistry() {
-    }
+    private TransmissionClassRegistry() {}
 
     public void registerProvider(TransmissionProvider provider) {
         register(provider);
@@ -55,8 +47,7 @@ public class TransmissionClassRegistry {
     }
 
     public static void register(TransmissionProvider provider) {
-        if (providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException(
-            "Already registered identifier TransmissionProvider: " + provider.getIdentifier());
+        if(providerMap.containsKey(provider.getIdentifier())) throw new RuntimeException("Already registered identifier TransmissionProvider: " + provider.getIdentifier());
         providerMap.put(provider.getIdentifier(), provider);
     }
 
@@ -64,7 +55,7 @@ public class TransmissionClassRegistry {
         register(new SimpleTransmissionNode.Provider());
         register(new SimplePrismTransmissionNode.Provider());
         register(new SimpleTransmissionSourceNode.Provider());
-        // register(new SimpleTransmissionReceiver.Provider());
+        //register(new SimpleTransmissionReceiver.Provider());
 
         register(new CrystalTransmissionNode.Provider());
         register(new CrystalPrismTransmissionNode.Provider());

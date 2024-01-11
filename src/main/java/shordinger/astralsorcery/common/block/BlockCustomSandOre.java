@@ -1,24 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.BlockFalling;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
 import shordinger.astralsorcery.common.item.ItemCraftingComponent;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.BlockFalling;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +65,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta])
-            : getDefaultState();
+        return meta < OreType.values().length ? getDefaultState().withProperty(ORE_TYPE, OreType.values()[meta]) : getDefaultState();
     }
 
     @Override
@@ -70,14 +74,13 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         switch (type) {
             case AQUAMARINE:
                 int f = fortune + 3;
                 int i = rand.nextInt(f * 2) - 1;
-                if (i < 0) {
+                if(i < 0) {
                     i = 0;
                 }
                 for (int j = 0; j < (i + 1); j++) {
@@ -131,8 +134,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(ORE_TYPE)
-            .getName();
+        return state.getValue(ORE_TYPE).getName();
     }
 
     @Override

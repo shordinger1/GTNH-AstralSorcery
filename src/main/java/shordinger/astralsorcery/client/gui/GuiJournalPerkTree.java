@@ -1,65 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui;
 
-import java.awt.*;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.client.ClientProxy;
 import shordinger.astralsorcery.client.ClientScheduler;
-import shordinger.astralsorcery.client.gui.journal.GuiRenderBoundingBox;
-import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
-import shordinger.astralsorcery.client.gui.journal.PerkTreeSizeHandler;
-import shordinger.astralsorcery.client.gui.journal.ScalingPoint;
-import shordinger.astralsorcery.client.gui.journal.SizeHandler;
+import shordinger.astralsorcery.client.gui.journal.*;
 import shordinger.astralsorcery.client.gui.journal.overlay.GuiJournalOverlayPerkStats;
 import shordinger.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import shordinger.astralsorcery.client.gui.perk.BatchPerkContext;
 import shordinger.astralsorcery.client.gui.perk.DynamicPerkRender;
 import shordinger.astralsorcery.client.gui.perk.PerkRenderGroup;
-import shordinger.astralsorcery.client.util.Blending;
-import shordinger.astralsorcery.client.util.BufferBatch;
-import shordinger.astralsorcery.client.util.GuiTextEntry;
-import shordinger.astralsorcery.client.util.RenderingUtils;
-import shordinger.astralsorcery.client.util.SpriteLibrary;
-import shordinger.astralsorcery.client.util.TextureHelper;
+import shordinger.astralsorcery.client.util.*;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
@@ -86,7 +46,36 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.NonDuplicateArrayList;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.SoundEvents;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.text.TextComponentTranslation;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraftforge.fml.client.FMLClientHandler;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -97,14 +86,10 @@ import shordinger.astralsorcery.migration.MathHelper;
  */
 public class GuiJournalPerkTree extends GuiScreenJournal {
 
-    private static final AbstractRenderableTexture textureResBack = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg2");
-    private static final AbstractRenderableTexture texturePerkConnection = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
-    private static final AbstractRenderableTexture textureSearchTextBG = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guijtextarea");
-    private static final AbstractRenderableTexture textureSlotContext = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "slotgemcontext");
+    private static final AbstractRenderableTexture textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg2");
+    private static final AbstractRenderableTexture texturePerkConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
+    private static final AbstractRenderableTexture textureSearchTextBG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijtextarea");
+    private static final AbstractRenderableTexture textureSlotContext = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "slotgemcontext");
     private static final AbstractRenderableTexture textureSearchMark = SpriteLibrary.spriteHalo4;
 
     private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
@@ -142,8 +127,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private Map<Rectangle, Integer> slotsSocketMenu = Maps.newHashMap();
     private Rectangle rStatStar = null;
 
-    private ItemStack mouseSealStack = null;
-    private ItemStack foundSeals = null;
+    private ItemStack mouseSealStack = ItemStack.EMPTY;
+    private ItemStack foundSeals = ItemStack.EMPTY;
 
     public GuiJournalPerkTree() {
         super(30);
@@ -206,9 +191,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
 
         if (!shifted) {
-            this.moveMouse(
-                MathHelper.floor(this.sizeHandler.getTotalWidth() / 2),
-                MathHelper.floor(this.sizeHandler.getTotalHeight() / 2));
+            this.moveMouse(MathHelper.floor(this.sizeHandler.getTotalWidth() / 2),
+                    MathHelper.floor(this.sizeHandler.getTotalHeight() / 2));
         }
 
         this.applyMovedMouseOffset();
@@ -219,11 +203,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         this.thisFramePerks.clear();
 
         int dWheelChange = Mouse.getDWheel();
-        if (dWheelChange < 0) {
+        if(dWheelChange < 0) {
             this.sizeHandler.handleZoomOut();
             this.rescaleMouse();
         }
-        if (dWheelChange > 0) {
+        if(dWheelChange > 0)  {
             this.sizeHandler.handleZoomIn();
             this.rescaleMouse();
         }
@@ -244,11 +228,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         ScaledResolution res = new ScaledResolution(mc);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(
-            (guiLeft + 27) * res.getScaleFactor(),
-            (guiTop + 27) * res.getScaleFactor(),
-            (guiWidth - 54) * res.getScaleFactor(),
-            (guiHeight - 54) * res.getScaleFactor());
+        GL11.glScissor((guiLeft + 27) * res.getScaleFactor(), (guiTop + 27) * res.getScaleFactor(), (guiWidth - 54) * res.getScaleFactor(), (guiHeight - 54) * res.getScaleFactor());
         drawPerkTree(partialTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
@@ -273,15 +253,15 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            int count = ItemPerkSeal.getPlayerSealCount(Minecraft.getMinecraft().thePlayer);
+        if (Minecraft.getMinecraft().player != null) {
+            int count = ItemPerkSeal.getPlayerSealCount(Minecraft.getMinecraft().player);
             if (count > 0) {
                 this.foundSeals = new ItemStack(ItemsAS.perkSeal, count);
             } else {
-                this.foundSeals = null;
+                this.foundSeals = ItemStack.EMPTY;
             }
         } else {
-            this.foundSeals = null;
+            this.foundSeals = ItemStack.EMPTY;
         }
 
         this.tickSealBreak--;
@@ -297,18 +277,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         if (socketMenu != null) {
             AbstractPerk sMenuPerk = (AbstractPerk) socketMenu;
-            Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(
-                Minecraft.getMinecraft().thePlayer,
-                s -> s.stackSize!=0 && s.getItem() instanceof ItemPerkGem
-                    && !ItemPerkGem.getModifiers(s)
-                    .isEmpty());
+            Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getMinecraft().player,
+                    s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !ItemPerkGem.getModifiers(s).isEmpty());
             if (found.isEmpty()) { // Close then.
                 closeSocketMenu();
                 return;
             }
 
-            Point offset = sMenuPerk.getPoint()
-                .getOffset();
+            Point offset = sMenuPerk.getPoint().getOffset();
             double x = this.sizeHandler.evRelativePosX(offset.x);
             double y = this.sizeHandler.evRelativePosY(offset.y);
             Point.Double scaledOffset = shift2DOffset(x, y);
@@ -322,16 +298,12 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int realWidth = Math.min(5, found.size());
             int realHeight = (found.size() / 5 + (found.size() % 5 == 0 ? 0 : 1));
 
-            int width = realWidth * scaledSlotSize;
+            int width  = realWidth * scaledSlotSize;
             int height = realHeight * scaledSlotSize;
-            rSocketMenu = new Rectangle(
-                (int) (offsetX + (12 * scale) - 4),
-                (int) (offsetY - (12 * scale) - 4),
-                width + 4,
-                height + 4);
+            rSocketMenu = new Rectangle((int) (offsetX + (12 * scale) - 4), (int) (offsetY - (12 * scale) - 4), width + 4, height + 4);
 
-            if (!this.guiBox.isInBox(rSocketMenu.x - guiLeft, rSocketMenu.y - guiTop) || !this.guiBox
-                .isInBox(rSocketMenu.x + rSocketMenu.width - guiLeft, rSocketMenu.y + rSocketMenu.height - guiTop)) {
+            if (!this.guiBox.isInBox(rSocketMenu.x - guiLeft, rSocketMenu.y - guiTop) ||
+                    !this.guiBox.isInBox(rSocketMenu.x + rSocketMenu.width - guiLeft, rSocketMenu.y + rSocketMenu.height - guiTop)) {
                 closeSocketMenu();
                 return;
             }
@@ -357,7 +329,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             for (int index = 0; index < found.size(); index++) {
                 int addedX = (index % 5) * scaledSlotSize;
                 int addedY = (index / 5) * scaledSlotSize;
-                drawTexturedRect(offsetX + addedX, offsetY + addedY, scaledSlotSize, scaledSlotSize, 0, 0, 1, 1);
+                drawTexturedRect(offsetX + addedX, offsetY + addedY, scaledSlotSize, scaledSlotSize,
+                        0, 0, 1, 1);
             }
 
             GlStateManager.enableDepth();
@@ -383,8 +356,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private void drawItemStack(ItemStack stack, int x, int y) {
-        FontRenderer fr = stack.getItem()
-            .getFontRenderer(stack);
+        FontRenderer fr = stack.getItem().getFontRenderer(stack);
         if (fr == null) fr = fontRenderer;
         this.zLevel += 500;
         this.itemRender.zLevel += 500;
@@ -403,36 +375,22 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.enableBlend();
         AbstractRenderableTexture tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridslot");
         tex.bindTexture();
-        drawTexturedRect(
-            guiLeft + rectSealBox.x - 1,
-            guiTop + rectSealBox.y - 1,
-            rectSealBox.width + 2,
-            rectSealBox.height + 2,
-            tex);
+        drawTexturedRect(guiLeft + rectSealBox.x - 1, guiTop + rectSealBox.y - 1, rectSealBox.width + 2, rectSealBox.height + 2, tex);
         GlStateManager.enableAlpha();
         GlStateManager.enableDepth();
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
 
         if (!this.foundSeals.isEmpty()) {
-            this.itemRender.renderItemAndEffectIntoGUI(
-                Minecraft.getMinecraft().thePlayer,
-                this.foundSeals,
-                guiLeft + rectSealBox.x,
-                guiTop + rectSealBox.y);
-            this.itemRender.renderItemOverlayIntoGUI(
-                this.fontRenderer,
-                this.foundSeals,
-                guiLeft + rectSealBox.x,
-                guiTop + rectSealBox.y,
-                null);
+            this.itemRender.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y);
+            this.itemRender.renderItemOverlayIntoGUI(this.fontRenderer, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y, null);
             GlStateManager.disableLighting();
         }
     }
 
     private void drawMiscInfo(int mouseX, int mouseY, float pTicks) {
         PlayerProgress prog = ResearchManager.clientProgress;
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -441,8 +399,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             GlStateManager.disableDepth();
             GlStateManager.pushMatrix();
             GlStateManager.translate(guiLeft + 50, guiTop + 18, 0);
-            fontRenderer
-                .drawString(I18n.format("perk.info.points", availablePerks), 0, 0, new Color(0xCCCCCC).getRGB(), false);
+            fontRenderer.drawString(I18n.format("perk.info.points", availablePerks), 0, 0, new Color(0xCCCCCC).getRGB(), false);
 
             GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -452,13 +409,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             GlStateManager.enableDepth();
         }
 
-        rStatStar = IGuiRenderablePage.GUI_INTERFACE.drawInfoStar(guiLeft + 288, guiTop + 20, zLevel + 100, 16, pTicks);
+        rStatStar = IGuiRenderablePage.GUI_INTERFACE.
+                drawInfoStar(guiLeft + 288, guiTop + 20, zLevel + 100, 16, pTicks);
         if (rStatStar.contains(mouseX, mouseY)) {
             GlStateManager.disableDepth();
             GlStateManager.pushMatrix();
             GlStateManager.translate(rStatStar.x + rStatStar.width / 2F, rStatStar.y + rStatStar.height, 0);
-            RenderingUtils
-                .renderBlueTooltip(0, 0, Lists.newArrayList(I18n.format("perk.reader.infostar")), fontRenderer);
+            RenderingUtils.renderBlueTooltip(0, 0,
+                    Lists.newArrayList(I18n.format("perk.reader.infostar")), fontRenderer);
 
             GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -510,14 +468,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private void rescaleMouse() {
         this.mousePosition.rescale(this.sizeHandler.getScalingFactor());
-        if (this.previousMousePosition != null) {
+        if(this.previousMousePosition != null) {
             this.previousMousePosition.rescale(this.sizeHandler.getScalingFactor());
         }
         this.moveMouse(0, 0);
     }
 
     private void drawHoverTooltips(int mouseX, int mouseY) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         for (Rectangle r : this.slotsSocketMenu.keySet()) {
             if (r.contains(mouseX, mouseY)) {
@@ -534,10 +492,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         if (!this.foundSeals.isEmpty() && rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
-            List<String> toolTip = this.foundSeals.getTooltip(
-                Minecraft.getMinecraft().thePlayer,
-                Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED
-                    : ITooltipFlag.TooltipFlags.NORMAL);
+            List<String> toolTip = this.foundSeals.getTooltip(Minecraft.getMinecraft().player,
+                    Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
             toolTip.add("");
             toolTip.add(TextFormatting.GRAY + I18n.format("perk.info.sealed.usage"));
             RenderingUtils.renderBlueTooltip(mouseX, mouseY, toolTip, Minecraft.getMinecraft().fontRenderer);
@@ -545,16 +501,12 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             GL11.glColor4f(1F, 1F, 1F, 1F);
         } else {
             for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
-                if (rctPerk.getValue()
-                    .contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+                if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                     List<String> toolTip = new LinkedList<>();
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchManager.clientProgress;
 
-                    perk.getLocalizedTooltip()
-                        .forEach(
-                            line -> toolTip
-                                .add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
+                    perk.getLocalizedTooltip().forEach(line -> toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
 
                     if (prog.isPerkSealed(perk)) {
                         toolTip.add(TextFormatting.RED + I18n.format("perk.info.sealed"));
@@ -568,11 +520,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     }
 
                     if (Minecraft.getMinecraft().gameSettings.advancedItemTooltips) {
-                        String loc = perk.getCategory()
-                            .getLocalizedName();
+                        String loc = perk.getCategory().getLocalizedName();
                         if (loc != null) {
-                            toolTip.add(
-                                TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + "[" + loc + "]");
+                            toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + "[" + loc + "]");
                         }
                     }
                     Collection<String> modInfo = perk.getSource();
@@ -583,9 +533,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     }
                     if (Minecraft.getMinecraft().gameSettings.showDebugInfo) {
                         toolTip.add("");
-                        toolTip.add(
-                            TextFormatting.GRAY + perk.getRegistryName()
-                                .toString());
+                        toolTip.add(TextFormatting.GRAY + perk.getRegistryName().toString());
                         toolTip.add(TextFormatting.GRAY + I18n.format("misc.ctrlcopy"));
                     }
                     RenderingUtils.renderBlueTooltip(mouseX, mouseY, toolTip, Minecraft.getMinecraft().fontRenderer);
@@ -602,7 +550,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private void drawPerkTree(float partialTicks) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -631,18 +579,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 status = PerkTreePoint.AllocationStatus.UNALLOCATED;
             }
 
-            Point offsetOne = perkConnection.key.getPoint()
-                .getOffset();
-            Point offsetTwo = perkConnection.value.getPoint()
-                .getOffset();
+            Point offsetOne = perkConnection.key.getPoint().getOffset();
+            Point offsetTwo = perkConnection.value.getPoint().getOffset();
             Point.Double shiftOne = this.sizeHandler.evRelativePos(offsetOne);
             Point.Double shiftTwo = this.sizeHandler.evRelativePos(offsetTwo);
-            drawConnection(
-                connBuffer,
-                status,
-                shiftOne,
-                shiftTwo,
-                ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
+            drawConnection(connBuffer, status, shiftOne, shiftTwo, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
         }
         drawBufferConnections.draw();
 
@@ -653,15 +594,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             Point offset = perkPoint.getOffset();
             double x = this.sizeHandler.evRelativePosX(offset.x);
             double y = this.sizeHandler.evRelativePosY(offset.y);
-            Rectangle.Double perkRect = drawPerk(
-                drawBuffer,
-                perkPoint,
-                x,
-                y,
-                partialTicks,
-                ClientScheduler.getClientTick() + offset.x + offset.y,
-                progress.isPerkSealed(perkPoint.getPerk()),
-                renderDynamic);
+            Rectangle.Double perkRect = drawPerk(drawBuffer, perkPoint,
+                    x, y,
+                    partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y,
+                    progress.isPerkSealed(perkPoint.getPerk()),
+                    renderDynamic);
             if (perkRect != null) {
                 this.thisFramePerks.put(perkPoint.getPerk(), perkRect);
             }
@@ -671,10 +608,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         renderDynamic.forEach(Runnable::run);
         GlStateManager.enableAlpha();
 
-        this.unlockEffects.keySet()
-            .removeIf(perk -> !drawPerkUnlock(perk, this.unlockEffects.get(perk)));
-        this.breakEffects.keySet()
-            .removeIf(perk -> !drawPerkSealBreak(perk, this.breakEffects.get(perk), partialTicks));
+        this.unlockEffects.keySet().removeIf(perk -> !drawPerkUnlock(perk, this.unlockEffects.get(perk)));
+        this.breakEffects.keySet().removeIf(perk -> !drawPerkSealBreak(perk, this.breakEffects.get(perk), partialTicks));
         TextureHelper.refreshTextureBindState();
     }
 
@@ -700,7 +635,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         GlStateManager.disableAlpha();
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         SpriteLibrary.spritePerkSeal.bindTexture();
@@ -708,9 +643,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.pushMatrix();
         GlStateManager.translate(offset.x, offset.y, 0);
 
-        Point pOffset = perk.getPoint()
-            .getOffset();
-        drawSeal(vb, width, 0, 0, ClientScheduler.getClientTick() + pOffset.x + pOffset.y, sealFade * 0.75F);
+        Point pOffset = perk.getPoint().getOffset();
+        drawSeal(vb, width, 0, 0,
+                ClientScheduler.getClientTick() + pOffset.x + pOffset.y, sealFade * 0.75F);
 
         GlStateManager.color(1F, 1F, 1F, 0.85F);
 
@@ -729,12 +664,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(width * u * 2)
-                .addY(width * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
-                .endVertex();
+            Vector3 pos = starVec.clone().addX(width * u * 2).addY(width * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
         }
         tes.draw();
 
@@ -762,7 +693,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
         width *= 2.5;
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         sprite.bindTexture();
@@ -780,12 +711,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(width * u * 2)
-                .addY(width * v * 2);
-            vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
-                .endVertex();
+            Vector3 pos = starVec.clone().addX(width * u * 2).addY(width * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
         }
 
         GlStateManager.disableAlpha();
@@ -797,8 +724,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         return true;
     }
 
-    private void drawConnection(BufferBuilder vb, PerkTreePoint.AllocationStatus status, Point.Double offset,
-                                Point.Double target, long effectTick) {
+    private void drawConnection(BufferBuilder vb, PerkTreePoint.AllocationStatus status, Point.Double offset, Point.Double target, long effectTick) {
         Point.Double offsetSrc = shift2DOffset(offset.x, offset.y);
         Point.Double offsetDst = shift2DOffset(target.x, target.y);
         Color overlay = Color.WHITE;
@@ -818,61 +744,46 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         double effectPart = (Math.sin(Math.toRadians(((effectTick) * 8) % 360D)) + 1D) / 4D;
         float br = 0.1F + 0.4F * (2F - ((float) effectPart));
-        float rR = (overlay.getRed() / 255F) * br;
+        float rR = (overlay.getRed()   / 255F) * br;
         float rG = (overlay.getGreen() / 255F) * br;
-        float rB = (overlay.getBlue() / 255F) * br;
+        float rB = (overlay.getBlue()  / 255F) * br;
         float rA = (overlay.getAlpha() / 255F) * br;
 
         Vector3 fromStar = new Vector3(offsetSrc.x, offsetSrc.y, 0);
-        Vector3 toStar = new Vector3(offsetDst.x, offsetDst.y, 0);
+        Vector3 toStar   = new Vector3(offsetDst.x, offsetDst.y, 0);
 
         double width = 4.0D * this.sizeHandler.getScalingFactor();
 
-        Vector3 dir = toStar.clone()
-            .subtract(fromStar);
-        Vector3 degLot = dir.clone()
-            .crossProduct(new Vector3(0, 0, 1))
-            .normalize()
-            .multiply(width);// .multiply(j == 0 ? 1 : -1);
+        Vector3 dir = toStar.clone().subtract(fromStar);
+        Vector3 degLot = dir.clone().crossProduct(new Vector3(0, 0, 1)).normalize().multiply(width);//.multiply(j == 0 ? 1 : -1);
 
-        Vector3 vec00 = fromStar.clone()
-            .add(degLot);
-        Vector3 vecV = degLot.clone()
-            .multiply(-2);
+        Vector3 vec00 = fromStar.clone().add(degLot);
+        Vector3 vecV = degLot.clone().multiply(-2);
 
         for (int i = 0; i < 4; i++) {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = vec00.clone()
-                .add(
-                    dir.clone()
-                        .multiply(u))
-                .add(
-                    vecV.clone()
-                        .multiply(v));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(u, v)
-                .color(rR, rG, rB, rA)
-                .endVertex();
+            Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).color(rR, rG, rB, rA).endVertex();
         }
     }
 
     @Nullable
-    private Rectangle.Double drawPerk(BatchPerkContext ctx, PerkTreePoint perkPoint, double lowX, double lowY,
-                                      float pTicks, long effectTick, boolean renderSeal, Collection<Runnable> outRenderDynamic) {
+    private Rectangle.Double drawPerk(BatchPerkContext ctx, PerkTreePoint perkPoint,
+                                      double lowX, double lowY, float pTicks, long effectTick, boolean renderSeal,
+                                      Collection<Runnable> outRenderDynamic) {
         Point.Double offset = shift2DOffset(lowX, lowY);
 
         double scale = this.sizeHandler.getScalingFactor();
-        PerkTreePoint.AllocationStatus status = perkPoint.getPerk()
-            .getPerkStatus(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
+        PerkTreePoint.AllocationStatus status = perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT);
 
-        Rectangle.Double drawSize = perkPoint
-            .renderPerkAtBatch(ctx, status, effectTick, pTicks, offset.x, offset.y, scale);
+        Rectangle.Double drawSize = perkPoint.renderPerkAtBatch(ctx, status, effectTick, pTicks, offset.x, offset.y, scale);
+
 
         if (perkPoint instanceof DynamicPerkRender) {
-            outRenderDynamic.add(
-                () -> ((DynamicPerkRender) perkPoint).renderAt(status, effectTick, pTicks, offset.x, offset.y, scale));
+            outRenderDynamic.add(() ->
+                    ((DynamicPerkRender) perkPoint).renderAt(status, effectTick, pTicks, offset.x, offset.y, scale));
         }
 
         if (drawSize == null) {
@@ -889,22 +800,18 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         double mapDrawSize = 28;
         if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
-            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk())
-                .provideConverters(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
+            for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk()).provideConverters(Minecraft.getMinecraft().player, Side.CLIENT)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
-                    // TODO rework design/visuals
+                    //TODO rework design/visuals
                     drawSearchHalo(ctx, mapDrawSize * radius * scale, offset.x, offset.y);
                 }
             }
         }
 
-        return new Rectangle.Double(
-            offset.x - (drawSize.width / 2),
-            offset.y - (drawSize.height / 2),
-            drawSize.width,
-            drawSize.height);
+        return new Rectangle.Double(offset.x - (drawSize.width / 2), offset.y - (drawSize.height / 2),
+                drawSize.width, drawSize.height);
     }
 
     private void drawSeal(BatchPerkContext ctx, double size, double x, double y, long spriteOffsetTick) {
@@ -928,13 +835,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(size * u * 2)
-                .addY(size * v * 2);
+            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
             vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
-                .color(1F, 1F, 1F, alpha)
-                .endVertex();
+                    .tex(frameUV.key + uLength * u, frameUV.value + vLength * v)
+                    .color(1F, 1F, 1F, alpha)
+                    .endVertex();
         }
     }
 
@@ -955,19 +860,17 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone()
-                .addX(size * u * 2)
-                .addY(size * v * 2);
+            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
             vb.pos(pos.getX(), pos.getY(), pos.getZ())
-                .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
-                .color(0.8F, 0.1F, 0.1F, 1F)
-                .endVertex();
+                    .tex(frameUV.x + uLength * u, frameUV.y + vLength * v)
+                    .color(0.8F, 0.1F, 0.1F, 1F)
+                    .endVertex();
         }
     }
 
     private Point.Double shift2DOffset(double x, double y) {
         double scaledLeft = this.mousePosition.getScaledPosX() - sizeHandler.widthToBorder;
-        double scaledTop = this.mousePosition.getScaledPosY() - sizeHandler.heightToBorder;
+        double scaledTop =  this.mousePosition.getScaledPosY() - sizeHandler.heightToBorder;
         double xAdd = x - scaledLeft;
         double yAdd = y - scaledTop;
         double offsetX = guiOffsetX + xAdd;
@@ -979,8 +882,10 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         int guiMouseX = mouseX - guiLeft;
         int guiMouseY = mouseY - guiTop;
 
-        if (this.mouseSealStack.isEmpty() && Mouse.isButtonDown(0) && guiBox.isInBox(guiMouseX, guiMouseY)) {
-            if (mouseDragging) {
+        if(this.mouseSealStack.isEmpty() &&
+                Mouse.isButtonDown(0) &&
+                guiBox.isInBox(guiMouseX, guiMouseY)) {
+            if(mouseDragging) {
                 moveMouse(-(guiMouseX - mouseBufferX), -(guiMouseY - mouseBufferY));
             } else {
                 mouseBufferX = guiMouseX;
@@ -996,23 +901,23 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private void moveMouse(int changeX, int changeY) {
         if (this.previousMousePosition != null) {
             mousePosition.updateScaledPos(
-                sizeHandler.clampX(previousMousePosition.getScaledPosX() + changeX),
-                sizeHandler.clampY(previousMousePosition.getScaledPosY() + changeY),
-                sizeHandler.getScalingFactor());
+                    sizeHandler.clampX(previousMousePosition.getScaledPosX() + changeX),
+                    sizeHandler.clampY(previousMousePosition.getScaledPosY() + changeY),
+                    sizeHandler.getScalingFactor());
         } else {
             mousePosition.updateScaledPos(
-                sizeHandler.clampX(changeX),
-                sizeHandler.clampY(changeY),
-                sizeHandler.getScalingFactor());
+                    sizeHandler.clampX(changeX),
+                    sizeHandler.clampY(changeY),
+                    sizeHandler.getScalingFactor());
         }
     }
 
     private void applyMovedMouseOffset() {
         this.previousMousePosition = ScalingPoint.createPoint(
-            this.mousePosition.getScaledPosX(),
-            this.mousePosition.getScaledPosY(),
-            this.sizeHandler.getScalingFactor(),
-            true);
+                this.mousePosition.getScaledPosX(),
+                this.mousePosition.getScaledPosY(),
+                this.sizeHandler.getScalingFactor(),
+                true);
     }
 
     private void drawBackground(float zLevel) {
@@ -1021,23 +926,13 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.color(br, br, br, 1F);
         GlStateManager.disableBlend();
         textureResBack.bindTexture();
-        BufferBuilder vb = Tessellator.instance
-            .getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(guiLeft + 10, guiTop - 10 + guiHeight, zLevel)
-            .tex(0, 1)
-            .endVertex();
-        vb.pos(guiLeft - 10 + guiWidth, guiTop - 10 + guiHeight, zLevel)
-            .tex(1, 1)
-            .endVertex();
-        vb.pos(guiLeft - 10 + guiWidth, guiTop + 10, zLevel)
-            .tex(1, 0)
-            .endVertex();
-        vb.pos(guiLeft + 10, guiTop + 10, zLevel)
-            .tex(0, 0)
-            .endVertex();
-        Tessellator.instance
-            .draw();
+        vb.pos(guiLeft + 10,            guiTop - 10 + guiHeight, zLevel).tex(0, 1).endVertex();
+        vb.pos(guiLeft - 10 + guiWidth, guiTop - 10 + guiHeight, zLevel).tex(1, 1).endVertex();
+        vb.pos(guiLeft - 10 + guiWidth, guiTop + 10,             zLevel).tex(1, 0).endVertex();
+        vb.pos(guiLeft + 10,            guiTop + 10,             zLevel).tex(0, 0).endVertex();
+        Tessellator.getInstance().draw();
 
         GlStateManager.enableBlend();
         GlStateManager.color(1F, 1F, 1F, 1F);
@@ -1046,32 +941,27 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private void updateSearchHighlight() {
         this.searchMatches.clear();
 
-        String matchText = this.searchTextEntry.getText()
-            .toLowerCase();
+        String matchText = this.searchTextEntry.getText().toLowerCase();
         if (matchText.length() < 3) return;
         for (PerkTreePoint point : PerkTree.PERK_TREE.getPerkPoints()) {
             AbstractPerk perk = point.getPerk();
-            if (perk instanceof ProgressGatedPerk && !((ProgressGatedPerk) perk).canSeeClient()) {
+            if (perk instanceof ProgressGatedPerk &&
+                    !((ProgressGatedPerk) perk).canSeeClient()) {
                 continue;
             }
-            String catStr = perk.getCategory()
-                .getLocalizedName();
-            if (catStr != null && catStr.toLowerCase()
-                .contains(matchText)) {
+            String catStr = perk.getCategory().getLocalizedName();
+            if (catStr != null && catStr.toLowerCase().contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
                 for (String tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.toLowerCase()
-                        .contains(matchText)) {
+                    if (tooltip.toLowerCase().contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
                 }
             }
         }
-        if (I18n.format("perk.info.sealed")
-            .toLowerCase()
-            .contains(matchText)) {
+        if (I18n.format("perk.info.sealed").toLowerCase().contains(matchText)) {
             PlayerProgress prog = ResearchManager.clientProgress;
             for (AbstractPerk sealed : prog.getSealedPerks()) {
                 if (!this.searchMatches.contains(sealed)) {
@@ -1091,20 +981,20 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
 
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         if (!this.mouseSealStack.isEmpty()) {
-            this.mouseSealStack = null;
-            if (Minecraft.getMinecraft().thePlayer == null) {
+            this.mouseSealStack = ItemStack.EMPTY;
+            if (Minecraft.getMinecraft().player == null) {
                 return;
             }
 
             PlayerProgress prog = ResearchManager.clientProgress;
             for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
-                if (rctPerk.getValue()
-                    .contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
-                    if (prog.hasPerkUnlocked(rctPerk.getKey()) && !prog.isPerkSealed(rctPerk.getKey())
-                        && ItemPerkSeal.useSeal(player, true)) {
+                if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+                    if (prog.hasPerkUnlocked(rctPerk.getKey()) &&
+                            !prog.isPerkSealed(rctPerk.getKey()) &&
+                            ItemPerkSeal.useSeal(player, true)) {
                         PktRequestPerkSealAction pkt = new PktRequestPerkSealAction(rctPerk.getKey(), true);
                         PacketChannel.CHANNEL.sendToServer(pkt);
                         break;
@@ -1119,10 +1009,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
 
         for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
-            if (this.unlockPrimed.equals(rctPerk.getKey()) && rctPerk.getValue()
-                .contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
-                if (rctPerk.getKey()
-                    .mayUnlockPerk(ResearchManager.clientProgress, player)) {
+            if (this.unlockPrimed.equals(rctPerk.getKey()) && rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+                if (rctPerk.getKey().mayUnlockPerk(ResearchManager.clientProgress, player)) {
                     PktUnlockPerk pkt = new PktUnlockPerk(false, rctPerk.getKey());
                     PacketChannel.CHANNEL.sendToServer(pkt);
                     break;
@@ -1146,14 +1034,15 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             searchTextEntry.setText("");
             return true;
         }
-        if (socketMenu != null && rSocketMenu != null && !rSocketMenu.contains(mouseX, mouseY)) {
+        if (socketMenu != null &&
+                rSocketMenu != null &&
+                !rSocketMenu.contains(mouseX, mouseY)) {
             closeSocketMenu();
             return true;
         }
 
         for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
-            if (rctPerk.getValue()
-                .contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+            if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
                 if (perk instanceof GemSlotPerk) {
                     return true;
@@ -1169,22 +1058,22 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         Point p = new Point(mouseX, mouseY);
 
-        if (socketMenu != null && (mouseButton == 0 || mouseButton == 1)
-            && rSocketMenu != null
-            && !rSocketMenu.contains(p)) {
+        if (socketMenu != null &&
+                (mouseButton == 0 || mouseButton == 1) &&
+                rSocketMenu != null &&
+                !rSocketMenu.contains(p)) {
             closeSocketMenu();
         }
 
         if (mouseButton == 0) {
             if (socketMenu != null) {
                 for (Rectangle r : slotsSocketMenu.keySet()) {
-                    if (r.contains(p) && !socketMenu.hasItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
+                    if (r.contains(p) && !socketMenu.hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
                         int slotId = slotsSocketMenu.get(r);
-                        ItemStack potentialStack = Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(slotId);
-                        if (!potentialStack.isEmpty() && !ItemPerkGem.getModifiers(potentialStack)
-                            .isEmpty()) {
-                            PktPerkGemModification pkt = PktPerkGemModification
-                                .insertItem((AbstractPerk) socketMenu, slotId);
+                        ItemStack potentialStack = Minecraft.getMinecraft().player.inventory.getStackInSlot(slotId);
+                        if (!potentialStack.isEmpty() &&
+                                !ItemPerkGem.getModifiers(potentialStack).isEmpty()) {
+                            PktPerkGemModification pkt = PktPerkGemModification.insertItem((AbstractPerk) socketMenu, slotId);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             closeSocketMenu();
                             SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
@@ -1207,8 +1096,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
             if (rStatStar.contains(mouseX, mouseY)) {
                 this.expectReinit = true;
-                Minecraft.getMinecraft()
-                    .displayGuiScreen(new GuiJournalOverlayPerkStats(this));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalOverlayPerkStats(this));
 
                 return;
             }
@@ -1216,25 +1104,21 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         PlayerProgress prog = ResearchManager.clientProgress;
         for (Map.Entry<AbstractPerk, Rectangle.Double> rctPerk : this.thisFramePerks.entrySet()) {
-            if (rctPerk.getValue()
-                .contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+            if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
-                if (mouseButton == 0 && Minecraft.getMinecraft().gameSettings.showDebugInfo
-                    && GuiScreen.isCtrlKeyDown()) {
-                    String perkKey = perk.getRegistryName()
-                        .toString();
+                if (mouseButton == 0 && Minecraft.getMinecraft().gameSettings.showDebugInfo && isCtrlKeyDown()) {
+                    String perkKey = perk.getRegistryName().toString();
                     GuiScreen.setClipboardString(perkKey);
-                    Minecraft.getMinecraft().thePlayer
-                        .sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", perkKey));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", perkKey));
                     break;
                 }
                 if (mouseButton == 1) {
                     if (prog.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
-                        if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
+                        if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             AstralSorcery.proxy.scheduleClientside(() -> {
-                                if (Minecraft.getMinecraft().currentScreen == this) { // Only if user hasn't closed
+                                if (Minecraft.getMinecraft().currentScreen == this) { //Only if user hasn't closed
                                     updateSearchHighlight();
                                 }
                             }, 10);
@@ -1250,7 +1134,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                         return;
                     }
 
-                    if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog, Minecraft.getMinecraft().thePlayer)) {
+                    if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog, Minecraft.getMinecraft().player)) {
                         this.unlockPrimed = perk;
                         break;
                     } else if (this.sealBreakPrimed != null && this.tickSealBreak > 0) {

@@ -1,35 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.gem;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.constellation.perk.attribute.GemAttributeModifier;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
@@ -37,8 +16,26 @@ import shordinger.astralsorcery.common.item.base.IItemVariants;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.MathHelper;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,7 +67,7 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+        if(this.isInCreativeTab(tab)) {
             for (GemType type : GemType.values()) {
                 items.add(new ItemStack(this, 1, type.ordinal()));
             }
@@ -95,12 +92,11 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     @Nonnull
     public static List<GemAttributeModifier> getModifiers(ItemStack stack) {
-        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemPerkGem)) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
             return Lists.newArrayList();
         }
         List<GemAttributeModifier> modifiers = Lists.newArrayList();
-        NBTTagList mods = NBTHelper.getPersistentData(stack)
-            .getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
+        NBTTagList mods = NBTHelper.getPersistentData(stack).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < mods.tagCount(); i++) {
             NBTTagCompound tag = mods.getCompoundTagAt(i);
             modifiers.add(GemAttributeModifier.deserialize(tag));
@@ -109,15 +105,14 @@ public class ItemPerkGem extends Item implements IItemVariants {
     }
 
     public static boolean setModifiers(ItemStack stack, List<GemAttributeModifier> modifiers) {
-        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemPerkGem)) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemPerkGem)) {
             return false;
         }
         NBTTagList mods = new NBTTagList();
         for (GemAttributeModifier modifier : modifiers) {
             mods.appendTag(modifier.serialize());
         }
-        NBTHelper.getPersistentData(stack)
-            .setTag("modifiers", mods);
+        NBTHelper.getPersistentData(stack).setTag("modifiers", mods);
         return true;
     }
 
@@ -136,11 +131,9 @@ public class ItemPerkGem extends Item implements IItemVariants {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         Item i = stack.getItem();
-        if (i instanceof ItemPerkGem) {
+        if(i instanceof ItemPerkGem) {
             GemType type = GemType.values()[MathHelper.clamp(stack.getItemDamage(), 0, GemType.values().length)];
-            return super.getUnlocalizedName(stack) + "."
-                + type.name()
-                .toLowerCase();
+            return super.getUnlocalizedName(stack) + "." + type.name().toLowerCase();
         }
         return super.getUnlocalizedName(stack);
     }
@@ -151,8 +144,7 @@ public class ItemPerkGem extends Item implements IItemVariants {
         GemType[] values = GemType.values();
         for (int i = 0; i < values.length; i++) {
             GemType mt = values[i];
-            sub[i] = mt.name()
-                .toLowerCase();
+            sub[i] = mt.name().toLowerCase();
         }
         return sub;
     }
@@ -170,8 +162,8 @@ public class ItemPerkGem extends Item implements IItemVariants {
 
     public static enum GemType {
 
-        SKY(1.0F, 1.0F),
-        DAY(7.5F, 0.6F),
+        SKY  (1.0F, 1.0F),
+        DAY  (7.5F, 0.6F),
         NIGHT(0.5F, 3.0F);
 
         public final float countModifier;

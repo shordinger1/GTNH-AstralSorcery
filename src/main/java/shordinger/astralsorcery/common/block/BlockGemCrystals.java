@@ -1,39 +1,47 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
+import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileGemCrystals;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.RayTraceResult;
-import shordinger.astralsorcery.migration.WorldHelper;
-import shordinger.astralsorcery.migration.block.AstralBlockContainer;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -46,15 +54,20 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 27.11.2018 / 18:57
  */
-public class BlockGemCrystals extends AstralBlockContainer implements BlockCustomName, BlockVariants {
+public class BlockGemCrystals extends BlockContainer implements BlockCustomName, BlockVariants {
 
     public static final PropertyEnum<GrowthStageType> STAGE = PropertyEnum.create("stage", GrowthStageType.class);
 
-    private static final AxisAlignedBB boxStage0 = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.375, 0.75);
-    private static final AxisAlignedBB boxStage1 = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5, 0.75);
-    private static final AxisAlignedBB boxStage2Night = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5, 0.75);
-    private static final AxisAlignedBB boxStage2Sky = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5625, 0.75);
-    private static final AxisAlignedBB boxStage2Day = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.5625, 0.75);
+    private static final AxisAlignedBB boxStage0 = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.375, 0.75);
+    private static final AxisAlignedBB boxStage1 = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Night = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5, 0.75);
+    private static final AxisAlignedBB boxStage2Sky = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5625, 0.75);
+    private static final AxisAlignedBB boxStage2Day = new AxisAlignedBB(0.25, 0, 0.25,
+            0.75, 0.5625, 0.75);
 
     public BlockGemCrystals() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -64,9 +77,7 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
         setLightLevel(0.3F);
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(
-            this.blockState.getBaseState()
-                .withProperty(STAGE, GrowthStageType.STAGE_0));
+        setDefaultState(this.blockState.getBaseState().withProperty(STAGE, GrowthStageType.STAGE_0));
     }
 
     @Override
@@ -79,23 +90,29 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
-        if (replaceable) {
+        if(replaceable) {
             BlockPos down = pos.down();
-            if (!worldIn.isSideSolid(down, ForgeDirection.UP)) replaceable = false;
+            if(!worldIn.isSideSolid(down, EnumFacing.UP))
+                replaceable = false;
         }
         return replaceable;
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return switch (state.getValue(STAGE)) {
-            case STAGE_0 -> boxStage0;
-            case STAGE_1 -> boxStage1;
-            case STAGE_2_SKY -> boxStage2Sky;
-            case STAGE_2_DAY -> boxStage2Day;
-            case STAGE_2_NIGHT -> boxStage2Night;
-            default -> super.getBoundingBox(state, source, pos);
-        };
+        switch (state.getValue(STAGE)) {
+            case STAGE_0:
+                return boxStage0;
+            case STAGE_1:
+                return boxStage1;
+            case STAGE_2_SKY:
+                return boxStage2Sky;
+            case STAGE_2_DAY:
+                return boxStage2Day;
+            case STAGE_2_NIGHT:
+                return boxStage2Night;
+        }
+        return super.getBoundingBox(state, source, pos);
     }
 
     @Override
@@ -104,14 +121,12 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-                                  EntityPlayer player) {
-        return super.getPickBlock(WorldHelper.getBlockState(world, pos), target, world, pos, player);
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -121,23 +136,20 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-                                ItemStack stack) {
-        state.withProperty(
-            STAGE,
-            GrowthStageType.values()[MathHelper.clamp(stack.getItemDamage(), 0, GrowthStageType.values().length)]);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        state.withProperty(STAGE, GrowthStageType.values()[
+                MathHelper.clamp(stack.getItemDamage(), 0, GrowthStageType.values().length)]);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(STAGE)
-            .ordinal();
+        return state.getValue(STAGE).ordinal();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState()
-            .withProperty(STAGE, GrowthStageType.values()[MathHelper.clamp(meta, 0, GrowthStageType.values().length)]);
+        return getDefaultState().withProperty(STAGE, GrowthStageType.values()[
+                MathHelper.clamp(meta, 0, GrowthStageType.values().length)]);
     }
 
     @Override
@@ -146,9 +158,8 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
-        ItemStack gem = null;
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        ItemStack gem = ItemStack.EMPTY;
         switch (state.getValue(STAGE)) {
             case STAGE_2_SKY:
                 gem = ItemPerkGem.GemType.SKY.asStack();
@@ -166,7 +177,7 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -174,7 +185,7 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
-        if (!downState.isSideSolid(worldIn, down, ForgeDirection.UP)) {
+        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
@@ -184,15 +195,10 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileGemCrystals te = MiscUtils.getTileAt(worldIn, pos, TileGemCrystals.class, true);
-        if (te != null && !worldIn.isRemote) {
-            PktParticleEvent event = new PktParticleEvent(
-                PktParticleEvent.ParticleEventType.GEM_CRYSTAL_BURST,
-                pos.getX(),
-                pos.getY(),
-                pos.getZ());
-            event.setAdditionalDataLong(
-                state.getValue(STAGE)
-                    .ordinal());
+        if(te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.GEM_CRYSTAL_BURST,
+                    pos.getX(), pos.getY(), pos.getZ());
+            event.setAdditionalDataLong(state.getValue(STAGE).ordinal());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
         }
         super.breakBlock(worldIn, pos, state);
@@ -253,8 +259,7 @@ public class BlockGemCrystals extends AstralBlockContainer implements BlockCusto
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(STAGE)
-            .getName();
+        return state.getValue(STAGE).getName();
     }
 
     public static enum GrowthStageType implements IStringSerializable {

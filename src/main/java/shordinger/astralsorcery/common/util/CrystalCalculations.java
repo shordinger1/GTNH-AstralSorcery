@@ -1,21 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.lib.Constellations;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,46 +26,45 @@ import shordinger.astralsorcery.migration.MathHelper;
  */
 public class CrystalCalculations {
 
-    private static final Map<IConstellation, Float> fractureModifierMap = new HashMap<IConstellation, Float>() {
-
+    private static Map<IConstellation, Float> fractureModifierMap = new HashMap<IConstellation, Float>() {
         {
-            put(Constellations.aevitas, 0.001F);
-            put(Constellations.discidia, 0.005F);
-            put(Constellations.evorsio, 0.001F);
-            put(Constellations.armara, 0.001F);
-            put(Constellations.vicio, 0.001F);
+            put(Constellations.aevitas,     0.001F);
+            put(Constellations.discidia,    0.005F);
+            put(Constellations.evorsio,     0.001F);
+            put(Constellations.armara,      0.001F);
+            put(Constellations.vicio,       0.001F);
 
-            put(Constellations.lucerna, 0.0007F);
-            put(Constellations.bootes, 0.1F);
-            put(Constellations.mineralis, 0.007F);
-            put(Constellations.octans, 0.1F);
-            put(Constellations.pelotrio, 4F);
-            put(Constellations.horologium, 0.0007F);
-            put(Constellations.fornax, 0.009F);
+            put(Constellations.lucerna,     0.0007F);
+            put(Constellations.bootes,      0.1F);
+            put(Constellations.mineralis,   0.007F);
+            put(Constellations.octans,      0.1F);
+            put(Constellations.pelotrio,    4F);
+            put(Constellations.horologium,  0.0007F);
+            put(Constellations.fornax,      0.009F);
         }
     };
 
-    // Depends on size and collectivity
-    // Can collect up to 9F at max, 4F max for rock crystals
+    //Depends on size and collectivity
+    //Can collect up to 9F at max, 4F max for rock crystals
     public static float getCollectionAmt(CrystalProperties properties, float distribution) {
         float sizeDistr = (((float) properties.getSize()) / 100F);
         sizeDistr *= 0.6F;
         return distribution * sizeDistr * (((float) properties.getCollectiveCapability()) / 100F);
     }
 
-    // Depends on purity alone - 1F -> all gets through, 0F -> none
+    //Depends on purity alone - 1F -> all gets through, 0F -> none
     public static float getThroughputMultiplier(CrystalProperties properties) {
         return (float) Math.sqrt((((float) properties.getPurity()) / 100));
     }
 
-    // Between 3 and 9-ish
-    // Unused atm
+    //Between 3 and 9-ish
+    //Unused atm
     public static float getThroughputCap(CrystalProperties properties) {
         float sizeDistr = (((float) properties.getSize()) / 100F) / 2;
         return (float) (3 + (Math.pow(sizeDistr, 2)));
     }
 
-    // 1-4
+    //1-4
     public static double getMaxRitualReduction(CrystalProperties properties) {
         double purity = Math.sqrt((((double) properties.getPurity()) / 100D));
         double cutting = Math.sqrt((((double) properties.getCollectiveCapability()) / 100D));
@@ -77,10 +76,9 @@ public class CrystalCalculations {
         return Math.max(10, MathHelper.floor(purity * 20));
     }
 
-    // Let's say you get 1 cycle over what the properties can do (20 at most free) that means you get about 40% fracture
-    // per irl day.
+    //Let's say you get 1 cycle over what the properties can do (20 at most free) that means you get about 40% fracture per irl day.
     public static float getFractureChance(int castTimes, int cap) {
-        if (castTimes <= cap) {
+        if(castTimes <= cap) {
             return 0F;
         }
         int remaining = castTimes - cap;
@@ -94,7 +92,7 @@ public class CrystalCalculations {
         return purity * cutting * size;
     }
 
-    // Defines an additional modifier to determine if a single tick of a constellation effect is "strong" or "weak"
+    //Defines an additional modifier to determine if a single tick of a constellation effect is "strong" or "weak"
     public static float getCstFractureModifier(IWeakConstellation channeling) {
         if (fractureModifierMap.containsKey(channeling)) {
             return fractureModifierMap.get(channeling);
@@ -102,23 +100,19 @@ public class CrystalCalculations {
         return 1F;
     }
 
-    // Between 0-18
-    /*
-     * public static double getMaxRitualEffect(CrystalProperties properties) {
-     * double purity = Math.sqrt((((float) properties.getPurity()) / 100F));
-     * double size = (double) properties.getSize() / 100D;
-     * double cutting = Math.sqrt((((float) properties.getCollectiveCapability()) / 100F));
-     * double res = size * purity;
-     * double loss = Math.max(0, (1D - cutting) * res);
-     * return (res - loss) + (res - loss);
-     * }
-     */
+    //Between 0-18
+    /*public static double getMaxRitualEffect(CrystalProperties properties) {
+        double purity = Math.sqrt((((float) properties.getPurity()) / 100F));
+        double size = (double) properties.getSize() / 100D;
+        double cutting = Math.sqrt((((float) properties.getCollectiveCapability()) / 100F));
+        double res = size * purity;
+        double loss = Math.max(0, (1D - cutting) * res);
+        return (res - loss) + (res - loss);
+    }*/
 
-    // 1F -> none, 0F -> ALL
-    /*
-     * public static float getDischargePerc(CrystalProperties properties) {
-     * return (float) Math.sqrt(((float) properties.getPurity()) / 100F);
-     * }
-     */
+    //1F -> none, 0F -> ALL
+    /*public static float getDischargePerc(CrystalProperties properties) {
+        return (float) Math.sqrt(((float) properties.getPurity()) / 100F);
+    }*/
 
 }

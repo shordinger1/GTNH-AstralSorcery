@@ -1,32 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.WorldType;
+import shordinger.wrapper.net.minecraft.world.biome.Biome;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.common.structure.array.BlockArray;
-import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,8 +73,7 @@ public class RenderWorldBuffer implements IBlockAccess {
 
     @Override
     public boolean isAirBlock(BlockPos pos) {
-        return this.blockRenderData.getOrDefault(pos, Blocks.AIR.getDefaultState())
-            .getBlock() == Blocks.AIR;
+        return this.blockRenderData.getOrDefault(pos, Blocks.AIR.getDefaultState()).getBlock() == Blocks.AIR;
     }
 
     @Nonnull
@@ -87,7 +84,7 @@ public class RenderWorldBuffer implements IBlockAccess {
     }
 
     @Override
-    public int getStrongPower(BlockPos pos, ForgeDirection direction) {
+    public int getStrongPower(BlockPos pos, EnumFacing direction) {
         return 0;
     }
 
@@ -99,7 +96,7 @@ public class RenderWorldBuffer implements IBlockAccess {
     }
 
     @Override
-    public boolean isSideSolid(BlockPos pos, ForgeDirection side, boolean _default) {
+    public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
         return getBlockState(pos).isSideSolid(this, pos, side);
     }
 

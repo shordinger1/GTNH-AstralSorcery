@@ -1,14 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
-
-import net.minecraft.item.ItemStack;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
@@ -19,6 +17,7 @@ import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.GrindstoneRecipeAdd;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.GrindstoneRecipeRemove;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -56,7 +55,7 @@ public class GrindstoneRecipe extends BaseTweaker {
 
     private static void addRecipeInternal(IIngredient obj, IItemStack output, float doubleChance) {
         ItemHandle in = convertToHandle(obj);
-        if (in == null || in.handleType == ItemHandle.Type.FLUID) { // No fluid inputs :thonk:
+        if (in == null || in.handleType == ItemHandle.Type.FLUID) { //No fluid inputs :thonk:
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input itemstack.");
             return;
         }

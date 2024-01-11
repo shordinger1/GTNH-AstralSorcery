@@ -1,23 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
 import shordinger.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import shordinger.astralsorcery.common.starlight.network.TransmissionWorldHandler;
@@ -27,7 +18,16 @@ import shordinger.astralsorcery.common.starlight.transmission.NodeConnection;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +47,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     private BlockPos thisPos;
 
-    private final Set<BlockPos> sourcesToThis = new HashSet<>();
+    private Set<BlockPos> sourcesToThis = new HashSet<>();
 
     public SimpleTransmissionNode(BlockPos thisPos) {
         this.thisPos = thisPos;
@@ -60,12 +60,11 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     public void updateIgnoreBlockCollisionState(World world, boolean ignoreBlockCollision) {
         this.ignoreBlockCollision = ignoreBlockCollision;
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance()
-            .getWorldHandler(world);
-        if (assistNext != null && handle != null) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+        if(assistNext != null && handle != null) {
             boolean oldState = this.nextReachable;
             this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
-            if (nextReachable != oldState) {
+            if(nextReachable != oldState) {
                 handle.notifyTransmissionNodeChange(this);
             }
         }
@@ -77,7 +76,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public boolean notifyUnlink(World world, BlockPos to) {
-        if (to.equals(nextPos)) { // cleanup
+        if(to.equals(nextPos)) { //cleanup
             this.nextPos = null;
             this.assistNext = null;
             this.dstToNextSq = 0;
@@ -95,7 +94,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     private void addLink(World world, BlockPos pos, boolean doRayTest, boolean oldRayState) {
         this.nextPos = pos;
         this.assistNext = new RaytraceAssist(thisPos, nextPos);
-        if (doRayTest) {
+        if(doRayTest) {
             this.nextReachable = this.ignoreBlockCollision || assistNext.isClear(world);
         } else {
             this.nextReachable = oldRayState;
@@ -105,10 +104,10 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public boolean notifyBlockChange(World world, BlockPos at) {
-        if (nextPos == null) return false;
+        if(nextPos == null) return false;
         double dstStart = thisPos.distanceSq(at.getX(), at.getY(), at.getZ());
         double dstEnd = nextPos.distanceSq(at.getX(), at.getY(), at.getZ());
-        if (dstStart > dstToNextSq || dstEnd > dstToNextSq) return false; // out of range
+        if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return false; //out of range
         boolean oldState = this.nextReachable;
         this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
         return this.nextReachable != oldState;
@@ -116,7 +115,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public void notifySourceLink(World world, BlockPos source) {
-        sourcesToThis.add(source);
+        if(!sourcesToThis.contains(source)) sourcesToThis.add(source);
     }
 
     @Override
@@ -126,13 +125,13 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public NodeConnection<IPrismTransmissionNode> queryNextNode(WorldNetworkHandler handler) {
-        if (nextPos == null) return null;
+        if(nextPos == null) return null;
         return new NodeConnection<>(handler.getTransmissionNode(nextPos), nextPos, nextReachable);
     }
 
     @Override
     public List<BlockPos> getSources() {
-        return new LinkedList<>(sourcesToThis);
+        return sourcesToThis.stream().collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
@@ -151,7 +150,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
             sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompoundTagAt(i)));
         }
 
-        if (compound.hasKey("nextPos")) {
+        if(compound.hasKey("nextPos")) {
             NBTTagCompound tag = compound.getCompoundTag("nextPos");
             BlockPos next = NBTHelper.readBlockPosFromNBT(tag);
             boolean oldRay = tag.getBoolean("rayState");
@@ -172,7 +171,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         }
         compound.setTag("sources", sources);
 
-        if (nextPos != null) {
+        if(nextPos != null) {
             NBTTagCompound pos = new NBTTagCompound();
             NBTHelper.writeBlockPosToNBT(nextPos, pos);
             pos.setBoolean("rayState", nextReachable);
@@ -203,7 +202,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
         @Override
         public String getIdentifier() {
-            return Tags.MODID + ":SimpleTransmissionNode";
+            return AstralSorcery.MODID + ":SimpleTransmissionNode";
         }
 
     }

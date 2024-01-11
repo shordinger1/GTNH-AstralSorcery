@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Maps;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -33,8 +33,7 @@ public class AttributeTypeLimiter {
     private static final Tuple<Float, Float> ANY = new Tuple<>(Float.MIN_VALUE, Float.MAX_VALUE);
     private static Map<PerkAttributeType, Tuple<Float, Float>> perkTypeLimits = Maps.newHashMap();
 
-    private AttributeTypeLimiter() {
-    }
+    private AttributeTypeLimiter() {}
 
     void putLimit(PerkAttributeType type, float lower, float upper) {
         perkTypeLimits.put(type, new Tuple<>(lower, upper));
@@ -48,7 +47,7 @@ public class AttributeTypeLimiter {
     @SubscribeEvent
     public void onProcess(AttributeEvent.PostProcessVanilla ev) {
         PerkAttributeType type = ev.resolveAttributeType();
-        if (type != null) { // If managed
+        if (type != null) { //If managed
             checkValue(type, (float) ev.getValue(), ev::setValue);
         }
     }

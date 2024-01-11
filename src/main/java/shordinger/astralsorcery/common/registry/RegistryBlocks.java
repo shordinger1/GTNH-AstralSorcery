@@ -1,104 +1,43 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry;
 
-import static shordinger.astralsorcery.common.lib.BlocksAS.*;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.common.CommonProxy;
+import shordinger.astralsorcery.common.base.Mods;
+import shordinger.astralsorcery.common.block.*;
+import shordinger.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
+import shordinger.astralsorcery.common.block.fluid.FluidLiquidStarlight;
+import shordinger.astralsorcery.common.block.network.*;
+import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
+import shordinger.astralsorcery.common.migration.MappingMigrationHandler;
+import shordinger.astralsorcery.common.tile.*;
+import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
+import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
+import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.renderer.ItemMeshDefinition;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import shordinger.wrapper.net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidRegistry;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.astralsorcery.common.CommonProxy;
-import shordinger.astralsorcery.common.base.Mods;
-import shordinger.astralsorcery.common.block.BlockAttunementRelay;
-import shordinger.astralsorcery.common.block.BlockBlackMarble;
-import shordinger.astralsorcery.common.block.BlockBore;
-import shordinger.astralsorcery.common.block.BlockBoreHead;
-import shordinger.astralsorcery.common.block.BlockCelestialCrystals;
-import shordinger.astralsorcery.common.block.BlockCelestialGateway;
-import shordinger.astralsorcery.common.block.BlockChalice;
-import shordinger.astralsorcery.common.block.BlockCustomFlower;
-import shordinger.astralsorcery.common.block.BlockCustomOre;
-import shordinger.astralsorcery.common.block.BlockCustomSandOre;
-import shordinger.astralsorcery.common.block.BlockDynamicColor;
-import shordinger.astralsorcery.common.block.BlockFakeTree;
-import shordinger.astralsorcery.common.block.BlockFlareLight;
-import shordinger.astralsorcery.common.block.BlockGemCrystals;
-import shordinger.astralsorcery.common.block.BlockInfusedWood;
-import shordinger.astralsorcery.common.block.BlockMachine;
-import shordinger.astralsorcery.common.block.BlockMapDrawingTable;
-import shordinger.astralsorcery.common.block.BlockMarble;
-import shordinger.astralsorcery.common.block.BlockMarbleDoubleSlab;
-import shordinger.astralsorcery.common.block.BlockMarbleSlab;
-import shordinger.astralsorcery.common.block.BlockMarbleStairs;
-import shordinger.astralsorcery.common.block.BlockObservatory;
-import shordinger.astralsorcery.common.block.BlockPortalNode;
-import shordinger.astralsorcery.common.block.BlockRitualLink;
-import shordinger.astralsorcery.common.block.BlockStarlightInfuser;
-import shordinger.astralsorcery.common.block.BlockStructural;
-import shordinger.astralsorcery.common.block.BlockTranslucentBlock;
-import shordinger.astralsorcery.common.block.BlockTreeBeacon;
-import shordinger.astralsorcery.common.block.BlockVanishing;
-import shordinger.astralsorcery.common.block.BlockVariants;
-import shordinger.astralsorcery.common.block.BlockWorldIlluminator;
-import shordinger.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
-import shordinger.astralsorcery.common.block.fluid.FluidLiquidStarlight;
-import shordinger.astralsorcery.common.block.network.BlockAltar;
-import shordinger.astralsorcery.common.block.network.BlockAttunementAltar;
-import shordinger.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
-import shordinger.astralsorcery.common.block.network.BlockCollectorCrystal;
-import shordinger.astralsorcery.common.block.network.BlockLens;
-import shordinger.astralsorcery.common.block.network.BlockPrism;
-import shordinger.astralsorcery.common.block.network.BlockRitualPedestal;
-import shordinger.astralsorcery.common.block.network.BlockWell;
-import shordinger.astralsorcery.common.integrations.ModIntegrationGeolosys;
-import shordinger.astralsorcery.common.migration.MappingMigrationHandler;
-import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.common.tile.TileAttunementAltar;
-import shordinger.astralsorcery.common.tile.TileAttunementRelay;
-import shordinger.astralsorcery.common.tile.TileBore;
-import shordinger.astralsorcery.common.tile.TileCelestialCrystals;
-import shordinger.astralsorcery.common.tile.TileCelestialGateway;
-import shordinger.astralsorcery.common.tile.TileChalice;
-import shordinger.astralsorcery.common.tile.TileFakeTree;
-import shordinger.astralsorcery.common.tile.TileGemCrystals;
-import shordinger.astralsorcery.common.tile.TileGrindstone;
-import shordinger.astralsorcery.common.tile.TileIlluminator;
-import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
-import shordinger.astralsorcery.common.tile.TileObservatory;
-import shordinger.astralsorcery.common.tile.TileOreGenerator;
-import shordinger.astralsorcery.common.tile.TileRitualLink;
-import shordinger.astralsorcery.common.tile.TileRitualPedestal;
-import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
-import shordinger.astralsorcery.common.tile.TileStructController;
-import shordinger.astralsorcery.common.tile.TileStructuralConnector;
-import shordinger.astralsorcery.common.tile.TileTelescope;
-import shordinger.astralsorcery.common.tile.TileTranslucent;
-import shordinger.astralsorcery.common.tile.TileTreeBeacon;
-import shordinger.astralsorcery.common.tile.TileVanishing;
-import shordinger.astralsorcery.common.tile.TileWell;
-import shordinger.astralsorcery.common.tile.network.TileCollectorCrystal;
-import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
-import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -120,7 +59,7 @@ public class RegistryBlocks {
 
         registerTileEntities();
 
-        if (Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleBlock();
         }
     }
@@ -130,23 +69,17 @@ public class RegistryBlocks {
         FluidRegistry.registerFluid(f);
         fluidLiquidStarlight = FluidRegistry.getFluid(f.getName());
         blockLiquidStarlight = new FluidBlockLiquidStarlight();
-        CommonProxy.registryPrimer.register(
-            blockLiquidStarlight.setUnlocalizedName(
-                    blockLiquidStarlight.getClass()
-                        .getSimpleName()
-                        .toLowerCase())
-                .setRegistryName(
-                    blockLiquidStarlight.getClass()
-                        .getSimpleName()
-                        .toLowerCase()));
+        CommonProxy.registryPrimer.register(blockLiquidStarlight
+                .setUnlocalizedName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase())
+                .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
         FluidRegistry.addBucketForFluid(fluidLiquidStarlight);
     }
 
-    // Blocks
+    //Blocks
     private static void registerBlocks() {
-        // WorldGen&Related
+        //WorldGen&Related
         customOre = registerBlock(new BlockCustomOre());
         queueCustomNameItemBlock(customOre);
         customSandOre = registerBlock(new BlockCustomSandOre());
@@ -174,7 +107,7 @@ public class RegistryBlocks {
         blockBoreHead = registerBlock(new BlockBoreHead());
         queueCustomNameItemBlock(blockBoreHead);
 
-        // Mechanics
+        //Mechanics
         blockAltar = registerBlock(new BlockAltar());
         attunementAltar = registerBlock(new BlockAttunementAltar());
         queueDefaultItemBlock(attunementAltar);
@@ -217,8 +150,8 @@ public class RegistryBlocks {
         gemCrystals = registerBlock(new BlockGemCrystals());
         queueCustomNameItemBlock(gemCrystals);
 
-        // Machines&Related
-        // stoneMachine = registerBlock(new BlockStoneMachine());
+        //Machines&Related
+        //stoneMachine = registerBlock(new BlockStoneMachine());
         collectorCrystal = registerBlock(new BlockCollectorCrystal());
         celestialCollectorCrystal = registerBlock(new BlockCelestialCollectorCrystal());
 
@@ -226,8 +159,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(blockStructural);
     }
 
-    // Called after items are registered.
-    // Necessary for blocks that require different models/renders for different metadata values
+    //Called after items are registered.
+    //Necessary for blocks that require different models/renders for different metadata values
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
@@ -245,7 +178,7 @@ public class RegistryBlocks {
         registerBlockRender(gemCrystals);
     }
 
-    // Tiles
+    //Tiles
     private static void registerTileEntities() {
         registerTile(TileAltar.class);
         registerTile(TileRitualPedestal.class);
@@ -286,25 +219,19 @@ public class RegistryBlocks {
     }
 
     private static <T extends Block> T registerBlock(T block, String name) {
-        CommonProxy.registryPrimer.register(
-            block.setUnlocalizedName(name)
-                .setRegistryName(name));
-        if (block instanceof BlockDynamicColor) {
+        CommonProxy.registryPrimer.register(block.setUnlocalizedName(name).setRegistryName(name));
+        if(block instanceof BlockDynamicColor) {
             pendingIBlockColorBlocks.add((BlockDynamicColor) block);
         }
         return block;
     }
 
     public static <T extends Block> T registerBlock(T block) {
-        return registerBlock(
-            block,
-            block.getClass()
-                .getSimpleName()
-                .toLowerCase());
+        return registerBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
     private static void registerBlockRender(Block block) {
-        if (block instanceof BlockVariants) {
+        if(block instanceof BlockVariants) {
             for (IBlockState state : ((BlockVariants) block).getValidStates()) {
                 String unlocName = ((BlockVariants) block).getBlockName(state);
                 String name = unlocName + "_" + ((BlockVariants) block).getStateName(state);
@@ -324,10 +251,7 @@ public class RegistryBlocks {
     }
 
     public static void registerTile(Class<? extends TileEntity> tile) {
-        registerTile(
-            tile,
-            tile.getSimpleName()
-                .toLowerCase());
+        registerTile(tile, tile.getSimpleName().toLowerCase());
     }
 
     public static class FluidCustomModelMapper extends StateMapperBase implements ItemMeshDefinition {

@@ -1,21 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,11 +34,11 @@ public class ItemHandTelescope extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
-        if (worldIn.isRemote) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        if(worldIn.isRemote) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.HAND_TELESCOPE, playerIn, worldIn, 0, 0, 0);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem());
+        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
 
 }

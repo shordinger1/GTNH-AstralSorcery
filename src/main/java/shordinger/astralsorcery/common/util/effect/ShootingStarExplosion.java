@@ -1,20 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.effect;
 
-import java.awt.*;
-import java.util.Random;
-
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -24,6 +17,12 @@ import shordinger.astralsorcery.common.base.ShootingStarHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,8 +39,7 @@ public class ShootingStarExplosion {
 
     public static void play(World world, Vector3 pos, boolean extinguished, long seed) {
         if (!extinguished && ShootingStarHandler.StarConfigEntry.doExplosion) {
-            boolean doDamage = world.getGameRules()
-                .getGameRuleBooleanValue("mobGriefing");
+            boolean doDamage = world.getGameRules().getBoolean("mobGriefing");
             world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 4.5F, false, doDamage);
         }
 
@@ -72,23 +70,17 @@ public class ShootingStarExplosion {
         if (!extinguished) {
             for (int i = 0; i < 14; i++) {
                 Vector3 randTo = new Vector3(
-                    r.nextFloat() * 8 * (r.nextBoolean() ? 1 : -1),
-                    r.nextFloat() * 5,
-                    r.nextFloat() * 8 * (r.nextBoolean() ? 1 : -1));
-                EffectLightning lightning = EffectHandler.getInstance()
-                    .lightning(
-                        pos,
-                        pos.clone()
-                            .add(randTo));
+                        r.nextFloat() * 8 * (r.nextBoolean() ? 1 : -1),
+                        r.nextFloat() * 5,
+                        r.nextFloat() * 8 * (r.nextBoolean() ? 1 : -1));
+                EffectLightning lightning = EffectHandler.getInstance().lightning(pos, pos.clone().add(randTo));
                 lightning.setBuildSpeed(0.12F);
                 switch (r.nextInt(3)) {
                     case 0:
                         lightning.setOverlayColor(c);
                         break;
                     case 1:
-                        lightning.setOverlayColor(
-                            c.brighter()
-                                .brighter());
+                        lightning.setOverlayColor(c.brighter().brighter());
                         break;
                     case 2:
                         lightning.setOverlayColor(Color.WHITE);
@@ -98,50 +90,43 @@ public class ShootingStarExplosion {
                 }
             }
 
-            Vector3 perp = Vector3.RotAxis.Y_AXIS.clone()
-                .perpendicular()
-                .normalize();
+            Vector3 perp = Vector3.RotAxis.Y_AXIS.clone().perpendicular().normalize();
             for (double i = 0; i <= 360; i += 0.9) {
-                Vector3 dir = perp.clone()
-                    .rotate(Math.toRadians(i), Vector3.RotAxis.Y_AXIS)
-                    .normalize();
-                Vector3 p = dir.clone()
-                    .multiply(3 + r.nextDouble() * 4)
-                    .add(pos);
+                Vector3 dir = perp.clone().rotate(Math.toRadians(i), Vector3.RotAxis.Y_AXIS).normalize();
+                Vector3 p = dir.clone().multiply(3 + r.nextDouble() * 4).add(pos);
                 EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(p.getX(), p.getY(), p.getZ());
                 dir.multiply(0.06);
                 particle
-                    .motion(
-                        dir.getX() + r.nextDouble() * 0.005,
-                        dir.getY() + 0.01 + r.nextDouble() * 0.01,
-                        dir.getZ() + r.nextDouble() * 0.005)
-                    .setColor(Color.BLUE)
-                    .scale(1.5F)
-                    .gravity(0.004)
-                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                    .setMaxAge(55 + r.nextInt(20));
-                particle.setAlphaMultiplier(0.4F)
-                    .setColor(r.nextBoolean() ? Color.WHITE : c);
+                        .motion(
+                                dir.getX() + r.nextDouble() * 0.005,
+                                dir.getY() + 0.01 + r.nextDouble() * 0.01,
+                                dir.getZ() + r.nextDouble() * 0.005)
+                        .setColor(Color.BLUE)
+                        .scale(1.5F)
+                        .gravity(0.004)
+                        .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                        .setMaxAge(55 + r.nextInt(20));
+                particle.setAlphaMultiplier(0.4F).setColor(r.nextBoolean() ? Color.WHITE : c);
             }
         }
 
         for (int i = 0; i < 70; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos);
             particle
-                .offset(
-                    r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1),
-                    r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1),
-                    r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1))
-                .motion(
-                    (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1),
-                    (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1),
-                    (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1))
-                .scale(0.8F + r.nextFloat() * 0.4F)
-                .gravity(0.004)
-                .setColor(Color.WHITE)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                .setMaxAge(80 + r.nextInt(20));
-            if (!extinguished && r.nextInt(3) == 0) {
+                    .offset(
+                            r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1),
+                            r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1),
+                            r.nextFloat() * 0.5 * (r.nextBoolean() ? 1 : -1))
+                    .motion(
+                            (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1),
+                            (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1),
+                            (r.nextBoolean() ? 0.2 : 1) * r.nextFloat() * 0.07 * (r.nextBoolean() ? 1 : -1))
+                    .scale(0.8F + r.nextFloat() * 0.4F)
+                    .gravity(0.004)
+                    .setColor(Color.WHITE)
+                    .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
+                    .setMaxAge(80 + r.nextInt(20));
+            if(!extinguished && r.nextInt(3) == 0) {
                 particle.setColor(c);
             }
         }

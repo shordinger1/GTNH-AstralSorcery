@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 09.07.2018 / 15:10
  */
-// Usable for most/many cases. Handles also all basic stuff around modifiers and converters
+//Usable for most/many cases. Handles also all basic stuff around modifiers and converters
 public class AttributeModifierPerk extends AttributeConverterPerk {
 
     private List<PerkAttributeModifier> typeModifierList = Lists.newArrayList();
@@ -47,8 +47,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     }
 
     @Nullable
-    public <T extends PerkAttributeModifier> T addModifier(float modifier, PerkAttributeModifier.Mode mode,
-                                                           String type) {
+    public <T extends PerkAttributeModifier> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
         PerkAttributeType attrType = AttributeTypeRegistry.getType(type);
         if (attrType != null) {
             return addModifier((T) attrType.createModifier(modifier, mode));
@@ -98,7 +97,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
                 PerkAttributeModifier postMod = mod;
                 LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getId());
-                if (!attr.applyModifier(player, mod.getAttributeType(), mod)) {
+                if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
                     LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getId() + " - already applied!");
                 }
             }
@@ -126,7 +125,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
                 PerkAttributeModifier postMod = mod;
                 LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getId());
-                if (!attr.removeModifier(player, mod.getAttributeType(), mod)) {
+                if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
                     LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getId() + " - not applied!");
                 }
             }
@@ -136,8 +135,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
-        Collection<PerkAttributeModifier> modifiers = this
-            .getModifiers(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().player, Side.CLIENT);
         boolean addEmptyLine = !modifiers.isEmpty();
 
         if (canSeeClient()) {

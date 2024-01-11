@@ -1,26 +1,32 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.NonNullList;
+import shordinger.wrapper.net.minecraft.block.BlockSlab;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.IProperty;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -38,7 +44,7 @@ public class BlockMarbleSlab extends BlockSlab {
     public BlockMarbleSlab() {
         super(Material.ROCK, MapColor.QUARTZ);
         IBlockState state = this.blockState.getBaseState();
-        if (!isDouble()) {
+        if(!isDouble()) {
             state = state.withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM);
         }
         setDefaultState(state.withProperty(MARBLE_TYPE, EnumType.BRICKS));
@@ -56,20 +62,13 @@ public class BlockMarbleSlab extends BlockSlab {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-                                  EntityPlayer player) {
-        return new ItemStack(
-            BlocksAS.blockMarbleSlab,
-            1,
-            state.getValue(MARBLE_TYPE)
-                .ordinal());
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return new ItemStack(BlocksAS.blockMarbleSlab, 1, state.getValue(MARBLE_TYPE).ordinal());
     }
 
     @Override
     public String getUnlocalizedName(int meta) {
-        return super.getUnlocalizedName() + "."
-            + EnumType.byMetadata(meta)
-            .getName();
+        return super.getUnlocalizedName() + "." + EnumType.byMetadata(meta).getName();
     }
 
     @Override
@@ -82,18 +81,16 @@ public class BlockMarbleSlab extends BlockSlab {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         IBlockState iblockstate = getDefaultState().withProperty(MARBLE_TYPE, EnumType.byMetadata(meta & 7));
-        if (!isDouble()) {
-            iblockstate = iblockstate
-                .withProperty(HALF, (meta & 8) == 0 ? BlockSlab.EnumBlockHalf.BOTTOM : BlockSlab.EnumBlockHalf.TOP);
+        if(!isDouble()) {
+            iblockstate = iblockstate.withProperty(HALF, (meta & 8) == 0 ? BlockSlab.EnumBlockHalf.BOTTOM : BlockSlab.EnumBlockHalf.TOP);
         }
         return iblockstate;
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        int i = state.getValue(MARBLE_TYPE)
-            .ordinal();
-        if (!isDouble()) {
+        int i = state.getValue(MARBLE_TYPE).ordinal();
+        if(!isDouble()) {
             if (state.getValue(HALF) == BlockSlab.EnumBlockHalf.TOP) {
                 i |= 8;
             }
@@ -103,14 +100,12 @@ public class BlockMarbleSlab extends BlockSlab {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return isDouble() ? new BlockStateContainer(this, MARBLE_TYPE)
-            : new BlockStateContainer(this, HALF, MARBLE_TYPE);
+        return isDouble() ? new BlockStateContainer(this, MARBLE_TYPE) : new BlockStateContainer(this, HALF, MARBLE_TYPE);
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(MARBLE_TYPE)
-            .ordinal();
+        return state.getValue(MARBLE_TYPE).ordinal();
     }
 
     @Override

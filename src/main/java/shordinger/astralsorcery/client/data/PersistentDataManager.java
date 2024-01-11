@@ -1,32 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.data;
 
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
+import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.config.Configuration;
-
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.AstralSorcery;
-import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,13 +37,17 @@ public class PersistentDataManager {
 
     public static final PersistentDataManager INSTANCE = new PersistentDataManager();
 
-    private static final String[] infoFileContents = new String[]{"Astral Sorcery's persistent data directory",
-        "Astral Sorcery stores various informations here to ensure they are persistent across several playthroughs",
-        "of different modpacks. Thus, no matter what pack you play, these files end up here.", "",
-        "Files saved here are saved in an NBT format and can't be opened directly on many systems.",
-        "See 'NBTExplorer' or related software to open and modify the files if needed.", "",
-        "Should you wish to disable some or all features accessing the permanent storage, check",
-        "Astral Sorcery's configuration file and disable all or individual features."};
+    private static final String[] infoFileContents  = new String[] {
+            "Astral Sorcery's persistent data directory",
+            "Astral Sorcery stores various informations here to ensure they are persistent across several playthroughs",
+            "of different modpacks. Thus, no matter what pack you play, these files end up here.",
+            "",
+            "Files saved here are saved in an NBT format and can't be opened directly on many systems.",
+            "See 'NBTExplorer' or related software to open and modify the files if needed.",
+            "",
+            "Should you wish to disable some or all features accessing the permanent storage, check",
+            "Astral Sorcery's configuration file and disable all or individual features."
+    };
 
     private File selectedPersistentDataFolder, localModPackFolder;
     private boolean useLocal = false;
@@ -56,13 +57,12 @@ public class PersistentDataManager {
     private Map<PersistentKey, Boolean> activeMap = Maps.newHashMap();
     private Map<PersistentKey, CachedPersistentData> cachedPersistentData = Maps.newHashMap();
 
-    // Trying to be in line with PSI's naming and location of folders
+    //Trying to be in line with PSI's naming and location of folders
     private static final String dirWindows = "\\AppData\\Roaming\\.minecraft\\astralsorcery_persistent";
     private static final String dirMac = "/Library/Application Support/minecraft/astralsorcery_persistent";
     private static final String dirOther = "/.minecraft/astralsorcery_persistent";
 
-    private PersistentDataManager() {
-    }
+    private PersistentDataManager() {}
 
     public boolean usePersistent() {
         return !useLocal;
@@ -88,14 +88,15 @@ public class PersistentDataManager {
             useLocal = true;
         }
 
-        if (!dataDir.exists() && !dataDir.mkdirs()) {
-            AstralSorcery.log.info(
-                "Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
+        if (!dataDir.exists() &&
+                !dataDir.mkdirs()) {
+            AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
             return;
         }
-        if (!dataDir.equals(localDataDirectory) && !localDataDirectory.exists() && !localDataDirectory.mkdirs()) {
-            AstralSorcery.log.info(
-                "Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
+        if (!dataDir.equals(localDataDirectory) &&
+                !localDataDirectory.exists() &&
+                !localDataDirectory.mkdirs()) {
+            AstralSorcery.log.info("Unable to create folder for persistent data. Are you sure the mod has the permissions to create files there?");
             return;
         }
         this.selectedPersistentDataFolder = dataDir;
@@ -119,8 +120,7 @@ public class PersistentDataManager {
         String userHome = System.getProperty("user.home");
         String userOS = System.getProperty("os.name");
         if (userOS == null) {
-            AstralSorcery.log.info(
-                "Unable to determine User OS. Unable to select appropriate directory. Using local/pack-dependent directory!");
+            AstralSorcery.log.info("Unable to determine User OS. Unable to select appropriate directory. Using local/pack-dependent directory!");
             return null;
         }
         userOS = userOS.toLowerCase();
@@ -190,10 +190,7 @@ public class PersistentDataManager {
     }
 
     private File getKeyFile(PersistentKey key) {
-        return resolveFile(
-            key.getFileName(),
-            this.activeMap.getOrDefault(key, false) ? this.selectedPersistentDataFolder : this.localModPackFolder,
-            true);
+        return resolveFile(key.getFileName(), this.activeMap.getOrDefault(key, false) ? this.selectedPersistentDataFolder : this.localModPackFolder, true);
     }
 
     private File getLocalModPackKeyFile(PersistentKey key) {
@@ -205,11 +202,10 @@ public class PersistentDataManager {
         if (createFile && !dataFile.exists()) {
             try {
                 CompressedStreamTools.write(new NBTTagCompound(), dataFile);
-                // if (!dataFile.createNewFile()) {
-                // CompressedStreamTools.write(new NBTTagCompound(), dataFile);
-                // AstralSorcery.log.info("Unable to create file for persistent data. Are you sure the mod has the
-                // permissions to create files?");
-                // }
+                //if (!dataFile.createNewFile()) {
+                //    CompressedStreamTools.write(new NBTTagCompound(), dataFile);
+                //    AstralSorcery.log.info("Unable to create file for persistent data. Are you sure the mod has the permissions to create files?");
+                //}
             } catch (IOException exc) {
                 exc.printStackTrace();
                 return null;
@@ -219,7 +215,7 @@ public class PersistentDataManager {
     }
 
     private void checkInfoFile() {
-        if (useLocal) return; // No need to do this when saving pack-dependent anyway.
+        if (useLocal) return; //No need to do this when saving pack-dependent anyway.
 
         File infoFile = new File(this.selectedPersistentDataFolder, "info.txt");
         if (!infoFile.exists()) {
@@ -257,23 +253,10 @@ public class PersistentDataManager {
         public final void loadFromConfig(Configuration cfg) {
             PersistentDataManager mgr = INSTANCE;
 
-            mgr.active = cfg.getBoolean(
-                "active",
-                getConfigurationSection(),
-                true,
-                "Defines if the persistent client-data usage/storage should be used. If set to false, it'll store the data in a pack-related directory (subfolder 'astralsorcery' in the same directory as /mods, /config, ...)");
+            mgr.active = cfg.getBoolean("active", getConfigurationSection(), true, "Defines if the persistent client-data usage/storage should be used. If set to false, it'll store the data in a pack-related directory (subfolder 'astralsorcery' in the same directory as /mods, /config, ...)");
 
             for (PersistentKey key : PersistentKey.values()) {
-                mgr.activeMap.put(
-                    key,
-                    cfg.getBoolean(
-                        "active_" + key.getName(),
-                        getConfigurationSection(),
-                        true,
-                        "Defines if the persistent data loading & saving should be enabled for " + key.getName()
-                            + " (saved in file "
-                            + key.getFileName()
-                            + ")"));
+                mgr.activeMap.put(key, cfg.getBoolean("active_" + key.getName(), getConfigurationSection(), true, "Defines if the persistent data loading & saving should be enabled for " + key.getName() + " (saved in file " + key.getFileName() + ")"));
             }
         }
     }

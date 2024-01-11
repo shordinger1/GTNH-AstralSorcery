@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -10,26 +10,27 @@ package shordinger.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.block.network.BlockStarlightNetwork;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileTreeBeacon;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Map;
@@ -60,33 +61,24 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements BlockDynam
         Map<IBlockState, ModelResourceLocation> out = Maps.newHashMap();
         ResourceLocation rl = Block.REGISTRY.getNameForObject(blockIn);
         rl = new ResourceLocation(rl.getResourceDomain(), rl.getResourcePath() + "_festive");
-        out.put(
-            blockIn.getDefaultState(),
-            new ModelResourceLocation(
-                rl,
-                getPropertyString(
-                    blockIn.getDefaultState()
-                        .getProperties())));
+        out.put(blockIn.getDefaultState(), new ModelResourceLocation(rl, getPropertyString(blockIn.getDefaultState().getProperties())));
         return out;
     }
 
     @Override
     public String getStateName(IBlockState state) {
-        if (handleRegisterStateMapper()) {
+        if(handleRegisterStateMapper()) {
             return "festive";
         }
         return "normal";
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-                                ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
         TileTreeBeacon ttb = MiscUtils.getTileAt(worldIn, pos, TileTreeBeacon.class, true);
-        if (ttb != null && !worldIn.isRemote
-            && placer instanceof EntityPlayerMP
-            && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
+        if (ttb != null && !worldIn.isRemote && placer instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
             ttb.setPlacedBy((EntityPlayer) placer);
         }
     }

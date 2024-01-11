@@ -1,12 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.research;
+
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,14 +20,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-
-import com.google.common.collect.Maps;
-import com.google.common.io.Files;
-
-import shordinger.astralsorcery.AstralSorcery;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,12 +33,11 @@ public class ResearchIOThread extends TimerTask {
     private static Timer ioThread;
     private static ResearchIOThread saveTask;
 
-    private final Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
-    private final Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
+    private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
+    private Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
     private boolean inSave = false, skipTick = false;
 
-    private ResearchIOThread() {
-    }
+    private ResearchIOThread() {}
 
     public static void startIOThread() {
         if (ioThread != null && saveTask != null) {
@@ -127,7 +124,6 @@ public class ResearchIOThread extends TimerTask {
             NBTTagCompound cmp = new NBTTagCompound();
             progress.store(cmp);
             CompressedStreamTools.write(cmp, playerFile);
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
     }
 }

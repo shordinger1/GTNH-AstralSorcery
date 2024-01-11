@@ -1,31 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import crafttweaker.CraftTweakerAPI;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.SerializeableRecipe;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.*;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.AltarRecipe;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GameStageTweaks;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.GrindstoneRecipe;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.InfusionRecipe;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.LightTransmutations;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.LiquidInteraction;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.Utils;
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.WellRecipe;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,8 +29,7 @@ public class ModIntegrationCrafttweaker {
     public static ModIntegrationCrafttweaker instance = new ModIntegrationCrafttweaker();
     public static List<SerializeableRecipe> recipeModifications = new LinkedList<>();
 
-    private ModIntegrationCrafttweaker() {
-    }
+    private ModIntegrationCrafttweaker() {}
 
     public void load() {
         CraftTweakerAPI.registerClass(InfusionRecipe.class);
@@ -55,21 +44,17 @@ public class ModIntegrationCrafttweaker {
         CraftTweakerAPI.registerClass(Utils.class);
         CraftTweakerAPI.registerClass(GameStageTweaks.class);
 
-        // For the perk removal / disabling events
+        //For the perk removal / disabling events
         MinecraftForge.EVENT_BUS.register(new PerkTree());
     }
 
     public void pushChanges() {
-        AstralSorcery.log
-            .info("Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
+        AstralSorcery.log.info("Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
         for (SerializeableRecipe recipe : recipeModifications) {
             try {
                 recipe.applyRecipe();
             } catch (Exception exc) {
-                AstralSorcery.log.error(
-                    "Couldn't apply RecipeModification for type " + recipe.getType()
-                        .name()
-                        .toLowerCase());
+                AstralSorcery.log.error("Couldn't apply RecipeModification for type " + recipe.getType().name().toLowerCase());
                 exc.printStackTrace();
             }
         }

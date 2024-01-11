@@ -1,25 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
 
-import java.awt.*;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagCompound;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.IChatComponent;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -29,16 +17,27 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.structure.change.ChangeSubscriber;
 import shordinger.astralsorcery.common.structure.match.StructureMatcherPatternArray;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.TextComponentString;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
+import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
+import shordinger.wrapper.net.minecraft.world.IWorldNameable;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,25 +62,24 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
     public void update() {
         super.update();
 
-        if (world.isRemote) {
+        if(world.isRemote) {
             playEffects();
         } else {
-            if ((ticksExisted & 15) == 0) {
-                updateSkyState(
-                    world.provider.isNether()
-                        || MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
+            if((ticksExisted & 15) == 0) {
+                updateSkyState(world.provider.isNether() ||
+                        MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
             }
 
             updateMultiblockState();
 
-            if (gatewayRegistered) {
-                if (!hasMultiblock() || !doesSeeSky()) {
+            if(gatewayRegistered) {
+                if(!hasMultiblock() || !doesSeeSky()) {
                     GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
                     cache.removePosition(world, pos);
                     gatewayRegistered = false;
                 }
             } else {
-                if (hasMultiblock() && doesSeeSky()) {
+                if(hasMultiblock() && doesSeeSky()) {
                     GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
                     cache.offerPosition(world, pos, display == null ? "" : display);
                     gatewayRegistered = true;
@@ -102,13 +100,12 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
 
     @Nullable
     @Override
-    public IChatComponent getDisplayName() {
+    public ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(getName()) : new TextComponentString("");
     }
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
     @Nullable
     @Override
@@ -140,9 +137,9 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         }
         boolean matches = this.structureMatch.matches(getWorld());
         if (matches != this.hasMultiblock) {
-            LogCategory.STRUCTURE_MATCH.info(
-                () -> "Structure match updated: " + this.getClass()
-                    .getName() + " at " + this.getPos() + " (" + this.hasMultiblock + " -> " + matches + ")");
+            LogCategory.STRUCTURE_MATCH.info(() ->
+                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
+                            " (" + this.hasMultiblock + " -> " + matches + ")");
             this.hasMultiblock = matches;
             markForUpdate();
         }
@@ -168,62 +165,44 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
     private void playEffects() {
         boolean prec = hasMultiblock && doesSeeSky;
         setupGatewayUI(prec);
-        if (prec) {
+        if(prec) {
             playFrameParticles();
         }
     }
 
     @SideOnly(Side.CLIENT)
     private void setupGatewayUI(boolean preconditionsFulfilled) {
-        if (preconditionsFulfilled) {
+        if(preconditionsFulfilled) {
             Vector3 sphereVec = new Vector3(pos).add(0.5, 1.62, 0.5);
-            if (clientSphere == null) {
-                CompoundEffectSphere sphere = new CompoundGatewayShield(
-                    sphereVec.clone(),
-                    Vector3.RotAxis.Y_AXIS,
-                    6,
-                    8,
-                    10);
-                sphere.setRemoveIfInvisible(true)
-                    .setAlphaFadeDistance(4);
-                EffectHandler.getInstance()
-                    .registerFX(sphere);
+            if(clientSphere == null) {
+                CompoundEffectSphere sphere = new CompoundGatewayShield(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 8, 10);
+                sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
+                EffectHandler.getInstance().registerFX(sphere);
                 clientSphere = sphere;
             }
-            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().thePlayer)
-                .distance(sphereVec);
-            if (clientSphere != null) {
-                if (!((CompoundEffectSphere) clientSphere).getPosition()
-                    .equals(sphereVec)) {
+            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().player).distance(sphereVec);
+            if(clientSphere != null) {
+                if(!((CompoundEffectSphere) clientSphere).getPosition().equals(sphereVec)) {
                     ((CompoundEffectSphere) clientSphere).requestRemoval();
 
-                    CompoundEffectSphere sphere = new CompoundGatewayShield(
-                        sphereVec.clone(),
-                        Vector3.RotAxis.Y_AXIS,
-                        6,
-                        8,
-                        10);
-                    sphere.setRemoveIfInvisible(true)
-                        .setAlphaFadeDistance(4);
-                    EffectHandler.getInstance()
-                        .registerFX(sphere);
+                    CompoundEffectSphere sphere = new CompoundGatewayShield(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 8, 10);
+                    sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
+                    EffectHandler.getInstance().registerFX(sphere);
                     clientSphere = sphere;
                 }
-                if (((EntityComplexFX) clientSphere).isRemoved() && playerDst < 5) {
-                    EffectHandler.getInstance()
-                        .registerFX((EntityComplexFX) clientSphere);
+                if(((EntityComplexFX) clientSphere).isRemoved() && playerDst < 5) {
+                    EffectHandler.getInstance().registerFX((EntityComplexFX) clientSphere);
                 }
             }
-            if (playerDst < 5.5) {
+            if(playerDst < 5.5) {
                 Minecraft.getMinecraft().gameSettings.thirdPersonView = 0;
             }
-            if (playerDst < 2.5) {
-                EffectHandler.getInstance()
-                    .requestGatewayUIFor(world, pos, sphereVec, 5.5);
+            if(playerDst < 2.5) {
+                EffectHandler.getInstance().requestGatewayUIFor(world, pos, sphereVec, 5.5);
             }
         } else {
-            if (clientSphere != null) {
-                if (!((EntityComplexFX) clientSphere).isRemoved()) {
+            if(clientSphere != null) {
+                if(!((EntityComplexFX) clientSphere).isRemoved()) {
                     ((EntityComplexFX) clientSphere).requestRemoval();
                 }
             }
@@ -234,15 +213,13 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
     private void playFrameParticles() {
         for (int i = 0; i < 2; i++) {
             Vector3 offset = new Vector3(pos).add(-2, 0, -2);
-            if (rand.nextBoolean()) {
+            if(rand.nextBoolean()) {
                 offset.add(5 * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * 5);
             } else {
                 offset.add(rand.nextFloat() * 5, 0, 5 * (rand.nextBoolean() ? 1 : 0));
             }
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
-            p.gravity(0.0045)
-                .scale(0.25F + rand.nextFloat() * 0.15F)
-                .setMaxAge(40 + rand.nextInt(40));
+            p.gravity(0.0045).scale(0.25F + rand.nextFloat() * 0.15F).setMaxAge(40 + rand.nextInt(40));
             Color c = new Color(60, 0, 255);
             switch (rand.nextInt(4)) {
                 case 0:
@@ -288,8 +265,4 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         }
     }
 
-    @Override
-    public void tick() {
-
-    }
 }

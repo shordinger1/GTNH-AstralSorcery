@@ -1,24 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.item.ItemBlock;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.HashMap;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,31 +32,29 @@ public class BlockDropCaptureAssist {
 
     public static BlockDropCaptureAssist instance = new BlockDropCaptureAssist();
 
-    private static final Map<Integer, NonNullList<ItemStack>> capturedStacks = new HashMap<>();
+    private static Map<Integer, NonNullList<ItemStack>> capturedStacks = new HashMap<>();
     private static int stack = -1;
 
-    private BlockDropCaptureAssist() {
-    }
+    private BlockDropCaptureAssist() {}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrop(EntityJoinWorldEvent event) {
-        if (event.world instanceof WorldServer && event.entity instanceof EntityItem) {
-            ItemStack itemStack = ((EntityItem) event.entity).getItem();
+        if (event.getWorld() instanceof WorldServer && event.getEntity() instanceof EntityItem) {
+            ItemStack itemStack = ((EntityItem) event.getEntity()).getItem();
             if (stack > -1) {
                 event.setCanceled(true);
-                if (!itemStack.isEmpty()) {
-                    if (itemStack.getItem() instanceof ItemBlock && ((ItemBlock) itemStack.getItem()).getBlock()
-                        .equals(Blocks.stone)) {
-                        event.entity.setDead();
+                if(!itemStack.isEmpty()) {
+                    if(itemStack.getItem() instanceof ItemBlock &&
+                            ((ItemBlock) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
+                        event.getEntity().setDead();
                         return;
                     }
-                    // Apparently concurrency sometimes gets us here...
+                    //Apparently concurrency sometimes gets us here...
                     if (stack > -1) {
-                        capturedStacks.computeIfAbsent(stack, st -> NonNullList.create())
-                            .add(itemStack);
+                        capturedStacks.computeIfAbsent(stack, st -> NonNullList.create()).add(itemStack);
                     }
                 }
-                event.entity.setDead();
+                event.getEntity().setDead();
             }
         }
     }

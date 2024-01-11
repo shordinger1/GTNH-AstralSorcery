@@ -1,28 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.wand;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.entities.EntityGrapplingHook;
 import shordinger.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.EnumAction;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,12 +50,12 @@ public class ItemGrappleWand extends Item implements ItemAlignmentChargeConsumer
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player) {
-        ItemStack stack = player.getHeldItem();
-        if (stack.stackSize==0 || worldIn.isRemote) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty() || worldIn.isRemote) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
-        if (drainTempCharge(player, Config.grappleWandUseCost, true)) {
+        if(drainTempCharge(player, Config.grappleWandUseCost, true)) {
             worldIn.spawnEntity(new EntityGrapplingHook(worldIn, player));
             drainTempCharge(player, Config.grappleWandUseCost, false);
         }

@@ -1,19 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import shordinger.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -41,18 +41,18 @@ public class AmuletEnchantHelper {
     private static float chanceToNonExisting = 0.35F;
 
     public static void rollAmulet(ItemStack stack) {
-        if (stack.stackSize == 0 || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
             return;
         }
 
         List<AmuletEnchantment> ench = new ArrayList<>();
         while (mayGetAdditionalRoll(ench)) {
             AmuletEnchantment.Type type = getRollType(ench);
-            if (type != null) {
+            if(type != null) {
                 int lvl = getRollLevel();
-                if (type.hasEnchantmentTag()) {
+                if(type.hasEnchantmentTag()) {
                     Enchantment e = AmuletEnchantmentRegistry.getRandomEnchant();
-                    if (e != null) {
+                    if(e != null) {
                         ench.add(new AmuletEnchantment(type, e, lvl));
                     }
                 } else {
@@ -67,48 +67,47 @@ public class AmuletEnchantHelper {
     private static AmuletEnchantment.Type getRollType(List<AmuletEnchantment> existing) {
         int exAll = getAdditionAll(existing);
         switch (existing.size()) {
-            case 0, 1 -> {
-                if (rand.nextFloat() < chanceToAll) {
+            case 0:
+            case 1:
+                if(rand.nextFloat() < chanceToAll) {
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_ALL;
                 }
-                if (rand.nextFloat() < chanceToNonExisting) {
+                if(rand.nextFloat() < chanceToNonExisting) {
                     return AmuletEnchantment.Type.ADD_TO_SPECIFIC;
                 }
                 return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
-            }
-            case 2 -> {
-                if (exAll > 1) {
+            case 2:
+                if(exAll > 1) {
                     return null;
-                } else if (exAll == 1) {
-                    if (rand.nextFloat() < chanceToNonExisting) {
+                } else if(exAll == 1) {
+                    if(rand.nextFloat() < chanceToNonExisting) {
                         return AmuletEnchantment.Type.ADD_TO_SPECIFIC;
                     }
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
                 } else {
-                    if (rand.nextFloat() < chanceToAll) {
+                    if(rand.nextFloat() < chanceToAll) {
                         return AmuletEnchantment.Type.ADD_TO_EXISTING_ALL;
                     }
-                    if (rand.nextFloat() < chanceToNonExisting) {
+                    if(rand.nextFloat() < chanceToNonExisting) {
                         return AmuletEnchantment.Type.ADD_TO_SPECIFIC;
                     }
                     return AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC;
                 }
-            }
-            default -> {
-            }
+            default:
+                break;
         }
         return null;
     }
 
     private static int getRollLevel() {
-        if (rand.nextFloat() < chance2Level) {
+        if(rand.nextFloat() < chance2Level) {
             return 2;
         }
         return 1;
     }
 
     private static boolean mayGetAdditionalRoll(List<AmuletEnchantment> existing) {
-        if (existing.isEmpty()) return true;
+        if(existing.isEmpty()) return true;
         switch (existing.size()) {
             case 1:
                 return rand.nextFloat() < chance2nd;
@@ -123,8 +122,7 @@ public class AmuletEnchantHelper {
     private static int getAdditionAll(List<AmuletEnchantment> ench) {
         int i = 0;
         for (AmuletEnchantment e : ench) {
-            if (e.getType()
-                .equals(AmuletEnchantment.Type.ADD_TO_EXISTING_ALL)) {
+            if(e.getType().equals(AmuletEnchantment.Type.ADD_TO_EXISTING_ALL)) {
                 i++;
             }
         }
@@ -136,13 +134,13 @@ public class AmuletEnchantHelper {
         for (AmuletEnchantment e : ench) {
             boolean found = false;
             for (AmuletEnchantment ex : enchantments) {
-                if (ex.canMerge(e)) {
+                if(ex.canMerge(e)) {
                     ex.merge(e);
                     found = true;
                     break;
                 }
             }
-            if (!found) {
+            if(!found) {
                 enchantments.add(e);
             }
         }
@@ -157,43 +155,13 @@ public class AmuletEnchantHelper {
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            chance2nd = cfg.getFloat(
-                "chance2nd",
-                getConfigurationSection(),
-                chance2nd,
-                0F,
-                1F,
-                "Defines the chance to roll a 2nd-enchantment-manipulating roll on the amulet. Value defines a percent chance from 0% to 100%. Setting this to 0 also prevents a 3rd roll");
-            chance3rd = cfg.getFloat(
-                "chance3rd",
-                getConfigurationSection(),
-                chance3rd,
-                0F,
-                1F,
-                "Defines the chance to roll a 3rd-enchantment-manipulation roll on the amulet. Value defines a percent chance from 0% to 100%.");
+            chance2nd = cfg.getFloat("chance2nd", getConfigurationSection(), chance2nd, 0F, 1F, "Defines the chance to roll a 2nd-enchantment-manipulating roll on the amulet. Value defines a percent chance from 0% to 100%. Setting this to 0 also prevents a 3rd roll");
+            chance3rd = cfg.getFloat("chance3rd", getConfigurationSection(), chance3rd, 0F, 1F, "Defines the chance to roll a 3rd-enchantment-manipulation roll on the amulet. Value defines a percent chance from 0% to 100%.");
 
-            chance2Level = cfg.getFloat(
-                "chanceLevel2",
-                getConfigurationSection(),
-                chance2Level,
-                0F,
-                1F,
-                "Defines the chance the roll will be +2 instead of +1 to existing enchantment/to enchantment/to all enchantments");
+            chance2Level = cfg.getFloat("chanceLevel2", getConfigurationSection(), chance2Level, 0F, 1F, "Defines the chance the roll will be +2 instead of +1 to existing enchantment/to enchantment/to all enchantments");
 
-            chanceToAll = cfg.getFloat(
-                "chanceToAll",
-                getConfigurationSection(),
-                chanceToAll,
-                0F,
-                1F,
-                "Defines the chance the amulet-roll 'to all existing enchantments' will appear.");
-            chanceToNonExisting = cfg.getFloat(
-                "chanceToNonExisting",
-                getConfigurationSection(),
-                chanceToNonExisting,
-                0F,
-                1F,
-                "Defines the chance the amulet roll 'to <encahntment>' will appear. (Don't mistake this for 'to exsting <enchantment>'!)");
+            chanceToAll = cfg.getFloat("chanceToAll", getConfigurationSection(), chanceToAll, 0F, 1F, "Defines the chance the amulet-roll 'to all existing enchantments' will appear.");
+            chanceToNonExisting = cfg.getFloat("chanceToNonExisting", getConfigurationSection(), chanceToNonExisting, 0F, 1F, "Defines the chance the amulet roll 'to <encahntment>' will appear. (Don't mistake this for 'to exsting <enchantment>'!)");
         }
     }
 

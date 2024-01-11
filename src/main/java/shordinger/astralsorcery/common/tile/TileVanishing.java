@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-
 import shordinger.astralsorcery.common.item.tool.wand.ItemWand;
 import shordinger.astralsorcery.common.item.tool.wand.WandAugment;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,32 +26,29 @@ import shordinger.astralsorcery.common.tile.base.TileEntityTick;
  */
 public class TileVanishing extends TileEntityTick {
 
-    private static final AxisAlignedBB topBox = new AxisAlignedBB(-0.9, 0, -0.9, 0.9, 0.9, 0.9);
+    private static final AxisAlignedBB topBox = new AxisAlignedBB(-0.9,0, -0.9, 0.9, 0.9, 0.9);
 
     @Override
     public void update() {
         super.update();
 
-        if (!worldObj.isRemote && ticksExisted % 10 == 0) {
-            List players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, topBox.offset(pos));
+        if(!world.isRemote && ticksExisted % 10 == 0) {
+            List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, topBox.offset(pos));
             for (EntityPlayer player : players) {
                 ItemStack held = player.getHeldItemMainhand();
-                if (!held.stackSize==0 && held.getItem() instanceof ItemWand
-                    && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
+                if(!held.isEmpty() && held.getItem() instanceof ItemWand && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }
                 held = player.getHeldItemOffhand();
-                if (!held.stackSize==0 && held.getItem() instanceof ItemWand
-                    && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
+                if(!held.isEmpty() && held.getItem() instanceof ItemWand && WandAugment.AEVITAS == ItemWand.getAugment(held)) {
                     return;
                 }
             }
-            worldObj.setBlockToAir(getPos());
+            getWorld().setBlockToAir(getPos());
         }
     }
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
 }

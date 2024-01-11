@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.item;
 
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
+import shordinger.wrapper.net.minecraft.client.resources.IResourceManager;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.client.model.ICustomModelLoader;
+import shordinger.wrapper.net.minecraftforge.client.model.IModel;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,8 +33,7 @@ public class DummyModelLoader implements ICustomModelLoader {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
-    }
+    public void onResourceManagerReload(IResourceManager resourceManager) {}
 
     @Override
     public String toString() {

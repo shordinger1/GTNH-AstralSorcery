@@ -1,27 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import java.util.EnumSet;
-
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import shordinger.astralsorcery.common.event.DynamicEnchantmentEvent;
 import shordinger.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import shordinger.astralsorcery.common.registry.RegistryEnchantments;
 import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.event.AttachCapabilitiesEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.EnumSet;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,26 +35,22 @@ public class PlayerAmuletHandler implements ITickHandler {
 
     public static final PlayerAmuletHandler INSTANCE = new PlayerAmuletHandler();
 
-    private PlayerAmuletHandler() {
-    }
+    private PlayerAmuletHandler() {}
 
     @SubscribeEvent
     public void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
-        if (!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
-            itemCapEvent
-                .addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
+        if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
+            itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
         }
     }
 
     @SubscribeEvent
     public void onAmuletEnchantApply(DynamicEnchantmentEvent.Add event) {
-        if (EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
-        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper
-            .getWornAmulet(event.getEnchantedItemStack());
-        if (linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
+        if(EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
+        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
+        if(linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
 
-        event.getEnchantmentsToApply()
-            .addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
+        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
     }
 
     @Override
@@ -65,7 +62,7 @@ public class PlayerAmuletHandler implements ITickHandler {
         boolean client = player.getEntityWorld().isRemote;
         for (EnchantmentPlayerWornTick e : RegistryEnchantments.wearableTickEnchantments) {
             int max = EnchantmentHelper.getMaxEnchantmentLevel(e, player);
-            if (max > 0) {
+            if(max > 0) {
                 e.onWornTick(client, player, max);
             }
         }
@@ -74,7 +71,7 @@ public class PlayerAmuletHandler implements ITickHandler {
     private void applyAmuletTags(EntityPlayer player) {
         for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if (stack.stackSize!=0 && !EnchantmentUpgradeHelper.isItemBlacklisted(stack)) {
+            if (!stack.isEmpty() && !EnchantmentUpgradeHelper.isItemBlacklisted(stack)) {
                 EnchantmentUpgradeHelper.applyAmuletOwner(player.getItemStackFromSlot(slot), player);
             }
         }

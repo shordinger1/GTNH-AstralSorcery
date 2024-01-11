@@ -1,33 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item;
 
+import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-
-import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,10 +39,10 @@ import shordinger.astralsorcery.migration.block.IBlockState;
 public abstract class ItemBlockStorage extends Item {
 
     public static void tryStoreBlock(ItemStack storeIn, World w, BlockPos pos) {
-        if (w.getTileEntity(pos) != null) return;
+        if(w.getTileEntity(pos) != null) return;
         IBlockState stateToStore = w.getBlockState(pos);
-        if (Item.getItemFromBlock(stateToStore.getBlock()) == null) return; // Can't charge the player anyway.
-        if (stateToStore.getBlockHardness(w, pos) == -1) return;
+        if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
+        if(stateToStore.getBlockHardness(w, pos) == -1) return;
         NBTTagCompound stateTag = NBTHelper.getBlockStateNBTTag(stateToStore);
 
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
@@ -57,7 +57,7 @@ public abstract class ItemBlockStorage extends Item {
         Map<IBlockState, ItemStack> map = new LinkedHashMap<>();
         for (IBlockState state : blockStates) {
             ItemStack stack = ItemUtils.createBlockStack(state);
-            if (stack.stackSize!=0) {
+            if(!stack.isEmpty()) {
                 map.put(state, stack);
             }
         }
@@ -67,12 +67,12 @@ public abstract class ItemBlockStorage extends Item {
     @Nonnull
     private static NonNullList<IBlockState> getStoredStates(ItemStack referenceContainer) {
         NonNullList<IBlockState> states = NonNullList.create();
-        if (!referenceContainer.isEmpty() && referenceContainer.getItem() instanceof ItemBlockStorage) {
+        if(!referenceContainer.isEmpty() && referenceContainer.getItem() instanceof ItemBlockStorage) {
             NBTTagCompound persistent = NBTHelper.getPersistentData(referenceContainer);
             NBTTagList stored = persistent.getTagList("storedStates", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < stored.tagCount(); i++) {
                 IBlockState state = NBTHelper.getBlockStateFromTag(stored.getCompoundTagAt(i));
-                if (state != null) {
+                if(state != null) {
                     states.add(state);
                 }
             }
@@ -81,10 +81,9 @@ public abstract class ItemBlockStorage extends Item {
     }
 
     public static void tryClearContainerFor(EntityPlayer player) {
-        ItemStack used = player.getHeldItem();
-        if (!used.isEmpty() && used.getItem() instanceof ItemBlockStorage) {
-            NBTHelper.getPersistentData(used)
-                .removeTag("storedStates");
+        ItemStack used = player.getHeldItem(EnumHand.MAIN_HAND);
+        if(!used.isEmpty() && used.getItem() instanceof ItemBlockStorage) {
+            NBTHelper.getPersistentData(used).removeTag("storedStates");
         }
     }
 

@@ -1,29 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.journal.page;
-
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.FontRenderer;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.util.BlockArrayRenderHelper;
 import shordinger.astralsorcery.client.util.RenderingUtils;
@@ -32,12 +15,27 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.lib.Sounds;
-import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
+import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.Vec3i;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fluids.UniversalBucket;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,8 +71,7 @@ public class JournalPageStructure implements IJournalPage {
 
     public static class Render implements IGuiRenderablePage {
 
-        private static BindableResource texSlices = AssetLibrary
-            .loadTexture(AssetLoader.TextureLocation.GUI, "guiscructpreviewicons");
+        private static BindableResource texSlices = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiscructpreviewicons");
 
         private final BlockArrayRenderHelper structRender;
         private final BlockArray blocks;
@@ -93,18 +90,11 @@ public class JournalPageStructure implements IJournalPage {
             this.shift = shift;
             List<ItemStack> stacksNeeded = structure.getAsDescriptiveStacks();
             for (ItemStack stack : stacksNeeded) {
-                if (stack.getItem() instanceof UniversalBucket) {
+                if(stack.getItem() instanceof UniversalBucket) {
                     FluidStack f = ((UniversalBucket) stack.getItem()).getFluid(stack);
-                    descriptionStacks.add(
-                        new Tuple<>(
-                            stack,
-                            stack.getCount() + "x "
-                                + I18n.format(stack.getUnlocalizedName() + ".name", f.getLocalizedName())));
+                    descriptionStacks.add(new Tuple<>(stack, stack.getCount() + "x " + I18n.format(stack.getUnlocalizedName() + ".name", f.getLocalizedName())));
                 } else {
-                    descriptionStacks.add(
-                        new Tuple<>(
-                            stack,
-                            stack.getCount() + "x " + I18n.format(stack.getUnlocalizedName() + ".name")));
+                    descriptionStacks.add(new Tuple<>(stack, stack.getCount() + "x " + I18n.format(stack.getUnlocalizedName() + ".name")));
                 }
             }
         }
@@ -119,7 +109,7 @@ public class JournalPageStructure implements IJournalPage {
 
             float shift = renderSizeDescription(offsetX, offsetY + 5);
 
-            if (unlocName != null) {
+            if(unlocName != null) {
                 renderHeadline(offsetX + shift, offsetY + 5, unlocName);
             }
             renderSliceButtons(offsetX, offsetY + 10, mouseX, mouseY);
@@ -153,21 +143,22 @@ public class JournalPageStructure implements IJournalPage {
                         GlStateManager.scale(1.1, 1.1, 1.1);
                     }
                     GlStateManager.translate(-(sliceUp.width / 2), -(sliceUp.height / 2), 0);
-                    drawRectPart(0, 0, sliceUp.width, sliceUp.height, 0, 0, v, 11D / 32D, 1D / 3D);
+                    drawRectPart(0, 0, sliceUp.width, sliceUp.height, 0,
+                            0, v, 11D / 32D, 1D / 3D);
                     GlStateManager.popMatrix();
                 }
                 if (structRender.hasSlice(yLevel - 1)) {
                     sliceDown = new Rectangle(MathHelper.floor(offsetX) + 160, MathHelper.floor(offsetY) + 28, 11, 16);
                     GlStateManager.pushMatrix();
-                    GlStateManager
-                        .translate(sliceDown.x + (sliceDown.width / 2D), sliceDown.y + (sliceDown.height / 2D), 0);
+                    GlStateManager.translate(sliceDown.x + (sliceDown.width / 2D), sliceDown.y + (sliceDown.height / 2D), 0);
                     double v = 2D / 3D;
                     if (sliceDown.contains(mouseX, mouseY)) {
                         v = 1D / 3D;
                         GlStateManager.scale(1.1, 1.1, 1.1);
                     }
                     GlStateManager.translate(-(sliceDown.width / 2), -(sliceDown.height / 2), 0);
-                    drawRectPart(0, 0, sliceDown.width, sliceDown.height, 0, 12D / 32D, v, 11D / 32D, 1D / 3D);
+                    drawRectPart(0, 0, sliceDown.width, sliceDown.height, 0,
+                            12D / 32D, v, 11D / 32D, 1D / 3D);
                     GlStateManager.popMatrix();
                 }
             }
@@ -179,19 +170,13 @@ public class JournalPageStructure implements IJournalPage {
         @Override
         public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             Rectangle rect = drawInfoStar(offsetX + 160, offsetY + 10, zLevel, 15, pTicks);
-            if (rect.contains(mouseX, mouseY)) {
-                /*
-                 * List<Tuple<ItemStack, String>> localized = new LinkedList<>();
-                 * for (Tuple<ItemStack, String> entry : descriptionStacks) {
-                 * localized.add(new Tuple<>(entry.key, entry.key.getCount() + "x " + I18n.format(entry.value)));
-                 * }
-                 */
-                RenderingUtils.renderBlueStackTooltip(
-                    (int) offsetX + 160,
-                    (int) offsetY + 10,
-                    descriptionStacks,
-                    getStandardFontRenderer(),
-                    getRenderItem());
+            if(rect.contains(mouseX, mouseY)) {
+                /*List<Tuple<ItemStack, String>> localized = new LinkedList<>();
+                for (Tuple<ItemStack, String> entry : descriptionStacks) {
+                    localized.add(new Tuple<>(entry.key, entry.key.getCount() + "x " + I18n.format(entry.value)));
+                }*/
+                RenderingUtils.renderBlueStackTooltip((int) offsetX + 160, (int) offsetY + 10, descriptionStacks,
+                        getStandardFontRenderer(), getRenderItem());
             }
         }
 
@@ -212,7 +197,7 @@ public class JournalPageStructure implements IJournalPage {
         }
 
         private float renderSizeDescription(float offsetX, float offsetY) {
-            BlockPos size = blocks.getSize();
+            Vec3i size = blocks.getSize();
             FontRenderer fr = getStandardFontRenderer();
             float scale = 1.3F;
             String desc = size.getX() + " - " + size.getY() + " - " + size.getZ();
@@ -241,9 +226,7 @@ public class JournalPageStructure implements IJournalPage {
         }
 
         private Point.Double renderOffset(float stdPageOffsetX, float stdPageOffsetY) {
-            return new Point.Double(
-                stdPageOffsetX + ((IJournalPage.DEFAULT_WIDTH * 2D) / 5D),
-                stdPageOffsetY + ((IJournalPage.DEFAULT_HEIGHT * 4D) / 6D));
+            return new Point.Double(stdPageOffsetX + ((IJournalPage.DEFAULT_WIDTH * 2D) / 5D), stdPageOffsetY + ((IJournalPage.DEFAULT_HEIGHT * 4D) / 6D));
         }
 
         @Override

@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
+import com.google.common.collect.Lists;
+import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-
-import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,7 +39,7 @@ public class GameStageTweaks extends BaseTweaker {
     @ZenMethod
     public static void addConstellationDiscoveryStage(String stageName, String unlocalizedConstellationName) {
         constellationStages.computeIfAbsent(unlocalizedConstellationName, str -> Lists.newArrayList())
-            .add(stageName);
+                .add(stageName);
     }
 
     public static int getMaxCap(String gameStageName) {

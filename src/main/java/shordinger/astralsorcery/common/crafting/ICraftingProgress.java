@@ -1,17 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import shordinger.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,8 +21,7 @@ import shordinger.astralsorcery.common.tile.TileAltar;
  */
 public interface ICraftingProgress {
 
-    // True if the recipe progressed, false if the recipe should be stuck..
-    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData,
-                              int activeCraftingTick, int totalCraftingTime);
+    //True if the recipe progressed, false if the recipe should be stuck..
+    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick, int totalCraftingTime);
 
 }

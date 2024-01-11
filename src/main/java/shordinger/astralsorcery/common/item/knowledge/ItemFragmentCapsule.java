@@ -1,40 +1,41 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.knowledge;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityItemExplosionResistant;
 import shordinger.astralsorcery.common.item.base.ItemHighlighted;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.SoundEvents;
+import shordinger.wrapper.net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,33 +69,30 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (!world.isRemote) {
             spawnFragment(player, hand);
         }
-        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem());
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, ForgeDirection facing,
-                                      float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             spawnFragment(player, hand);
         }
         return EnumActionResult.PASS;
     }
 
-    private void spawnFragment(EntityPlayer player) {
-        SoundHelper
-            .playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
+    private void spawnFragment(EntityPlayer player, EnumHand hand) {
+        SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, player.getEntityWorld(), player.getPosition(), 0.75F, 3.5F);
         ItemStack frag = new ItemStack(ItemsAS.knowledgeFragment);
         ItemKnowledgeFragment.generateSeed(player, frag);
         player.setHeldItem(hand, frag);
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-    }
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {}
 
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
@@ -104,12 +102,7 @@ public class ItemFragmentCapsule extends Item implements ItemHighlighted {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityItemExplosionResistant e = new EntityItemExplosionResistant(
-            world,
-            location.posX,
-            location.posY,
-            location.posZ,
-            itemstack);
+        EntityItemExplosionResistant e = new EntityItemExplosionResistant(world, location.posX, location.posY, location.posZ, itemstack);
         e.setDefaultPickupDelay();
         e.motionX = location.motionX;
         e.motionY = location.motionY;

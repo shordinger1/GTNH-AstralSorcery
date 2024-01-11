@@ -1,15 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
@@ -18,6 +16,8 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -38,8 +38,7 @@ public class AltarRecipeTrait extends BaseAltarRecipe {
         this.focusRequiredConstellation = null;
     }
 
-    public AltarRecipeTrait(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired,
-                            int craftingTickTime, @Nullable IConstellation focus) {
+    public AltarRecipeTrait(String name, ItemHandle[] inputs, ItemStack output, int starlightRequired, int craftingTickTime, @Nullable IConstellation focus) {
         super(name, inputs, output, starlightRequired, craftingTickTime);
         this.focusRequiredConstellation = focus;
     }
@@ -52,9 +51,8 @@ public class AltarRecipeTrait extends BaseAltarRecipe {
     @Override
     public void read(ByteBuf buf) {
         super.read(buf);
-        if (buf.readBoolean()) {
-            this.focusRequiredConstellation = ConstellationRegistry
-                .getConstellationByName(ByteBufUtils.readString(buf));
+        if(buf.readBoolean()) {
+            this.focusRequiredConstellation = ConstellationRegistry.getConstellationByName(ByteBufUtils.readString(buf));
         } else {
             this.focusRequiredConstellation = null;
         }
@@ -64,7 +62,7 @@ public class AltarRecipeTrait extends BaseAltarRecipe {
     public void write(ByteBuf buf) {
         super.write(buf);
         buf.writeBoolean(this.focusRequiredConstellation == null);
-        if (this.focusRequiredConstellation != null) {
+        if(this.focusRequiredConstellation != null) {
             ByteBufUtils.writeString(buf, this.focusRequiredConstellation.getUnlocalizedName());
         }
     }
@@ -72,12 +70,12 @@ public class AltarRecipeTrait extends BaseAltarRecipe {
     @Override
     public void applyRecipe() {
         AbstractAltarRecipe aar = buildRecipeUnsafe(
-            TileAltar.AltarLevel.TRAIT_CRAFT,
-            this.starlightRequired,
-            this.craftingTickTime,
-            this.output,
-            this.inputs);
-        if (aar instanceof TraitRecipe && focusRequiredConstellation != null) {
+                TileAltar.AltarLevel.TRAIT_CRAFT,
+                this.starlightRequired,
+                this.craftingTickTime,
+                this.output,
+                this.inputs);
+        if(aar instanceof TraitRecipe && focusRequiredConstellation != null) {
             ((TraitRecipe) aar).setRequiredConstellation(focusRequiredConstellation);
         }
         CraftingAccessManager.registerMTAltarRecipe(aar);

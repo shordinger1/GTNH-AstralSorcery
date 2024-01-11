@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
+import com.google.common.collect.Lists;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.world.World;
-
-import com.google.common.collect.Lists;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,10 +74,7 @@ public interface BlockStateCheck {
 
         @Override
         public boolean isStateValid(IBlockState state) {
-            return state.getBlock()
-                .equals(block)
-                && state.getBlock()
-                .getMetaFromState(state) == toCheck;
+            return state.getBlock().equals(block) && state.getBlock().getMetaFromState(state) == toCheck;
         }
     }
 
@@ -88,7 +84,7 @@ public interface BlockStateCheck {
         private final net.minecraft.block.Block block;
 
         public AnyMeta(net.minecraft.block.Block block, int meta) {
-            this(block, new int[]{meta});
+            this(block, new int[] { meta });
         }
 
         public AnyMeta(net.minecraft.block.Block block, int... values) {
@@ -119,11 +115,7 @@ public interface BlockStateCheck {
 
         @Override
         public boolean isStateValid(IBlockState state) {
-            return state.getBlock()
-                .equals(block)
-                && passableMetadataValues.contains(
-                state.getBlock()
-                    .getMetaFromState(state));
+            return state.getBlock().equals(block) && passableMetadataValues.contains(state.getBlock().getMetaFromState(state));
         }
     }
 

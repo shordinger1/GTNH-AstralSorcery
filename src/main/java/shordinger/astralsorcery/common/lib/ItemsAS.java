@@ -1,21 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.lib;
 
 import shordinger.astralsorcery.common.item.*;
-import shordinger.astralsorcery.common.item.ItemColoredLens;
-import shordinger.astralsorcery.common.item.ItemConstellationPaper;
-import shordinger.astralsorcery.common.item.ItemCraftingComponent;
-import shordinger.astralsorcery.common.item.ItemHandTelescope;
-import shordinger.astralsorcery.common.item.ItemInfusedGlass;
-import shordinger.astralsorcery.common.item.ItemJournal;
-import shordinger.astralsorcery.common.item.ItemKnowledgeShare;
 import shordinger.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import shordinger.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import shordinger.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
@@ -24,16 +17,6 @@ import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
 import shordinger.astralsorcery.common.item.knowledge.ItemFragmentCapsule;
 import shordinger.astralsorcery.common.item.knowledge.ItemKnowledgeFragment;
 import shordinger.astralsorcery.common.item.tool.*;
-import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
-import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe;
-import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalShovel;
-import shordinger.astralsorcery.common.item.tool.ItemChargedCrystalSword;
-import shordinger.astralsorcery.common.item.tool.ItemCrystalAxe;
-import shordinger.astralsorcery.common.item.tool.ItemCrystalPickaxe;
-import shordinger.astralsorcery.common.item.tool.ItemCrystalShovel;
-import shordinger.astralsorcery.common.item.tool.ItemCrystalSword;
-import shordinger.astralsorcery.common.item.tool.ItemLinkingTool;
-import shordinger.astralsorcery.common.item.tool.ItemSkyResonator;
 import shordinger.astralsorcery.common.item.tool.sextant.ItemSextant;
 import shordinger.astralsorcery.common.item.tool.wand.ItemWand;
 import shordinger.astralsorcery.common.item.useables.ItemPerkSeal;

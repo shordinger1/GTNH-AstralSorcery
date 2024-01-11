@@ -1,21 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.starlight.WorldNetworkHandler;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,8 +31,7 @@ public interface ITransmissionReceiver extends IPrismTransmissionNode {
     }
 
     @Override
-    default public void notifyLink(World world, BlockPos to) {
-    }
+    default public void notifyLink(World world, BlockPos to) {}
 
     @Override
     default public boolean notifyUnlink(World world, BlockPos to) {

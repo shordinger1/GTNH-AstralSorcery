@@ -1,24 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.starmap;
 
+import shordinger.astralsorcery.common.constellation.IConstellation;
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
+import shordinger.wrapper.net.minecraft.potion.Potion;
+
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.potion.Potion;
-
-import shordinger.astralsorcery.common.constellation.IConstellation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,15 +27,14 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
  */
 public class ConstellationMapEffectRegistry {
 
-    private static final Map<IConstellation, MapEffect> effectRegistry = new HashMap<>();
+    private static Map<IConstellation, MapEffect> effectRegistry = new HashMap<>();
 
     @Nullable
     static MapEffect getEffects(IConstellation c) {
         return effectRegistry.get(c);
     }
 
-    public static MapEffect registerMapEffect(IConstellation c, Collection<EnchantmentMapEffect> enchantmentEffects,
-                                              Collection<PotionMapEffect> potionEffects) {
+    public static MapEffect registerMapEffect(IConstellation c, Collection<EnchantmentMapEffect> enchantmentEffects, Collection<PotionMapEffect> potionEffects) {
         MapEffect me = new MapEffect(enchantmentEffects, potionEffects);
         effectRegistry.put(c, me);
         return me;

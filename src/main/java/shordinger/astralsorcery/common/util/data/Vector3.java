@@ -1,23 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
-import java.util.Random;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-
 import io.netty.buffer.ByteBuf;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.*;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -69,7 +65,11 @@ public class Vector3 {
     }
 
     public Vector3(TileEntity te) {
-        this(te.xCoord, te.yCoord, te.zCoord);
+        this(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+    }
+
+    public Vector3(Vec3d vec) {
+        this(vec.x, vec.y, vec.z);
     }
 
     public static Vector3 atEntityCorner(Entity entity) {
@@ -89,7 +89,7 @@ public class Vector3 {
         return new Vector3(box.maxX, box.maxY, box.maxZ);
     }
 
-    public Vector3 add(BlockPos vec) {
+    public Vector3 add(Vec3i vec) {
         this.x += vec.getX();
         this.y += vec.getY();
         this.z += vec.getZ();
@@ -139,7 +139,7 @@ public class Vector3 {
         return this;
     }
 
-    public Vector3 subtract(BlockPos vec) {
+    public Vector3 subtract(Vec3i vec) {
         this.x -= vec.getX();
         this.y -= vec.getY();
         this.z -= vec.getZ();
@@ -197,13 +197,35 @@ public class Vector3 {
     }
 
     public double distance(Vector3 o) {
-        return Math.sqrt(distanceSquared(o.toBlockPos()));
+        return Math.sqrt(distanceSquared(o));
     }
 
-    public double distanceSquared(BlockPos o) {
+    public double distanceSquared(Vector3 o) {
+        double difX = x - o.x;
+        double difY = y - o.y;
+        double difZ = z - o.z;
+        return difX * difX + difY * difY + difZ * difZ;
+    }
+
+    public double distance(Vec3i o) {
+        return Math.sqrt(distanceSquared(o));
+    }
+
+    public double distanceSquared(Vec3i o) {
         double difX = x - o.getX();
         double difY = y - o.getY();
         double difZ = z - o.getZ();
+        return difX * difX + difY * difY + difZ * difZ;
+    }
+
+    public double distance(Vec3d o) {
+        return Math.sqrt(distanceSquared(o));
+    }
+
+    public double distanceSquared(Vec3d o) {
+        double difX = x - o.x;
+        double difY = y - o.y;
+        double difZ = z - o.z;
         return difX * difX + difY * difY + difZ * difZ;
     }
 
@@ -298,13 +320,9 @@ public class Vector3 {
         return this;
     }
 
-    // In rad's
+    //In rad's
     public Vector3 rotate(double angle, Vector3 axis) {
-        Quat.buildQuatFrom3DVector(
-                axis.clone()
-                    .normalize(),
-                angle)
-            .rotateWithMagnitude(this);
+        Quat.buildQuatFrom3DVector(axis.clone().normalize(), angle).rotateWithMagnitude(this);
         return this;
     }
 
@@ -326,8 +344,8 @@ public class Vector3 {
         return this;
     }
 
-    // x -> about 1/sqrt(x)
-    // ~50% faster than 1/Math.sqrt(x) in its ~3-4th iterations for about the same numbers.
+    //x -> about 1/sqrt(x)
+    //~50% faster than 1/Math.sqrt(x) in its ~3-4th iterations for about the same numbers.
     public static double fastInvSqrt(double x) {
         double xhalf = 0.5d * x;
         long i = Double.doubleToLongBits(x);
@@ -357,17 +375,11 @@ public class Vector3 {
     }
 
     public static Vector3 random() {
-        return new Vector3(
-            RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1),
-            RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1),
-            RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1));
+        return new Vector3(RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1));
     }
 
     public static Vector3 random(Random rand) {
-        return new Vector3(
-            rand.nextDouble() * (rand.nextBoolean() ? 1 : -1),
-            rand.nextDouble() * (rand.nextBoolean() ? 1 : -1),
-            rand.nextDouble() * (rand.nextBoolean() ? 1 : -1));
+        return new Vector3(rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1));
     }
 
     public static Vector3 positiveYRandom() {
@@ -380,26 +392,21 @@ public class Vector3 {
         return rand.setY(Math.abs(rand.getY()));
     }
 
-    // RIP ChunkCoordinates BibleThump
-    /*
-     * public static Vector3 fromCC(ChunkCoordinates cc) {
-     * return new Vector3(cc.posX, cc.posY, cc.posZ);
-     * }
-     * public ChunkCoordinates getAsFloatCC() {
-     * return new ChunkCoordinates(Float.floatToIntBits((float) this.x), Float.floatToIntBits((float) this.y),
-     * Float.floatToIntBits((float) this.z));
-     * }
-     * public static Vector3 getFromFloatCC(ChunkCoordinates cc) {
-     * return new Vector3(Float.intBitsToFloat(cc.posX), Float.intBitsToFloat(cc.posY), Float.intBitsToFloat(cc.posZ));
-     * }
-     */
+    //RIP ChunkCoordinates BibleThump
+    /*public static Vector3 fromCC(ChunkCoordinates cc) {
+        return new Vector3(cc.posX, cc.posY, cc.posZ);
+    }
+
+    public ChunkCoordinates getAsFloatCC() {
+        return new ChunkCoordinates(Float.floatToIntBits((float) this.x), Float.floatToIntBits((float) this.y), Float.floatToIntBits((float) this.z));
+    }
+
+    public static Vector3 getFromFloatCC(ChunkCoordinates cc) {
+        return new Vector3(Float.intBitsToFloat(cc.posX), Float.intBitsToFloat(cc.posY), Float.intBitsToFloat(cc.posZ));
+    }*/
 
     public boolean isInAABB(Vector3 min, Vector3 max) {
-        return (this.x >= min.x) && (this.x <= max.x)
-            && (this.y >= min.y)
-            && (this.y <= max.y)
-            && (this.z >= min.z)
-            && (this.z <= max.z);
+        return (this.x >= min.x) && (this.x <= max.x) && (this.y >= min.y) && (this.y <= max.y) && (this.z >= min.z) && (this.z <= max.z);
     }
 
     public boolean isInSphere(Vector3 origin, double radius) {
@@ -409,8 +416,12 @@ public class Vector3 {
         return (difX * difX + difY * difY + difZ * difZ) <= (radius * radius);
     }
 
+    public Vec3d toVec3d() {
+        return new Vec3d(x, y, z);
+    }
+
     public BlockPos toBlockPos() {
-        return new BlockPos(x, y, z);
+        return new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
     }
 
     public ChunkPos toChunkPos() {
@@ -425,8 +436,8 @@ public class Vector3 {
         return new Vector3(tX - x, tY - y, tZ - z);
     }
 
-    // copy & converts to polar coordinates (in degrees)
-    // Order: Distance, Theta, Phi
+    //copy & converts to polar coordinates (in degrees)
+    //Order: Distance, Theta, Phi
     public Vector3 copyToPolar() {
         double length = length();
         double theta = Math.acos(y / length);
@@ -438,9 +449,9 @@ public class Vector3 {
 
     public Vector3 copyInterpolateWith(Vector3 next, float partial) {
         return new Vector3(
-            (x == next.x ? x : x + ((next.x - x) * partial)),
-            (y == next.y ? y : y + ((next.y - y) * partial)),
-            (z == next.z ? z : z + ((next.z - z) * partial)));
+                (x == next.x ? x : x + ((next.x - x) * partial)),
+                (y == next.y ? y : y + ((next.y - y) * partial)),
+                (z == next.z ? z : z + ((next.z - z) * partial)));
     }
 
     public double getX() {
@@ -518,9 +529,7 @@ public class Vector3 {
         }
         Vector3 other = (Vector3) obj;
 
-        return (Math.abs(this.x - other.x) < 1.0E-004D) && (Math.abs(this.y - other.y) < 1.0E-004D)
-            && (Math.abs(this.z - other.z) < 1.0E-004D)
-            && (getClass().equals(obj.getClass()));
+        return (Math.abs(this.x - other.x) < 1.0E-004D) && (Math.abs(this.y - other.y) < 1.0E-004D) && (Math.abs(this.z - other.z) < 1.0E-004D) && (getClass().equals(obj.getClass()));
     }
 
     public int hashCode() {
@@ -538,10 +547,6 @@ public class Vector3 {
 
     public String toString() {
         return this.x + "," + this.y + "," + this.z;
-    }
-
-    public double distance(BlockPos pos) {
-        return pos.getDistance((int) x, (int) y, (int) z);
     }
 
     public static class Quat {
@@ -590,7 +595,7 @@ public class Vector3 {
         }
 
         public void leftMultiply(Quat quat) {
-            double d = this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
+            double d =  this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
             double d1 = this.s * quat.i + this.i * quat.s - this.j * quat.k + this.k * quat.j;
             double d2 = this.s * quat.j + this.i * quat.k + this.j * quat.s - this.k * quat.i;
             double d3 = this.s * quat.k - this.i * quat.j + this.j * quat.i + this.k * quat.s;
@@ -601,7 +606,7 @@ public class Vector3 {
         }
 
         public void rightMultiply(Quat quat) {
-            double d = this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
+            double d =  this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
             double d1 = this.s * quat.i + this.i * quat.s + this.j * quat.k - this.k * quat.j;
             double d2 = this.s * quat.j - this.i * quat.k + this.j * quat.s + this.k * quat.i;
             double d3 = this.s * quat.k + this.i * quat.j - this.j * quat.i + this.k * quat.s;

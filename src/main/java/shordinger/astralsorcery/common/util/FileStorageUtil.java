@@ -1,18 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import java.io.File;
+import shordinger.astralsorcery.AstralSorcery;
 
 import javax.annotation.Nonnull;
-
-import shordinger.astralsorcery.Tags;
+import java.io.File;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,13 +22,12 @@ import shordinger.astralsorcery.Tags;
  */
 public class FileStorageUtil {
 
-    private FileStorageUtil() {
-    }
+    private FileStorageUtil() {}
 
     @Nonnull
     public static File getAstralSorceryDirectory() {
-        File f = new File(System.getProperty("user.dir"), Tags.MODID);
-        if (!f.exists()) {
+        File f = new File(System.getProperty("user.dir"), AstralSorcery.MODID);
+        if(!f.exists()) {
             f.mkdirs();
         }
         return f;
@@ -38,7 +36,7 @@ public class FileStorageUtil {
     @Nonnull
     public static File getGeneralSubDirectory(String directoryName) {
         File f = new File(FileStorageUtil.getAstralSorceryDirectory(), directoryName);
-        if (!f.exists()) {
+        if(!f.exists()) {
             f.mkdirs();
         }
         return f;

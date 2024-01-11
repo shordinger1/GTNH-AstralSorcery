@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.client;
 
-import java.util.UUID;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.PlayerActivityManager;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +30,7 @@ public class PktPlayerStatus implements IMessageHandler<PktPlayerStatus, IMessag
     private UUID playerUUID;
     private boolean status;
 
-    public PktPlayerStatus() {
-    }
+    public PktPlayerStatus() {}
 
     public PktPlayerStatus(UUID playerUUID, boolean active) {
         this.playerUUID = playerUUID;
@@ -53,11 +51,9 @@ public class PktPlayerStatus implements IMessageHandler<PktPlayerStatus, IMessag
 
     @Override
     public IMessage onMessage(PktPlayerStatus pkt, MessageContext ctx) {
-        FMLCommonHandler.instance()
-            .getMinecraftServerInstance()
-            .addScheduledTask(() -> {
-                PlayerActivityManager.INSTANCE.setStatusServer(pkt.playerUUID, pkt.status);
-            });
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            PlayerActivityManager.INSTANCE.setStatusServer(pkt.playerUUID, pkt.status);
+        });
         return null;
     }
 }

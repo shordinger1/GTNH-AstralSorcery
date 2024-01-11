@@ -1,22 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.crafting.ICraftingProgress;
 import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ import java.util.function.Function;
  */
 public class ActiveCraftingTask {
 
-    private final Map<Integer, Object> clientEffectContainer = new HashMap<>();
+    private Map<Integer, Object> clientEffectContainer = new HashMap<>();
 
     private final AbstractAltarRecipe recipeToCraft;
     private final UUID playerCraftingUUID;
@@ -77,8 +77,7 @@ public class ActiveCraftingTask {
     }
 
     public boolean shouldPersist(TileAltar ta) {
-        return recipeToCraft instanceof TraitRecipe || ta.getAltarLevel()
-            .ordinal() >= TileAltar.AltarLevel.TRAIT_CRAFT.ordinal();
+        return recipeToCraft instanceof TraitRecipe || ta.getAltarLevel().ordinal() >= TileAltar.AltarLevel.TRAIT_CRAFT.ordinal();
     }
 
     public UUID getPlayerCraftingUUID() {
@@ -87,10 +86,7 @@ public class ActiveCraftingTask {
 
     @Nullable
     public EntityPlayer tryGetCraftingPlayerServer() {
-        return FMLCommonHandler.instance()
-            .getMinecraftServerInstance()
-            .getPlayerList()
-            .getPlayerByUUID(playerCraftingUUID);
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerCraftingUUID);
     }
 
     @SideOnly(Side.CLIENT)
@@ -98,11 +94,10 @@ public class ActiveCraftingTask {
         return (T) clientEffectContainer.computeIfAbsent(index, provider);
     }
 
-    // True if the recipe progressed, false if it's stuck
+    //True if the recipe progressed, false if it's stuck
     public boolean tick(TileAltar altar) {
-        if (recipeToCraft instanceof ICraftingProgress) {
-            if (!((ICraftingProgress) recipeToCraft)
-                .tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {
+        if(recipeToCraft instanceof ICraftingProgress) {
+            if (!((ICraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {
                 return false;
             }
         }
@@ -130,7 +125,7 @@ public class ActiveCraftingTask {
     public static ActiveCraftingTask deserialize(NBTTagCompound compound, @Nullable ActiveCraftingTask previous) {
         int recipeId = compound.getInteger("recipeId");
         AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipe(recipeId);
-        if (recipe == null) {
+        if(recipe == null) {
             AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId);
             return null;
         } else {
@@ -162,11 +157,11 @@ public class ActiveCraftingTask {
 
     public static enum CraftingState {
 
-        ACTIVE, // All valid, continuing to craft.
+        ACTIVE, //All valid, continuing to craft.
 
-        WAITING, // Potentially waiting for user interaction. Recipe itself is fully valid.
+        WAITING, //Potentially waiting for user interaction. Recipe itself is fully valid.
 
-        PAUSED // Something of the recipe is not valid, waiting with continuation; nothing user-related.
+        PAUSED //Something of the recipe is not valid, waiting with continuation; nothing user-related.
 
     }
 

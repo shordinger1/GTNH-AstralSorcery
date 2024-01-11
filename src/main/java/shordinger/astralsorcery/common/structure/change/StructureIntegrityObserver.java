@@ -1,26 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure.change;
 
-import java.util.List;
-
-import net.minecraft.world.World;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StructureMatchingBuffer;
 import shordinger.astralsorcery.common.event.BlockModifyEvent;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,19 +32,17 @@ public class StructureIntegrityObserver {
 
     public static final StructureIntegrityObserver INSTANCE = new StructureIntegrityObserver();
 
-    private StructureIntegrityObserver() {
-    }
+    private StructureIntegrityObserver() {}
 
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        World world = event.world;
-        if (world.isRemote || !event.getChunk().isTerrainPopulated) {
+        World world = event.getWorld();
+        if (world.isRemote || !event.getChunk().isTerrainPopulated()) {
             return;
         }
 
         StructureMatchingBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_MATCH);
-        ChunkPos ch = event.getChunk()
-            .getPos();
+        ChunkPos ch = event.getChunk().getPos();
         BlockPos pos = event.getPos();
         IBlockState oldS = event.getOldState();
         IBlockState newS = event.getNewState();

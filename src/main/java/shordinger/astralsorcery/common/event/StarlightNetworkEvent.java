@@ -1,16 +1,16 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import shordinger.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.starlight.transmission.registry.Transmiss
  * Created by HellFirePvP
  * Date: 23.10.2016 / 22:34
  */
-// Use this in case you want to add transmission or source nodes to the starlight network system.
+//Use this in case you want to add transmission or source nodes to the starlight network system.
 public class StarlightNetworkEvent {
 
     public static class TransmissionRegister extends Event {

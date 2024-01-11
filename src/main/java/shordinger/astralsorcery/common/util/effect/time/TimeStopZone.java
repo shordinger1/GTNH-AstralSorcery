@@ -1,37 +1,36 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.effect.time;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.dragon.phase.IPhase;
-import net.minecraft.entity.boss.dragon.phase.PhaseList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-
 import shordinger.astralsorcery.common.base.TileAccelerationBlacklist;
 import shordinger.astralsorcery.common.registry.RegistryPotions;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.boss.EntityDragon;
+import shordinger.wrapper.net.minecraft.entity.boss.dragon.phase.IPhase;
+import shordinger.wrapper.net.minecraft.entity.boss.dragon.phase.PhaseList;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.ITickable;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+
+import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,8 +53,7 @@ public class TimeStopZone {
 
     private List<TileEntity> cachedTiles = new LinkedList<>();
 
-    TimeStopZone(EntityTargetController ctrl, float range, BlockPos offset, World world, int tickLivespan,
-                 boolean reducedParticles) {
+    TimeStopZone(EntityTargetController ctrl, float range, BlockPos offset, World world, int tickLivespan, boolean reducedParticles) {
         this.targetController = ctrl;
         this.range = range;
         this.offset = offset;
@@ -65,7 +63,7 @@ public class TimeStopZone {
     }
 
     void onServerTick() {
-        if (!active) return;
+        if(!active) return;
         this.ticksToLive--;
 
         int minX = MathHelper.floor((offset.getX() - range) / 16.0D);
@@ -76,18 +74,13 @@ public class TimeStopZone {
         for (int xx = minX; xx <= maxX; ++xx) {
             for (int zz = minZ; zz <= maxZ; ++zz) {
                 Chunk ch = world.getChunkFromChunkCoords(xx, zz);
-                if (!ch.isEmpty()) {
+                if(!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
                         TileEntity te = teEntry.getValue();
-                        if (TileAccelerationBlacklist.canAccelerate(te) && offset.getDistance(
-                            te.getPos()
-                                .getX(),
-                            te.getPos()
-                                .getY(),
-                            te.getPos()
-                                .getZ())
-                            <= range && world.tickableTileEntities.contains(te)) {
+                        if(TileAccelerationBlacklist.canAccelerate(te) &&
+                                offset.getDistance(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()) <= range &&
+                                world.tickableTileEntities.contains(te)) {
                             world.tickableTileEntities.remove(te);
                             safeCacheTile(te);
                         }
@@ -98,11 +91,10 @@ public class TimeStopZone {
     }
 
     private void safeCacheTile(TileEntity te) {
-        if (te == null) return;
+        if(te == null) return;
 
         for (TileEntity tile : cachedTiles) {
-            if (tile.getPos()
-                .equals(te.getPos())) {
+            if(tile.getPos().equals(te.getPos())) {
                 return;
             }
         }
@@ -115,13 +107,10 @@ public class TimeStopZone {
 
     void stopEffect() {
         for (TileEntity cached : cachedTiles) {
-            IBlockState state = WorldHelper.getBlockState(world, cached.getPos());
-            if (state.getBlock()
-                .hasTileEntity(state)) {
-                TileEntity te = state.getBlock()
-                    .createTileEntity(world, state);
-                if (te != null && te.getClass()
-                    .isAssignableFrom(cached.getClass())) {
+            IBlockState state = world.getBlockState(cached.getPos());
+            if (state.getBlock().hasTileEntity(state)) {
+                TileEntity te = state.getBlock().createTileEntity(world, state);
+                if (te != null && te.getClass().isAssignableFrom(cached.getClass())) {
                     world.tickableTileEntities.add(cached);
                 }
             }
@@ -135,13 +124,10 @@ public class TimeStopZone {
     }
 
     boolean interceptEntityTick(EntityLivingBase e) {
-        return active && e != null
-            && targetController.shouldFreezeEntity(e)
-            && Vector3.atEntityCorner(e)
-            .distance(offset) <= range;
+        return active && e != null && targetController.shouldFreezeEntity(e) && Vector3.atEntityCorner(e).distance(offset) <= range;
     }
 
-    // Mainly because we still want to be able to do damage.
+    //Mainly because we still want to be able to do damage.
     static void handleImportantEntityTicks(EntityLivingBase e) {
         if (e.hurtTime > 0) {
             e.hurtTime--;
@@ -161,7 +147,7 @@ public class TimeStopZone {
         e.prevDistanceWalkedModified = e.distanceWalkedModified;
         e.prevCameraPitch = e.cameraPitch;
 
-        if (e.isPotionActive(RegistryPotions.potionTimeFreeze)) {
+        if(e.isPotionActive(RegistryPotions.potionTimeFreeze)) {
             PotionEffect pe = e.getActivePotionEffect(RegistryPotions.potionTimeFreeze);
             if (!pe.onUpdate(e)) {
                 if (!e.world.isRemote) {
@@ -170,12 +156,10 @@ public class TimeStopZone {
             }
         }
 
-        if (e instanceof EntityDragon) {
-            IPhase phase = ((EntityDragon) e).getPhaseManager()
-                .getCurrentPhase();
-            if (phase.getType() != PhaseList.HOLDING_PATTERN && phase.getType() != PhaseList.DYING) {
-                ((EntityDragon) e).getPhaseManager()
-                    .setPhase(PhaseList.HOLDING_PATTERN);
+        if(e instanceof EntityDragon) {
+            IPhase phase = ((EntityDragon) e).getPhaseManager().getCurrentPhase();
+            if(phase.getType() != PhaseList.HOLDING_PATTERN && phase.getType() != PhaseList.DYING) {
+                ((EntityDragon) e).getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN);
             }
         }
     }
@@ -193,14 +177,13 @@ public class TimeStopZone {
         }
 
         boolean shouldFreezeEntity(EntityLivingBase e) {
-            if (e.isDead || e.getHealth() <= 0) {
+            if(e.isDead || e.getHealth() <= 0) {
                 return false;
             }
-            if (e instanceof EntityDragon && ((EntityDragon) e).getPhaseManager()
-                .getCurrentPhase() == PhaseList.DYING) {
+            if(e instanceof EntityDragon && ((EntityDragon) e).getPhaseManager().getCurrentPhase() == PhaseList.DYING) {
                 return false;
             }
-            if (hasOwner && e.getEntityId() == ownerId) {
+            if(hasOwner && e.getEntityId() == ownerId) {
                 return false;
             }
             return targetPlayers || !(e instanceof EntityPlayer);

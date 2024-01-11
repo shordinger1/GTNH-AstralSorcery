@@ -1,19 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment;
 
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.enchantment.EnumEnchantmentType;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.MobEffects;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,20 +37,19 @@ public class EnchantmentNightVision extends EnchantmentPlayerWornTick {
 
     @Override
     public void onEntityDamaged(EntityLivingBase user, Entity target, int level) {
-        if (target instanceof EntityLivingBase) {
-            ((EntityLivingBase) target)
-                .addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, level - 1, true, false));
+        if(target instanceof EntityLivingBase) {
+            ((EntityLivingBase) target).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, level - 1, true, false));
         }
     }
 
     @Override
-    public boolean canApply(ItemStack p_92089_1_) {
-        return super.canApply(p_92089_1_);
+    public boolean canApply(ItemStack stack) {
+        return type.canEnchantItem(stack.getItem());
     }
 
     @Override
     public int getMaxLevel() {
-        return super.getMaxLevel();
+        return 1;
     }
 
     @Override

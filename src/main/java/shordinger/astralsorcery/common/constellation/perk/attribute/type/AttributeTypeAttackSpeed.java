@@ -1,18 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import org.jetbrains.annotations.Nullable;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
+import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 
 import java.util.UUID;
 
@@ -35,24 +34,15 @@ public class AttributeTypeAttackSpeed extends VanillaAttributeType {
 
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
-        return getUuid(mode, ATTACK_SPEED_ADD_ID, ATTACK_SPEED_ADD_MULTIPLY_ID, ATTACK_SPEED_STACK_MULTIPLY_ID);
-    }
-
-    @Nullable
-    static UUID getUuid(PerkAttributeModifier.Mode mode, UUID attackSpeedAddId, UUID attackSpeedAddMultiplyId,
-                        UUID attackSpeedStackMultiplyId) {
         switch (mode) {
-            case ADDITION -> {
-                return attackSpeedAddId;
-            }
-            case ADDED_MULTIPLY -> {
-                return attackSpeedAddMultiplyId;
-            }
-            case STACKING_MULTIPLY -> {
-                return attackSpeedStackMultiplyId;
-            }
-            default -> {
-            }
+            case ADDITION:
+                return ATTACK_SPEED_ADD_ID;
+            case ADDED_MULTIPLY:
+                return ATTACK_SPEED_ADD_MULTIPLY_ID;
+            case STACKING_MULTIPLY:
+                return ATTACK_SPEED_STACK_MULTIPLY_ID;
+            default:
+                break;
         }
         return null;
     }

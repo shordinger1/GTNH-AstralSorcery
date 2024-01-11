@@ -1,26 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile.base;
 
-import java.util.Arrays;
-import java.util.List;
+import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
-
-import com.gtnewhorizons.modularui.api.forge.ItemStackHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import shordinger.astralsorcery.common.util.ItemUtils;
-import shordinger.astralsorcery.migration.Capability;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,13 +31,13 @@ public class TileInventoryBase extends TileEntityTick {
 
     protected int inventorySize;
     private ItemHandlerTile handle;
-    private List<ForgeDirection> applicableSides;
+    private List<EnumFacing> applicableSides;
 
     public TileInventoryBase(int inventorySize) {
-        this(inventorySize, ForgeDirection.VALUES);
+        this(inventorySize, EnumFacing.VALUES);
     }
 
-    public TileInventoryBase(int inventorySize, ForgeDirection... applicableSides) {
+    public TileInventoryBase(int inventorySize, EnumFacing... applicableSides) {
         this.inventorySize = inventorySize;
         this.handle = createNewItemHandler();
         this.applicableSides = Arrays.asList(applicableSides);
@@ -50,27 +48,25 @@ public class TileInventoryBase extends TileEntityTick {
     }
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
     public ItemHandlerTile getInventoryHandler() {
         return handle;
     }
 
-    private boolean hasHandlerForSide(ForgeDirection facing) {
+    private boolean hasHandlerForSide(EnumFacing facing) {
         return facing == null || applicableSides.contains(facing);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, ForgeDirection facing) {
-        return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-            : super.hasCapability(capability, facing);
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY : super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, ForgeDirection facing) {
-        if (hasHandlerForSide(facing)) {
-            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(hasHandlerForSide(facing)) {
+            if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handle);
             }
         }
@@ -83,7 +79,7 @@ public class TileInventoryBase extends TileEntityTick {
 
         this.handle = createNewItemHandler();
         this.handle.deserializeNBT(compound.getCompoundTag("inventory"));
-        if (this.handle.getSlots() != this.inventorySize) {
+        if(this.handle.getSlots() != this.inventorySize) {
             ItemHandlerTile newInv = createNewItemHandler();
             for (int i = 0; i < Math.min(this.handle.getSlots(), this.inventorySize); i++) {
                 ItemStack old = this.handle.getStackInSlot(i);
@@ -105,13 +101,7 @@ public class TileInventoryBase extends TileEntityTick {
         return inventorySize;
     }
 
-    protected void onInventoryChanged(int slotChanged) {
-    }
-
-    @Override
-    public void tick() {
-
-    }
+    protected void onInventoryChanged(int slotChanged) {}
 
     public static class ItemHandlerTileFiltered extends ItemHandlerTile {
 
@@ -132,7 +122,7 @@ public class TileInventoryBase extends TileEntityTick {
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (!canExtractItem(slot, amount, getStackInSlot(slot))) {
-                return null;
+                return ItemStack.EMPTY;
             }
             return super.extractItem(slot, amount, simulate);
         }
@@ -164,7 +154,7 @@ public class TileInventoryBase extends TileEntityTick {
 
         public void clearInventory() {
             for (int i = 0; i < getSlots(); i++) {
-                setStackInSlot(i, null);
+                setStackInSlot(i, ItemStack.EMPTY);
                 onContentsChanged(i);
             }
         }

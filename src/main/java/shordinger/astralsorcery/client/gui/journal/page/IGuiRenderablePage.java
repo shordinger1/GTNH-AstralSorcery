@@ -1,27 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.journal.page;
-
-import java.awt.*;
-
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.util.TextureHelper;
@@ -29,7 +14,16 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
+import shordinger.wrapper.net.minecraft.client.renderer.*;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,16 +34,13 @@ import shordinger.astralsorcery.migration.MathHelper;
  */
 public interface IGuiRenderablePage {
 
-    public static final IGuiRenderablePage GUI_INTERFACE = (offsetX, offsetY, pTicks, zLevel, mouseX, mouseY) -> {
-    };
+    public static final IGuiRenderablePage GUI_INTERFACE = (offsetX, offsetY, pTicks, zLevel, mouseX, mouseY) -> {};
 
     static final BindableResource resStar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
 
-    default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX,
-                                   float mouseY) {
-    }
+    default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
 
     default public boolean propagateMouseClick(int mouseX, int mouseZ) {
         return false;
@@ -59,8 +50,7 @@ public interface IGuiRenderablePage {
         return drawItemStack(stack, offsetX, offsetY, zLevel, getStandardFontRenderer(), getRenderItem());
     }
 
-    default public Rectangle drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel,
-                                           FontRenderer fontRenderer, RenderItem ri) {
+    default public Rectangle drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel, FontRenderer fontRenderer, RenderItem ri) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
@@ -68,11 +58,11 @@ public interface IGuiRenderablePage {
         ri.zLevel = zLevel;
         RenderHelper.enableGUIStandardItemLighting();
 
-        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
-        ri.renderItemOverlayIntoGUI(fontRenderer, stack, offsetX, offsetY, null);
+        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, stack, offsetX, offsetY);
+        ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableAlpha(); // Because Mc item rendering..
+        GlStateManager.enableAlpha(); //Because Mc item rendering..
         ri.zLevel = zIR;
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
@@ -81,25 +71,19 @@ public interface IGuiRenderablePage {
         return new Rectangle(offsetX, offsetY, 16, 16);
     }
 
-    default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase,
-                                          float pTicks) {
+    default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
 
         float tick = ClientScheduler.getClientTick() + pTicks;
         float deg = (tick * 2) % 360F;
-        float wh = widthHeightBase
-            - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
+        float wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
         drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
 
         deg = ((tick + 22.5F) * 2) % 360F;
-        wh = widthHeightBase
-            - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
+        wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
         drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
 
-        return new Rectangle(
-            MathHelper.floor(offsetX - widthHeightBase / 2F),
-            MathHelper.floor(offsetY - widthHeightBase / 2F),
-            MathHelper.floor(widthHeightBase),
-            MathHelper.floor(widthHeightBase));
+        return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
+                MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
     }
 
     default public void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {
@@ -108,25 +92,17 @@ public interface IGuiRenderablePage {
 
         resStar.bind();
         Vector3 offset = new Vector3(-widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
-        Vector3 uv01 = new Vector3(-widthHeight / 2D, widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
-        Vector3 uv11 = new Vector3(widthHeight / 2D, widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
-        Vector3 uv10 = new Vector3(widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv01   = new Vector3(-widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv11   = new Vector3( widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv10   = new Vector3( widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX + uv01.getX(), offsetY + uv01.getY(), zLevel)
-            .tex(0, 1)
-            .endVertex();
-        vb.pos(offsetX + uv11.getX(), offsetY + uv11.getY(), zLevel)
-            .tex(1, 1)
-            .endVertex();
-        vb.pos(offsetX + uv10.getX(), offsetY + uv10.getY(), zLevel)
-            .tex(1, 0)
-            .endVertex();
-        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel)
-            .tex(0, 0)
-            .endVertex();
+        vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel).tex(0, 0).endVertex();
         tes.draw();
 
         TextureHelper.refreshTextureBindState();
@@ -136,47 +112,29 @@ public interface IGuiRenderablePage {
     }
 
     default public void drawRect(double offsetX, double offsetY, double width, double height, double zLevel) {
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX, offsetY + height, zLevel)
-            .tex(0, 1)
-            .endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel)
-            .tex(1, 1)
-            .endVertex();
-        vb.pos(offsetX + width, offsetY, zLevel)
-            .tex(1, 0)
-            .endVertex();
-        vb.pos(offsetX, offsetY, zLevel)
-            .tex(0, 0)
-            .endVertex();
+        vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + width, offsetY,          zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
         tes.draw();
     }
 
-    default public void drawRectPart(double offsetX, double offsetY, double width, double height, double zLevel,
-                                     double u, double v, double uLength, double vLength) {
-        Tessellator tes = Tessellator.instance;
+    default public void drawRectPart(double offsetX, double offsetY, double width, double height, double zLevel, double u, double v, double uLength, double vLength) {
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX, offsetY + height, zLevel)
-            .tex(u, v + vLength)
-            .endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel)
-            .tex(u + uLength, v + vLength)
-            .endVertex();
-        vb.pos(offsetX + width, offsetY, zLevel)
-            .tex(u + uLength, v)
-            .endVertex();
-        vb.pos(offsetX, offsetY, zLevel)
-            .tex(u, v)
-            .endVertex();
+        vb.pos(offsetX,         offsetY + height, zLevel).tex(u,           v + vLength).endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offsetX + width, offsetY,          zLevel).tex(u + uLength, v)          .endVertex();
+        vb.pos(offsetX,         offsetY,          zLevel).tex(u,           v)          .endVertex();
         tes.draw();
     }
 
     default public RenderItem getRenderItem() {
-        return Minecraft.getMinecraft()
-            .getRenderItem();
+        return Minecraft.getMinecraft().getRenderItem();
     }
 
     default public FontRenderer getStandardFontRenderer() {
@@ -191,17 +149,17 @@ public interface IGuiRenderablePage {
         String base = "astralsorcery.journal.recipe.amt.";
         String ext;
         float perc = ((float) amtRequired) / ((float) maxAmount);
-        if (perc <= 0.1) {
+        if(perc <= 0.1) {
             ext = "lowest";
-        } else if (perc <= 0.25) {
+        } else if(perc <= 0.25) {
             ext = "low";
-        } else if (perc <= 0.5) {
+        } else if(perc <= 0.5) {
             ext = "avg";
-        } else if (perc <= 0.75) {
+        } else if(perc <= 0.75) {
             ext = "more";
-        } else if (perc <= 0.9) {
+        } else if(perc <= 0.9) {
             ext = "high";
-        } else if (perc > 1) {
+        } else if(perc > 1) {
             ext = "toomuch";
         } else {
             ext = "highest";

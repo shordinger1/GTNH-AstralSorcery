@@ -1,33 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.WorldHelper;
-import shordinger.astralsorcery.migration.block.AstralBlockContainer;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 26.05.2018 / 14:32
  */
-public class BlockObservatory extends AstralBlockContainer {
+public class BlockObservatory extends BlockContainer {
 
     public BlockObservatory() {
         super(Material.ROCK, MapColor.GRAY);
@@ -56,9 +56,7 @@ public class BlockObservatory extends AstralBlockContainer {
             for (int yy = 0; yy <= 3; yy++) {
                 for (int zz = -1; zz <= 1; zz++) {
                     mut.setPos(pos.getX() + xx, pos.getY() + yy, pos.getZ() + zz);
-                    if (!world.isAirBlock(mut) && !WorldHelper.getBlockState(world, mut)
-                        .getBlock()
-                        .isReplaceable(world, mut)) {
+                    if (!world.isAirBlock(mut) && !world.getBlockState(mut).getBlock().isReplaceable(world, mut)) {
                         mut.release();
                         return false;
                     }
@@ -70,26 +68,18 @@ public class BlockObservatory extends AstralBlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
-                                    ForgeDirection facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
             if (to != null && to.isUsable() && !player.isSneaking()) {
                 Entity e = to.findRideableObservatoryEntity();
                 if (e != null) {
-                    if (player.getRidingEntity() == null) {
+                    if(player.getRidingEntity() == null) {
                         player.startRiding(e);
-                    } else if (!player.getRidingEntity()
-                        .equals(e)) {
+                    } else if(!player.getRidingEntity().equals(e)) {
                         return true;
                     }
-                    player.openGui(
-                        AstralSorcery.instance,
-                        CommonProxy.EnumGuiId.OBSERVATORY.ordinal(),
-                        world,
-                        pos.getX(),
-                        pos.getY(),
-                        pos.getZ());
+                    player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.OBSERVATORY.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
                 }
             }
         }
@@ -102,13 +92,12 @@ public class BlockObservatory extends AstralBlockContainer {
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

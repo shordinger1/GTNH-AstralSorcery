@@ -1,18 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.entity;
 
-import java.awt.*;
-import java.util.UUID;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -22,6 +17,11 @@ import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,17 +59,13 @@ public class PartialEntityCrystal extends PatreonPartialEntity {
             int age = 30 + rand.nextInt(15);
             float scale = 0.1F + rand.nextFloat() * 0.1F;
             Vector3 at = new Vector3(this.pos);
-            at.add(
-                rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1));
+            at.add(rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.07 * (rand.nextBoolean() ? 1 : -1));
             at.addY(0.2F);
-            Vector3 motion = Vector3.random()
-                .multiply(0.01F);
+            Vector3 motion = Vector3.random().multiply(0.01F);
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at);
-            particle.scale(scale)
-                .gravity(0.004)
-                .enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            particle.scale(scale).gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
             particle.motion(motion.getX(), motion.getY(), motion.getZ());
             particle.setColor(rand.nextInt(3) == 0 ? this.colorTheme.brighter() : this.colorTheme);
             particle.setMaxAge(age);
@@ -83,9 +79,8 @@ public class PartialEntityCrystal extends PatreonPartialEntity {
 
         if (clientEffect != null) {
             EffectFloatingCrystal crystal = (EffectFloatingCrystal) clientEffect;
-            if (crystal.isRemoved() && Config.enablePatreonEffects) {
-                EffectHandler.getInstance()
-                    .registerFX(crystal);
+            if(crystal.isRemoved() && Config.enablePatreonEffects) {
+                EffectHandler.getInstance().registerFX(crystal);
             }
         } else {
             EffectFloatingCrystal crystal = new EffectFloatingCrystal();
@@ -93,8 +88,7 @@ public class PartialEntityCrystal extends PatreonPartialEntity {
             crystal.setRefreshFunc(() -> !removed && Config.enablePatreonEffects);
             crystal.setTexture(queryTexture);
             crystal.setColorTheme(colorTheme);
-            EffectHandler.getInstance()
-                .registerFX(crystal);
+            EffectHandler.getInstance().registerFX(crystal);
             clientEffect = crystal;
         }
     }

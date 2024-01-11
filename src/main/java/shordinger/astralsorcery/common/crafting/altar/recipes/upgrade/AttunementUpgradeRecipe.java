@@ -1,17 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.altar.recipes.upgrade;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.crafting.IAltarUpgradeRecipe;
@@ -25,6 +21,11 @@ import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -36,22 +37,23 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 09.10.2016 / 11:40
  */
-public class AttunementUpgradeRecipe extends DiscoveryRecipe
-    implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
+public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
 
     public AttunementUpgradeRecipe() {
-        super(
-            shapedRecipe("upgrade_tier2", new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
-                .addPart(
-                    BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                    ShapedRecipeSlot.LOWER_LEFT,
-                    ShapedRecipeSlot.UPPER_LEFT,
-                    ShapedRecipeSlot.UPPER_RIGHT,
-                    ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(), ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LEFT)
-                .addPart(ItemHandle.getCrystalVariant(false, false), ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(BlocksAS.fluidLiquidStarlight, ShapedRecipeSlot.CENTER)
-                .unregisteredAccessibleShapedRecipe());
+        super(shapedRecipe("upgrade_tier2", new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
+                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LEFT)
+                .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override
@@ -68,7 +70,7 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -86,9 +88,9 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 
-        if (state == ActiveCraftingTask.CraftingState.ACTIVE) {
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
             ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-            if (rand.nextInt(6) == 0) {
+            if(rand.nextInt(6) == 0) {
                 pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
             }
         }

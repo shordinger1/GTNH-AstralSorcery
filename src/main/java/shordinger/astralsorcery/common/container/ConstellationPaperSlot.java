@@ -1,18 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.container;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
 import shordinger.astralsorcery.common.item.ItemConstellationPaper;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,16 +26,14 @@ public class ConstellationPaperSlot extends SlotItemHandler {
 
     private final ContainerJournal listener;
 
-    public ConstellationPaperSlot(IItemHandler handle, ContainerJournal containerJournal, int index, int xPosition,
-                                  int yPosition) {
+    public ConstellationPaperSlot(IItemHandler handle, ContainerJournal containerJournal, int index, int xPosition, int yPosition) {
         super(handle, index, xPosition, yPosition);
         this.listener = containerJournal;
     }
 
     @Override
     public boolean isItemValid(@Nullable ItemStack stack) {
-        return stack.stackSize!=0 && stack.getItem() instanceof ItemConstellationPaper
-            && ItemConstellationPaper.getConstellation(stack) != null;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(stack) != null;
     }
 
     @Override

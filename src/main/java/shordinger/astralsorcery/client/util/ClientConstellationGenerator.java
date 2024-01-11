@@ -1,25 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.awt.*;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.word.RandomWordGenerator;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.star.StarConnection;
@@ -27,6 +16,15 @@ import shordinger.astralsorcery.common.constellation.star.StarLocation;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.data.fragment.KnowledgeFragment;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,13 +44,15 @@ public class ClientConstellationGenerator {
 
     public static ClientConstellation generateRandom(long seed, int stars) {
         Random sRandom = new Random(seed);
-        String name = RandomWordGenerator.getGenerator()
-            .generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);
+        String name = RandomWordGenerator.getGenerator().generateWord(seed, sRandom.nextFloat() > 0.6F ? 7 : 6);
         ClientConstellation cst = new ClientConstellation(name);
         List<StarLocation> tmpStars = Lists.newArrayList();
         List<StarConnection> tmpConnections = Lists.newArrayList();
         for (int i = 0; i < stars; i++) {
-            Point newPoint = pickStarPoint(sRandom, tmpStars, 6);
+            Point newPoint = pickStarPoint(
+                    sRandom,
+                    tmpStars,
+                    6);
             tmpStars.add(new StarLocation(newPoint.x, newPoint.y));
         }
         Iterator<StarLocation> it = tmpStars.iterator();
@@ -67,18 +67,15 @@ public class ClientConstellationGenerator {
         }
         tmpStars.forEach(s -> cst.addStar(s.x, s.y));
         tmpConnections.forEach(c -> {
-            if (cst.getStars()
-                .contains(c.to)
-                && cst.getStars()
-                .contains(c.from)) {
+            if (cst.getStars().contains(c.to) &&
+                    cst.getStars().contains(c.from)) {
                 cst.addConnection(c.from, c.to);
             }
         });
         return cst;
     }
 
-    private static StarLocation findConnection(Random rand, StarLocation sl, List<StarLocation> stars,
-                                               List<StarConnection> existingConnections) {
+    private static StarLocation findConnection(Random rand, StarLocation sl, List<StarLocation> stars, List<StarConnection> existingConnections) {
         List<StarLocation> others = Lists.newArrayList(stars);
         others.remove(sl);
         if (others.isEmpty()) return null;
@@ -102,8 +99,8 @@ public class ClientConstellationGenerator {
 
     private static boolean isIntersecting(StarConnection part, Point p) {
         StarConnection originPart = new StarConnection(
-            new StarLocation(0, 0),
-            new StarLocation(part.to.x - part.from.x, part.to.y - part.from.y));
+                new StarLocation(0, 0),
+                new StarLocation(part.to.x - part.from.x, part.to.y - part.from.y));
         Point originOffset = new Point(p.x - part.from.x, p.y - part.from.y);
         return cross(originPart.to.asPoint(), originOffset) < 0;
     }
@@ -115,9 +112,7 @@ public class ClientConstellationGenerator {
     private static Point pickStarPoint(Random rand, List<StarLocation> occupied, float minDst) {
         lblSearch:
         while (true) {
-            Point opt = new Point(
-                rand.nextInt(IConstellation.STAR_GRID_SIZE - 6),
-                rand.nextInt(IConstellation.STAR_GRID_SIZE - 6));
+            Point opt = new Point(rand.nextInt(IConstellation.STAR_GRID_SIZE - 6), rand.nextInt(IConstellation.STAR_GRID_SIZE - 6));
             opt.translate(3, 3);
 
             for (StarLocation other : occupied) {
@@ -152,7 +147,7 @@ public class ClientConstellationGenerator {
 
         @Override
         public StarLocation addStar(int x, int y) {
-            x %= (IConstellation.STAR_GRID_SIZE - 1); // 31x31
+            x %= (IConstellation.STAR_GRID_SIZE - 1); //31x31
             y %= (IConstellation.STAR_GRID_SIZE - 1);
             StarLocation star = new StarLocation(x, y);
             if (!starLocations.contains(star)) {

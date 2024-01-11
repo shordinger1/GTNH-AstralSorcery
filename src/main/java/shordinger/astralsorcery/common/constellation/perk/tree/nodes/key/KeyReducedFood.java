@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.FoodStats;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.FoodStats;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,9 +29,9 @@ public class KeyReducedFood extends KeyPerk implements IPlayerTickPerk {
 
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
-        if (side == Side.SERVER) {
+        if(side == Side.SERVER) {
             FoodStats stats = player.getFoodStats();
-            if (stats.foodExhaustionLevel > -10F) {
+            if(stats.foodExhaustionLevel > -10F) {
                 stats.addExhaustion(-0.01F);
             }
         }

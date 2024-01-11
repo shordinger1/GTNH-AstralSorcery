@@ -1,17 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.ResourceLocation;
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityInject;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import shordinger.wrapper.net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,9 +31,7 @@ import java.util.concurrent.Callable;
  */
 public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> {
 
-    public static final ResourceLocation CAP_AMULETHOLDER_NAME = new ResourceLocation(
-        Tags.MODID,
-        "cap_item_amulet_holder");
+    public static final ResourceLocation CAP_AMULETHOLDER_NAME = new ResourceLocation(AstralSorcery.MODID, "cap_item_amulet_holder");
 
     @CapabilityInject(AmuletHolderCapability.class)
     public static Capability<AmuletHolderCapability> CAPABILITY_AMULET_HOLDER = null;
@@ -47,7 +49,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound cmp = new NBTTagCompound();
-        if (holderUUID != null) {
+        if(holderUUID != null) {
             cmp.setUniqueId("AS_Amulet_Holder", holderUUID);
         }
         return cmp;
@@ -55,7 +57,7 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        if (nbt.hasUniqueId("AS_Amulet_Holder")) {
+        if(nbt.hasUniqueId("AS_Amulet_Holder")) {
             this.holderUUID = nbt.getUniqueId("AS_Amulet_Holder");
         } else {
             this.holderUUID = null;
@@ -67,13 +69,13 @@ public class AmuletHolderCapability implements INBTSerializable<NBTTagCompound> 
         private final AmuletHolderCapability defaultImpl = new AmuletHolderCapability();
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable ForgeDirection facing) {
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
             return capability.equals(CAPABILITY_AMULET_HOLDER);
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable ForgeDirection facing) {
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
             return hasCapability(capability, facing) ? CAPABILITY_AMULET_HOLDER.cast(defaultImpl) : null;
         }
 

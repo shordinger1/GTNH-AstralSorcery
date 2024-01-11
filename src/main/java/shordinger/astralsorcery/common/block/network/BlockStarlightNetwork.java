@@ -1,27 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block.network;
 
-import com.gtnewhorizons.modularui.api.forge.IItemHandler;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.tile.base.TileNetwork;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.AstralBlockContainer;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,10 +29,10 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 21:01
  */
-public abstract class BlockStarlightNetwork extends AstralBlockContainer {
+public abstract class BlockStarlightNetwork extends BlockContainer {
 
     public BlockStarlightNetwork(Material blockMaterialIn, MapColor blockMapColorIn) {
-        super(blockMaterialIn);
+        super(blockMaterialIn, blockMapColorIn);
     }
 
     public BlockStarlightNetwork(Material materialIn) {
@@ -43,15 +42,15 @@ public abstract class BlockStarlightNetwork extends AstralBlockContainer {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileNetwork teN = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
-        if (teN != null) {
+        if(teN != null) {
             teN.onBreak();
         }
 
         TileEntity inv = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
-        if (inv != null && !worldIn.isRemote) {
-            for (ForgeDirection face : ForgeDirection.values()) {
+        if(inv != null && !worldIn.isRemote) {
+            for (EnumFacing face : EnumFacing.VALUES) {
                 IItemHandler handle = inv.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
-                if (handle != null) {
+                if(handle != null) {
                     ItemUtils.dropInventory(handle, worldIn, pos);
                     break;
                 }

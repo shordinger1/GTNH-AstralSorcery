@@ -1,35 +1,40 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.tile.TileAttunementRelay;
 import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.SoundEvents;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -78,19 +83,18 @@ public class BlockAttunementRelay extends BlockContainer {
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
+        if(!worldIn.isRemote) {
             TileEntity inv = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
-            if (inv != null) {
-                for (ForgeDirection face : ForgeDirection.VALUES) {
+            if(inv != null) {
+                for (EnumFacing face : EnumFacing.VALUES) {
                     IItemHandler handle = inv.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
-                    if (handle != null) {
+                    if(handle != null) {
                         ItemUtils.dropInventory(handle, worldIn, pos);
                         break;
                     }
@@ -112,24 +116,16 @@ public class BlockAttunementRelay extends BlockContainer {
         Thread searchThread = new Thread(() -> {
             BlockPos closestAltar = null;
             double dstSqOtherRelay = Double.MAX_VALUE;
-            BlockArray relaysAndAltars = BlockDiscoverer.searchForBlocksAround(
-                world,
-                pos,
-                16,
-                (world1, pos1, state1) -> state1.getBlock()
-                    .equals(BlocksAS.blockAltar)
-                    || state1.getBlock()
-                    .equals(BlocksAS.attunementRelay));
-            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern()
-                .entrySet()) {
-                if (entry.getValue().type.equals(BlocksAS.blockAltar)) {
-                    if (closestAltar == null || pos.distanceSq(entry.getKey()) < pos.distanceSq(closestAltar)) {
+            BlockArray relaysAndAltars = BlockDiscoverer.searchForBlocksAround(world, pos, 16,
+                    (world1, pos1, state1) -> state1.getBlock().equals(BlocksAS.blockAltar) || state1.getBlock().equals(BlocksAS.attunementRelay));
+            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern().entrySet()) {
+                if(entry.getValue().type.equals(BlocksAS.blockAltar)) {
+                    if(closestAltar == null || pos.distanceSq(entry.getKey()) < pos.distanceSq(closestAltar)) {
                         closestAltar = entry.getKey();
                     }
                 } else {
-                    double dstSqOther = entry.getKey()
-                        .distanceSq(pos);
-                    if (dstSqOther < dstSqOtherRelay) {
+                    double dstSqOther = entry.getKey().distanceSq(pos);
+                    if(dstSqOther < dstSqOtherRelay) {
                         dstSqOtherRelay = dstSqOther;
                     }
                 }
@@ -139,10 +135,10 @@ public class BlockAttunementRelay extends BlockContainer {
             double finalDstSqOtherRelay = dstSqOtherRelay;
             AstralSorcery.proxy.scheduleDelayed(() -> {
                 TileAttunementRelay tar = MiscUtils.getTileAt(world, pos, TileAttunementRelay.class, true);
-                if (tar != null) {
+                if(tar != null) {
                     tar.updatePositionData(finalClosestAltar, finalDstSqOtherRelay);
                 }
-                if (recUpdate) {
+                if(recUpdate) {
                     BlockAltar.startSearchForRelayUpdate(world, pos);
                 }
             });
@@ -152,37 +148,27 @@ public class BlockAttunementRelay extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            ItemStack held = playerIn.getHeldItem();
-            if (!held.stackSize==0) {
+            ItemStack held = playerIn.getHeldItem(hand);
+            if (!held.isEmpty()) {
                 TileAttunementRelay tar = MiscUtils.getTileAt(worldIn, pos, TileAttunementRelay.class, true);
                 if (tar != null) {
                     TileInventoryBase.ItemHandlerTile mod = tar.getInventoryHandler();
-                    if (!mod.getStackInSlot(0)
-                        .isEmpty()) {
+                    if (!mod.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = mod.getStackInSlot(0);
                         playerIn.inventory.placeItemBackInInventory(worldIn, stack);
-                        mod.setStackInSlot(0, null);
+                        mod.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
                     }
 
-                    if (!worldIn.isAirBlock(pos.up())) {
+                    if(!worldIn.isAirBlock(pos.up())) {
                         return false;
                     }
 
                     mod.setStackInSlot(0, ItemUtils.copyStackWithSize(held, 1));
-                    worldIn.playSound(
-                        null,
-                        pos.getX(),
-                        pos.getY(),
-                        pos.getZ(),
-                        SoundEvents.ENTITY_ITEM_PICKUP,
-                        SoundCategory.PLAYERS,
-                        0.2F,
-                        ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    if (!playerIn.isCreative()) {
+                    worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    if(!playerIn.isCreative()) {
                         held.shrink(1);
                     }
                     tar.markForUpdate();
@@ -191,11 +177,10 @@ public class BlockAttunementRelay extends BlockContainer {
                 TileAttunementRelay tar = MiscUtils.getTileAt(worldIn, pos, TileAttunementRelay.class, true);
                 if (tar != null) {
                     TileInventoryBase.ItemHandlerTile mod = tar.getInventoryHandler();
-                    if (!mod.getStackInSlot(0)
-                        .isEmpty()) {
+                    if (!mod.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = mod.getStackInSlot(0);
                         playerIn.inventory.placeItemBackInInventory(worldIn, stack);
-                        mod.setStackInSlot(0, null);
+                        mod.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
                     }
                 }

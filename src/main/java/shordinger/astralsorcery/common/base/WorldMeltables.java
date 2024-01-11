@@ -1,28 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.constellation.effect.GenListEntries;
 import shordinger.astralsorcery.common.util.BlockStateCheck;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.FurnaceRecipes;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,15 +32,15 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public enum WorldMeltables implements MeltInteraction {
 
-    COBBLE(new BlockStateCheck.Block(Blocks.COBBLESTONE), Blocks.FLOWING_LAVA.getDefaultState(), 180),
-    STONE(new BlockStateCheck.Block(Blocks.STONE), Blocks.FLOWING_LAVA.getDefaultState(), 100),
-    OBSIDIAN(new BlockStateCheck.Block(Blocks.OBSIDIAN), Blocks.FLOWING_LAVA.getDefaultState(), 75),
-    NETHERRACK(new BlockStateCheck.Block(Blocks.NETHERRACK), Blocks.FLOWING_LAVA.getDefaultState(), 40),
-    NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK), Blocks.FLOWING_LAVA.getDefaultState(), 60),
-    MAGMA(new BlockStateCheck.Block(Blocks.MAGMA), Blocks.FLOWING_LAVA.getDefaultState(), 1),
-    ICE(new BlockStateCheck.Block(Blocks.ICE), Blocks.FLOWING_WATER.getDefaultState(), 1),
-    FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE), Blocks.FLOWING_WATER.getDefaultState(), 1),
-    PACKED_ICE(new BlockStateCheck.Block(Blocks.PACKED_ICE), Blocks.FLOWING_WATER.getDefaultState(), 2);
+    COBBLE(     new BlockStateCheck.Block(Blocks.COBBLESTONE),     Blocks.FLOWING_LAVA.getDefaultState(),  180),
+    STONE(      new BlockStateCheck.Block(Blocks.STONE),           Blocks.FLOWING_LAVA.getDefaultState(),  100),
+    OBSIDIAN(   new BlockStateCheck.Block(Blocks.OBSIDIAN),        Blocks.FLOWING_LAVA.getDefaultState(),  75),
+    NETHERRACK( new BlockStateCheck.Block(Blocks.NETHERRACK),      Blocks.FLOWING_LAVA.getDefaultState(),  40),
+    NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK),    Blocks.FLOWING_LAVA.getDefaultState(),  60),
+    MAGMA(      new BlockStateCheck.Block(Blocks.MAGMA),           Blocks.FLOWING_LAVA.getDefaultState(),  1),
+    ICE(        new BlockStateCheck.Block(Blocks.ICE),             Blocks.FLOWING_WATER.getDefaultState(), 1),
+    FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE),     Blocks.FLOWING_WATER.getDefaultState(), 1),
+    PACKED_ICE( new BlockStateCheck.Block(Blocks.PACKED_ICE),      Blocks.FLOWING_WATER.getDefaultState(), 2);
 
     private final BlockStateCheck meltableCheck;
     private final IBlockState meltResult;
@@ -67,7 +66,7 @@ public enum WorldMeltables implements MeltInteraction {
     @Override
     @Nonnull
     public ItemStack getMeltResultStack() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -77,15 +76,15 @@ public enum WorldMeltables implements MeltInteraction {
 
     @Nullable
     public static MeltInteraction getMeltable(World world, BlockPos pos) {
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = world.getBlockState(pos);
         for (WorldMeltables melt : values()) {
-            if (melt.isMeltable(world, pos, state)) return melt;
+            if(melt.isMeltable(world, pos, state))
+                return melt;
         }
         ItemStack stack = ItemUtils.createBlockStack(state);
-        if (stack.stackSize!=0) {
-            ItemStack out = FurnaceRecipes.instance()
-                .getSmeltingResult(stack);
-            if (!out.isEmpty()) {
+        if(!stack.isEmpty()) {
+            ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
+            if(!out.isEmpty()) {
                 return new FurnaceRecipeInteraction(state, out);
             }
         }
@@ -99,12 +98,12 @@ public enum WorldMeltables implements MeltInteraction {
         }
 
         public boolean isValid(World world, boolean forceLoad) {
-            if (!forceLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos()))) return true;
+            if(!forceLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true;
             return getMeltable(world) != null;
         }
 
         public MeltInteraction getMeltable(World world) {
-            return WorldMeltables.getMeltable(world, pos());
+            return WorldMeltables.getMeltable(world, getPos());
         }
 
     }
@@ -115,10 +114,7 @@ public enum WorldMeltables implements MeltInteraction {
         private final BlockStateCheck.Meta matchInState;
 
         public FurnaceRecipeInteraction(IBlockState inState, ItemStack outStack) {
-            this.matchInState = new BlockStateCheck.Meta(
-                inState.getBlock(),
-                inState.getBlock()
-                    .getMetaFromState(inState));
+            this.matchInState = new BlockStateCheck.Meta(inState.getBlock(), inState.getBlock().getMetaFromState(inState));
             this.out = outStack;
         }
 

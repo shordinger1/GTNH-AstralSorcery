@@ -1,29 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.base.patreon.data.provider;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
-import net.minecraft.block.Block;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.base.patreon.base.PtEffectBlockRing;
 import shordinger.astralsorcery.common.base.patreon.data.EffectProvider;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,28 +51,20 @@ public class BlockRingProvider implements EffectProvider<PtEffectBlockRing> {
         for (JsonElement patternElement : jo) {
             JsonObject obj = (JsonObject) patternElement;
             BlockPos pos = new BlockPos(
-                obj.getAsJsonPrimitive("posX")
-                    .getAsInt(),
-                obj.getAsJsonPrimitive("posY")
-                    .getAsInt(),
-                obj.getAsJsonPrimitive("posZ")
-                    .getAsInt());
-            Block b = Block.getBlockFromName(
-                obj.getAsJsonPrimitive("block")
-                    .getAsString());
-            int data = obj.has("data") ? obj.getAsJsonPrimitive("data")
-                .getAsInt() : 0;
+                    obj.getAsJsonPrimitive("posX").getAsInt(),
+                    obj.getAsJsonPrimitive("posY").getAsInt(),
+                    obj.getAsJsonPrimitive("posZ").getAsInt());
+            Block b = Block.getBlockFromName(obj.getAsJsonPrimitive("block").getAsString());
+            int data = obj.has("data") ? obj.getAsJsonPrimitive("data").getAsInt() : 0;
             pattern.put(pos, b.getStateFromMeta(data));
         }
-        return new PtEffectBlockRing(
-            effectUniqueId,
-            fc,
-            uuid,
-            distance,
-            rotationAngle,
-            repeats,
-            tickRotationSpeed,
-            pattern);
+        return new PtEffectBlockRing(effectUniqueId,
+                fc, uuid,
+                distance,
+                rotationAngle,
+                repeats,
+                tickRotationSpeed,
+                pattern);
     }
 
 }

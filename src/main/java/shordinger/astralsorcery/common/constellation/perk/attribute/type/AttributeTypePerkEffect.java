@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,9 +31,9 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
         super.onApply(player, side);
 
         AttributeTypeRegistry.getTypes()
-            .stream()
-            .filter(t -> t instanceof VanillaAttributeType)
-            .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
+                .stream()
+                .filter(t -> t instanceof VanillaAttributeType)
+                .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
     }
 
     @Override
@@ -41,8 +41,8 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
         super.onRemove(player, side, removedCompletely);
 
         AttributeTypeRegistry.getTypes()
-            .stream()
-            .filter(t -> t instanceof VanillaAttributeType)
-            .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
+                .stream()
+                .filter(t -> t instanceof VanillaAttributeType)
+                .forEach(t -> ((VanillaAttributeType) t).refreshAttribute(player));
     }
 }

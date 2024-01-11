@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.core;
 
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.IFMLCallHook;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import cpw.mods.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.IFMLCallHook;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +25,7 @@ import java.util.Map;
  * Date: 07.05.2016 / 02:55
  */
 @IFMLLoadingPlugin.Name(value = "AstralCore")
-@IFMLLoadingPlugin.TransformerExclusions({"shordinger.astralsorcery.core"})
+@IFMLLoadingPlugin.TransformerExclusions({"hellfirepvp.astralsorcery.core"})
 @IFMLLoadingPlugin.SortingIndex(1005)
 public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
@@ -64,7 +64,7 @@ public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
     @Override
     public String getAccessTransformerClass() {
-        return "shordinger.astralsorcery.core.AstralTransformer";
+        return "hellfirepvp.astralsorcery.core.AstralTransformer";
     }
 
 }

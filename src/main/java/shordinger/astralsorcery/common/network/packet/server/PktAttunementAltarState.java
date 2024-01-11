@@ -1,30 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,16 +33,14 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  * Created by HellFirePvP
  * Date: 28.12.2016 / 01:53
  */
-public class PktAttunementAltarState
-    implements IMessage, IMessageHandler<PktAttunementAltarState, PktAttunementAltarState> {
+public class PktAttunementAltarState implements IMessage, IMessageHandler<PktAttunementAltarState, PktAttunementAltarState> {
 
     private int entityId = -1;
     private int worldId = -1;
     private BlockPos at = BlockPos.ORIGIN;
     private boolean started = false;
 
-    public PktAttunementAltarState() {
-    }
+    public PktAttunementAltarState() {}
 
     public PktAttunementAltarState(int entityId, int worldId, BlockPos at) {
         this.entityId = entityId;
@@ -74,12 +72,12 @@ public class PktAttunementAltarState
 
     @Override
     public PktAttunementAltarState onMessage(PktAttunementAltarState message, MessageContext ctx) {
-        if (ctx.side == Side.SERVER) {
-            if (message.started) {
+        if(ctx.side == Side.SERVER) {
+            if(message.started) {
                 AstralSorcery.proxy.scheduleDelayed(() -> {
                     World w = DimensionManager.getWorld(message.worldId);
                     TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, true);
-                    if (ta != null) {
+                    if(ta != null) {
                         EntityPlayer pl = ctx.getServerHandler().player;
                         ta.markPlayerStartCameraFlight(pl);
                     }
@@ -93,17 +91,16 @@ public class PktAttunementAltarState
 
     @SideOnly(Side.CLIENT)
     private void recClient(PktAttunementAltarState message) {
-        World mcWorld = Minecraft.getMinecraft().theWorld;
-        if (mcWorld != null && mcWorld.provider.dimensionId == message.worldId
-            && Minecraft.getMinecraft().thePlayer != null
-            && Minecraft.getMinecraft().thePlayer.getEntityId() == message.entityId) {
+        World mcWorld = Minecraft.getMinecraft().world;
+        if(mcWorld != null && mcWorld.provider.getDimension() == message.worldId &&
+                Minecraft.getMinecraft().player != null &&
+                Minecraft.getMinecraft().player.getEntityId() == message.entityId) {
 
             AstralSorcery.proxy.scheduleClientside(() -> {
                 TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, message.at, TileAttunementAltar.class, true);
                 if (ta != null) {
-                    if (ta.tryStartCameraFlight()) {
-                        PacketChannel.CHANNEL
-                            .sendToServer(new PktAttunementAltarState(true, message.worldId, message.at));
+                    if(ta.tryStartCameraFlight()) {
+                        PacketChannel.CHANNEL.sendToServer(new PktAttunementAltarState(true, message.worldId, message.at));
                     }
                 }
             });

@@ -1,19 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import shordinger.astralsorcery.migration.block.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,8 +23,8 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  */
 public class DirectionalLayerBlockDiscoverer {
 
-    private final BlockPos start;
-    private final int rad, stepWidth;
+    private BlockPos start;
+    private int rad, stepWidth;
 
     public DirectionalLayerBlockDiscoverer(BlockPos start, int discoverRadius, int stepWidth) {
         this.start = start;
@@ -42,13 +41,14 @@ public class DirectionalLayerBlockDiscoverer {
         BlockPos currentPos = start;
         tryAdd(start, visited);
 
-        ForgeDirection dir = ForgeDirection.NORTH;
-        while (Math.abs(currentPos.getX() - xPos) <= rad && Math.abs(currentPos.getY() - yPos) <= rad
-            && Math.abs(currentPos.getZ() - zPos) <= rad) {
+        EnumFacing dir = EnumFacing.NORTH;
+        while ( Math.abs(currentPos.getX() - xPos) <= rad &&
+                Math.abs(currentPos.getY() - yPos) <= rad &&
+                Math.abs(currentPos.getZ() - zPos) <= rad) {
             currentPos = currentPos.offset(dir, stepWidth);
             tryAdd(currentPos, visited);
-            ForgeDirection tryDirNext = dir.rotateY();
-            if (!visited.contains(currentPos.offset(tryDirNext, stepWidth))) {
+            EnumFacing tryDirNext = dir.rotateY();
+            if(!visited.contains(currentPos.offset(tryDirNext, stepWidth))) {
                 dir = tryDirNext;
             }
         }
@@ -57,7 +57,7 @@ public class DirectionalLayerBlockDiscoverer {
     }
 
     private void tryAdd(BlockPos at, List<BlockPos> visited) {
-        if (!visited.contains(at)) {
+        if(!visited.contains(at)) {
             visited.add(at);
         }
     }

@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.grindstone;
 
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalSword;
 import shordinger.astralsorcery.common.item.tool.ItemCrystalToolBase;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -25,13 +25,13 @@ import javax.annotation.Nonnull;
 public class CrystalToolSharpeningRecipe extends GrindstoneRecipe {
 
     public CrystalToolSharpeningRecipe(int chance) {
-        super(null, null, chance);
+        super(ItemStack.EMPTY, ItemStack.EMPTY, chance);
     }
 
     @Override
     public boolean matches(ItemStack stackIn) {
-        return !stackIn.isEmpty()
-            && (stackIn.getItem() instanceof ItemCrystalToolBase || stackIn.getItem() instanceof ItemCrystalSword);
+        return !stackIn.isEmpty() &&
+                (stackIn.getItem() instanceof ItemCrystalToolBase || stackIn.getItem() instanceof ItemCrystalSword);
     }
 
     @Override
@@ -44,11 +44,11 @@ public class CrystalToolSharpeningRecipe extends GrindstoneRecipe {
     public GrindResult grind(ItemStack stackIn) {
         ToolCrystalProperties prop = ItemCrystalToolBase.getToolProperties(stackIn);
         ToolCrystalProperties result = prop.grindCopy(rand);
-        if (result == null) {
+        if(result == null) {
             return GrindResult.failBreakItem();
         }
         ItemCrystalToolBase.setToolProperties(stackIn, result);
-        if (result.getSize() <= 0) {
+        if(result.getSize() <= 0) {
             return GrindResult.failBreakItem();
         }
         return GrindResult.success();

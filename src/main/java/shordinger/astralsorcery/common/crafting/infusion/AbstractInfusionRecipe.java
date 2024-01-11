@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.infusion;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.common.crafting.IGatedRecipe;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidActionResult;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -36,7 +36,7 @@ public abstract class AbstractInfusionRecipe {
     private boolean acceptsChalices = true;
 
     @Nonnull
-    protected ItemStack output = null;
+    protected ItemStack output = ItemStack.EMPTY;
     @Nonnull
     protected ItemHandle input;
 
@@ -88,12 +88,9 @@ public abstract class AbstractInfusionRecipe {
 
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
-        if (stack.stackSize!=0) {
-            FluidActionResult fas = null;
-            if (input.getFluidTypeAndAmount() != null) {
-                fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
-            }
-            if (fas.isSuccess()) {
+        if(!stack.isEmpty()) {
+            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            if(fas.isSuccess()) {
                 infuser.setStack(fas.getResult());
             }
         }
@@ -102,17 +99,17 @@ public abstract class AbstractInfusionRecipe {
     @Nonnull
     @SideOnly(Side.CLIENT)
     public ItemStack getOutputForRender() {
-        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
     @Nonnull
     public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
-        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
     @Nonnull
     public ItemStack getOutputForMatching() {
-        return Objects.requireNonNull(ItemUtils.copyStackWithSize(output, output.getCount()));
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
     @Nonnull
@@ -120,24 +117,20 @@ public abstract class AbstractInfusionRecipe {
         return input;
     }
 
-    public void onCraftServerFinish(TileStarlightInfuser infuser, Random rand) {
-    }
+    public void onCraftServerFinish(TileStarlightInfuser infuser, Random rand) {}
 
-    public void onCraftServerTick(TileStarlightInfuser infuser, int tick, Random rand) {
-    }
+    public void onCraftServerTick(TileStarlightInfuser infuser, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileStarlightInfuser infuser, long tick, Random rand) {
-    }
+    public void onCraftClientTick(TileStarlightInfuser infuser, long tick, Random rand) {}
 
     public boolean matches(TileStarlightInfuser infuser) {
-        if (this instanceof IGatedRecipe) {
-            if (infuser.getWorld().isRemote) {
-                if (!((IGatedRecipe) this).hasProgressionClient()) return false;
+        if(this instanceof IGatedRecipe) {
+            if(infuser.getWorld().isRemote) {
+                if(!((IGatedRecipe) this).hasProgressionClient()) return false;
             }
         }
 
-        return infuser.hasMultiblock() && !infuser.getInputStack()
-            .isEmpty() && input.matchCrafting(infuser.getInputStack());
+        return infuser.hasMultiblock() && !infuser.getInputStack().isEmpty() && input.matchCrafting(infuser.getInputStack());
     }
 }

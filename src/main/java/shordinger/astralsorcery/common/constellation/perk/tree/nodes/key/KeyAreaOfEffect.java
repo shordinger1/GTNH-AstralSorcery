@@ -1,30 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Enchantments;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
+import shordinger.wrapper.net.minecraft.util.EntityDamageSourceIndirect;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,26 +47,23 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
             return;
         }
 
-        DamageSource source = event.source;
-        if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null
-            && source.getTrueSource() instanceof EntityPlayer) {
+        DamageSource source = event.getSource();
+        if (source instanceof EntityDamageSourceIndirect &&
+                source.getTrueSource() != null && source.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) source.getTrueSource();
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
             PlayerProgress prog = ResearchManager.getProgress(player, side);
             if (prog.hasPerkEffect(this)) {
-                EntityLivingBase attacked = event.entityLiving;
+                EntityLivingBase attacked = event.getEntityLiving();
                 float sweepPerc = EnchantmentHelper.getSweepingDamageRatio(player);
                 if (sweepPerc > 0) {
                     sweepPerc = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
-                    float toApply = event.ammount * sweepPerc;
+                            .modifyValue(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
+                    float toApply = event.getAmount() * sweepPerc;
                     inSweepAttack = true;
                     try {
-                        for (EntityLivingBase target : attacked.getEntityWorld()
-                            .getEntitiesWithinAABB(
-                                EntityLivingBase.class,
-                                attacked.getEntityBoundingBox()
-                                    .grow(1, 0.25, 1))) {
+                        for (EntityLivingBase target : attacked.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class,
+                                attacked.getEntityBoundingBox().grow(1, 0.25, 1))) {
                             if (MiscUtils.canPlayerAttackServer(player, target)) {
                                 DamageUtil.attackEntityFrom(target, source, toApply);
                             }

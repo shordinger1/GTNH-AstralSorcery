@@ -1,24 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.attribute.type;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.AttributeEvent;
 import shordinger.astralsorcery.common.event.PotionApplyEvent;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,34 +35,28 @@ public class AttributePotionDuration extends PerkAttributeType {
 
     @SubscribeEvent
     public void onPotionDurationNew(PotionApplyEvent.New event) {
-        if (event.entityLiving instanceof EntityPlayer) {
-            modifyPotionDuration((EntityPlayer) event.entityLiving, event.getPotionEffect(), event.getPotionEffect());
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getPotionEffect(), event.getPotionEffect());
         }
     }
 
     @SubscribeEvent
     public void onPotionDurationChanged(PotionApplyEvent.Changed event) {
-        if (event.entityLiving instanceof EntityPlayer) {
-            modifyPotionDuration(
-                (EntityPlayer) event.entityLiving,
-                event.getNewCombinedEffect(),
-                event.getAddedEffect());
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            modifyPotionDuration((EntityPlayer) event.getEntityLiving(), event.getNewCombinedEffect(), event.getAddedEffect());
         }
     }
 
     private void modifyPotionDuration(EntityPlayer player, PotionEffect newSetEffect, PotionEffect addedEffect) {
-        if (player.world.isRemote || newSetEffect.getPotion()
-            .isBadEffect() || addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
+        if (player.world.isRemote ||
+                newSetEffect.getPotion().isBadEffect() ||
+                addedEffect.getAmplifier() < newSetEffect.getAmplifier()) {
             return;
         }
 
         float existingDuration = addedEffect.getDuration();
         float newDuration = PerkAttributeHelper.getOrCreateMap(player, Side.SERVER)
-            .modifyValue(
-                player,
-                ResearchManager.getProgress(player, Side.SERVER),
-                AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION,
-                existingDuration);
+                .modifyValue(player, ResearchManager.getProgress(player, Side.SERVER), AttributeTypeRegistry.ATTR_TYPE_POTION_DURATION, existingDuration);
         newDuration = AttributeEvent.postProcessModded(player, this, newDuration);
 
         if (newSetEffect.getDuration() < newDuration) {

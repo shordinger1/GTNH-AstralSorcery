@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.lib;
 
+import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
+import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.common.structure.array.StructureBlockArray;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,7 +63,6 @@ public class MultiBlockArrays {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    public static @interface PasteBlacklist {
-    }
+    public static @interface PasteBlacklist {}
 
 }

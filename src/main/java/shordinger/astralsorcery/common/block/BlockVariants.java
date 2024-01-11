@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
+import shordinger.wrapper.net.minecraft.block.properties.IProperty;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.IStringSerializable;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.util.IStringSerializable;
-
-import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,8 +24,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public interface BlockVariants {
 
-    default <T extends Comparable<T>> List<IBlockState> singleEnumPropertyStates(IBlockState defaultState,
-                                                                                 IProperty<T> prop, T[] enumValues) {
+    default <T extends Comparable<T>> List<IBlockState> singleEnumPropertyStates(IBlockState defaultState, IProperty<T> prop, T[] enumValues) {
         List<IBlockState> ret = new LinkedList<>();
         for (T val : enumValues) {
             ret.add(defaultState.withProperty(prop, val));
@@ -34,10 +32,8 @@ public interface BlockVariants {
         return ret;
     }
 
-    default <T extends Comparable<T> & IStringSerializable> String extractEnumPropertyString(IBlockState state,
-                                                                                             IProperty<T> property) {
-        return state.getValue(property)
-            .getName();
+    default <T extends Comparable<T> & IStringSerializable> String extractEnumPropertyString(IBlockState state, IProperty<T> property) {
+        return state.getValue(property).getName();
     }
 
     public List<IBlockState> getValidStates();
@@ -45,9 +41,7 @@ public interface BlockVariants {
     public String getStateName(IBlockState state);
 
     default public String getBlockName(IBlockState state) {
-        return state.getBlock()
-            .getClass()
-            .getSimpleName();
+        return state.getBlock().getClass().getSimpleName();
     }
 
 }

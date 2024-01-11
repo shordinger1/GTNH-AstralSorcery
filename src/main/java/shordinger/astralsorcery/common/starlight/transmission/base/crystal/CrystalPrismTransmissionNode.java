@@ -1,26 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.starlight.transmission.base.crystal;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,7 +50,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     @Override
     public void onTransmissionTick(World world) {
         TileCrystalLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileCrystalLens.class, false);
-        if (lens != null) {
+        if(lens != null) {
             lens.onTransmissionTick();
         }
     }
@@ -75,6 +74,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     public TransmissionClassRegistry.TransmissionProvider getProvider() {
         return new Provider();
     }
+
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -107,7 +107,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
 
         @Override
         public String getIdentifier() {
-            return Tags.MODID + ":CrystalPrismTransmissionNode";
+            return AstralSorcery.MODID + ":CrystalPrismTransmissionNode";
         }
 
     }

@@ -1,22 +1,21 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
-import net.minecraft.util.ResourceLocation;
-
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.block.network.BlockAltar;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.lib.MultiBlockArrays;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the 1.11.2 port of Reika's mods.
@@ -31,14 +30,13 @@ import shordinger.astralsorcery.migration.block.IBlockState;
 public class MultiblockAltarTrait extends PatternBlockArray {
 
     public MultiblockAltarTrait() {
-        super(new ResourceLocation(Tags.MODID, "pattern_altar_t4"));
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_altar_t4"));
         addAll(MultiBlockArrays.patternAltarConstellation);
         load();
     }
 
     private void load() {
-        IBlockState mBrick = BlocksAS.blockMarble.getDefaultState()
-            .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
+        IBlockState mBrick = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.BRICKS);
 
         addBlock(4, 3, 3, mBrick);
         addBlock(4, 3, -3, mBrick);
@@ -48,7 +46,7 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(3, 3, 4, mBrick);
         addBlock(-3, 3, 4, mBrick);
         addBlock(3, 3, -4, mBrick);
-        addBlock(-3, 3, -4, mBrick);
+        addBlock(-3, 3,-4, mBrick);
 
         addBlock(3, 4, 3, mBrick);
         addBlock(3, 4, 2, mBrick);
@@ -71,12 +69,7 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(1, 4, 3, mBrick);
         addBlock(2, 4, 3, mBrick);
 
-        addBlock(
-            0,
-            0,
-            0,
-            BlocksAS.blockAltar.getDefaultState()
-                .withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
+        addBlock(0, 0, 0, BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
     }
 
 }

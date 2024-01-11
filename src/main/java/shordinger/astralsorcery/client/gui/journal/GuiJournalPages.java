@@ -1,26 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.journal;
-
-import java.awt.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
@@ -33,6 +19,17 @@ import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.util.SoundHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,12 +42,10 @@ public class GuiJournalPages extends GuiScreenJournal {
 
     private static GuiJournalPages openGuiInstance;
     private static boolean saveSite = true;
-    // private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
+    //private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
 
-    private static final BindableResource texArrow = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
-    private static final BindableResource texUnderline = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MISC, "underline");
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
+    private static final BindableResource texUnderline = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline");
 
     @Nullable
     private final GuiJournalProgression origin;
@@ -61,7 +56,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     private String unlocTitle;
 
     private boolean informPreviousClose = true;
-    private int currentPageOffset = 0; // * 2 = left page.
+    private int currentPageOffset = 0; //* 2 = left page.
     private Rectangle rectBack, rectNext, rectPrev;
 
     GuiJournalPages(@Nullable GuiJournalProgression origin, ResearchNode node) {
@@ -69,31 +64,19 @@ public class GuiJournalPages extends GuiScreenJournal {
         this.researchNode = node;
         this.origin = origin;
         this.previous = null;
-        this.pages = new ArrayList<>(
-            node.getPages()
-                .size());
-        pages.addAll(
-            node.getPages()
-                .stream()
-                .map(IJournalPage::buildRenderPage)
-                .collect(Collectors.toList()));
+        this.pages = new ArrayList<>(node.getPages().size());
+        pages.addAll(node.getPages().stream().map(IJournalPage::buildRenderPage).collect(Collectors.toList()));
         this.unlocTitle = node.getUnLocalizedName();
     }
 
-    // Use this to use this screen independently of the actual journal.
+    //Use this to use this screen independently of the actual journal.
     public GuiJournalPages(@Nullable GuiScreen previous, ResearchNode detailedInformation, int exactPage) {
         super(-1);
         this.researchNode = detailedInformation;
         this.origin = null;
         this.previous = previous;
-        this.pages = new ArrayList<>(
-            detailedInformation.getPages()
-                .size());
-        pages.addAll(
-            detailedInformation.getPages()
-                .stream()
-                .map(IJournalPage::buildRenderPage)
-                .collect(Collectors.toList()));
+        this.pages = new ArrayList<>(detailedInformation.getPages().size());
+        pages.addAll(detailedInformation.getPages().stream().map(IJournalPage::buildRenderPage).collect(Collectors.toList()));
         this.unlocTitle = detailedInformation.getUnLocalizedName();
         this.currentPageOffset = exactPage / 2;
     }
@@ -110,7 +93,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     public void initGui() {
         super.initGui();
 
-        if (origin != null) {
+        if(origin != null) {
             origin.rescaleAndRefresh = false;
             origin.setGuiSize(width, height);
             origin.initGui();
@@ -126,8 +109,8 @@ public class GuiJournalPages extends GuiScreenJournal {
     @Override
     public void onGuiClosed() {
         super.onGuiClosed();
-        if (origin != null) {
-            if (saveSite) {
+        if(origin != null) {
+            if(saveSite) {
                 openGuiInstance = this;
                 GuiJournalProgression.getJournalInstance().rescaleAndRefresh = false;
             } else {
@@ -135,8 +118,8 @@ public class GuiJournalPages extends GuiScreenJournal {
                 openGuiInstance = null;
             }
         }
-        if (previous != null) {
-            if (informPreviousClose) {
+        if(previous != null) {
+            if(informPreviousClose) {
                 previous.onGuiClosed();
             }
         }
@@ -149,7 +132,7 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glEnable(GL11.GL_BLEND);
         Point mouse = new Point(mouseX, mouseY);
 
-        if (origin != null) {
+        if(origin != null) {
             drawDefault(textureResBlank, mouse);
         } else {
             drawWHRect(textureResBlank);
@@ -158,7 +141,7 @@ public class GuiJournalPages extends GuiScreenJournal {
 
         zLevel += 100;
         int pageOffsetY = 20;
-        if (currentPageOffset == 0) {
+        if(currentPageOffset == 0) {
             TextureHelper.refreshTextureBindState();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -167,7 +150,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glTranslated(guiLeft + 117, guiTop + 22, 0);
             GL11.glScaled(1.3, 1.3, 1.3);
             GL11.glTranslated(-(width / 2), 0, 0);
-            fontRenderer.drawString(name, 0, 0, 0x00DDDDDD);// Color.LIGHT_GRAY.getRGB());
+            fontRenderer.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
             GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glPopMatrix();
 
@@ -181,21 +164,21 @@ public class GuiJournalPages extends GuiScreenJournal {
         }
 
         int index = currentPageOffset * 2;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
+            page.render    (guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
         }
         index = index + 1;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            page.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
@@ -206,7 +189,7 @@ public class GuiJournalPages extends GuiScreenJournal {
         TextureHelper.refreshTextureBindState();
 
         index = currentPageOffset * 2;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
@@ -216,7 +199,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             TextureHelper.refreshTextureBindState();
         }
         index = index + 1;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
@@ -240,7 +223,7 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushMatrix();
         GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
         float uFrom = 0F, vFrom = 0.5F;
-        if (rectBack.contains(mouse)) {
+        if(rectBack.contains(mouse)) {
             uFrom = 0.5F;
             GL11.glScaled(1.1, 1.1, 1.1);
         } else {
@@ -261,14 +244,14 @@ public class GuiJournalPages extends GuiScreenJournal {
         int cIndex = currentPageOffset * 2;
         rectNext = null;
         rectPrev = null;
-        if (cIndex > 0) {
+        if(cIndex > 0) {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0.5F;
-            if (rectPrev.contains(mouse)) {
+            if(rectPrev.contains(mouse)) {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
@@ -283,14 +266,14 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPopMatrix();
         }
         int nextIndex = cIndex + 2;
-        if (pages.size() >= (nextIndex + 1)) {
+        if(pages.size() >= (nextIndex + 1)) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0F;
-            if (rectNext.contains(mouse)) {
+            if(rectNext.contains(mouse)) {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
@@ -309,15 +292,13 @@ public class GuiJournalPages extends GuiScreenJournal {
 
     @Override
     protected boolean handleRightClickClose(int mouseX, int mouseY) {
-        if (origin != null) {
+        if(origin != null) {
             origin.expectReinit = true;
             saveSite = false;
-            Minecraft.getMinecraft()
-                .displayGuiScreen(origin);
+            Minecraft.getMinecraft().displayGuiScreen(origin);
         } else {
             informPreviousClose = false;
-            Minecraft.getMinecraft()
-                .displayGuiScreen(previous);
+            Minecraft.getMinecraft().displayGuiScreen(previous);
         }
         return true;
     }
@@ -326,50 +307,48 @@ public class GuiJournalPages extends GuiScreenJournal {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseButton != 0) return;
+        if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if (origin != null) {
+        if(origin != null) {
             if (handleBookmarkClick(p)) {
                 saveSite = false;
                 return;
             }
         }
-        if (rectBack != null && rectBack.contains(p)) {
-            if (origin != null) {
+        if(rectBack != null && rectBack.contains(p)) {
+            if(origin != null) {
                 origin.expectReinit = true;
                 saveSite = false;
-                Minecraft.getMinecraft()
-                    .displayGuiScreen(origin);
+                Minecraft.getMinecraft().displayGuiScreen(origin);
                 return;
             } else {
                 informPreviousClose = false;
-                Minecraft.getMinecraft()
-                    .displayGuiScreen(previous);
+                Minecraft.getMinecraft().displayGuiScreen(previous);
                 return;
             }
         }
-        if (rectPrev != null && rectPrev.contains(p)) {
+        if(rectPrev != null && rectPrev.contains(p)) {
             this.currentPageOffset -= 1;
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
-        if (rectNext != null && rectNext.contains(p)) {
+        if(rectNext != null && rectNext.contains(p)) {
             this.currentPageOffset += 1;
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
 
         int index = currentPageOffset * 2;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             IGuiRenderablePage page = pages.get(index);
-            if (page != null) {
-                if (page.propagateMouseClick(mouseX, mouseY)) return;
+            if(page != null) {
+                if(page.propagateMouseClick(mouseX, mouseY)) return;
             }
         }
         index += 1;
-        if (pages.size() > index) {
+        if(pages.size() > index) {
             IGuiRenderablePage page = pages.get(index);
-            if (page != null) {
+            if(page != null) {
                 page.propagateMouseClick(mouseX, mouseY);
             }
         }

@@ -1,47 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool.wand;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
@@ -65,10 +31,38 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.item.EnumAction;
+import shordinger.wrapper.net.minecraft.item.IItemPropertyGetter;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.util.math.Vec3d;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,12 +82,9 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter() {
-
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                return getAugment(stack) == WandAugment.ARMARA && entityIn != null
-                    && entityIn.isHandActive()
-                    && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+                return getAugment(stack) == WandAugment.ARMARA && entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
             }
         });
     }
@@ -114,11 +105,8 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            tooltip.add(
-                TextFormatting.BLUE + I18n.format(
-                    wa.getAssociatedConstellation()
-                        .getUnlocalizedName()));
+        if(wa != null) {
+            tooltip.add(TextFormatting.BLUE + I18n.format(wa.getAssociatedConstellation().getUnlocalizedName()));
         }
     }
 
@@ -127,12 +115,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         LinkedList<ResourceLocation> out = new LinkedList<>();
         out.add(defaultLocation);
         for (WandAugment wa : WandAugment.values()) {
-            out.add(
-                new ResourceLocation(
-                    defaultLocation.getResourceDomain(),
-                    defaultLocation.getResourcePath() + "_"
-                        + wa.name()
-                        .toLowerCase()));
+            out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_" + wa.name().toLowerCase()));
         }
         return out;
     }
@@ -140,14 +123,10 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            return new ModelResourceLocation(
-                new ResourceLocation(
-                    suggestedDefaultLocation.getResourceDomain(),
-                    suggestedDefaultLocation.getResourcePath() + "_"
-                        + wa.name()
-                        .toLowerCase()),
-                suggestedDefaultLocation.getVariant());
+        if(wa != null) {
+            return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
+                    suggestedDefaultLocation.getResourcePath() + "_" + wa.name().toLowerCase()),
+                    suggestedDefaultLocation.getVariant());
         }
         return suggestedDefaultLocation;
     }
@@ -155,11 +134,11 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Nullable
     public static WandAugment getAugment(@Nonnull ItemStack stack) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
-        if (!cmp.hasKey("AugmentName")) {
+        if(!cmp.hasKey("AugmentName")) {
             return null;
         }
         IMajorConstellation cst = ConstellationRegistry.getMajorConstellationByName(cmp.getString("AugmentName"));
-        if (cst == null) {
+        if(cst == null) {
             return null;
         }
         return WandAugment.getByConstellation(cst);
@@ -167,21 +146,18 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     public static ItemStack setAugment(@Nonnull ItemStack stack, @Nonnull WandAugment augment) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
-        cmp.setString(
-            "AugmentName",
-            augment.getAssociatedConstellation()
-                .getUnlocalizedName());
+        cmp.setString("AugmentName", augment.getAssociatedConstellation().getUnlocalizedName());
         return stack;
     }
 
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            if (wa.equals(WandAugment.ARMARA)) {
+        if(wa != null) {
+            if(wa.equals(WandAugment.ARMARA)) {
                 return EnumAction.BLOCK;
             }
-            if (wa.equals(WandAugment.VICIO)) {
+            if(wa.equals(WandAugment.VICIO)) {
                 return EnumAction.BOW;
             }
         }
@@ -189,11 +165,11 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerInIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if (!itemstack.stackSize==0) {
+        if(!itemstack.isEmpty()) {
             WandAugment wa = getAugment(itemstack);
-            if (wa != null && (wa == WandAugment.ARMARA || wa == WandAugment.VICIO)) {
+            if(wa != null && (wa == WandAugment.ARMARA || wa == WandAugment.VICIO)) {
                 playerIn.setActiveHand(handIn);
                 return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
             }
@@ -204,16 +180,16 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
         World world = player.getEntityWorld();
-        if (stack.stackSize==0) return;
+        if(stack.isEmpty()) return;
 
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            if (!world.isRemote) {
+        if(wa != null) {
+            if(!world.isRemote) {
 
             } else {
-                if (wa == WandAugment.VICIO) {
+                if(wa == WandAugment.VICIO) {
                     playVicioEffect(stack, player, count);
-                } else if (wa == WandAugment.ARMARA) {
+                } else if(wa == WandAugment.ARMARA) {
                     playArmaraEffect(player);
                 }
             }
@@ -222,18 +198,15 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @SideOnly(Side.CLIENT)
     private void playArmaraEffect(EntityLivingBase player) {
-        if (player.ticksExisted % 2 == 0) {
+        if(player.ticksExisted % 2 == 0) {
             Collection<Vector3> positions = MiscUtils.getCirclePositions(
-                Vector3.atEntityCorner(player)
-                    .addY(player.height / 2),
-                Vector3.RotAxis.Y_AXIS,
-                0.8F - rand.nextFloat() * 0.1F,
-                20 + rand.nextInt(10));
+                    Vector3.atEntityCorner(player).addY(player.height / 2),
+                    Vector3.RotAxis.Y_AXIS, 0.8F - rand.nextFloat() * 0.1F, 20 + rand.nextInt(10));
             for (Vector3 v : positions) {
                 EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
                 particle.gravity(0.004);
                 particle.motion(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.01, 0);
-                if (rand.nextInt(3) == 0) {
+                if(rand.nextInt(3) == 0) {
                     particle.setColor(Color.WHITE);
                     particle.scale(0.1F + rand.nextFloat() * 0.05F);
                     particle.setMaxAge(15 + rand.nextInt(10));
@@ -248,36 +221,21 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @SideOnly(Side.CLIENT)
     private void playVicioEffect(ItemStack stack, EntityLivingBase entity, int count) {
         int strTick = this.getMaxItemUseDuration(stack) - count;
-        if (strTick <= 2) return;
+        if(strTick <= 2) return;
         float mul = MathHelper.clamp(((float) strTick) / 30F, 0F, 1F);
 
-        Vector3 look = new Vector3(entity.getLook(1F)).normalize()
-            .multiply(mul * 3);
-        Vector3 motionReverse = look.clone()
-            .normalize()
-            .multiply(-0.4 * mul);
-        Vector3 perp = look.clone()
-            .perpendicular();
-        Vector3 origin = new Vector3(
-            entity.posX + entity.width / 2F,
-            entity.posY + entity.height,
-            entity.posZ + entity.width / 2F);
+        Vector3 look = new Vector3(entity.getLook(1F)).normalize().multiply(mul * 3);
+        Vector3 motionReverse = look.clone().normalize().multiply(-0.4 * mul);
+        Vector3 perp = look.clone().perpendicular();
+        Vector3 origin = new Vector3(entity.posX + entity.width / 2F, entity.posY + entity.height, entity.posZ + entity.width / 2F);
 
         for (int i = 0; i < 4; i++) {
-            if (rand.nextFloat() < mul) {
-                Vector3 at = look.clone()
-                    .multiply(0.2 + rand.nextFloat() * 2.5)
-                    .add(
-                        perp.clone()
-                            .rotate(rand.nextFloat() * 360, look)
-                            .multiply(rand.nextFloat() * 0.5))
-                    .add(origin);
+            if(rand.nextFloat() < mul) {
+                Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat() * 0.5)).add(origin);
 
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
-                p.scale(0.35F + rand.nextFloat() * 0.2F)
-                    .setMaxAge(10 + rand.nextInt(10));
-                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                    .setAlphaMultiplier(1F);
+                p.scale(0.35F + rand.nextFloat() * 0.2F).setMaxAge(10 + rand.nextInt(10));
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setAlphaMultiplier(1F);
                 p.gravity(0.004);
                 p.setColor(wandBlue);
                 p.motion(motionReverse.getX(), motionReverse.getY(), motionReverse.getZ());
@@ -288,7 +246,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
+        if(wa != null) {
             switch (wa) {
                 case VICIO:
                     return 72000;
@@ -306,18 +264,17 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        if (worldIn.isRemote) return;
+        if(worldIn.isRemote) return;
 
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            if (wa.equals(WandAugment.VICIO)) {
+        if(wa != null) {
+            if(wa.equals(WandAugment.VICIO)) {
                 int strTick = this.getMaxItemUseDuration(stack) - timeLeft;
-                if (strTick <= 2) return;
+                if(strTick <= 2) return;
                 float mul = MathHelper.clamp(((float) strTick) / 30F, 0F, 1F);
-                BlockPos vec = entityLiving.getLook(1F);
-                Vector3 motionApply = new Vector3(vec).normalize()
-                    .multiply(mul * 3F);
-                if (motionApply.getY() > 0) {
+                Vec3d vec = entityLiving.getLook(1F);
+                Vector3 motionApply = new Vector3(vec).normalize().multiply(mul * 3F);
+                if(motionApply.getY() > 0) {
                     motionApply.setY(MathHelper.clamp(motionApply.getY() + (0.7F * mul), 0.7F * mul, Float.MAX_VALUE));
                 }
 
@@ -327,42 +284,34 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                 entityLiving.fallDistance = 0F;
                 PktShootEntity pkt = new PktShootEntity(entityLiving.getEntityId(), motionApply);
                 pkt.setEffectLength(mul);
-                PacketChannel.CHANNEL.sendToDimension(pkt, worldIn.provider.dimensionId);
+                PacketChannel.CHANNEL.sendToDimension(pkt, worldIn.provider.getDimension());
             }
         }
     }
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!isSelected)
-            isSelected = (entityIn instanceof EntityPlayer) && ((EntityPlayer) entityIn).getHeldItemOffhand() == stack;
+        if (!isSelected) isSelected = (entityIn instanceof EntityPlayer) && ((EntityPlayer) entityIn).getHeldItemOffhand() == stack;
 
-        if (!worldIn.isRemote) {
-            if (isSelected) {
+        if(!worldIn.isRemote) {
+            if(isSelected) {
                 if (worldIn.getTotalWorldTime() % 20 == 0 && entityIn instanceof EntityPlayerMP) {
-                    double dstr = ConstellationSkyHandler.getInstance()
-                        .getCurrentDaytimeDistribution(worldIn);
-                    if (dstr <= 1E-4) return;
+                    double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
+                    if(dstr <= 1E-4) return;
 
-                    RockCrystalBuffer buf = WorldCacheManager
-                        .getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+                    RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
 
                     ChunkPos pos = new ChunkPos(entityIn.getPosition());
                     Set<BlockPos> posList = new HashSet<>(buf.collectPositions(pos, 4));
                     posList.addAll(RockCrystalHandler.INSTANCE.collectPositions(worldIn, pos, 4));
                     for (BlockPos rPos : posList) {
                         IBlockState state = worldIn.getBlockState(rPos);
-                        if (!(state.getBlock() instanceof BlockCustomOre)
-                            || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
+                        if (!(state.getBlock() instanceof BlockCustomOre) || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
                             RockCrystalHandler.INSTANCE.removeOre(worldIn, rPos, true);
                             continue;
                         }
                         BlockPos p = rPos.up();
-                        PktParticleEvent pkt = new PktParticleEvent(
-                            PktParticleEvent.ParticleEventType.WAND_CRYSTAL_HIGHLIGHT,
-                            p.getX(),
-                            p.getY(),
-                            p.getZ());
+                        PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.WAND_CRYSTAL_HIGHLIGHT, p.getX(), p.getY(), p.getZ());
                         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) entityIn);
                     }
                 }
@@ -373,10 +322,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                         for (int xx = -1; xx <= 1; xx++) {
                             for (int zz = -1; zz <= 1; zz++) {
                                 BlockPos at = playerPos.add(xx, -1, zz);
-                                if (MiscUtils.isChunkLoaded(worldIn, at) && !worldIn.isOutsideBuildHeight(at)
-                                    && worldIn.getBlockState(at)
-                                    .getBlock()
-                                    .equals(Blocks.AIR)) {
+                                if (MiscUtils.isChunkLoaded(worldIn, at) && !worldIn.isOutsideBuildHeight(at) && worldIn.getBlockState(at).getBlock().equals(Blocks.AIR)) {
                                     worldIn.setBlockState(at, BlocksAS.blockVanishing.getDefaultState());
                                 }
                             }
@@ -385,7 +331,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
                 }
             }
         } else {
-            if (isSelected) {
+            if(isSelected) {
                 playClientEffects(stack, entityIn);
             }
         }
@@ -394,19 +340,16 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     @SideOnly(Side.CLIENT)
     private void playClientEffects(ItemStack stack, Entity entityIn) {
         WandAugment wa = getAugment(stack);
-        if (wa != null) {
-            if (rand.nextFloat() <= 0.7F) {
+        if(wa != null) {
+            if(rand.nextFloat() <= 0.7F) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    entityIn.posX - entityIn.width / 2 + rand.nextFloat() * entityIn.width,
-                    entityIn.posY + rand.nextFloat() * (entityIn.height / 2),
-                    entityIn.posZ - entityIn.width / 2 + rand.nextFloat() * entityIn.width);
-                p.gravity(0.004)
-                    .scale(0.3F + rand.nextFloat() * 0.2F)
-                    .setMaxAge(45 + rand.nextInt(20));
-                p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
-                    .setAlphaMultiplier(1F);
+                        entityIn.posX - entityIn.width / 2 + rand.nextFloat() * entityIn.width,
+                        entityIn.posY + rand.nextFloat() * (entityIn.height / 2),
+                        entityIn.posZ - entityIn.width / 2 + rand.nextFloat() * entityIn.width);
+                p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(45 + rand.nextInt(20));
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(1F);
                 p.motion(0, -rand.nextFloat() * 0.001, 0);
-                if (rand.nextInt(4) == 0) {
+                if(rand.nextInt(4) == 0) {
                     p.setColor(Color.WHITE);
                     p.scale(0.1F + rand.nextFloat() * 0.1F);
                 } else {
@@ -418,49 +361,36 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @SideOnly(Side.CLIENT)
     public static void highlightEffects(PktParticleEvent event) {
-        if (Minecraft.getMinecraft().theWorld == null) return;
+        if(Minecraft.getMinecraft().world == null) return;
 
-        BlockPos orePos = event.getVec()
-            .toBlockPos();
-        BlockPos pos = Minecraft.getMinecraft().theWorld.getTopSolidOrLiquidBlock(orePos)
-            .up();
+        BlockPos orePos = event.getVec().toBlockPos();
+        BlockPos pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(orePos).up();
         Vector3 display = new Vector3(pos);
         MiscUtils.applyRandomOffset(display, rand, 2);
         double velX = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double velY = rand.nextFloat() * 0.3F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
-        double dstr = ConstellationSkyHandler.getInstance()
-            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+        double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
         for (int i = 0; i < 10; i++) {
-            EntityFXFacingParticle particle = EffectHelper
-                .genericFlareParticle(display.getX(), display.getY(), display.getZ());
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(display.getX(), display.getY(), display.getZ());
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-            particle.motion(
-                velX * (0.2 + 0.8 * rand.nextFloat()),
-                velY * (0.4 + 0.6 * rand.nextFloat()),
-                velZ * (0.2 + 0.8 * rand.nextFloat()));
-            particle.scale(0.7F)
-                .setMaxAge(70);
-            particle.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
-                .setAlphaMultiplier((float) ((150 * dstr) / 255F));
+            particle.motion(velX * (0.2 + 0.8 * rand.nextFloat()), velY * (0.4 + 0.6 * rand.nextFloat()), velZ * (0.2 + 0.8 * rand.nextFloat()));
+            particle.scale(0.7F).setMaxAge(70);
+            particle.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier((float) ((150 * dstr) / 255F));
         }
         dstr = Math.sqrt(dstr);
         dstr = Math.sqrt(dstr);
-        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer);
-        float dst = (float) event.getVec()
-            .distance(plVec);
+        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
+        float dst = (float) event.getVec().distance(plVec);
         float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));
-        if (dstMul >= 1E-4) {
+        if(dstMul >= 1E-4) {
             EntityFXFacingDepthParticle p = EffectHelper.genericDepthIgnoringFlareParticle(
-                orePos.getX() - 1 + rand.nextFloat() * 3,
-                orePos.getY() - 1 + rand.nextFloat() * 3,
-                orePos.getZ() - 1 + rand.nextFloat() * 3);
+                    orePos.getX() - 1 + rand.nextFloat() * 3,
+                    orePos.getY() - 1 + rand.nextFloat() * 3,
+                    orePos.getZ() - 1 + rand.nextFloat() * 3);
             p.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-            p.gravity(0.004)
-                .scale(0.4F)
-                .setAlphaMultiplier((float) ((150 * dstr) / 255F) * dstMul);
-            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                .setMaxAge(30 + rand.nextInt(10));
+            p.gravity(0.004).scale(0.4F).setAlphaMultiplier((float) ((150 * dstr) / 255F) * dstMul);
+            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setMaxAge(30 + rand.nextInt(10));
         }
     }
 
@@ -470,16 +400,15 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
     }
 
     @Override
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, ForgeDirection side,
-                                ItemStack stack) {
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
+        IBlockState state = world.getBlockState(pos);
         Block b = state.getBlock();
-        if (b instanceof IWandInteract) {
+        if(b instanceof IWandInteract) {
             ((IWandInteract) b).onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
             return true;
         }
         IWandInteract wandTe = MiscUtils.getTileAt(world, pos, IWandInteract.class, true);
-        if (wandTe != null) {
+        if(wandTe != null) {
             wandTe.onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
             return true;
         }

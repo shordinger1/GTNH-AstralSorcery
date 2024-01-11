@@ -1,43 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.event.listener;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -62,7 +32,34 @@ import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.data.TimeoutList;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.entity.*;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
+import shordinger.wrapper.net.minecraft.entity.projectile.EntityArrow;
+import shordinger.wrapper.net.minecraft.init.MobEffects;
+import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.potion.PotionEffect;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraft.world.storage.loot.LootContext;
+import shordinger.wrapper.net.minecraft.world.storage.loot.LootTable;
+import shordinger.wrapper.net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.*;
+import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -82,12 +79,10 @@ public class EventHandlerEntity {
     private static final Color discidiaWandColor = new Color(0x880100);
 
     public static int spawnSkipId = -1;
-    public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(
-        TickEvent.Type.SERVER);
+    public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> ritualFlight = new TimeoutList<>(player -> {
-        if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).interactionManager.getGameType()
-            .isSurvivalOrAdventure()) {
+        if(player instanceof EntityPlayerMP && ((EntityPlayerMP) player).interactionManager.getGameType().isSurvivalOrAdventure()) {
             player.capabilities.allowFlying = false;
             player.capabilities.isFlying = false;
             player.sendPlayerAbilities();
@@ -97,12 +92,12 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onTarget(LivingSetAttackTargetEvent event) {
-        EntityLivingBase living = event.target;
+        EntityLivingBase living = event.getTarget();
         if (living != null && !living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
-                event.entityLiving.setRevengeTarget(null);
-                if (event.entityLiving instanceof EntityLiving) {
-                    ((EntityLiving) event.entityLiving).setAttackTarget(null);
+                event.getEntityLiving().setRevengeTarget(null);
+                if (event.getEntityLiving() instanceof EntityLiving) {
+                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
                 }
             }
         }
@@ -110,9 +105,8 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onSleep(PlayerSleepInBedEvent event) {
-        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(event.entityPlayer.getEntityWorld());
-        if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(event.getEntityPlayer().getEntityWorld());
+        if(wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             if (event.getResultStatus() == null) {
                 event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
             }
@@ -121,63 +115,49 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onSpawnDropCloud(EntityJoinWorldEvent event) {
-        if (event.getEntity() instanceof EntityAreaEffectCloud && MiscUtils.iterativeSearch(
-            ((EntityAreaEffectCloud) event.getEntity()).effects,
-            (pEffect) -> pEffect.getPotion()
-                .equals(RegistryPotions.potionDropModifier))
-            != null) {
+        if (event.getEntity() instanceof EntityAreaEffectCloud &&
+                MiscUtils.iterativeSearch(((EntityAreaEffectCloud) event.getEntity()).effects, (pEffect) -> pEffect.getPotion().equals(RegistryPotions.potionDropModifier)) != null) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onAttack(LivingHurtEvent event) {
-        if (event.getEntity()
-            .getEntityWorld().isRemote) return;
+        if(event.getEntity().getEntityWorld().isRemote) return;
 
-        DamageSource source = event.source;
-        if (source.getTrueSource() != null) {
+        DamageSource source = event.getSource();
+        if(source.getTrueSource() != null) {
             EntityLivingBase entitySource = null;
-            if (source.getTrueSource() instanceof EntityLivingBase) {
+            if(source.getTrueSource() instanceof EntityLivingBase) {
                 entitySource = (EntityLivingBase) source.getTrueSource();
-            } else if (source.getTrueSource() instanceof EntityArrow) {
+            } else if(source.getTrueSource() instanceof EntityArrow) {
                 Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
-                if (shooter instanceof EntityLivingBase) {
+                if(shooter != null && shooter instanceof EntityLivingBase) {
                     entitySource = (EntityLivingBase) shooter;
                 }
             }
-            if (entitySource != null) {
+            if(entitySource != null) {
                 WandAugment foundAugment = null;
                 ItemStack stack = entitySource.getHeldItemMainhand();
-                if (stack.stackSize!=0 && stack.getItem() instanceof ItemWand) {
+                if(!stack.isEmpty() && stack.getItem() instanceof ItemWand) {
                     foundAugment = ItemWand.getAugment(stack);
                 }
                 stack = entitySource.getHeldItemOffhand();
-                if (foundAugment == null && stack.stackSize!=0 && stack.getItem() instanceof ItemWand) {
+                if(foundAugment == null && !stack.isEmpty() && stack.getItem() instanceof ItemWand) {
                     foundAugment = ItemWand.getAugment(stack);
                 }
-                if (foundAugment != null && foundAugment.equals(WandAugment.DISCIDIA)) {
+                if(foundAugment != null && foundAugment.equals(WandAugment.DISCIDIA)) {
                     EntityAttackStack attack = attackStack.get(entitySource.getEntityId());
-                    if (attack == null) {
+                    if(attack == null) {
                         attack = new EntityAttackStack();
                         attackStack.put(entitySource.getEntityId(), attack);
                     }
-                    EntityLivingBase entity = event.entityLiving;
+                    EntityLivingBase entity = event.getEntityLiving();
                     float multiplier = attack.getAndUpdateMultipler(entity);
-                    event.setAmount(event.ammount * (1F + multiplier));
-                    PktParticleEvent ev = new PktParticleEvent(
-                        PktParticleEvent.ParticleEventType.DISCIDIA_ATTACK_STACK,
-                        entity.posX,
-                        entity.posY,
-                        entity.posZ);
+                    event.setAmount(event.getAmount() * (1F + multiplier));
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.DISCIDIA_ATTACK_STACK, entity.posX, entity.posY, entity.posZ);
                     ev.setAdditionalData(multiplier);
-                    PacketChannel.CHANNEL.sendToAllAround(
-                        ev,
-                        PacketChannel.pointFromPos(
-                            event.getEntity().world,
-                            event.getEntity()
-                                .getPosition(),
-                            64));
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(event.getEntity().world, event.getEntity().getPosition(), 64));
                 }
             }
         }
@@ -185,49 +165,45 @@ public class EventHandlerEntity {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDeathInform(LivingDeathEvent event) {
-        attackStack.remove(
-            event.getEntity()
-                .getEntityId());
+        attackStack.remove(event.getEntity().getEntityId());
     }
 
     @SubscribeEvent
     public void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
-        if (event.entityLiving.isPotionActive(RegistryPotions.potionTimeFreeze)) {
+        if(event.getEntityLiving().isPotionActive(RegistryPotions.potionTimeFreeze)) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public void onDrops(LivingDropsEvent event) {
-        if (event.entityLiving.world == null || event.entityLiving.world.isRemote
-            || !(event.entityLiving.world instanceof WorldServer)) {
+        if(event.getEntityLiving().world == null ||
+                event.getEntityLiving().world.isRemote ||
+                !(event.getEntityLiving().world instanceof WorldServer)) {
             return;
         }
-        if (event.entityLiving instanceof EntityPlayer || !(event.entityLiving instanceof EntityLiving)) return;
-        EntityLiving el = (EntityLiving) event.entityLiving;
+        if(event.getEntityLiving() instanceof EntityPlayer || !(event.getEntityLiving() instanceof EntityLiving)) return;
+        EntityLiving el = (EntityLiving) event.getEntityLiving();
         WorldServer ws = (WorldServer) el.world;
 
         PotionEffect pe = el.getActivePotionEffect(RegistryPotions.potionDropModifier);
         if (pe != null) {
             el.removeActivePotionEffect(RegistryPotions.potionDropModifier);
             int ampl = pe.getAmplifier();
-            if (ampl == 0) {
-                event.getDrops()
-                    .clear();
+            if(ampl == 0) {
+                event.getDrops().clear();
             } else {
                 LootTable lootTableRef = EntityUtils.getLootTable(el);
                 LootContext.Builder builder = new LootContext.Builder(ws).withLootedEntity(el)
-                    .withDamageSource(event.source)
-                    .withLuck(0);
-                if (lootTableRef != null) {
+                        .withDamageSource(event.getSource()).withLuck(0);
+                if(lootTableRef != null) {
                     for (int i = 0; i < ampl; i++) {
                         for (ItemStack stack : lootTableRef.generateLootForPools(rand, builder.build())) {
-                            if (stack.stackSize==0) continue;
+                            if(stack.isEmpty()) continue;
 
                             EntityItem ei = new EntityItem(ws, el.posX, el.posY, el.posZ, stack);
                             ei.setDefaultPickupDelay();
-                            event.getDrops()
-                                .add(ei);
+                            event.getDrops().add(ei);
                         }
                     }
                 }
@@ -235,44 +211,37 @@ public class EventHandlerEntity {
         }
     }
 
-    // Just... do the clear.
+    //Just... do the clear.
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onLeftClickBlock(PlayerInteractEvent event) {
-        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
-            ItemStack held = event.entityLiving.getHeldItem();
-            if (!event.world.isRemote && held != null
-                && held.stackSize > 0
-                && held.getItem() instanceof ItemBlockStorage) {
-                ItemBlockStorage.tryClearContainerFor(event.entityPlayer);
-            }
+    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack held = event.getItemStack();
+        if(!event.getWorld().isRemote && !held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+            ItemBlockStorage.tryClearContainerFor(event.getEntityPlayer());
         }
     }
 
-    // Send clear to server
+    //Send clear to server
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onLeftClickAir(PlayerInteractEvent event) {
-        ItemStack held = event.entityLiving.getHeldItem();
-        if (held != null && held.stackSize > 0 && held.getItem() instanceof ItemBlockStorage) {
+    public void onLeftClickAir(PlayerInteractEvent.LeftClickEmpty event) {
+        ItemStack held = event.getItemStack();
+        if(!held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
             PacketChannel.CHANNEL.sendToServer(new PktClearBlockStorageStack());
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onRightClickDebug(PlayerInteractEvent event) {
-        if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            if (event.entityPlayer.isCreative() && !event.world.isRemote) {
-                if (StarlightNetworkDebugHandler.INSTANCE
-                    .beginDebugFor(event.world, event.getPos(), event.entityPlayer)) {
-                    event.setCanceled(true);
-                }
+    public void onRightClickDebug(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getEntityPlayer().isCreative() && !event.getWorld().isRemote) {
+            if(StarlightNetworkDebugHandler.INSTANCE.beginDebugFor(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
+                event.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
-        EntityLivingBase living = event.entityLiving;
-        if (living == null || living.worldObj.isRemote) return;
+        EntityLivingBase living = event.getEntityLiving();
+        if (living == null || living.getEntityWorld().isRemote) return;
 
         if (!living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
@@ -281,17 +250,16 @@ public class EventHandlerEntity {
             }
         }
 
-        DamageSource source = event.source;
-        if (Mods.DRACONICEVOLUTION.isPresent()) {
+        DamageSource source = event.getSource();
+        if(Mods.DRACONICEVOLUTION.isPresent()) {
             ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-            if (!chest.isEmpty() && chest.getItem() instanceof ItemCape
-                && ModIntegrationDraconicEvolution.isChaosDamage(source)) {
-                if (living instanceof EntityPlayer && ((EntityPlayer) living).isCreative()) {
+            if(!chest.isEmpty() && chest.getItem() instanceof ItemCape && ModIntegrationDraconicEvolution.isChaosDamage(source)) {
+                if(living instanceof EntityPlayer && ((EntityPlayer) living).isCreative()) {
                     event.setCanceled(true);
                     return;
                 }
-                event.setAmount(event.ammount * (1F - Config.capeChaosResistance));
-                if (event.ammount <= 1E-4) {
+                event.setAmount(event.getAmount() * (1F - Config.capeChaosResistance));
+                if(event.getAmount() <= 1E-4) {
                     event.setCanceled(true);
                     return;
                 }
@@ -305,7 +273,7 @@ public class EventHandlerEntity {
                 p = (EntityPlayer) source.getTrueSource();
             } else if (source.getTrueSource() instanceof EntityArrow) {
                 Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
-                if (shooter instanceof EntityPlayer) {
+                if (shooter != null && shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
                     break lblIn;
@@ -314,24 +282,24 @@ public class EventHandlerEntity {
                 break lblIn;
             }
             ItemStack held = p.getHeldItemMainhand();
-            if (SwordSharpenHelper.isSwordSharpened(held)) {
-                // YEEEAAAA i know this flat multiplies all damage.. but w/e..
-                // There's no great way to test for item here.
-                event.setAmount(event.ammount * (1 + ((float) Config.swordSharpMultiplier)));
+            if(SwordSharpenHelper.isSwordSharpened(held)) {
+                //YEEEAAAA i know this flat multiplies all damage.. but w/e..
+                //There's no great way to test for item here.
+                event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
             }
         }
-        EntityLivingBase entity = event.entityLiving;
+        EntityLivingBase entity = event.getEntityLiving();
         if (entity != null) {
             ItemStack active = entity.getActiveItemStack();
-            if (!active.isEmpty() && active.getItem() instanceof ItemWand) {
+            if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
                 WandAugment wa = ItemWand.getAugment(active);
-                if (wa != null && wa.equals(WandAugment.ARMARA)) {
+                if(wa != null && wa.equals(WandAugment.ARMARA)) {
                     PotionEffect potion = new PotionEffect(MobEffects.RESISTANCE, 100, 0);
-                    if (entity.isPotionApplicable(potion)) {
+                    if(entity.isPotionApplicable(potion)) {
                         entity.addPotionEffect(potion);
                     }
                     potion = new PotionEffect(MobEffects.ABSORPTION, 100, 1);
-                    if (entity.isPotionApplicable(potion)) {
+                    if(entity.isPotionApplicable(potion)) {
                         entity.addPotionEffect(potion);
                     }
                 }
@@ -341,26 +309,21 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
-        if (event.getResult() == Event.Result.DENY) return; // Already denied anyway.
-        if (event.world.isRemote) return;
-        if (event.isSpawner()) return; // FINE, i'll allow spawners.
+        if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
+        if (event.getWorld().isRemote) return;
+        if (event.isSpawner()) return; //FINE, i'll allow spawners.
 
-        EntityLivingBase toTest = event.entityLiving;
+        EntityLivingBase toTest = event.getEntityLiving();
         if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {
             return;
         }
 
         Vector3 at = Vector3.atEntityCorner(toTest);
-        boolean mayDeny = Config.doesMobSpawnDenyDenyEverything
-            || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
+        boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {
-            for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions
-                .entrySet()) {
-                if (!entry.getKey()
-                    .getWorld()
-                    .equals(toTest.getEntityWorld())) continue;
-                if (at.distance(entry.getKey()) <= entry.getValue()
-                    .getValue()) {
+            for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
+                if (!entry.getKey().getWorld().equals(toTest.getEntityWorld())) continue;
+                if (at.distance(entry.getKey()) <= entry.getValue().getValue()) {
                     event.setResult(Event.Result.DENY);
                     return;
                 }
@@ -371,33 +334,28 @@ public class EventHandlerEntity {
     @SideOnly(Side.CLIENT)
     public static void playDiscidiaStackAttackEffects(PktParticleEvent pkt) {
         Vector3 at = pkt.getVec();
-        World w = Minecraft.getMinecraft().theWorld;
+        World w = Minecraft.getMinecraft().world;
         EntityLivingBase found = null;
-        if (w != null) {
+        if(w != null) {
             EntityLivingBase e = EntityUtils.selectClosest(
-                w.getEntitiesWithinAABB(
-                    EntityLivingBase.class,
-                    Block.FULL_BLOCK_AABB.offset(at.getX() - 0.5, at.getY() - 0.5, at.getZ() - 0.5)),
-                (ent) -> ent.getDistance(at.getX(), at.getY(), at.getZ()));
-            if (e != null) {
+                    w.getEntitiesWithinAABB(EntityLivingBase.class, Block.FULL_BLOCK_AABB.offset(at.getX() - 0.5, at.getY() - 0.5, at.getZ() - 0.5)),
+                    (ent) -> ent.getDistance(at.getX(), at.getY(), at.getZ()));
+            if(e != null) {
                 found = e;
             }
         }
-        if (found != null) {
+        if(found != null) {
             AxisAlignedBB box = found.getEntityBoundingBox();
             for (int i = 0; i < 24; i++) {
-                if (rand.nextFloat() < pkt.getAdditionalData()) {
+                if(rand.nextFloat() < pkt.getAdditionalData()) {
                     Vector3 pos = new Vector3(
-                        box.minX + ((box.maxX - box.minX) * rand.nextFloat()),
-                        box.minY + ((box.maxY - box.minY) * rand.nextFloat()),
-                        box.minZ + ((box.maxZ - box.minZ) * rand.nextFloat()));
+                            box.minX + ((box.maxX - box.minX) * rand.nextFloat()),
+                            box.minY + ((box.maxY - box.minY) * rand.nextFloat()),
+                            box.minZ + ((box.maxZ - box.minZ) * rand.nextFloat()));
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
-                    p.setColor(discidiaWandColor)
-                        .setMaxAge(25 + rand.nextInt(10));
-                    p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT)
-                        .setAlphaMultiplier(1F);
-                    p.gravity(0.004)
-                        .scale(0.15F + rand.nextFloat() * 0.1F);
+                    p.setColor(discidiaWandColor).setMaxAge(25 + rand.nextInt(10));
+                    p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).setAlphaMultiplier(1F);
+                    p.gravity(0.004).scale(0.15F + rand.nextFloat() * 0.1F);
                     Vector3 motion = new Vector3();
                     MiscUtils.applyRandomOffset(motion, rand, 0.03F);
                     p.motion(motion.getX(), motion.getY(), motion.getZ());
@@ -408,7 +366,7 @@ public class EventHandlerEntity {
 
     private static class EntityAttackStack {
 
-        private static final long stackMsDuration = 5000;
+        private static long stackMsDuration = 5000;
 
         private int entityStackId = -1;
         private long lastStackMs = 0;
@@ -419,7 +377,7 @@ public class EventHandlerEntity {
         }
 
         public float getMultiplier(int attackedEntityId) {
-            if (entityStackId != attackedEntityId) {
+            if(entityStackId != attackedEntityId) {
                 return 0F;
             }
             return (((float) stack) / ((float) Config.discidiaStackCap)) * Config.discidiaStackMultiplier;
@@ -430,7 +388,7 @@ public class EventHandlerEntity {
         }
 
         public float getAndUpdateMultipler(int attackedEntityId) {
-            if (attackedEntityId != entityStackId) {
+            if(attackedEntityId != entityStackId) {
                 entityStackId = attackedEntityId;
                 lastStackMs = System.currentTimeMillis();
                 stack = 0;
@@ -438,7 +396,7 @@ public class EventHandlerEntity {
                 long current = System.currentTimeMillis();
                 long diff = current - lastStackMs;
                 lastStackMs = current;
-                if (diff < stackMsDuration) {
+                if(diff < stackMsDuration) {
                     stack = MathHelper.clamp(stack + 1, 0, Config.discidiaStackCap);
                 } else {
                     stack = MathHelper.clamp(stack - ((int) (diff / stackMsDuration)), 0, Config.discidiaStackCap);

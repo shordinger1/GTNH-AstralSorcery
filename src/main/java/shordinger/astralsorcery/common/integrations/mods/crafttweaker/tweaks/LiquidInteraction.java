@@ -1,15 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IItemStack;
@@ -18,6 +15,8 @@ import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.LiquidInteractionAdd;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.network.LiquidInteractionRemove;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -48,8 +47,7 @@ public class LiquidInteraction extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addInteraction(ILiquidStack liquidIn1, float chanceConsumption1, ILiquidStack liquidIn2,
-                                      float chanceConsumption2, int weight, IItemStack output) {
+    public static void addInteraction(ILiquidStack liquidIn1, float chanceConsumption1, ILiquidStack liquidIn2, float chanceConsumption2, int weight, IItemStack output) {
         ItemStack out = convertToItemStack(output);
         if (out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-removal due to invalid/empty item output.");
@@ -70,8 +68,7 @@ public class LiquidInteraction extends BaseTweaker {
         chanceConsumption1 = Math.max(0, chanceConsumption1);
         chanceConsumption2 = Math.max(0, chanceConsumption2);
 
-        ModIntegrationCrafttweaker.recipeModifications
-            .add(new LiquidInteractionAdd(in1, in2, chanceConsumption1, chanceConsumption2, out, weight));
+        ModIntegrationCrafttweaker.recipeModifications.add(new LiquidInteractionAdd(in1, in2, chanceConsumption1, chanceConsumption2, out, weight));
     }
 
 }

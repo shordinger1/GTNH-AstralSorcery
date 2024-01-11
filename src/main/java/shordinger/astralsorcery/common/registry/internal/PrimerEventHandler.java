@@ -1,41 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry.internal;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.DataSerializerEntry;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.base.LiquidInteraction;
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.registry.*;
-import shordinger.astralsorcery.common.registry.RegistryBlocks;
-import shordinger.astralsorcery.common.registry.RegistryConstellations;
-import shordinger.astralsorcery.common.registry.RegistryEnchantments;
-import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.common.registry.RegistryPotions;
-import shordinger.astralsorcery.common.registry.RegistryRecipes;
-import shordinger.astralsorcery.common.registry.RegistrySounds;
 import shordinger.astralsorcery.common.util.ASDataSerializers;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
+import shordinger.wrapper.net.minecraft.potion.Potion;
+import shordinger.wrapper.net.minecraft.util.SoundEvent;
+import shordinger.wrapper.net.minecraft.world.biome.Biome;
+import shordinger.wrapper.net.minecraftforge.event.RegistryEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.registries.DataSerializerEntry;
+import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistry;
+import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +38,7 @@ import shordinger.astralsorcery.common.util.ASDataSerializers;
  */
 public class PrimerEventHandler {
 
-    private final InternalRegistryPrimer registry;
+    private InternalRegistryPrimer registry;
 
     public PrimerEventHandler(InternalRegistryPrimer registry) {
         this.registry = registry;
@@ -56,10 +48,7 @@ public class PrimerEventHandler {
     public void registerItems(RegistryEvent.Register<Item> event) {
         registry.wipe(event.getClass());
         RegistryItems.init();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
         AstralSorcery.proxy.registerOreDictEntries();
         RegistryConstellations.initConstellationSignatures();
     }
@@ -69,40 +58,28 @@ public class PrimerEventHandler {
         registry.wipe(event.getClass());
         RegistryBlocks.init();
         RegistryBlocks.initRenderRegistry();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
     public void registerBiomes(RegistryEvent.Register<Biome> event) {
         registry.wipe(event.getClass());
-        // ? maybe. one day.
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        //? maybe. one day.
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
     public void registerPotions(RegistryEvent.Register<Potion> event) {
         registry.wipe(event.getClass());
         RegistryPotions.init();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
     public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
         registry.wipe(event.getClass());
         RegistryEnchantments.init();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
@@ -113,36 +90,26 @@ public class PrimerEventHandler {
         WellLiquefaction.init();
         LiquidInteraction.init();
         LightOreTransmutations.init();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
     public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
         registry.wipe(event.getClass());
         RegistrySounds.init();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     @SubscribeEvent
     public void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
         registry.wipe(event.getClass());
         ASDataSerializers.registerSerializers();
-        fillRegistry(
-            event.getRegistry()
-                .getRegistrySuperType(),
-            event.getRegistry());
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    private <T extends IForgeRegistryEntry<T>> void fillRegistry(Class<T> registrySuperType,
-                                                                 IForgeRegistry<T> forgeRegistry) {
+    private <T extends IForgeRegistryEntry<T>> void fillRegistry(Class<T> registrySuperType, IForgeRegistry<T> forgeRegistry) {
         List<?> entries = registry.getEntries(registrySuperType);
-        if (entries != null) {
+        if(entries != null) {
             entries.forEach((e) -> forgeRegistry.register((T) e));
         }
     }

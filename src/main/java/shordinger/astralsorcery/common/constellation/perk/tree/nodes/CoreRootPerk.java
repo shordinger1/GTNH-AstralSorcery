@@ -1,25 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraftforge.common.util.Constants;
-
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,12 +51,7 @@ public class CoreRootPerk extends KeyPerk {
             if (ResearchManager.grantFreePerkPoint(player, token)) {
                 listTokens.appendTag(new NBTTagString(token));
 
-                LogCategory.PERKS.info(() -> {
-                    if (player != null) {
-                        return "Granted perk point " + token + " to " + player.getDisplayName();
-                    }
-                    return null;
-                });
+                LogCategory.PERKS.info(() -> "Granted perk point " + token + " to " + player.getName());
             }
         }
         dataStorage.setTag("tokens", listTokens);
@@ -71,7 +65,7 @@ public class CoreRootPerk extends KeyPerk {
         for (int i = 0; i < listTokens.tagCount(); i++) {
             String tk = listTokens.getStringTagAt(i);
             if (ResearchManager.revokeFreePoint(player, tk)) {
-                LogCategory.PERKS.info(() -> "Revoked perk point " + tk + " of " + player.getDisplayName());
+                LogCategory.PERKS.info(() -> "Revoked perk point " + tk + " of " + player.getName());
             }
         }
     }

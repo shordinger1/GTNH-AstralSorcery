@@ -1,30 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import java.util.*;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,7 +34,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public class RaytraceAssist {
 
-    // -1 is wildcard
+    //-1 is wildcard
     private static final Map<Block, List<Integer>> passable = new HashMap<>();
 
     private static final double STEP_WIDTH = 0.05;
@@ -45,7 +44,7 @@ public class RaytraceAssist {
     private final BlockPos startPos, targetPos;
 
     private boolean collectEntities = false;
-    private final List<Integer> collected = new LinkedList<>();
+    private List<Integer> collected = new LinkedList<>();
     private AxisAlignedBB collectBox = null;
     private boolean includeEnd = false;
 
@@ -75,50 +74,44 @@ public class RaytraceAssist {
 
     public boolean isClear(World world) {
         Vector3 aim = start.vectorFromHereTo(target);
-        Vector3 stepAim = aim.clone()
-            .normalize()
-            .multiply(STEP_WIDTH);
+        Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
         double distance = aim.length();
         Vector3 prevVec = start.clone();
         for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
-            Vector3 stepVec = prevVec.clone()
-                .add(stepAim);
+            Vector3 stepVec = prevVec.clone().add(stepAim);
             BlockPos at = stepVec.toBlockPos();
 
-            if (collectEntities) {
-                List entities = world.getEntitiesWithinAABB(
-                    Entity.class,
-                    collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
+            if(collectEntities) {
+                List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
                 for (Entity b : entities) {
-                    if (!collected.contains(b.getEntityId())) {
+                    if(!collected.contains(b.getEntityId())) {
                         collected.add(b.getEntityId());
                     }
                 }
             }
 
-            if (MiscUtils.isChunkLoaded(world, new ChunkPos(at))) {
-                if (!isStartEnd(at) && !world.isAirBlock(at)) {
-                    IBlockState state = WorldHelper.getBlockState(world, at);
-                    if (!isAllowed(state)) {
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(at))) {
+                if(!isStartEnd(at) && !world.isAirBlock(at)) {
+                    IBlockState state = world.getBlockState(at);
+                    if(!isAllowed(state)) {
                         hit = at;
                         return false;
                     }
                 }
             }
 
-            /*
-             * Tried often enough. doesn't work properly for whatever reason.
-             * RayTraceResult rtr = world.rayTraceBlocks(prevVec.toBlockPos(), stepVec.toBlockPos());
-             * if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
-             * BlockPos hit = rtr.getBlockPos();
-             * if(!isStartEnd(hit)) {
-             * IBlockState state = WorldHelper.getBlockState(world,hit);
-             * if(!isAllowed(state)) {
-             * return false;
-             * }
-             * }
-             * }
-             */
+            /* Tried often enough. doesn't work properly for whatever reason.
+            RayTraceResult rtr = world.rayTraceBlocks(prevVec.toVec3d(), stepVec.toVec3d());
+
+            if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
+                BlockPos hit = rtr.getBlockPos();
+                if(!isStartEnd(hit)) {
+                    IBlockState state = world.getBlockState(hit);
+                    if(!isAllowed(state)) {
+                        return false;
+                    }
+                }
+            }*/
 
             prevVec = stepVec;
         }
@@ -133,7 +126,7 @@ public class RaytraceAssist {
         List<Entity> entities = new LinkedList<>();
         for (Integer id : collected) {
             Entity e = world.getEntityByID(id);
-            if (e != null && !e.isDead) {
+            if(e != null && !e.isDead) {
                 entities.add(e);
             }
         }
@@ -143,9 +136,9 @@ public class RaytraceAssist {
     private boolean isAllowed(IBlockState state) {
         Block b = state.getBlock();
         List<Integer> accepted = passable.get(b);
-        if (accepted != null) {
-            if (accepted.size() == 1 && accepted.get(0) == -1) return true;
-            if (accepted.contains(b.getMetaFromState(state))) return true;
+        if(accepted != null) {
+            if(accepted.size() == 1 && accepted.get(0) == -1) return true;
+            if(accepted.contains(b.getMetaFromState(state))) return true;
         }
         return false;
     }
@@ -156,7 +149,7 @@ public class RaytraceAssist {
 
     public static void addPassable(Block b, Integer... stateMetas) {
         List<Integer> passStates = new ArrayList<>();
-        if (stateMetas == null || stateMetas.length == 0) {
+        if(stateMetas == null || stateMetas.length == 0) {
             passStates.add(-1);
         } else {
             Collections.addAll(passStates, stateMetas);
@@ -175,8 +168,7 @@ public class RaytraceAssist {
     public static void playDebug(PktParticleEvent event) {
         Vector3 pos = event.getVec();
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
-        p.gravity(0.004)
-            .scale(0.05F);
+        p.gravity(0.004).scale(0.05F);
     }
 
 }

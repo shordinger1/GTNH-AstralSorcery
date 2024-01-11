@@ -1,22 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.camera;
 
-import java.util.LinkedList;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+
+import javax.annotation.Nullable;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,36 +42,27 @@ public class ClientCameraFlightHelper {
         }
 
         public CameraFlightBuilder addPoint(Vector3 nextPoint, int ticksToFlyThere) {
-            if (ticksToFlyThere < 0) {
-                AstralSorcery.log
-                    .warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
+            if(ticksToFlyThere < 0) {
+                AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
                 return this;
             }
             this.flight.addPoint(nextPoint, ticksToFlyThere);
             return this;
         }
 
-        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, double radius, int amountOfPointsOnCircle,
-                                                     int ticksBetweenEachPoint) {
+        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, double radius, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
             return addCircularPoints(centerOffset, (deg) -> radius, amountOfPointsOnCircle, ticksBetweenEachPoint);
         }
 
-        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, DynamicRadiusGetter radius,
-                                                     int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
-            if (ticksBetweenEachPoint < 0) {
-                AstralSorcery.log
-                    .warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
+        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, DynamicRadiusGetter radius, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
+            if(ticksBetweenEachPoint < 0) {
+                AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
                 return this;
             }
             double degPerPoint = 360D / ((double) amountOfPointsOnCircle);
             for (int i = 0; i < amountOfPointsOnCircle; i++) {
                 double deg = i * degPerPoint;
-                Vector3 point = Vector3.RotAxis.Y_AXIS.clone()
-                    .perpendicular()
-                    .normalize()
-                    .multiply(radius.getRadius(deg))
-                    .rotate(Math.toRadians(deg), Vector3.RotAxis.Y_AXIS)
-                    .add(centerOffset);
+                Vector3 point = Vector3.RotAxis.Y_AXIS.clone().perpendicular().normalize().multiply(radius.getRadius(deg)).rotate(Math.toRadians(deg), Vector3.RotAxis.Y_AXIS).add(centerOffset);
                 addPoint(point, ticksBetweenEachPoint);
             }
             return this;
@@ -94,16 +83,13 @@ public class ClientCameraFlightHelper {
         }
 
         public CameraFlight finishAndStart() {
-            if (this.flight.flightPoints.size() <= 0) {
+            if(this.flight.flightPoints.size() <= 0) {
                 AstralSorcery.log.warn("Tried to start a camera flight without any points! Skipping...");
                 return null;
             }
 
-            ClientCameraManager.CameraTransformerRenderReplacement repl = new ClientCameraManager.CameraTransformerRenderReplacement(
-                this.flight,
-                this.flight);
-            ClientCameraManager.getInstance()
-                .addTransformer(repl);
+            ClientCameraManager.CameraTransformerRenderReplacement repl = new ClientCameraManager.CameraTransformerRenderReplacement(this.flight, this.flight);
+            ClientCameraManager.getInstance().addTransformer(repl);
             return this.flight;
         }
 
@@ -117,13 +103,11 @@ public class ClientCameraFlightHelper {
 
     public static interface TickDelegate {
 
-        public void tick(ClientCameraManager.EntityRenderViewReplacement renderView,
-                         ClientCameraManager.EntityClientReplacement focusedEntity);
+        public void tick(ClientCameraManager.EntityRenderViewReplacement renderView, ClientCameraManager.EntityClientReplacement focusedEntity);
 
     }
 
-    public static class CameraFlight extends ClientCameraManager.EntityRenderViewReplacement
-        implements ClientCameraManager.PersistencyFunction {
+    public static class CameraFlight extends ClientCameraManager.EntityRenderViewReplacement implements ClientCameraManager.PersistencyFunction {
 
         private LinkedList<FlightPoint> flightPoints = new LinkedList<>();
         private final Vector3 startVector, focus;
@@ -159,14 +143,13 @@ public class ClientCameraFlightHelper {
         }
 
         @Override
-        public void moveEntityTick(ClientCameraManager.EntityRenderViewReplacement entity,
-                                   ClientCameraManager.EntityClientReplacement replacement, int ticksExisted) {
-            if (delegate != null) {
+        public void moveEntityTick(ClientCameraManager.EntityRenderViewReplacement entity, ClientCameraManager.EntityClientReplacement replacement, int ticksExisted) {
+            if(delegate != null) {
                 delegate.tick(entity, replacement);
             }
             setCameraFocus(Vector3.atEntityCenter(replacement));
             this.expired = this.ticksExisted > totalTickDuration;
-            if (flightPoints.isEmpty()) {
+            if(flightPoints.isEmpty()) {
                 this.expired = true;
             } else {
                 Vector3 position = queryByTicks(ticksExisted);
@@ -181,14 +164,14 @@ public class ClientCameraFlightHelper {
 
         @Override
         public void onStopTransforming() {
-            if (stopDelegate != null && Minecraft.getMinecraft().theWorld != null) {
+            if(stopDelegate != null && Minecraft.getMinecraft().world != null) {
                 stopDelegate.onCameraFlightStop();
             }
         }
 
-        // Prev-Next tuple
+        //Prev-Next tuple
         private Vector3 queryByTicks(int ticks) {
-            if (ticks <= 0) {
+            if(ticks <= 0) {
                 return startVector;
             }
             int acc = 0;
@@ -200,19 +183,15 @@ public class ClientCameraFlightHelper {
                 prev = current == null ? startVector : current.dstPoint;
                 current = point;
 
-                if (accumulator >= ticks) {
+                if(accumulator >= ticks) {
                     int interp = current.ticksToGetThere - (accumulator - ticks);
                     int dstJump = current.ticksToGetThere;
-                    return current.dstPoint.clone()
-                        .subtract(prev)
-                        .divide(dstJump)
-                        .multiply(MathHelper.clamp(interp, 1, dstJump))
-                        .add(prev);
+                    return current.dstPoint.clone().subtract(prev).divide(dstJump).multiply(MathHelper.clamp(interp, 1, dstJump)).add(prev);
                 } else {
                     acc = accumulator;
                 }
             }
-            return flightPoints.getLast().dstPoint; // Doesn't happen since the list isn't empty.
+            return flightPoints.getLast().dstPoint; //Doesn't happen since the list isn't empty.
         }
 
         public boolean isExpired() {

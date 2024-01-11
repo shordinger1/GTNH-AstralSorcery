@@ -1,15 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.base;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,10 +35,8 @@ public class GuiTileBase<T extends TileEntity> extends GuiWHScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if (te.isInvalid()
-            || te.getWorldObj().provider.dimensionId != Minecraft.getMinecraft().theWorld.provider.dimensionId) {
-            Minecraft.getMinecraft()
-                .displayGuiScreen(null);
+        if(te.isInvalid() || te.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
+            Minecraft.getMinecraft().displayGuiScreen(null);
         }
     }
 

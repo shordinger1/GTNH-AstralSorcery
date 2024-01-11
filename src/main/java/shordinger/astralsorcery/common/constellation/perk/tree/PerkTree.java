@@ -1,31 +1,28 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree;
 
-import java.util.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,17 +36,16 @@ public class PerkTree {
     public static final int PERK_TREE_VERSION = 1;
     public static final PerkTree PERK_TREE = new PerkTree();
 
-    private static final Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
+    private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
     private boolean frozen = false;
 
-    private final List<PerkTreePoint<?>> treePoints = new LinkedList<>();
-    private final Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
-    private final List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
+    private List<PerkTreePoint<?>> treePoints = new LinkedList<>();
+    private Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
+    private List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
-    private final Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
+    private Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
 
-    private PerkTree() {
-    }
+    private PerkTree() {}
 
     public PointConnector registerRootPerk(RootPerk perk) {
         if (frozen) {
@@ -77,7 +73,7 @@ public class PerkTree {
 
     @Nullable
     public AbstractPerk getAstralSorceryPerk(String keyName) {
-        return getPerk(new ResourceLocation(Tags.MODID, keyName));
+        return getPerk(new ResourceLocation(AstralSorcery.MODID, keyName));
     }
 
     @Nullable
@@ -89,9 +85,7 @@ public class PerkTree {
     private PointConnector setPoint(AbstractPerk perk) throws IllegalArgumentException {
         PerkTreePoint<?> offsetPoint = perk.getPoint();
         if (this.treePoints.contains(offsetPoint)) {
-            throw new IllegalArgumentException(
-                "Tried to register perk-point at already placed position: " + offsetPoint.getOffset()
-                    .toString());
+            throw new IllegalArgumentException("Tried to register perk-point at already placed position: " + offsetPoint.getOffset().toString());
         }
         this.treePoints.add(offsetPoint);
         return new PointConnector(perk);
@@ -114,16 +108,14 @@ public class PerkTree {
         return ImmutableList.copyOf(this.treePoints);
     }
 
-    // Only for rendering purposes.
+    //Only for rendering purposes.
     @SideOnly(Side.CLIENT)
     public Collection<Tuple<AbstractPerk, AbstractPerk>> getConnections() {
         return ImmutableList.copyOf(this.connections);
     }
 
     public void clearCache(Side side) {
-        this.treePoints.stream()
-            .map(PerkTreePoint::getPerk)
-            .forEach(p -> p.clearCaches(side));
+        this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
     }
 
     public void removePerk(AbstractPerk perk) {
@@ -164,7 +156,7 @@ public class PerkTree {
         }
 
         public boolean disconnect(AbstractPerk other) {
-            if (other == null) {
+            if (other ==  null) {
                 return false;
             }
 
@@ -175,19 +167,12 @@ public class PerkTree {
             if (!others.remove(other)) {
                 return false;
             }
-            return connections.removeIf(
-                t -> (t.getKey()
-                    .equals(other)
-                    && t.getValue()
-                    .equals(point))
-                    || (t.getKey()
-                    .equals(point)
-                    && t.getValue()
-                    .equals(other)));
+            return connections.removeIf(t -> (t.getKey().equals(other) && t.getValue().equals(point)) ||
+                    (t.getKey().equals(point) && t.getValue().equals(other)));
         }
 
         public PointConnector connect(AbstractPerk other) {
-            if (other == null) {
+            if (other ==  null) {
                 return this;
             }
 

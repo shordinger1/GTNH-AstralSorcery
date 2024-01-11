@@ -1,24 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util.item;
 
-import java.util.Collections;
-import java.util.List;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.*;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import shordinger.astralsorcery.migration.block.IBlockState;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,7 +34,7 @@ public class DummyVanillaBakedModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable ForgeDirection side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         return Collections.emptyList();
     }
 
@@ -57,9 +55,7 @@ public class DummyVanillaBakedModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getMinecraft()
-            .getTextureMapBlocks()
-            .getTextureExtry("");
+        return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("");
     }
 
     @Override

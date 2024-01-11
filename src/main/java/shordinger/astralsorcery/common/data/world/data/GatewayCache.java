@@ -1,18 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.world.data;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.data.world.CachedWorldData;
@@ -20,7 +15,12 @@ import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class GatewayCache extends CachedWorldData {
 
-    private final List<GatewayNode> gatewayPositions = new LinkedList<>();
+    private List<GatewayNode> gatewayPositions = new LinkedList<>();
 
     public GatewayCache() {
         super(WorldCacheManager.SaveKey.GATEWAY_DATA);
@@ -49,31 +49,30 @@ public class GatewayCache extends CachedWorldData {
 
     public void offerPosition(World world, BlockPos pos, @Nonnull String display) {
         TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileCelestialGateway)) {
+        if(te == null || !(te instanceof TileCelestialGateway)) {
             return;
         }
         GatewayNode node = new GatewayNode(pos, display);
-        if (gatewayPositions.contains(node)) {
+        if(gatewayPositions.contains(node)) {
             return;
         }
         gatewayPositions.add(node);
         markDirty();
         CelestialGatewaySystem.instance.addPosition(world, node);
-        AstralSorcery.log.info("Added new gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
+        AstralSorcery.log.info("Added new gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
     }
 
     public void removePosition(World world, BlockPos pos) {
-        if (gatewayPositions.remove(pos)) {
+        if(gatewayPositions.remove(pos)) {
             markDirty();
             CelestialGatewaySystem.instance.removePosition(world, pos);
-            AstralSorcery.log
-                .info("Removed gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
+            AstralSorcery.log.info("Removed gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
         }
     }
 
     @Override
     public void onLoad(World world) {
-        AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.dimensionId);
+        AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.getDimension());
         long msStart = System.currentTimeMillis();
 
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
@@ -92,11 +91,7 @@ public class GatewayCache extends CachedWorldData {
             }
         }
 
-        AstralSorcery.log.info(
-            "GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart)
-                + "ms! Collected and checked "
-                + gatewayPositions.size()
-                + " gateway nodes!");
+        AstralSorcery.log.info("GatewayCache checked and fully loaded in " + (System.currentTimeMillis() - msStart) + "ms! Collected and checked " + gatewayPositions.size() + " gateway nodes!");
     }
 
     @Override
@@ -124,8 +119,7 @@ public class GatewayCache extends CachedWorldData {
     }
 
     @Override
-    public void updateTick(World world) {
-    }
+    public void updateTick(World world) {}
 
     public static class GatewayNode extends BlockPos {
 

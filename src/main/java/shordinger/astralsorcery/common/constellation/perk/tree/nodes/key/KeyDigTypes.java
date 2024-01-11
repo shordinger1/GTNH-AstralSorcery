@@ -1,24 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraftforge.event.entity.player.PlayerEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,19 +40,15 @@ public class KeyDigTypes extends KeyPerk {
             return;
         }
 
-        EntityPlayer player = event.entityPlayer;
-        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.getEntityPlayer();
+        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             ItemStack heldMainHand = player.getHeldItemMainhand();
-            if (!heldMainHand.isEmpty() && heldMainHand.getItem()
-                .getToolClasses(heldMainHand)
-                .contains("pickaxe")) {
+            if(!heldMainHand.isEmpty() && heldMainHand.getItem().getToolClasses(heldMainHand).contains("pickaxe")) {
                 IBlockState tryHarvest = event.getTargetBlock();
-                String toolRequired = tryHarvest.getBlock()
-                    .getHarvestTool(tryHarvest);
-                if (toolRequired == null || toolRequired.equalsIgnoreCase("shovel")
-                    || toolRequired.equalsIgnoreCase("axe")) {
+                String toolRequired = tryHarvest.getBlock().getHarvestTool(tryHarvest);
+                if(toolRequired == null || toolRequired.equalsIgnoreCase("shovel") || toolRequired.equalsIgnoreCase("axe")) {
                     event.setCanHarvest(true);
                 }
             }
@@ -64,27 +59,18 @@ public class KeyDigTypes extends KeyPerk {
     public void onHarvestSpeed(PlayerEvent.BreakSpeed event) {
         if (checkingSpeed) return;
 
-        EntityPlayer player = event.entityPlayer;
-        Side side = event.entityLiving.world.isRemote ? Side.CLIENT : Side.SERVER;
+        EntityPlayer player = event.getEntityPlayer();
+        Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             IBlockState broken = event.getState();
             ItemStack playerMainHand = player.getHeldItemMainhand();
-            if (!playerMainHand.isEmpty()) {
-                if (playerMainHand.getItem()
-                    .getToolClasses(playerMainHand)
-                    .contains("pickaxe")) {
-                    if (!broken.getBlock()
-                        .isToolEffective("pickaxe", broken)) {
-                        if (broken.getBlock()
-                            .isToolEffective("shovel", broken)
-                            || broken.getBlock()
-                            .isToolEffective("axe", broken)) {
+            if(!playerMainHand.isEmpty()) {
+                if(playerMainHand.getItem().getToolClasses(playerMainHand).contains("pickaxe")) {
+                    if(!broken.getBlock().isToolEffective("pickaxe", broken)) {
+                        if(broken.getBlock().isToolEffective("shovel", broken) || broken.getBlock().isToolEffective("axe", broken)) {
                             checkingSpeed = true;
-                            event.setNewSpeed(
-                                Math.max(
-                                    event.getNewSpeed(),
-                                    playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
+                            event.setNewSpeed(Math.max(event.getNewSpeed(), playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState())));
                             checkingSpeed = false;
                         }
                     }

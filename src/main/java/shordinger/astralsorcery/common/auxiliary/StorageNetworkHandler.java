@@ -1,25 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.auxiliary;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.data.world.WorldCacheManager;
 import shordinger.astralsorcery.common.data.world.data.StorageNetworkBuffer;
 import shordinger.astralsorcery.common.tile.TileStorageCore;
 import shordinger.astralsorcery.common.tile.storage.StorageNetwork;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,15 +28,15 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  */
 public class StorageNetworkHandler {
 
-    // private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
+    //private static final AxisAlignedBB box = new AxisAlignedBB(-3, 0, -3, 3, 0, 3);
     private static Map<Integer, NetworkHelper> mappingHelpers = new HashMap<>();
 
     public static NetworkHelper getHandler(World world) {
-        return mappingHelpers.computeIfAbsent(world.provider.dimensionId, id -> new NetworkHelper(world));
+        return mappingHelpers.computeIfAbsent(world.provider.getDimension(), id -> new NetworkHelper(world));
     }
 
     public static void clearHandler(World world) {
-        clearHandler(world.provider.dimensionId);
+        clearHandler(world.provider.getDimension());
     }
 
     public static void clearHandler(int dimId) {
@@ -59,11 +57,11 @@ public class StorageNetworkHandler {
         }
 
         public void addCore(TileStorageCore core) {
-            // TODO fusion logic
+            //TODO fusion logic
         }
 
         public void removeCore(TileStorageCore core) {
-            // TODO division logic
+            //TODO division logic
         }
 
     }

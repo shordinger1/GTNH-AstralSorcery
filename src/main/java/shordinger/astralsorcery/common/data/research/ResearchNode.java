@@ -1,26 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.research;
 
+import shordinger.astralsorcery.client.gui.journal.page.IJournalPage;
+import shordinger.astralsorcery.client.util.resource.SpriteQuery;
+import shordinger.astralsorcery.client.util.resource.TextureQuery;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
-import shordinger.astralsorcery.client.gui.journal.page.IJournalPage;
-import shordinger.astralsorcery.client.util.resource.SpriteQuery;
-import shordinger.astralsorcery.client.util.resource.TextureQuery;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,8 +34,8 @@ public class ResearchNode {
     private final int id;
     private final RenderType renderType;
     public final int renderPosX, renderPosZ;
-    private final String unlocName;
-    // private boolean special = false;
+    private String unlocName;
+    //private boolean special = false;
 
     private ItemStack[] renderItemStacks;
     private TextureQuery renderTextureQuery;
@@ -45,8 +43,8 @@ public class ResearchNode {
 
     private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
-    private final List<ResearchNode> connectionsTo = new LinkedList<>();
-    private final List<IJournalPage> pages = new LinkedList<>();
+    private List<ResearchNode> connectionsTo = new LinkedList<>();
+    private List<IJournalPage> pages = new LinkedList<>();
 
     private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {
         this.id = counter;
@@ -59,7 +57,7 @@ public class ResearchNode {
 
     public ResearchNode(ItemStack itemStack, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
-        this.renderItemStacks = new ItemStack[]{itemStack};
+        this.renderItemStacks = new ItemStack[] { itemStack };
     }
 
     public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
@@ -77,12 +75,10 @@ public class ResearchNode {
         this.renderSpriteQuery = query;
     }
 
-    /*
-     * public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
-     * this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
-     * this.texture = textureResource;
-     * }
-     */
+    /*public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
+        this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
+        this.texture = textureResource;
+    }*/
 
     public ResearchNode addSourceConnectionFrom(ResearchNode node) {
         this.connectionsTo.add(node);
@@ -111,15 +107,14 @@ public class ResearchNode {
         return true;
     }
 
-    /*
-     * public ResearchNode setSpecial() {
-     * this.special = true;
-     * return this;
-     * }
-     * public boolean isSpecial() {
-     * return special;
-     * }
-     */
+    /*public ResearchNode setSpecial() {
+        this.special = true;
+        return this;
+    }
+
+    public boolean isSpecial() {
+        return special;
+    }*/
 
     public ResearchNode setTextureColorHintWithAlpha(Color textureColorHint) {
         this.textureColorHint = textureColorHint;
@@ -178,9 +173,7 @@ public class ResearchNode {
 
     public static enum RenderType {
 
-        ITEMSTACK,
-        TEXTURE,
-        TEXTURE_SPRITE
+        ITEMSTACK, TEXTURE, TEXTURE_SPRITE
 
     }
 

@@ -1,29 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item;
-
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.world.World;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
@@ -33,8 +16,24 @@ import shordinger.astralsorcery.common.container.ContainerJournal;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.ActionResult;
-import shordinger.astralsorcery.migration.EnumActionResult;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
+import shordinger.wrapper.net.minecraft.inventory.IInventory;
+import shordinger.wrapper.net.minecraft.inventory.InventoryBasic;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
+import shordinger.wrapper.net.minecraft.util.ActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumActionResult;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -51,18 +50,18 @@ public class ItemJournal extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
-        if (worldIn.isRemote && !playerIn.isSneaking()) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        if(worldIn.isRemote && !playerIn.isSneaking()) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL, playerIn, worldIn, 0, 0, 0);
-        } else if (!worldIn.isRemote && playerIn.isSneaking() ) {
+        } else if(!worldIn.isRemote && playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL_STORAGE, playerIn, worldIn, 0, 0, 0);
         }
-        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem());
+        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
 
     @Nullable
     public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack, int journalIndex) {
-        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemJournal)) return null;
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemJournal)) return null;
         return new ContainerJournal(playerInv, stack, journalIndex);
     }
 
@@ -95,7 +94,7 @@ public class ItemJournal extends Item {
         LinkedList<IConstellation> out = new LinkedList<>();
         for (int i = 0; i < constellationPapers.tagCount(); i++) {
             IConstellation c = ConstellationRegistry.getConstellationByName(constellationPapers.getStringTagAt(i));
-            if (c != null) {
+            if(c != null) {
                 out.add(c);
             }
         }

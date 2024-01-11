@@ -1,17 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.constellation;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
 
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.PerkConverter;
@@ -20,6 +15,10 @@ import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttribut
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,43 +32,32 @@ public class PerkGelu extends ConstellationPerk {
     public PerkGelu(int x, int y) {
         super("cst_gelu", Constellations.gelu, x, y);
         setCategory(CATEGORY_FOCUS);
-        this.addModifier(
-            new PerkAttributeModifier(
-                AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
-                PerkAttributeModifier.Mode.ADDED_MULTIPLY,
-                0.03F) {
+        this.addModifier(new PerkAttributeModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, PerkAttributeModifier.Mode.ADDED_MULTIPLY, 0.03F) {
+            @Override
+            protected void initModifier() {
+                super.initModifier();
 
-                @Override
-                protected void initModifier() {
-                    super.initModifier();
+                this.setAbsolute();
+            }
 
-                    this.setAbsolute();
-                }
+            @Override
+            public float getValue(EntityPlayer player, PlayerProgress progress) {
+                return getFlatValue() * progress.getAppliedPerks().size();
+            }
 
-                @Override
-                public float getValue(EntityPlayer player, PlayerProgress progress) {
-                    return getFlatValue() * progress.getAppliedPerks()
-                        .size();
-                }
-
-                @Override
-                public boolean hasDisplayString() {
-                    return false;
-                }
-            });
+            @Override
+            public boolean hasDisplayString() {
+                return false;
+            }
+        });
         this.addConverter(new PerkConverter() {
-
             @Nonnull
             @Override
-            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress,
-                                                         PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                if (modifier.getAttributeType()
-                    .equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT) && owningPerk != null
-                    && !owningPerk.equals(PerkGelu.this)) {
-                    return modifier.convertModifier(
-                        AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT,
-                        PerkAttributeModifier.Mode.STACKING_MULTIPLY,
-                        1F);
+            public PerkAttributeModifier convertModifier(EntityPlayer player, PlayerProgress progress, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT) &&
+                        owningPerk != null &&
+                        !owningPerk.equals(PerkGelu.this)) {
+                    return modifier.convertModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 1F);
                 }
                 return modifier;
             }
@@ -78,10 +66,8 @@ public class PerkGelu extends ConstellationPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
-        return super.mayUnlockPerk(progress, player) && !MiscUtils.contains(
-            progress.getAppliedPerks(),
-            perk -> perk.getCategory()
-                .equals(CATEGORY_FOCUS));
+        return super.mayUnlockPerk(progress, player) &&
+                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
     }
 
 }

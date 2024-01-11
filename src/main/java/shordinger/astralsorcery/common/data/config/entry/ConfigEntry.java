@@ -1,14 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.config.entry;
 
-import net.minecraftforge.common.config.Configuration;
+import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,9 +28,7 @@ public abstract class ConfigEntry {
     }
 
     public String getConfigurationSection() {
-        return section.name()
-            .toLowerCase() + "."
-            + key;
+        return section.name().toLowerCase() + "." + key;
     }
 
     public String getKey() {

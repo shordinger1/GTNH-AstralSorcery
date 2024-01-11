@@ -1,31 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.gui.journal;
 
 /**
- * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
- * Class: ScalingPoint
- * Created by HellFirePvP
- * Date: 14.08.2016 / 16:39
- */
+* This class is part of the Astral Sorcery Mod
+* The complete source code for this mod can be found on github.
+* Class: ScalingPoint
+* Created by HellFirePvP
+* Date: 14.08.2016 / 16:39
+*/
 public class ScalingPoint {
 
     private double posX, posY;
     private double scaledX, scaledY;
 
-    private ScalingPoint() {
-    }
+    private ScalingPoint() {}
 
     public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
         ScalingPoint sp = new ScalingPoint();
-        if (arePositionsScaled) {
+        if(arePositionsScaled) {
             sp.updateScaledPos(posX, posY, scale);
         } else {
             sp.updatePos(posX, posY, scale);

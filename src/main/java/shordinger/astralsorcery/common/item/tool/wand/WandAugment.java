@@ -1,17 +1,17 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.tool.wand;
 
-import javax.annotation.Nullable;
-
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.lib.Constellations;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +41,7 @@ public enum WandAugment {
     @Nullable
     public static WandAugment getByConstellation(IMajorConstellation cst) {
         for (WandAugment wa : values()) {
-            if (cst.equals(wa.getAssociatedConstellation())) {
+            if(cst.equals(wa.getAssociatedConstellation())) {
                 return wa;
             }
         }

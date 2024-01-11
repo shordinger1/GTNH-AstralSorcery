@@ -1,21 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
-import net.minecraft.util.ResourceLocation;
-
-import shordinger.astralsorcery.Tags;
+import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;
 import shordinger.astralsorcery.common.block.BlockMarble;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +26,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
 public class MultiblockGateway extends PatternBlockArray {
 
     public MultiblockGateway() {
-        super(new ResourceLocation(Tags.MODID, "pattern_celestial_gateway"));
+        super(new ResourceLocation(AstralSorcery.MODID, "pattern_celestial_gateway"));
         load();
     }
 
@@ -42,14 +41,14 @@ public class MultiblockGateway extends PatternBlockArray {
         addBlock(0, 0, 0, BlocksAS.celestialGateway.getDefaultState());
 
         addBlock(-3, -1, -3, mru);
-        addBlock(3, -1, -3, mru);
-        addBlock(3, -1, 3, mru);
-        addBlock(-3, -1, 3, mru);
+        addBlock( 3, -1, -3, mru);
+        addBlock( 3, -1,  3, mru);
+        addBlock(-3, -1,  3, mru);
 
-        addBlock(-3, 0, -3, mgr);
-        addBlock(3, 0, -3, mgr);
-        addBlock(3, 0, 3, mgr);
-        addBlock(-3, 0, 3, mgr);
+        addBlock(-3,  0, -3, mgr);
+        addBlock( 3,  0, -3, mgr);
+        addBlock( 3,  0,  3, mgr);
+        addBlock(-3,  0,  3, mgr);
     }
 
 }

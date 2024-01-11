@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util.data;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import com.google.common.collect.Lists;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
  */
 public class NonDuplicateArrayList<E> implements Collection<E> {
 
-    private final ArrayList<E> managed = Lists.newArrayList();
+    private ArrayList<E> managed = Lists.newArrayList();
 
     @Override
     public int size() {

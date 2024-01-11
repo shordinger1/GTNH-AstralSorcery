@@ -1,20 +1,20 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.constellation.MoonPhase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,20 +32,14 @@ public class MoonPhaseRenderHelper {
     }
 
     static {
-        moonPhaseIcons.put(MoonPhase.FULL, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full"));
-        moonPhaseIcons
-            .put(MoonPhase.WANING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning1"));
-        moonPhaseIcons
-            .put(MoonPhase.WANING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning2"));
-        moonPhaseIcons
-            .put(MoonPhase.WANING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning3"));
-        moonPhaseIcons.put(MoonPhase.NEW, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_new"));
-        moonPhaseIcons
-            .put(MoonPhase.WAXING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1"));
-        moonPhaseIcons
-            .put(MoonPhase.WAXING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2"));
-        moonPhaseIcons
-            .put(MoonPhase.WAXING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3"));
+        moonPhaseIcons.put(MoonPhase.FULL,      AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full"));
+        moonPhaseIcons.put(MoonPhase.WANING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning1"));
+        moonPhaseIcons.put(MoonPhase.WANING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning2"));
+        moonPhaseIcons.put(MoonPhase.WANING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning3"));
+        moonPhaseIcons.put(MoonPhase.NEW,       AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_new"));
+        moonPhaseIcons.put(MoonPhase.WAXING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1"));
+        moonPhaseIcons.put(MoonPhase.WAXING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2"));
+        moonPhaseIcons.put(MoonPhase.WAXING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3"));
     }
 
 }

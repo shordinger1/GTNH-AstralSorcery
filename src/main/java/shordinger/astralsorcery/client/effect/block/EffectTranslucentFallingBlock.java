@@ -1,20 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.block;
-
-import net.minecraft.client.Minecraft;
-import shordinger.astralsorcery.migration.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-import net.minecraft.world.IBlockAccess;
-
-import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.util.AirBlockRenderWorld;
@@ -22,8 +14,15 @@ import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.init.Biomes;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,14 +81,12 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         return this;
     }
 
-    public EffectTranslucentFallingBlock setMotionController(
-        MotionController<EffectTranslucentFallingBlock> motionController) {
+    public EffectTranslucentFallingBlock setMotionController(MotionController<EffectTranslucentFallingBlock> motionController) {
         this.motionController = motionController;
         return this;
     }
 
-    public EffectTranslucentFallingBlock setPositionController(
-        PositionController<EffectTranslucentFallingBlock> positionController) {
+    public EffectTranslucentFallingBlock setPositionController(PositionController<EffectTranslucentFallingBlock> positionController) {
         this.positionController = positionController;
         return this;
     }
@@ -115,10 +112,8 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
     }
 
     public EffectTranslucentFallingBlock tumble() {
-        this.rotationDegreeAxis = Vector3.positiveYRandom()
-            .multiply(360);
-        this.rotationChange = Vector3.random()
-            .multiply(12);
+        this.rotationDegreeAxis = Vector3.positiveYRandom().multiply(360);
+        this.rotationChange = Vector3.random().multiply(12);
         return this;
     }
 
@@ -136,16 +131,16 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
 
     public Vector3 getInterpolatedPosition(float percent) {
         return new Vector3(
-            RenderingUtils.interpolate(prevPosition.getX(), position.getX(), percent),
-            RenderingUtils.interpolate(prevPosition.getY(), position.getY(), percent),
-            RenderingUtils.interpolate(prevPosition.getZ(), position.getZ(), percent));
+                RenderingUtils.interpolate(prevPosition.getX(), position.getX(), percent),
+                RenderingUtils.interpolate(prevPosition.getY(), position.getY(), percent),
+                RenderingUtils.interpolate(prevPosition.getZ(), position.getZ(), percent));
     }
 
     public Vector3 getInterpolatedRotation(float percent) {
         return new Vector3(
-            RenderingUtils.interpolate(prevRotationDegreeAxis.getX(), rotationDegreeAxis.getX(), percent),
-            RenderingUtils.interpolate(prevRotationDegreeAxis.getY(), rotationDegreeAxis.getY(), percent),
-            RenderingUtils.interpolate(prevRotationDegreeAxis.getZ(), rotationDegreeAxis.getZ(), percent));
+                RenderingUtils.interpolate(prevRotationDegreeAxis.getX(), rotationDegreeAxis.getX(), percent),
+                RenderingUtils.interpolate(prevRotationDegreeAxis.getY(), rotationDegreeAxis.getY(), percent),
+                RenderingUtils.interpolate(prevRotationDegreeAxis.getZ(), rotationDegreeAxis.getZ(), percent));
     }
 
     @Override
@@ -171,7 +166,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
             this.position.add(this.motion);
         }
 
-        if (this.rotationChange.lengthSquared() > 0) {
+        if(this.rotationChange.lengthSquared() > 0) {
             this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
             this.rotationDegreeAxis.add(this.rotationChange);
         }
@@ -186,7 +181,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.ADDITIVEDARK.apply();
-        if (disableDepth) {
+        if(disableDepth) {
             GL11.glDisable(GL11.GL_DEPTH_TEST);
         }
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -213,15 +208,15 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         GL11.glRotated(rotation.getZ(), 0, 0, 1);
         GL11.glTranslated(-0.5, -0.5, -0.5);
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().theWorld.getWorldInfo().getTerrainType());
+        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
         RenderingUtils.renderBlockSafely(world, BlockPos.ORIGIN, this.blockState, vb);
         tes.draw();
 
         GL11.glEnable(GL11.GL_CULL_FACE);
-        if (disableDepth) {
+        if(disableDepth) {
             GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
         Blending.DEFAULT.apply();

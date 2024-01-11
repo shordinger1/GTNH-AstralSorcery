@@ -1,23 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -26,7 +17,18 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.APIRegistryEvent;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.astralsorcery.migration.TextFormatting;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
+import shordinger.wrapper.net.minecraftforge.fml.common.ModContainer;
+import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -98,30 +100,27 @@ public abstract class AbstractPerk {
 
     @Optional.Method(modid = "crafttweaker")
     public final void adjustMultipliers() {
-        double multiplier = shordinger.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree
-            .getMultiplier(this);
+        double multiplier = hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.PerkTree.getMultiplier(this);
         applyEffectMultiplier(multiplier);
     }
 
-    protected void applyEffectMultiplier(double multiplier) {
-    }
+    protected void applyEffectMultiplier(double multiplier) {}
 
-    // Return true to display that the perk's modifiers got disabled by pack's configurations
+    //Return true to display that the perk's modifiers got disabled by pack's configurations
     public boolean modifiersDisabled(EntityPlayer player, Side side) {
         APIRegistryEvent.PerkDisable event = new APIRegistryEvent.PerkDisable(this, player, side);
         MinecraftForge.EVENT_BUS.post(event);
         return event.isPerkDisabled();
     }
 
-    // Reserving application/removal methods to delegate for later pre-application logic
+    //Reserving application/removal methods to delegate for later pre-application logic
     final void applyPerk(EntityPlayer player, Side side) {
         if (modifiersDisabled(player, side)) {
             return;
         }
 
         this.applyPerkLogic(player, side);
-        if (PerkAttributeHelper.getOrCreateMap(player, side)
-            .markPerkApplied(this)) {
+        if (PerkAttributeHelper.getOrCreateMap(player, side).markPerkApplied(this)) {
             LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " applied!");
         }
     }
@@ -132,8 +131,7 @@ public abstract class AbstractPerk {
         }
 
         this.removePerkLogic(player, side);
-        if (PerkAttributeHelper.getOrCreateMap(player, side)
-            .markPerkRemoved(this)) {
+        if (PerkAttributeHelper.getOrCreateMap(player, side).markPerkRemoved(this)) {
             LogCategory.PERKS.info(() -> "Cache: " + this.getRegistryName() + " removed!");
         }
     }
@@ -144,33 +142,28 @@ public abstract class AbstractPerk {
 
     @Nullable
     public NBTTagCompound getPerkData(EntityPlayer player, Side side) {
-        return ResearchManager.getProgress(player, side)
-            .getPerkData(this);
+        return ResearchManager.getProgress(player, side).getPerkData(this);
     }
 
     /**
      * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
      * Called AFTER the perk has been re-applied with the new data.
      */
-    public void modifyPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
-    }
+    public void modifyPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 
     /**
      * Called ONCE when the perk is unlocked
      * You may use the NBTTagCompound to save data to remove it again later
      * The player might be null for root perks on occasion.
      */
-    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress,
-                                   NBTTagCompound dataStorage) {
-    }
+    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
      * Called after the perk is already removed from the player
      */
-    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
-    }
+    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 
     public <T> T setNameOverride(AbstractPerk other) {
         return setNameOverride(other.getUnlocalizedName());
@@ -198,8 +191,7 @@ public abstract class AbstractPerk {
             return PerkTreePoint.AllocationStatus.ALLOCATED;
         }
 
-        return mayUnlockPerk(progress, player) ? PerkTreePoint.AllocationStatus.UNLOCKABLE
-            : PerkTreePoint.AllocationStatus.UNALLOCATED;
+        return mayUnlockPerk(progress, player) ? PerkTreePoint.AllocationStatus.UNLOCKABLE : PerkTreePoint.AllocationStatus.UNALLOCATED;
     }
 
     public boolean mayUnlockPerk(PlayerProgress progress, EntityPlayer player) {
@@ -233,12 +225,10 @@ public abstract class AbstractPerk {
 
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
-        if (modifiersDisabled(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
+        if (modifiersDisabled(Minecraft.getMinecraft().player, Side.CLIENT)) {
             tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
-            tooltipCache.add(
-                this.getCategory()
-                    .getTextFormatting() + I18n.format(this.getUnlocalizedName() + ".name"));
+            tooltipCache.add(this.getCategory().getTextFormatting() + I18n.format(this.getUnlocalizedName() + ".name"));
 
             if (key == null) {
                 key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
@@ -246,7 +236,7 @@ public abstract class AbstractPerk {
             int prevLength = tooltipCache.size();
             boolean shouldAdd = addLocalizedTooltip(tooltipCache);
             if (shouldAdd && prevLength != tooltipCache.size()) {
-                tooltipCache.add(""); // Add empty line..
+                tooltipCache.add(""); //Add empty line..
             }
             if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
                 int count = 1;
@@ -270,23 +260,20 @@ public abstract class AbstractPerk {
         return false;
     }
 
-    // Should return a localized string of the mod (or part of a mod) that added this perk
-    // Default: modname of added mod
+    //Should return a localized string of the mod (or part of a mod) that added this perk
+    //Default: modname of added mod
     @Nullable
     @SideOnly(Side.CLIENT)
     public Collection<String> getSource() {
         String modid = getRegistryName().getResourceDomain();
-        ModContainer mod = Loader.instance()
-            .getIndexedModList()
-            .get(modid);
+        ModContainer mod = Loader.instance().getIndexedModList().get(modid);
         if (mod != null) {
             return Lists.newArrayList(mod.getName());
         }
         return null;
     }
 
-    public void clearCaches(Side side) {
-    }
+    public void clearCaches(Side side) {}
 
     @SideOnly(Side.CLIENT)
     public void clearClientCaches() {

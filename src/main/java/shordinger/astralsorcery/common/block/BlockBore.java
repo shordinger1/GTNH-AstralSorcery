@@ -1,33 +1,34 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileBore;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemBlock;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -50,20 +51,14 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.getBlockState(pos.down())
-            .getBlock()
-            .isReplaceable(worldIn, pos.down())) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(worldIn.getBlockState(pos.down()).getBlock().isReplaceable(worldIn, pos.down())) {
             TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
-            ItemStack held = playerIn.getHeldItem();
-            if (tb != null && !held.stackSize==0
-                && held.getItem() instanceof ItemBlock
-                && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
-                if (!worldIn.isRemote) {
-                    if (worldIn
-                        .setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()))) {
-                        if (!playerIn.isCreative()) {
+            ItemStack held = playerIn.getHeldItem(hand);
+            if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
+                if(!worldIn.isRemote) {
+                    if (worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()))) {
+                        if(!playerIn.isCreative()) {
                             held.shrink(1);
                         }
                     }
@@ -75,7 +70,7 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -95,8 +90,7 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -121,5 +115,6 @@ public class BlockBore extends BlockContainer implements BlockStructureObserver 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return null;
     }
+
 
 }

@@ -1,23 +1,24 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure;
 
+import com.google.common.collect.Lists;
+import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.Vec3i;
+
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.util.AxisAlignedBB;
-
-import com.google.common.collect.Lists;
-
-import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.ChunkPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,21 +29,17 @@ import shordinger.astralsorcery.migration.ChunkPos;
  */
 public interface ObservableArea {
 
-    public Collection<ChunkPos> getAffectedChunks(BlockPos offset);
+    public Collection<ChunkPos> getAffectedChunks(Vec3i offset);
 
     public boolean observes(BlockPos pos);
 
-    default Collection<ChunkPos> calculateAffectedChunks(AxisAlignedBB box, BlockPos offset) {
+    default Collection<ChunkPos> calculateAffectedChunks(AxisAlignedBB box, Vec3i offset) {
         return calculateAffectedChunks(
-            Vector3.getMin(box)
-                .toBlockPos()
-                .add(offset),
-            Vector3.getMax(box)
-                .toBlockPos()
-                .add(offset));
+                Vector3.getMin(box).toBlockPos().add(offset),
+                Vector3.getMax(box).toBlockPos().add(offset));
     }
 
-    default Collection<ChunkPos> calculateAffectedChunks(BlockPos min, BlockPos max) {
+    default Collection<ChunkPos> calculateAffectedChunks(Vec3i min, Vec3i max) {
         List<ChunkPos> affected = Lists.newArrayList();
         int maxX = max.getX() >> 4;
         int maxZ = max.getZ() >> 4;

@@ -1,28 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.tile;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.entities.EntityObservatoryHelper;
 import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,19 +38,18 @@ public class TileObservatory extends TileEntityTick {
     public float observatoryPitch = -45, prevObservatoryPitch = -45;
 
     @Override
-    protected void onFirstTick() {
-    }
+    protected void onFirstTick() {}
 
     @Override
     public void update() {
         super.update();
 
-        if (!world.isRemote) {
-            if (this.entityHelperRef == null) {
+        if(!world.isRemote) {
+            if(this.entityHelperRef == null) {
                 createNewObservatoryEntity();
             } else {
                 Entity e;
-                if ((e = resolveEntity(this.entityHelperRef)) == null || e.isDead) {
+                if((e = resolveEntity(this.entityHelperRef)) == null || e.isDead) {
                     createNewObservatoryEntity();
                 } else {
                     double xOffset = -0.85;
@@ -70,7 +67,7 @@ public class TileObservatory extends TileEntityTick {
     public boolean isUsable() {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
-                if (xx == 0 && zz == 0) {
+                if(xx == 0 && zz == 0) {
                     continue;
                 }
                 BlockPos other = pos.add(xx, 0, zz);
@@ -79,12 +76,7 @@ public class TileObservatory extends TileEntityTick {
                 }
             }
         }
-        return MiscUtils.canSeeSky(
-            this.getWorld(),
-            this.getPos()
-                .up(),
-            true,
-            false);
+        return MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, false);
     }
 
     private Entity createNewObservatoryEntity() {
@@ -92,7 +84,7 @@ public class TileObservatory extends TileEntityTick {
         this.entityIdServerRef = null;
 
         EntityObservatoryHelper helper = new EntityObservatoryHelper(this.world, this.pos);
-        helper.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, 0, 0);
+        helper.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5, 0,0);
         this.world.spawnEntity(helper);
 
         this.entityHelperRef = helper.getUniqueID();
@@ -102,11 +94,9 @@ public class TileObservatory extends TileEntityTick {
 
     @Nullable
     private Entity resolveEntity(UUID entityUUID) {
-        if (entityUUID == null) return null;
-        for (Entity e : world
-            .getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(-3, -1, -3), pos.add(3, 2, 3)))) {
-            if (e.getUniqueID()
-                .equals(entityUUID)) {
+        if(entityUUID == null) return null;
+        for (Entity e : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(-3, -1, -3), pos.add(3, 2, 3)))) {
+            if (e.getUniqueID().equals(entityUUID)) {
                 this.entityIdServerRef = e.getEntityId();
                 return e;
             }
@@ -116,7 +106,7 @@ public class TileObservatory extends TileEntityTick {
 
     @Nullable
     public Entity findRideableObservatoryEntity() {
-        if (this.entityHelperRef == null || this.entityIdServerRef == null) {
+        if(this.entityHelperRef == null || this.entityIdServerRef == null) {
             return null;
         }
         return this.world.getEntityByID(this.entityIdServerRef);
@@ -165,7 +155,7 @@ public class TileObservatory extends TileEntityTick {
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if (this.entityHelperRef != null) {
+        if(this.entityHelperRef != null) {
             compound.setUniqueId("entity", this.entityHelperRef);
         }
         compound.setFloat("oYaw", this.observatoryYaw);

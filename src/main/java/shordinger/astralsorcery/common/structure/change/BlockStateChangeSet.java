@@ -1,27 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.structure.change;
 
+import com.google.common.collect.Maps;
+import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.init.Blocks;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
-
-import com.google.common.collect.Maps;
-
-import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +30,7 @@ import shordinger.astralsorcery.migration.block.IBlockState;
  */
 public final class BlockStateChangeSet {
 
-    private final Map<BlockPos, StateChange> changes = Maps.newHashMap();
+    private Map<BlockPos, StateChange> changes = Maps.newHashMap();
 
     public final void reset() {
         this.changes.clear();
@@ -67,10 +65,10 @@ public final class BlockStateChangeSet {
             NBTTagCompound changeTag = changeList.getCompoundTagAt(i);
 
             BlockPos pos = NBTHelper.readBlockPosFromNBT(changeTag);
-            IBlockState oldState = NBTHelper
-                .getBlockStateFromTag(changeTag.getCompoundTag("oldState"), Blocks.AIR.getDefaultState());
-            IBlockState newState = NBTHelper
-                .getBlockStateFromTag(changeTag.getCompoundTag("newState"), Blocks.AIR.getDefaultState());
+            IBlockState oldState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("oldState"),
+                    Blocks.AIR.getDefaultState());
+            IBlockState newState = NBTHelper.getBlockStateFromTag(changeTag.getCompoundTag("newState"),
+                    Blocks.AIR.getDefaultState());
             this.changes.put(pos, new StateChange(pos, oldState, newState));
         }
     }

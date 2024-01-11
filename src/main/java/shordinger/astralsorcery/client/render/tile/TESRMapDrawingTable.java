@@ -1,22 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.render.tile;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
 
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.client.models.base.ASstarmapper;
@@ -31,7 +21,16 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,8 +42,7 @@ import shordinger.astralsorcery.migration.block.BlockPos;
 public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawingTable> {
 
     private static final ASstarmapper modelDrawingTable = new ASstarmapper();
-    private static final BindableResource texDrawingTable = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.MODELS, "starmapper/astralsorcery_starmapper");
+    private static final BindableResource texDrawingTable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "starmapper/astralsorcery_starmapper");
 
     private static List<BlockPos> requiredGlasses = new LinkedList<>();
 
@@ -52,13 +50,13 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
 
-        // RenderHelper.disableStandardItemLighting();
+        //RenderHelper.disableStandardItemLighting();
         GlStateManager.pushMatrix();
-        // GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+        //GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(240.0F, 1.0F, 0.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GlStateManager.popMatrix();
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F,1F);
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
         GlStateManager.pushMatrix();
@@ -84,23 +82,19 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
     }
 
     @Override
-    public void render(TileMapDrawingTable te, double x, double y, double z, float partialTicks, int destroyStage,
-                       float alpha) {
+    public void render(TileMapDrawingTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
-        if (!te.hasParchment() && !te.getSlotIn()
-            .isEmpty()) {
+        if(!te.hasParchment() && !te.getSlotIn().isEmpty()) {
             ItemStack in = te.getSlotIn();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.pushMatrix();
             GlStateManager.translate(x + 0.5, y + 0.85, z + 0.5);
             GlStateManager.scale(0.625F, 0.625F, 0.625F);
 
-            Minecraft.getMinecraft()
-                .getRenderItem()
-                .renderItem(in, ItemCameraTransforms.TransformType.GROUND);
+            Minecraft.getMinecraft().getRenderItem().renderItem(in, ItemCameraTransforms.TransformType.GROUND);
             GlStateManager.popMatrix();
             RenderHelper.disableStandardItemLighting();
         }
@@ -125,14 +119,13 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
         TextureHelper.refreshTextureBindState();
         GlStateManager.popMatrix();
 
-        if (te.getPercRunning() > 1E-4) {
+        if(te.getPercRunning() > 1E-4) {
             GlStateManager.color(1F, 1F, 1F, te.getPercRunning());
 
             SpriteSheetResource halo = SpriteLibrary.spriteHalo2;
-            halo.getResource()
-                .bindTexture();
+            halo.getResource().bindTexture();
             Tuple<Double, Double> uvFrame = halo.getUVOffset(ClientScheduler.getClientTick());
-            float rot = 360F - ((float) (ClientScheduler.getClientTick() % 2000) / 2000F * 360F);
+            float rot = 360F - ((float) (ClientScheduler.getClientTick()     % 2000) / 2000F * 360F);
 
             GlStateManager.disableLighting();
             GlStateManager.pushMatrix();
@@ -140,15 +133,9 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
             GlStateManager.disableAlpha();
 
             RenderingUtils.renderAngleRotatedTexturedRect(
-                new Vector3(0.5, 1.01, 0.5).add(te.getPos()),
-                Vector3.RotAxis.Y_AXIS,
-                Math.toRadians(rot),
-                1F,
-                uvFrame.key,
-                uvFrame.value,
-                halo.getULength(),
-                halo.getVLength(),
-                partialTicks);
+                    new Vector3(0.5, 1.01, 0.5).add(te.getPos()),
+                    Vector3.RotAxis.Y_AXIS, Math.toRadians(rot), 1F,
+                    uvFrame.key, uvFrame.value, halo.getULength(), halo.getVLength(), partialTicks);
 
             GlStateManager.enableCull();
             GlStateManager.enableAlpha();
@@ -157,8 +144,7 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
             GlStateManager.enableLighting();
         }
 
-        if (!te.getSlotGlassLens()
-            .isEmpty()) {
+        if(!te.getSlotGlassLens().isEmpty()) {
             requiredGlasses.add(te.getPos());
         }
 

@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -20,7 +20,7 @@ public interface IJournalPage {
     public static final int DEFAULT_WIDTH = 175;
     public static final int DEFAULT_HEIGHT = 220;
 
-    // Called if the collection of pages that contains this page is opened.
+    //Called if the collection of pages that contains this page is opened.
     public IGuiRenderablePage buildRenderPage();
 
 }

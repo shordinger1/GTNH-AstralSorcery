@@ -4,8 +4,8 @@ import static shordinger.astralsorcery.Tags.MODID;
 
 import java.util.Map;
 
-import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraft.launchwrapper.Launch;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

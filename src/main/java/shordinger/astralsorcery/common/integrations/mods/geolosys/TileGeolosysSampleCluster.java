@@ -1,8 +1,8 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -17,5 +17,4 @@ import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
  * Created by HellFirePvP
  * Date: 03.10.2017 / 17:55
  */
-public class TileGeolosysSampleCluster extends TileEntitySynchronized {
-}
+public class TileGeolosysSampleCluster extends TileEntitySynchronized {}

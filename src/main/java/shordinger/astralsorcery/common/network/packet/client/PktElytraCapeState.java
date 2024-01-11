@@ -1,26 +1,25 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.client;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectVicio;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.key.KeyMantleFlight;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.wearable.ItemCape;
 import shordinger.astralsorcery.common.lib.Constellations;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,8 +32,7 @@ public class PktElytraCapeState implements IMessageHandler<PktElytraCapeState, I
 
     private byte type = 0;
 
-    public PktElytraCapeState() {
-    }
+    public PktElytraCapeState() {}
 
     public static PktElytraCapeState resetFallDistance() {
         PktElytraCapeState st = new PktElytraCapeState();
@@ -66,40 +64,37 @@ public class PktElytraCapeState implements IMessageHandler<PktElytraCapeState, I
 
     @Override
     public IMessage onMessage(PktElytraCapeState message, MessageContext ctx) {
-        FMLCommonHandler.instance()
-            .getMinecraftServerInstance()
-            .addScheduledTask(() -> {
-                EntityPlayer pl = ctx.getServerHandler().player;
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+            EntityPlayer pl = ctx.getServerHandler().player;
 
-                CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
-                if (vic == null) {
-                    return;
+            CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
+            if (vic == null) {
+                return;
+            }
+
+            boolean hasFlightPerk = ResearchManager.getProgress(pl, Side.SERVER).hasPerkEffect(p -> p instanceof KeyMantleFlight);
+
+            switch (message.type) {
+                case 0: {
+                    if (pl.isElytraFlying()) {
+                        pl.fallDistance = 0F;
+                    }
+                    break;
                 }
-
-                boolean hasFlightPerk = ResearchManager.getProgress(pl, Side.SERVER)
-                    .hasPerkEffect(p -> p instanceof KeyMantleFlight);
-
-                switch (message.type) {
-                    case 0: {
-                        if (pl.isElytraFlying()) {
-                            pl.fallDistance = 0F;
-                        }
-                        break;
+                case 1: {
+                    if (!hasFlightPerk) {
+                        pl.setFlag(7, true);
                     }
-                    case 1: {
-                        if (!hasFlightPerk) {
-                            pl.setFlag(7, true);
-                        }
-                        break;
-                    }
-                    case 2: {
-                        pl.setFlag(7, false);
-                        break;
-                    }
-                    default:
-                        break;
+                    break;
                 }
-            });
+                case 2: {
+                    pl.setFlag(7, false);
+                    break;
+                }
+                default:
+                    break;
+            }
+        });
         return null;
     }
 }

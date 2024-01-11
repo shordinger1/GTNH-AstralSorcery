@@ -1,31 +1,29 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.UUID;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktPlayerStatus;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.settings.GameSettings;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.InputEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,16 +34,15 @@ import shordinger.astralsorcery.common.network.packet.client.PktPlayerStatus;
  */
 public class PlayerActivityManager implements ITickHandler {
 
-    private static final long INACTIVITY_MS = 5 * 60 * 1000; // 5 minutes.
+    private static final long INACTIVITY_MS = 5 * 60 * 1000; //5 minutes.
     public static final PlayerActivityManager INSTANCE = new PlayerActivityManager();
-    private final Map<UUID, Boolean> serverActivityMap = Maps.newHashMap();
+    private Map<UUID, Boolean> serverActivityMap = Maps.newHashMap();
 
     private long clientInteractMs = -1;
     private boolean clientActive = true;
     private boolean up = false, down = false, left = false, right = false;
 
-    private PlayerActivityManager() {
-    }
+    private PlayerActivityManager() {}
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
@@ -57,7 +54,7 @@ public class PlayerActivityManager implements ITickHandler {
         if (clientInteractMs == -1) {
             clientInteractMs = System.currentTimeMillis();
         }
-        if (Minecraft.getMinecraft().thePlayer == null) {
+        if (Minecraft.getMinecraft().player == null) {
             return;
         }
         checkMs();
@@ -66,7 +63,7 @@ public class PlayerActivityManager implements ITickHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onKeyIn(InputEvent.KeyInputEvent event) {
-        if (Minecraft.getMinecraft().thePlayer == null) {
+        if (Minecraft.getMinecraft().player == null) {
             return;
         }
 
@@ -98,7 +95,7 @@ public class PlayerActivityManager implements ITickHandler {
             clientInteractMs = System.currentTimeMillis();
             if (!clientActive) {
                 clientActive = true;
-                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), true);
+                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), true);
                 PacketChannel.CHANNEL.sendToServer(pkt);
             }
         }
@@ -110,7 +107,7 @@ public class PlayerActivityManager implements ITickHandler {
 
             clientInteractMs = System.currentTimeMillis();
             clientActive = false;
-            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), false);
+            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), false);
             PacketChannel.CHANNEL.sendToServer(pkt);
         }
     }
@@ -120,7 +117,7 @@ public class PlayerActivityManager implements ITickHandler {
     }
 
     public boolean isPlayerActiveServer(EntityPlayer player) {
-        return !isPlayerActiveServer(player.getUniqueID());
+        return isPlayerActiveServer(player.getUniqueID());
     }
 
     public boolean isPlayerActiveServer(UUID playerUUID) {

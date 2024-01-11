@@ -1,39 +1,40 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import shordinger.astralsorcery.migration.block.BlockStateContainer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import shordinger.astralsorcery.migration.RayTraceResult;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileStructuralConnector;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.BlockContainer;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
+import shordinger.wrapper.net.minecraft.world.Explosion;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -61,10 +62,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                IBlockState downState = WorldHelper.getBlockState(world, pos.down());
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .getBlock()
-                    .getSoundType(downState, world, pos, entity);
+                IBlockState downState = world.getBlockState(pos.down());
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getSoundType(downState, world, pos, entity);
             default:
                 break;
         }
@@ -73,12 +72,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public String getHarvestTool(IBlockState state) {
-        return state.getValue(BLOCK_TYPE)
-            .getSupportedState()
-            .getBlock()
-            .getHarvestTool(
-                state.getValue(BLOCK_TYPE)
-                    .getSupportedState());
+        return state.getValue(BLOCK_TYPE).getSupportedState().getBlock().getHarvestTool(state.getValue(BLOCK_TYPE).getSupportedState());
     }
 
     @Override
@@ -86,11 +80,10 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         if (effectLoop) return false;
         effectLoop = true;
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                Minecraft.getMinecraft().effectRenderer
-                    .addBlockDestroyEffects(pos.down(), WorldHelper.getBlockState(world, pos.down()));
+                Minecraft.getMinecraft().effectRenderer.addBlockDestroyEffects(pos.down(), world.getBlockState(pos.down()));
                 effectLoop = false;
                 return true;
             default:
@@ -126,22 +119,10 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, ForgeDirection facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .getBlock()
-                    .onBlockActivated(
-                        worldIn,
-                        pos.down(),
-                        BlockType.TELESCOPE_STRUCT.getSupportedState(),
-                        playerIn,
-                        hand,
-                        facing,
-                        hitX,
-                        hitY,
-                        hitZ);
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState(), playerIn, hand, facing, hitX, hitY, hitZ);
             default:
                 break;
         }
@@ -149,8 +130,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-                         int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 drops.add(BlockMachine.MachineType.TELESCOPE.asStack());
@@ -164,8 +144,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         switch (blockState.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .getBlockHardness(worldIn, pos.down());
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlockHardness(worldIn, pos.down());
             default:
                 break;
         }
@@ -174,12 +153,10 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .getBlock()
-                    .getExplosionResistance(world, pos.down(), exploder, explosion);
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getExplosionResistance(world, pos.down(), exploder, explosion);
             default:
                 break;
         }
@@ -187,14 +164,11 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-                                  EntityPlayer player) {
-        state = WorldHelper.getBlockState(world, pos);
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .getBlock()
-                    .getPickBlock(BlockType.TELESCOPE_STRUCT.getSupportedState(), target, world, pos.down(), player);
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getPickBlock(BlockType.TELESCOPE_STRUCT.getSupportedState(), target, world, pos.down(), player);
             default:
                 break;
         }
@@ -205,7 +179,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                if (world.isAirBlock(pos.down())) {
+                if(world.isAirBlock(pos.down())) {
                     world.setBlockToAir(pos);
                 }
                 break;
@@ -216,14 +190,14 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        if (!(world instanceof World)) {
+        if(!(world instanceof World)) {
             super.onNeighborChange(world, pos, neighbor);
             return;
         }
-        IBlockState state = WorldHelper.getBlockState(world, pos);
+        IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                if (world.isAirBlock(pos.down())) {
+                if(world.isAirBlock(pos.down())) {
                     ((World) world).setBlockToAir(pos);
                 }
                 break;
@@ -234,8 +208,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta])
-            : getDefaultState();
+        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta]) : getDefaultState();
     }
 
     @Override
@@ -262,24 +235,19 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
-        return state.getValue(BLOCK_TYPE)
-            .getSupportedState()
-            .isOpaqueCube();
+        return state.getValue(BLOCK_TYPE).getSupportedState().isOpaqueCube();
     }
 
     @Override
     public boolean isFullCube(IBlockState state) {
-        return state.getValue(BLOCK_TYPE)
-            .getSupportedState()
-            .isFullCube();
+        return state.getValue(BLOCK_TYPE).getSupportedState().isFullCube();
     }
 
     @Override
     public boolean isNormalCube(IBlockState state) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .isNormalCube();
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().isNormalCube();
             default:
                 break;
         }
@@ -287,11 +255,10 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, ForgeDirection side) {
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         switch (base_state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState()
-                    .isSideSolid(world, pos.down(), side);
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().isSideSolid(world, pos.down(), side);
             default:
                 break;
         }
@@ -299,8 +266,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -324,8 +290,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(BLOCK_TYPE)
-            .getName();
+        return state.getValue(BLOCK_TYPE).getName();
     }
 
     @Override
@@ -345,8 +310,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
 
     public static enum BlockType implements IStringSerializable {
 
-        TELESCOPE_STRUCT(BlocksAS.blockMachine.getDefaultState()
-            .withProperty(BlockMachine.MACHINE_TYPE, BlockMachine.MachineType.TELESCOPE));
+        TELESCOPE_STRUCT(BlocksAS.blockMachine.getDefaultState().withProperty(BlockMachine.MACHINE_TYPE, BlockMachine.MachineType.TELESCOPE));
 
         private final IBlockState supportedState;
 

@@ -1,16 +1,15 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.integrations.mods.jei.util;
 
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,8 +28,7 @@ public class JEISessionHandler {
         return INSTANCE;
     }
 
-    private JEISessionHandler() {
-    }
+    private JEISessionHandler() {}
 
     public void setJeiOnServer(boolean jeiOnServer) {
         this.jeiOnServer = jeiOnServer;
@@ -42,8 +40,7 @@ public class JEISessionHandler {
 
     @SubscribeEvent
     public void onClientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        if (!event.isLocal() && !event.getConnectionType()
-            .equals("MODDED")) {
+        if (!event.isLocal() && !event.getConnectionType().equals("MODDED")) {
             jeiOnServer = false;
         }
     }

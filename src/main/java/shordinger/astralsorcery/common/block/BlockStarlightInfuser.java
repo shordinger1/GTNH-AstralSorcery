@@ -1,31 +1,33 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.block;
 
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import shordinger.astralsorcery.common.block.network.BlockStarlightNetwork;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.structure.BlockStructureObserver;
 import shordinger.astralsorcery.common.tile.TileStarlightInfuser;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.migration.block.BlockFaceShape;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.block.EnumBlockRenderType;
-import shordinger.astralsorcery.migration.block.IBlockState;
+import shordinger.wrapper.net.minecraft.block.SoundType;
+import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import shordinger.wrapper.net.minecraft.block.material.Material;
+import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
+import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumBlockRenderType;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.IBlockAccess;
+import shordinger.wrapper.net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,12 +55,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                     ForgeDirection side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!worldIn.isRemote && hand.equals(EnumHand.MAIN_HAND)) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
-            if (infuser != null) {
-                infuser.onInteract(playerIn, playerIn.getHeldItem());
+            if(infuser != null) {
+                infuser.onInteract(playerIn, hand, playerIn.getHeldItem(hand));
             }
         }
         return true;
@@ -71,19 +72,14 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
+        if(!worldIn.isRemote) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
-            if (infuser != null && !infuser.getInputStack()
-                .isEmpty()) {
-                ItemUtils.dropItemNaturally(
-                    worldIn,
-                    infuser.getPos()
-                        .getX() + 0.5,
-                    infuser.getPos()
-                        .getY() + 1,
-                    infuser.getPos()
-                        .getZ() + 0.5,
-                    infuser.getInputStack());
+            if(infuser != null && !infuser.getInputStack().isEmpty()) {
+                ItemUtils.dropItemNaturally(worldIn,
+                        infuser.getPos().getX() + 0.5,
+                        infuser.getPos().getY() + 1,
+                        infuser.getPos().getZ() + 0.5,
+                        infuser.getInputStack());
             }
         }
 
@@ -111,8 +107,7 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork implements Bloc
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-                                            ForgeDirection p_193383_4_) {
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
     }
 

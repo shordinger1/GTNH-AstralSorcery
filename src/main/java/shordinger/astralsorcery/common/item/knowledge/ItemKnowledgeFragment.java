@@ -1,37 +1,13 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.knowledge;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.resources.I18n;
-import shordinger.astralsorcery.migration.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.data.KnowledgeFragmentData;
 import shordinger.astralsorcery.client.data.PersistentDataManager;
@@ -48,7 +24,29 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.client.resources.I18n;
+import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.util.*;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
+import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,8 +63,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-    }
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {}
 
     @Override
     public boolean hasEffect(ItemStack stack) {
@@ -84,7 +81,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
             if (hasConstellationInformation(stack)) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.constellation.desc.1"));
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.constellation.desc.2"));
-            } else if (resolveFragment(stack) != null) {
+            } else if(resolveFragment(stack) != null) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.content.desc.1"));
                 tooltip.add(TextFormatting.GRAY + I18n.format("misc.fragment.content.desc.2"));
             } else {
@@ -95,47 +92,39 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (!worldIn.isRemote && stack.stackSize!=0
-            && stack.getItem() instanceof ItemKnowledgeFragment
-            && !getSeed(stack).isPresent()) {
+        if (!worldIn.isRemote &&
+                !stack.isEmpty() &&
+                stack.getItem() instanceof ItemKnowledgeFragment &&
+                !getSeed(stack).isPresent()) {
             stack.setCount(0);
         }
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote) {
-            ItemStack stack = player.getHeldItem();
+            ItemStack stack = player.getHeldItem(hand);
             if (hasConstellationInformation(stack)) {
-                player.openGui(
-                    AstralSorcery.instance,
-                    CommonProxy.EnumGuiId.KNOWLEDGE_CONSTELLATION.ordinal(),
-                    world,
-                    0,
-                    0,
-                    0);
-                return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem());
+                player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.KNOWLEDGE_CONSTELLATION.ordinal(), world, 0, 0, 0);
+                return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
             } else {
                 KnowledgeFragment frag = resolveFragment(stack);
                 if (frag != null) {
                     ItemKnowledgeFragment.clearFragment(player, frag);
-                    KnowledgeFragmentData dat = PersistentDataManager.INSTANCE
-                        .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+                    KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
                     if (dat.addFragment(frag)) {
-                        player.sendMessage(
-                            new TextComponentString(
-                                TextFormatting.GREEN
-                                    + I18n.format("misc.fragment.added", frag.getLocalizedIndexName())));
+                        player.sendMessage(new TextComponentString(
+                                TextFormatting.GREEN +
+                                        I18n.format("misc.fragment.added", frag.getLocalizedIndexName())));
                     }
                 }
             }
         }
-        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem());
+        return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, ForgeDirection facing,
-                                      float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         return EnumActionResult.PASS;
     }
 
@@ -143,7 +132,9 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     public boolean onEntityItemUpdate(EntityItem entityItem) {
         if (!entityItem.world.isRemote) {
             ItemStack stack = entityItem.getItem();
-            if (stack.stackSize!=0 && stack.getItem() instanceof ItemKnowledgeFragment && !getSeed(stack).isPresent()) {
+            if (!stack.isEmpty() &&
+                    stack.getItem() instanceof ItemKnowledgeFragment &&
+                    !getSeed(stack).isPresent()) {
                 entityItem.setDead();
                 stack.setCount(0);
                 entityItem.setItem(stack);
@@ -153,10 +144,8 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     }
 
     static void generateSeed(EntityPlayer player, ItemStack stack) {
-        if (stack.stackSize!=0 && stack.getItem() instanceof ItemKnowledgeFragment) {
-            long baseRand = (((player.getEntityId() << 6) | (System.currentTimeMillis() & 223)) << 16)
-                | player.getEntityWorld()
-                .getTotalWorldTime();
+        if (!stack.isEmpty() && stack.getItem() instanceof ItemKnowledgeFragment) {
+            long baseRand = (((player.getEntityId() << 6) | (System.currentTimeMillis() & 223)) << 16) | player.getEntityWorld().getTotalWorldTime();
             Random r = new Random(baseRand);
             r.nextLong();
             setSeed(stack, r.nextLong());
@@ -189,8 +178,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
 
     @Nullable
     @SideOnly(Side.CLIENT)
-    public static shordinger.astralsorcery.common.util.data.Tuple<IConstellation, List<MoonPhase>> getConstellationInformation(
-        ItemStack stack) {
+    public static Tuple<IConstellation, List<MoonPhase>> getConstellationInformation(ItemStack stack) {
         KnowledgeFragment frag = resolveFragment(stack);
         if (frag != null) {
             Optional<Long> seedOpt = getSeed(stack);
@@ -217,8 +205,7 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
         Optional<Long> seedOpt = getSeed(stack);
         if (!seedOpt.isPresent()) return null;
         Random sRand = new Random(seedOpt.get());
-        KnowledgeFragmentData dat = PersistentDataManager.INSTANCE
-            .getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
+        KnowledgeFragmentData dat = PersistentDataManager.INSTANCE.getData(PersistentDataManager.PersistentKey.KNOWLEDGE_FRAGMENTS);
         List<KnowledgeFragment> all = dat.getDiscoverableFragments();
         all.removeIf(f -> !f.isFullyPresent());
         if (all.isEmpty()) return null;
@@ -229,12 +216,12 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     @SideOnly(Side.CLIENT)
     public static List<ItemStack> gatherFragments(EntityPlayer player) {
         Collection<ItemStack> fragItems = ItemUtils.findItemsInInventory(
-            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            new ItemStack(ItemsAS.knowledgeFragment),
-            false);
+                player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+                new ItemStack(ItemsAS.knowledgeFragment),
+                false);
         List<ItemStack> frags = new LinkedList<>();
         for (ItemStack stack : fragItems) {
-            if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
             if (fr != null) {
                 frags.add(stack);
@@ -246,29 +233,29 @@ public class ItemKnowledgeFragment extends Item implements ItemHighlighted {
     @SideOnly(Side.CLIENT)
     public static void clearFragment(EntityPlayer player, KnowledgeFragment frag) {
         Map<Integer, ItemStack> fragItems = ItemUtils.findItemsIndexedInInventory(
-            player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
-            new ItemStack(ItemsAS.knowledgeFragment),
-            false);
+                player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null),
+                new ItemStack(ItemsAS.knowledgeFragment),
+                false);
         for (Map.Entry<Integer, ItemStack> entry : fragItems.entrySet()) {
             ItemStack stack = entry.getValue();
-            if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) continue;
             KnowledgeFragment fr = resolveFragment(stack);
             if (fr != null && fr.equals(frag)) {
                 PacketChannel.CHANNEL.sendToServer(new PktRemoveKnowledgeFragment(entry.getKey()));
-                player.inventory.setInventorySlotContents(entry.getKey(), null);
+                player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
                 break;
             }
         }
     }
 
+
     public static void setSeed(ItemStack stack, long seed) {
-        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
-        NBTHelper.getPersistentData(stack)
-            .setLong("seed", seed);
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) return;
+        NBTHelper.getPersistentData(stack).setLong("seed", seed);
     }
 
     public static Optional<Long> getSeed(ItemStack stack) {
-        if (stack.stackSize==0 || !(stack.getItem() instanceof ItemKnowledgeFragment)) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemKnowledgeFragment)) {
             return Optional.empty();
         }
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);

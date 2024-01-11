@@ -1,14 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.util;
 
-import net.minecraft.util.WeightedRandom;
+import shordinger.wrapper.net.minecraft.util.WeightedRandom;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +19,7 @@ import net.minecraft.util.WeightedRandom;
  */
 public class WRItemObject<T> extends WeightedRandom.Item {
 
-    private final T object;
+    private T object;
 
     public WRItemObject(int itemWeightIn, T value) {
         super(itemWeightIn);

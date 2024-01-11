@@ -1,24 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.data.research;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
 import shordinger.astralsorcery.common.constellation.IMajorConstellation;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -96,8 +94,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public void useTarget(SextantFinder.TargetObject target) {
-    }
+    public void useTarget(SextantFinder.TargetObject target) {}
 
     @Override
     public boolean hasConstellationDiscovered(String constellation) {
@@ -141,6 +138,6 @@ public class PlayerProgressTestAccess extends PlayerProgress {
 
     @Override
     public boolean didReceiveTome() {
-        return true; // Fake players always did get the tome already.
+        return true; //Fake players always did get the tome already.
     }
 }

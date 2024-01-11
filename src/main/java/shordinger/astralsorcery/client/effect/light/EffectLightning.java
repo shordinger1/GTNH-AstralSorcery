@@ -1,29 +1,14 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.effect.light;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import shordinger.astralsorcery.migration.BufferBuilder;
-import com.gtnewhorizons.modularui.api.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import shordinger.astralsorcery.migration.DefaultVertexFormats;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Lists;
-
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.util.Blending;
@@ -34,7 +19,19 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
+import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
+import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,10 +41,9 @@ import shordinger.astralsorcery.migration.MathHelper;
  * Date: 05.12.2016 / 21:14
  */
 public class EffectLightning extends EntityComplexFX {
-    // Implementation of lightning generation according to NVIDIA's lightning paper
+    //Implementation of lightning generation according to NVIDIA's lightning paper
 
-    private static final BindableResource connection = AssetLibrary
-        .loadTexture(AssetLoader.TextureLocation.EFFECT, "lightningpart");
+    private static final BindableResource connection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightningpart");
     private static Random rand = new Random();
 
     private static final float optimalLightningLength = 7F;
@@ -82,49 +78,36 @@ public class EffectLightning extends EntityComplexFX {
     }
 
     public EffectLightning setOverlayColor(Color color) {
-        this.ovR = color.getRed() / 255F;
+        this.ovR = color.getRed()   / 255F;
         this.ovG = color.getGreen() / 255F;
-        this.ovB = color.getBlue() / 255F;
+        this.ovB = color.getBlue()  / 255F;
         return this;
     }
 
     public EffectLightning finalizeAndRegister() {
         this.root.calcDepthRec();
-        EffectHandler.getInstance()
-            .registerFX(this);
+        EffectHandler.getInstance().registerFX(this);
         return this;
     }
 
     public static EffectLightning buildAndRegisterLightning(Vector3 source, Vector3 destination) {
-        double dstLength = destination.clone()
-            .subtract(source)
-            .length();
+        double dstLength = destination.clone().subtract(source).length();
         float perc = 1F;
-        if (dstLength > optimalLightningLength) {
+        if(dstLength > optimalLightningLength) {
             perc = MathHelper.sqrt(dstLength / optimalLightningLength);
-        } else if (dstLength < optimalLightningLength) {
+        } else if(dstLength < optimalLightningLength) {
             perc = (float) Math.pow(dstLength / optimalLightningLength, 2);
         }
 
-        EffectLightning lightning = buildLightning(
-            rand.nextLong(),
-            source,
-            destination,
-            defaultMinJitterDst * perc,
-            defaultMaxJitterDst * perc,
-            defaultForkChance,
-            defaultMinForkAngleDeg,
-            defaultMaxForkAngleDeg);
+        EffectLightning lightning = buildLightning(rand.nextLong(), source, destination, defaultMinJitterDst * perc, defaultMaxJitterDst * perc, defaultForkChance, defaultMinForkAngleDeg, defaultMaxForkAngleDeg);
         lightning.setBuildSpeed(Math.max(0.01F, growSpeed * perc));
         lightning.setBuildWaitTime(Math.max(0.0067F, fadeTime * perc));
         lightning.finalizeAndRegister();
         return lightning;
     }
 
-    public static EffectLightning buildLightning(long seed, Vector3 source, Vector3 destination,
-                                                 float minJitterDistance, float maxJitterDistance, float forkChance, float minForkAngle, float maxForkAngle) {
-        Vector3 directionVector = destination.clone()
-            .subtract(source);
+    public static EffectLightning buildLightning(long seed, Vector3 source, Vector3 destination, float minJitterDistance, float maxJitterDistance, float forkChance, float minForkAngle, float maxForkAngle) {
+        Vector3 directionVector = destination.clone().subtract(source);
         Random lightningSeed = new Random(seed);
 
         List<LightningVertex> rootVertices = Lists.newLinkedList();
@@ -139,36 +122,20 @@ public class EffectLightning extends EntityComplexFX {
             for (LightningVertex sourceVertex : rootVertices) {
                 LinkedList<LightningVertex> newNext = new LinkedList<>();
                 for (LightningVertex nextVertex : Lists.newArrayList(sourceVertex.next)) {
-                    Vector3 direction = nextVertex.offset.clone()
-                        .subtract(sourceVertex.offset);
-                    Vector3 split = direction.clone()
-                        .multiply(0.5F)
-                        .add(sourceVertex.offset);
-                    float jitDst = (minJitterDistance
-                        + (maxJitterDistance - minJitterDistance) * lightningSeed.nextFloat())
-                        * ((float) (iterations - i) / ((float) iterations));
-                    Vector3 axPerp = direction.clone()
-                        .perpendicular()
-                        .rotate(lightningSeed.nextFloat() * 2 * Math.PI, direction)
-                        .normalize()
-                        .multiply(jitDst);
+                    Vector3 direction = nextVertex.offset.clone().subtract(sourceVertex.offset);
+                    Vector3 split = direction.clone().multiply(0.5F).add(sourceVertex.offset);
+                    float jitDst = (minJitterDistance + (maxJitterDistance - minJitterDistance) * lightningSeed.nextFloat()) * ((float) (iterations - i) / ((float) iterations));
+                    Vector3 axPerp = direction.clone().perpendicular().rotate(lightningSeed.nextFloat() * 2 * Math.PI, direction).normalize().multiply(jitDst);
                     split.add(axPerp);
                     LightningVertex newVertex = new LightningVertex(split);
                     newVertex.next.add(nextVertex);
                     newNext.add(newVertex);
-                    if (lightningSeed.nextFloat() < forkChance) {
-                        Vector3 dirFork = split.clone()
-                            .subtract(sourceVertex.offset);
+                    if(lightningSeed.nextFloat() < forkChance) {
+                        Vector3 dirFork = split.clone().subtract(sourceVertex.offset);
                         float forkAngle = minForkAngle + (maxForkAngle - minForkAngle) * lightningSeed.nextFloat();
                         forkAngle = (float) Math.toRadians(forkAngle);
-                        Vector3 perpAxis = dirFork.clone()
-                            .perpendicular()
-                            .rotate(lightningSeed.nextFloat() * 2 * Math.PI, dirFork);
-                        Vector3 dirPos = dirFork.clone()
-                            .rotate(forkAngle, perpAxis)
-                            .normalize()
-                            .multiply(dirFork.length() * 3D / 4D)
-                            .add(split);
+                        Vector3 perpAxis = dirFork.clone().perpendicular().rotate(lightningSeed.nextFloat() * 2 * Math.PI, dirFork);
+                        Vector3 dirPos = dirFork.clone().rotate(forkAngle, perpAxis).normalize().multiply(dirFork.length() * 3D / 4D).add(split);
                         LightningVertex forkVertex = new LightningVertex(dirPos);
                         newVertex.next.add(forkVertex);
                     }
@@ -192,7 +159,7 @@ public class EffectLightning extends EntityComplexFX {
         Blending.ADDITIVE_ALPHA.applyStateManager();
         connection.bind();
 
-        Tessellator tes = Tessellator.instance;
+        Tessellator tes = Tessellator.getInstance();
         BufferBuilder buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
@@ -201,9 +168,9 @@ public class EffectLightning extends EntityComplexFX {
         }
 
         buf.sortVertexData(
-            (float) TileEntityRendererDispatcher.staticPlayerX,
-            (float) TileEntityRendererDispatcher.staticPlayerY,
-            (float) TileEntityRendererDispatcher.staticPlayerZ);
+                (float) TileEntityRendererDispatcher.staticPlayerX,
+                (float) TileEntityRendererDispatcher.staticPlayerY,
+                (float) TileEntityRendererDispatcher.staticPlayerZ);
         tes.draw();
 
         TextureHelper.refreshTextureBindState();
@@ -225,58 +192,30 @@ public class EffectLightning extends EntityComplexFX {
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
         for (LightningVertex next : root.next) {
             drawLine(root.offset, next.offset, vb);
-            if (mayRenderNext) renderRec(next, vb);
+            if(mayRenderNext) renderRec(next, vb);
         }
     }
 
     private void drawLine(Vector3 from, Vector3 to, BufferBuilder vb) {
-        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F), 0.035F, vb);
+        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.035F, vb);
         renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.035F, vb);
     }
 
-    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size,
-                                                BufferBuilder buf) {
-        Vector3 aim = to.clone()
-            .subtract(from)
-            .normalize();
-        Vector3 aimPerp = aim.clone()
-            .perpendicular()
-            .normalize();
-        Vector3 perp = aimPerp.clone()
-            .rotate(angle, aim)
-            .normalize();
-        Vector3 perpFrom = perp.clone()
-            .multiply(size);
+    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, BufferBuilder buf) {
+        Vector3 aim = to.clone().subtract(from).normalize();
+        Vector3 aimPerp = aim.clone().perpendicular().normalize();
+        Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();
+        Vector3 perpFrom = perp.clone().multiply(size);
         Vector3 perpTo = perp.multiply(size);
 
-        Vector3 vec = from.clone()
-            .add(
-                perpFrom.clone()
-                    .multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(1, 1)
-            .color(ovR, ovG, ovB, 1F)
-            .endVertex();
-        vec = from.clone()
-            .add(perpFrom);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(1, 0)
-            .color(ovR, ovG, ovB, 1F)
-            .endVertex();
-        vec = to.clone()
-            .add(perpTo);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(0, 0)
-            .color(ovR, ovG, ovB, 1F)
-            .endVertex();
-        vec = to.clone()
-            .add(
-                perpTo.clone()
-                    .multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ())
-            .tex(0, 1)
-            .color(ovR, ovG, ovB, 1F)
-            .endVertex();
+        Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 1).color(ovR, ovG, ovB, 1F).endVertex();
+        vec = from.clone().add(perpFrom);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 0).color(ovR, ovG, ovB, 1F).endVertex();
+        vec = to.clone().add(perpTo);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 0).color(ovR, ovG, ovB, 1F).endVertex();
+        vec = to.clone().add(perpTo.clone().multiply(-1));
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 1).color(ovR, ovG, ovB, 1F).endVertex();
     }
 
     @Override
@@ -285,8 +224,7 @@ public class EffectLightning extends EntityComplexFX {
     }
 
     @Override
-    public void render(float pTicks) {
-    }
+    public void render(float pTicks) {}
 
     @Override
     public void tick() {
@@ -304,7 +242,7 @@ public class EffectLightning extends EntityComplexFX {
         }
 
         public void calcDepthRec() {
-            if (next.isEmpty()) {
+            if(next.isEmpty()) {
                 this.followingDepth = 0;
             } else {
                 for (LightningVertex vertex : next) {

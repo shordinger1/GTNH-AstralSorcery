@@ -1,27 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk.tree.nodes.key;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraftforge.event.entity.living.LivingHurtEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventPriority;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +40,7 @@ public class KeyDamageArmor extends KeyPerk {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDmg(LivingHurtEvent event) {
-        EntityLivingBase attacked = event.entityLiving;
+        EntityLivingBase attacked = event.getEntityLiving();
         if (attacked instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) attacked;
             Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
@@ -57,10 +56,10 @@ public class KeyDamageArmor extends KeyPerk {
                     return;
                 }
 
-                float dmg = event.ammount;
+                float dmg = event.getAmount();
                 dmg *= ((dmgPercentPerArmor * armorPieces) * PerkAttributeHelper.getOrCreateMap(player, side)
-                    .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT));
-                event.setAmount(Math.max(event.ammount - dmg, 0));
+                        .getModifier(player, prog, AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT));
+                event.setAmount(Math.max(event.getAmount() - dmg, 0));
 
                 int armorDmg = MathHelper.ceil(dmg * 1.3F);
                 for (ItemStack stack : player.getArmorInventoryList()) {

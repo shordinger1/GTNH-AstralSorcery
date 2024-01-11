@@ -1,20 +1,12 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item.block;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -24,6 +16,13 @@ import shordinger.astralsorcery.common.entities.EntityItemHighlighted;
 import shordinger.astralsorcery.common.item.base.ItemHighlighted;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.item.EnumRarity;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,20 +63,18 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     @Override
     public EnumRarity getRarity(ItemStack stack) {
         BlockCollectorCrystalBase.CollectorCrystalType type = getType(stack);
-        if (type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             return RegistryItems.rarityCelestial;
         }
         return super.getRarity(stack);
     }
 
     public static void setType(ItemStack stack, BlockCollectorCrystalBase.CollectorCrystalType type) {
-        NBTHelper.getPersistentData(stack)
-            .setInteger("collectorType", type.ordinal());
+        NBTHelper.getPersistentData(stack).setInteger("collectorType", type.ordinal());
     }
 
     public static BlockCollectorCrystalBase.CollectorCrystalType getType(ItemStack stack) {
-        return BlockCollectorCrystalBase.CollectorCrystalType.values()[NBTHelper.getPersistentData(stack)
-            .getInteger("collectorType")];
+        return BlockCollectorCrystalBase.CollectorCrystalType.values()[NBTHelper.getPersistentData(stack).getInteger("collectorType")];
     }
 
     public static void setConstellation(ItemStack stack, IWeakConstellation constellation) {
@@ -89,13 +86,12 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     }
 
     public static void setTraitConstellation(ItemStack stack, @Nullable IMinorConstellation constellation) {
-        if (constellation == null) return;
+        if(constellation == null) return;
         constellation.writeToNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey() + "trait");
     }
 
     public static IMinorConstellation getTrait(ItemStack stack) {
-        return (IMinorConstellation) IConstellation
-            .readFromNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey() + "trait");
+        return (IMinorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack), IConstellation.getDefaultSaveKey() + "trait");
     }
 
 }

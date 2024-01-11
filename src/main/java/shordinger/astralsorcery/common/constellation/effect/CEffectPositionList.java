@@ -1,18 +1,18 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.effect;
 
-import javax.annotation.Nullable;
-
 import shordinger.astralsorcery.common.constellation.IWeakConstellation;
 import shordinger.astralsorcery.common.util.ILocatable;
-import shordinger.astralsorcery.migration.block.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,8 +23,7 @@ import shordinger.astralsorcery.migration.block.BlockPos;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int maxCount,
-                               Verifier verifier) {
+    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int maxCount, Verifier verifier) {
         super(origin, c, cfgName, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
@@ -35,8 +34,8 @@ public abstract class CEffectPositionList extends CEffectPositionListGen<GenList
     @Nullable
     public BlockPos getRandomPosition() {
         GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
-        if (entry != null) {
-            return entry.pos();
+        if(entry != null) {
+            return entry.getPos();
         }
         return null;
     }

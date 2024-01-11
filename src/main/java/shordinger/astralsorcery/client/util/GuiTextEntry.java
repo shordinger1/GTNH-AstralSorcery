@@ -1,20 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
+import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
+import shordinger.wrapper.net.minecraft.util.ChatAllowedCharacters;
+import org.lwjgl.input.Keyboard;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ChatAllowedCharacters;
-
-import org.lwjgl.input.Keyboard;
 
 /**
  * This class is part of the Astral Sorcery Mod

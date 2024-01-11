@@ -1,29 +1,26 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.constellation.perk;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.relauncher.Side;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.util.log.LogCategory;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,8 +31,8 @@ import shordinger.astralsorcery.common.util.log.LogCategory;
  */
 public class PlayerAttributeMap {
 
-    private final Side side;
-    private final Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
+    private Side side;
+    private Set<AbstractPerk> cacheAppliedPerks = new HashSet<>();
     private Map<PerkAttributeType, List<PerkAttributeModifier>> attributes = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 
@@ -64,10 +61,8 @@ public class PlayerAttributeMap {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return false;
 
-        if (attributes.computeIfAbsent(attributeType, t -> Lists.newArrayList())
-            .remove(modifier)) {
-            boolean completelyRemoved = attributes.get(attributeType)
-                .isEmpty();
+        if (attributes.computeIfAbsent(attributeType, t -> Lists.newArrayList()).remove(modifier)) {
+            boolean completelyRemoved = attributes.get(attributeType).isEmpty();
             attributeType.onRemove(player, side, completelyRemoved);
             if (getModifiersByType(attributeType, modifier.getMode()).isEmpty()) {
                 attributeType.onModeRemove(player, modifier.getMode(), side, completelyRemoved);
@@ -78,8 +73,7 @@ public class PlayerAttributeMap {
     }
 
     @Nonnull
-    public PerkAttributeModifier convertModifier(@Nonnull EntityPlayer player, @Nonnull PlayerProgress progress,
-                                                 @Nonnull PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+    public PerkAttributeModifier convertModifier(@Nonnull EntityPlayer player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
         for (PerkConverter converter : converters) {
             modifier = converter.convertModifier(player, progress, modifier, owningPerk);
         }
@@ -87,8 +81,7 @@ public class PlayerAttributeMap {
     }
 
     @Nonnull
-    public Collection<PerkAttributeModifier> gainModifiers(@Nonnull EntityPlayer player,
-                                                           @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+    public Collection<PerkAttributeModifier> gainModifiers(@Nonnull EntityPlayer player, @Nonnull PlayerProgress progress, @Nonnull PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
         Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
         for (PerkConverter converter : converters) {
             modifiers.addAll(converter.gainExtraModifiers(player, progress, modifier, owningPerk));
@@ -150,9 +143,7 @@ public class PlayerAttributeMap {
         }
         if (appliedModifiers > 0) {
 
-            LogCategory.PERKS.warn(
-                () -> "Following modifiers are still applied on " + side.name()
-                    + " while trying to modify converters:");
+            LogCategory.PERKS.warn(() -> "Following modifiers are still applied on " + side.name() + " while trying to modify converters:");
             for (List<PerkAttributeModifier> modifiers : this.attributes.values()) {
                 for (PerkAttributeModifier modifier : modifiers) {
                     LogCategory.PERKS.warn(() -> "Modifier: " + modifier.getId());
@@ -164,23 +155,20 @@ public class PlayerAttributeMap {
     }
 
     private List<PerkAttributeModifier> getModifiersByType(PerkAttributeType type, PerkAttributeModifier.Mode mode) {
-        return attributes.computeIfAbsent(type, t -> Lists.newArrayList())
-            .stream()
-            .filter(mod -> mod.getMode() == mode)
-            .collect(Collectors.toList());
+        return attributes.computeIfAbsent(type, t -> Lists.newArrayList()).stream()
+                .filter(mod -> mod.getMode() == mode)
+                .collect(Collectors.toList());
     }
 
     public float getModifier(EntityPlayer player, PlayerProgress progress, String type) {
         return getModifier(player, progress, type, Arrays.asList(PerkAttributeModifier.Mode.values()));
     }
 
-    public float getModifier(EntityPlayer player, PlayerProgress progress, String type,
-                             PerkAttributeModifier.Mode mode) {
+    public float getModifier(EntityPlayer player, PlayerProgress progress, String type, PerkAttributeModifier.Mode mode) {
         return getModifier(player, progress, type, Lists.newArrayList(mode));
     }
 
-    public float getModifier(EntityPlayer player, PlayerProgress progress, String type,
-                             Collection<PerkAttributeModifier.Mode> applicableModes) {
+    public float getModifier(EntityPlayer player, PlayerProgress progress, String type, Collection<PerkAttributeModifier.Mode> applicableModes) {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return 1F;
 
@@ -192,24 +180,18 @@ public class PlayerAttributeMap {
         }
 
         if (applicableModes.contains(PerkAttributeModifier.Mode.ADDITION)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(
-                attributeType,
-                PerkAttributeModifier.Mode.ADDITION)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDITION)) {
                 mod += (modifier.getValue(player, progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
             float multiply = mod;
-            for (PerkAttributeModifier modifier : getModifiersByType(
-                attributeType,
-                PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
                 mod += multiply * (modifier.getValue(player, progress) * perkEffectModifier);
             }
         }
         if (applicableModes.contains(PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(
-                attributeType,
-                PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
                 mod *= ((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1;
             }
         }
@@ -232,9 +214,7 @@ public class PlayerAttributeMap {
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
             value += multiply * (mod.getValue(player, progress) * perkEffectModifier);
         }
-        for (PerkAttributeModifier mod : getModifiersByType(
-            attributeType,
-            PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
+        for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
             value *= ((mod.getValue(player, progress) - 1F) * perkEffectModifier) + 1F;
         }
         return value;

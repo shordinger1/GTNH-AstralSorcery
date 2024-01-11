@@ -1,28 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.crafting.helper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import shordinger.astralsorcery.common.util.ItemUtils;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -88,7 +87,7 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
 
         public Builder addPart(ItemStack stack, ShapedRecipeSlot... slots) {
             ItemHandle handle = new ItemHandle(stack);
-            for (ShapedRecipeSlot slot : slots) {
+            for(ShapedRecipeSlot slot : slots) {
                 crafingShape.put(slot, handle);
             }
             return this;
@@ -96,7 +95,7 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
 
         public Builder addPart(FluidStack fluidStack, ShapedRecipeSlot... slots) {
             ItemHandle handle = new ItemHandle(fluidStack);
-            for (ShapedRecipeSlot slot : slots) {
+            for(ShapedRecipeSlot slot : slots) {
                 crafingShape.put(slot, handle);
             }
             return this;
@@ -112,14 +111,14 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
 
         public Builder addPart(String oreDictName, ShapedRecipeSlot... slots) {
             ItemHandle handle = new ItemHandle(oreDictName);
-            for (ShapedRecipeSlot slot : slots) {
+            for(ShapedRecipeSlot slot : slots) {
                 crafingShape.put(slot, handle);
             }
             return this;
         }
 
         public Builder addPart(ItemHandle handle, ShapedRecipeSlot... slots) {
-            for (ShapedRecipeSlot slot : slots) {
+            for(ShapedRecipeSlot slot : slots) {
                 crafingShape.put(slot, handle);
             }
             return this;
@@ -131,15 +130,15 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
         }
 
         public AccessibleRecipeAdapater unregisteredAccessibleShapedRecipe() {
-            if (registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
-            registered = true; // Cache it please instead.
+            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            registered = true; //Cache it please instead.
             BasePlainRecipe actual = RecipeHelper.getShapedOredictRecipe(entry, output, crafingShape.bake());
             ShapedRecipe access = new ShapedRecipe(output, crafingShape);
             return new AccessibleRecipeAdapater(actual, access);
         }
 
         public AccessibleRecipeAdapater buildAndRegisterLightCraftingRecipe() {
-            if (registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = new ShapedLightProximityRecipe(entry, output, crafingShape.bake());
             CommonProxy.registryPrimer.register(actual);
@@ -148,7 +147,7 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
         }
 
         public AccessibleRecipeAdapater buildAndRegisterShapedRecipe() {
-            if (registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapedOredictRecipe(entry, output, crafingShape.bake());
             CommonProxy.registryPrimer.register(actual);

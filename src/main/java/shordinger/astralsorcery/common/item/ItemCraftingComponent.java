@@ -1,29 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.item;
 
-import java.util.Objects;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import shordinger.astralsorcery.common.entities.EntityItemStardust;
 import shordinger.astralsorcery.common.item.base.IItemVariants;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.migration.MathHelper;
+import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.entity.Entity;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.math.MathHelper;
+import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +40,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
+        if(this.isInCreativeTab(tab)) {
             for (MetaType type : MetaType.values()) {
                 items.add(new ItemStack(this, 1, type.getMeta()));
             }
@@ -52,8 +50,11 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
-        if (Objects.requireNonNull(type) == MetaType.STARDUST) {
-            return true;
+        switch (type) {
+            case STARDUST:
+                return true;
+            default:
+                break;
         }
         return super.hasCustomEntity(stack);
     }
@@ -64,12 +65,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         MetaType type = MetaType.fromMeta(itemstack.getItemDamage());
         switch (type) {
             case STARDUST:
-                EntityItemStardust stardust = new EntityItemStardust(
-                    world,
-                    location.posX,
-                    location.posY,
-                    location.posZ,
-                    itemstack);
+                EntityItemStardust stardust = new EntityItemStardust(world, location.posX, location.posY, location.posZ, itemstack);
                 stardust.setDefaultPickupDelay();
                 stardust.motionX = location.motionX;
                 stardust.motionY = location.motionY;
@@ -88,7 +84,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         Item i = stack.getItem();
-        if (i instanceof ItemCraftingComponent) {
+        if(i instanceof ItemCraftingComponent) {
             MetaType type = MetaType.fromMeta(stack.getItemDamage());
             return super.getUnlocalizedName(stack) + "." + type.getUnlocalizedName();
         }
@@ -139,7 +135,7 @@ public class ItemCraftingComponent extends Item implements IItemVariants {
         }
 
         public static MetaType fromMeta(int meta) {
-            int ord = MathHelper.clamp(meta, 0, values().length - 1);
+            int ord = MathHelper.clamp(meta, 0, values().length -1);
             return values()[ord];
         }
 

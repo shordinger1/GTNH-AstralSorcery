@@ -1,23 +1,22 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.client.util;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ITickableSound;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.util.SoundUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.audio.ITickableSound;
+import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
+import shordinger.wrapper.net.minecraft.util.SoundCategory;
+import shordinger.wrapper.net.minecraft.util.SoundEvent;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,17 +36,7 @@ public class PositionedLoopSound extends PositionedSoundRecord implements ITicka
     }
 
     public PositionedLoopSound(SoundEvent sound, SoundCategory category, float volume, float pitch, Vector3 pos) {
-        super(
-            sound.getSoundName(),
-            category,
-            volume,
-            pitch,
-            true,
-            0,
-            AttenuationType.LINEAR,
-            (float) pos.getX(),
-            (float) pos.getY(),
-            (float) pos.getZ());
+        super(sound.getSoundName(), category, volume, pitch, true, 0, AttenuationType.LINEAR, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ());
     }
 
     public void setRefreshFunction(ActivityFunction func) {
@@ -61,14 +50,11 @@ public class PositionedLoopSound extends PositionedSoundRecord implements ITicka
     }
 
     public boolean hasStoppedPlaying() {
-        return hasStoppedPlaying || !Minecraft.getMinecraft()
-            .getSoundHandler()
-            .isSoundPlaying(this);
+        return hasStoppedPlaying || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this);
     }
 
     @Override
-    public void update() {
-    }
+    public void update() {}
 
     @SideOnly(Side.CLIENT)
     public static interface ActivityFunction {

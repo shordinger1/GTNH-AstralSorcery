@@ -1,31 +1,30 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.network.packet.server;
 
-import java.awt.*;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
+import io.netty.buffer.ByteBuf;
+import shordinger.wrapper.net.minecraft.client.Minecraft;
+import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.Side;
+import shordinger.wrapper.net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,8 +40,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
     private FluidStack comp1, comp2;
     private Vector3 pos;
 
-    public PktLiquidInteractionBurst() {
-    }
+    public PktLiquidInteractionBurst() {}
 
     public PktLiquidInteractionBurst(FluidStack comp1, FluidStack comp2, Vector3 pos) {
         this.comp1 = comp1;
@@ -72,22 +70,16 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
     @SideOnly(Side.CLIENT)
     private void playClientEffect(PktLiquidInteractionBurst message) {
-        if (Minecraft.getMinecraft().theWorld == null) return;
+        if(Minecraft.getMinecraft().world == null) return;
 
         TextureAtlasSprite tas1 = RenderingUtils.tryGetFlowingTextureOfFluidStack(message.comp1);
 
         for (int i = 0; i < 11 + rand.nextInt(3); i++) {
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas1);
-            cube.setTextureSubSizePercentage(1F / 16F)
-                .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
-            cube.setColorHandler(
-                cb -> new Color(
-                    message.comp1.getFluid()
-                        .getColor(message.comp1)));
-            cube.setScale(0.1F)
-                .tumble()
-                .setMotion(
+            cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
+            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setColorHandler(cb -> new Color(message.comp1.getFluid().getColor(message.comp1)));
+            cube.setScale(0.1F).tumble().setMotion(
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1));
@@ -97,16 +89,10 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
         for (int i = 0; i < 11 + rand.nextInt(3); i++) {
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas2);
-            cube.setTextureSubSizePercentage(1F / 16F)
-                .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
-            cube.setColorHandler(
-                cb -> new Color(
-                    message.comp2.getFluid()
-                        .getColor(message.comp2)));
-            cube.setScale(0.1F)
-                .tumble()
-                .setMotion(
+            cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
+            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setColorHandler(cb -> new Color(message.comp2.getFluid().getColor(message.comp2)));
+            cube.setScale(0.1F).tumble().setMotion(
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1));

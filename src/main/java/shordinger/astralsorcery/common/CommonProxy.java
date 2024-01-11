@@ -1,52 +1,19 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common;
 
-import java.awt.*;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.oredict.OreDictionary;
-
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.auxiliary.link.LinkHandler;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
-import shordinger.astralsorcery.common.base.FluidRarityRegistry;
-import shordinger.astralsorcery.common.base.HerdableAnimal;
-import shordinger.astralsorcery.common.base.Mods;
-import shordinger.astralsorcery.common.base.OreTypes;
-import shordinger.astralsorcery.common.base.RockCrystalHandler;
-import shordinger.astralsorcery.common.base.ShootingStarHandler;
-import shordinger.astralsorcery.common.base.TileAccelerationBlacklist;
-import shordinger.astralsorcery.common.base.TreeTypes;
+import shordinger.astralsorcery.common.base.*;
 import shordinger.astralsorcery.common.base.patreon.PatreonDataManager;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonFlareManager;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
@@ -59,12 +26,7 @@ import shordinger.astralsorcery.common.constellation.effect.ConstellationEffectR
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.PerkLevelManager;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
-import shordinger.astralsorcery.common.container.ContainerAltarAttunement;
-import shordinger.astralsorcery.common.container.ContainerAltarConstellation;
-import shordinger.astralsorcery.common.container.ContainerAltarDiscovery;
-import shordinger.astralsorcery.common.container.ContainerAltarTrait;
-import shordinger.astralsorcery.common.container.ContainerJournal;
-import shordinger.astralsorcery.common.container.ContainerObservatory;
+import shordinger.astralsorcery.common.container.*;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
@@ -75,12 +37,7 @@ import shordinger.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import shordinger.astralsorcery.common.enchantment.amulet.AmuletHolderCapability;
 import shordinger.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
-import shordinger.astralsorcery.common.event.listener.EventHandlerCapeEffects;
-import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
-import shordinger.astralsorcery.common.event.listener.EventHandlerIO;
-import shordinger.astralsorcery.common.event.listener.EventHandlerMisc;
-import shordinger.astralsorcery.common.event.listener.EventHandlerNetwork;
-import shordinger.astralsorcery.common.event.listener.EventHandlerServer;
+import shordinger.astralsorcery.common.event.listener.*;
 import shordinger.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import shordinger.astralsorcery.common.integrations.ModIntegrationChisel;
 import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
@@ -92,15 +49,7 @@ import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.migration.MappingMigrationHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktLightningEffect;
-import shordinger.astralsorcery.common.registry.RegistryAdvancements;
-import shordinger.astralsorcery.common.registry.RegistryConstellations;
-import shordinger.astralsorcery.common.registry.RegistryEntities;
-import shordinger.astralsorcery.common.registry.RegistryItems;
-import shordinger.astralsorcery.common.registry.RegistryKnowledgeFragments;
-import shordinger.astralsorcery.common.registry.RegistryPerks;
-import shordinger.astralsorcery.common.registry.RegistryRecipes;
-import shordinger.astralsorcery.common.registry.RegistryResearch;
-import shordinger.astralsorcery.common.registry.RegistryStructures;
+import shordinger.astralsorcery.common.registry.*;
 import shordinger.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import shordinger.astralsorcery.common.registry.internal.PrimerEventHandler;
 import shordinger.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
@@ -110,33 +59,40 @@ import shordinger.astralsorcery.common.starlight.network.TransmissionChunkTracke
 import shordinger.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.structure.change.StructureIntegrityObserver;
-import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.astralsorcery.common.tile.TileAttunementAltar;
-import shordinger.astralsorcery.common.tile.TileBore;
-import shordinger.astralsorcery.common.tile.TileChalice;
-import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
-import shordinger.astralsorcery.common.tile.TileObservatory;
-import shordinger.astralsorcery.common.tile.TileOreGenerator;
-import shordinger.astralsorcery.common.tile.TileTelescope;
-import shordinger.astralsorcery.common.tile.TileTreeBeacon;
-import shordinger.astralsorcery.common.util.AltarRecipeEffectRecovery;
-import shordinger.astralsorcery.common.util.BlockDropCaptureAssist;
-import shordinger.astralsorcery.common.util.DamageSourceUtil;
-import shordinger.astralsorcery.common.util.LootTableUtil;
-import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.astralsorcery.common.util.OreDictAlias;
-import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
-import shordinger.astralsorcery.common.util.PlayerActivityManager;
-import shordinger.astralsorcery.common.util.TreeCaptureHelper;
+import shordinger.astralsorcery.common.tile.*;
+import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopController;
 import shordinger.astralsorcery.common.util.log.LogUtil;
 import shordinger.astralsorcery.common.world.AstralWorldGenerator;
 import shordinger.astralsorcery.common.world.retrogen.ChunkVersionController;
 import shordinger.astralsorcery.common.world.retrogen.RetroGenController;
-import shordinger.astralsorcery.migration.block.BlockPos;
-import shordinger.astralsorcery.migration.Capability;
-import shordinger.astralsorcery.migration.CapabilityManager;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
+import shordinger.wrapper.net.minecraft.util.DamageSource;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import shordinger.wrapper.net.minecraft.util.EnumHand;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityManager;
+import shordinger.wrapper.net.minecraftforge.common.util.FakePlayer;
+import shordinger.wrapper.net.minecraftforge.common.util.FakePlayerFactory;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.IGuiHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
+import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -149,16 +105,13 @@ public class CommonProxy implements IGuiHandler {
 
     private static final UUID AS_FAKEPLAYER_UUID = UUID.fromString("5ae0411c-9069-4d79-8892-bc112c4b3a08");
 
-    public static DamageSource dmgSourceBleed = DamageSourceUtil.newType("as.bleed")
-        .setDamageBypassesArmor();
-    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar")
-        .setDamageBypassesArmor()
-        .setMagicDamage();
+    public static DamageSource dmgSourceBleed   = DamageSourceUtil.newType("as.bleed").setDamageBypassesArmor();
+    public static DamageSource dmgSourceStellar = DamageSourceUtil.newType("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static DamageSource dmgSourceReflect = DamageSourceUtil.newType("thorns");
     public static InternalRegistryPrimer registryPrimer;
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
-    private final CommonScheduler commonScheduler = new CommonScheduler();
+    private CommonScheduler commonScheduler = new CommonScheduler();
 
     public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
@@ -200,7 +153,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryEntities.init();
 
-        // Transmission registry
+        //Transmission registry
         SourceClassRegistry.setupRegistry();
         TransmissionClassRegistry.setupRegistry();
         StarlightNetworkRegistry.setupRegistry();
@@ -225,56 +178,44 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        // Chunk Fluid storage for Neromantic primes
-        CapabilityManager.INSTANCE.register(
-            FluidRarityRegistry.ChunkFluidEntry.class,
-            new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
-
-                @Nullable
-                @Override
-                public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
-                                        FluidRarityRegistry.ChunkFluidEntry instance, ForgeDirection side) {
-                    return instance.serializeNBT();
-                }
-
-                @Override
-                public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability,
-                                    FluidRarityRegistry.ChunkFluidEntry instance, ForgeDirection side, NBTBase nbt) {
-                    instance.deserializeNBT((NBTTagCompound) nbt);
-                }
-            },
-            new FluidRarityRegistry.ChunkFluidEntryFactory());
-
-        // Item data storage to find player + item combinations
-        CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<>() {
-
+        //Chunk Fluid storage for Neromantic primes
+        CapabilityManager.INSTANCE.register(FluidRarityRegistry.ChunkFluidEntry.class, new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
-                                    ForgeDirection side) {
+            public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
                 return instance.serializeNBT();
             }
 
             @Override
-            public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance,
-                                ForgeDirection side, NBTBase nbt) {
+            public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, new FluidRarityRegistry.ChunkFluidEntryFactory());
+
+        //Item data storage to find player + item combinations
+        CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side) {
+                return instance.serializeNBT();
+            }
+
+            @Override
+            public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new AmuletHolderCapability.Factory());
 
-        // Chunk rock crystal storage for rock crystal generation
-        CapabilityManager.INSTANCE.register(RockCrystalHandler.RockCrystalPositions.class, new Capability.IStorage<>() {
-
+        //Chunk rock crystal storage for rock crystal generation
+        CapabilityManager.INSTANCE.register(RockCrystalHandler.RockCrystalPositions.class, new Capability.IStorage<RockCrystalHandler.RockCrystalPositions>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
-                                    RockCrystalHandler.RockCrystalPositions instance, ForgeDirection side) {
+            public NBTBase writeNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side) {
                 return instance.serializeNBT();
             }
 
             @Override
-            public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability,
-                                RockCrystalHandler.RockCrystalPositions instance, ForgeDirection side, NBTBase nbt) {
+            public void readNBT(Capability<RockCrystalHandler.RockCrystalPositions> capability, RockCrystalHandler.RockCrystalPositions instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new RockCrystalHandler.ChunkFluidEntryFactory());
@@ -297,8 +238,7 @@ public class CommonProxy implements IGuiHandler {
         OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.RUNED.asStack());
 
         OreDictionary.registerOre("oreAstralStarmetal", BlockCustomOre.OreType.STARMETAL.asStack());
-        OreDictionary
-            .registerOre(OreDictAlias.ITEM_STARMETAL_INGOT, ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
+        OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_INGOT, ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
         OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_DUST, ItemCraftingComponent.MetaType.STARDUST.asStack());
 
         OreDictionary.registerOre("oreAquamarine", BlockCustomSandOre.OreType.AQUAMARINE.asStack());
@@ -315,7 +255,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryConstellations.initMapEffects();
 
-        if (Mods.CRAFTTWEAKER.isPresent()) {
+        if(Mods.CRAFTTWEAKER.isPresent()) {
             ModIntegrationCrafttweaker.instance.pushChanges();
         }
         ModIntegrationChisel.sendVariantIMC();
@@ -349,8 +289,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(PlayerActivityManager.INSTANCE);
         MinecraftForge.EVENT_BUS.register(StructureIntegrityObserver.INSTANCE);
 
-        GameRegistry.registerWorldGenerator((IWorldGenerator) worldGenerator.setupAttributes(), 50);
-        if (Config.enableRetroGen) {
+        GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
+        if(Config.enableRetroGen) {
             MinecraftForge.EVENT_BUS.register(new RetroGenController());
         }
 
@@ -368,27 +308,26 @@ public class CommonProxy implements IGuiHandler {
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
-        manager.register(new LinkHandler()); // Only used as PERK_TREE for tick handling
+        manager.register(new LinkHandler()); //Only used as PERK_TREE for tick handling
         manager.register(SyncDataHolder.getTickInstance());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
         manager.register(PlayerAmuletHandler.INSTANCE);
-        // manager.register(SpellCastingManager.PERK_TREE);
+        //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
         manager.register(ShootingStarHandler.getInstance());
         manager.register(ParticleEffectWatcher.INSTANCE);
         manager.register(PlayerActivityManager.INSTANCE);
 
-        // TickTokenizedMaps
+        //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
         manager.register(EventHandlerEntity.invulnerabilityCooldown);
         manager.register(EventHandlerEntity.ritualFlight);
         manager.register(PerkEffectHelper.perkCooldowns);
-        manager.register(PerkEffectHelper.perkCooldownsClient); // Doesn't matter being registered on servers aswell.
-        // And prevent fckery in integrated.
+        manager.register(PerkEffectHelper.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
     }
 
     public void postInit() {
@@ -409,23 +348,17 @@ public class CommonProxy implements IGuiHandler {
         return FakePlayerFactory.get(world, new GameProfile(AS_FAKEPLAYER_UUID, "AS-FakePlayer"));
     }
 
-    public void registerVariantName(Item item, String name) {
-    }
+    public void registerVariantName(Item item, String name) {}
 
-    public void registerBlockRender(Block block, int metadata, String name) {
-    }
+    public void registerBlockRender(Block block, int metadata, String name) {}
 
-    public void registerItemRender(Item item, int metadata, String name) {
-    }
+    public void registerItemRender(Item item, int metadata, String name) {}
 
-    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {
-    }
+    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
 
-    public void registerFromSubItems(Item item, String name) {
-    }
+    public void registerFromSubItems(Item item, String name) {}
 
-    public void scheduleClientside(Runnable r, int tickDelay) {
-    }
+    public void scheduleClientside(Runnable r, int tickDelay) {}
 
     public void scheduleClientside(Runnable r) {
         scheduleClientside(r, 0);
@@ -445,7 +378,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void fireLightning(World world, Vector3 from, Vector3 to, Color overlay) {
         PktLightningEffect effect = new PktLightningEffect(from, to);
-        if (overlay != null) {
+        if(overlay != null) {
             effect.setColorOverlay(overlay);
         }
         PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, from.toBlockPos(), 40));
@@ -453,13 +386,13 @@ public class CommonProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        if (id < 0 || id >= EnumGuiId.values().length) return null; // Out of range.
+        if(id < 0 || id >= EnumGuiId.values().length) return null; //Out of range.
         EnumGuiId guiType = EnumGuiId.values()[id];
 
         TileEntity t = null;
-        if (guiType.getTileClass() != null) {
+        if(guiType.getTileClass() != null) {
             t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass(), true);
-            if (t == null) {
+            if(t == null) {
                 return null;
             }
         }
@@ -474,9 +407,9 @@ public class CommonProxy implements IGuiHandler {
             case ALTAR_TRAIT:
                 return new ContainerAltarTrait(player.inventory, (TileAltar) t);
             case JOURNAL_STORAGE: {
-                ItemStack held = player.getHeldItem();
-                if (held != null && held.stackSize != 0) {
-                    if (held.getItem() instanceof ItemJournal) {
+                ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
+                if(!held.isEmpty()) {
+                    if(held.getItem() instanceof ItemJournal) {
                         return new ContainerJournal(player.inventory, held, player.inventory.currentItem);
                     }
                 }
@@ -498,7 +431,7 @@ public class CommonProxy implements IGuiHandler {
         player.openGui(AstralSorcery.instance, guiId.ordinal(), world, x, y, z);
     }
 
-    public enum EnumGuiId {
+    public static enum EnumGuiId {
 
         TELESCOPE(TileTelescope.class),
         HAND_TELESCOPE,

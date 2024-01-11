@@ -1,22 +1,27 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.world.retrogen;
 
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.world.ChunkEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import shordinger.astralsorcery.common.CommonProxy;
 import shordinger.astralsorcery.common.world.AstralWorldGenerator;
-import shordinger.astralsorcery.migration.ChunkPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
+import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
+import shordinger.wrapper.net.minecraftforge.event.world.ChunkEvent;
+import shordinger.wrapper.net.minecraftforge.event.world.WorldEvent;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,15 +37,15 @@ public class RetroGenController {
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        World w = event.world;
+        World w = event.getWorld();
         if (w.isRemote) return;
         Chunk ch = event.getChunk();
 
-        if (!event.getChunk().isTerrainPopulated) {
+        if (!event.getChunk().isTerrainPopulated()) {
             return;
         }
 
-        visitChunkPopulation(ch.worldObj, ch.getPos());
+        visitChunkPopulation(ch.getWorld(), ch.getPos());
     }
 
     private void visitChunkPopulation(World w, ChunkPos pos) {
@@ -48,8 +53,9 @@ public class RetroGenController {
         int chX = pos.x;
         int chZ = pos.z;
 
-        if (w.isChunkGeneratedAt(chX + 1, chZ) && w.isChunkGeneratedAt(chX, chZ + 1)
-            && w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
+        if (w.isChunkGeneratedAt(chX + 1, chZ) &&
+                w.isChunkGeneratedAt(chX, chZ + 1) &&
+                w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
 
             Integer chunkVersion = -1;
             if (((WorldServer) w).getChunkProvider().chunkLoader.isChunkGeneratedAt(chX, chZ)) {

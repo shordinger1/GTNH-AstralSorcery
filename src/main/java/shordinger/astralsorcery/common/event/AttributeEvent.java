@@ -1,22 +1,23 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
- * Shordinger / GTNH AstralSorcery 2024
+ *
  * All rights reserved.
- *  Also Avaliable 1.7.10 source code in https://github.com/shordinger1/GTNH-AstralSorcery
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
 
 package shordinger.astralsorcery.common.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry;
 import shordinger.astralsorcery.common.constellation.perk.attribute.PerkAttributeType;
 import shordinger.astralsorcery.core.ASMCallHook;
+import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.AbstractAttributeMap;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
+import shordinger.wrapper.net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
+import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
+import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -77,7 +78,7 @@ public class AttributeEvent {
         @Nullable
         public EntityPlayer getPlayer() {
             EntityLivingBase owner = getEntityLiving();
-            if (owner instanceof EntityPlayer) {
+            if (owner != null && owner instanceof EntityPlayer) {
                 return (EntityPlayer) owner;
             }
             return null;
@@ -146,8 +147,7 @@ public class AttributeEvent {
     public static double postProcessVanilla(double value, ModifiableAttributeInstance instance) {
         PostProcessVanilla ev = new PostProcessVanilla(instance, value);
         MinecraftForge.EVENT_BUS.post(ev);
-        return ev.getAttribute()
-            .clampValue(ev.getValue()); // Cause that happened before our call already...
+        return ev.getAttribute().clampValue(ev.getValue()); //Cause that happened before our call already...
     }
 
     @ASMCallHook
@@ -155,8 +155,7 @@ public class AttributeEvent {
         if (fAttributeMapEntity != null) {
             try {
                 fAttributeMapEntity.set(map, entity);
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
         return map;
     }
@@ -166,8 +165,7 @@ public class AttributeEvent {
         if (fAttributeMapEntity != null) {
             try {
                 return (EntityLivingBase) fAttributeMapEntity.get(map);
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
         return null;
     }
