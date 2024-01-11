@@ -1,0 +1,35 @@
+package shordinger.wrapper.net.minecraft.client.gui.spectator.categories;
+
+import java.util.List;
+
+import com.google.common.base.MoreObjects;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import shordinger.wrapper.net.minecraft.client.gui.spectator.ISpectatorMenuObject;
+import shordinger.wrapper.net.minecraft.client.gui.spectator.ISpectatorMenuView;
+import shordinger.wrapper.net.minecraft.client.gui.spectator.SpectatorMenu;
+
+@SideOnly(Side.CLIENT)
+public class SpectatorDetails {
+
+    private final ISpectatorMenuView category;
+    private final List<ISpectatorMenuObject> items;
+    private final int selectedSlot;
+
+    public SpectatorDetails(ISpectatorMenuView categoryIn, List<ISpectatorMenuObject> itemsIn, int selectedIndex) {
+        this.category = categoryIn;
+        this.items = itemsIn;
+        this.selectedSlot = selectedIndex;
+    }
+
+    public ISpectatorMenuObject getObject(int index) {
+        return index >= 0 && index < this.items.size()
+            ? (ISpectatorMenuObject) MoreObjects.firstNonNull(this.items.get(index), SpectatorMenu.EMPTY_SLOT)
+            : SpectatorMenu.EMPTY_SLOT;
+    }
+
+    public int getSelectedSlot() {
+        return this.selectedSlot;
+    }
+}
