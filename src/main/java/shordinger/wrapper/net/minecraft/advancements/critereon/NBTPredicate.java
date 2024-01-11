@@ -9,9 +9,9 @@ import shordinger.wrapper.net.minecraft.command.CommandBase;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTUtil;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 

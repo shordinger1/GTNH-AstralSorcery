@@ -1,16 +1,14 @@
 package shordinger.wrapper.net.minecraft.util.datafix;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import shordinger.wrapper.net.minecraft.util.Util;
+
+import java.util.List;
+import java.util.Map;
 
 public class DataFixer implements IDataFixer {
 

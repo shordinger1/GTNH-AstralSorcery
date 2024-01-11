@@ -20,12 +20,14 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.client.ClientScheduler;
 import shordinger.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import shordinger.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
 import shordinger.astralsorcery.common.item.base.render.ItemDynamicColor;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
+import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.entity.Entity;
@@ -33,8 +35,7 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.world.World;
@@ -165,24 +166,48 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
         tag.setTag("amuletEnchantments", enchants);
     }
 
-    @Override
+
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
         player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
     }
 
-    @Override
-    public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-        player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
-    }
 
-    @Override
     public BaubleType getBaubleType(ItemStack itemstack) {
         return BaubleType.AMULET;
     }
 
-    @Override
+
     public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
         return true;
     }
 
+    @Override
+    public BaubleType getBaubleType(net.minecraft.item.ItemStack itemstack) {
+        return getBaubleType(new ItemStack(itemstack));
+    }
+
+    @Override
+    public void onWornTick(net.minecraft.item.ItemStack itemstack, net.minecraft.entity.EntityLivingBase player) {
+        return;
+    }
+
+    @Override
+    public void onEquipped(net.minecraft.item.ItemStack itemstack, net.minecraft.entity.EntityLivingBase player) {
+        player.playSound(Block.soundTypeGlass.soundName, .65F, 6.4f);
+    }
+
+    @Override
+    public void onUnequipped(net.minecraft.item.ItemStack itemstack, net.minecraft.entity.EntityLivingBase player) {
+//        onUnequipped(new ItemStack(itemstack), player);
+    }
+
+    @Override
+    public boolean canEquip(net.minecraft.item.ItemStack itemstack, net.minecraft.entity.EntityLivingBase player) {
+        return false;
+    }
+
+    @Override
+    public boolean canUnequip(net.minecraft.item.ItemStack itemstack, net.minecraft.entity.EntityLivingBase player) {
+        return false;
+    }
 }

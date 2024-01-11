@@ -32,9 +32,9 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import cpw.mods.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.world.storage.SaveHandler;
 import shordinger.wrapper.net.minecraft.world.storage.WorldInfo;

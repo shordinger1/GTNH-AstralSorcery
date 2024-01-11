@@ -1,9 +1,6 @@
 package shordinger.wrapper.net.minecraft.world.gen.structure;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.block.BlockFlowerPot;
 import shordinger.wrapper.net.minecraft.block.BlockLever;
 import shordinger.wrapper.net.minecraft.block.BlockPistonBase;
@@ -21,7 +18,6 @@ import shordinger.wrapper.net.minecraft.entity.IEntityLivingData;
 import shordinger.wrapper.net.minecraft.entity.monster.EntityWitch;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityChest;
@@ -34,6 +30,10 @@ import shordinger.wrapper.net.minecraft.world.gen.structure.template.PlacementSe
 import shordinger.wrapper.net.minecraft.world.gen.structure.template.Template;
 import shordinger.wrapper.net.minecraft.world.gen.structure.template.TemplateManager;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootTableList;
+
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class ComponentScatteredFeaturePieces {
 

@@ -8,16 +8,9 @@
 
 package shordinger.astralsorcery.client.util.camera;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.util.data.Vector3;
@@ -29,9 +22,15 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EnumPlayerModelParts;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumHandSide;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.TreeSet;
 
 /**
  * This class is part of the Astral Sorcery Mod

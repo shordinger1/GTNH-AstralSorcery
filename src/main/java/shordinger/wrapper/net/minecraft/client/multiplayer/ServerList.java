@@ -12,8 +12,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 @SideOnly(Side.CLIENT)
 public class ServerList {

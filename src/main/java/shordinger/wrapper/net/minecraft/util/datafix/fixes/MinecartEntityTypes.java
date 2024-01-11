@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;
 
 public class MinecartEntityTypes implements IFixableData {

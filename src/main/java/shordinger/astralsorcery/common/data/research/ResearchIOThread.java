@@ -20,7 +20,7 @@ import com.google.common.io.Files;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod

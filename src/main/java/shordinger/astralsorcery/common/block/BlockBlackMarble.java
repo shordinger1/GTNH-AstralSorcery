@@ -46,7 +46,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
         setHardness(1.0F);
         setHarvestLevel("pickaxe", 1);
         setResistance(3.0F);
-        setSoundType(SoundType.STONE);
+        setSoundType(shordinger.wrapper.net.minecraft.block.SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(
             this.blockState.getBaseState()

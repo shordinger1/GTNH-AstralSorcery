@@ -90,7 +90,7 @@ import shordinger.wrapper.net.minecraft.crash.CrashReport;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.launchwrapper.Launch;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.INetHandler;
 import shordinger.wrapper.net.minecraft.network.NetHandlerPlayServer;
 import shordinger.wrapper.net.minecraft.network.NetworkManager;

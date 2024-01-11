@@ -18,10 +18,11 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import net.minecraft.util.IChatComponent;
 import shordinger.wrapper.net.minecraft.util.EnumTypeAdapterFactory;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 
-public interface ITextComponent extends Iterable<ITextComponent> {
+public interface ITextComponent extends IChatComponent {
 
     /**
      * Sets the style of this component and updates the parent style of all of the sibling components.

@@ -26,7 +26,7 @@ import shordinger.wrapper.net.minecraft.advancements.PlayerAdvancements;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.NetHandlerPlayServer;
 import shordinger.wrapper.net.minecraft.network.NetworkManager;
 import shordinger.wrapper.net.minecraft.network.Packet;

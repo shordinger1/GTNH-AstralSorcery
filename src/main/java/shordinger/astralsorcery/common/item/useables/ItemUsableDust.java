@@ -16,7 +16,7 @@ import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockDispenser;
-import shordinger.wrapper.net.minecraft.block.SoundType;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.dispenser.IBehaviorDispenseItem;
@@ -197,7 +197,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
         public void rightClickBlock(EntityPlayer playerIn, World worldIn, BlockPos pos, ItemStack dustStack,
                                     EnumFacing facing) {
             switch (this) {
-                case ILLUMINATION:
+                case ILLUMINATION -> {
                     IBlockState iblockstate = worldIn.getBlockState(pos);
                     Block block = iblockstate.getBlock();
                     if (!block.isReplaceable(worldIn, pos)) {
@@ -206,7 +206,7 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     if (playerIn.canPlayerEdit(pos, facing, dustStack)
                         && worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null)) {
                         if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
-                            SoundType soundtype = worldIn.getBlockState(pos)
+                            SoundType soundtype = (SoundType) worldIn.getBlockState(pos)
                                 .getBlock()
                                 .getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                             worldIn.playSound(
@@ -221,8 +221,8 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                             }
                         }
                     }
-                    break;
-                case NOCTURNAL:
+                }
+                case NOCTURNAL -> {
                     pos = pos.offset(facing);
                     EntityNocturnalSpark noc = new EntityNocturnalSpark(worldIn, playerIn);
                     noc.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -231,9 +231,9 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     if (!playerIn.isCreative()) {
                         dustStack.shrink(1);
                     }
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
 

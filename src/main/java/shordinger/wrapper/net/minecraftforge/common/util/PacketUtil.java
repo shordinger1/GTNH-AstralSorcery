@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.common.util;
 
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.PacketBuffer;
 
 public class PacketUtil {

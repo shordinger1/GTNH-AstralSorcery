@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.MoverType;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;

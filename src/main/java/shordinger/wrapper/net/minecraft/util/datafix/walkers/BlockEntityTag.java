@@ -1,19 +1,16 @@
 package shordinger.wrapper.net.minecraft.util.datafix.walkers;
 
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.Maps;
+import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.common.collect.Maps;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;
 import shordinger.wrapper.net.minecraft.util.datafix.IDataFixer;
 import shordinger.wrapper.net.minecraft.util.datafix.IDataWalker;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 public class BlockEntityTag implements IDataWalker {
 

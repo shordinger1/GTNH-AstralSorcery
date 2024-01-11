@@ -15,7 +15,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.common.collect.Maps;
 
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.datafix.DataFixer;

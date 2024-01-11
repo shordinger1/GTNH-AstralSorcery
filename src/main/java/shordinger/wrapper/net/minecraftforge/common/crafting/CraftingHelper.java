@@ -16,6 +16,46 @@
 
 package shordinger.wrapper.net.minecraftforge.common.crafting;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.item.Item;
+import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.item.crafting.CraftingManager;
+import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
+import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
+import shordinger.wrapper.net.minecraft.item.crafting.ShapedRecipes;
+import shordinger.wrapper.net.minecraft.item.crafting.ShapelessRecipes;
+import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
+import shordinger.wrapper.net.minecraft.nbt.NBTException;
+import shordinger.wrapper.net.minecraft.util.JsonUtils;
+import shordinger.wrapper.net.minecraft.util.NonNullList;
+import shordinger.wrapper.net.minecraft.util.ResourceLocation;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
+import shordinger.wrapper.net.minecraftforge.fml.common.FMLLog;
+import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
+import shordinger.wrapper.net.minecraftforge.fml.common.ModContainer;
+import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
+import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import shordinger.wrapper.net.minecraftforge.oredict.OreIngredient;
+import shordinger.wrapper.net.minecraftforge.oredict.ShapedOreRecipe;
+import shordinger.wrapper.net.minecraftforge.oredict.ShapelessOreRecipe;
+import shordinger.wrapper.net.minecraftforge.registries.ForgeRegistry;
+import shordinger.wrapper.net.minecraftforge.registries.GameData;
+import shordinger.wrapper.net.minecraftforge.registries.RegistryManager;
+
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,49 +78,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-
-import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.item.Item;
-import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.item.crafting.CraftingManager;
-import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
-import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
-import shordinger.wrapper.net.minecraft.item.crafting.ShapedRecipes;
-import shordinger.wrapper.net.minecraft.item.crafting.ShapelessRecipes;
-import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
-import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.util.JsonUtils;
-import shordinger.wrapper.net.minecraft.util.NonNullList;
-import shordinger.wrapper.net.minecraft.util.ResourceLocation;
-import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.fml.common.FMLLog;
-import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
-import shordinger.wrapper.net.minecraftforge.fml.common.ModContainer;
-import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
-import shordinger.wrapper.net.minecraftforge.oredict.OreIngredient;
-import shordinger.wrapper.net.minecraftforge.oredict.ShapedOreRecipe;
-import shordinger.wrapper.net.minecraftforge.oredict.ShapelessOreRecipe;
-import shordinger.wrapper.net.minecraftforge.registries.ForgeRegistry;
-import shordinger.wrapper.net.minecraftforge.registries.GameData;
-import shordinger.wrapper.net.minecraftforge.registries.RegistryManager;
 
 public class CraftingHelper {
 

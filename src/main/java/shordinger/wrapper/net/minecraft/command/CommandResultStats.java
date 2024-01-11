@@ -1,9 +1,7 @@
 package shordinger.wrapper.net.minecraft.command;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.entity.Entity;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.scoreboard.Score;
 import shordinger.wrapper.net.minecraft.scoreboard.ScoreObjective;
 import shordinger.wrapper.net.minecraft.scoreboard.Scoreboard;
@@ -12,6 +10,8 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class CommandResultStats {
 

@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -47,9 +48,9 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagInt;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.*;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
@@ -360,7 +361,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
             if (cmp.hasKey("upgrades", Constants.NBT.TAG_LIST)) {
                 NBTTagList list = cmp.getTagList("upgrades", Constants.NBT.TAG_INT);
                 for (int i = 0; i < list.tagCount(); i++) {
-                    if (list.getIntAt(i) == id) {
+                    if (list.func_150306_c(i)[i] == id) {
                         return true;
                     }
                 }

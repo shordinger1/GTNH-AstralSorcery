@@ -8,19 +8,12 @@
 
 package shordinger.astralsorcery.common.block.network;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.tile.TileWell;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.wrapper.net.minecraft.block.SoundType;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
@@ -46,6 +39,11 @@ import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
 import shordinger.wrapper.net.minecraftforge.items.wrapper.InvWrapper;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

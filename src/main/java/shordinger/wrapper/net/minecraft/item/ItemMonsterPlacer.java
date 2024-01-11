@@ -16,7 +16,7 @@ import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.IEntityLivingData;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.tileentity.MobSpawnerBaseLogic;

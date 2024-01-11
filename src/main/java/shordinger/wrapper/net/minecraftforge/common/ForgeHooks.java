@@ -79,8 +79,8 @@ import shordinger.wrapper.net.minecraft.item.ItemSpade;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.ItemTippedArrow;
 import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.network.NetHandlerPlayServer;
 import shordinger.wrapper.net.minecraft.network.Packet;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializer;
@@ -158,7 +158,6 @@ import shordinger.wrapper.net.minecraftforge.fml.common.network.handshake.Networ
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
 import shordinger.wrapper.net.minecraftforge.registries.DataSerializerEntry;
 import shordinger.wrapper.net.minecraftforge.registries.ForgeRegistry;
-import shordinger.wrapper.net.minecraftforge.registries.GameData;
 import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistry;
 import shordinger.wrapper.net.minecraftforge.registries.RegistryManager;
 
@@ -799,6 +798,7 @@ public class ForgeHooks {
     public static EnumActionResult onPlaceItemIntoWorld(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player,
                                                         @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side, float hitX, float hitY, float hitZ,
                                                         @Nonnull EnumHand hand) {
+
         // handle all placement events here
         int meta = itemstack.getItemDamage();
         int size = itemstack.getCount();

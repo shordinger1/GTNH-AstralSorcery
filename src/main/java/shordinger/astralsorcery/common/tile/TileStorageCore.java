@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.tile.storage.StorageCache;
 import shordinger.astralsorcery.common.tile.storage.StorageKey;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;

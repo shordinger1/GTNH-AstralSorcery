@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.world.storage;
 import javax.annotation.Nullable;
 
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public interface IPlayerFileData {
 

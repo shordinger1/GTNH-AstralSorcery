@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.World;
 
 public class MapGenStructureIO {

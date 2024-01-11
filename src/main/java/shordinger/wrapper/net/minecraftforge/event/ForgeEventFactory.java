@@ -138,7 +138,7 @@ import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.Event.Result;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ForgeEventFactory {
+public class ForgeEventFactory extends net.minecraftforge.event.ForgeEventFactory {
 
     public static EntityMultiPlaceEvent onMultiBlockPlace(@Nullable Entity entity, List<BlockSnapshot> blockSnapshots,
                                                           EnumFacing direction) {

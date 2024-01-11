@@ -1,18 +1,8 @@
 package shordinger.wrapper.net.minecraft.command.server;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.command.CommandBase;
 import shordinger.wrapper.net.minecraft.command.CommandException;
 import shordinger.wrapper.net.minecraft.command.CommandResultStats;
@@ -24,7 +14,6 @@ import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTUtil;
 import shordinger.wrapper.net.minecraft.scoreboard.IScoreCriteria;
 import shordinger.wrapper.net.minecraft.scoreboard.Score;
@@ -37,6 +26,15 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentTranslation;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class CommandScoreboard extends CommandBase {
 

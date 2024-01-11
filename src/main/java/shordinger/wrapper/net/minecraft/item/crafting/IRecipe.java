@@ -4,8 +4,9 @@ import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
 
-public interface IRecipe extends net.minecraftforge.registries.IForgeRegistryEntry<IRecipe> {
+public interface IRecipe extends IForgeRegistryEntry<IRecipe> {
 
     /**
      * Used to check if a recipe matches current crafting inventory

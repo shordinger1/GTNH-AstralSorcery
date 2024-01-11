@@ -17,7 +17,7 @@ import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.ChatAllowedCharacters;

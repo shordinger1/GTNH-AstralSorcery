@@ -42,7 +42,7 @@ import shordinger.wrapper.net.minecraft.item.EnumAction;
 import shordinger.wrapper.net.minecraft.item.EnumRarity;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
 import shordinger.wrapper.net.minecraft.util.NonNullList;

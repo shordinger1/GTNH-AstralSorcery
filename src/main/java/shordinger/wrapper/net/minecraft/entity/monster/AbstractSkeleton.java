@@ -2,6 +2,7 @@ package shordinger.wrapper.net.minecraft.entity.monster;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.entity.EntityCreature;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
@@ -30,7 +31,6 @@ import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;

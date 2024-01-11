@@ -16,20 +16,19 @@
 
 package shordinger.wrapper.net.minecraftforge.common.util;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.datafix.DataFixer;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;
 import shordinger.wrapper.net.minecraft.util.datafix.IDataWalker;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixType;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CompoundDataFixer extends DataFixer {
 

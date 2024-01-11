@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.util;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class WeightedSpawnerEntity extends WeightedRandom.Item {
 

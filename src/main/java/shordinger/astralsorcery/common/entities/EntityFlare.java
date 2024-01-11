@@ -37,7 +37,7 @@ import shordinger.wrapper.net.minecraft.entity.EntityFlying;
 import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
 import shordinger.wrapper.net.minecraft.entity.passive.EntityBat;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.SoundEvent;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;

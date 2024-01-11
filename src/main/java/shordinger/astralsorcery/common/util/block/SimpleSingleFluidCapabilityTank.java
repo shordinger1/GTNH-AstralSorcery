@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.fluids.*;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidHandler;

@@ -9,7 +9,7 @@ import shordinger.wrapper.net.minecraft.command.CommandResultStats;
 import shordinger.wrapper.net.minecraft.command.ICommandSender;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;

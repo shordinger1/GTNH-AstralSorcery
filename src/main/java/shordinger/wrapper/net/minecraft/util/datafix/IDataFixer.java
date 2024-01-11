@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.util.datafix;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public interface IDataFixer {
 

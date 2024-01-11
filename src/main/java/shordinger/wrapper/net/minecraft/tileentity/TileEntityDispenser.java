@@ -8,7 +8,7 @@ import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.inventory.ContainerDispenser;
 import shordinger.wrapper.net.minecraft.inventory.ItemStackHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.datafix.DataFixer;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;

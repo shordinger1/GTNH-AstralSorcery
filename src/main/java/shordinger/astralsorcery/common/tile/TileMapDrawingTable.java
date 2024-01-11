@@ -37,7 +37,7 @@ import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.ItemBook;
 import shordinger.wrapper.net.minecraft.item.ItemPotion;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.potion.PotionUtils;
 import shordinger.wrapper.net.minecraft.util.EnumParticleTypes;
 import shordinger.wrapper.net.minecraft.util.SoundCategory;

@@ -128,7 +128,7 @@ import shordinger.wrapper.net.minecraft.inventory.InventoryBasic;
 import shordinger.wrapper.net.minecraft.item.ItemMap;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.NetworkManager;
 import shordinger.wrapper.net.minecraft.network.Packet;
 import shordinger.wrapper.net.minecraft.network.PacketBuffer;

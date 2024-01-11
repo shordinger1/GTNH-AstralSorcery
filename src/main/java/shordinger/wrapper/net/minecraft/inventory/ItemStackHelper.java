@@ -3,8 +3,8 @@ package shordinger.wrapper.net.minecraft.inventory;
 import java.util.List;
 
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 
 public class ItemStackHelper {

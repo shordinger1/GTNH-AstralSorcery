@@ -8,20 +8,19 @@
 
 package shordinger.astralsorcery.common.data;
 
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
+import shordinger.astralsorcery.common.util.data.Tuple;
+import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nullable;
-
-import cpw.mods.fml.relauncher.Side;
-import shordinger.astralsorcery.common.starlight.network.TransmissionChain;
-import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
-import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod

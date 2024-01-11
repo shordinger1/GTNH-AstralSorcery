@@ -1,9 +1,8 @@
 package shordinger.wrapper.net.minecraft.util.datafix.fixes;
 
 import com.google.gson.JsonParseException;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 import shordinger.wrapper.net.minecraft.util.StringUtils;

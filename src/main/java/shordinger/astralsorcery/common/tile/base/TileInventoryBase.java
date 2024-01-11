@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;

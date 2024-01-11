@@ -13,8 +13,8 @@ import shordinger.wrapper.net.minecraft.entity.ai.attributes.AttributeModifier;
 import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttribute;
 import shordinger.wrapper.net.minecraft.entity.ai.attributes.IAttributeInstance;
 import shordinger.wrapper.net.minecraft.entity.ai.attributes.RangedAttribute;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class SharedMonsterAttributes {
 

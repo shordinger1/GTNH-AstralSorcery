@@ -17,14 +17,15 @@ import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
-import shordinger.wrapper.net.minecraft.entity.item.EntityXPOrb;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.init.Enchantments;
 import shordinger.wrapper.net.minecraft.init.Items;
+import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemBlock;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
+import shordinger.wrapper.net.minecraft.pathfinding.PathNodeType;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.BlockRenderLayer;
@@ -36,6 +37,7 @@ import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.util.ObjectIntIdentityMap;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.Rotation;
+import shordinger.wrapper.net.minecraft.util.SoundEvent;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
@@ -45,6 +47,8 @@ import shordinger.wrapper.net.minecraft.util.text.translation.I18n;
 import shordinger.wrapper.net.minecraft.world.Explosion;
 import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
+import shordinger.wrapper.net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -95,7 +99,7 @@ public class Block extends net.minecraft.block.Block {
     // /**
     // * true if the Block contains a Tile Entity
     // */
-    // protected boolean hasTileEntity;
+    protected boolean hasTileEntity;
     // /**
     // * Sound of stepping on the block
     // */
@@ -272,18 +276,11 @@ public class Block extends net.minecraft.block.Block {
     }
 
     public Block(Material blockMaterialIn, MapColor blockMapColorIn) {
-        super();
-        this.enableStats = true;
-        this.blockSoundType = SoundType.STONE;
-        this.blockParticleGravity = 1.0F;
-        this.slipperiness = 0.6F;
-        this.blockMaterial = blockMaterialIn;
-        this.blockMapColor = blockMapColorIn;
+        super(blockMaterialIn);
         this.blockState = this.createBlockState();
         this.setDefaultState(this.blockState.getBaseState());
         this.fullBlock = this.getDefaultState()
             .isOpaqueCube();
-        this.lightOpacity = this.fullBlock ? 255 : 0;
         this.translucent = !blockMaterialIn.blocksLight();
     }
 
@@ -294,7 +291,7 @@ public class Block extends net.minecraft.block.Block {
     /**
      * Sets the footstep sound for the block. Returns the object for convenience in constructing.
      */
-    protected Block setSoundType(shordinger.wrapper.net.minecraft.block.SoundType sound) {
+    protected Block setSoundType(SoundType sound) {
         super.setStepSound(sound);
         return this;
     }
@@ -661,20 +658,7 @@ public class Block extends net.minecraft.block.Block {
      * Spawns this Block's drops into the World as EntityItems.
      */
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-        if (!worldIn.isRemote && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates,
-        // prevents item dupe
-        {
-            List<ItemStack> drops = getDrops(worldIn, pos, state, fortune); // use the old method until it gets removed,
-            // for backward compatibility
-            chance = net.minecraftforge.event.ForgeEventFactory
-                .fireBlockHarvesting(drops, worldIn, pos, state, fortune, chance, false, harvesters.get());
-
-            for (ItemStack drop : drops) {
-                if (worldIn.rand.nextFloat() <= chance) {
-                    spawnAsEntity(worldIn, pos, drop);
-                }
-            }
-        }
+        super.dropBlockAsItemWithChance(worldIn, pos.getX(), pos.getY(), pos.getZ(), getMetaFromState(state), chance, fortune);
     }
 
     /**
@@ -710,20 +694,7 @@ public class Block extends net.minecraft.block.Block {
      * Spawns the given amount of experience into the World as XP orb entities
      */
     public void dropXpOnBlockBreak(World worldIn, BlockPos pos, int amount) {
-        if (!worldIn.isRemote && worldIn.getGameRules()
-            .getBoolean("doTileDrops")) {
-            while (amount > 0) {
-                int i = EntityXPOrb.getXPSplit(amount);
-                amount -= i;
-                worldIn.spawnEntity(
-                    new EntityXPOrb(
-                        worldIn,
-                        (double) pos.getX() + 0.5D,
-                        (double) pos.getY() + 0.5D,
-                        (double) pos.getZ() + 0.5D,
-                        i));
-            }
-        }
+        super.dropXpOnBlockBreak(worldIn, pos.getX(), pos.getY(), pos.getZ(), amount);
     }
 
     /**
@@ -870,7 +841,7 @@ public class Block extends net.minecraft.block.Block {
                 items.add(itemstack);
             }
 
-            net.minecraftforge.event.ForgeEventFactory
+            ForgeEventFactory
                 .fireBlockHarvesting(items, worldIn, pos, state, 0, 1.0f, true, player);
             for (ItemStack item : items) {
                 spawnAsEntity(worldIn, pos, item);
@@ -1200,41 +1171,8 @@ public class Block extends net.minecraft.block.Block {
      */
     @Deprecated // Use IBlockState.getBlockFaceShape
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        if (base_state.isTopSolid() && side == EnumFacing.UP) // Short circuit to vanilla function if its true
-            return true;
+        return super.isSideSolid(world, pos.getX(), pos.getY(), pos.getZ(), EnumFacing.getForgeSide(side));
 
-        if (this instanceof BlockSlab) {
-            IBlockState state = this.getActualState(base_state, world, pos);
-            return base_state.isFullBlock()
-                || (state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP && side == EnumFacing.UP)
-                || (state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.BOTTOM && side == EnumFacing.DOWN);
-        } else if (this instanceof BlockFarmland) {
-            return (side != EnumFacing.DOWN && side != EnumFacing.UP);
-        } else if (this instanceof BlockStairs) {
-            IBlockState state = this.getActualState(base_state, world, pos);
-            boolean flipped = state.getValue(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
-            BlockStairs.EnumShape shape = (BlockStairs.EnumShape) state.getValue(BlockStairs.SHAPE);
-            EnumFacing facing = (EnumFacing) state.getValue(BlockStairs.FACING);
-            if (side == EnumFacing.UP) return flipped;
-            if (side == EnumFacing.DOWN) return !flipped;
-            if (facing == side) return true;
-            if (flipped) {
-                if (shape == BlockStairs.EnumShape.INNER_LEFT) return side == facing.rotateYCCW();
-                if (shape == BlockStairs.EnumShape.INNER_RIGHT) return side == facing.rotateY();
-            } else {
-                if (shape == BlockStairs.EnumShape.INNER_LEFT) return side == facing.rotateY();
-                if (shape == BlockStairs.EnumShape.INNER_RIGHT) return side == facing.rotateYCCW();
-            }
-            return false;
-        } else if (this instanceof BlockSnow) {
-            IBlockState state = this.getActualState(base_state, world, pos);
-            return ((Integer) state.getValue(BlockSnow.LAYERS)) >= 8;
-        } else if (this instanceof BlockHopper && side == EnumFacing.UP) {
-            return true;
-        } else if (this instanceof BlockCompressedPowered) {
-            return true;
-        }
-        return isNormalCube(base_state, world, pos);
     }
 
     /**
@@ -1272,7 +1210,7 @@ public class Block extends net.minecraft.block.Block {
      * @return True to spawn the drops
      */
     public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        return net.minecraftforge.common.ForgeHooks.canHarvestBlock(this, player, world, pos);
+        return ForgeHooks.canHarvestBlock(this, player, world, pos);
     }
 
     /**
@@ -1310,7 +1248,7 @@ public class Block extends net.minecraft.block.Block {
      * @return A number ranging from 0 to 300 relating used to determine if the block will be consumed by fire
      */
     public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return net.minecraft.init.Blocks.FIRE.getFlammability(this);
+        returnBlocks.FIRE.getFlammability(this);
     }
 
     /**
@@ -1335,7 +1273,7 @@ public class Block extends net.minecraft.block.Block {
      * @return A number that is used to determine the speed of fire growth around the block
      */
     public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return net.minecraft.init.Blocks.FIRE.getEncouragement(this);
+        returnBlocks.FIRE.getEncouragement(this);
     }
 
     /**
@@ -1476,7 +1414,7 @@ public class Block extends net.minecraft.block.Block {
      * @return True to treat this as a bed
      */
     public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity player) {
-        return this == net.minecraft.init.Blocks.BED;
+        return this == Blocks.BED;
     }
 
     /**
@@ -1757,7 +1695,7 @@ public class Block extends net.minecraft.block.Block {
      * @return True to prevent vanilla break particles from spawning.
      */
     @SideOnly(Side.CLIENT)
-    public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.ParticleManager manager) {
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         return false;
     }
 
@@ -1791,11 +1729,11 @@ public class Block extends net.minecraft.block.Block {
                 .getZ());
         net.minecraftforge.common.EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
 
-        if (plant.getBlock() == net.minecraft.init.Blocks.CACTUS) {
-            return this == net.minecraft.init.Blocks.CACTUS || this == net.minecraft.init.Blocks.SAND;
+        if (plant.getBlock() == Blocks.CACTUS) {
+            return this == Blocks.CACTUS || this == Blocks.SAND;
         }
 
-        if (plant.getBlock() == net.minecraft.init.Blocks.REEDS && this == net.minecraft.init.Blocks.REEDS) {
+        if (plant.getBlock() == Blocks.REEDS && this == Blocks.REEDS) {
             return true;
         }
 
@@ -1805,22 +1743,22 @@ public class Block extends net.minecraft.block.Block {
 
         switch (plantType) {
             case Desert:
-                return this == net.minecraft.init.Blocks.SAND || this == net.minecraft.init.Blocks.HARDENED_CLAY
-                    || this == net.minecraft.init.Blocks.STAINED_HARDENED_CLAY;
+                return this == Blocks.SAND || this == Blocks.HARDENED_CLAY
+                    || this == Blocks.STAINED_HARDENED_CLAY;
             case Nether:
-                return this == net.minecraft.init.Blocks.SOUL_SAND;
+                return this == Blocks.SOUL_SAND;
             case Crop:
-                return this == net.minecraft.init.Blocks.FARMLAND;
+                return this == Blocks.FARMLAND;
             case Cave:
                 return state.isSideSolid(world, pos, EnumFacing.UP);
             case Plains:
-                return this == net.minecraft.init.Blocks.GRASS || this == net.minecraft.init.Blocks.DIRT
-                    || this == net.minecraft.init.Blocks.FARMLAND;
+                return this == Blocks.GRASS || this == Blocks.DIRT
+                    || this == Blocks.FARMLAND;
             case Water:
                 return state.getMaterial() == Material.WATER && state.getValue(BlockLiquid.LEVEL) == 0;
             case Beach:
-                boolean isBeach = this == net.minecraft.init.Blocks.GRASS || this == net.minecraft.init.Blocks.DIRT
-                    || this == net.minecraft.init.Blocks.SAND;
+                boolean isBeach = this == Blocks.GRASS || this == Blocks.DIRT
+                    || this == Blocks.SAND;
                 boolean hasWater = (world.getBlockState(pos.east())
                     .getMaterial() == Material.WATER
                     || world.getBlockState(pos.west())
@@ -1851,8 +1789,8 @@ public class Block extends net.minecraft.block.Block {
      * @param source Source plant's position in world
      */
     public void onPlantGrow(IBlockState state, World world, BlockPos pos, BlockPos source) {
-        if (this == net.minecraft.init.Blocks.GRASS || this == net.minecraft.init.Blocks.FARMLAND) {
-            world.setBlockState(pos, net.minecraft.init.Blocks.DIRT.getDefaultState(), 2);
+        if (this == Blocks.GRASS || this == Blocks.FARMLAND) {
+            world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 2);
         }
     }
 
@@ -1866,7 +1804,7 @@ public class Block extends net.minecraft.block.Block {
      * @return True if the soil should be considered fertile.
      */
     public boolean isFertile(World world, BlockPos pos) {
-        if (this == net.minecraft.init.Blocks.FARMLAND) {
+        if (this == Blocks.FARMLAND) {
             return ((Integer) world.getBlockState(pos)
                 .getValue(BlockFarmland.MOISTURE)) > 0;
         }
@@ -1901,16 +1839,16 @@ public class Block extends net.minecraft.block.Block {
      */
     public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
         if (entity instanceof net.minecraft.entity.boss.EntityDragon) {
-            return this != net.minecraft.init.Blocks.BARRIER && this != net.minecraft.init.Blocks.OBSIDIAN
-                && this != net.minecraft.init.Blocks.END_STONE
-                && this != net.minecraft.init.Blocks.BEDROCK
-                && this != net.minecraft.init.Blocks.END_PORTAL
-                && this != net.minecraft.init.Blocks.END_PORTAL_FRAME
-                && this != net.minecraft.init.Blocks.COMMAND_BLOCK
-                && this != net.minecraft.init.Blocks.REPEATING_COMMAND_BLOCK
-                && this != net.minecraft.init.Blocks.CHAIN_COMMAND_BLOCK
-                && this != net.minecraft.init.Blocks.IRON_BARS
-                && this != net.minecraft.init.Blocks.END_GATEWAY;
+            return this != Blocks.BARRIER && this != Blocks.OBSIDIAN
+                && this != Blocks.END_STONE
+                && this != Blocks.BEDROCK
+                && this != Blocks.END_PORTAL
+                && this != Blocks.END_PORTAL_FRAME
+                && this != Blocks.COMMAND_BLOCK
+                && this != Blocks.REPEATING_COMMAND_BLOCK
+                && this != Blocks.CHAIN_COMMAND_BLOCK
+                && this != Blocks.IRON_BARS
+                && this != Blocks.END_GATEWAY;
         } else if ((entity instanceof net.minecraft.entity.boss.EntityWither)
             || (entity instanceof net.minecraft.entity.projectile.EntityWitherSkull)) {
             return net.minecraft.entity.boss.EntityWither.canDestroyBlock(this);
@@ -1928,9 +1866,9 @@ public class Block extends net.minecraft.block.Block {
      * @return True, to support the beacon, and make it active with this block.
      */
     public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon) {
-        return this == net.minecraft.init.Blocks.EMERALD_BLOCK || this == net.minecraft.init.Blocks.GOLD_BLOCK
-            || this == net.minecraft.init.Blocks.DIAMOND_BLOCK
-            || this == net.minecraft.init.Blocks.IRON_BLOCK;
+        return this == Blocks.EMERALD_BLOCK || this == Blocks.GOLD_BLOCK
+            || this == Blocks.DIAMOND_BLOCK
+            || this == Blocks.IRON_BLOCK;
     }
 
     /**
@@ -2020,7 +1958,7 @@ public class Block extends net.minecraft.block.Block {
      * @return The amount of enchanting power this block produces.
      */
     public float getEnchantPowerBonus(World world, BlockPos pos) {
-        return this == net.minecraft.init.Blocks.BOOKSHELF ? 1 : 0;
+        return this == Blocks.BOOKSHELF ? 1 : 0;
     }
 
     /**
@@ -2178,8 +2116,8 @@ public class Block extends net.minecraft.block.Block {
      */
     public boolean isToolEffective(String type, IBlockState state) {
         if ("pickaxe".equals(type)
-            && (this == net.minecraft.init.Blocks.REDSTONE_ORE || this == net.minecraft.init.Blocks.LIT_REDSTONE_ORE
-            || this == net.minecraft.init.Blocks.OBSIDIAN))
+            && (this == Blocks.REDSTONE_ORE || this == Blocks.LIT_REDSTONE_ORE
+            || this == Blocks.OBSIDIAN))
             return false;
         return type != null && type.equals(getHarvestTool(state));
     }
@@ -2267,7 +2205,7 @@ public class Block extends net.minecraft.block.Block {
     protected static ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
     protected static ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
 
-    protected NonNullList<ItemStack> captureDrops(boolean start) {
+    protected List<net.minecraft.item.ItemStack> captureDrops(boolean start) {
         if (start) {
             captureDrops.set(true);
             capturedDrops.get()
@@ -2275,7 +2213,7 @@ public class Block extends net.minecraft.block.Block {
             return NonNullList.create();
         } else {
             captureDrops.set(false);
-            return capturedDrops.get();
+            return capturedDrops.get().stream().map((ItemStack::getRealItemStack)).toList();
         }
     }
 
@@ -2391,9 +2329,9 @@ public class Block extends net.minecraft.block.Block {
      */
     @Nullable
     @Deprecated // TODO: remove
-    public net.minecraft.pathfinding.PathNodeType getAiPathNodeType(IBlockState state, IBlockAccess world,
-                                                                    BlockPos pos) {
-        return isBurning(world, pos) ? net.minecraft.pathfinding.PathNodeType.DAMAGE_FIRE : null;
+    public PathNodeType getAiPathNodeType(IBlockState state, IBlockAccess world,
+                                          BlockPos pos) {
+        return isBurning(world, pos) ? PathNodeType.DAMAGE_FIRE : null;
     }
 
     /**
@@ -2402,8 +2340,8 @@ public class Block extends net.minecraft.block.Block {
      * @return the PathNodeType
      */
     @Nullable
-    public net.minecraft.pathfinding.PathNodeType getAiPathNodeType(IBlockState state, IBlockAccess world, BlockPos pos,
-                                                                    @Nullable net.minecraft.entity.EntityLiving entity) {
+    public PathNodeType getAiPathNodeType(IBlockState state, IBlockAccess world, BlockPos pos,
+                                          @Nullable net.minecraft.entity.EntityLiving entity) {
         return getAiPathNodeType(state, world, pos);
     }
 
@@ -2417,12 +2355,13 @@ public class Block extends net.minecraft.block.Block {
     public boolean doesSideBlockChestOpening(IBlockState blockState, IBlockAccess world, BlockPos pos,
                                              EnumFacing side) {
         ResourceLocation registryName = this.getRegistryName();
-        if (registryName != null && "minecraft".equals(registryName.getResourceDomain())) {
+        if (registryName != null) {
             // maintain the vanilla behavior of https://bugs.mojang.com/browse/MC-378
             return isNormalCube(blockState, world, pos);
         }
         return isSideSolid(blockState, world, pos, side);
     }
+
 
     /**
      * @param state The state
@@ -3881,7 +3820,7 @@ public class Block extends net.minecraft.block.Block {
     // }
 
     private static void registerBlock(int id, ResourceLocation textualID, Block block_) {
-        REGISTRY.register(id, textualID, block_);
+        REGISTRY.addObject(id, textualID.toString(), block_);
     }
 
     private static void registerBlock(int id, String textualID, Block block_) {
@@ -3893,4 +3832,155 @@ public class Block extends net.minecraft.block.Block {
         XZ,
         XYZ;
     }
+
+
+    public static class SoundType extends net.minecraft.block.Block.SoundType {
+
+        public static final SoundType WOOD = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeWood,
+            SoundEvents.BLOCK_WOOD_BREAK,
+            SoundEvents.BLOCK_WOOD_STEP,
+            SoundEvents.BLOCK_WOOD_PLACE,
+            SoundEvents.BLOCK_WOOD_HIT,
+            SoundEvents.BLOCK_WOOD_FALL);
+        public static final SoundType GROUND = new SoundType(
+            1.0F,
+            1.0F,
+            SoundEvents.BLOCK_GRAVEL_BREAK,
+            SoundEvents.BLOCK_GRAVEL_STEP,
+            SoundEvents.BLOCK_GRAVEL_PLACE,
+            SoundEvents.BLOCK_GRAVEL_HIT,
+            SoundEvents.BLOCK_GRAVEL_FALL);
+        public static final SoundType PLANT = new SoundType(
+            1.0F,
+            1.0F,
+            SoundEvents.BLOCK_GRASS_BREAK,
+            SoundEvents.BLOCK_GRASS_STEP,
+            SoundEvents.BLOCK_GRASS_PLACE,
+            SoundEvents.BLOCK_GRASS_HIT,
+            SoundEvents.BLOCK_GRASS_FALL);
+        public static final SoundType STONE = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeStone,
+            SoundEvents.BLOCK_STONE_BREAK,
+            SoundEvents.BLOCK_STONE_STEP,
+            SoundEvents.BLOCK_STONE_PLACE,
+            SoundEvents.BLOCK_STONE_HIT,
+            SoundEvents.BLOCK_STONE_FALL);
+        public static final SoundType METAL = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeMetal,
+            SoundEvents.BLOCK_METAL_BREAK,
+            SoundEvents.BLOCK_METAL_STEP,
+            SoundEvents.BLOCK_METAL_PLACE,
+            SoundEvents.BLOCK_METAL_HIT,
+            SoundEvents.BLOCK_METAL_FALL);
+        public static final SoundType GLASS = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeGlass,
+            SoundEvents.BLOCK_GLASS_BREAK,
+            SoundEvents.BLOCK_GLASS_STEP,
+            SoundEvents.BLOCK_GLASS_PLACE,
+            SoundEvents.BLOCK_GLASS_HIT,
+            SoundEvents.BLOCK_GLASS_FALL);
+        public static final SoundType CLOTH = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeCloth,
+            SoundEvents.BLOCK_CLOTH_BREAK,
+            SoundEvents.BLOCK_CLOTH_STEP,
+            SoundEvents.BLOCK_CLOTH_PLACE,
+            SoundEvents.BLOCK_CLOTH_HIT,
+            SoundEvents.BLOCK_CLOTH_FALL);
+        public static final SoundType SAND = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeSand,
+            SoundEvents.BLOCK_SAND_BREAK,
+            SoundEvents.BLOCK_SAND_STEP,
+            SoundEvents.BLOCK_SAND_PLACE,
+            SoundEvents.BLOCK_SAND_HIT,
+            SoundEvents.BLOCK_SAND_FALL);
+        public static final SoundType SNOW = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeSnow,
+            SoundEvents.BLOCK_SNOW_BREAK,
+            SoundEvents.BLOCK_SNOW_STEP,
+            SoundEvents.BLOCK_SNOW_PLACE,
+            SoundEvents.BLOCK_SNOW_HIT,
+            SoundEvents.BLOCK_SNOW_FALL);
+        public static final SoundType LADDER = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeLadder,
+            SoundEvents.BLOCK_LADDER_BREAK,
+            SoundEvents.BLOCK_LADDER_STEP,
+            SoundEvents.BLOCK_LADDER_PLACE,
+            SoundEvents.BLOCK_LADDER_HIT,
+            SoundEvents.BLOCK_LADDER_FALL);
+        public static final SoundType ANVIL = new SoundType(
+            shordinger.wrapper.net.minecraft.block.Block.soundTypeAnvil,
+            SoundEvents.BLOCK_ANVIL_BREAK,
+            SoundEvents.BLOCK_ANVIL_STEP,
+            SoundEvents.BLOCK_ANVIL_PLACE,
+            SoundEvents.BLOCK_ANVIL_HIT,
+            SoundEvents.BLOCK_ANVIL_FALL);
+        public static final SoundType SLIME = new SoundType(
+            1.0F,
+            1.0F,
+            SoundEvents.BLOCK_SLIME_BREAK,
+            SoundEvents.BLOCK_SLIME_STEP,
+            SoundEvents.BLOCK_SLIME_PLACE,
+            SoundEvents.BLOCK_SLIME_HIT,
+            SoundEvents.BLOCK_SLIME_FALL);
+        private final SoundEvent breakSound;
+        /**
+         * The sound played when walking on a block.
+         */
+        private final SoundEvent stepSound;
+        /**
+         * The sound played when a block gets placed.
+         */
+        private final SoundEvent placeSound;
+        /**
+         * The sound played when a block gets hit (i.e. while mining).
+         */
+        private final SoundEvent hitSound;
+        /**
+         * The sound played when a block gets fallen upon.
+         */
+        private final SoundEvent fallSound;
+
+        public SoundType(float volumeIn, float pitchIn, SoundEvent breakSoundIn, SoundEvent stepSoundIn,
+                         SoundEvent placeSoundIn, SoundEvent hitSoundIn, SoundEvent fallSoundIn) {
+            super("", volumeIn, pitchIn);
+            this.breakSound = breakSoundIn;
+            this.stepSound = stepSoundIn;
+            this.placeSound = placeSoundIn;
+            this.hitSound = hitSoundIn;
+            this.fallSound = fallSoundIn;
+        }
+
+        public SoundType(net.minecraft.block.Block.SoundType oldData, SoundEvent breakSoundIn, SoundEvent stepSoundIn, SoundEvent placeSoundIn,
+                         SoundEvent hitSoundIn, SoundEvent fallSoundIn) {
+            super(oldData.soundName, oldData.volume, oldData.frequency);
+            this.breakSound = breakSoundIn;
+            this.stepSound = stepSoundIn;
+            this.placeSound = placeSoundIn;
+            this.hitSound = hitSoundIn;
+            this.fallSound = fallSoundIn;
+
+        }
+
+        public SoundEvent getBreakSound() {
+            return this.breakSound;
+        }
+
+        public SoundEvent getStepSound() {
+            return this.stepSound;
+        }
+
+        public SoundEvent getPlaceSound() {
+            return this.placeSound;
+        }
+
+        public SoundEvent getHitSound() {
+            return this.hitSound;
+        }
+
+        public SoundEvent getFallSound() {
+            return this.fallSound;
+        }
+    }
+
 }

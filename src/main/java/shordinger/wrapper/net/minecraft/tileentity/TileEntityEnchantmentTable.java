@@ -6,7 +6,7 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
 import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.inventory.ContainerEnchantment;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ITickable;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;

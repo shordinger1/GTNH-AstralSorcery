@@ -8,10 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import javax.annotation.Nullable;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import shordinger.astralsorcery.client.effect.controller.orbital.OrbitalEffectLucerna;
@@ -27,10 +26,11 @@ import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.TickTokenizedMap;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

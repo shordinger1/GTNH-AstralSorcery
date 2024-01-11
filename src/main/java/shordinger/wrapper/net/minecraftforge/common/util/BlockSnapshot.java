@@ -16,19 +16,18 @@
 
 package shordinger.wrapper.net.minecraftforge.common.util;
 
-import java.lang.ref.WeakReference;
-import java.util.Objects;
-
-import javax.annotation.Nullable;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 /**
  * Represents a captured snapshot of a block which will not change

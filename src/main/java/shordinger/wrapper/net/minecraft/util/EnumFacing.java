@@ -11,6 +11,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
+import net.minecraftforge.common.util.ForgeDirection;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
@@ -486,6 +487,30 @@ public enum EnumFacing implements IStringSerializable {
 
         public Iterator<EnumFacing> iterator() {
             return Iterators.<EnumFacing>forArray(this.facings());
+        }
+    }
+
+
+    public static ForgeDirection getForgeSide(EnumFacing facing) {
+        switch (facing) {
+            case SOUTH -> {
+                return ForgeDirection.SOUTH;
+            }
+            case NORTH -> {
+                return ForgeDirection.NORTH;
+            }
+            case WEST -> {
+                return ForgeDirection.WEST;
+            }
+            case EAST -> {
+                return ForgeDirection.EAST;
+            }
+            case UP -> {
+                return ForgeDirection.UP;
+            }
+            case DOWN -> {
+                return ForgeDirection.DOWN;
+            }
         }
     }
 }

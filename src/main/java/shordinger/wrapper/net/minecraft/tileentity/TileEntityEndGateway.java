@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTUtil;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;

@@ -27,7 +27,7 @@ import shordinger.wrapper.net.minecraft.inventory.ContainerBeacon;
 import shordinger.wrapper.net.minecraft.inventory.ISidedInventory;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.potion.Potion;
 import shordinger.wrapper.net.minecraft.potion.PotionEffect;

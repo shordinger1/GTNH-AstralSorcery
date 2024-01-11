@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.reflect.TypeToken;
 
+import cpw.mods.fml.common.registry.GameData;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
 public interface IForgeRegistryEntry<V> {

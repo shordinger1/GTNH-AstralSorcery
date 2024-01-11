@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.cape;
 
-import java.lang.reflect.Constructor;
+import net.minecraft.nbt.NBTTagCompound;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import java.lang.reflect.Constructor;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.world.storage;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class WorldSavedData implements net.minecraftforge.common.util.INBTSerializable<NBTTagCompound> {
 

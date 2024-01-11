@@ -15,7 +15,7 @@ import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiMainMenu;
 import shordinger.wrapper.net.minecraft.client.settings.GameSettings;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.Session;
 import shordinger.wrapper.net.minecraft.world.GameType;
 

@@ -26,7 +26,7 @@ import shordinger.wrapper.net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import shordinger.wrapper.net.minecraft.entity.ai.EntityAIWatchClosest;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;

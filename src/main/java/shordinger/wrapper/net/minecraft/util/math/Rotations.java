@@ -1,7 +1,7 @@
 package shordinger.wrapper.net.minecraft.util.math;
 
 import shordinger.wrapper.net.minecraft.nbt.NBTTagFloat;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagList;
 
 public class Rotations {
 

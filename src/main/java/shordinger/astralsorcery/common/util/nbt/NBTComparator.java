@@ -13,9 +13,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 /**
  * This class is part of the Astral Sorcery Mod

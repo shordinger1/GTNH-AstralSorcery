@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.common.util;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraft.world.storage.WorldSavedData;
 

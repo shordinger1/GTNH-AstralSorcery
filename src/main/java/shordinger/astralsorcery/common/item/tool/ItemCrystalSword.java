@@ -33,7 +33,7 @@ import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.ItemSword;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
 

@@ -39,7 +39,7 @@ import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.tutorial.TutorialSteps;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EnumPlayerModelParts;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.play.client.CPacketClientSettings;
 import shordinger.wrapper.net.minecraft.util.EnumHandSide;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;

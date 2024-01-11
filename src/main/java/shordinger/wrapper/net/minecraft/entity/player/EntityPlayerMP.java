@@ -43,7 +43,7 @@ import shordinger.wrapper.net.minecraft.item.ItemMapBase;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.CraftingManager;
 import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.NetHandlerPlayServer;
 import shordinger.wrapper.net.minecraft.network.Packet;
 import shordinger.wrapper.net.minecraft.network.PacketBuffer;

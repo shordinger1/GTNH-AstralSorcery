@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.world.chunk.storage;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.datafix.DataFixer;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraft.world.storage.SaveHandler;

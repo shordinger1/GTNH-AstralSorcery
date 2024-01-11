@@ -8,11 +8,11 @@
 
 package shordinger.astralsorcery.common.block.network;
 
+import net.minecraft.block.material.MapColor;
 import shordinger.astralsorcery.common.tile.base.TileNetwork;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
-import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;

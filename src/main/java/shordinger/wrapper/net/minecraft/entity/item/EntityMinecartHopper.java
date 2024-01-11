@@ -10,7 +10,7 @@ import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.inventory.ContainerHopper;
 import shordinger.wrapper.net.minecraft.inventory.IInventory;
 import shordinger.wrapper.net.minecraft.item.Item;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.IHopper;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityHopper;
 import shordinger.wrapper.net.minecraft.util.DamageSource;

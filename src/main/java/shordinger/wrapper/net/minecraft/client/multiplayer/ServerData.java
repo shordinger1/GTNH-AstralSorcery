@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.multiplayer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentTranslation;
 

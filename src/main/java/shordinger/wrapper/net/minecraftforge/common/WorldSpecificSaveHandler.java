@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import com.google.common.io.Files;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.MinecraftException;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraft.world.WorldServer;

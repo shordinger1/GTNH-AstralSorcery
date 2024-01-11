@@ -8,13 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.effect.aoe;
 
-import java.awt.*;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHelper;
 import shordinger.astralsorcery.client.effect.EntityComplexFX;
@@ -34,14 +30,31 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
-import shordinger.wrapper.net.minecraft.entity.monster.*;
-import shordinger.wrapper.net.minecraft.entity.passive.*;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityBlaze;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityGhast;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityPigZombie;
+import shordinger.wrapper.net.minecraft.entity.monster.EntitySkeleton;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityStray;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityWitch;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityWitherSkeleton;
+import shordinger.wrapper.net.minecraft.entity.monster.EntityZombie;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityChicken;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityCow;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityHorse;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityParrot;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityPig;
+import shordinger.wrapper.net.minecraft.entity.passive.EntitySheep;
+import shordinger.wrapper.net.minecraft.entity.passive.EntitySkeletonHorse;
+import shordinger.wrapper.net.minecraft.entity.passive.EntityVillager;
 import shordinger.wrapper.net.minecraft.potion.PotionEffect;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

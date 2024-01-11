@@ -8,12 +8,9 @@
 
 package shordinger.astralsorcery.common.constellation.starmap;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.DrawnConstellation;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -25,12 +22,19 @@ import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
 import shordinger.wrapper.net.minecraft.item.ItemBook;
 import shordinger.wrapper.net.minecraft.item.ItemEnchantedBook;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.potion.PotionEffect;
 import shordinger.wrapper.net.minecraft.potion.PotionUtils;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
+import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

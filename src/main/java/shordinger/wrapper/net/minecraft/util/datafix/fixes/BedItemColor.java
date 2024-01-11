@@ -1,7 +1,7 @@
 package shordinger.wrapper.net.minecraft.util.datafix.fixes;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;
 
 public class BedItemColor implements IFixableData {

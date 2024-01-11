@@ -11,7 +11,7 @@ import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.IProjectile;
 import shordinger.wrapper.net.minecraft.entity.passive.EntityLlama;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.EnumParticleTypes;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;

@@ -1,16 +1,15 @@
 package shordinger.wrapper.net.minecraft.command;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 public class CommandEnchant extends CommandBase {
 

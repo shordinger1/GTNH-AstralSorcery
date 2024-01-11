@@ -16,10 +16,10 @@
 
 package shordinger.wrapper.net.minecraftforge.fluids.capability;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityInject;

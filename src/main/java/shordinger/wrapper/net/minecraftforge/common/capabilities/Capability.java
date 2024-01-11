@@ -16,14 +16,12 @@
 
 package shordinger.wrapper.net.minecraftforge.common.capabilities;
 
-import java.util.concurrent.Callable;
+import com.google.common.base.Throwables;
+import net.minecraft.nbt.NBTBase;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Throwables;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.util.EnumFacing;
+import java.util.concurrent.Callable;
 
 /**
  * This is the core holder object Capabilities.

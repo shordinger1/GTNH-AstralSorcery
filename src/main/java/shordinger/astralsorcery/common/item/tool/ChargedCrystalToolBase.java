@@ -8,18 +8,17 @@
 
 package shordinger.astralsorcery.common.item.tool;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +40,7 @@ public interface ChargedCrystalToolBase {
         applyToolProperties(inert, prop);
         if (stack.hasTagCompound()) {
             inert.setTagCompound(
-                stack.getTagCompound()
+                (NBTTagCompound) stack.getTagCompound()
                     .copy());
         }
         return inert;

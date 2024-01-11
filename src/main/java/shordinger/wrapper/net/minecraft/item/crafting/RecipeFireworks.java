@@ -8,8 +8,8 @@ import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.inventory.InventoryCrafting;
 import shordinger.wrapper.net.minecraft.item.ItemDye;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
 

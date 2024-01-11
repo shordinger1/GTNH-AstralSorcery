@@ -10,7 +10,7 @@ import shordinger.wrapper.net.minecraft.block.BlockDoor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityChest;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityDispenser;

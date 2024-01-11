@@ -8,8 +8,7 @@
 
 package shordinger.astralsorcery.common.starlight.transmission.base.crystal;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.item.crystal.CrystalProperties;
 import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
@@ -17,9 +16,10 @@ import shordinger.astralsorcery.common.starlight.transmission.base.SimpleTransmi
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -38,7 +38,7 @@ import com.google.gson.JsonSyntaxException;
 
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class JsonUtils {
 

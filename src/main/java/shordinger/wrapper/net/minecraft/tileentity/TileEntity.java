@@ -8,12 +8,11 @@ import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.BlockJukebox;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.crash.CrashReportCategory;
 import shordinger.wrapper.net.minecraft.crash.ICrashReportDetail;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import shordinger.wrapper.net.minecraft.util.Mirror;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -22,9 +21,12 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.registry.RegistryNamespaced;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityDispatcher;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public abstract class TileEntity
-    implements net.minecraftforge.common.capabilities.ICapabilitySerializable<NBTTagCompound> {
+public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
+    implements ICapabilitySerializable<NBTTagCompound> {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>> REGISTRY = new RegistryNamespaced<ResourceLocation, Class<? extends TileEntity>>();
@@ -487,21 +489,21 @@ public abstract class TileEntity
         return false;
     }
 
-    private net.minecraftforge.common.capabilities.CapabilityDispatcher capabilities;
+    private CapabilityDispatcher capabilities;
 
     public TileEntity() {
         capabilities = net.minecraftforge.event.ForgeEventFactory.gatherCapabilities(this);
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability,
+    public boolean hasCapability(Capability<?> capability,
                                  @Nullable net.minecraft.util.EnumFacing facing) {
         return capabilities == null ? false : capabilities.hasCapability(capability, facing);
     }
 
     @Override
     @Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability,
+    public <T> T getCapability(Capability<T> capability,
                                @Nullable net.minecraft.util.EnumFacing facing) {
         return capabilities == null ? null : capabilities.getCapability(capability, facing);
     }
@@ -516,31 +518,31 @@ public abstract class TileEntity
         return ret;
     }
 
-    static {
-        register("furnace", TileEntityFurnace.class);
-        register("chest", TileEntityChest.class);
-        register("ender_chest", TileEntityEnderChest.class);
-        register("jukebox", BlockJukebox.TileEntityJukebox.class);
-        register("dispenser", TileEntityDispenser.class);
-        register("dropper", TileEntityDropper.class);
-        register("sign", TileEntitySign.class);
-        register("mob_spawner", TileEntityMobSpawner.class);
-        register("noteblock", TileEntityNote.class);
-        register("piston", TileEntityPiston.class);
-        register("brewing_stand", TileEntityBrewingStand.class);
-        register("enchanting_table", TileEntityEnchantmentTable.class);
-        register("end_portal", TileEntityEndPortal.class);
-        register("beacon", TileEntityBeacon.class);
-        register("skull", TileEntitySkull.class);
-        register("daylight_detector", TileEntityDaylightDetector.class);
-        register("hopper", TileEntityHopper.class);
-        register("comparator", TileEntityComparator.class);
-        register("flower_pot", TileEntityFlowerPot.class);
-        register("banner", TileEntityBanner.class);
-        register("structure_block", TileEntityStructure.class);
-        register("end_gateway", TileEntityEndGateway.class);
-        register("command_block", TileEntityCommandBlock.class);
-        register("shulker_box", TileEntityShulkerBox.class);
-        register("bed", TileEntityBed.class);
-    }
+//    static {
+//        register("furnace", TileEntityFurnace.class);
+//        register("chest", TileEntityChest.class);
+//        register("ender_chest", TileEntityEnderChest.class);
+//        register("jukebox", BlockJukebox.TileEntityJukebox.class);
+//        register("dispenser", TileEntityDispenser.class);
+//        register("dropper", TileEntityDropper.class);
+//        register("sign", TileEntitySign.class);
+//        register("mob_spawner", TileEntityMobSpawner.class);
+//        register("noteblock", TileEntityNote.class);
+//        register("piston", TileEntityPiston.class);
+//        register("brewing_stand", TileEntityBrewingStand.class);
+//        register("enchanting_table", TileEntityEnchantmentTable.class);
+//        register("end_portal", TileEntityEndPortal.class);
+//        register("beacon", TileEntityBeacon.class);
+//        register("skull", TileEntitySkull.class);
+//        register("daylight_detector", TileEntityDaylightDetector.class);
+//        register("hopper", TileEntityHopper.class);
+//        register("comparator", TileEntityComparator.class);
+//        register("flower_pot", TileEntityFlowerPot.class);
+//        register("banner", TileEntityBanner.class);
+//        register("structure_block", TileEntityStructure.class);
+//        register("end_gateway", TileEntityEndGateway.class);
+//        register("command_block", TileEntityCommandBlock.class);
+//        register("shulker_box", TileEntityShulkerBox.class);
+//        register("bed", TileEntityBed.class);
+//    }
 }

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.datafix.DataFixer;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;

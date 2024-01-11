@@ -8,19 +8,18 @@
 
 package shordinger.astralsorcery.common.structure.change;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

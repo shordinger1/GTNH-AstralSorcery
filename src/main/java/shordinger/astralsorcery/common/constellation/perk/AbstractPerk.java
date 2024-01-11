@@ -8,19 +8,10 @@
 
 package shordinger.astralsorcery.common.constellation.perk;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -32,13 +23,20 @@ import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
 import shordinger.wrapper.net.minecraftforge.fml.common.ModContainer;
 import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

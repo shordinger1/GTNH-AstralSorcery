@@ -20,7 +20,7 @@ import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTUtil;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityBanner;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityBed;

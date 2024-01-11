@@ -35,7 +35,7 @@ import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.EnumConnectionState;
 import shordinger.wrapper.net.minecraft.network.INetHandler;
 import shordinger.wrapper.net.minecraft.network.NetHandlerPlayServer;

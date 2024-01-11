@@ -1,25 +1,23 @@
 package shordinger.wrapper.net.minecraft.command;
 
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.inventory.IInventory;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.NextTickListEntry;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.gen.structure.StructureBoundingBox;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
 
 public class CommandClone extends CommandBase {
 

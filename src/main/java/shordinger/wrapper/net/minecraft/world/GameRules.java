@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.world;
 import java.util.Set;
 import java.util.TreeMap;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class GameRules {
 

@@ -23,7 +23,7 @@ import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.ItemSword;
 import shordinger.wrapper.net.minecraft.item.ItemTool;
 import shordinger.wrapper.net.minecraft.item.crafting.FurnaceRecipes;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.ITickable;
 import shordinger.wrapper.net.minecraft.util.NonNullList;

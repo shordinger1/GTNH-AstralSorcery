@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.event.world;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraft.world.chunk.storage.AnvilChunkLoader;

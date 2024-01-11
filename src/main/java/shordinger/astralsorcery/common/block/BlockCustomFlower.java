@@ -69,23 +69,19 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
         if (!(world instanceof World)) {
             return;
         }
-        switch (state.getValue(FLOWER_TYPE)) {
-            case GLOW_FLOWER:
-                int size = 1;
-                for (int i = 0; i < fortune; i++) {
-                    size += rand.nextInt(3) + 1;
-                }
-                for (int i = 0; i < size; i++) {
-                    ItemUtils.dropItemNaturally(
-                        (World) world,
-                        pos.getX() + 0.5,
-                        pos.getY() + 0.1,
-                        pos.getZ() + 0.5,
-                        new ItemStack(Items.GLOWSTONE_DUST));
-                }
-                break;
-            default:
-                break;
+        if (state.getValue(FLOWER_TYPE) == FlowerType.GLOW_FLOWER) {
+            int size = 1;
+            for (int i = 0; i < fortune; i++) {
+                size += rand.nextInt(3) + 1;
+            }
+            for (int i = 0; i < size; i++) {
+                ItemUtils.dropItemNaturally(
+                    (World) world,
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.1,
+                    pos.getZ() + 0.5,
+                    new ItemStack(Items.GLOWSTONE_DUST));
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import shordinger.astralsorcery.common.tile.base.TileInventoryBase;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.struct.BlockDiscoverer;
+import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockContainer;
 import shordinger.wrapper.net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
@@ -58,7 +59,7 @@ public class BlockAttunementRelay extends BlockContainer {
         setHarvestLevel("pickaxe", 0);
         setResistance(1.0F);
         setLightLevel(0.25F);
-        setSoundType(SoundType.GLASS);
+        setSoundType((shordinger.wrapper.net.minecraft.block.SoundType) Block.soundTypeGlass);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

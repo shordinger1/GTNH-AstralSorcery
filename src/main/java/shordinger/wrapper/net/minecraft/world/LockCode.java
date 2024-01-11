@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.world;
 
 import javax.annotation.concurrent.Immutable;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 @Immutable
 public class LockCode {

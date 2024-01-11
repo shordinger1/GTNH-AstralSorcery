@@ -16,11 +16,13 @@
 
 package shordinger.wrapper.net.minecraftforge.energy;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagInt;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
-import shordinger.wrapper.net.minecraftforge.common.capabilities.*;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability.IStorage;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityInject;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityManager;
 
 public class CapabilityEnergy {
 

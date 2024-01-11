@@ -1,9 +1,9 @@
 package shordinger.wrapper.net.minecraft.util.datafix.fixes;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;
 
 public class AddBedTileEntity implements IFixableData {

@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.MinecraftException;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraft.world.chunk.storage.IChunkLoader;

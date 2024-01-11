@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.util.datafix.walkers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;
 import shordinger.wrapper.net.minecraft.util.datafix.IDataFixer;
 import shordinger.wrapper.net.minecraft.util.datafix.IDataWalker;

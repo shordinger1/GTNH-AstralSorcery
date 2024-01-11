@@ -1,5 +1,7 @@
 package shordinger.wrapper.net.minecraft.util.datafix;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.block.BlockJukebox;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.boss.EntityDragon;
@@ -74,8 +76,6 @@ import shordinger.wrapper.net.minecraft.entity.projectile.EntitySpectralArrow;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityTippedArrow;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityWitherSkull;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityBrewingStand;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityChest;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityDispenser;

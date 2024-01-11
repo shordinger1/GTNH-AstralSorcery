@@ -16,15 +16,15 @@
 
 package shordinger.wrapper.net.minecraftforge.common.model.animation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityInject;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityManager;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CapabilityAnimation {
 

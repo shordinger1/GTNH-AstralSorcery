@@ -10,6 +10,7 @@ package shordinger.astralsorcery.common.constellation.cape.impl;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.common.base.MeltInteraction;
 import shordinger.astralsorcery.common.base.WorldMeltables;
 import shordinger.astralsorcery.common.constellation.IConstellation;
@@ -18,7 +19,6 @@ import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.common.config.Configuration;
 

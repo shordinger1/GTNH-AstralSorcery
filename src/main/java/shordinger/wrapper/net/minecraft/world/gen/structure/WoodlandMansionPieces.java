@@ -14,7 +14,7 @@ import shordinger.wrapper.net.minecraft.entity.IEntityLivingData;
 import shordinger.wrapper.net.minecraft.entity.monster.EntityEvoker;
 import shordinger.wrapper.net.minecraft.entity.monster.EntityVindicator;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.Mirror;

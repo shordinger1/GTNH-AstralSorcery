@@ -29,7 +29,7 @@ import shordinger.wrapper.net.minecraft.block.BlockChest;
 import shordinger.wrapper.net.minecraft.block.BlockEnderChest;
 import shordinger.wrapper.net.minecraft.block.BlockSign;
 import shordinger.wrapper.net.minecraft.block.BlockSkull;
-import shordinger.wrapper.net.minecraft.block.SoundType;
+
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;

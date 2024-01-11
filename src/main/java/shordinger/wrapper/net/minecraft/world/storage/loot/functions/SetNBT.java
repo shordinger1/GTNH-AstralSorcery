@@ -10,7 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootContext;

@@ -12,8 +12,8 @@ import com.google.common.collect.Sets;
 
 import shordinger.wrapper.net.minecraft.entity.monster.EntityGuardian;
 import shordinger.wrapper.net.minecraft.init.Biomes;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;

@@ -10,7 +10,7 @@ package shordinger.astralsorcery.common.crafting;
 
 import shordinger.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import shordinger.astralsorcery.common.tile.TileAltar;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod

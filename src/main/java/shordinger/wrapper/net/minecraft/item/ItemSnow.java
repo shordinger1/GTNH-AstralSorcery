@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.item;
 import shordinger.wrapper.net.minecraft.advancements.CriteriaTriggers;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockSnow;
-import shordinger.wrapper.net.minecraft.block.SoundType;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;

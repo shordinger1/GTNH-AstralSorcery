@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.fluids;
 
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.IFluidHandler;

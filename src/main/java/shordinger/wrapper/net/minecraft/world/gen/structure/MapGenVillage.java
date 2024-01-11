@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import shordinger.wrapper.net.minecraft.init.Biomes;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.World;

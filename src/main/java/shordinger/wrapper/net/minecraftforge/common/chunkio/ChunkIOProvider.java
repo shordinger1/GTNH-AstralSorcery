@@ -16,16 +16,16 @@
 
 package shordinger.wrapper.net.minecraftforge.common.chunkio;
 
-import java.io.IOException;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.chunk.Chunk;
 import shordinger.wrapper.net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import shordinger.wrapper.net.minecraft.world.gen.ChunkProviderServer;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 import shordinger.wrapper.net.minecraftforge.event.world.ChunkDataEvent;
+
+import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 class ChunkIOProvider implements Runnable {
 

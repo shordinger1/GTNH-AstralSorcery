@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.tileentity;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityComparator extends TileEntity {
 

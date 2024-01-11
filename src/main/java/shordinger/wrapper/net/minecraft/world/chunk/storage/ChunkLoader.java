@@ -1,8 +1,8 @@
 package shordinger.wrapper.net.minecraft.world.chunk.storage;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.init.Biomes;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
 import shordinger.wrapper.net.minecraft.world.biome.BiomeProvider;

@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.wrapper.net.minecraft.item.Item;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.datafix.FixTypes;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;

@@ -24,7 +24,7 @@ import shordinger.wrapper.net.minecraft.entity.boss.EntityDragon;
 import shordinger.wrapper.net.minecraft.entity.boss.dragon.phase.IPhase;
 import shordinger.wrapper.net.minecraft.entity.boss.dragon.phase.PhaseList;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.potion.PotionEffect;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;

@@ -11,7 +11,7 @@ package shordinger.astralsorcery.common.tile;
 import java.util.UUID;
 
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod

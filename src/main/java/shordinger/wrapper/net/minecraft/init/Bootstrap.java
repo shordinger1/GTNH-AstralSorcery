@@ -1,17 +1,11 @@
 package shordinger.wrapper.net.minecraft.init;
 
-import java.io.File;
-import java.io.PrintStream;
-import java.util.Random;
-import java.util.UUID;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.mojang.authlib.GameProfile;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import shordinger.wrapper.net.minecraft.advancements.AdvancementManager;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockDispenser;
@@ -54,7 +48,6 @@ import shordinger.wrapper.net.minecraft.item.ItemDye;
 import shordinger.wrapper.net.minecraft.item.ItemMonsterPlacer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.item.crafting.CraftingManager;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.nbt.NBTUtil;
 import shordinger.wrapper.net.minecraft.potion.Potion;
 import shordinger.wrapper.net.minecraft.potion.PotionHelper;
@@ -74,6 +67,11 @@ import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.biome.Biome;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootTableList;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Random;
+import java.util.UUID;
 
 public class Bootstrap {
 

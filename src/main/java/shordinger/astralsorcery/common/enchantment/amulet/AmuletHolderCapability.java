@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.enchantment.amulet;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;

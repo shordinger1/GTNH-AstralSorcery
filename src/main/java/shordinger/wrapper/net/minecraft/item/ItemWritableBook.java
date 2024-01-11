@@ -1,8 +1,8 @@
 package shordinger.wrapper.net.minecraft.item;
 
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;

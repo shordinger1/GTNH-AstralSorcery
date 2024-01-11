@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.common.util;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTBase;
 
 /**
  * An interface designed to unify various things in the Minecraft

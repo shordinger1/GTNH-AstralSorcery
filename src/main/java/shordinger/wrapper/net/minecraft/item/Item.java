@@ -12,37 +12,24 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.RegistryNamespaced;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.BlockDirt;
-import shordinger.wrapper.net.minecraft.block.BlockDoublePlant;
-import shordinger.wrapper.net.minecraft.block.BlockFlower;
-import shordinger.wrapper.net.minecraft.block.BlockPlanks;
-import shordinger.wrapper.net.minecraft.block.BlockPrismarine;
-import shordinger.wrapper.net.minecraft.block.BlockRedSandstone;
-import shordinger.wrapper.net.minecraft.block.BlockSand;
-import shordinger.wrapper.net.minecraft.block.BlockSandStone;
-import shordinger.wrapper.net.minecraft.block.BlockSilverfish;
-import shordinger.wrapper.net.minecraft.block.BlockStone;
-import shordinger.wrapper.net.minecraft.block.BlockStoneBrick;
-import shordinger.wrapper.net.minecraft.block.BlockWall;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
+import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
+import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.ai.attributes.AttributeModifier;
-import shordinger.wrapper.net.minecraft.entity.item.EntityBoat;
-import shordinger.wrapper.net.minecraft.entity.item.EntityItemFrame;
-import shordinger.wrapper.net.minecraft.entity.item.EntityMinecart;
-import shordinger.wrapper.net.minecraft.entity.item.EntityPainting;
+import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
+import shordinger.wrapper.net.minecraft.entity.passive.HorseArmorType;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.init.Items;
-import shordinger.wrapper.net.minecraft.init.MobEffects;
-import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.potion.PotionEffect;
 import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
@@ -55,15 +42,18 @@ import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
 import shordinger.wrapper.net.minecraft.util.registry.IRegistry;
-import shordinger.wrapper.net.minecraft.util.registry.RegistryNamespaced;
 import shordinger.wrapper.net.minecraft.util.registry.RegistrySimple;
 import shordinger.wrapper.net.minecraft.util.text.translation.I18n;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
+import shordinger.wrapper.net.minecraftforge.common.IRarity;
+import shordinger.wrapper.net.minecraftforge.common.animation.ITimeValue;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilityProvider;
+import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<Item> {
+public class Item extends net.minecraft.item.Item {
 
-    public static final RegistryNamespaced<ResourceLocation, Item> REGISTRY = net.minecraftforge.registries.GameData
-        .getWrapper(Item.class);
+    public static final RegistryNamespaced REGISTRY = itemRegistry;
     private static final Map<Block, Item> BLOCK_TO_ITEM = net.minecraftforge.registries.GameData.getBlockItemMap();
     private static final IItemPropertyGetter DAMAGED_GETTER = new IItemPropertyGetter() {
 
@@ -129,7 +119,7 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
     }
 
     public static Item getItemById(int id) {
-        return REGISTRY.getObjectById(id);
+        return (Item) REGISTRY.getObjectById(id);
     }
 
     public static Item getItemFromBlock(Block blockIn) {
@@ -143,12 +133,12 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
      */
     @Nullable
     public static Item getByNameOrId(String id) {
-        Item item = REGISTRY.getObject(new ResourceLocation(id));
+        Item item = (Item) REGISTRY.getObject(new ResourceLocation(id));
 
         if (item == null) {
             try {
                 return getItemById(Integer.parseInt(id));
-            } catch (NumberFormatException var3) {
+            } catch (NumberFormatException ignored) {
                 ;
             }
         }
@@ -582,17 +572,7 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
         return displayName;
     }
 
-    /**
-     * This is called when the item is used, before the block is activated.
-     *
-     * @param stack  The Item Stack
-     * @param player The Player that used the item
-     * @param world  The Current World
-     * @param pos    Target position
-     * @param side   The side of the target hit
-     * @param hand   Which hand the item is being held in.
-     * @return Return PASS to allow vanilla handling, any other to skip normal code.
-     */
+
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX,
                                            float hitY, float hitZ, EnumHand hand) {
         return EnumActionResult.PASS;
@@ -764,7 +744,7 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
      * @param entityItem The entity Item
      * @return Return true to skip any further update code.
      */
-    public boolean onEntityItemUpdate(net.minecraft.entity.item.EntityItem entityItem) {
+    public boolean onEntityItemUpdate(EntityItem entityItem) {
         return false;
     }
 
@@ -824,15 +804,6 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
         return net.minecraft.entity.EntityLiving.getSlotForItemStack(stack) == armorType;
     }
 
-    /**
-     * Override this to set a non-default armor slot for an ItemStack, but
-     * <em>do not use this to get the armor slot of said stack; for that, use
-     * {@link net.minecraft.entity.EntityLiving#getSlotForItemStack(ItemStack)}.</em>
-     *
-     * @param stack the ItemStack
-     * @return the armor slot of the ItemStack, or {@code null} to let the default
-     * vanilla logic as per {@code EntityLiving.getSlotForItemStack(stack)} decide
-     */
     @Nullable
     public EntityEquipmentSlot getEquipmentSlot(ItemStack stack) {
         return null;
@@ -891,8 +862,8 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
      */
     @SideOnly(Side.CLIENT)
     @Nullable
-    public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
-                                                               EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack,
+                                    EntityEquipmentSlot armorSlot, ModelBiped _default) {
         return null;
     }
 
@@ -1011,17 +982,6 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
         }
     }
 
-    /**
-     * Checked from {@link net.minecraft.client.multiplayer.PlayerControllerMP#onPlayerDestroyBlock(BlockPos pos)
-     * PlayerControllerMP.onPlayerDestroyBlock()}
-     * when a creative player left-clicks a block with this item.
-     * Also checked from
-     * {@link net.minecraftforge.common.ForgeHooks#onBlockBreakEvent(World, GameType, EntityPlayerMP, BlockPos)
-     * ForgeHooks.onBlockBreakEvent()}
-     * to prevent sending an event.
-     *
-     * @return true if the given player can destroy specified block in creative mode with this item
-     */
     public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
         return !(this instanceof ItemSword);
     }
@@ -1096,19 +1056,8 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
         return getItemEnchantability();
     }
 
-    /**
-     * Checks whether an item can be enchanted with a certain enchantment. This applies specifically to enchanting an
-     * item in the enchanting table and is called when retrieving the list of possible enchantments for an item.
-     * Enchantments may additionally (or exclusively) be doing their own checks in
-     * {@link net.minecraft.enchantment.Enchantment#canApplyAtEnchantingTable(ItemStack)}; check the individual
-     * implementation for reference.
-     * By default this will check if the enchantment type is valid for this item type.
-     *
-     * @param stack       the item stack to be enchanted
-     * @param enchantment the enchantment to be applied
-     * @return true if the enchantment can be applied to this item
-     */
-    public boolean canApplyAtEnchantingTable(ItemStack stack, net.minecraft.enchantment.Enchantment enchantment) {
+
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return enchantment.type.canEnchantItem(stack.getItem());
     }
 
@@ -1136,48 +1085,21 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
         return !oldStack.equals(newStack); // !ItemStack.areItemStacksEqual(oldStack, newStack);
     }
 
-    /**
-     * Called when the player is mining a block and the item in his hand changes.
-     * Allows to not reset blockbreaking if only NBT or similar changes.
-     *
-     * @param oldStack The old stack that was used for mining. Item in players main hand
-     * @param newStack The new stack
-     * @return True to reset block break progress
-     */
+
     public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
         return !(newStack.getItem() == oldStack.getItem() && ItemStack.areItemStackTagsEqual(newStack, oldStack)
             && (newStack.isItemStackDamageable() || newStack.getMetadata() == oldStack.getMetadata()));
     }
 
-    /**
-     * Called while an item is in 'active' use to determine if usage should continue.
-     * Allows items to continue being used while sustaining damage, for example.
-     *
-     * @param oldStack the previous 'active' stack
-     * @param newStack the stack currently in the active hand
-     * @return true to set the new stack to active and continue using it
-     */
+
     public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
         return oldStack.equals(newStack);
     }
 
-    /**
-     * Called to get the Mod ID of the mod that *created* the ItemStack,
-     * instead of the real Mod ID that *registered* it.
-     * <p>
-     * For example the Forge Universal Bucket creates a subitem for each modded fluid,
-     * and it returns the modded fluid's Mod ID here.
-     * <p>
-     * Mods that register subitems for other mods can override this.
-     * Informational mods can call it to show the mod that created the item.
-     *
-     * @param itemStack the ItemStack to check
-     * @return the Mod ID for the ItemStack, or
-     * null when there is no specially associated mod and {@link #getRegistryName()} would return null.
-     */
+
     @Nullable
     public String getCreatorModId(ItemStack itemStack) {
-        return net.minecraftforge.common.ForgeHooks.getDefaultCreatorModId(itemStack);
+        return ForgeHooks.getDefaultCreatorModId(itemStack);
     }
 
     /**
@@ -1195,36 +1117,22 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
      * item.
      */
     @Nullable
-    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack,
-                                                                                       @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack,
+                                                @Nullable NBTTagCompound nbt) {
         return null;
     }
 
-    public com.google.common.collect.ImmutableMap<String, net.minecraftforge.common.animation.ITimeValue> getAnimationParameters(
+    public com.google.common.collect.ImmutableMap<String, ITimeValue> getAnimationParameters(
         final ItemStack stack, final World world, final EntityLivingBase entity) {
-        com.google.common.collect.ImmutableMap.Builder<String, net.minecraftforge.common.animation.ITimeValue> builder = com.google.common.collect.ImmutableMap
+        com.google.common.collect.ImmutableMap.Builder<String, ITimeValue> builder = com.google.common.collect.ImmutableMap
             .builder();
         for (ResourceLocation location : properties.getKeys()) {
             final IItemPropertyGetter parameter = properties.getObject(location);
-            builder.put(location.toString(), new net.minecraftforge.common.animation.ITimeValue() {
-
-                public float apply(float input) {
-                    return parameter.apply(stack, world, entity);
-                }
-            });
+            builder.put(location.toString(), input -> parameter.apply(stack, world, entity));
         }
         return builder.build();
     }
 
-    /**
-     * Can this Item disable a shield
-     *
-     * @param stack    The ItemStack
-     * @param shield   The shield in question
-     * @param entity   The EntityLivingBase holding the shield
-     * @param attacker The EntityLivingBase holding the ItemStack
-     * @retrun True if this ItemStack can disable the shield in question.
-     */
     public boolean canDisableShield(ItemStack stack, ItemStack shield, EntityLivingBase entity,
                                     EntityLivingBase attacker) {
         return this instanceof ItemAxe;
@@ -1257,1063 +1165,1057 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
      * @param stack the armor stack
      * @return an enum constant of type {@code HorseArmorType}. Return HorseArmorType.NONE if this is not horse armor
      */
-    public net.minecraft.entity.passive.HorseArmorType getHorseArmorType(ItemStack stack) {
-        return net.minecraft.entity.passive.HorseArmorType.getByItem(stack.getItem());
+    public HorseArmorType getHorseArmorType(ItemStack stack) {
+        return HorseArmorType.getByItem(stack.getItem());
     }
 
     public String getHorseArmorTexture(net.minecraft.entity.EntityLiving wearer, ItemStack stack) {
         return getHorseArmorType(stack).getTextureName();
     }
 
-    /**
-     * Called every tick from {@link EntityHorse#onUpdate()} on the item in the armor slot.
-     *
-     * @param world the world the horse is in
-     * @param horse the horse wearing this armor
-     * @param armor the armor itemstack
-     */
+
     public void onHorseArmorTick(World world, net.minecraft.entity.EntityLiving horse, ItemStack armor) {
     }
 
     @SideOnly(Side.CLIENT)
     @Nullable
-    private net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer teisr;
+    private TileEntityItemStackRenderer teisr;
 
     /**
      * @return This Item's renderer, or the default instance if it does not have one.
      */
     @SideOnly(Side.CLIENT)
-    public final net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer getTileEntityItemStackRenderer() {
-        return teisr != null ? teisr : net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer.instance;
+    public final TileEntityItemStackRenderer getTileEntityItemStackRenderer() {
+        return teisr != null ? teisr : TileEntityItemStackRenderer.instance;
     }
 
     @SideOnly(Side.CLIENT)
     public void setTileEntityItemStackRenderer(
-        @Nullable net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer teisr) {
+        @Nullable TileEntityItemStackRenderer teisr) {
         this.teisr = teisr;
     }
 
-    public net.minecraftforge.common.IRarity getForgeRarity(ItemStack stack) {
+    public IRarity getForgeRarity(ItemStack stack) {
         return this.getRarity(stack);
     }
 
     /* ======================================== FORGE END ===================================== */
 
-    public static void registerItems() {
-        registerItemBlock(Blocks.AIR, new ItemAir(Blocks.AIR));
-        registerItemBlock(
-            Blocks.STONE,
-            (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockStone.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("stone"));
-        registerItemBlock(Blocks.GRASS, new ItemColored(Blocks.GRASS, false));
-        registerItemBlock(Blocks.DIRT, (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new ItemMultiTexture.Mapper() {
-
-            public String apply(ItemStack p_apply_1_) {
-                return BlockDirt.DirtType.byMetadata(p_apply_1_.getMetadata())
-                    .getUnlocalizedName();
-            }
-        })).setUnlocalizedName("dirt"));
-        registerItemBlock(Blocks.COBBLESTONE);
-        registerItemBlock(
-            Blocks.PLANKS,
-            (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("wood"));
-        registerItemBlock(
-            Blocks.SAPLING,
-            (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("sapling"));
-        registerItemBlock(Blocks.BEDROCK);
-        registerItemBlock(Blocks.SAND, (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new ItemMultiTexture.Mapper() {
-
-            public String apply(ItemStack p_apply_1_) {
-                return BlockSand.EnumType.byMetadata(p_apply_1_.getMetadata())
-                    .getUnlocalizedName();
-            }
-        })).setUnlocalizedName("sand"));
-        registerItemBlock(Blocks.GRAVEL);
-        registerItemBlock(Blocks.GOLD_ORE);
-        registerItemBlock(Blocks.IRON_ORE);
-        registerItemBlock(Blocks.COAL_ORE);
-        registerItemBlock(Blocks.LOG, (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new ItemMultiTexture.Mapper() {
-
-            public String apply(ItemStack p_apply_1_) {
-                return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
-                    .getUnlocalizedName();
-            }
-        })).setUnlocalizedName("log"));
-        registerItemBlock(Blocks.LOG2, (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new ItemMultiTexture.Mapper() {
-
-            public String apply(ItemStack p_apply_1_) {
-                return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata() + 4)
-                    .getUnlocalizedName();
-            }
-        })).setUnlocalizedName("log"));
-        registerItemBlock(Blocks.LEAVES, (new ItemLeaves(Blocks.LEAVES)).setUnlocalizedName("leaves"));
-        registerItemBlock(Blocks.LEAVES2, (new ItemLeaves(Blocks.LEAVES2)).setUnlocalizedName("leaves"));
-        registerItemBlock(
-            Blocks.SPONGE,
-            (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return (p_apply_1_.getMetadata() & 1) == 1 ? "wet" : "dry";
-                }
-            })).setUnlocalizedName("sponge"));
-        registerItemBlock(Blocks.GLASS);
-        registerItemBlock(Blocks.LAPIS_ORE);
-        registerItemBlock(Blocks.LAPIS_BLOCK);
-        registerItemBlock(Blocks.DISPENSER);
-        registerItemBlock(
-            Blocks.SANDSTONE,
-            (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockSandStone.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("sandStone"));
-        registerItemBlock(Blocks.NOTEBLOCK);
-        registerItemBlock(Blocks.GOLDEN_RAIL);
-        registerItemBlock(Blocks.DETECTOR_RAIL);
-        registerItemBlock(Blocks.STICKY_PISTON, new ItemPiston(Blocks.STICKY_PISTON));
-        registerItemBlock(Blocks.WEB);
-        registerItemBlock(
-            Blocks.TALLGRASS,
-            (new ItemColored(Blocks.TALLGRASS, true)).setSubtypeNames(new String[]{"shrub", "grass", "fern"}));
-        registerItemBlock(Blocks.DEADBUSH);
-        registerItemBlock(Blocks.PISTON, new ItemPiston(Blocks.PISTON));
-        registerItemBlock(Blocks.WOOL, (new ItemCloth(Blocks.WOOL)).setUnlocalizedName("cloth"));
-        registerItemBlock(
-            Blocks.YELLOW_FLOWER,
-            (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockFlower.EnumFlowerType
-                        .getType(BlockFlower.EnumFlowerColor.YELLOW, p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("flower"));
-        registerItemBlock(
-            Blocks.RED_FLOWER,
-            (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockFlower.EnumFlowerType.getType(BlockFlower.EnumFlowerColor.RED, p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("rose"));
-        registerItemBlock(Blocks.BROWN_MUSHROOM);
-        registerItemBlock(Blocks.RED_MUSHROOM);
-        registerItemBlock(Blocks.GOLD_BLOCK);
-        registerItemBlock(Blocks.IRON_BLOCK);
-        registerItemBlock(
-            Blocks.STONE_SLAB,
-            (new ItemSlab(Blocks.STONE_SLAB, Blocks.STONE_SLAB, Blocks.DOUBLE_STONE_SLAB))
-                .setUnlocalizedName("stoneSlab"));
-        registerItemBlock(Blocks.BRICK_BLOCK);
-        registerItemBlock(Blocks.TNT);
-        registerItemBlock(Blocks.BOOKSHELF);
-        registerItemBlock(Blocks.MOSSY_COBBLESTONE);
-        registerItemBlock(Blocks.OBSIDIAN);
-        registerItemBlock(Blocks.TORCH);
-        registerItemBlock(Blocks.END_ROD);
-        registerItemBlock(Blocks.CHORUS_PLANT);
-        registerItemBlock(Blocks.CHORUS_FLOWER);
-        registerItemBlock(Blocks.PURPUR_BLOCK);
-        registerItemBlock(Blocks.PURPUR_PILLAR);
-        registerItemBlock(Blocks.PURPUR_STAIRS);
-        registerItemBlock(
-            Blocks.PURPUR_SLAB,
-            (new ItemSlab(Blocks.PURPUR_SLAB, Blocks.PURPUR_SLAB, Blocks.PURPUR_DOUBLE_SLAB))
-                .setUnlocalizedName("purpurSlab"));
-        registerItemBlock(Blocks.MOB_SPAWNER);
-        registerItemBlock(Blocks.OAK_STAIRS);
-        registerItemBlock(Blocks.CHEST);
-        registerItemBlock(Blocks.DIAMOND_ORE);
-        registerItemBlock(Blocks.DIAMOND_BLOCK);
-        registerItemBlock(Blocks.CRAFTING_TABLE);
-        registerItemBlock(Blocks.FARMLAND);
-        registerItemBlock(Blocks.FURNACE);
-        registerItemBlock(Blocks.LADDER);
-        registerItemBlock(Blocks.RAIL);
-        registerItemBlock(Blocks.STONE_STAIRS);
-        registerItemBlock(Blocks.LEVER);
-        registerItemBlock(Blocks.STONE_PRESSURE_PLATE);
-        registerItemBlock(Blocks.WOODEN_PRESSURE_PLATE);
-        registerItemBlock(Blocks.REDSTONE_ORE);
-        registerItemBlock(Blocks.REDSTONE_TORCH);
-        registerItemBlock(Blocks.STONE_BUTTON);
-        registerItemBlock(Blocks.SNOW_LAYER, new ItemSnow(Blocks.SNOW_LAYER));
-        registerItemBlock(Blocks.ICE);
-        registerItemBlock(Blocks.SNOW);
-        registerItemBlock(Blocks.CACTUS);
-        registerItemBlock(Blocks.CLAY);
-        registerItemBlock(Blocks.JUKEBOX);
-        registerItemBlock(Blocks.OAK_FENCE);
-        registerItemBlock(Blocks.SPRUCE_FENCE);
-        registerItemBlock(Blocks.BIRCH_FENCE);
-        registerItemBlock(Blocks.JUNGLE_FENCE);
-        registerItemBlock(Blocks.DARK_OAK_FENCE);
-        registerItemBlock(Blocks.ACACIA_FENCE);
-        registerItemBlock(Blocks.PUMPKIN);
-        registerItemBlock(Blocks.NETHERRACK);
-        registerItemBlock(Blocks.SOUL_SAND);
-        registerItemBlock(Blocks.GLOWSTONE);
-        registerItemBlock(Blocks.LIT_PUMPKIN);
-        registerItemBlock(Blocks.TRAPDOOR);
-        registerItemBlock(
-            Blocks.MONSTER_EGG,
-            (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockSilverfish.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("monsterStoneEgg"));
-        registerItemBlock(
-            Blocks.STONEBRICK,
-            (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockStoneBrick.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("stonebricksmooth"));
-        registerItemBlock(Blocks.BROWN_MUSHROOM_BLOCK);
-        registerItemBlock(Blocks.RED_MUSHROOM_BLOCK);
-        registerItemBlock(Blocks.IRON_BARS);
-        registerItemBlock(Blocks.GLASS_PANE);
-        registerItemBlock(Blocks.MELON_BLOCK);
-        registerItemBlock(Blocks.VINE, new ItemColored(Blocks.VINE, false));
-        registerItemBlock(Blocks.OAK_FENCE_GATE);
-        registerItemBlock(Blocks.SPRUCE_FENCE_GATE);
-        registerItemBlock(Blocks.BIRCH_FENCE_GATE);
-        registerItemBlock(Blocks.JUNGLE_FENCE_GATE);
-        registerItemBlock(Blocks.DARK_OAK_FENCE_GATE);
-        registerItemBlock(Blocks.ACACIA_FENCE_GATE);
-        registerItemBlock(Blocks.BRICK_STAIRS);
-        registerItemBlock(Blocks.STONE_BRICK_STAIRS);
-        registerItemBlock(Blocks.MYCELIUM);
-        registerItemBlock(Blocks.WATERLILY, new ItemLilyPad(Blocks.WATERLILY));
-        registerItemBlock(Blocks.NETHER_BRICK);
-        registerItemBlock(Blocks.NETHER_BRICK_FENCE);
-        registerItemBlock(Blocks.NETHER_BRICK_STAIRS);
-        registerItemBlock(Blocks.ENCHANTING_TABLE);
-        registerItemBlock(Blocks.END_PORTAL_FRAME);
-        registerItemBlock(Blocks.END_STONE);
-        registerItemBlock(Blocks.END_BRICKS);
-        registerItemBlock(Blocks.DRAGON_EGG);
-        registerItemBlock(Blocks.REDSTONE_LAMP);
-        registerItemBlock(
-            Blocks.WOODEN_SLAB,
-            (new ItemSlab(Blocks.WOODEN_SLAB, Blocks.WOODEN_SLAB, Blocks.DOUBLE_WOODEN_SLAB))
-                .setUnlocalizedName("woodSlab"));
-        registerItemBlock(Blocks.SANDSTONE_STAIRS);
-        registerItemBlock(Blocks.EMERALD_ORE);
-        registerItemBlock(Blocks.ENDER_CHEST);
-        registerItemBlock(Blocks.TRIPWIRE_HOOK);
-        registerItemBlock(Blocks.EMERALD_BLOCK);
-        registerItemBlock(Blocks.SPRUCE_STAIRS);
-        registerItemBlock(Blocks.BIRCH_STAIRS);
-        registerItemBlock(Blocks.JUNGLE_STAIRS);
-        registerItemBlock(Blocks.COMMAND_BLOCK);
-        registerItemBlock(Blocks.BEACON);
-        registerItemBlock(
-            Blocks.COBBLESTONE_WALL,
-            (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockWall.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("cobbleWall"));
-        registerItemBlock(Blocks.WOODEN_BUTTON);
-        registerItemBlock(Blocks.ANVIL, (new ItemAnvilBlock(Blocks.ANVIL)).setUnlocalizedName("anvil"));
-        registerItemBlock(Blocks.TRAPPED_CHEST);
-        registerItemBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
-        registerItemBlock(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
-        registerItemBlock(Blocks.DAYLIGHT_DETECTOR);
-        registerItemBlock(Blocks.REDSTONE_BLOCK);
-        registerItemBlock(Blocks.QUARTZ_ORE);
-        registerItemBlock(Blocks.HOPPER);
-        registerItemBlock(
-            Blocks.QUARTZ_BLOCK,
-            (new ItemMultiTexture(
-                Blocks.QUARTZ_BLOCK,
-                Blocks.QUARTZ_BLOCK,
-                new String[]{"default", "chiseled", "lines"})).setUnlocalizedName("quartzBlock"));
-        registerItemBlock(Blocks.QUARTZ_STAIRS);
-        registerItemBlock(Blocks.ACTIVATOR_RAIL);
-        registerItemBlock(Blocks.DROPPER);
-        registerItemBlock(
-            Blocks.STAINED_HARDENED_CLAY,
-            (new ItemCloth(Blocks.STAINED_HARDENED_CLAY)).setUnlocalizedName("clayHardenedStained"));
-        registerItemBlock(Blocks.BARRIER);
-        registerItemBlock(Blocks.IRON_TRAPDOOR);
-        registerItemBlock(Blocks.HAY_BLOCK);
-        registerItemBlock(Blocks.CARPET, (new ItemCloth(Blocks.CARPET)).setUnlocalizedName("woolCarpet"));
-        registerItemBlock(Blocks.HARDENED_CLAY);
-        registerItemBlock(Blocks.COAL_BLOCK);
-        registerItemBlock(Blocks.PACKED_ICE);
-        registerItemBlock(Blocks.ACACIA_STAIRS);
-        registerItemBlock(Blocks.DARK_OAK_STAIRS);
-        registerItemBlock(Blocks.SLIME_BLOCK);
-        registerItemBlock(Blocks.GRASS_PATH);
-        registerItemBlock(
-            Blocks.DOUBLE_PLANT,
-            (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockDoublePlant.EnumPlantType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("doublePlant"));
-        registerItemBlock(
-            Blocks.STAINED_GLASS,
-            (new ItemCloth(Blocks.STAINED_GLASS)).setUnlocalizedName("stainedGlass"));
-        registerItemBlock(
-            Blocks.STAINED_GLASS_PANE,
-            (new ItemCloth(Blocks.STAINED_GLASS_PANE)).setUnlocalizedName("stainedGlassPane"));
-        registerItemBlock(
-            Blocks.PRISMARINE,
-            (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockPrismarine.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("prismarine"));
-        registerItemBlock(Blocks.SEA_LANTERN);
-        registerItemBlock(
-            Blocks.RED_SANDSTONE,
-            (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new ItemMultiTexture.Mapper() {
-
-                public String apply(ItemStack p_apply_1_) {
-                    return BlockRedSandstone.EnumType.byMetadata(p_apply_1_.getMetadata())
-                        .getUnlocalizedName();
-                }
-            })).setUnlocalizedName("redSandStone"));
-        registerItemBlock(Blocks.RED_SANDSTONE_STAIRS);
-        registerItemBlock(
-            Blocks.STONE_SLAB2,
-            (new ItemSlab(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2))
-                .setUnlocalizedName("stoneSlab2"));
-        registerItemBlock(Blocks.REPEATING_COMMAND_BLOCK);
-        registerItemBlock(Blocks.CHAIN_COMMAND_BLOCK);
-        registerItemBlock(Blocks.MAGMA);
-        registerItemBlock(Blocks.NETHER_WART_BLOCK);
-        registerItemBlock(Blocks.RED_NETHER_BRICK);
-        registerItemBlock(Blocks.BONE_BLOCK);
-        registerItemBlock(Blocks.STRUCTURE_VOID);
-        registerItemBlock(Blocks.OBSERVER);
-        registerItemBlock(Blocks.WHITE_SHULKER_BOX, new ItemShulkerBox(Blocks.WHITE_SHULKER_BOX));
-        registerItemBlock(Blocks.ORANGE_SHULKER_BOX, new ItemShulkerBox(Blocks.ORANGE_SHULKER_BOX));
-        registerItemBlock(Blocks.MAGENTA_SHULKER_BOX, new ItemShulkerBox(Blocks.MAGENTA_SHULKER_BOX));
-        registerItemBlock(Blocks.LIGHT_BLUE_SHULKER_BOX, new ItemShulkerBox(Blocks.LIGHT_BLUE_SHULKER_BOX));
-        registerItemBlock(Blocks.YELLOW_SHULKER_BOX, new ItemShulkerBox(Blocks.YELLOW_SHULKER_BOX));
-        registerItemBlock(Blocks.LIME_SHULKER_BOX, new ItemShulkerBox(Blocks.LIME_SHULKER_BOX));
-        registerItemBlock(Blocks.PINK_SHULKER_BOX, new ItemShulkerBox(Blocks.PINK_SHULKER_BOX));
-        registerItemBlock(Blocks.GRAY_SHULKER_BOX, new ItemShulkerBox(Blocks.GRAY_SHULKER_BOX));
-        registerItemBlock(Blocks.SILVER_SHULKER_BOX, new ItemShulkerBox(Blocks.SILVER_SHULKER_BOX));
-        registerItemBlock(Blocks.CYAN_SHULKER_BOX, new ItemShulkerBox(Blocks.CYAN_SHULKER_BOX));
-        registerItemBlock(Blocks.PURPLE_SHULKER_BOX, new ItemShulkerBox(Blocks.PURPLE_SHULKER_BOX));
-        registerItemBlock(Blocks.BLUE_SHULKER_BOX, new ItemShulkerBox(Blocks.BLUE_SHULKER_BOX));
-        registerItemBlock(Blocks.BROWN_SHULKER_BOX, new ItemShulkerBox(Blocks.BROWN_SHULKER_BOX));
-        registerItemBlock(Blocks.GREEN_SHULKER_BOX, new ItemShulkerBox(Blocks.GREEN_SHULKER_BOX));
-        registerItemBlock(Blocks.RED_SHULKER_BOX, new ItemShulkerBox(Blocks.RED_SHULKER_BOX));
-        registerItemBlock(Blocks.BLACK_SHULKER_BOX, new ItemShulkerBox(Blocks.BLACK_SHULKER_BOX));
-        registerItemBlock(Blocks.WHITE_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.ORANGE_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.MAGENTA_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.YELLOW_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.LIME_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.PINK_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.GRAY_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.SILVER_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.CYAN_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.PURPLE_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.BLUE_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.BROWN_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.GREEN_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.RED_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.BLACK_GLAZED_TERRACOTTA);
-        registerItemBlock(Blocks.CONCRETE, (new ItemCloth(Blocks.CONCRETE)).setUnlocalizedName("concrete"));
-        registerItemBlock(
-            Blocks.CONCRETE_POWDER,
-            (new ItemCloth(Blocks.CONCRETE_POWDER)).setUnlocalizedName("concrete_powder"));
-        registerItemBlock(Blocks.STRUCTURE_BLOCK);
-        registerItem(256, "iron_shovel", (new ItemSpade(Item.ToolMaterial.IRON)).setUnlocalizedName("shovelIron"));
-        registerItem(257, "iron_pickaxe", (new ItemPickaxe(Item.ToolMaterial.IRON)).setUnlocalizedName("pickaxeIron"));
-        registerItem(258, "iron_axe", (new ItemAxe(Item.ToolMaterial.IRON)).setUnlocalizedName("hatchetIron"));
-        registerItem(259, "flint_and_steel", (new ItemFlintAndSteel()).setUnlocalizedName("flintAndSteel"));
-        registerItem(260, "apple", (new ItemFood(4, 0.3F, false)).setUnlocalizedName("apple"));
-        registerItem(261, "bow", (new ItemBow()).setUnlocalizedName("bow"));
-        registerItem(262, "arrow", (new ItemArrow()).setUnlocalizedName("arrow"));
-        registerItem(263, "coal", (new ItemCoal()).setUnlocalizedName("coal"));
-        registerItem(
-            264,
-            "diamond",
-            (new Item()).setUnlocalizedName("diamond")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            265,
-            "iron_ingot",
-            (new Item()).setUnlocalizedName("ingotIron")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            266,
-            "gold_ingot",
-            (new Item()).setUnlocalizedName("ingotGold")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(267, "iron_sword", (new ItemSword(Item.ToolMaterial.IRON)).setUnlocalizedName("swordIron"));
-        registerItem(268, "wooden_sword", (new ItemSword(Item.ToolMaterial.WOOD)).setUnlocalizedName("swordWood"));
-        registerItem(269, "wooden_shovel", (new ItemSpade(Item.ToolMaterial.WOOD)).setUnlocalizedName("shovelWood"));
-        registerItem(
-            270,
-            "wooden_pickaxe",
-            (new ItemPickaxe(Item.ToolMaterial.WOOD)).setUnlocalizedName("pickaxeWood"));
-        registerItem(271, "wooden_axe", (new ItemAxe(Item.ToolMaterial.WOOD)).setUnlocalizedName("hatchetWood"));
-        registerItem(272, "stone_sword", (new ItemSword(Item.ToolMaterial.STONE)).setUnlocalizedName("swordStone"));
-        registerItem(273, "stone_shovel", (new ItemSpade(Item.ToolMaterial.STONE)).setUnlocalizedName("shovelStone"));
-        registerItem(
-            274,
-            "stone_pickaxe",
-            (new ItemPickaxe(Item.ToolMaterial.STONE)).setUnlocalizedName("pickaxeStone"));
-        registerItem(275, "stone_axe", (new ItemAxe(Item.ToolMaterial.STONE)).setUnlocalizedName("hatchetStone"));
-        registerItem(
-            276,
-            "diamond_sword",
-            (new ItemSword(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("swordDiamond"));
-        registerItem(
-            277,
-            "diamond_shovel",
-            (new ItemSpade(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("shovelDiamond"));
-        registerItem(
-            278,
-            "diamond_pickaxe",
-            (new ItemPickaxe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("pickaxeDiamond"));
-        registerItem(279, "diamond_axe", (new ItemAxe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("hatchetDiamond"));
-        registerItem(
-            280,
-            "stick",
-            (new Item()).setFull3D()
-                .setUnlocalizedName("stick")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            281,
-            "bowl",
-            (new Item()).setUnlocalizedName("bowl")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(282, "mushroom_stew", (new ItemSoup(6)).setUnlocalizedName("mushroomStew"));
-        registerItem(283, "golden_sword", (new ItemSword(Item.ToolMaterial.GOLD)).setUnlocalizedName("swordGold"));
-        registerItem(284, "golden_shovel", (new ItemSpade(Item.ToolMaterial.GOLD)).setUnlocalizedName("shovelGold"));
-        registerItem(
-            285,
-            "golden_pickaxe",
-            (new ItemPickaxe(Item.ToolMaterial.GOLD)).setUnlocalizedName("pickaxeGold"));
-        registerItem(286, "golden_axe", (new ItemAxe(Item.ToolMaterial.GOLD)).setUnlocalizedName("hatchetGold"));
-        registerItem(
-            287,
-            "string",
-            (new ItemBlockSpecial(Blocks.TRIPWIRE)).setUnlocalizedName("string")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            288,
-            "feather",
-            (new Item()).setUnlocalizedName("feather")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            289,
-            "gunpowder",
-            (new Item()).setUnlocalizedName("sulphur")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(290, "wooden_hoe", (new ItemHoe(Item.ToolMaterial.WOOD)).setUnlocalizedName("hoeWood"));
-        registerItem(291, "stone_hoe", (new ItemHoe(Item.ToolMaterial.STONE)).setUnlocalizedName("hoeStone"));
-        registerItem(292, "iron_hoe", (new ItemHoe(Item.ToolMaterial.IRON)).setUnlocalizedName("hoeIron"));
-        registerItem(293, "diamond_hoe", (new ItemHoe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("hoeDiamond"));
-        registerItem(294, "golden_hoe", (new ItemHoe(Item.ToolMaterial.GOLD)).setUnlocalizedName("hoeGold"));
-        registerItem(295, "wheat_seeds", (new ItemSeeds(Blocks.WHEAT, Blocks.FARMLAND)).setUnlocalizedName("seeds"));
-        registerItem(
-            296,
-            "wheat",
-            (new Item()).setUnlocalizedName("wheat")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(297, "bread", (new ItemFood(5, 0.6F, false)).setUnlocalizedName("bread"));
-        registerItem(
-            298,
-            "leather_helmet",
-            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.HEAD))
-                .setUnlocalizedName("helmetCloth"));
-        registerItem(
-            299,
-            "leather_chestplate",
-            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.CHEST))
-                .setUnlocalizedName("chestplateCloth"));
-        registerItem(
-            300,
-            "leather_leggings",
-            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.LEGS))
-                .setUnlocalizedName("leggingsCloth"));
-        registerItem(
-            301,
-            "leather_boots",
-            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.FEET))
-                .setUnlocalizedName("bootsCloth"));
-        registerItem(
-            302,
-            "chainmail_helmet",
-            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.HEAD))
-                .setUnlocalizedName("helmetChain"));
-        registerItem(
-            303,
-            "chainmail_chestplate",
-            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.CHEST))
-                .setUnlocalizedName("chestplateChain"));
-        registerItem(
-            304,
-            "chainmail_leggings",
-            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.LEGS))
-                .setUnlocalizedName("leggingsChain"));
-        registerItem(
-            305,
-            "chainmail_boots",
-            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.FEET))
-                .setUnlocalizedName("bootsChain"));
-        registerItem(
-            306,
-            "iron_helmet",
-            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.HEAD))
-                .setUnlocalizedName("helmetIron"));
-        registerItem(
-            307,
-            "iron_chestplate",
-            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.CHEST))
-                .setUnlocalizedName("chestplateIron"));
-        registerItem(
-            308,
-            "iron_leggings",
-            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.LEGS))
-                .setUnlocalizedName("leggingsIron"));
-        registerItem(
-            309,
-            "iron_boots",
-            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.FEET)).setUnlocalizedName("bootsIron"));
-        registerItem(
-            310,
-            "diamond_helmet",
-            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.HEAD))
-                .setUnlocalizedName("helmetDiamond"));
-        registerItem(
-            311,
-            "diamond_chestplate",
-            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.CHEST))
-                .setUnlocalizedName("chestplateDiamond"));
-        registerItem(
-            312,
-            "diamond_leggings",
-            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.LEGS))
-                .setUnlocalizedName("leggingsDiamond"));
-        registerItem(
-            313,
-            "diamond_boots",
-            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.FEET))
-                .setUnlocalizedName("bootsDiamond"));
-        registerItem(
-            314,
-            "golden_helmet",
-            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.HEAD))
-                .setUnlocalizedName("helmetGold"));
-        registerItem(
-            315,
-            "golden_chestplate",
-            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.CHEST))
-                .setUnlocalizedName("chestplateGold"));
-        registerItem(
-            316,
-            "golden_leggings",
-            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.LEGS))
-                .setUnlocalizedName("leggingsGold"));
-        registerItem(
-            317,
-            "golden_boots",
-            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.FEET)).setUnlocalizedName("bootsGold"));
-        registerItem(
-            318,
-            "flint",
-            (new Item()).setUnlocalizedName("flint")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(319, "porkchop", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("porkchopRaw"));
-        registerItem(320, "cooked_porkchop", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("porkchopCooked"));
-        registerItem(321, "painting", (new ItemHangingEntity(EntityPainting.class)).setUnlocalizedName("painting"));
-        registerItem(
-            322,
-            "golden_apple",
-            (new ItemAppleGold(4, 1.2F, false)).setAlwaysEdible()
-                .setUnlocalizedName("appleGold"));
-        registerItem(323, "sign", (new ItemSign()).setUnlocalizedName("sign"));
-        registerItem(324, "wooden_door", (new ItemDoor(Blocks.OAK_DOOR)).setUnlocalizedName("doorOak"));
-        Item item = (new ItemBucket(Blocks.AIR)).setUnlocalizedName("bucket")
-            .setMaxStackSize(16);
-        registerItem(325, "bucket", item);
-        registerItem(
-            326,
-            "water_bucket",
-            (new ItemBucket(Blocks.FLOWING_WATER)).setUnlocalizedName("bucketWater")
-                .setContainerItem(item));
-        registerItem(
-            327,
-            "lava_bucket",
-            (new ItemBucket(Blocks.FLOWING_LAVA)).setUnlocalizedName("bucketLava")
-                .setContainerItem(item));
-        registerItem(328, "minecart", (new ItemMinecart(EntityMinecart.Type.RIDEABLE)).setUnlocalizedName("minecart"));
-        registerItem(329, "saddle", (new ItemSaddle()).setUnlocalizedName("saddle"));
-        registerItem(330, "iron_door", (new ItemDoor(Blocks.IRON_DOOR)).setUnlocalizedName("doorIron"));
-        registerItem(331, "redstone", (new ItemRedstone()).setUnlocalizedName("redstone"));
-        registerItem(332, "snowball", (new ItemSnowball()).setUnlocalizedName("snowball"));
-        registerItem(333, "boat", new ItemBoat(EntityBoat.Type.OAK));
-        registerItem(
-            334,
-            "leather",
-            (new Item()).setUnlocalizedName("leather")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            335,
-            "milk_bucket",
-            (new ItemBucketMilk()).setUnlocalizedName("milk")
-                .setContainerItem(item));
-        registerItem(
-            336,
-            "brick",
-            (new Item()).setUnlocalizedName("brick")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            337,
-            "clay_ball",
-            (new Item()).setUnlocalizedName("clay")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            338,
-            "reeds",
-            (new ItemBlockSpecial(Blocks.REEDS)).setUnlocalizedName("reeds")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            339,
-            "paper",
-            (new Item()).setUnlocalizedName("paper")
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            340,
-            "book",
-            (new ItemBook()).setUnlocalizedName("book")
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            341,
-            "slime_ball",
-            (new Item()).setUnlocalizedName("slimeball")
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            342,
-            "chest_minecart",
-            (new ItemMinecart(EntityMinecart.Type.CHEST)).setUnlocalizedName("minecartChest"));
-        registerItem(
-            343,
-            "furnace_minecart",
-            (new ItemMinecart(EntityMinecart.Type.FURNACE)).setUnlocalizedName("minecartFurnace"));
-        registerItem(344, "egg", (new ItemEgg()).setUnlocalizedName("egg"));
-        registerItem(
-            345,
-            "compass",
-            (new ItemCompass()).setUnlocalizedName("compass")
-                .setCreativeTab(CreativeTabs.TOOLS));
-        registerItem(346, "fishing_rod", (new ItemFishingRod()).setUnlocalizedName("fishingRod"));
-        registerItem(
-            347,
-            "clock",
-            (new ItemClock()).setUnlocalizedName("clock")
-                .setCreativeTab(CreativeTabs.TOOLS));
-        registerItem(
-            348,
-            "glowstone_dust",
-            (new Item()).setUnlocalizedName("yellowDust")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            349,
-            "fish",
-            (new ItemFishFood(false)).setUnlocalizedName("fish")
-                .setHasSubtypes(true));
-        registerItem(
-            350,
-            "cooked_fish",
-            (new ItemFishFood(true)).setUnlocalizedName("fish")
-                .setHasSubtypes(true));
-        registerItem(351, "dye", (new ItemDye()).setUnlocalizedName("dyePowder"));
-        registerItem(
-            352,
-            "bone",
-            (new Item()).setUnlocalizedName("bone")
-                .setFull3D()
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            353,
-            "sugar",
-            (new Item()).setUnlocalizedName("sugar")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            354,
-            "cake",
-            (new ItemBlockSpecial(Blocks.CAKE)).setMaxStackSize(1)
-                .setUnlocalizedName("cake")
-                .setCreativeTab(CreativeTabs.FOOD));
-        registerItem(
-            355,
-            "bed",
-            (new ItemBed()).setMaxStackSize(1)
-                .setUnlocalizedName("bed"));
-        registerItem(
-            356,
-            "repeater",
-            (new ItemBlockSpecial(Blocks.UNPOWERED_REPEATER)).setUnlocalizedName("diode")
-                .setCreativeTab(CreativeTabs.REDSTONE));
-        registerItem(357, "cookie", (new ItemFood(2, 0.1F, false)).setUnlocalizedName("cookie"));
-        registerItem(358, "filled_map", (new ItemMap()).setUnlocalizedName("map"));
-        registerItem(359, "shears", (new ItemShears()).setUnlocalizedName("shears"));
-        registerItem(360, "melon", (new ItemFood(2, 0.3F, false)).setUnlocalizedName("melon"));
-        registerItem(
-            361,
-            "pumpkin_seeds",
-            (new ItemSeeds(Blocks.PUMPKIN_STEM, Blocks.FARMLAND)).setUnlocalizedName("seeds_pumpkin"));
-        registerItem(
-            362,
-            "melon_seeds",
-            (new ItemSeeds(Blocks.MELON_STEM, Blocks.FARMLAND)).setUnlocalizedName("seeds_melon"));
-        registerItem(363, "beef", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("beefRaw"));
-        registerItem(364, "cooked_beef", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("beefCooked"));
-        registerItem(
-            365,
-            "chicken",
-            (new ItemFood(2, 0.3F, true)).setPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 0), 0.3F)
-                .setUnlocalizedName("chickenRaw"));
-        registerItem(366, "cooked_chicken", (new ItemFood(6, 0.6F, true)).setUnlocalizedName("chickenCooked"));
-        registerItem(
-            367,
-            "rotten_flesh",
-            (new ItemFood(4, 0.1F, true)).setPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 0), 0.8F)
-                .setUnlocalizedName("rottenFlesh"));
-        registerItem(368, "ender_pearl", (new ItemEnderPearl()).setUnlocalizedName("enderPearl"));
-        registerItem(
-            369,
-            "blaze_rod",
-            (new Item()).setUnlocalizedName("blazeRod")
-                .setCreativeTab(CreativeTabs.MATERIALS)
-                .setFull3D());
-        registerItem(
-            370,
-            "ghast_tear",
-            (new Item()).setUnlocalizedName("ghastTear")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            371,
-            "gold_nugget",
-            (new Item()).setUnlocalizedName("goldNugget")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            372,
-            "nether_wart",
-            (new ItemSeeds(Blocks.NETHER_WART, Blocks.SOUL_SAND)).setUnlocalizedName("netherStalkSeeds"));
-        registerItem(373, "potion", (new ItemPotion()).setUnlocalizedName("potion"));
-        Item item1 = (new ItemGlassBottle()).setUnlocalizedName("glassBottle");
-        registerItem(374, "glass_bottle", item1);
-        registerItem(
-            375,
-            "spider_eye",
-            (new ItemFood(2, 0.8F, false)).setPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0), 1.0F)
-                .setUnlocalizedName("spiderEye"));
-        registerItem(
-            376,
-            "fermented_spider_eye",
-            (new Item()).setUnlocalizedName("fermentedSpiderEye")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            377,
-            "blaze_powder",
-            (new Item()).setUnlocalizedName("blazePowder")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            378,
-            "magma_cream",
-            (new Item()).setUnlocalizedName("magmaCream")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            379,
-            "brewing_stand",
-            (new ItemBlockSpecial(Blocks.BREWING_STAND)).setUnlocalizedName("brewingStand")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            380,
-            "cauldron",
-            (new ItemBlockSpecial(Blocks.CAULDRON)).setUnlocalizedName("cauldron")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(381, "ender_eye", (new ItemEnderEye()).setUnlocalizedName("eyeOfEnder"));
-        registerItem(
-            382,
-            "speckled_melon",
-            (new Item()).setUnlocalizedName("speckledMelon")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(383, "spawn_egg", (new ItemMonsterPlacer()).setUnlocalizedName("monsterPlacer"));
-        registerItem(384, "experience_bottle", (new ItemExpBottle()).setUnlocalizedName("expBottle"));
-        registerItem(385, "fire_charge", (new ItemFireball()).setUnlocalizedName("fireball"));
-        registerItem(
-            386,
-            "writable_book",
-            (new ItemWritableBook()).setUnlocalizedName("writingBook")
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            387,
-            "written_book",
-            (new ItemWrittenBook()).setUnlocalizedName("writtenBook")
-                .setMaxStackSize(16));
-        registerItem(
-            388,
-            "emerald",
-            (new Item()).setUnlocalizedName("emerald")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(389, "item_frame", (new ItemHangingEntity(EntityItemFrame.class)).setUnlocalizedName("frame"));
-        registerItem(
-            390,
-            "flower_pot",
-            (new ItemBlockSpecial(Blocks.FLOWER_POT)).setUnlocalizedName("flowerPot")
-                .setCreativeTab(CreativeTabs.DECORATIONS));
-        registerItem(
-            391,
-            "carrot",
-            (new ItemSeedFood(3, 0.6F, Blocks.CARROTS, Blocks.FARMLAND)).setUnlocalizedName("carrots"));
-        registerItem(
-            392,
-            "potato",
-            (new ItemSeedFood(1, 0.3F, Blocks.POTATOES, Blocks.FARMLAND)).setUnlocalizedName("potato"));
-        registerItem(393, "baked_potato", (new ItemFood(5, 0.6F, false)).setUnlocalizedName("potatoBaked"));
-        registerItem(
-            394,
-            "poisonous_potato",
-            (new ItemFood(2, 0.3F, false)).setPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0), 0.6F)
-                .setUnlocalizedName("potatoPoisonous"));
-        registerItem(395, "map", (new ItemEmptyMap()).setUnlocalizedName("emptyMap"));
-        registerItem(
-            396,
-            "golden_carrot",
-            (new ItemFood(6, 1.2F, false)).setUnlocalizedName("carrotGolden")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(397, "skull", (new ItemSkull()).setUnlocalizedName("skull"));
-        registerItem(398, "carrot_on_a_stick", (new ItemCarrotOnAStick()).setUnlocalizedName("carrotOnAStick"));
-        registerItem(
-            399,
-            "nether_star",
-            (new ItemSimpleFoiled()).setUnlocalizedName("netherStar")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            400,
-            "pumpkin_pie",
-            (new ItemFood(8, 0.3F, false)).setUnlocalizedName("pumpkinPie")
-                .setCreativeTab(CreativeTabs.FOOD));
-        registerItem(401, "fireworks", (new ItemFirework()).setUnlocalizedName("fireworks"));
-        registerItem(
-            402,
-            "firework_charge",
-            (new ItemFireworkCharge()).setUnlocalizedName("fireworksCharge")
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            403,
-            "enchanted_book",
-            (new ItemEnchantedBook()).setMaxStackSize(1)
-                .setUnlocalizedName("enchantedBook"));
-        registerItem(
-            404,
-            "comparator",
-            (new ItemBlockSpecial(Blocks.UNPOWERED_COMPARATOR)).setUnlocalizedName("comparator")
-                .setCreativeTab(CreativeTabs.REDSTONE));
-        registerItem(
-            405,
-            "netherbrick",
-            (new Item()).setUnlocalizedName("netherbrick")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            406,
-            "quartz",
-            (new Item()).setUnlocalizedName("netherquartz")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            407,
-            "tnt_minecart",
-            (new ItemMinecart(EntityMinecart.Type.TNT)).setUnlocalizedName("minecartTnt"));
-        registerItem(
-            408,
-            "hopper_minecart",
-            (new ItemMinecart(EntityMinecart.Type.HOPPER)).setUnlocalizedName("minecartHopper"));
-        registerItem(
-            409,
-            "prismarine_shard",
-            (new Item()).setUnlocalizedName("prismarineShard")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            410,
-            "prismarine_crystals",
-            (new Item()).setUnlocalizedName("prismarineCrystals")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(411, "rabbit", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("rabbitRaw"));
-        registerItem(412, "cooked_rabbit", (new ItemFood(5, 0.6F, true)).setUnlocalizedName("rabbitCooked"));
-        registerItem(413, "rabbit_stew", (new ItemSoup(10)).setUnlocalizedName("rabbitStew"));
-        registerItem(
-            414,
-            "rabbit_foot",
-            (new Item()).setUnlocalizedName("rabbitFoot")
-                .setCreativeTab(CreativeTabs.BREWING));
-        registerItem(
-            415,
-            "rabbit_hide",
-            (new Item()).setUnlocalizedName("rabbitHide")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            416,
-            "armor_stand",
-            (new ItemArmorStand()).setUnlocalizedName("armorStand")
-                .setMaxStackSize(16));
-        registerItem(
-            417,
-            "iron_horse_armor",
-            (new Item()).setUnlocalizedName("horsearmormetal")
-                .setMaxStackSize(1)
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            418,
-            "golden_horse_armor",
-            (new Item()).setUnlocalizedName("horsearmorgold")
-                .setMaxStackSize(1)
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(
-            419,
-            "diamond_horse_armor",
-            (new Item()).setUnlocalizedName("horsearmordiamond")
-                .setMaxStackSize(1)
-                .setCreativeTab(CreativeTabs.MISC));
-        registerItem(420, "lead", (new ItemLead()).setUnlocalizedName("leash"));
-        registerItem(421, "name_tag", (new ItemNameTag()).setUnlocalizedName("nameTag"));
-        registerItem(
-            422,
-            "command_block_minecart",
-            (new ItemMinecart(EntityMinecart.Type.COMMAND_BLOCK)).setUnlocalizedName("minecartCommandBlock")
-                .setCreativeTab((CreativeTabs) null));
-        registerItem(423, "mutton", (new ItemFood(2, 0.3F, true)).setUnlocalizedName("muttonRaw"));
-        registerItem(424, "cooked_mutton", (new ItemFood(6, 0.8F, true)).setUnlocalizedName("muttonCooked"));
-        registerItem(425, "banner", (new ItemBanner()).setUnlocalizedName("banner"));
-        registerItem(426, "end_crystal", new ItemEndCrystal());
-        registerItem(427, "spruce_door", (new ItemDoor(Blocks.SPRUCE_DOOR)).setUnlocalizedName("doorSpruce"));
-        registerItem(428, "birch_door", (new ItemDoor(Blocks.BIRCH_DOOR)).setUnlocalizedName("doorBirch"));
-        registerItem(429, "jungle_door", (new ItemDoor(Blocks.JUNGLE_DOOR)).setUnlocalizedName("doorJungle"));
-        registerItem(430, "acacia_door", (new ItemDoor(Blocks.ACACIA_DOOR)).setUnlocalizedName("doorAcacia"));
-        registerItem(431, "dark_oak_door", (new ItemDoor(Blocks.DARK_OAK_DOOR)).setUnlocalizedName("doorDarkOak"));
-        registerItem(
-            432,
-            "chorus_fruit",
-            (new ItemChorusFruit(4, 0.3F)).setAlwaysEdible()
-                .setUnlocalizedName("chorusFruit")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            433,
-            "chorus_fruit_popped",
-            (new Item()).setUnlocalizedName("chorusFruitPopped")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(434, "beetroot", (new ItemFood(1, 0.6F, false)).setUnlocalizedName("beetroot"));
-        registerItem(
-            435,
-            "beetroot_seeds",
-            (new ItemSeeds(Blocks.BEETROOTS, Blocks.FARMLAND)).setUnlocalizedName("beetroot_seeds"));
-        registerItem(436, "beetroot_soup", (new ItemSoup(6)).setUnlocalizedName("beetroot_soup"));
-        registerItem(
-            437,
-            "dragon_breath",
-            (new Item()).setCreativeTab(CreativeTabs.BREWING)
-                .setUnlocalizedName("dragon_breath")
-                .setContainerItem(item1));
-        registerItem(438, "splash_potion", (new ItemSplashPotion()).setUnlocalizedName("splash_potion"));
-        registerItem(439, "spectral_arrow", (new ItemSpectralArrow()).setUnlocalizedName("spectral_arrow"));
-        registerItem(440, "tipped_arrow", (new ItemTippedArrow()).setUnlocalizedName("tipped_arrow"));
-        registerItem(441, "lingering_potion", (new ItemLingeringPotion()).setUnlocalizedName("lingering_potion"));
-        registerItem(442, "shield", (new ItemShield()).setUnlocalizedName("shield"));
-        registerItem(443, "elytra", (new ItemElytra()).setUnlocalizedName("elytra"));
-        registerItem(444, "spruce_boat", new ItemBoat(EntityBoat.Type.SPRUCE));
-        registerItem(445, "birch_boat", new ItemBoat(EntityBoat.Type.BIRCH));
-        registerItem(446, "jungle_boat", new ItemBoat(EntityBoat.Type.JUNGLE));
-        registerItem(447, "acacia_boat", new ItemBoat(EntityBoat.Type.ACACIA));
-        registerItem(448, "dark_oak_boat", new ItemBoat(EntityBoat.Type.DARK_OAK));
-        registerItem(
-            449,
-            "totem_of_undying",
-            (new Item()).setUnlocalizedName("totem")
-                .setMaxStackSize(1)
-                .setCreativeTab(CreativeTabs.COMBAT));
-        registerItem(
-            450,
-            "shulker_shell",
-            (new Item()).setUnlocalizedName("shulkerShell")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(
-            452,
-            "iron_nugget",
-            (new Item()).setUnlocalizedName("ironNugget")
-                .setCreativeTab(CreativeTabs.MATERIALS));
-        registerItem(453, "knowledge_book", (new ItemKnowledgeBook()).setUnlocalizedName("knowledgeBook"));
-        registerItem(2256, "record_13", (new ItemRecord("13", SoundEvents.RECORD_13)).setUnlocalizedName("record"));
-        registerItem(2257, "record_cat", (new ItemRecord("cat", SoundEvents.RECORD_CAT)).setUnlocalizedName("record"));
-        registerItem(
-            2258,
-            "record_blocks",
-            (new ItemRecord("blocks", SoundEvents.RECORD_BLOCKS)).setUnlocalizedName("record"));
-        registerItem(
-            2259,
-            "record_chirp",
-            (new ItemRecord("chirp", SoundEvents.RECORD_CHIRP)).setUnlocalizedName("record"));
-        registerItem(2260, "record_far", (new ItemRecord("far", SoundEvents.RECORD_FAR)).setUnlocalizedName("record"));
-        registerItem(
-            2261,
-            "record_mall",
-            (new ItemRecord("mall", SoundEvents.RECORD_MALL)).setUnlocalizedName("record"));
-        registerItem(
-            2262,
-            "record_mellohi",
-            (new ItemRecord("mellohi", SoundEvents.RECORD_MELLOHI)).setUnlocalizedName("record"));
-        registerItem(
-            2263,
-            "record_stal",
-            (new ItemRecord("stal", SoundEvents.RECORD_STAL)).setUnlocalizedName("record"));
-        registerItem(
-            2264,
-            "record_strad",
-            (new ItemRecord("strad", SoundEvents.RECORD_STRAD)).setUnlocalizedName("record"));
-        registerItem(
-            2265,
-            "record_ward",
-            (new ItemRecord("ward", SoundEvents.RECORD_WARD)).setUnlocalizedName("record"));
-        registerItem(2266, "record_11", (new ItemRecord("11", SoundEvents.RECORD_11)).setUnlocalizedName("record"));
-        registerItem(
-            2267,
-            "record_wait",
-            (new ItemRecord("wait", SoundEvents.RECORD_WAIT)).setUnlocalizedName("record"));
-    }
+//    public static void registerItems() {
+//        registerItemBlock(Blocks.AIR, new ItemAir(Blocks.AIR));
+//        registerItemBlock(
+//            Blocks.STONE,
+//            (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockStone.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("stone"));
+//        registerItemBlock(Blocks.GRASS, new ItemColored(Blocks.GRASS, false));
+//        registerItemBlock(Blocks.DIRT, (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new ItemMultiTexture.Mapper() {
+//
+//            public String apply(ItemStack p_apply_1_) {
+//                return BlockDirt.DirtType.byMetadata(p_apply_1_.getMetadata())
+//                    .getUnlocalizedName();
+//            }
+//        })).setUnlocalizedName("dirt"));
+//        registerItemBlock(Blocks.COBBLESTONE);
+//        registerItemBlock(
+//            Blocks.PLANKS,
+//            (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("wood"));
+//        registerItemBlock(
+//            Blocks.SAPLING,
+//            (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("sapling"));
+//        registerItemBlock(Blocks.BEDROCK);
+//        registerItemBlock(Blocks.SAND, (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new ItemMultiTexture.Mapper() {
+//
+//            public String apply(ItemStack p_apply_1_) {
+//                return BlockSand.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                    .getUnlocalizedName();
+//            }
+//        })).setUnlocalizedName("sand"));
+//        registerItemBlock(Blocks.GRAVEL);
+//        registerItemBlock(Blocks.GOLD_ORE);
+//        registerItemBlock(Blocks.IRON_ORE);
+//        registerItemBlock(Blocks.COAL_ORE);
+//        registerItemBlock(Blocks.LOG, (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new ItemMultiTexture.Mapper() {
+//
+//            public String apply(ItemStack p_apply_1_) {
+//                return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                    .getUnlocalizedName();
+//            }
+//        })).setUnlocalizedName("log"));
+//        registerItemBlock(Blocks.LOG2, (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new ItemMultiTexture.Mapper() {
+//
+//            public String apply(ItemStack p_apply_1_) {
+//                return BlockPlanks.EnumType.byMetadata(p_apply_1_.getMetadata() + 4)
+//                    .getUnlocalizedName();
+//            }
+//        })).setUnlocalizedName("log"));
+//        registerItemBlock(Blocks.LEAVES, (new ItemLeaves(Blocks.LEAVES)).setUnlocalizedName("leaves"));
+//        registerItemBlock(Blocks.LEAVES2, (new ItemLeaves(Blocks.LEAVES2)).setUnlocalizedName("leaves"));
+//        registerItemBlock(
+//            Blocks.SPONGE,
+//            (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return (p_apply_1_.getMetadata() & 1) == 1 ? "wet" : "dry";
+//                }
+//            })).setUnlocalizedName("sponge"));
+//        registerItemBlock(Blocks.GLASS);
+//        registerItemBlock(Blocks.LAPIS_ORE);
+//        registerItemBlock(Blocks.LAPIS_BLOCK);
+//        registerItemBlock(Blocks.DISPENSER);
+//        registerItemBlock(
+//            Blocks.SANDSTONE,
+//            (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockSandStone.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("sandStone"));
+//        registerItemBlock(Blocks.NOTEBLOCK);
+//        registerItemBlock(Blocks.GOLDEN_RAIL);
+//        registerItemBlock(Blocks.DETECTOR_RAIL);
+//        registerItemBlock(Blocks.STICKY_PISTON, new ItemPiston(Blocks.STICKY_PISTON));
+//        registerItemBlock(Blocks.WEB);
+//        registerItemBlock(
+//            Blocks.TALLGRASS,
+//            (new ItemColored(Blocks.TALLGRASS, true)).setSubtypeNames(new String[]{"shrub", "grass", "fern"}));
+//        registerItemBlock(Blocks.DEADBUSH);
+//        registerItemBlock(Blocks.PISTON, new ItemPiston(Blocks.PISTON));
+//        registerItemBlock(Blocks.WOOL, (new ItemCloth(Blocks.WOOL)).setUnlocalizedName("cloth"));
+//        registerItemBlock(
+//            Blocks.YELLOW_FLOWER,
+//            (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockFlower.EnumFlowerType
+//                        .getType(BlockFlower.EnumFlowerColor.YELLOW, p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("flower"));
+//        registerItemBlock(
+//            Blocks.RED_FLOWER,
+//            (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockFlower.EnumFlowerType.getType(BlockFlower.EnumFlowerColor.RED, p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("rose"));
+//        registerItemBlock(Blocks.BROWN_MUSHROOM);
+//        registerItemBlock(Blocks.RED_MUSHROOM);
+//        registerItemBlock(Blocks.GOLD_BLOCK);
+//        registerItemBlock(Blocks.IRON_BLOCK);
+//        registerItemBlock(
+//            Blocks.STONE_SLAB,
+//            (new ItemSlab(Blocks.STONE_SLAB, Blocks.STONE_SLAB, Blocks.DOUBLE_STONE_SLAB))
+//                .setUnlocalizedName("stoneSlab"));
+//        registerItemBlock(Blocks.BRICK_BLOCK);
+//        registerItemBlock(Blocks.TNT);
+//        registerItemBlock(Blocks.BOOKSHELF);
+//        registerItemBlock(Blocks.MOSSY_COBBLESTONE);
+//        registerItemBlock(Blocks.OBSIDIAN);
+//        registerItemBlock(Blocks.TORCH);
+//        registerItemBlock(Blocks.END_ROD);
+//        registerItemBlock(Blocks.CHORUS_PLANT);
+//        registerItemBlock(Blocks.CHORUS_FLOWER);
+//        registerItemBlock(Blocks.PURPUR_BLOCK);
+//        registerItemBlock(Blocks.PURPUR_PILLAR);
+//        registerItemBlock(Blocks.PURPUR_STAIRS);
+//        registerItemBlock(
+//            Blocks.PURPUR_SLAB,
+//            (new ItemSlab(Blocks.PURPUR_SLAB, Blocks.PURPUR_SLAB, Blocks.PURPUR_DOUBLE_SLAB))
+//                .setUnlocalizedName("purpurSlab"));
+//        registerItemBlock(Blocks.MOB_SPAWNER);
+//        registerItemBlock(Blocks.OAK_STAIRS);
+//        registerItemBlock(Blocks.CHEST);
+//        registerItemBlock(Blocks.DIAMOND_ORE);
+//        registerItemBlock(Blocks.DIAMOND_BLOCK);
+//        registerItemBlock(Blocks.CRAFTING_TABLE);
+//        registerItemBlock(Blocks.FARMLAND);
+//        registerItemBlock(Blocks.FURNACE);
+//        registerItemBlock(Blocks.LADDER);
+//        registerItemBlock(Blocks.RAIL);
+//        registerItemBlock(Blocks.STONE_STAIRS);
+//        registerItemBlock(Blocks.LEVER);
+//        registerItemBlock(Blocks.STONE_PRESSURE_PLATE);
+//        registerItemBlock(Blocks.WOODEN_PRESSURE_PLATE);
+//        registerItemBlock(Blocks.REDSTONE_ORE);
+//        registerItemBlock(Blocks.REDSTONE_TORCH);
+//        registerItemBlock(Blocks.STONE_BUTTON);
+//        registerItemBlock(Blocks.SNOW_LAYER, new ItemSnow(Blocks.SNOW_LAYER));
+//        registerItemBlock(Blocks.ICE);
+//        registerItemBlock(Blocks.SNOW);
+//        registerItemBlock(Blocks.CACTUS);
+//        registerItemBlock(Blocks.CLAY);
+//        registerItemBlock(Blocks.JUKEBOX);
+//        registerItemBlock(Blocks.OAK_FENCE);
+//        registerItemBlock(Blocks.SPRUCE_FENCE);
+//        registerItemBlock(Blocks.BIRCH_FENCE);
+//        registerItemBlock(Blocks.JUNGLE_FENCE);
+//        registerItemBlock(Blocks.DARK_OAK_FENCE);
+//        registerItemBlock(Blocks.ACACIA_FENCE);
+//        registerItemBlock(Blocks.PUMPKIN);
+//        registerItemBlock(Blocks.NETHERRACK);
+//        registerItemBlock(Blocks.SOUL_SAND);
+//        registerItemBlock(Blocks.GLOWSTONE);
+//        registerItemBlock(Blocks.LIT_PUMPKIN);
+//        registerItemBlock(Blocks.TRAPDOOR);
+//        registerItemBlock(
+//            Blocks.MONSTER_EGG,
+//            (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockSilverfish.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("monsterStoneEgg"));
+//        registerItemBlock(
+//            Blocks.STONEBRICK,
+//            (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockStoneBrick.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("stonebricksmooth"));
+//        registerItemBlock(Blocks.BROWN_MUSHROOM_BLOCK);
+//        registerItemBlock(Blocks.RED_MUSHROOM_BLOCK);
+//        registerItemBlock(Blocks.IRON_BARS);
+//        registerItemBlock(Blocks.GLASS_PANE);
+//        registerItemBlock(Blocks.MELON_BLOCK);
+//        registerItemBlock(Blocks.VINE, new ItemColored(Blocks.VINE, false));
+//        registerItemBlock(Blocks.OAK_FENCE_GATE);
+//        registerItemBlock(Blocks.SPRUCE_FENCE_GATE);
+//        registerItemBlock(Blocks.BIRCH_FENCE_GATE);
+//        registerItemBlock(Blocks.JUNGLE_FENCE_GATE);
+//        registerItemBlock(Blocks.DARK_OAK_FENCE_GATE);
+//        registerItemBlock(Blocks.ACACIA_FENCE_GATE);
+//        registerItemBlock(Blocks.BRICK_STAIRS);
+//        registerItemBlock(Blocks.STONE_BRICK_STAIRS);
+//        registerItemBlock(Blocks.MYCELIUM);
+//        registerItemBlock(Blocks.WATERLILY, new ItemLilyPad(Blocks.WATERLILY));
+//        registerItemBlock(Blocks.NETHER_BRICK);
+//        registerItemBlock(Blocks.NETHER_BRICK_FENCE);
+//        registerItemBlock(Blocks.NETHER_BRICK_STAIRS);
+//        registerItemBlock(Blocks.ENCHANTING_TABLE);
+//        registerItemBlock(Blocks.END_PORTAL_FRAME);
+//        registerItemBlock(Blocks.END_STONE);
+//        registerItemBlock(Blocks.END_BRICKS);
+//        registerItemBlock(Blocks.DRAGON_EGG);
+//        registerItemBlock(Blocks.REDSTONE_LAMP);
+//        registerItemBlock(
+//            Blocks.WOODEN_SLAB,
+//            (new ItemSlab(Blocks.WOODEN_SLAB, Blocks.WOODEN_SLAB, Blocks.DOUBLE_WOODEN_SLAB))
+//                .setUnlocalizedName("woodSlab"));
+//        registerItemBlock(Blocks.SANDSTONE_STAIRS);
+//        registerItemBlock(Blocks.EMERALD_ORE);
+//        registerItemBlock(Blocks.ENDER_CHEST);
+//        registerItemBlock(Blocks.TRIPWIRE_HOOK);
+//        registerItemBlock(Blocks.EMERALD_BLOCK);
+//        registerItemBlock(Blocks.SPRUCE_STAIRS);
+//        registerItemBlock(Blocks.BIRCH_STAIRS);
+//        registerItemBlock(Blocks.JUNGLE_STAIRS);
+//        registerItemBlock(Blocks.COMMAND_BLOCK);
+//        registerItemBlock(Blocks.BEACON);
+//        registerItemBlock(
+//            Blocks.COBBLESTONE_WALL,
+//            (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockWall.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("cobbleWall"));
+//        registerItemBlock(Blocks.WOODEN_BUTTON);
+//        registerItemBlock(Blocks.ANVIL, (new ItemAnvilBlock(Blocks.ANVIL)).setUnlocalizedName("anvil"));
+//        registerItemBlock(Blocks.TRAPPED_CHEST);
+//        registerItemBlock(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
+//        registerItemBlock(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
+//        registerItemBlock(Blocks.DAYLIGHT_DETECTOR);
+//        registerItemBlock(Blocks.REDSTONE_BLOCK);
+//        registerItemBlock(Blocks.QUARTZ_ORE);
+//        registerItemBlock(Blocks.HOPPER);
+//        registerItemBlock(
+//            Blocks.QUARTZ_BLOCK,
+//            (new ItemMultiTexture(
+//                Blocks.QUARTZ_BLOCK,
+//                Blocks.QUARTZ_BLOCK,
+//                new String[]{"default", "chiseled", "lines"})).setUnlocalizedName("quartzBlock"));
+//        registerItemBlock(Blocks.QUARTZ_STAIRS);
+//        registerItemBlock(Blocks.ACTIVATOR_RAIL);
+//        registerItemBlock(Blocks.DROPPER);
+//        registerItemBlock(
+//            Blocks.STAINED_HARDENED_CLAY,
+//            (new ItemCloth(Blocks.STAINED_HARDENED_CLAY)).setUnlocalizedName("clayHardenedStained"));
+//        registerItemBlock(Blocks.BARRIER);
+//        registerItemBlock(Blocks.IRON_TRAPDOOR);
+//        registerItemBlock(Blocks.HAY_BLOCK);
+//        registerItemBlock(Blocks.CARPET, (new ItemCloth(Blocks.CARPET)).setUnlocalizedName("woolCarpet"));
+//        registerItemBlock(Blocks.HARDENED_CLAY);
+//        registerItemBlock(Blocks.COAL_BLOCK);
+//        registerItemBlock(Blocks.PACKED_ICE);
+//        registerItemBlock(Blocks.ACACIA_STAIRS);
+//        registerItemBlock(Blocks.DARK_OAK_STAIRS);
+//        registerItemBlock(Blocks.SLIME_BLOCK);
+//        registerItemBlock(Blocks.GRASS_PATH);
+//        registerItemBlock(
+//            Blocks.DOUBLE_PLANT,
+//            (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockDoublePlant.EnumPlantType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("doublePlant"));
+//        registerItemBlock(
+//            Blocks.STAINED_GLASS,
+//            (new ItemCloth(Blocks.STAINED_GLASS)).setUnlocalizedName("stainedGlass"));
+//        registerItemBlock(
+//            Blocks.STAINED_GLASS_PANE,
+//            (new ItemCloth(Blocks.STAINED_GLASS_PANE)).setUnlocalizedName("stainedGlassPane"));
+//        registerItemBlock(
+//            Blocks.PRISMARINE,
+//            (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockPrismarine.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("prismarine"));
+//        registerItemBlock(Blocks.SEA_LANTERN);
+//        registerItemBlock(
+//            Blocks.RED_SANDSTONE,
+//            (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new ItemMultiTexture.Mapper() {
+//
+//                public String apply(ItemStack p_apply_1_) {
+//                    return BlockRedSandstone.EnumType.byMetadata(p_apply_1_.getMetadata())
+//                        .getUnlocalizedName();
+//                }
+//            })).setUnlocalizedName("redSandStone"));
+//        registerItemBlock(Blocks.RED_SANDSTONE_STAIRS);
+//        registerItemBlock(
+//            Blocks.STONE_SLAB2,
+//            (new ItemSlab(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2))
+//                .setUnlocalizedName("stoneSlab2"));
+//        registerItemBlock(Blocks.REPEATING_COMMAND_BLOCK);
+//        registerItemBlock(Blocks.CHAIN_COMMAND_BLOCK);
+//        registerItemBlock(Blocks.MAGMA);
+//        registerItemBlock(Blocks.NETHER_WART_BLOCK);
+//        registerItemBlock(Blocks.RED_NETHER_BRICK);
+//        registerItemBlock(Blocks.BONE_BLOCK);
+//        registerItemBlock(Blocks.STRUCTURE_VOID);
+//        registerItemBlock(Blocks.OBSERVER);
+//        registerItemBlock(Blocks.WHITE_SHULKER_BOX, new ItemShulkerBox(Blocks.WHITE_SHULKER_BOX));
+//        registerItemBlock(Blocks.ORANGE_SHULKER_BOX, new ItemShulkerBox(Blocks.ORANGE_SHULKER_BOX));
+//        registerItemBlock(Blocks.MAGENTA_SHULKER_BOX, new ItemShulkerBox(Blocks.MAGENTA_SHULKER_BOX));
+//        registerItemBlock(Blocks.LIGHT_BLUE_SHULKER_BOX, new ItemShulkerBox(Blocks.LIGHT_BLUE_SHULKER_BOX));
+//        registerItemBlock(Blocks.YELLOW_SHULKER_BOX, new ItemShulkerBox(Blocks.YELLOW_SHULKER_BOX));
+//        registerItemBlock(Blocks.LIME_SHULKER_BOX, new ItemShulkerBox(Blocks.LIME_SHULKER_BOX));
+//        registerItemBlock(Blocks.PINK_SHULKER_BOX, new ItemShulkerBox(Blocks.PINK_SHULKER_BOX));
+//        registerItemBlock(Blocks.GRAY_SHULKER_BOX, new ItemShulkerBox(Blocks.GRAY_SHULKER_BOX));
+//        registerItemBlock(Blocks.SILVER_SHULKER_BOX, new ItemShulkerBox(Blocks.SILVER_SHULKER_BOX));
+//        registerItemBlock(Blocks.CYAN_SHULKER_BOX, new ItemShulkerBox(Blocks.CYAN_SHULKER_BOX));
+//        registerItemBlock(Blocks.PURPLE_SHULKER_BOX, new ItemShulkerBox(Blocks.PURPLE_SHULKER_BOX));
+//        registerItemBlock(Blocks.BLUE_SHULKER_BOX, new ItemShulkerBox(Blocks.BLUE_SHULKER_BOX));
+//        registerItemBlock(Blocks.BROWN_SHULKER_BOX, new ItemShulkerBox(Blocks.BROWN_SHULKER_BOX));
+//        registerItemBlock(Blocks.GREEN_SHULKER_BOX, new ItemShulkerBox(Blocks.GREEN_SHULKER_BOX));
+//        registerItemBlock(Blocks.RED_SHULKER_BOX, new ItemShulkerBox(Blocks.RED_SHULKER_BOX));
+//        registerItemBlock(Blocks.BLACK_SHULKER_BOX, new ItemShulkerBox(Blocks.BLACK_SHULKER_BOX));
+//        registerItemBlock(Blocks.WHITE_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.ORANGE_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.MAGENTA_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.YELLOW_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.LIME_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.PINK_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.GRAY_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.SILVER_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.CYAN_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.PURPLE_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.BLUE_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.BROWN_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.GREEN_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.RED_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.BLACK_GLAZED_TERRACOTTA);
+//        registerItemBlock(Blocks.CONCRETE, (new ItemCloth(Blocks.CONCRETE)).setUnlocalizedName("concrete"));
+//        registerItemBlock(
+//            Blocks.CONCRETE_POWDER,
+//            (new ItemCloth(Blocks.CONCRETE_POWDER)).setUnlocalizedName("concrete_powder"));
+//        registerItemBlock(Blocks.STRUCTURE_BLOCK);
+//        registerItem(256, "iron_shovel", (new ItemSpade(Item.ToolMaterial.IRON)).setUnlocalizedName("shovelIron"));
+//        registerItem(257, "iron_pickaxe", (new ItemPickaxe(Item.ToolMaterial.IRON)).setUnlocalizedName("pickaxeIron"));
+//        registerItem(258, "iron_axe", (new ItemAxe(Item.ToolMaterial.IRON)).setUnlocalizedName("hatchetIron"));
+//        registerItem(259, "flint_and_steel", (new ItemFlintAndSteel()).setUnlocalizedName("flintAndSteel"));
+//        registerItem(260, "apple", (new ItemFood(4, 0.3F, false)).setUnlocalizedName("apple"));
+//        registerItem(261, "bow", (new ItemBow()).setUnlocalizedName("bow"));
+//        registerItem(262, "arrow", (new ItemArrow()).setUnlocalizedName("arrow"));
+//        registerItem(263, "coal", (new ItemCoal()).setUnlocalizedName("coal"));
+//        registerItem(
+//            264,
+//            "diamond",
+//            (new Item()).setUnlocalizedName("diamond")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            265,
+//            "iron_ingot",
+//            (new Item()).setUnlocalizedName("ingotIron")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            266,
+//            "gold_ingot",
+//            (new Item()).setUnlocalizedName("ingotGold")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(267, "iron_sword", (new ItemSword(Item.ToolMaterial.IRON)).setUnlocalizedName("swordIron"));
+//        registerItem(268, "wooden_sword", (new ItemSword(Item.ToolMaterial.WOOD)).setUnlocalizedName("swordWood"));
+//        registerItem(269, "wooden_shovel", (new ItemSpade(Item.ToolMaterial.WOOD)).setUnlocalizedName("shovelWood"));
+//        registerItem(
+//            270,
+//            "wooden_pickaxe",
+//            (new ItemPickaxe(Item.ToolMaterial.WOOD)).setUnlocalizedName("pickaxeWood"));
+//        registerItem(271, "wooden_axe", (new ItemAxe(Item.ToolMaterial.WOOD)).setUnlocalizedName("hatchetWood"));
+//        registerItem(272, "stone_sword", (new ItemSword(Item.ToolMaterial.STONE)).setUnlocalizedName("swordStone"));
+//        registerItem(273, "stone_shovel", (new ItemSpade(Item.ToolMaterial.STONE)).setUnlocalizedName("shovelStone"));
+//        registerItem(
+//            274,
+//            "stone_pickaxe",
+//            (new ItemPickaxe(Item.ToolMaterial.STONE)).setUnlocalizedName("pickaxeStone"));
+//        registerItem(275, "stone_axe", (new ItemAxe(Item.ToolMaterial.STONE)).setUnlocalizedName("hatchetStone"));
+//        registerItem(
+//            276,
+//            "diamond_sword",
+//            (new ItemSword(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("swordDiamond"));
+//        registerItem(
+//            277,
+//            "diamond_shovel",
+//            (new ItemSpade(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("shovelDiamond"));
+//        registerItem(
+//            278,
+//            "diamond_pickaxe",
+//            (new ItemPickaxe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("pickaxeDiamond"));
+//        registerItem(279, "diamond_axe", (new ItemAxe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("hatchetDiamond"));
+//        registerItem(
+//            280,
+//            "stick",
+//            (new Item()).setFull3D()
+//                .setUnlocalizedName("stick")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            281,
+//            "bowl",
+//            (new Item()).setUnlocalizedName("bowl")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(282, "mushroom_stew", (new ItemSoup(6)).setUnlocalizedName("mushroomStew"));
+//        registerItem(283, "golden_sword", (new ItemSword(Item.ToolMaterial.GOLD)).setUnlocalizedName("swordGold"));
+//        registerItem(284, "golden_shovel", (new ItemSpade(Item.ToolMaterial.GOLD)).setUnlocalizedName("shovelGold"));
+//        registerItem(
+//            285,
+//            "golden_pickaxe",
+//            (new ItemPickaxe(Item.ToolMaterial.GOLD)).setUnlocalizedName("pickaxeGold"));
+//        registerItem(286, "golden_axe", (new ItemAxe(Item.ToolMaterial.GOLD)).setUnlocalizedName("hatchetGold"));
+//        registerItem(
+//            287,
+//            "string",
+//            (new ItemBlockSpecial(Blocks.TRIPWIRE)).setUnlocalizedName("string")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            288,
+//            "feather",
+//            (new Item()).setUnlocalizedName("feather")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            289,
+//            "gunpowder",
+//            (new Item()).setUnlocalizedName("sulphur")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(290, "wooden_hoe", (new ItemHoe(Item.ToolMaterial.WOOD)).setUnlocalizedName("hoeWood"));
+//        registerItem(291, "stone_hoe", (new ItemHoe(Item.ToolMaterial.STONE)).setUnlocalizedName("hoeStone"));
+//        registerItem(292, "iron_hoe", (new ItemHoe(Item.ToolMaterial.IRON)).setUnlocalizedName("hoeIron"));
+//        registerItem(293, "diamond_hoe", (new ItemHoe(Item.ToolMaterial.DIAMOND)).setUnlocalizedName("hoeDiamond"));
+//        registerItem(294, "golden_hoe", (new ItemHoe(Item.ToolMaterial.GOLD)).setUnlocalizedName("hoeGold"));
+//        registerItem(295, "wheat_seeds", (new ItemSeeds(Blocks.WHEAT, Blocks.FARMLAND)).setUnlocalizedName("seeds"));
+//        registerItem(
+//            296,
+//            "wheat",
+//            (new Item()).setUnlocalizedName("wheat")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(297, "bread", (new ItemFood(5, 0.6F, false)).setUnlocalizedName("bread"));
+//        registerItem(
+//            298,
+//            "leather_helmet",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.HEAD))
+//                .setUnlocalizedName("helmetCloth"));
+//        registerItem(
+//            299,
+//            "leather_chestplate",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.CHEST))
+//                .setUnlocalizedName("chestplateCloth"));
+//        registerItem(
+//            300,
+//            "leather_leggings",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.LEGS))
+//                .setUnlocalizedName("leggingsCloth"));
+//        registerItem(
+//            301,
+//            "leather_boots",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.FEET))
+//                .setUnlocalizedName("bootsCloth"));
+//        registerItem(
+//            302,
+//            "chainmail_helmet",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.HEAD))
+//                .setUnlocalizedName("helmetChain"));
+//        registerItem(
+//            303,
+//            "chainmail_chestplate",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.CHEST))
+//                .setUnlocalizedName("chestplateChain"));
+//        registerItem(
+//            304,
+//            "chainmail_leggings",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.LEGS))
+//                .setUnlocalizedName("leggingsChain"));
+//        registerItem(
+//            305,
+//            "chainmail_boots",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.CHAIN, 1, EntityEquipmentSlot.FEET))
+//                .setUnlocalizedName("bootsChain"));
+//        registerItem(
+//            306,
+//            "iron_helmet",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.HEAD))
+//                .setUnlocalizedName("helmetIron"));
+//        registerItem(
+//            307,
+//            "iron_chestplate",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.CHEST))
+//                .setUnlocalizedName("chestplateIron"));
+//        registerItem(
+//            308,
+//            "iron_leggings",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.LEGS))
+//                .setUnlocalizedName("leggingsIron"));
+//        registerItem(
+//            309,
+//            "iron_boots",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.IRON, 2, EntityEquipmentSlot.FEET)).setUnlocalizedName("bootsIron"));
+//        registerItem(
+//            310,
+//            "diamond_helmet",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.HEAD))
+//                .setUnlocalizedName("helmetDiamond"));
+//        registerItem(
+//            311,
+//            "diamond_chestplate",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.CHEST))
+//                .setUnlocalizedName("chestplateDiamond"));
+//        registerItem(
+//            312,
+//            "diamond_leggings",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.LEGS))
+//                .setUnlocalizedName("leggingsDiamond"));
+//        registerItem(
+//            313,
+//            "diamond_boots",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.DIAMOND, 3, EntityEquipmentSlot.FEET))
+//                .setUnlocalizedName("bootsDiamond"));
+//        registerItem(
+//            314,
+//            "golden_helmet",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.HEAD))
+//                .setUnlocalizedName("helmetGold"));
+//        registerItem(
+//            315,
+//            "golden_chestplate",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.CHEST))
+//                .setUnlocalizedName("chestplateGold"));
+//        registerItem(
+//            316,
+//            "golden_leggings",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.LEGS))
+//                .setUnlocalizedName("leggingsGold"));
+//        registerItem(
+//            317,
+//            "golden_boots",
+//            (new ItemArmor(ItemArmor.ArmorMaterial.GOLD, 4, EntityEquipmentSlot.FEET)).setUnlocalizedName("bootsGold"));
+//        registerItem(
+//            318,
+//            "flint",
+//            (new Item()).setUnlocalizedName("flint")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(319, "porkchop", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("porkchopRaw"));
+//        registerItem(320, "cooked_porkchop", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("porkchopCooked"));
+//        registerItem(321, "painting", (new ItemHangingEntity(EntityPainting.class)).setUnlocalizedName("painting"));
+//        registerItem(
+//            322,
+//            "golden_apple",
+//            (new ItemAppleGold(4, 1.2F, false)).setAlwaysEdible()
+//                .setUnlocalizedName("appleGold"));
+//        registerItem(323, "sign", (new ItemSign()).setUnlocalizedName("sign"));
+//        registerItem(324, "wooden_door", (new ItemDoor(Blocks.OAK_DOOR)).setUnlocalizedName("doorOak"));
+//        Item item = (new ItemBucket(Blocks.AIR)).setUnlocalizedName("bucket")
+//            .setMaxStackSize(16);
+//        registerItem(325, "bucket", item);
+//        registerItem(
+//            326,
+//            "water_bucket",
+//            (new ItemBucket(Blocks.FLOWING_WATER)).setUnlocalizedName("bucketWater")
+//                .setContainerItem(item));
+//        registerItem(
+//            327,
+//            "lava_bucket",
+//            (new ItemBucket(Blocks.FLOWING_LAVA)).setUnlocalizedName("bucketLava")
+//                .setContainerItem(item));
+//        registerItem(328, "minecart", (new ItemMinecart(EntityMinecart.Type.RIDEABLE)).setUnlocalizedName("minecart"));
+//        registerItem(329, "saddle", (new ItemSaddle()).setUnlocalizedName("saddle"));
+//        registerItem(330, "iron_door", (new ItemDoor(Blocks.IRON_DOOR)).setUnlocalizedName("doorIron"));
+//        registerItem(331, "redstone", (new ItemRedstone()).setUnlocalizedName("redstone"));
+//        registerItem(332, "snowball", (new ItemSnowball()).setUnlocalizedName("snowball"));
+//        registerItem(333, "boat", new ItemBoat(EntityBoat.Type.OAK));
+//        registerItem(
+//            334,
+//            "leather",
+//            (new Item()).setUnlocalizedName("leather")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            335,
+//            "milk_bucket",
+//            (new ItemBucketMilk()).setUnlocalizedName("milk")
+//                .setContainerItem(item));
+//        registerItem(
+//            336,
+//            "brick",
+//            (new Item()).setUnlocalizedName("brick")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            337,
+//            "clay_ball",
+//            (new Item()).setUnlocalizedName("clay")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            338,
+//            "reeds",
+//            (new ItemBlockSpecial(Blocks.REEDS)).setUnlocalizedName("reeds")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            339,
+//            "paper",
+//            (new Item()).setUnlocalizedName("paper")
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            340,
+//            "book",
+//            (new ItemBook()).setUnlocalizedName("book")
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            341,
+//            "slime_ball",
+//            (new Item()).setUnlocalizedName("slimeball")
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            342,
+//            "chest_minecart",
+//            (new ItemMinecart(EntityMinecart.Type.CHEST)).setUnlocalizedName("minecartChest"));
+//        registerItem(
+//            343,
+//            "furnace_minecart",
+//            (new ItemMinecart(EntityMinecart.Type.FURNACE)).setUnlocalizedName("minecartFurnace"));
+//        registerItem(344, "egg", (new ItemEgg()).setUnlocalizedName("egg"));
+//        registerItem(
+//            345,
+//            "compass",
+//            (new ItemCompass()).setUnlocalizedName("compass")
+//                .setCreativeTab(CreativeTabs.TOOLS));
+//        registerItem(346, "fishing_rod", (new ItemFishingRod()).setUnlocalizedName("fishingRod"));
+//        registerItem(
+//            347,
+//            "clock",
+//            (new ItemClock()).setUnlocalizedName("clock")
+//                .setCreativeTab(CreativeTabs.TOOLS));
+//        registerItem(
+//            348,
+//            "glowstone_dust",
+//            (new Item()).setUnlocalizedName("yellowDust")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            349,
+//            "fish",
+//            (new ItemFishFood(false)).setUnlocalizedName("fish")
+//                .setHasSubtypes(true));
+//        registerItem(
+//            350,
+//            "cooked_fish",
+//            (new ItemFishFood(true)).setUnlocalizedName("fish")
+//                .setHasSubtypes(true));
+//        registerItem(351, "dye", (new ItemDye()).setUnlocalizedName("dyePowder"));
+//        registerItem(
+//            352,
+//            "bone",
+//            (new Item()).setUnlocalizedName("bone")
+//                .setFull3D()
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            353,
+//            "sugar",
+//            (new Item()).setUnlocalizedName("sugar")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            354,
+//            "cake",
+//            (new ItemBlockSpecial(Blocks.CAKE)).setMaxStackSize(1)
+//                .setUnlocalizedName("cake")
+//                .setCreativeTab(CreativeTabs.FOOD));
+//        registerItem(
+//            355,
+//            "bed",
+//            (new ItemBed()).setMaxStackSize(1)
+//                .setUnlocalizedName("bed"));
+//        registerItem(
+//            356,
+//            "repeater",
+//            (new ItemBlockSpecial(Blocks.UNPOWERED_REPEATER)).setUnlocalizedName("diode")
+//                .setCreativeTab(CreativeTabs.REDSTONE));
+//        registerItem(357, "cookie", (new ItemFood(2, 0.1F, false)).setUnlocalizedName("cookie"));
+//        registerItem(358, "filled_map", (new ItemMap()).setUnlocalizedName("map"));
+//        registerItem(359, "shears", (new ItemShears()).setUnlocalizedName("shears"));
+//        registerItem(360, "melon", (new ItemFood(2, 0.3F, false)).setUnlocalizedName("melon"));
+//        registerItem(
+//            361,
+//            "pumpkin_seeds",
+//            (new ItemSeeds(Blocks.PUMPKIN_STEM, Blocks.FARMLAND)).setUnlocalizedName("seeds_pumpkin"));
+//        registerItem(
+//            362,
+//            "melon_seeds",
+//            (new ItemSeeds(Blocks.MELON_STEM, Blocks.FARMLAND)).setUnlocalizedName("seeds_melon"));
+//        registerItem(363, "beef", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("beefRaw"));
+//        registerItem(364, "cooked_beef", (new ItemFood(8, 0.8F, true)).setUnlocalizedName("beefCooked"));
+//        registerItem(
+//            365,
+//            "chicken",
+//            (new ItemFood(2, 0.3F, true)).setPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 0), 0.3F)
+//                .setUnlocalizedName("chickenRaw"));
+//        registerItem(366, "cooked_chicken", (new ItemFood(6, 0.6F, true)).setUnlocalizedName("chickenCooked"));
+//        registerItem(
+//            367,
+//            "rotten_flesh",
+//            (new ItemFood(4, 0.1F, true)).setPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 0), 0.8F)
+//                .setUnlocalizedName("rottenFlesh"));
+//        registerItem(368, "ender_pearl", (new ItemEnderPearl()).setUnlocalizedName("enderPearl"));
+//        registerItem(
+//            369,
+//            "blaze_rod",
+//            (new Item()).setUnlocalizedName("blazeRod")
+//                .setCreativeTab(CreativeTabs.MATERIALS)
+//                .setFull3D());
+//        registerItem(
+//            370,
+//            "ghast_tear",
+//            (new Item()).setUnlocalizedName("ghastTear")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            371,
+//            "gold_nugget",
+//            (new Item()).setUnlocalizedName("goldNugget")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            372,
+//            "nether_wart",
+//            (new ItemSeeds(Blocks.NETHER_WART, Blocks.SOUL_SAND)).setUnlocalizedName("netherStalkSeeds"));
+//        registerItem(373, "potion", (new ItemPotion()).setUnlocalizedName("potion"));
+//        Item item1 = (new ItemGlassBottle()).setUnlocalizedName("glassBottle");
+//        registerItem(374, "glass_bottle", item1);
+//        registerItem(
+//            375,
+//            "spider_eye",
+//            (new ItemFood(2, 0.8F, false)).setPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0), 1.0F)
+//                .setUnlocalizedName("spiderEye"));
+//        registerItem(
+//            376,
+//            "fermented_spider_eye",
+//            (new Item()).setUnlocalizedName("fermentedSpiderEye")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            377,
+//            "blaze_powder",
+//            (new Item()).setUnlocalizedName("blazePowder")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            378,
+//            "magma_cream",
+//            (new Item()).setUnlocalizedName("magmaCream")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            379,
+//            "brewing_stand",
+//            (new ItemBlockSpecial(Blocks.BREWING_STAND)).setUnlocalizedName("brewingStand")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            380,
+//            "cauldron",
+//            (new ItemBlockSpecial(Blocks.CAULDRON)).setUnlocalizedName("cauldron")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(381, "ender_eye", (new ItemEnderEye()).setUnlocalizedName("eyeOfEnder"));
+//        registerItem(
+//            382,
+//            "speckled_melon",
+//            (new Item()).setUnlocalizedName("speckledMelon")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(383, "spawn_egg", (new ItemMonsterPlacer()).setUnlocalizedName("monsterPlacer"));
+//        registerItem(384, "experience_bottle", (new ItemExpBottle()).setUnlocalizedName("expBottle"));
+//        registerItem(385, "fire_charge", (new ItemFireball()).setUnlocalizedName("fireball"));
+//        registerItem(
+//            386,
+//            "writable_book",
+//            (new ItemWritableBook()).setUnlocalizedName("writingBook")
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            387,
+//            "written_book",
+//            (new ItemWrittenBook()).setUnlocalizedName("writtenBook")
+//                .setMaxStackSize(16));
+//        registerItem(
+//            388,
+//            "emerald",
+//            (new Item()).setUnlocalizedName("emerald")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(389, "item_frame", (new ItemHangingEntity(EntityItemFrame.class)).setUnlocalizedName("frame"));
+//        registerItem(
+//            390,
+//            "flower_pot",
+//            (new ItemBlockSpecial(Blocks.FLOWER_POT)).setUnlocalizedName("flowerPot")
+//                .setCreativeTab(CreativeTabs.DECORATIONS));
+//        registerItem(
+//            391,
+//            "carrot",
+//            (new ItemSeedFood(3, 0.6F, Blocks.CARROTS, Blocks.FARMLAND)).setUnlocalizedName("carrots"));
+//        registerItem(
+//            392,
+//            "potato",
+//            (new ItemSeedFood(1, 0.3F, Blocks.POTATOES, Blocks.FARMLAND)).setUnlocalizedName("potato"));
+//        registerItem(393, "baked_potato", (new ItemFood(5, 0.6F, false)).setUnlocalizedName("potatoBaked"));
+//        registerItem(
+//            394,
+//            "poisonous_potato",
+//            (new ItemFood(2, 0.3F, false)).setPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0), 0.6F)
+//                .setUnlocalizedName("potatoPoisonous"));
+//        registerItem(395, "map", (new ItemEmptyMap()).setUnlocalizedName("emptyMap"));
+//        registerItem(
+//            396,
+//            "golden_carrot",
+//            (new ItemFood(6, 1.2F, false)).setUnlocalizedName("carrotGolden")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(397, "skull", (new ItemSkull()).setUnlocalizedName("skull"));
+//        registerItem(398, "carrot_on_a_stick", (new ItemCarrotOnAStick()).setUnlocalizedName("carrotOnAStick"));
+//        registerItem(
+//            399,
+//            "nether_star",
+//            (new ItemSimpleFoiled()).setUnlocalizedName("netherStar")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            400,
+//            "pumpkin_pie",
+//            (new ItemFood(8, 0.3F, false)).setUnlocalizedName("pumpkinPie")
+//                .setCreativeTab(CreativeTabs.FOOD));
+//        registerItem(401, "fireworks", (new ItemFirework()).setUnlocalizedName("fireworks"));
+//        registerItem(
+//            402,
+//            "firework_charge",
+//            (new ItemFireworkCharge()).setUnlocalizedName("fireworksCharge")
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            403,
+//            "enchanted_book",
+//            (new ItemEnchantedBook()).setMaxStackSize(1)
+//                .setUnlocalizedName("enchantedBook"));
+//        registerItem(
+//            404,
+//            "comparator",
+//            (new ItemBlockSpecial(Blocks.UNPOWERED_COMPARATOR)).setUnlocalizedName("comparator")
+//                .setCreativeTab(CreativeTabs.REDSTONE));
+//        registerItem(
+//            405,
+//            "netherbrick",
+//            (new Item()).setUnlocalizedName("netherbrick")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            406,
+//            "quartz",
+//            (new Item()).setUnlocalizedName("netherquartz")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            407,
+//            "tnt_minecart",
+//            (new ItemMinecart(EntityMinecart.Type.TNT)).setUnlocalizedName("minecartTnt"));
+//        registerItem(
+//            408,
+//            "hopper_minecart",
+//            (new ItemMinecart(EntityMinecart.Type.HOPPER)).setUnlocalizedName("minecartHopper"));
+//        registerItem(
+//            409,
+//            "prismarine_shard",
+//            (new Item()).setUnlocalizedName("prismarineShard")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            410,
+//            "prismarine_crystals",
+//            (new Item()).setUnlocalizedName("prismarineCrystals")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(411, "rabbit", (new ItemFood(3, 0.3F, true)).setUnlocalizedName("rabbitRaw"));
+//        registerItem(412, "cooked_rabbit", (new ItemFood(5, 0.6F, true)).setUnlocalizedName("rabbitCooked"));
+//        registerItem(413, "rabbit_stew", (new ItemSoup(10)).setUnlocalizedName("rabbitStew"));
+//        registerItem(
+//            414,
+//            "rabbit_foot",
+//            (new Item()).setUnlocalizedName("rabbitFoot")
+//                .setCreativeTab(CreativeTabs.BREWING));
+//        registerItem(
+//            415,
+//            "rabbit_hide",
+//            (new Item()).setUnlocalizedName("rabbitHide")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            416,
+//            "armor_stand",
+//            (new ItemArmorStand()).setUnlocalizedName("armorStand")
+//                .setMaxStackSize(16));
+//        registerItem(
+//            417,
+//            "iron_horse_armor",
+//            (new Item()).setUnlocalizedName("horsearmormetal")
+//                .setMaxStackSize(1)
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            418,
+//            "golden_horse_armor",
+//            (new Item()).setUnlocalizedName("horsearmorgold")
+//                .setMaxStackSize(1)
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(
+//            419,
+//            "diamond_horse_armor",
+//            (new Item()).setUnlocalizedName("horsearmordiamond")
+//                .setMaxStackSize(1)
+//                .setCreativeTab(CreativeTabs.MISC));
+//        registerItem(420, "lead", (new ItemLead()).setUnlocalizedName("leash"));
+//        registerItem(421, "name_tag", (new ItemNameTag()).setUnlocalizedName("nameTag"));
+//        registerItem(
+//            422,
+//            "command_block_minecart",
+//            (new ItemMinecart(EntityMinecart.Type.COMMAND_BLOCK)).setUnlocalizedName("minecartCommandBlock")
+//                .setCreativeTab((CreativeTabs) null));
+//        registerItem(423, "mutton", (new ItemFood(2, 0.3F, true)).setUnlocalizedName("muttonRaw"));
+//        registerItem(424, "cooked_mutton", (new ItemFood(6, 0.8F, true)).setUnlocalizedName("muttonCooked"));
+//        registerItem(425, "banner", (new ItemBanner()).setUnlocalizedName("banner"));
+//        registerItem(426, "end_crystal", new ItemEndCrystal());
+//        registerItem(427, "spruce_door", (new ItemDoor(Blocks.SPRUCE_DOOR)).setUnlocalizedName("doorSpruce"));
+//        registerItem(428, "birch_door", (new ItemDoor(Blocks.BIRCH_DOOR)).setUnlocalizedName("doorBirch"));
+//        registerItem(429, "jungle_door", (new ItemDoor(Blocks.JUNGLE_DOOR)).setUnlocalizedName("doorJungle"));
+//        registerItem(430, "acacia_door", (new ItemDoor(Blocks.ACACIA_DOOR)).setUnlocalizedName("doorAcacia"));
+//        registerItem(431, "dark_oak_door", (new ItemDoor(Blocks.DARK_OAK_DOOR)).setUnlocalizedName("doorDarkOak"));
+//        registerItem(
+//            432,
+//            "chorus_fruit",
+//            (new ItemChorusFruit(4, 0.3F)).setAlwaysEdible()
+//                .setUnlocalizedName("chorusFruit")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            433,
+//            "chorus_fruit_popped",
+//            (new Item()).setUnlocalizedName("chorusFruitPopped")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(434, "beetroot", (new ItemFood(1, 0.6F, false)).setUnlocalizedName("beetroot"));
+//        registerItem(
+//            435,
+//            "beetroot_seeds",
+//            (new ItemSeeds(Blocks.BEETROOTS, Blocks.FARMLAND)).setUnlocalizedName("beetroot_seeds"));
+//        registerItem(436, "beetroot_soup", (new ItemSoup(6)).setUnlocalizedName("beetroot_soup"));
+//        registerItem(
+//            437,
+//            "dragon_breath",
+//            (new Item()).setCreativeTab(CreativeTabs.BREWING)
+//                .setUnlocalizedName("dragon_breath")
+//                .setContainerItem(item1));
+//        registerItem(438, "splash_potion", (new ItemSplashPotion()).setUnlocalizedName("splash_potion"));
+//        registerItem(439, "spectral_arrow", (new ItemSpectralArrow()).setUnlocalizedName("spectral_arrow"));
+//        registerItem(440, "tipped_arrow", (new ItemTippedArrow()).setUnlocalizedName("tipped_arrow"));
+//        registerItem(441, "lingering_potion", (new ItemLingeringPotion()).setUnlocalizedName("lingering_potion"));
+//        registerItem(442, "shield", (new ItemShield()).setUnlocalizedName("shield"));
+//        registerItem(443, "elytra", (new ItemElytra()).setUnlocalizedName("elytra"));
+//        registerItem(444, "spruce_boat", new ItemBoat(EntityBoat.Type.SPRUCE));
+//        registerItem(445, "birch_boat", new ItemBoat(EntityBoat.Type.BIRCH));
+//        registerItem(446, "jungle_boat", new ItemBoat(EntityBoat.Type.JUNGLE));
+//        registerItem(447, "acacia_boat", new ItemBoat(EntityBoat.Type.ACACIA));
+//        registerItem(448, "dark_oak_boat", new ItemBoat(EntityBoat.Type.DARK_OAK));
+//        registerItem(
+//            449,
+//            "totem_of_undying",
+//            (new Item()).setUnlocalizedName("totem")
+//                .setMaxStackSize(1)
+//                .setCreativeTab(CreativeTabs.COMBAT));
+//        registerItem(
+//            450,
+//            "shulker_shell",
+//            (new Item()).setUnlocalizedName("shulkerShell")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(
+//            452,
+//            "iron_nugget",
+//            (new Item()).setUnlocalizedName("ironNugget")
+//                .setCreativeTab(CreativeTabs.MATERIALS));
+//        registerItem(453, "knowledge_book", (new ItemKnowledgeBook()).setUnlocalizedName("knowledgeBook"));
+//        registerItem(2256, "record_13", (new ItemRecord("13", SoundEvents.RECORD_13)).setUnlocalizedName("record"));
+//        registerItem(2257, "record_cat", (new ItemRecord("cat", SoundEvents.RECORD_CAT)).setUnlocalizedName("record"));
+//        registerItem(
+//            2258,
+//            "record_blocks",
+//            (new ItemRecord("blocks", SoundEvents.RECORD_BLOCKS)).setUnlocalizedName("record"));
+//        registerItem(
+//            2259,
+//            "record_chirp",
+//            (new ItemRecord("chirp", SoundEvents.RECORD_CHIRP)).setUnlocalizedName("record"));
+//        registerItem(2260, "record_far", (new ItemRecord("far", SoundEvents.RECORD_FAR)).setUnlocalizedName("record"));
+//        registerItem(
+//            2261,
+//            "record_mall",
+//            (new ItemRecord("mall", SoundEvents.RECORD_MALL)).setUnlocalizedName("record"));
+//        registerItem(
+//            2262,
+//            "record_mellohi",
+//            (new ItemRecord("mellohi", SoundEvents.RECORD_MELLOHI)).setUnlocalizedName("record"));
+//        registerItem(
+//            2263,
+//            "record_stal",
+//            (new ItemRecord("stal", SoundEvents.RECORD_STAL)).setUnlocalizedName("record"));
+//        registerItem(
+//            2264,
+//            "record_strad",
+//            (new ItemRecord("strad", SoundEvents.RECORD_STRAD)).setUnlocalizedName("record"));
+//        registerItem(
+//            2265,
+//            "record_ward",
+//            (new ItemRecord("ward", SoundEvents.RECORD_WARD)).setUnlocalizedName("record"));
+//        registerItem(2266, "record_11", (new ItemRecord("11", SoundEvents.RECORD_11)).setUnlocalizedName("record"));
+//        registerItem(
+//            2267,
+//            "record_wait",
+//            (new ItemRecord("wait", SoundEvents.RECORD_WAIT)).setUnlocalizedName("record"));
+//    }
 
     /**
      * Register a default ItemBlock for the given Block.
@@ -2335,7 +2237,7 @@ public class Item extends net.minecraftforge.registries.IForgeRegistryEntry.Impl
     }
 
     private static void registerItem(int id, ResourceLocation textualID, Item itemIn) {
-        REGISTRY.register(id, textualID, itemIn);
+        REGISTRY.addObject(id, String.valueOf(textualID), itemIn);
     }
 
     @SideOnly(Side.CLIENT)

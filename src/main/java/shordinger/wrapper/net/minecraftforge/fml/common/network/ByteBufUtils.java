@@ -16,22 +16,11 @@
 
 package shordinger.wrapper.net.minecraftforge.fml.common.network;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.Validate;
-
 import com.google.common.collect.ImmutableList;
-
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.Validate;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.PacketBuffer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
@@ -39,6 +28,14 @@ import shordinger.wrapper.net.minecraftforge.registries.ForgeRegistry;
 import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistry;
 import shordinger.wrapper.net.minecraftforge.registries.IForgeRegistryEntry;
 import shordinger.wrapper.net.minecraftforge.registries.RegistryManager;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Utilities for interacting with {@link ByteBuf}.

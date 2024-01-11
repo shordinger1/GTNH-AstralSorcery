@@ -8,18 +8,21 @@
 
 package shordinger.astralsorcery.common;
 
-import java.awt.*;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.mojang.authlib.GameProfile;
-
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import shordinger.astralsorcery.common.auxiliary.link.LinkHandler;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
-import shordinger.astralsorcery.common.base.*;
+import shordinger.astralsorcery.common.base.FluidRarityRegistry;
+import shordinger.astralsorcery.common.base.HerdableAnimal;
+import shordinger.astralsorcery.common.base.Mods;
+import shordinger.astralsorcery.common.base.OreTypes;
+import shordinger.astralsorcery.common.base.RockCrystalHandler;
+import shordinger.astralsorcery.common.base.ShootingStarHandler;
+import shordinger.astralsorcery.common.base.TileAccelerationBlacklist;
+import shordinger.astralsorcery.common.base.TreeTypes;
 import shordinger.astralsorcery.common.base.patreon.PatreonDataManager;
 import shordinger.astralsorcery.common.base.patreon.flare.PatreonFlareManager;
 import shordinger.astralsorcery.common.block.BlockCustomOre;
@@ -32,7 +35,12 @@ import shordinger.astralsorcery.common.constellation.effect.ConstellationEffectR
 import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.PerkLevelManager;
 import shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeLimiter;
-import shordinger.astralsorcery.common.container.*;
+import shordinger.astralsorcery.common.container.ContainerAltarAttunement;
+import shordinger.astralsorcery.common.container.ContainerAltarConstellation;
+import shordinger.astralsorcery.common.container.ContainerAltarDiscovery;
+import shordinger.astralsorcery.common.container.ContainerAltarTrait;
+import shordinger.astralsorcery.common.container.ContainerJournal;
+import shordinger.astralsorcery.common.container.ContainerObservatory;
 import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
@@ -43,7 +51,12 @@ import shordinger.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import shordinger.astralsorcery.common.enchantment.amulet.AmuletHolderCapability;
 import shordinger.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import shordinger.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
-import shordinger.astralsorcery.common.event.listener.*;
+import shordinger.astralsorcery.common.event.listener.EventHandlerCapeEffects;
+import shordinger.astralsorcery.common.event.listener.EventHandlerEntity;
+import shordinger.astralsorcery.common.event.listener.EventHandlerIO;
+import shordinger.astralsorcery.common.event.listener.EventHandlerMisc;
+import shordinger.astralsorcery.common.event.listener.EventHandlerNetwork;
+import shordinger.astralsorcery.common.event.listener.EventHandlerServer;
 import shordinger.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import shordinger.astralsorcery.common.integrations.ModIntegrationChisel;
 import shordinger.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
@@ -55,7 +68,15 @@ import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.migration.MappingMigrationHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktLightningEffect;
-import shordinger.astralsorcery.common.registry.*;
+import shordinger.astralsorcery.common.registry.RegistryAdvancements;
+import shordinger.astralsorcery.common.registry.RegistryConstellations;
+import shordinger.astralsorcery.common.registry.RegistryEntities;
+import shordinger.astralsorcery.common.registry.RegistryItems;
+import shordinger.astralsorcery.common.registry.RegistryKnowledgeFragments;
+import shordinger.astralsorcery.common.registry.RegistryPerks;
+import shordinger.astralsorcery.common.registry.RegistryRecipes;
+import shordinger.astralsorcery.common.registry.RegistryResearch;
+import shordinger.astralsorcery.common.registry.RegistryStructures;
 import shordinger.astralsorcery.common.registry.internal.InternalRegistryPrimer;
 import shordinger.astralsorcery.common.registry.internal.PrimerEventHandler;
 import shordinger.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
@@ -65,8 +86,24 @@ import shordinger.astralsorcery.common.starlight.network.TransmissionChunkTracke
 import shordinger.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import shordinger.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import shordinger.astralsorcery.common.structure.change.StructureIntegrityObserver;
-import shordinger.astralsorcery.common.tile.*;
-import shordinger.astralsorcery.common.util.*;
+import shordinger.astralsorcery.common.tile.TileAltar;
+import shordinger.astralsorcery.common.tile.TileAttunementAltar;
+import shordinger.astralsorcery.common.tile.TileBore;
+import shordinger.astralsorcery.common.tile.TileChalice;
+import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
+import shordinger.astralsorcery.common.tile.TileObservatory;
+import shordinger.astralsorcery.common.tile.TileOreGenerator;
+import shordinger.astralsorcery.common.tile.TileTelescope;
+import shordinger.astralsorcery.common.tile.TileTreeBeacon;
+import shordinger.astralsorcery.common.util.AltarRecipeEffectRecovery;
+import shordinger.astralsorcery.common.util.BlockDropCaptureAssist;
+import shordinger.astralsorcery.common.util.DamageSourceUtil;
+import shordinger.astralsorcery.common.util.LootTableUtil;
+import shordinger.astralsorcery.common.util.MiscUtils;
+import shordinger.astralsorcery.common.util.OreDictAlias;
+import shordinger.astralsorcery.common.util.ParticleEffectWatcher;
+import shordinger.astralsorcery.common.util.PlayerActivityManager;
+import shordinger.astralsorcery.common.util.TreeCaptureHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopController;
 import shordinger.astralsorcery.common.util.log.LogUtil;
@@ -77,8 +114,6 @@ import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.DamageSource;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
@@ -95,6 +130,10 @@ import shordinger.wrapper.net.minecraftforge.fml.common.network.IGuiHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
 import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod

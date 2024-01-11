@@ -15,7 +15,7 @@ import shordinger.wrapper.net.minecraft.item.ItemFireworkCharge;
 import shordinger.wrapper.net.minecraft.item.ItemMap;
 import shordinger.wrapper.net.minecraft.item.ItemMonsterPlacer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.nbt.NBTTagIntArray;
 import shordinger.wrapper.net.minecraft.potion.PotionUtils;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;

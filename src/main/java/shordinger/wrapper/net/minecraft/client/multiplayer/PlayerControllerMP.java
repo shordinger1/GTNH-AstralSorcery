@@ -6,7 +6,7 @@ import io.netty.buffer.Unpooled;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockCommandBlock;
 import shordinger.wrapper.net.minecraft.block.BlockStructure;
-import shordinger.wrapper.net.minecraft.block.SoundType;
+
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.Minecraft;

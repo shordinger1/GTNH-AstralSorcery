@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.data.config.ConfigDataAdapter;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.WeightedRandom;

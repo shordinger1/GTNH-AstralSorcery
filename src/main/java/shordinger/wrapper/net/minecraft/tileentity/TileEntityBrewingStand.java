@@ -14,7 +14,7 @@ import shordinger.wrapper.net.minecraft.inventory.InventoryHelper;
 import shordinger.wrapper.net.minecraft.inventory.ItemStackHelper;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.potion.PotionHelper;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.ITickable;

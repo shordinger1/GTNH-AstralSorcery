@@ -13,6 +13,8 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraft.advancements.CriteriaTriggers;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
@@ -31,9 +33,7 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.init.Enchantments;
 import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;
@@ -51,8 +51,15 @@ import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.util.text.event.HoverEvent;
 import shordinger.wrapper.net.minecraft.util.text.translation.I18n;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityDispatcher;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilityProvider;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import shordinger.wrapper.net.minecraftforge.event.ForgeEventFactory;
+import shordinger.wrapper.net.minecraftforge.registries.IRegistryDelegate;
 
-public final class ItemStack implements net.minecraftforge.common.capabilities.ICapabilitySerializable<NBTTagCompound> {
+public final class ItemStack implements ICapabilitySerializable<NBTTagCompound> {
 
     public static final ItemStack EMPTY = new ItemStack((Item) null);
     public static final DecimalFormat DECIMALFORMAT = new DecimalFormat("#.##");
@@ -80,8 +87,8 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
     private Block canPlaceOnCacheBlock;
     private boolean canPlaceOnCacheResult;
 
-    private net.minecraftforge.registries.IRegistryDelegate<Item> delegate;
-    private net.minecraftforge.common.capabilities.CapabilityDispatcher capabilities;
+    private IRegistryDelegate<Item> delegate;
+    private CapabilityDispatcher capabilities;
     private NBTTagCompound capNBT;
 
     public ItemStack(Block blockIn) {
@@ -120,6 +127,14 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
 
         this.updateEmptyState();
         this.forgeInit();
+    }
+
+    public net.minecraft.item.ItemStack getRealItemStack() {
+        return new net.minecraft.item.ItemStack(item, stackSize, getMetadata());
+    }
+
+    public ItemStack(net.minecraft.item.ItemStack stack) {
+        this((Item) stack.getItem(), stack.stackSize, stack.getItemDamage());
     }
 
     private void updateEmptyState() {
@@ -194,7 +209,7 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
      */
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand,
                                       EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote) return net.minecraftforge.common.ForgeHooks
+        if (!worldIn.isRemote) return ForgeHooks
             .onPlaceItemIntoWorld(this, playerIn, worldIn, pos, side, hitX, hitY, hitZ, hand);
         EnumActionResult enumactionresult = this.getItem()
             .onItemUse(playerIn, worldIn, pos, hand, side, hitX, hitY, hitZ);
@@ -244,8 +259,8 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
      * Write the stack fields to a NBT object. Return the new NBT object.
      */
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(this.item);
-        nbt.setString("id", resourcelocation == null ? "minecraft:air" : resourcelocation.toString());
+        String resourcelocation = Item.REGISTRY.getNameForObject(this.item);
+        nbt.setString("id", resourcelocation == null ? "minecraft:air" : resourcelocation);
         nbt.setByte("Count", (byte) this.stackSize);
         nbt.setShort("Damage", (short) this.itemDamage);
 
@@ -431,7 +446,7 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
         itemstack.setAnimationsToGo(this.getAnimationsToGo());
 
         if (this.stackTagCompound != null) {
-            itemstack.stackTagCompound = this.stackTagCompound.copy();
+            itemstack.stackTagCompound = (NBTTagCompound) this.stackTagCompound.copy();
         }
 
         return itemstack;
@@ -753,14 +768,13 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
                     }
                 }
 
-                if (nbttagcompound1.getTagId("Lore") == 9) {
+                if (nbttagcompound1.func_150299_b("Lore") == 9) {
                     NBTTagList nbttaglist3 = nbttagcompound1.getTagList("Lore", 8);
 
-                    if (!nbttaglist3.hasNoTags()) {
+                    if (nbttaglist3.tagCount() != 0) {
                         for (int l1 = 0; l1 < nbttaglist3.tagCount(); ++l1) {
                             list.add(
-                                TextFormatting.DARK_PURPLE + ""
-                                    + TextFormatting.ITALIC
+                                TextFormatting.DARK_PURPLE + String.valueOf(TextFormatting.ITALIC)
                                     + nbttaglist3.getStringTagAt(l1));
                         }
                     }
@@ -836,7 +850,7 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
         if (this.hasTagCompound() && this.stackTagCompound.hasKey("CanDestroy", 9) && (i1 & 8) == 0) {
             NBTTagList nbttaglist1 = this.stackTagCompound.getTagList("CanDestroy", 8);
 
-            if (!nbttaglist1.hasNoTags()) {
+            if (nbttaglist1.tagCount() != 0) {
                 list.add("");
                 list.add(TextFormatting.GRAY + I18n.translateToLocal("item.canBreak"));
 
@@ -855,7 +869,7 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
         if (this.hasTagCompound() && this.stackTagCompound.hasKey("CanPlaceOn", 9) && (i1 & 16) == 0) {
             NBTTagList nbttaglist2 = this.stackTagCompound.getTagList("CanPlaceOn", 8);
 
-            if (!nbttaglist2.hasNoTags()) {
+            if (nbttaglist2.tagCount() != 0) {
                 list.add("");
                 list.add(TextFormatting.GRAY + I18n.translateToLocal("item.canPlace"));
 
@@ -881,19 +895,17 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
             }
 
             list.add(
-                TextFormatting.DARK_GRAY + ((ResourceLocation) Item.REGISTRY.getNameForObject(this.item)).toString());
+                TextFormatting.DARK_GRAY + (Item.REGISTRY.getNameForObject(this.item)));
 
             if (this.hasTagCompound()) {
                 list.add(
                     TextFormatting.DARK_GRAY + I18n.translateToLocalFormatted(
                         "item.nbt_tags",
-                        this.getTagCompound()
-                            .getKeySet()
-                            .size()));
+                        this.getTagCompound().func_150296_c().size()));
             }
         }
 
-        net.minecraftforge.event.ForgeEventFactory.onItemTooltip(this, playerIn, list, advanced);
+        ForgeEventFactory.onItemTooltip(this, playerIn, list, advanced);
         return list;
     }
 
@@ -945,8 +957,7 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
      */
     public boolean isItemEnchanted() {
         if (this.stackTagCompound != null && this.stackTagCompound.hasKey("ench", 9)) {
-            return !this.stackTagCompound.getTagList("ench", 10)
-                .hasNoTags();
+            return this.stackTagCompound.getTagList("ench", 10).tagCount() != 0;
         } else {
             return false;
         }
@@ -1178,15 +1189,15 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
     }
 
     @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability,
-                                 @Nullable net.minecraft.util.EnumFacing facing) {
-        return this.isEmpty || this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
+    public boolean hasCapability(Capability<?> capability,
+                                 @Nullable EnumFacing facing) {
+        return !this.isEmpty && this.capabilities != null && this.capabilities.hasCapability(capability, facing);
     }
 
     @Override
     @Nullable
-    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability,
-                               @Nullable net.minecraft.util.EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability,
+                               @Nullable EnumFacing facing) {
         return this.isEmpty || this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
     }
 
@@ -1221,10 +1232,10 @@ public final class ItemStack implements net.minecraftforge.common.capabilities.I
     private void forgeInit() {
         Item item = getItemRaw();
         if (item != null) {
-            this.delegate = item.delegate;
-            net.minecraftforge.common.capabilities.ICapabilityProvider provider = item
+            this.delegate = (IRegistryDelegate<Item>) item.delegate;
+            ICapabilityProvider provider = item
                 .initCapabilities(this, this.capNBT);
-            this.capabilities = net.minecraftforge.event.ForgeEventFactory.gatherCapabilities(this, provider);
+            this.capabilities = ForgeEventFactory.gatherCapabilities(this, provider);
             if (this.capNBT != null && this.capabilities != null) this.capabilities.deserializeNBT(this.capNBT);
         }
     }

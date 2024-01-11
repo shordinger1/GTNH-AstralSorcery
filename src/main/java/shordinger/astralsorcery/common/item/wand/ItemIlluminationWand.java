@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.tile.TileTranslucent;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.block.SoundType;
+
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
@@ -37,7 +37,7 @@ import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
@@ -139,7 +139,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                     if (playerIn.canPlayerEdit(pos, facing, stack)) {
                         if (worldIn.getBlockState(pos)
                             .equals(getPlacingState(stack))) {
-                            SoundType soundtype = worldIn.getBlockState(pos)
+                            SoundType soundtype = (SoundType) worldIn.getBlockState(pos)
                                 .getBlock()
                                 .getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                             if (worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3)) {
@@ -154,7 +154,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                         } else if (worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null)
                             && drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
                             if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
-                                SoundType soundtype = worldIn.getBlockState(pos)
+                                SoundType soundtype = (SoundType) worldIn.getBlockState(pos)
                                     .getBlock()
                                     .getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                                 worldIn.playSound(

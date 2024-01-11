@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.wrapper.net.minecraft.block.BlockDispenser;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -21,7 +22,7 @@ import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ActionResult;
 import shordinger.wrapper.net.minecraft.util.EntitySelectors;
 import shordinger.wrapper.net.minecraft.util.EnumActionResult;
@@ -220,12 +221,13 @@ public class ItemArmor extends Item {
      */
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.material.getRepairItemStack();
-        if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
+        if (!mat.isEmpty() && OreDictionary.itemMatches(mat.getRealItemStack(), repair.getRealItemStack(), false))
+            return true;
         return super.getIsRepairable(toRepair, repair);
     }
 
     /**
-     * Called when the equipped item is right clicked.
+     * Called when the equipped item is right-clicked.
      */
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);

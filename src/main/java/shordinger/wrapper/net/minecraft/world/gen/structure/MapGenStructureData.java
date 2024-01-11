@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.world.gen.structure;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.storage.WorldSavedData;
 
 public class MapGenStructureData extends WorldSavedData {

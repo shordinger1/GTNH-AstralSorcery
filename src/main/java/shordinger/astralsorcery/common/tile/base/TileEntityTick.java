@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.tile.base;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ITickable;
 
 /**

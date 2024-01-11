@@ -1,13 +1,13 @@
 package shordinger.wrapper.net.minecraft.command;
 
-import java.util.UUID;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;
+
+import java.util.UUID;
 
 public class CommandEntityData extends CommandBase {
 

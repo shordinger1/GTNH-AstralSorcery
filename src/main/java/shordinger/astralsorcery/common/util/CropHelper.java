@@ -8,25 +8,29 @@
 
 package shordinger.astralsorcery.common.util;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.astralsorcery.common.constellation.effect.CEffectPositionListGen;
-import shordinger.wrapper.net.minecraft.block.*;
+import shordinger.wrapper.net.minecraft.block.Block;
+import shordinger.wrapper.net.minecraft.block.BlockDoublePlant;
+import shordinger.wrapper.net.minecraft.block.BlockGrass;
+import shordinger.wrapper.net.minecraft.block.BlockNetherWart;
+import shordinger.wrapper.net.minecraft.block.BlockStem;
+import shordinger.wrapper.net.minecraft.block.BlockTallGrass;
+import shordinger.wrapper.net.minecraft.block.IGrowable;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraftforge.common.IPlantable;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod

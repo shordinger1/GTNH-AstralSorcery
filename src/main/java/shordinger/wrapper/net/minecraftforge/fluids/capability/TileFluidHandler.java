@@ -19,7 +19,7 @@ package shordinger.wrapper.net.minecraftforge.fluids.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.Capability;

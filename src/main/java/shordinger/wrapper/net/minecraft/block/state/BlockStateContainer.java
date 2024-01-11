@@ -1,16 +1,5 @@
 package shordinger.wrapper.net.minecraft.block.state;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.material.MapColor;
-
 import com.google.common.base.Function;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableCollection;
@@ -22,10 +11,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
-import com.google.common.collect.UnmodifiableIterator;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.material.EnumPushReaction;
 import shordinger.wrapper.net.minecraft.block.material.Material;
@@ -47,6 +35,14 @@ import shordinger.wrapper.net.minecraft.world.IBlockAccess;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.property.ExtendedBlockState;
 import shordinger.wrapper.net.minecraftforge.common.property.IUnlistedProperty;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 public class BlockStateContainer {
 
@@ -131,18 +127,16 @@ public class BlockStateContainer {
     private List<Iterable<Comparable<?>>> getAllowedValues() {
         List<Iterable<Comparable<?>>> list = Lists.<Iterable<Comparable<?>>>newArrayList();
         ImmutableCollection<IProperty<?>> immutablecollection = this.properties.values();
-        UnmodifiableIterator unmodifiableiterator = immutablecollection.iterator();
 
-        while (unmodifiableiterator.hasNext()) {
-            IProperty<?> iproperty = (IProperty) unmodifiableiterator.next();
-            list.add(((IProperty) iproperty).getAllowedValues());
+        for (IProperty<?> iProperty : immutablecollection) {
+            list.add(((IProperty) (IProperty<?>) (IProperty) iProperty).getAllowedValues());
         }
 
         return list;
     }
 
     public IBlockState getBaseState() {
-        return (IBlockState) this.validStates.get(0);
+        return this.validStates.get(0);
     }
 
     public Block getBlock() {

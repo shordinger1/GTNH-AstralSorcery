@@ -1,8 +1,9 @@
 package shordinger.wrapper.net.minecraft.item;
 
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
+import shordinger.wrapper.net.minecraftforge.common.IRarity;
 
-public enum EnumRarity implements net.minecraftforge.common.IRarity {
+public enum EnumRarity implements IRarity {
 
     COMMON(TextFormatting.WHITE, "Common"),
     UNCOMMON(TextFormatting.YELLOW, "Uncommon"),

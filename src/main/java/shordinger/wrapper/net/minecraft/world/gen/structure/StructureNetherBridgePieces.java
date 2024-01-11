@@ -12,7 +12,7 @@ import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.entity.EntityList;
 import shordinger.wrapper.net.minecraft.entity.monster.EntityBlaze;
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntityMobSpawner;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;

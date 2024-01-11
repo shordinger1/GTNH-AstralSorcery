@@ -8,7 +8,7 @@ import com.google.common.collect.ComparisonChain;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PotionEffect implements Comparable<PotionEffect> {
 

@@ -97,7 +97,7 @@ import shordinger.wrapper.net.minecraft.entity.projectile.EntitySnowball;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntitySpectralArrow;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityTippedArrow;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityWitherSkull;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.stats.StatBase;
 import shordinger.wrapper.net.minecraft.stats.StatList;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;

@@ -8,15 +8,25 @@
 
 package shordinger.astralsorcery.common.constellation.cape;
 
-import java.util.HashMap;
-import java.util.Map;
+import net.minecraft.nbt.NBTTagCompound;
+import shordinger.astralsorcery.common.constellation.IConstellation;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectArmara;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectBootes;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectHorologium;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectLucerna;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectMineralis;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
+import shordinger.astralsorcery.common.constellation.cape.impl.CapeEffectVicio;
+import shordinger.astralsorcery.common.data.config.Config;
 
 import javax.annotation.Nullable;
-
-import shordinger.astralsorcery.common.constellation.IConstellation;
-import shordinger.astralsorcery.common.constellation.cape.impl.*;
-import shordinger.astralsorcery.common.data.config.Config;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

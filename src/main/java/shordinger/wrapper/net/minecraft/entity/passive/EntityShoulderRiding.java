@@ -1,7 +1,7 @@
 package shordinger.wrapper.net.minecraft.entity.passive;
 
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.world.World;
 
 public abstract class EntityShoulderRiding extends EntityTameable {

@@ -10,7 +10,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 import shordinger.wrapper.net.minecraft.util.StringUtils;
 import shordinger.wrapper.net.minecraft.util.datafix.IFixableData;

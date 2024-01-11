@@ -19,7 +19,7 @@ package shordinger.wrapper.net.minecraftforge.fluids;
 import javax.annotation.Nullable;
 
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLLog;
 import shordinger.wrapper.net.minecraftforge.registries.IRegistryDelegate;

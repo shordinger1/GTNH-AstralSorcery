@@ -37,7 +37,7 @@ import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityFlying;
 import shordinger.wrapper.net.minecraft.entity.SharedMonsterAttributes;
 import shordinger.wrapper.net.minecraft.entity.ai.EntityFlyHelper;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;

@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import shordinger.wrapper.net.minecraft.init.Blocks;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.Mirror;
 import shordinger.wrapper.net.minecraft.util.Rotation;

@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.entity;
 
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.DamageSource;
 
 public class MultiPartEntityPart extends Entity {

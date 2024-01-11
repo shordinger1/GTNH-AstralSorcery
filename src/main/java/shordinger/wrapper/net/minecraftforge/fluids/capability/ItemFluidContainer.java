@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilityProvider;
 import shordinger.wrapper.net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 

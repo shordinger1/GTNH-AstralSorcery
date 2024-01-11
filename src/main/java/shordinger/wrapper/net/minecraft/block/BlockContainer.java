@@ -1,8 +1,6 @@
 package shordinger.wrapper.net.minecraft.block;
 
-import javax.annotation.Nullable;
-
-import shordinger.wrapper.net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.MapColor;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
@@ -18,6 +16,8 @@ import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.IWorldNameable;
 import shordinger.wrapper.net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public abstract class BlockContainer extends Block implements ITileEntityProvider {
 

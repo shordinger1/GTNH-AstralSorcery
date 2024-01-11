@@ -36,9 +36,9 @@ import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexForm
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.nbt.JsonToNBT;
-import shordinger.wrapper.net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTBase;
 import shordinger.wrapper.net.minecraft.nbt.NBTException;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;
 import shordinger.wrapper.net.minecraft.util.text.event.ClickEvent;
