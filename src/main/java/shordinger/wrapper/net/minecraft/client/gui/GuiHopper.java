@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiContainer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
@@ -28,7 +28,7 @@ public class GuiHopper extends GuiContainer {
     private final IInventory hopperInventory;
 
     public GuiHopper(InventoryPlayer playerInv, IInventory hopperInv) {
-        super(new ContainerHopper(playerInv, hopperInv, Minecraft.getMinecraft().player));
+        super(new ContainerHopper(playerInv, hopperInv, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = playerInv;
         this.hopperInventory = hopperInv;
         this.allowUserInput = false;

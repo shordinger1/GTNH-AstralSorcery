@@ -48,7 +48,7 @@ import com.google.common.collect.Maps;
 
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.ISound;
 import shordinger.wrapper.net.minecraft.client.audio.SoundHandler;
 import shordinger.wrapper.net.minecraft.client.audio.SoundManager;

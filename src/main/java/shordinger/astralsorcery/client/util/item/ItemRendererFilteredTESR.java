@@ -11,7 +11,7 @@ package shordinger.astralsorcery.client.util.item;
 import java.util.HashMap;
 import java.util.Map;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;

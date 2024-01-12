@@ -23,7 +23,7 @@ import com.google.gson.JsonObject;
 import shordinger.wrapper.net.minecraft.advancements.critereon.ItemPredicate;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * An {@link ItemPredicate} that matches oredicts.

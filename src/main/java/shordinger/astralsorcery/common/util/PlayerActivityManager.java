@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktPlayerStatus;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.settings.GameSettings;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,7 +55,7 @@ public class PlayerActivityManager implements ITickHandler {
         if (clientInteractMs == -1) {
             clientInteractMs = System.currentTimeMillis();
         }
-        if (Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
         checkMs();
@@ -64,7 +64,7 @@ public class PlayerActivityManager implements ITickHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onKeyIn(InputEvent.KeyInputEvent event) {
-        if (Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
 
@@ -96,7 +96,7 @@ public class PlayerActivityManager implements ITickHandler {
             clientInteractMs = System.currentTimeMillis();
             if (!clientActive) {
                 clientActive = true;
-                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), true);
+                PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), true);
                 PacketChannel.CHANNEL.sendToServer(pkt);
             }
         }
@@ -108,7 +108,7 @@ public class PlayerActivityManager implements ITickHandler {
 
             clientInteractMs = System.currentTimeMillis();
             clientActive = false;
-            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().player.getUniqueID(), false);
+            PktPlayerStatus pkt = new PktPlayerStatus(Minecraft.getMinecraft().thePlayer.getUniqueID(), false);
             PacketChannel.CHANNEL.sendToServer(pkt);
         }
     }

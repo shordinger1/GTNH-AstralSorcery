@@ -16,7 +16,7 @@ public abstract class TileEntityLockable extends TileEntity implements ILockable
         this.code = LockCode.fromNBT(compound);
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if (this.code != null) {

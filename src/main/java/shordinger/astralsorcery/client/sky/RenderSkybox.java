@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.common.data.config.Config;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.WorldClient;
 import shordinger.wrapper.net.minecraft.client.renderer.EntityRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderGlobal;
@@ -49,7 +49,7 @@ public class RenderSkybox extends IRenderHandler {
 
         inRender = true;
 
-        if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+        if (Config.weakSkyRendersWhitelist.contains(world.provider.dimensionId)) {
             if (otherSkyRenderer != null) {
                 otherSkyRenderer.render(partialTicks, world, mc);
             } else {
@@ -58,7 +58,7 @@ public class RenderSkybox extends IRenderHandler {
                 if (world.provider.getDimensionType()
                     .getId() == 1) {
                     rg.renderSkyEnd();
-                } else if (Minecraft.getMinecraft().world.provider.isSurfaceWorld()) {
+                } else if (Minecraft.getMinecraft().theWorld.provider.isSurfaceWorld()) {
                     IRenderHandler render = world.provider.getSkyRenderer();
                     world.provider.setSkyRenderer(null);
 

@@ -42,12 +42,13 @@ public class TimeStopController implements ITickHandler {
 
     public static TimeStopController INSTANCE = new TimeStopController();
 
-    private TimeStopController() {}
+    private TimeStopController() {
+    }
 
     @Nullable
     public static TimeStopZone tryGetZoneAt(World world, BlockPos pos) {
         if (world.isRemote) return null;
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         List<TimeStopZone> zones = INSTANCE.activeTimeStopZones.get(dimId);
         if (zones == null || zones.isEmpty()) return null;
         for (TimeStopZone zone : zones) {
@@ -75,7 +76,7 @@ public class TimeStopController implements ITickHandler {
         if (world.provider == null) return null;
 
         TimeStopZone stopZone = new TimeStopZone(controller, range, offset, world, maxAge, reducedParticles);
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         List<TimeStopZone> zones = INSTANCE.activeTimeStopZones.computeIfAbsent(dimId, (id) -> new LinkedList<>());
         zones.add(stopZone);
         ((DataTimeFreezeEffects) SyncDataHolder.getData(Side.SERVER, SyncDataHolder.DATA_TIME_FREEZE_EFFECTS))
@@ -87,7 +88,7 @@ public class TimeStopController implements ITickHandler {
     public void onWorldClear(WorldEvent.Unload event) {
         World w = event.getWorld();
         if (w != null && w.provider != null) {
-            int id = w.provider.getDimension();
+            int id = w.provider.dimensionId;
             List<TimeStopZone> freezeAreas = activeTimeStopZones.get(id);
             if (freezeAreas != null && !freezeAreas.isEmpty()) {
                 for (TimeStopZone stop : freezeAreas) {
@@ -123,7 +124,7 @@ public class TimeStopController implements ITickHandler {
         }
         World w = e.world;
         if (w != null && w.provider != null) {
-            int id = w.provider.getDimension();
+            int id = w.provider.dimensionId;
             List<TimeStopZone> freezeAreas = activeTimeStopZones.get(id);
             if (freezeAreas != null && !freezeAreas.isEmpty()) {
                 for (TimeStopZone stop : freezeAreas) {

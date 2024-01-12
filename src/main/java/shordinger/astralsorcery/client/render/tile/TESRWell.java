@@ -17,7 +17,7 @@ import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.common.tile.TileWell;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

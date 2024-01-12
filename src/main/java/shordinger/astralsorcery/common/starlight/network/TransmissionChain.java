@@ -64,12 +64,12 @@ public class TransmissionChain {
             AstralSorcery.proxy.scheduleDelayed(() -> {
                 DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
                 connections.updateNewConnectionsThreaded(
-                    netHandler.getWorld().provider.getDimension(),
+                    netHandler.getWorld().provider.dimensionId,
                     chain.getFoundConnections());
                 DataLightBlockEndpoints endpoints = SyncDataHolder
                     .getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
                 endpoints.updateNewEndpoints(
-                    netHandler.getWorld().provider.getDimension(),
+                    netHandler.getWorld().provider.dimensionId,
                     chain.resolvedNormalBlockPositions);
             });
         });
@@ -111,7 +111,7 @@ public class TransmissionChain {
         if (uncheckedEndpointsBlock.contains(pos) && !resolvedNormalBlockPositions.contains(pos)) {
             resolvedNormalBlockPositions.add(pos);
             DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
-            endpoints.updateNewEndpoint(world.provider.getDimension(), pos);
+            endpoints.updateNewEndpoint(world.provider.dimensionId, pos);
         }
     }
 

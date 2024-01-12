@@ -32,7 +32,7 @@ import shordinger.wrapper.net.minecraft.block.BlockSkull;
 
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.ISound;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
 import shordinger.wrapper.net.minecraft.client.multiplayer.WorldClient;

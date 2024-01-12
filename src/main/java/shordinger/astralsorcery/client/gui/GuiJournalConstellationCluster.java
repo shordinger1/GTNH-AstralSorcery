@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;

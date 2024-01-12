@@ -9,7 +9,7 @@
 package shordinger.astralsorcery.client.util;
 
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BlockFluidRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.EntityRenderer;

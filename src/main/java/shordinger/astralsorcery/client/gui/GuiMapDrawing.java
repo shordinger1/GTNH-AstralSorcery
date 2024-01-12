@@ -42,7 +42,7 @@ import shordinger.astralsorcery.common.network.packet.client.PktBurnParchment;
 import shordinger.astralsorcery.common.network.packet.client.PktEngraveGlass;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
@@ -120,7 +120,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                         fr = custom;
                     }
                     tooltip = in.getTooltip(
-                        Minecraft.getMinecraft().player,
+                        Minecraft.getMinecraft().thePlayer,
                         Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED
                             : ITooltipFlag.TooltipFlags.NORMAL);
                 }
@@ -145,7 +145,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                         fr = custom;
                     }
                     tooltip = in.getTooltip(
-                        Minecraft.getMinecraft().player,
+                        Minecraft.getMinecraft().thePlayer,
                         Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED
                             : ITooltipFlag.TooltipFlags.NORMAL);
                 }
@@ -160,7 +160,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
             @Override
             public float getBrightness() {
                 return ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             }
         };
         if (hasLens) {
@@ -171,7 +171,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                 if (f.getBrightness() > 1E-4) {
                     DataActiveCelestials dac = SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS);
                     Collection<IConstellation> cst = dac
-                        .getActiveConstellations(Minecraft.getMinecraft().world.provider.getDimension());
+                        .getActiveConstellations(Minecraft.getMinecraft().theWorld.provider.dimensionId);
 
                     if (cst != null) {
                         List<IConstellation> filtered = cst.stream()
@@ -328,7 +328,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                 false);
 
             if (ConstellationSkyHandler.getInstance()
-                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world) <= 1E-4) {
+                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld) <= 1E-4) {
                 dragging = null;
             }
         }
@@ -396,7 +396,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                 filtered.add(new DrawnConstellation(at, c.constellation));
             }
             PktEngraveGlass pkt = new PktEngraveGlass(
-                getOwningTileEntity().getWorld().provider.getDimension(),
+                getOwningTileEntity().getWorld().provider.dimensionId,
                 getOwningTileEntity().getPos(),
                 filtered);
             PacketChannel.CHANNEL.sendToServer(pkt);
@@ -460,10 +460,10 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                     1,
                     MathHelper.ceil(
                         7 * ConstellationSkyHandler.getInstance()
-                            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world))))
+                            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld))))
                 == 0) {
                 PktBurnParchment pkt = new PktBurnParchment(
-                    Minecraft.getMinecraft().world.provider.getDimension(),
+                    Minecraft.getMinecraft().theWorld.provider.dimensionId,
                     getOwningTileEntity().getPos());
                 PacketChannel.CHANNEL.sendToServer(pkt);
                 return true;

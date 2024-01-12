@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.client.gui.base;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 
 /**
@@ -36,7 +36,7 @@ public class GuiTileBase<T extends TileEntity> extends GuiWHScreen {
         super.updateScreen();
 
         if (te.isInvalid()
-            || te.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
+            || te.getWorld().provider.dimensionId != Minecraft.getMinecraft().theWorld.provider.dimensionId) {
             Minecraft.getMinecraft()
                 .displayGuiScreen(null);
         }

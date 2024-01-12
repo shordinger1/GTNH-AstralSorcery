@@ -42,7 +42,7 @@ public class ParticleEffectWatcher implements ITickHandler {
     }
 
     public boolean mayFire(World world, BlockPos pos) {
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         worldWatch.putIfAbsent(dimId, Lists.newArrayList());
         List<BlockPos> worldPos = worldWatch.get(dimId);
         return !worldPos.contains(pos) && worldPos.add(pos);

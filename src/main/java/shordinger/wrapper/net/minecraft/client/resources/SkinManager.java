@@ -22,7 +22,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.IImageBuffer;
 import shordinger.wrapper.net.minecraft.client.renderer.ImageBufferDownload;
 import shordinger.wrapper.net.minecraft.client.renderer.ThreadDownloadImageData;

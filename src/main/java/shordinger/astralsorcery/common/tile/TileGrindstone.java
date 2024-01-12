@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.network.packet.server.PktPlayEffect;
 import shordinger.astralsorcery.common.tile.base.TileEntitySynchronized;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ITickable;
@@ -67,7 +67,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
     @SideOnly(Side.CLIENT)
     public static void playWheelAnimation(PktPlayEffect pktPlayEffect) {
         TileGrindstone tgr = MiscUtils
-            .getTileAt(Minecraft.getMinecraft().world, pktPlayEffect.pos, TileGrindstone.class, false);
+            .getTileAt(Minecraft.getMinecraft().theWorld, pktPlayEffect.pos, TileGrindstone.class, false);
         if (tgr != null) {
             if (tgr.tickWheelAnimation == 0) {
                 tgr.tickWheelAnimation = TICKS_WHEEL_ROTATION;
@@ -92,7 +92,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
         super.readCustomNBT(compound);
 
         NBTTagCompound itemTag = compound.getCompoundTag("item");
-        if (itemTag.getSize() <= 0) {
+        if (itemTag.func_150296_c().isEmpty()) {
             grindingItem = ItemStack.EMPTY;
         } else {
             grindingItem = new ItemStack(itemTag);

@@ -7,7 +7,7 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.Unpooled;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiContainer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
@@ -36,7 +36,7 @@ public class GuiRepair extends GuiContainer implements IContainerListener {
     private final InventoryPlayer playerInventory;
 
     public GuiRepair(InventoryPlayer inventoryIn, World worldIn) {
-        super(new ContainerRepair(inventoryIn, worldIn, Minecraft.getMinecraft().player));
+        super(new ContainerRepair(inventoryIn, worldIn, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = inventoryIn;
         this.anvil = (ContainerRepair) this.inventorySlots;
     }

@@ -26,7 +26,7 @@ import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.*;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;

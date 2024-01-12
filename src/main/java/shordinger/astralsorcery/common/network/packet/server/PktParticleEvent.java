@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.CelestialStrike;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.Vec3i;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -125,7 +125,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleEvent message) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 

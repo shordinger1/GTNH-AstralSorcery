@@ -233,7 +233,7 @@ public class TileEntityBrewingStand extends TileEntityLockable implements ITicka
         this.fuel = compound.getByte("Fuel");
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setShort("BrewTime", (short) this.brewTime);
         ItemStackHelper.saveAllItems(compound, this.brewingItemStacks);

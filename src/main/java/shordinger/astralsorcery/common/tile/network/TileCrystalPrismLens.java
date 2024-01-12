@@ -22,7 +22,7 @@ import shordinger.astralsorcery.common.starlight.transmission.IPrismTransmission
 import shordinger.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -49,7 +49,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     private void playPrismEffects() {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());

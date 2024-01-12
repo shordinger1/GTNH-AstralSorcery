@@ -38,10 +38,10 @@ public class LegacyDataMigration {
             int totalChunkCount = crystalData.size();
 
             if (totalChunkCount > 0) {
-                msgOut.accept("Migrating rock crystal data for dimension " + world.provider.getDimension());
+                msgOut.accept("Migrating rock crystal data for dimension " + world.provider.dimensionId);
                 msgOut.accept(totalChunkCount + " chunks of crystals found!");
 
-                boolean keepingLoaded = DimensionManager.keepDimensionLoaded(world.provider.getDimension(), true);
+                boolean keepingLoaded = DimensionManager.keepDimensionLoaded(world.provider.dimensionId, true);
 
                 int chunkCount = 0;
                 int migrated = 0;
@@ -78,7 +78,7 @@ public class LegacyDataMigration {
                 }
 
                 if (keepingLoaded) {
-                    DimensionManager.keepDimensionLoaded(world.provider.getDimension(), false);
+                    DimensionManager.keepDimensionLoaded(world.provider.dimensionId, false);
                 }
 
                 msgOut.accept(

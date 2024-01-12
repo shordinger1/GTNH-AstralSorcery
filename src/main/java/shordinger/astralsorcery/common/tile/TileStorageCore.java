@@ -106,7 +106,7 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
         super.writeCustomNBT(compound);
 
         if (this.ownerUUID != null) {
-            compound.setUniqueId("ownerUUID", this.ownerUUID);
+            compound.setString("ownerUUID", String.valueOf(this.ownerUUID));
         }
     }
 
@@ -114,8 +114,8 @@ public class TileStorageCore extends TileEntityTick implements IStorageNetworkTi
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasUniqueId("ownerUUID")) {
-            this.ownerUUID = compound.getUniqueId("ownerUUID");
+        if (compound.hasKey("ownerUUID")) {
+            this.ownerUUID = UUID.fromString(compound.getString("ownerUUID"));
         } else {
             this.ownerUUID = null;
         }

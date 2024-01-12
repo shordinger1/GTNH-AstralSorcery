@@ -32,7 +32,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -193,7 +193,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube.setBlendMode(null)
                 .setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, at.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     fs.getFluid()
@@ -218,7 +218,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         cube.setBlendMode(null)
             .setTextureSubSizePercentage(1F / 16F)
             .setMaxAge(20 + rand.nextInt(20));
-        cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+        cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, perp.toBlockPos());
         cube.setColorHandler(
             cb -> new Color(
                 fs.getFluid()
@@ -259,7 +259,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube.setBlendMode(null)
                 .setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, perp.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     fs.getFluid()
@@ -326,7 +326,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
     @Override
     public int getDimensionId() {
-        return this.getWorld().provider.getDimension();
+        return this.getWorld().provider.dimensionId;
     }
 
     @Override

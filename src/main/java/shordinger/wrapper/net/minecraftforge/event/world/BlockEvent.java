@@ -207,7 +207,7 @@ public class BlockEvent extends Event {
             this.entity = entity;
             this.blockSnapshot = blockSnapshot;
             this.placedBlock = !(entity instanceof EntityPlayer) ? blockSnapshot.getReplacedBlock()
-                : blockSnapshot.getCurrentBlock();
+                : (IBlockState) blockSnapshot.getCurrentBlock();
             this.placedAgainst = placedAgainst;
 
             if (DEBUG) {

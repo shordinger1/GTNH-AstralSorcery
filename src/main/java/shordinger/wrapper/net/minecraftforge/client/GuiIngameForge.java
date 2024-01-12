@@ -25,7 +25,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import shordinger.wrapper.net.minecraft.block.material.Material;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.gui.Gui;
 import shordinger.wrapper.net.minecraft.client.gui.GuiIngame;

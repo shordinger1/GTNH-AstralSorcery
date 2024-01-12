@@ -53,7 +53,7 @@ import org.lwjgl.opengl.Drawable;
 import org.lwjgl.opengl.SharedDrawable;
 import org.lwjgl.util.glu.GLU;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureManager;

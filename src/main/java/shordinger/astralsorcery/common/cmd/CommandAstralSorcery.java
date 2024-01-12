@@ -13,6 +13,7 @@ import java.util.*;
 
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
 import shordinger.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import shordinger.astralsorcery.common.constellation.*;
 import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
@@ -76,6 +77,13 @@ public class CommandAstralSorcery extends CommandBase {
         return 2;
     }
 
+
+
+    @Override
+    public List addTabCompletionOptions(net.minecraft.command.ICommandSender sender, String[] args) {
+        return null;
+    }
+
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return index == 1;
@@ -103,7 +111,7 @@ public class CommandAstralSorcery extends CommandBase {
                 return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
             } else if (args.length == 3) {
                 switch (identifier) {
-                    case "constellations": {
+                    case "constellations" -> {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
                             names.add(c.getUnlocalizedName());
@@ -111,7 +119,7 @@ public class CommandAstralSorcery extends CommandBase {
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    case "research": {
+                    case "research" -> {
                         List<String> names = new ArrayList<>();
                         for (ResearchProgression r : ResearchProgression.values()) {
                             names.add(r.name());
@@ -119,20 +127,21 @@ public class CommandAstralSorcery extends CommandBase {
                         names.add("all");
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    case "progress":
+                    case "progress" -> {
                         List<String> progressNames = new ArrayList<>();
                         progressNames.add("all");
                         progressNames.add("next");
                         return getListOfStringsMatchingLastWord(args, progressNames);
-                    case "attune": {
+                    }
+                    case "attune" -> {
                         List<String> names = new ArrayList<>();
                         for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
                             names.add(c.getUnlocalizedName());
                         }
                         return getListOfStringsMatchingLastWord(args, names);
                     }
-                    default:
-                        break;
+                    default -> {
+                    }
                 }
 
             }
@@ -562,4 +571,8 @@ public class CommandAstralSorcery extends CommandBase {
         }
     }
 
+    @Override
+    public int compareTo(@NotNull Object o) {
+        return 0;
+    }
 }

@@ -6,7 +6,7 @@ public class TileEntityComparator extends TileEntity {
 
     private int outputSignal;
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("OutputSignal", this.outputSignal);
         return compound;

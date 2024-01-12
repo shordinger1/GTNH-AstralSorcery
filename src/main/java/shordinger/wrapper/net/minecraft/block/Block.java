@@ -1273,7 +1273,7 @@ public class Block extends net.minecraft.block.Block {
      * @return A number that is used to determine the speed of fire growth around the block
      */
     public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
-        returnBlocks.FIRE.getEncouragement(this);
+        return Blocks.FIRE.getEncouragement(this);
     }
 
     /**
@@ -2360,6 +2360,10 @@ public class Block extends net.minecraft.block.Block {
             return isNormalCube(blockState, world, pos);
         }
         return isSideSolid(blockState, world, pos, side);
+    }
+
+    public ResourceLocation getRegistryName() {
+        return null;//TODO
     }
 
 

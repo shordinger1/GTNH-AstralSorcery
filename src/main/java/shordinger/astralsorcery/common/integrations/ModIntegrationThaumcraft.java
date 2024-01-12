@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.integrations;
 
-import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_ARMOR;
-import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST;
+import static shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_ARMOR;
+import static shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.base.Mods;

@@ -18,7 +18,7 @@ import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;

@@ -10,7 +10,7 @@ import com.google.common.collect.Ordering;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.Gui;
 import shordinger.wrapper.net.minecraft.client.gui.GuiSpectator;
 import shordinger.wrapper.net.minecraft.client.gui.spectator.ISpectatorMenuObject;

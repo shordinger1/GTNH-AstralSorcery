@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.client.AnvilConverterException;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.world.storage.ISaveFormat;
 import shordinger.wrapper.net.minecraft.world.storage.WorldSummary;

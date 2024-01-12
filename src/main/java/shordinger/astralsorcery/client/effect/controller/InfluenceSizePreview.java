@@ -19,7 +19,7 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 
 /**
@@ -50,8 +50,8 @@ public class InfluenceSizePreview implements IComplexEffect {
 
     @Override
     public boolean canRemove() {
-        return fadeOutTicks <= 0 || Minecraft.getMinecraft().world == null
-            || Minecraft.getMinecraft().world.provider.getDimension() != tile.getDimensionId();
+        return fadeOutTicks <= 0 || Minecraft.getMinecraft().theWorld == null
+            || Minecraft.getMinecraft().theWorld.provider.dimensionId != tile.getDimensionId();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class InfluenceSizePreview implements IComplexEffect {
     }
 
     protected boolean needsFadeOut() {
-        if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
             return true;
         }
         IStructureAreaOfInfluence aoe = EffectHandler.getInstance()
@@ -105,7 +105,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             return true;
         }
         if (MiscUtils
-            .getTileAt(Minecraft.getMinecraft().world, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false)
+            .getTileAt(Minecraft.getMinecraft().theWorld, aoe.getLocationPos(), IStructureAreaOfInfluence.class, false)
             == null) {
             return true;
         }
@@ -114,7 +114,7 @@ public class InfluenceSizePreview implements IComplexEffect {
             return true;
         }
         BlockPos offset = this.tile.getActualRenderOffsetPos();
-        double dst = Minecraft.getMinecraft().player.getDistance(offset.getX(), offset.getY(), offset.getZ());
+        double dst = Minecraft.getMinecraft().thePlayer.getDistance(offset.getX(), offset.getY(), offset.getZ());
         if (dst <= 4) {
             return false;
         }

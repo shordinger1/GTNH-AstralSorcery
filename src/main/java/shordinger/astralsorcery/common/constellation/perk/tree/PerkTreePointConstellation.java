@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 
@@ -68,7 +68,7 @@ public class PerkTreePointConstellation<T extends AbstractPerk> extends PerkTree
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
                          double scale) {
         if (this.associatedConstellation != null) {
-            PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+            PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
             if (!prog.getKnownConstellations()
                 .contains(this.associatedConstellation.getUnlocalizedName())) {
                 return;

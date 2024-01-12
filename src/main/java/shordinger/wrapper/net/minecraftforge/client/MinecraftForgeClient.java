@@ -32,7 +32,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureUtil;
 import shordinger.wrapper.net.minecraft.client.resources.IResource;
 import shordinger.wrapper.net.minecraft.client.resources.IResourceManager;

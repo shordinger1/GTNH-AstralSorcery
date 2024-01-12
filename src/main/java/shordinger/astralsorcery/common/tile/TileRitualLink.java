@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.tile.base.TileEntityTick;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -69,7 +69,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
 
     @SideOnly(Side.CLIENT)
     private void playClientEffects() {
-        if (this.linkedTo != null && Minecraft.getMinecraft().player.getDistanceSq(getPos()) < 1024) { // 32 Squared
+        if (this.linkedTo != null && Minecraft.getMinecraft().thePlayer.getDistanceSq(getPos()) < 1024) { // 32 Squared
             if (ticksExisted % 4 == 0) {
                 Collection<Vector3> positions = MiscUtils.getCirclePositions(
                     new Vector3(this).add(0.5, 0.5, 0.5),

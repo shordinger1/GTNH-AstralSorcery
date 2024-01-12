@@ -35,7 +35,7 @@ import paulscode.sound.SoundSystemLogger;
 import paulscode.sound.Source;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.libraries.LibraryLWJGLOpenAL;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.settings.GameSettings;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;

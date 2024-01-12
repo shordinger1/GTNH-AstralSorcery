@@ -86,7 +86,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     private boolean isApplicableWorld(World world) {
         if (cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
 
-        Integer dimId = world.provider.getDimension();
+        Integer dimId = world.provider.dimensionId;
         if (cfgEntry.getApplicableDimensions()
             .isEmpty()) return false;
         for (Integer dim : cfgEntry.getApplicableDimensions()) {

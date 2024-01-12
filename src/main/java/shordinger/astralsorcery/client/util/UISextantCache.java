@@ -22,7 +22,7 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktRequestSextantTarget;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 
@@ -45,8 +45,8 @@ public class UISextantCache {
     private UISextantCache() {}
 
     public static void addTarget(SextantFinder.TargetObject to, BlockPos pos, int dim) {
-        if (Minecraft.getMinecraft().player == null) return;
-        BlockPos at = Minecraft.getMinecraft().player.getPosition();
+        if (Minecraft.getMinecraft().thePlayer == null) return;
+        BlockPos at = Minecraft.getMinecraft().thePlayer.getPosition();
         ChunkPos chAt = new ChunkPos(at);
 
         Tuple<ChunkPos, Integer> key = new Tuple<>(chAt, dim);

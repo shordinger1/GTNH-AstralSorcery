@@ -40,7 +40,7 @@ import shordinger.astralsorcery.common.util.data.TimeoutList;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.*;
 import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -368,7 +368,7 @@ public class EventHandlerEntity {
     @SideOnly(Side.CLIENT)
     public static void playDiscidiaStackAttackEffects(PktParticleEvent pkt) {
         Vector3 at = pkt.getVec();
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         EntityLivingBase found = null;
         if (w != null) {
             EntityLivingBase e = EntityUtils.selectClosest(

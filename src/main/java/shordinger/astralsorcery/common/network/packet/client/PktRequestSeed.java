@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraftforge.common.DimensionManager;

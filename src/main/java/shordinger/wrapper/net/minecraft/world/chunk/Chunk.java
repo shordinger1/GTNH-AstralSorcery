@@ -1477,7 +1477,7 @@ public class Chunk implements net.minecraftforge.common.capabilities.ICapability
                 format,
                 "Minecraft",
                 this.getPos(),
-                this.world.provider.getDimension(),
+                this.world.provider.dimensionId,
                 this.world.provider.getDimensionType()
                     .getName(),
                 populating);
@@ -1488,7 +1488,7 @@ public class Chunk implements net.minecraftforge.common.capabilities.ICapability
                 format,
                 activeModContainer.getName(),
                 this.getPos(),
-                this.world.provider.getDimension(),
+                this.world.provider.dimensionId,
                 this.world.provider.getDimensionType()
                     .getName(),
                 populating);

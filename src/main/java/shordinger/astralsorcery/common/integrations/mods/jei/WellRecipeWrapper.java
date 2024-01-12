@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.base.WellLiquefaction;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;

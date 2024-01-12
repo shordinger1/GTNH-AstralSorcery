@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.client.gui.base;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiContainer;
 import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;

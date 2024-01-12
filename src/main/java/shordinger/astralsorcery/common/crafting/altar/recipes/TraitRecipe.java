@@ -47,7 +47,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;

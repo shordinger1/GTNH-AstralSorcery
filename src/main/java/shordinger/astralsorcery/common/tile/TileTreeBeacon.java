@@ -46,7 +46,7 @@ import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.IGrowable;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -226,8 +226,9 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                         + ConfigEntryTreeBeacon.maxCount);
 
                 if (treePositions.getSize() + world.capturedBlockSnapshots.size() <= ConfigEntryTreeBeacon.maxCount) {
-                    for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
-                        IBlockState setBlock = snapshot.getCurrentBlock();
+                    for (int i = 0; i < world.capturedBlockSnapshots.size(); i++) {
+                        var snapshot = (BlockSnapshot) world.capturedBlockSnapshots.get(i);
+                        IBlockState setBlock = (IBlockState) snapshot.getCurrentBlock();
                         BlockPos at = snapshot.getPos();
                         IBlockState current = world.getBlockState(at);
                         if (current.getBlockHardness(world, at) == -1 || world.getTileEntity(at) != null) {
@@ -270,7 +271,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
                         }
                     }
                 } else {
-                    for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
+                    for (int i = 0; i < world.capturedBlockSnapshots.size(); i++) {
+                        var snapshot = (BlockSnapshot) world.capturedBlockSnapshots.get(i);
                         IBlockState current = world.getBlockState(snapshot.getPos());
                         world.notifyBlockUpdate(snapshot.getPos(), current, current, 3);
                     }
@@ -336,10 +338,10 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
     public static void playParticles(PktParticleEvent event) {
         BlockPos fakeTree = event.getVec()
             .toBlockPos();
-        TileFakeTree tft = MiscUtils.getTileAt(Minecraft.getMinecraft().world, fakeTree, TileFakeTree.class, false);
+        TileFakeTree tft = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, fakeTree, TileFakeTree.class, false);
         if (tft != null && tft.getReference() != null) {
             TileTreeBeacon ttb = MiscUtils
-                .getTileAt(Minecraft.getMinecraft().world, tft.getReference(), TileTreeBeacon.class, false);
+                .getTileAt(Minecraft.getMinecraft().theWorld, tft.getReference(), TileTreeBeacon.class, false);
             if (ttb != null) {
                 int color = 0xFF00FF00; // Green
                 PatreonEffectHelper.PatreonEffect pe;
@@ -383,7 +385,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
         super.validate();
 
         treeWatcher = new TreeCaptureHelper.TreeWatcher(
-            world.provider.getDimension(),
+            world.provider.dimensionId,
             getPos(),
             ConfigEntryTreeBeacon.treeBeaconRange);
         TreeCaptureHelper.offerWeakWatcher(treeWatcher);
@@ -407,7 +409,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
 
     @Override
     public int getDimensionId() {
-        return this.getWorld().provider.getDimension();
+        return this.getWorld().provider.dimensionId;
     }
 
     @Override
@@ -430,8 +432,8 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
             treePositions.offerElement(new WRItemObject<>(weight, pos));
         }
 
-        if (compound.hasUniqueId("placer")) {
-            this.placedBy = compound.getUniqueId("placer");
+        if (compound.hasKey("placer")) {
+            this.placedBy = UUID.fromString(compound.getString("placer"));
         } else {
             this.placedBy = null;
         }
@@ -453,7 +455,7 @@ public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOf
         compound.setTag("positions", listPositions);
 
         if (this.placedBy != null) {
-            compound.setUniqueId("placer", this.placedBy);
+            compound.setString("placer", String.valueOf(this.placedBy));
         }
     }
 

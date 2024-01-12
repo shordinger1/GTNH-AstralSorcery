@@ -33,7 +33,7 @@ import shordinger.wrapper.net.minecraftforge.fluids.Fluid;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidUtil;
 import shordinger.wrapper.net.minecraftforge.fluids.UniversalBucket;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.wrapper.net.minecraftforge.oredict.OreIngredient;
 
 /**

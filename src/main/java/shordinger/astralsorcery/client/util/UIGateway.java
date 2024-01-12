@@ -27,7 +27,7 @@ import shordinger.astralsorcery.common.data.world.data.GatewayCache;
 import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
@@ -70,7 +70,7 @@ public class UIGateway {
     public static UIGateway initialize(World world, BlockPos gatewayPos, Vector3 source, double sphereRadius) {
         UIGateway ui = new UIGateway(gatewayPos, source, sphereRadius);
         CelestialGatewaySystem system = CelestialGatewaySystem.instance;
-        int dimid = world.provider.getDimension();
+        int dimid = world.provider.dimensionId;
         List<GatewayCache.GatewayNode> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
         if (sameDimensionPositions != null) {
             gatherStars(ui, dimid, sameDimensionPositions, true, sphereRadius);
@@ -171,9 +171,9 @@ public class UIGateway {
     }
 
     public void renderIntoWorld(float pticks) {
-        if (Minecraft.getMinecraft().player == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null) return;
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         double dst = new Vector3(origin).distance(
             Vector3.atEntityCorner(player)
                 .addY(1.5));

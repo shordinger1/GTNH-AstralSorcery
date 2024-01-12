@@ -24,7 +24,7 @@ import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.AbstractTexture;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureManager;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureUtil;

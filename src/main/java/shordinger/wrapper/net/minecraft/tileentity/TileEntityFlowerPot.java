@@ -25,7 +25,7 @@ public class TileEntityFlowerPot extends TileEntity {
     public static void registerFixesFlowerPot(DataFixer fixer) {
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(this.flowerPotItem);
         compound.setString("Item", resourcelocation == null ? "" : resourcelocation.toString());

@@ -15,7 +15,7 @@ import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.properties.IProperty;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.client.ClientBrandRetriever;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.OpenGlHelper;
 import shordinger.wrapper.net.minecraft.entity.Entity;

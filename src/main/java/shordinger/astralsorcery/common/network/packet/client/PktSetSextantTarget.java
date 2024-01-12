@@ -81,7 +81,7 @@ public class PktSetSextantTarget implements IMessage, IMessageHandler<PktSetSext
                                     ItemSextant.setCurrentTargetInformation(
                                         held,
                                         result,
-                                        player.world.provider.getDimension());
+                                        player.world.provider.dimensionId);
                                 } else {
                                     AstralSorcery.log.warn(
                                         "Could not set used sextant target for player " + player.getDisplayName()

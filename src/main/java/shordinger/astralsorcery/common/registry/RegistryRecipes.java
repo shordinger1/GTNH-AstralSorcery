@@ -8,13 +8,13 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
-import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
-import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
-import static hellfirepvp.astralsorcery.common.crafting.helper.ShapelessRecipe.Builder.newShapelessRecipe;
-import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
-import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
-import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
+import static shordinger.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
+import static shordinger.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
+import static shordinger.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
+import static shordinger.astralsorcery.common.crafting.helper.ShapelessRecipe.Builder.newShapelessRecipe;
+import static shordinger.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
+import static shordinger.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
+import static shordinger.astralsorcery.common.lib.RecipesAS.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +58,7 @@ import shordinger.wrapper.net.minecraft.init.Items;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -238,7 +238,7 @@ public class RegistryRecipes {
                 }
             }
             registerGrindstoneRecipe(
-                new hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe(
+                new shordinger.astralsorcery.common.crafting.grindstone.GrindstoneRecipe(
                     new ItemHandle(inputs),
                     output,
                     12,

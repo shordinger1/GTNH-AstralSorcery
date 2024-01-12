@@ -19,7 +19,7 @@ import shordinger.astralsorcery.client.util.resource.SpriteQuery;
 import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -68,9 +68,9 @@ public class PtEffectFixedSprite extends PatreonEffectHelper.PatreonEffect {
             spr.setNoRotation(45)
                 .setAlphaMultiplier(1F);
             spr.setRefreshFunc(
-                () -> !owningPlayer.isDead && Minecraft.getMinecraft().player != null
-                    && Minecraft.getMinecraft().world != null
-                    && Minecraft.getMinecraft().world.provider != null);
+                () -> !owningPlayer.isDead && Minecraft.getMinecraft().thePlayer != null
+                    && Minecraft.getMinecraft().theWorld != null
+                    && Minecraft.getMinecraft().theWorld.provider != null);
             spr.setScale(10F);
             activeSprite = spr;
         }

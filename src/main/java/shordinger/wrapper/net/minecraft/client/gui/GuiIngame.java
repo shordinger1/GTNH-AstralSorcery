@@ -16,7 +16,7 @@ import com.google.common.collect.Ordering;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.material.Material;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.chat.IChatListener;
 import shordinger.wrapper.net.minecraft.client.gui.chat.NarratorChatListener;
 import shordinger.wrapper.net.minecraft.client.gui.chat.NormalChatListener;

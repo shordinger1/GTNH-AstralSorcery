@@ -40,12 +40,12 @@ public class BlockBreakAssist {
     private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
     public static BreakEntry addProgress(World world, BlockPos pos, float expectedHardness, float percStrength) {
-        TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.getDimension());
+        TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.dimensionId);
         if (map == null) {
             map = new TickTokenizedMap<>(TickEvent.Type.SERVER);
             TickManager.getInstance()
                 .register(map);
-            breakMap.put(world.provider.getDimension(), map);
+            breakMap.put(world.provider.dimensionId, map);
         }
 
         BreakEntry breakProgress = map.get(pos);

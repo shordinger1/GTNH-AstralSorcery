@@ -28,7 +28,7 @@ import java.util.TreeMap;
 
 import org.lwjgl.input.Keyboard;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiListExtended;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.gui.GuiTextField;

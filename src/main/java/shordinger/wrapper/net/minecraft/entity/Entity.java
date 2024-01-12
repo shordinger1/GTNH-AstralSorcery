@@ -47,10 +47,6 @@ import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagDouble;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
-import shordinger.wrapper.net.minecraft.nbt.NBTTagString;
 import shordinger.wrapper.net.minecraft.network.datasync.DataParameter;
 import shordinger.wrapper.net.minecraft.network.datasync.DataSerializers;
 import shordinger.wrapper.net.minecraft.network.datasync.EntityDataManager;
@@ -86,9 +82,10 @@ import shordinger.wrapper.net.minecraft.util.text.translation.I18n;
 import shordinger.wrapper.net.minecraft.world.Explosion;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
+import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public abstract class Entity
-    implements ICommandSender, net.minecraftforge.common.capabilities.ICapabilitySerializable<NBTTagCompound> {
+public abstract class Entity extends net.minecraft.entity.Entity
+    implements ICommandSender, ICapabilitySerializable<NBTTagCompound> {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final List<ItemStack> EMPTY_EQUIPMENT = Collections.<ItemStack>emptyList();

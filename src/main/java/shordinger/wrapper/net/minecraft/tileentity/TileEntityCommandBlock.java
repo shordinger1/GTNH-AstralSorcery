@@ -94,7 +94,7 @@ public class TileEntityCommandBlock extends TileEntity {
         }
     };
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         this.commandBlockLogic.writeToNBT(compound);
         compound.setBoolean("powered", this.isPowered());

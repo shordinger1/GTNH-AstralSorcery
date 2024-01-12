@@ -148,8 +148,8 @@ public class TileObservatory extends TileEntityTick {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasUniqueId("entity")) {
-            this.entityHelperRef = compound.getUniqueId("entity");
+        if (compound.hasKey("entity")) {
+            this.entityHelperRef = UUID.fromString(compound.getString("entity"));
         } else {
             this.entityHelperRef = null;
         }
@@ -164,7 +164,7 @@ public class TileObservatory extends TileEntityTick {
         super.writeCustomNBT(compound);
 
         if (this.entityHelperRef != null) {
-            compound.setUniqueId("entity", this.entityHelperRef);
+            compound.setString("entity", String.valueOf(this.entityHelperRef));
         }
         compound.setFloat("oYaw", this.observatoryYaw);
         compound.setFloat("oPitch", this.observatoryPitch);

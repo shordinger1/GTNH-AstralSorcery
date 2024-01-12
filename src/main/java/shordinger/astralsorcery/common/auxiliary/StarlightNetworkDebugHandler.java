@@ -61,7 +61,7 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
         IPrismTransmissionNode tr = wnh.getTransmissionNode(pos);
 
         player.sendMessage(new TextComponentString("§aPrinting debug for..."));
-        player.sendMessage(new TextComponentString("§aWorld-ID:§c " + world.provider.getDimension()));
+        player.sendMessage(new TextComponentString("§aWorld-ID:§c " + world.provider.dimensionId));
         player.sendMessage(new TextComponentString("§aPos:§c " + pos.toString()));
         player.sendMessage(
             new TextComponentString(

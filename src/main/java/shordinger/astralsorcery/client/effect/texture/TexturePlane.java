@@ -19,7 +19,7 @@ import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 
@@ -194,7 +194,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
             if (refreshFunc != null) {
                 Entity rView = Minecraft.getMinecraft()
                     .getRenderViewEntity();
-                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
                 if (rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) <= Config.maxEffectRenderDistanceSq) {
                     if (refreshFunc.shouldRefresh()) {
                         counter = 0;
@@ -215,7 +215,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         Vector3 rPos = new Vector3(
             RenderingUtils.interpolate(this.prevPos.getX(), this.pos.getX(), partialTicks),
             RenderingUtils.interpolate(this.prevPos.getY(), this.pos.getY(), partialTicks),

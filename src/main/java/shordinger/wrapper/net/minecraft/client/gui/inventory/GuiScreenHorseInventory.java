@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui.inventory;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.passive.AbstractChestHorse;
 import shordinger.wrapper.net.minecraft.entity.passive.AbstractHorse;
@@ -37,7 +37,7 @@ public class GuiScreenHorseInventory extends GuiContainer {
     private float mousePosY;
 
     public GuiScreenHorseInventory(IInventory playerInv, IInventory horseInv, AbstractHorse horse) {
-        super(new ContainerHorseInventory(playerInv, horseInv, horse, Minecraft.getMinecraft().player));
+        super(new ContainerHorseInventory(playerInv, horseInv, horse, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = playerInv;
         this.horseInventory = horseInv;
         this.horseEntity = horse;

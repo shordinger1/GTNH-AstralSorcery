@@ -325,7 +325,7 @@ public class DimensionManager {
             .isEmpty() && world.playerEntities.isEmpty()
             && !world.provider.getDimensionType()
             .shouldLoadSpawn()
-            && !keepLoaded.contains(world.provider.getDimension());
+            && !keepLoaded.contains(world.provider.dimensionId);
     }
 
     /**

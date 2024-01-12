@@ -21,7 +21,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;

@@ -53,7 +53,7 @@ import shordinger.astralsorcery.common.util.*;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -364,7 +364,7 @@ public class TileRitualPedestal extends TileReceiverBase
 
     @Override
     public int getDimensionId() {
-        return this.getWorld().provider.getDimension();
+        return this.getWorld().provider.dimensionId;
     }
 
     private void updateMultiblockState() {
@@ -470,12 +470,12 @@ public class TileRitualPedestal extends TileReceiverBase
                 if (isInvalid() || !working) {
                     return false;
                 }
-                if (this.getWorld().provider == null || Minecraft.getMinecraft().world == null
-                    || Minecraft.getMinecraft().world.provider == null) {
+                if (this.getWorld().provider == null || Minecraft.getMinecraft().theWorld == null
+                    || Minecraft.getMinecraft().theWorld.provider == null) {
                     return false;
                 }
-                return this.getWorld().provider.getDimension()
-                    == Minecraft.getMinecraft().world.provider.getDimension();
+                return this.getWorld().provider.dimensionId
+                    == Minecraft.getMinecraft().theWorld.provider.dimensionId;
             });
             spr.setScale(6.5F);
             spritePlane = spr;
@@ -497,7 +497,7 @@ public class TileRitualPedestal extends TileReceiverBase
      * recNode.updateCrystalProperties(world, properties, tuned, trait);
      * } else {
      * AstralSorcery.log.warn("Updated inventory and tried to update pedestal state.");
-     * AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" +
+     * AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.dimensionId + " pos=" +
      * getLocationPos() + " - couldn't find it.");
      * }
      * } else {
@@ -506,7 +506,7 @@ public class TileRitualPedestal extends TileReceiverBase
      * recNode.updateCrystalProperties(world, null, null, null);
      * } else {
      * AstralSorcery.log.warn("Updated inventory and tried to update pedestal state.");
-     * AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" +
+     * AstralSorcery.log.warn("Tried to find receiver node at dimId=" + world.provider.dimensionId + " pos=" +
      * getLocationPos() + " - couldn't find it.");
      * }
      * }
@@ -528,7 +528,7 @@ public class TileRitualPedestal extends TileReceiverBase
         this.working = compound.getBoolean("working");
         this.clientCatalystCache = NBTHelper.getStack(compound, "catalyst");
         if (compound.hasKey("ownerMost")) {
-            this.ownerUUID = compound.getUniqueId("owner");
+            this.ownerUUID = UUID.fromString(compound.getString("owner"));
         } else {
             this.ownerUUID = UUID.randomUUID();
         }
@@ -555,7 +555,7 @@ public class TileRitualPedestal extends TileReceiverBase
         compound.setBoolean("working", working);
         NBTHelper.setStack(compound, "catalyst", this.clientCatalystCache);
         if (ownerUUID != null) {
-            compound.setUniqueId("owner", ownerUUID);
+            compound.setString("owner", String.valueOf(ownerUUID));
         }
         compound.setBoolean("hasMultiblock", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
@@ -667,7 +667,7 @@ public class TileRitualPedestal extends TileReceiverBase
                     ce = channeling.getRitualEffect(getRitualOrigin());
                     /*
                      * if(channeling.equals(Constellations.ara)) {
-                     * tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getLocationPos(),
+                     * tw = new TreeCaptureHelper.TreeWatcher(world.provider.dimensionId, getLocationPos(),
                      * CEffectAra.treeRange);
                      * if(CEffectAra.enabled) {
                      * TreeCaptureHelper.offerWeakWatcher(tw);

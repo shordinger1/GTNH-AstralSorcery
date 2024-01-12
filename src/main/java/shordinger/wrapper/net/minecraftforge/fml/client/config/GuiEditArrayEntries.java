@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiListExtended;
 import shordinger.wrapper.net.minecraft.client.gui.GuiTextField;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;

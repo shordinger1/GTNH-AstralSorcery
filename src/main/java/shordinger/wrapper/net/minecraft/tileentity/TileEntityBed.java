@@ -25,7 +25,7 @@ public class TileEntityBed extends TileEntity {
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("color", this.color.getMetadata());
         return compound;

@@ -57,7 +57,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

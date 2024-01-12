@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.tile.TileMapDrawingTable;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.DimensionManager;

@@ -27,7 +27,7 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.data.OreDictUniqueStackList;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.client.resources.IResourceManager;
 import shordinger.wrapper.net.minecraft.client.resources.IResourceManagerReloadListener;

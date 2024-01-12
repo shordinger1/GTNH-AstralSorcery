@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateBossInfo;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;

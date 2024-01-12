@@ -35,7 +35,7 @@ import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
 import shordinger.wrapper.net.minecraftforge.fml.common.discovery.ASMDataTable;
 import shordinger.wrapper.net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import shordinger.wrapper.net.minecraftforge.fml.common.eventhandler.EventBus;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MinecraftForge {
 

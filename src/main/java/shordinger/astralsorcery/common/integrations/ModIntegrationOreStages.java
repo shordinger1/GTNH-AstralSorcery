@@ -14,7 +14,7 @@ import net.darkhax.orestages.api.OreTiersAPI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.Tuple;
 import shordinger.wrapper.net.minecraftforge.fml.common.Optional;
@@ -31,7 +31,7 @@ public class ModIntegrationOreStages {
     @SideOnly(Side.CLIENT)
     @Optional.Method(modid = "orestages")
     public static boolean canSeeOreClient(IBlockState test) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null) return false;
         Tuple<String, IBlockState> replacement;
         if ((replacement = OreTiersAPI.getStageInfo(test)) != null) {

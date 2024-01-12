@@ -8,7 +8,7 @@ import com.google.common.collect.Maps;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.resources.Language;
 import shordinger.wrapper.net.minecraft.client.resources.LanguageManager;

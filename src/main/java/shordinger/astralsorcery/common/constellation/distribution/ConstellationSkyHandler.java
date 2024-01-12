@@ -18,7 +18,7 @@ import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.client.PktRequestSeed;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -68,7 +68,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     private void handleClientTick() {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w != null) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if (handle == null) {
@@ -104,7 +104,7 @@ public class ConstellationSkyHandler implements ITickHandler {
     @SideOnly(Side.CLIENT)
     public Optional<Long> getSeedIfPresent(World world) {
         if (world == null) return Optional.empty();
-        return getSeedIfPresent(world.provider.getDimension());
+        return getSeedIfPresent(world.provider.dimensionId);
     }
 
     @SideOnly(Side.CLIENT)
@@ -154,11 +154,11 @@ public class ConstellationSkyHandler implements ITickHandler {
         } else {
             handlerMap = worldHandlersServer;
         }
-        return handlerMap.get(world.provider.getDimension());
+        return handlerMap.get(world.provider.dimensionId);
     }
 
     public void revertWorldTimeTick(World world) {
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         Boolean state = skyRevertMap.get(dimId);
         if (!world.isRemote && state != null && !state) {
             skyRevertMap.put(dimId, true);
@@ -173,9 +173,9 @@ public class ConstellationSkyHandler implements ITickHandler {
     }
 
     public void informWorldUnload(World world) {
-        worldHandlersServer.remove(world.provider.getDimension());
-        worldHandlersClient.remove(world.provider.getDimension());
-        cacheSeedLookup.remove(world.provider.getDimension());
+        worldHandlersServer.remove(world.provider.dimensionId);
+        worldHandlersClient.remove(world.provider.dimensionId);
+        cacheSeedLookup.remove(world.provider.dimensionId);
     }
 
     @Override

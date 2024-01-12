@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.nbt.CompressedStreamTools;
 
 import java.io.File;

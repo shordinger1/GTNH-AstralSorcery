@@ -11,7 +11,7 @@ package shordinger.astralsorcery.client.util;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.settings.KeyBinding;
 
 /**

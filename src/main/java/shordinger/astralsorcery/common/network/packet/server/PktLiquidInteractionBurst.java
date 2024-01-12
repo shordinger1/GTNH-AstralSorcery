@@ -19,7 +19,7 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFloatingCube;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraftforge.fluids.FluidStack;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -70,7 +70,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
     @SideOnly(Side.CLIENT)
     private void playClientEffect(PktLiquidInteractionBurst message) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
 
         TextureAtlasSprite tas1 = RenderingUtils.tryGetFlowingTextureOfFluidStack(message.comp1);
 
@@ -78,7 +78,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas1);
             cube.setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     message.comp1.getFluid()
@@ -97,7 +97,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(message.pos, tas2);
             cube.setTextureSubSizePercentage(1F / 16F)
                 .setMaxAge(20 + rand.nextInt(20));
-            cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
+            cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, message.pos.toBlockPos());
             cube.setColorHandler(
                 cb -> new Color(
                     message.comp2.getFluid()

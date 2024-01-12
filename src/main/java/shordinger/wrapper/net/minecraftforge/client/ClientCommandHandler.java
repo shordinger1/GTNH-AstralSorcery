@@ -20,7 +20,7 @@ import static net.minecraft.util.text.TextFormatting.*;
 
 import java.util.List;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiChat;
 import shordinger.wrapper.net.minecraft.command.CommandException;
 import shordinger.wrapper.net.minecraft.command.CommandHandler;

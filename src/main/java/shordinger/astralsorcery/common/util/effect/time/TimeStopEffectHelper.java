@@ -24,7 +24,7 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.network.packet.server.PktParticleEvent;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -119,7 +119,7 @@ public class TimeStopEffectHelper {
     @SideOnly(Side.CLIENT)
     public void playClientTickEffect() {
         Random rand = new Random();
-        List<EntityLivingBase> entities = Minecraft.getMinecraft().world.getEntitiesWithinAABB(
+        List<EntityLivingBase> entities = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(
             EntityLivingBase.class,
             new AxisAlignedBB(-range, -range, -range, range, range, range)
                 .offset(position.getX(), position.getY(), position.getZ()),
@@ -138,7 +138,7 @@ public class TimeStopEffectHelper {
 
         for (int xx = minX; xx <= maxX; ++xx) {
             for (int zz = minZ; zz <= maxZ; ++zz) {
-                Chunk ch = Minecraft.getMinecraft().world.getChunkFromChunkCoords(xx, zz);
+                Chunk ch = Minecraft.getMinecraft().theWorld.getChunkFromChunkCoords(xx, zz);
                 if (!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
@@ -219,7 +219,7 @@ public class TimeStopEffectHelper {
                     .normalize()
                     .multiply(rand.nextFloat() * range)
                     .add(position);
-                AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().world, rand1, rand2, Color.WHITE);
+                AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().theWorld, rand1, rand2, Color.WHITE);
             }
         }
     }

@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.server.MinecraftServer;

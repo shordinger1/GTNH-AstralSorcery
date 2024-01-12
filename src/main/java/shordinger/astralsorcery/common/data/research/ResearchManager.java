@@ -725,7 +725,7 @@ public class ResearchManager {
         if (crafter == null) {
             AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
             AstralSorcery.log
-                .warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+                .warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.dimensionId);
             return;
         }
 
@@ -741,7 +741,7 @@ public class ResearchManager {
         if (crafter == null || !(crafter instanceof EntityPlayerMP)) {
             AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
             AstralSorcery.log
-                .warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
+                .warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.dimensionId);
             return;
         }
 

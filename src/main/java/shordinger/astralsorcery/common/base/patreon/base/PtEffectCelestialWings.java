@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.auxiliary.tick.ITickHandler;
 import shordinger.astralsorcery.common.auxiliary.tick.TickManager;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -75,7 +75,7 @@ public class PtEffectCelestialWings extends PatreonEffectHelper.PatreonEffect im
         if (side == Side.CLIENT && player != null
             && player.getUniqueID()
             .equals(playerUUID)
-            && (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.getUniqueID()
+            && (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getUniqueID()
             .equals(playerUUID) && Minecraft.getMinecraft().gameSettings.thirdPersonView != 0)) {
 
             spawnEffects(player);

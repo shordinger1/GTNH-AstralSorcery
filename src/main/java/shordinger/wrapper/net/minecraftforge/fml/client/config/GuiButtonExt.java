@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.fml.client.config;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiButton;
 
 /**

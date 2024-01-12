@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -84,7 +84,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
 
     @SideOnly(Side.CLIENT)
     private void triggerClientside(EventAction trigger, PktParticleDataEvent message) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
         AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 

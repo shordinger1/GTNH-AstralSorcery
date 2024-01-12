@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.WRItemObject;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
@@ -111,7 +111,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IConstellation c = getConstellation(stack);
-        if (c != null && c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
+        if (c != null && c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) {
             tooltip.add(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
         } else {
             tooltip.add(TextFormatting.GRAY + I18n.format("constellation.noInformation"));

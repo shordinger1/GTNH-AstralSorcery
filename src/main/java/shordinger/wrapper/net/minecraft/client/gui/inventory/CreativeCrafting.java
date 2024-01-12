@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui.inventory;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.inventory.Container;
 import shordinger.wrapper.net.minecraft.inventory.IContainerListener;
 import shordinger.wrapper.net.minecraft.inventory.IInventory;

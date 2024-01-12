@@ -26,7 +26,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import shordinger.wrapper.net.minecraft.client.resources.IReloadableResourceManager;
 import shordinger.wrapper.net.minecraft.client.resources.IResourceManager;

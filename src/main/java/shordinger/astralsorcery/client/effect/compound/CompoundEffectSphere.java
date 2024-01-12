@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 
@@ -113,8 +113,8 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
         GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
         float alpha = 1F;
-        if (alphaFadeMaxDist != -1 && Minecraft.getMinecraft().player != null) {
-            Vector3 plVec = Vector3.atEntityCenter(Minecraft.getMinecraft().player);
+        if (alphaFadeMaxDist != -1 && Minecraft.getMinecraft().thePlayer != null) {
+            Vector3 plVec = Vector3.atEntityCenter(Minecraft.getMinecraft().thePlayer);
             double dst = plVec.distance(getPosition()) - 1.2;
 
             alpha *= 1D - (dst / alphaFadeMaxDist);

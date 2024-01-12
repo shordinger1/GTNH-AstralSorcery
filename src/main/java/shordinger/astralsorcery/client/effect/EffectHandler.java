@@ -43,7 +43,7 @@ import shordinger.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import shordinger.astralsorcery.common.util.Counter;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -228,11 +228,11 @@ public final class EffectHandler {
         tick();
 
         /*
-         * if(Minecraft.getMinecraft().player == null) return;
+         * if(Minecraft.getMinecraft().thePlayer == null) return;
          * if(ClientScheduler.getClientTick() % 10 != 0) return;
-         * ItemStack main = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+         * ItemStack main = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
          * if(main != null && main.getItem() instanceof ItemIlluminationWand) {
-         * RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().player, 60);
+         * RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().thePlayer, 60);
          * if(res != null && res.typeOfHit == RayTraceResult.Type.BLOCK) {
          * EffectLightning.buildAndRegisterLightning(new Vector3(res.getBlockPos()).addY(7), new
          * Vector3(res.getBlockPos()));
@@ -361,7 +361,7 @@ public final class EffectHandler {
             influenceSizePreview = null;
         }
 
-        if (Minecraft.getMinecraft().player == null) {
+        if (Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
 
@@ -396,7 +396,7 @@ public final class EffectHandler {
             }
         }
 
-        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
+        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer);
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
                 fastRenderParticles.remove(null);

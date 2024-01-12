@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.common.util.SoundUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.ITickableSound;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
 import shordinger.wrapper.net.minecraft.util.SoundCategory;

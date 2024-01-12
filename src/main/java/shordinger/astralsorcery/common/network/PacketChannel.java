@@ -11,6 +11,7 @@ package shordinger.astralsorcery.common.network;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.AstralSorcery;
+import shordinger.astralsorcery.Tags;
 import shordinger.astralsorcery.client.ClientProxy;
 import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.network.packet.client.*;
@@ -30,7 +31,7 @@ import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.Simpl
  */
 public class PacketChannel {
 
-    public static final SimpleNetworkWrapper CHANNEL = new SimpleNetworkWrapper(AstralSorcery.NAME) {
+    public static final SimpleNetworkWrapper CHANNEL = new SimpleNetworkWrapper(Tags.MODNAME) {
 
         @Override
         public void sendToServer(IMessage message) {
@@ -114,7 +115,7 @@ public class PacketChannel {
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, Vec3i pos, double range) {
         return new NetworkRegistry.TargetPoint(
-            world.provider.getDimension(),
+            world.provider.dimensionId,
             pos.getX(),
             pos.getY(),
             pos.getZ(),

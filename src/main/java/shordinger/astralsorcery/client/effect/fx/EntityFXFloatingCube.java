@@ -20,7 +20,7 @@ import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;

@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.crafting.altar.recipes;
 
-import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
+import static shordinger.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 
 import java.awt.*;
 import java.util.Random;

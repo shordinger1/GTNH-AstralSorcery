@@ -17,7 +17,7 @@ import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
@@ -102,13 +102,13 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
         String tr = I18n.format(prog.getUnlocalizedName());
         String out = I18n.format("progress.gain.research.chat", tr);
         out = TextFormatting.AQUA + out;
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().thePlayer.sendMessage(new TextComponentString(out));
     }
 
     @SideOnly(Side.CLIENT)
     private void addProgressChatMessage() {
         String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().thePlayer.sendMessage(new TextComponentString(out));
     }
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.*;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.util.EnumFacing;

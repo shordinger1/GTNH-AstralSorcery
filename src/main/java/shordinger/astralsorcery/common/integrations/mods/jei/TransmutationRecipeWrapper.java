@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.base.LightOreTransmutations;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 

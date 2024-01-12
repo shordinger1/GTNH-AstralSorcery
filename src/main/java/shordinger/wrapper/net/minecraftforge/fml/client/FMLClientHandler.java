@@ -62,7 +62,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import cpw.mods.fml.relauncher.Side;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.client.gui.Gui;
 import shordinger.wrapper.net.minecraft.client.gui.GuiIngameMenu;

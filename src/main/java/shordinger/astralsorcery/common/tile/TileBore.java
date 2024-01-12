@@ -48,7 +48,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.boss.EntityDragon;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -448,12 +448,12 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 if (isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
                 }
-                if (this.getWorld().provider == null || Minecraft.getMinecraft().world == null
-                    || Minecraft.getMinecraft().world.provider == null) {
+                if (this.getWorld().provider == null || Minecraft.getMinecraft().theWorld == null
+                    || Minecraft.getMinecraft().theWorld.provider == null) {
                     return false;
                 }
-                return this.getWorld().provider.getDimension()
-                    == Minecraft.getMinecraft().world.provider.getDimension();
+                return this.getWorld().provider.dimensionId
+                    == Minecraft.getMinecraft().theWorld.provider.dimensionId;
             });
             EffectHandler.getInstance()
                 .registerFX(spr);
@@ -918,12 +918,12 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 if (isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
                 }
-                if (this.getWorld().provider == null || Minecraft.getMinecraft().world == null
-                    || Minecraft.getMinecraft().world.provider == null) {
+                if (this.getWorld().provider == null || Minecraft.getMinecraft().theWorld == null
+                    || Minecraft.getMinecraft().theWorld.provider == null) {
                     return false;
                 }
-                return this.getWorld().provider.getDimension()
-                    == Minecraft.getMinecraft().world.provider.getDimension();
+                return this.getWorld().provider.dimensionId
+                    == Minecraft.getMinecraft().theWorld.provider.dimensionId;
             });
             spr.setRenderAlphaFunction(
                 (fx, a) -> a * Math.min(1, ((float) this.operationTicks) / ((float) SEGMENT_STARTUP)));

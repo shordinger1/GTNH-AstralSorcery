@@ -10,7 +10,7 @@ package shordinger.astralsorcery.client.render.entity;
 
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.entities.EntityItemHighlighted;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.entity.Render;
 import shordinger.wrapper.net.minecraft.client.renderer.entity.RenderEntityItem;

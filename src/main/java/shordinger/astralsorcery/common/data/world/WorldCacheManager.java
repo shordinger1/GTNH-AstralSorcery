@@ -70,7 +70,7 @@ public class WorldCacheManager implements ITickHandler {
                 ensureFolder(saveDir);
             }
         }
-        File worldDir = new File(saveDir, "DIM_" + world.provider.getDimension());
+        File worldDir = new File(saveDir, "DIM_" + world.provider.dimensionId);
         if (!worldDir.exists()) {
             worldDir.mkdirs();
         } else {
@@ -90,8 +90,8 @@ public class WorldCacheManager implements ITickHandler {
 
     @Nullable
     private static CachedWorldData getFromCache(World world, SaveKey key) {
-        if (!cachedData.containsKey(world.provider.getDimension())) return null;
-        Map<SaveKey, CachedWorldData> dataMap = cachedData.get(world.provider.getDimension());
+        if (!cachedData.containsKey(world.provider.dimensionId)) return null;
+        Map<SaveKey, CachedWorldData> dataMap = cachedData.get(world.provider.dimensionId);
         return dataMap.get(key);
     }
 
@@ -99,7 +99,7 @@ public class WorldCacheManager implements ITickHandler {
         CachedWorldData data = getFromCache(world, key);
         if (data != null) return data;
 
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         CachedWorldData loaded = loadDataFromFile(world, key);
         if (!cachedData.containsKey(dimId)) {
             cachedData.put(dimId, new HashMap<>());
@@ -121,7 +121,7 @@ public class WorldCacheManager implements ITickHandler {
             return key.getNewInstance();
         }
         AstralSorcery.log
-            .info("Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
+            .info("Load CachedWorldData '" + key.identifier + "' for world " + world.provider.dimensionId);
         boolean errored = false;
         CachedWorldData data = null;
         try {
@@ -184,7 +184,7 @@ public class WorldCacheManager implements ITickHandler {
             data = key.getNewInstance();
         }
         AstralSorcery.log
-            .info("Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
+            .info("Loading of '" + key.identifier + "' for world " + world.provider.dimensionId + " finished.");
         return data;
     }
 
@@ -223,7 +223,7 @@ public class WorldCacheManager implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
         if (world.isRemote) return;
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         Map<SaveKey, CachedWorldData> dataMap = cachedData.get(dimId);
         if (dataMap == null) return;
 
@@ -236,7 +236,7 @@ public class WorldCacheManager implements ITickHandler {
     }
 
     public void doSave(World world) {
-        int dimId = world.provider.getDimension();
+        int dimId = world.provider.dimensionId;
         Map<SaveKey, CachedWorldData> worldCache = cachedData.get(dimId);
         if (worldCache == null) return;
         for (SaveKey key : SaveKey.values()) {

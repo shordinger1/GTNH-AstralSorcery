@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
+import static shordinger.astralsorcery.common.lib.MultiBlockArrays.*;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.lib.BlocksAS;

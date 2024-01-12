@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.tile.TileCelestialGateway;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.data.WorldBlockPos;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
@@ -60,12 +60,12 @@ public class ClientGatewayHandler {
                 screenshotCooldown = 0;
             }
         }
-        if (Minecraft.getMinecraft().player == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null) return;
 
         UIGateway ui = EffectHandler.getInstance()
             .getUiGateway();
-        if (ui != null && Minecraft.getMinecraft().player.world != null) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+        if (ui != null && Minecraft.getMinecraft().thePlayer.world != null) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             TileCelestialGateway gate = MiscUtils.getTileAt(
                 player.world,
                 Vector3.atEntityCorner(player)
@@ -91,7 +91,7 @@ public class ClientGatewayHandler {
                     focusTicks = 0;
                 } else {
                     if (!Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()
-                        && !Minecraft.getMinecraft().player.isSneaking()) {
+                        && !Minecraft.getMinecraft().thePlayer.isSneaking()) {
                         focusTicks = 0;
                         focusingEntry = null;
                     } else {
@@ -121,7 +121,7 @@ public class ClientGatewayHandler {
             Vector3 dir = focusingEntry.relativePos.clone()
                 .add(ui.getPos())
                 .subtract(
-                    Vector3.atEntityCorner(Minecraft.getMinecraft().player)
+                    Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer)
                         .addY(1.62));
             Vector3 mov = dir.clone()
                 .normalize()
@@ -235,7 +235,7 @@ public class ClientGatewayHandler {
             }
 
             if (focusTicks > 95) { // Time explained below
-                Minecraft.getMinecraft().player.setSneaking(false);
+                Minecraft.getMinecraft().thePlayer.setSneaking(false);
                 PacketChannel.CHANNEL
                     .sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos));
                 focusTicks = 0;
@@ -247,15 +247,15 @@ public class ClientGatewayHandler {
     @SideOnly(Side.CLIENT)
     private void captureScreenshot(TileCelestialGateway gate) {
         ResourceLocation gatewayScreenshot = ClientScreenshotCache
-            .tryQueryTextureFor(gate.getWorld().provider.getDimension(), gate.getPos());
-        if (gatewayScreenshot == null && Minecraft.getMinecraft().player != null
-            && Minecraft.getMinecraft().player.rotationPitch <= 0
+            .tryQueryTextureFor(gate.getWorld().provider.dimensionId, gate.getPos());
+        if (gatewayScreenshot == null && Minecraft.getMinecraft().thePlayer != null
+            && Minecraft.getMinecraft().thePlayer.rotationPitch <= 0
             && Minecraft.getMinecraft().currentScreen == null
             && Minecraft.getMinecraft().renderGlobal.getRenderedChunks() > 200) {
             screenshotCooldown = 10;
             lastScreenshotPos = WorldBlockPos.wrap(gate);
 
-            ClientScreenshotCache.takeViewScreenshotFor(gate.getWorld().provider.getDimension(), gate.getPos());
+            ClientScreenshotCache.takeViewScreenshotFor(gate.getWorld().provider.dimensionId, gate.getPos());
         }
     }
 

@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.client.renderer.entity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.model.ModelBase;
 import shordinger.wrapper.net.minecraft.client.model.ModelMinecart;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;

@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.event.APIRegistryEvent;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -232,7 +232,7 @@ public abstract class AbstractPerk {
 
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
-        if (modifiersDisabled(Minecraft.getMinecraft().player, Side.CLIENT)) {
+        if (modifiersDisabled(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
             tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
             tooltipCache.add(

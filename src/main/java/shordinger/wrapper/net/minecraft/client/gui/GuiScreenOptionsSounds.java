@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
 import shordinger.wrapper.net.minecraft.client.audio.SoundHandler;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;

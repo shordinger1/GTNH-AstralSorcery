@@ -8,9 +8,9 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
-import static hellfirepvp.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry.*;
-import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
+import static shordinger.astralsorcery.common.constellation.perk.attribute.AttributeTypeRegistry.*;
+import static shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry.*;
+import static shordinger.astralsorcery.common.constellation.perk.tree.PerkTree.PERK_TREE;
 
 import java.util.Collection;
 import java.util.List;

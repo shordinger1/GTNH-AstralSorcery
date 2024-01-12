@@ -29,7 +29,7 @@ import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 

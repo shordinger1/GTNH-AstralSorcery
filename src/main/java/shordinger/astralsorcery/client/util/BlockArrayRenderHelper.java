@@ -15,7 +15,7 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
@@ -147,7 +147,7 @@ public class BlockArrayRenderHelper {
             }
             BakedBlockData renderData = data.getValue();
             if (renderData.tileEntity != null) {
-                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().theWorld);
                 renderData.tileEntity.setPos(offset);
             }
             if (renderData.type != Blocks.AIR) {
@@ -165,7 +165,7 @@ public class BlockArrayRenderHelper {
             }
             BakedBlockData renderData = data.getValue();
             if (renderData.tileEntity != null && renderData.tesr != null) {
-                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().theWorld);
                 renderData.tileEntity.setPos(offset);
                 renderData.tesr
                     .render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
@@ -203,7 +203,7 @@ public class BlockArrayRenderHelper {
                 BlockPos offset = entry.getKey();
                 BlockArray.BlockInformation info = entry.getValue();
                 if (info.type.hasTileEntity(info.state)) {
-                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().world, info.state);
+                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().theWorld, info.state);
                     BlockArray.TileEntityCallback callback = array.getTileCallbacks()
                         .get(offset);
                     if (te != null && callback != null) {
@@ -258,7 +258,7 @@ public class BlockArrayRenderHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public WorldType getWorldType() {
-            return Minecraft.getMinecraft().world.getWorldType();
+            return Minecraft.getMinecraft().theWorld.getWorldType();
         }
 
         @Override

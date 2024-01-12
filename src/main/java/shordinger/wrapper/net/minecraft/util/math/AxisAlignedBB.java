@@ -7,40 +7,11 @@ import shordinger.wrapper.net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
 
-public class AxisAlignedBB {
+public class AxisAlignedBB extends net.minecraft.util.AxisAlignedBB {
 
-    /**
-     * The minimum X coordinate of this bounding box. Guaranteed to always be less than or equal to {@link #maxX}.
-     */
-    public final double minX;
-    /**
-     * The minimum Y coordinate of this bounding box. Guaranteed to always be less than or equal to {@link #maxY}.
-     */
-    public final double minY;
-    /**
-     * The minimum Y coordinate of this bounding box. Guaranteed to always be less than or equal to {@link #maxZ}.
-     */
-    public final double minZ;
-    /**
-     * The maximum X coordinate of this bounding box. Guaranteed to always be greater than or equal to {@link #minX}.
-     */
-    public final double maxX;
-    /**
-     * The maximum Y coordinate of this bounding box. Guaranteed to always be greater than or equal to {@link #minY}.
-     */
-    public final double maxY;
-    /**
-     * The maximum Z coordinate of this bounding box. Guaranteed to always be greater than or equal to {@link #minZ}.
-     */
-    public final double maxZ;
 
     public AxisAlignedBB(double x1, double y1, double z1, double x2, double y2, double z2) {
-        this.minX = Math.min(x1, x2);
-        this.minY = Math.min(y1, y2);
-        this.minZ = Math.min(z1, z2);
-        this.maxX = Math.max(x1, x2);
-        this.maxY = Math.max(y1, y2);
-        this.maxZ = Math.max(z1, z2);
+        super(x1, y1, z1, x2, y2, z2);
     }
 
     public AxisAlignedBB(BlockPos pos) {

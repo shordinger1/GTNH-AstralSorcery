@@ -54,7 +54,7 @@ public class TileEntityStructure extends TileEntity {
     private float integrity = 1.0F;
     private long seed;
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setString("name", this.name);
         compound.setString("author", this.author);

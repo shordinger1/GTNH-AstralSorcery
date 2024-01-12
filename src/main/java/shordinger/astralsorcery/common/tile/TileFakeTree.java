@@ -126,8 +126,8 @@ public class TileFakeTree extends TileEntityTick {
             this.ta = new ClearAction();
         }
 
-        if (compound.hasUniqueId("playerEffectRef")) {
-            this.playerEffectRef = compound.getUniqueId("playerEffectRef");
+        if (compound.hasKey("playerEffectRef")) {
+            this.playerEffectRef = UUID.fromString(compound.getString("playerEffectRef"));
         } else {
             this.playerEffectRef = null;
         }
@@ -165,7 +165,7 @@ public class TileFakeTree extends TileEntityTick {
         }
 
         if (this.playerEffectRef != null) {
-            compound.setUniqueId("playerEffectRef", this.playerEffectRef);
+            compound.setString("playerEffectRef", String.valueOf(this.playerEffectRef));
         }
     }
 

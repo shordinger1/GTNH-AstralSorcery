@@ -51,7 +51,7 @@ import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockLiquid;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.enchantment.Enchantment;
 import shordinger.wrapper.net.minecraft.enchantment.EnchantmentHelper;
@@ -510,14 +510,14 @@ public class ForgeHooks {
 
         if (isCreative) {
             player.inventory.setPickedItemStack(result);
-            Minecraft.getMinecraft().playerController
+            Minecraft.getMinecraft().thePlayerController
                 .sendSlotPacket(player.getHeldItem(EnumHand.MAIN_HAND), 36 + player.inventory.currentItem);
             return true;
         }
         int slot = player.inventory.getSlotFor(result);
         if (slot != -1) {
             if (InventoryPlayer.isHotbar(slot)) player.inventory.currentItem = slot;
-            else Minecraft.getMinecraft().playerController.pickItem(slot);
+            else Minecraft.getMinecraft().thePlayerController.pickItem(slot);
             return true;
         }
         return false;

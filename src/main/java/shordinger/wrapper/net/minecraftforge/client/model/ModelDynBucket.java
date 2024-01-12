@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.BakedQuad;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;

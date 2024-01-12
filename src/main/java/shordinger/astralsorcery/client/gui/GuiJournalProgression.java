@@ -22,7 +22,7 @@ import shordinger.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import shordinger.astralsorcery.client.util.ClientUtils;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 

@@ -16,6 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.common.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -36,48 +37,29 @@ import java.util.Objects;
  * Unlike Block, which only one object can exist per coordinate, BlockSnapshot
  * can exist multiple times for any given Block.
  */
-public class BlockSnapshot {
+public class BlockSnapshot extends net.minecraftforge.common.util.BlockSnapshot {
 
-    private static final boolean DEBUG = Boolean.parseBoolean(System.getProperty("forge.debugBlockSnapshot", "false"));
-
-    private final BlockPos pos;
-    private final int dimId;
-    @Nullable
-    private IBlockState replacedBlock;
-    private int flag;
-    @Nullable
-    private final NBTTagCompound nbt;
-    @Nullable
-    private WeakReference<World> world;
-    private final ResourceLocation registryName;
-    private final int meta;
+    //    private static final boolean DEBUG = Boolean.parseBoolean(System.getProperty("forge.debugBlockSnapshot", "false"));
+//
+//    private final BlockPos pos;
+//    private final int dimId;
+//    @Nullable
+//    private IBlockState replacedBlock;
+//    private int flag;
+//    @Nullable
+//    private final NBTTagCompound nbt;
+//    @Nullable
+//    private WeakReference<World> world;
+//    private final ResourceLocation registryName;
+//    private final int meta;
 
     public BlockSnapshot(World world, BlockPos pos, IBlockState state) {
         this(world, pos, state, getTileNBT(world.getTileEntity(pos)));
     }
 
     public BlockSnapshot(World world, BlockPos pos, IBlockState state, @Nullable NBTTagCompound nbt) {
-        this.setWorld(world);
-        this.dimId = world.provider.getDimension();
-        this.pos = pos.toImmutable();
-        this.setReplacedBlock(state);
-        this.registryName = state.getBlock()
-            .getRegistryName();
-        this.meta = state.getBlock()
-            .getMetaFromState(state);
-        this.setFlag(3);
-        this.nbt = nbt;
-        if (DEBUG) {
-            System.out.printf(
-                "Created BlockSnapshot - [World: %s ][Location: %d,%d,%d ][Block: %s ][Meta: %d ]",
-                world.getWorldInfo()
-                    .getWorldName(),
-                pos.getX(),
-                pos.getY(),
-                pos.getZ(),
-                getRegistryName(),
-                getMeta());
-        }
+        super(world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock(), world.getBlockMetadata(pos.getX(), pos.getY(), pos.getZ()));
+//        this.nbt = nbt;
     }
 
     public BlockSnapshot(World world, BlockPos pos, IBlockState state, int flag) {
@@ -99,12 +81,8 @@ public class BlockSnapshot {
      */
     public BlockSnapshot(int dimension, BlockPos pos, ResourceLocation registryName, int meta, int flag,
                          @Nullable NBTTagCompound nbt) {
-        this.dimId = dimension;
-        this.pos = pos.toImmutable();
-        this.setFlag(flag);
-        this.registryName = registryName;
-        this.meta = meta;
-        this.nbt = nbt;
+        super(dimension, pos.getX(), pos.getY(), pos.getZ(), registryName.getResourceDomain(), registryName.getResourcePath(), meta, flag, nbt);
+//        this.nbt = nbt;
     }
 
     public static BlockSnapshot getBlockSnapshot(World world, BlockPos pos) {
@@ -118,7 +96,9 @@ public class BlockSnapshot {
     public static BlockSnapshot readFromNBT(NBTTagCompound tag) {
         return new BlockSnapshot(
             tag.getInteger("dimension"),
-            new BlockPos(tag.getInteger("posX"), tag.getInteger("posY"), tag.getInteger("posZ")),
+            new BlockPos(tag.getInteger("posX"),
+                tag.getInteger("posY"),
+                tag.getInteger("posZ")),
             new ResourceLocation(tag.getString("blockMod"), tag.getString("blockName")),
             tag.getInteger("metadata"),
             tag.getInteger("flag"),
@@ -131,10 +111,6 @@ public class BlockSnapshot {
         NBTTagCompound nbt = new NBTTagCompound();
         te.writeToNBT(nbt);
         return nbt;
-    }
-
-    public IBlockState getCurrentBlock() {
-        return getWorld().getBlockState(getPos());
     }
 
     public World getWorld() {

@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -137,7 +137,7 @@ public class GuiAltarTrait extends GuiAltarBase {
                     @Override
                     public float getBrightness() {
                         return RenderConstellation.conCFlicker(
-                            Minecraft.getMinecraft().world.getTotalWorldTime(),
+                            Minecraft.getMinecraft().theWorld.getTotalWorldTime(),
                             pTicks,
                             5 + rand.nextInt(5));
                     }

@@ -18,7 +18,7 @@ import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.entities.EntityObservatoryHelper;
 import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -47,8 +47,8 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
 
         Entity ridden;
         EntityPlayer player;
-        if ((player = Minecraft.getMinecraft().player) != null
-            && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null
+        if ((player = Minecraft.getMinecraft().thePlayer) != null
+            && (ridden = Minecraft.getMinecraft().thePlayer.getRidingEntity()) != null
             && ridden instanceof EntityObservatoryHelper
             && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
             ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(te, player);

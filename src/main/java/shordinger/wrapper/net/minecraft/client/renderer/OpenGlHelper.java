@@ -31,7 +31,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import oshi.SystemInfo;
 import oshi.hardware.Processor;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import shordinger.wrapper.net.minecraft.client.settings.GameSettings;
 import shordinger.wrapper.net.minecraft.util.Util;

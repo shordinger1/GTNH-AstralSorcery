@@ -91,7 +91,7 @@ import shordinger.wrapper.net.minecraft.world.storage.ISaveFormat;
 import shordinger.wrapper.net.minecraft.world.storage.ISaveHandler;
 import shordinger.wrapper.net.minecraft.world.storage.WorldInfo;
 
-public abstract class MinecraftServer implements ICommandSender, Runnable, IThreadListener, ISnooperInfo {
+public abstract class MinecraftServer extends net.minecraft.server.MinecraftServer implements ICommandSender, Runnable, IThreadListener, ISnooperInfo {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public static final File USER_CACHE_FILE = new File("usercache.json");
@@ -552,7 +552,7 @@ public abstract class MinecraftServer implements ICommandSender, Runnable, IThre
 
             WorldServer[] tmp = worlds;
             for (WorldServer world : tmp) {
-                net.minecraftforge.common.DimensionManager.setWorld(world.provider.getDimension(), null, this);
+                net.minecraftforge.common.DimensionManager.setWorld(world.provider.dimensionId, null, this);
             }
         }
 

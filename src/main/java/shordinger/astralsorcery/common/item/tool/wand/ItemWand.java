@@ -42,7 +42,7 @@ import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
@@ -413,11 +413,11 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @SideOnly(Side.CLIENT)
     public static void highlightEffects(PktParticleEvent event) {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
 
         BlockPos orePos = event.getVec()
             .toBlockPos();
-        BlockPos pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(orePos)
+        BlockPos pos = Minecraft.getMinecraft().theWorld.getTopSolidOrLiquidBlock(orePos)
             .up();
         Vector3 display = new Vector3(pos);
         MiscUtils.applyRandomOffset(display, rand, 2);
@@ -425,7 +425,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         double velY = rand.nextFloat() * 0.3F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double dstr = ConstellationSkyHandler.getInstance()
-            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
         for (int i = 0; i < 10; i++) {
             EntityFXFacingParticle particle = EffectHelper
                 .genericFlareParticle(display.getX(), display.getY(), display.getZ());
@@ -441,7 +441,7 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
         }
         dstr = Math.sqrt(dstr);
         dstr = Math.sqrt(dstr);
-        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
+        Vector3 plVec = Vector3.atEntityCorner(Minecraft.getMinecraft().thePlayer);
         float dst = (float) event.getVec()
             .distance(plVec);
         float dstMul = dst <= 25 ? 1F : (dst >= 50 ? 0F : (1F - (dst - 25F) / 25F));

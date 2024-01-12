@@ -17,12 +17,13 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.nbt.NBTTagString;
 import shordinger.astralsorcery.client.gui.journal.GuiScreenJournal;
 import shordinger.astralsorcery.common.data.fragment.KnowledgeFragment;
 import shordinger.astralsorcery.common.data.fragment.KnowledgeFragmentManager;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -77,7 +78,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
     }
 
     public List<KnowledgeFragment> getDiscoverableFragments() {
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         List<KnowledgeFragment> frag = KnowledgeFragmentManager.getInstance()
             .getAllFragments();
         frag.removeAll(flattenedFragments);
@@ -86,7 +87,7 @@ public class KnowledgeFragmentData extends CachedPersistentData {
     }
 
     public Collection<KnowledgeFragment> getFragmentsFor(GuiScreenJournal journal) {
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         return getAllFragments().stream()
             .filter(f -> f.isVisible(journal) && f.canSee(prog) && f.isFullyPresent())
             .collect(Collectors.toList());

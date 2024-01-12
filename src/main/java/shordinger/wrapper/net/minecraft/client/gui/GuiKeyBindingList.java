@@ -6,7 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.settings.KeyBinding;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;

@@ -14,7 +14,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import shordinger.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;

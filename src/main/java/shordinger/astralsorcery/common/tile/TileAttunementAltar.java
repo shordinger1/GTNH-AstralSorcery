@@ -60,7 +60,7 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -319,7 +319,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
                         PktAttunementAltarState state = new PktAttunementAltarState(
                             pl.getEntityId(),
-                            world.provider.getDimension(),
+                            world.provider.dimensionId,
                             getPos());
                         PacketChannel.CHANNEL.sendTo(state, pl);
                         return;
@@ -570,7 +570,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             EntityPlayer.class,
             new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1)
                 .offset(getPos()));
-        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
+        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().thePlayer);
     }
 
     private void checkClientEffectIntegrity() {
@@ -584,7 +584,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
     @SideOnly(Side.CLIENT)
     private void checkCameraClient() {
-        if (mode != 1 || entityIdActive != Minecraft.getMinecraft().player.getEntityId()) {
+        if (mode != 1 || entityIdActive != Minecraft.getMinecraft().thePlayer.getEntityId()) {
             ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
             clientActiveCameraFlight = null;
         }
@@ -597,7 +597,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         }
 
         if (activeFound == null) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             if (player != null && player.getDistanceSq(getPos()) <= 250) {
                 IConstellation held = null;
                 if (!player.getHeldItemMainhand()
@@ -662,7 +662,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             spawnAmbientParticles();
             if (highlight != null && highlightActive > 0) {
                 float night = ConstellationSkyHandler.getInstance()
-                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                    .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
                 List<BlockPos> positions = translateConstellationPositions(highlight);
                 for (BlockPos pos : positions) {
                     if (rand.nextBoolean()) continue;
@@ -774,7 +774,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                     PacketChannel.CHANNEL.sendToServer(
                         new PktAttuneConstellation(
                             (IMajorConstellation) activeFound,
-                            world.provider.getDimension(),
+                            world.provider.dimensionId,
                             getPos()));
                     SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }

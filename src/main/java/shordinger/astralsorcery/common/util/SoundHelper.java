@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.PositionedLoopSound;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.util.SoundCategory;
 import shordinger.wrapper.net.minecraft.util.SoundEvent;
@@ -93,7 +93,7 @@ public class SoundHelper {
 
     @SideOnly(Side.CLIENT)
     public static void playSoundClient(SoundEvent sound, float volume, float pitch) {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         if (player != null) {
             player.playSound(sound, volume, pitch);
         }
@@ -108,9 +108,9 @@ public class SoundHelper {
     @SideOnly(Side.CLIENT)
     public static void playSoundClientWorld(SoundEvent sound, SoundCategory cat, BlockPos pos, float volume,
                                             float pitch) {
-        if (Minecraft.getMinecraft().world != null) {
-            Minecraft.getMinecraft().world.playSound(
-                Minecraft.getMinecraft().player,
+        if (Minecraft.getMinecraft().theWorld != null) {
+            Minecraft.getMinecraft().theWorld.playSound(
+                Minecraft.getMinecraft().thePlayer,
                 pos.getX(),
                 pos.getY(),
                 pos.getZ(),

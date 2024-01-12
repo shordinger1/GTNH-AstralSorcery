@@ -32,7 +32,7 @@ import io.netty.buffer.Unpooled;
 import shordinger.wrapper.net.minecraft.advancements.Advancement;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.client.ClientBrandRetriever;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.GuardianSound;
 import shordinger.wrapper.net.minecraft.client.audio.ISound;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;

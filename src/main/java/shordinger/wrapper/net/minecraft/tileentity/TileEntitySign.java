@@ -34,7 +34,7 @@ public class TileEntitySign extends TileEntity {
     private EntityPlayer player;
     private final CommandResultStats stats = new CommandResultStats();
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         for (int i = 0; i < 4; ++i) {

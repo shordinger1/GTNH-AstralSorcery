@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui.inventory;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.inventory.ContainerChest;
 import shordinger.wrapper.net.minecraft.inventory.IInventory;
@@ -27,7 +27,7 @@ public class GuiChest extends GuiContainer {
     private final int inventoryRows;
 
     public GuiChest(IInventory upperInv, IInventory lowerInv) {
-        super(new ContainerChest(upperInv, lowerInv, Minecraft.getMinecraft().player));
+        super(new ContainerChest(upperInv, lowerInv, Minecraft.getMinecraft().thePlayer));
         this.upperChestInventory = upperInv;
         this.lowerChestInventory = lowerInv;
         this.allowUserInput = false;

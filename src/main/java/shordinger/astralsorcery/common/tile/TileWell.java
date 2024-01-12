@@ -40,7 +40,7 @@ import shordinger.astralsorcery.common.util.SkyCollectionHelper;
 import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -206,7 +206,7 @@ public class TileWell extends TileReceiverBaseInventory {
         if (rand.nextInt(6) == 0) {
             Entity rView = Minecraft.getMinecraft()
                 .getRenderViewEntity();
-            if (rView == null) rView = Minecraft.getMinecraft().player;
+            if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
             if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
             EntityFXFacingParticle p = EffectHelper
                 .genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5);

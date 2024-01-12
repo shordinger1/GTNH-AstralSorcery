@@ -47,7 +47,7 @@ import shordinger.wrapper.net.minecraftforge.fml.common.FMLLog;
 import shordinger.wrapper.net.minecraftforge.fml.common.Loader;
 import shordinger.wrapper.net.minecraftforge.fml.common.ModContainer;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.wrapper.net.minecraftforge.oredict.OreIngredient;
 import shordinger.wrapper.net.minecraftforge.oredict.ShapedOreRecipe;
 import shordinger.wrapper.net.minecraftforge.oredict.ShapelessOreRecipe;

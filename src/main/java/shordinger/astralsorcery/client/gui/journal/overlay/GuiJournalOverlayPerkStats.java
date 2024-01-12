@@ -38,7 +38,7 @@ import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReader
 import shordinger.astralsorcery.common.constellation.perk.reader.AttributeReaderRegistry;
 import shordinger.astralsorcery.common.constellation.perk.reader.PerkStatistic;
 import shordinger.astralsorcery.common.constellation.perk.reader.PlayerAttributeInterpreter;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
@@ -75,7 +75,7 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
 
         statistics.clear();
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         PlayerAttributeInterpreter interpreter = PlayerAttributeInterpreter.defaultInterpreter(player);
 
         AttributeTypeRegistry.getTypes()
@@ -201,7 +201,7 @@ public class GuiJournalOverlayPerkStats extends GuiScreenJournalOverlay {
             return;
         }
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         PlayerAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, Side.CLIENT);
 
         List<String> information = Lists.newArrayList();

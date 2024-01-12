@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.JsonUtils;
 import shordinger.wrapper.net.minecraft.util.Session;
 

@@ -21,6 +21,7 @@ import shordinger.astralsorcery.common.world.structure.StructureSmallShrine;
 import shordinger.astralsorcery.common.world.structure.StructureTreasureShrine;
 import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.world.World;
+import shordinger.wrapper.net.minecraft.world.WorldProvider;
 import shordinger.wrapper.net.minecraft.world.WorldType;
 import shordinger.wrapper.net.minecraft.world.chunk.IChunkProvider;
 import shordinger.wrapper.net.minecraft.world.gen.IChunkGenerator;
@@ -81,7 +82,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
                          IChunkProvider chunkProvider) {
         if (!Config.enableFlatGen && world.getWorldType()
             .equals(WorldType.FLAT)) return;
-        if (!Config.worldGenDimWhitelist.contains(world.provider.getDimension())) return;
+        if (!Config.worldGenDimWhitelist.contains(world.provider.dimensionId)) return;
 
         ChunkVersionController.instance
             .setGenerationVersion(new ChunkPos(chunkX, chunkZ), CURRENT_WORLD_GENERATOR_VERSION);

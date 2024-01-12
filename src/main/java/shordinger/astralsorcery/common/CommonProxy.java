@@ -129,7 +129,7 @@ import shordinger.wrapper.net.minecraftforge.common.util.FakePlayerFactory;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.IGuiHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.GameRegistry;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.awt.*;

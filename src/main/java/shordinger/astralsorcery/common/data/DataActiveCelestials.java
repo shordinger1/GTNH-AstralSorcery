@@ -11,6 +11,7 @@ package shordinger.astralsorcery.common.data;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.constellation.ConstellationRegistry;
 import shordinger.astralsorcery.common.constellation.IConstellation;

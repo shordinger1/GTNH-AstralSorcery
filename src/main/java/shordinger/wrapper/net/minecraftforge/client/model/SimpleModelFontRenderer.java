@@ -22,7 +22,7 @@ import javax.vecmath.Vector4f;
 
 import com.google.common.collect.ImmutableList;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.BakedQuad;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;

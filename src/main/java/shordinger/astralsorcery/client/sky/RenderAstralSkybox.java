@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.constellation.distribution.ConstellationS
 import shordinger.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.WorldClient;
 import shordinger.wrapper.net.minecraft.client.renderer.*;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -264,7 +264,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     private void renderSky(float partialTicks) {
         GlStateManager.disableTexture2D();
-        Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(
+        Vec3d vec3 = Minecraft.getMinecraft().theWorld.getSkyColor(
             Minecraft.getMinecraft()
                 .getRenderViewEntity(),
             partialTicks);
@@ -296,15 +296,15 @@ public class RenderAstralSkybox extends IRenderHandler {
             GlStateManager.SourceFactor.ONE,
             GlStateManager.DestFactor.ZERO);
         RenderHelper.disableStandardItemLighting();
-        float[] sunsetColors = Minecraft.getMinecraft().world.provider
-            .calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
+        float[] sunsetColors = Minecraft.getMinecraft().theWorld.provider
+            .calcSunriseSunsetColors(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks), partialTicks);
         if (sunsetColors != null) {
             renderSunsetToBackground(sunsetColors, partialTicks);
         }
         renderDefaultCelestials(partialTicks);
 
-        double absPlayerHorizon = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y
-            - Minecraft.getMinecraft().world.getHorizon();
+        double absPlayerHorizon = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).y
+            - Minecraft.getMinecraft().theWorld.getHorizon();
         if (absPlayerHorizon < 0.0D) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 12.0F, 0.0F);
@@ -312,7 +312,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             GlStateManager.popMatrix();
         }
 
-        if (Minecraft.getMinecraft().world.provider.isSkyColored()) {
+        if (Minecraft.getMinecraft().theWorld.provider.isSkyColored()) {
             GlStateManager.color(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F);
         } else {
             GlStateManager.color(f, f1, f2);
@@ -336,14 +336,14 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.pushMatrix();
 
         // Bind alpha according to rain strength - if it rains "completely", moon, sun and stars are not rendered.
-        float alphaSubRain = 1.0F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+        float alphaSubRain = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, alphaSubRain);
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager
-            .rotate(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+            .rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         if (handle != null && handle.getCurrentlyActiveEvent() == CelestialEvent.SOLAR_ECLIPSE) {
             renderSolarEclipseSun(handle);
         } else {
@@ -364,9 +364,9 @@ public class RenderAstralSkybox extends IRenderHandler {
             renderMoon();
         }
 
-        renderStars(Minecraft.getMinecraft().world, partialTicks);
+        renderStars(Minecraft.getMinecraft().theWorld, partialTicks);
 
-        renderConstellations(Minecraft.getMinecraft().world, partialTicks);
+        renderConstellations(Minecraft.getMinecraft().theWorld, partialTicks);
 
         /*
          * Tessellator tes = Tessellator.getInstance();
@@ -476,10 +476,10 @@ public class RenderAstralSkybox extends IRenderHandler {
             GlStateManager.SourceFactor.ONE,
             GlStateManager.DestFactor.ZERO);
         GlStateManager.pushMatrix();
-        float alphaSubRain = 1.0F - Minecraft.getMinecraft().world.getRainStrength(pticks);
+        float alphaSubRain = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(pticks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, alphaSubRain);
         GlStateManager.rotate(-90F, 0F, 1F, 0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().world.getCelestialAngle(pticks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(pticks) * 360.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
 
@@ -534,7 +534,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
-        int i = Minecraft.getMinecraft().world.getMoonPhase();
+        int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
         float maxU = (float) (k) / 4.0F;
@@ -613,7 +613,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.pushMatrix();
         GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(
-            MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
+            MathHelper.sin(Minecraft.getMinecraft().theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F
                 : 0.0F,
             0.0F,
             0.0F,

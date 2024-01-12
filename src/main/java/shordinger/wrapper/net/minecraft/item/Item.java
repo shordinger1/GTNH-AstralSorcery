@@ -2245,6 +2245,10 @@ public class Item extends net.minecraft.item.Item {
         return new ItemStack(this);
     }
 
+    public ResourceLocation getRegistryName() {
+        return null;
+    }
+
     public static enum ToolMaterial {
 
         WOOD(0, 59, 2.0F, 0.0F, 15),

@@ -52,7 +52,7 @@ import shordinger.wrapper.net.minecraft.world.WorldSettings;
 import shordinger.wrapper.net.minecraft.world.WorldType;
 
 @SideOnly(Side.SERVER)
-public class DedicatedServer extends MinecraftServer implements IServer {
+public class DedicatedServer extends net.minecraft.server.dedicated.DedicatedServer implements IServer {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern RESOURCE_PACK_SHA1_PATTERN = Pattern.compile("^[a-fA-F0-9]{40}$");

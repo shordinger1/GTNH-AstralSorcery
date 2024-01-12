@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.data.fragment.KnowledgeFragment.*;
-import static hellfirepvp.astralsorcery.common.data.research.ResearchProgression.findNode;
+import static shordinger.astralsorcery.common.data.fragment.KnowledgeFragment.*;
+import static shordinger.astralsorcery.common.data.research.ResearchProgression.findNode;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;

@@ -110,7 +110,7 @@ public class ChunkProviderServer implements IChunkProvider {
                     "There is an attempt to load a chunk ({},{}) in dimension {} that is already being loaded. This will cause weird chunk breakages.",
                     x,
                     z,
-                    this.world.provider.getDimension());
+                    this.world.provider.dimensionId);
                 if (chunk == null) chunk = this.loadChunkFromFile(x, z);
 
                 if (chunk != null) {
@@ -264,7 +264,7 @@ public class ChunkProviderServer implements IChunkProvider {
             }
 
             if (this.id2ChunkMap.isEmpty())
-                net.minecraftforge.common.DimensionManager.unloadWorld(this.world.provider.getDimension());
+                net.minecraftforge.common.DimensionManager.unloadWorld(this.world.provider.dimensionId);
 
             this.chunkLoader.chunkTick();
         }

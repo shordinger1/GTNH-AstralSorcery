@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.client.model.animation;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemOverride;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -73,7 +73,7 @@ public final class AnimationItemOverrideList extends ItemOverrideList {
                 world = entity.world;
             }
             if (world == null) {
-                world = Minecraft.getMinecraft().world;
+                world = Minecraft.getMinecraft().theWorld;
             }
             IModelState state = asm.apply(Animation.getWorldTime(world, Animation.getPartialTickTime()))
                 .getLeft();

@@ -60,7 +60,7 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.NonDuplicateArrayList;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
@@ -263,8 +263,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if (Minecraft.getMinecraft().player != null) {
-            int count = ItemPerkSeal.getPlayerSealCount(Minecraft.getMinecraft().player);
+        if (Minecraft.getMinecraft().thePlayer != null) {
+            int count = ItemPerkSeal.getPlayerSealCount(Minecraft.getMinecraft().thePlayer);
             if (count > 0) {
                 this.foundSeals = new ItemStack(ItemsAS.perkSeal, count);
             } else {
@@ -288,7 +288,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (socketMenu != null) {
             AbstractPerk sMenuPerk = (AbstractPerk) socketMenu;
             Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(
-                Minecraft.getMinecraft().player,
+                Minecraft.getMinecraft().thePlayer,
                 s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
                     && !ItemPerkGem.getModifiers(s)
                     .isEmpty());
@@ -406,7 +406,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         if (!this.foundSeals.isEmpty()) {
             this.itemRender.renderItemAndEffectIntoGUI(
-                Minecraft.getMinecraft().player,
+                Minecraft.getMinecraft().thePlayer,
                 this.foundSeals,
                 guiLeft + rectSealBox.x,
                 guiTop + rectSealBox.y);
@@ -422,7 +422,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private void drawMiscInfo(int mouseX, int mouseY, float pTicks) {
         PlayerProgress prog = ResearchManager.clientProgress;
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -507,7 +507,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private void drawHoverTooltips(int mouseX, int mouseY) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         for (Rectangle r : this.slotsSocketMenu.keySet()) {
             if (r.contains(mouseX, mouseY)) {
@@ -525,7 +525,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         if (!this.foundSeals.isEmpty() && rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
             List<String> toolTip = this.foundSeals.getTooltip(
-                Minecraft.getMinecraft().player,
+                Minecraft.getMinecraft().thePlayer,
                 Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED
                     : ITooltipFlag.TooltipFlags.NORMAL);
             toolTip.add("");
@@ -592,7 +592,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private void drawPerkTree(float partialTicks) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -855,7 +855,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         double scale = this.sizeHandler.getScalingFactor();
         PerkTreePoint.AllocationStatus status = perkPoint.getPerk()
-            .getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT);
+            .getPerkStatus(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
 
         Rectangle.Double drawSize = perkPoint
             .renderPerkAtBatch(ctx, status, effectTick, pTicks, offset.x, offset.y, scale);
@@ -880,7 +880,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         double mapDrawSize = 28;
         if (perkPoint.getPerk() instanceof AttributeConverterPerk) {
             for (PerkConverter converter : ((AttributeConverterPerk) perkPoint.getPerk())
-                .provideConverters(Minecraft.getMinecraft().player, Side.CLIENT)) {
+                .provideConverters(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
                 if (converter instanceof PerkConverter.Radius) {
                     double radius = ((PerkConverter.Radius) converter).getRadius();
 
@@ -1081,11 +1081,11 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         if (!this.mouseSealStack.isEmpty()) {
             this.mouseSealStack = ItemStack.EMPTY;
-            if (Minecraft.getMinecraft().player == null) {
+            if (Minecraft.getMinecraft().thePlayer == null) {
                 return;
             }
 
@@ -1168,9 +1168,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (mouseButton == 0) {
             if (socketMenu != null) {
                 for (Rectangle r : slotsSocketMenu.keySet()) {
-                    if (r.contains(p) && !socketMenu.hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
+                    if (r.contains(p) && !socketMenu.hasItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
                         int slotId = slotsSocketMenu.get(r);
-                        ItemStack potentialStack = Minecraft.getMinecraft().player.inventory.getStackInSlot(slotId);
+                        ItemStack potentialStack = Minecraft.getMinecraft().thePlayer.inventory.getStackInSlot(slotId);
                         if (!potentialStack.isEmpty() && !ItemPerkGem.getModifiers(potentialStack)
                             .isEmpty()) {
                             PktPerkGemModification pkt = PktPerkGemModification
@@ -1213,13 +1213,13 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                     String perkKey = perk.getRegistryName()
                         .toString();
                     GuiScreen.setClipboardString(perkKey);
-                    Minecraft.getMinecraft().player
+                    Minecraft.getMinecraft().thePlayer
                         .sendMessage(new TextComponentTranslation("misc.ctrlcopy.copied", perkKey));
                     break;
                 }
                 if (mouseButton == 1) {
                     if (prog.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
-                        if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().player, Side.CLIENT)) {
+                        if (((GemSlotPerk) perk).hasItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             AstralSorcery.proxy.scheduleClientside(() -> {
@@ -1239,7 +1239,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                         return;
                     }
 
-                    if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog, Minecraft.getMinecraft().player)) {
+                    if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog, Minecraft.getMinecraft().thePlayer)) {
                         this.unlockPrimed = perk;
                         break;
                     } else if (this.sealBreakPrimed != null && this.tickSealBreak > 0) {

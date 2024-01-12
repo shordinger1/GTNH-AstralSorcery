@@ -11,13 +11,13 @@ package shordinger.astralsorcery.common.potion;
 import java.awt.*;
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;

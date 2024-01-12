@@ -48,14 +48,6 @@ public class Constants {
         public static final int TAG_ANY_NUMERIC = 99;
     }
 
-    /**
-     * The world event IDS, used when calling
-     * {@link net.minecraft.world.World#playEvent(net.minecraft.entity.player.EntityPlayer, int, net.minecraft.util.math.BlockPos, int)}.
-     * <br>
-     * Can be found from {@link net.minecraft.client.renderer.RenderGlobal#playEvent}<br>
-     * Some of the events use the {@code data} parameter. If this is the case, an explanation of what {@code data} does
-     * is also provided
-     */
     public static class WorldEvents {
 
         public static final int DISPENSER_DISPENSE_SOUND = 1000;
@@ -119,9 +111,7 @@ public class Constants {
          */
         public static final int DISPENSER_SMOKE = 2000;
 
-        /**
-         * {@code data} is the {@link net.minecraft.block.Block#getStateId state id} of the block broken
-         */
+
         public static final int BREAK_BLOCK_EFFECTS = 2001;
         /**
          * {@code data} is the rgb color int that should be used for the potion particles
@@ -143,12 +133,6 @@ public class Constants {
         public static final int ENDERMAN_GROWL_SOUND = 3001;
     }
 
-    /**
-     * The flags used when calling {@link net.minecraft.world.World#setBlockState}<br>
-     * Can be found from {@link net.minecraft.world.World#markAndNotifyBlock} and
-     * {@link net.minecraft.client.renderer.RenderGlobal#notifyBlockUpdate}<br>
-     * Flags can be combined with bitwise OR
-     */
     public static class BlockFlags {
 
         /**

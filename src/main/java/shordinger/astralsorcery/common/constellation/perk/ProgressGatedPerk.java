@@ -18,7 +18,7 @@ import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ProgressionTier;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
@@ -86,7 +86,7 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @SideOnly(Side.CLIENT)
     public final boolean canSeeClient() {
-        return canSee(Minecraft.getMinecraft().player, Side.CLIENT);
+        return canSee(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
     }
 
     public final boolean canSee(EntityPlayer player, Side side) {

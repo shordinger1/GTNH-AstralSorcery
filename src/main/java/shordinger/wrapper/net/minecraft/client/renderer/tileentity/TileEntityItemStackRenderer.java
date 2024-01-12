@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.BlockChest;
 import shordinger.wrapper.net.minecraft.block.BlockShulkerBox;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.model.ModelShield;
 import shordinger.wrapper.net.minecraft.client.renderer.BannerTextures;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;

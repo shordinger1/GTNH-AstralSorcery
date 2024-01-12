@@ -8,12 +8,13 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
-import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
-import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
+import static shordinger.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
+import static shordinger.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
+import static shordinger.astralsorcery.common.lib.Constellations.*;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -101,8 +102,8 @@ public class RegistryConstellations {
             Arrays.asList(new PotionMapEffect(MobEffects.RESISTANCE)));
         registerMapEffect(
             vicio,
-            Arrays.asList(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 3, 5)),
-            Arrays.asList(new PotionMapEffect(MobEffects.SPEED, 1, 3)));
+            List.of(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 3, 5)),
+            List.of(new PotionMapEffect(MobEffects.SPEED, 1, 3)));
         registerMapEffect(
             aevitas,
             Arrays.asList(new EnchantmentMapEffect(Enchantments.MENDING, 1, 3)),

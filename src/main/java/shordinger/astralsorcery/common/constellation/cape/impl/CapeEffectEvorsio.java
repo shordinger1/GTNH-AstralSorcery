@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.EnumCreatureType;
@@ -72,12 +72,12 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
     @SideOnly(Side.CLIENT)
     public static void playBlockBreakParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        if (!Minecraft.getMinecraft().player.isCreative() && event.getAdditionalDataLong() != 0) {
+        if (!Minecraft.getMinecraft().thePlayer.isCreative() && event.getAdditionalDataLong() != 0) {
             int stateId = (int) event.getAdditionalDataLong();
             IBlockState state = Block.getStateById(stateId);
             if (state != Blocks.AIR.getDefaultState()) {
                 ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-                World world = Minecraft.getMinecraft().world;
+                World world = Minecraft.getMinecraft().theWorld;
                 try {
                     if (!state.getBlock()
                             .addDestroyEffects(world, at.toBlockPos(), pm)) {

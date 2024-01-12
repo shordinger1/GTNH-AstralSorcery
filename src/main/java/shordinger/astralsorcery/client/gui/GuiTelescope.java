@@ -45,7 +45,7 @@ import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -111,7 +111,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
             for (IConstellation c : handle.getActiveConstellations()) {
                 if (c instanceof IWeakConstellation
-                    && c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) {
+                    && c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
@@ -248,7 +248,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
             guiOwner.getWorld()
                 .getSeed() * 31 + lastTracked * 31
                 + rotation.ordinal());
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
         /*
@@ -296,8 +296,8 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 float innerOffsetY = starSize + r.nextInt(MathHelper.floor(guiHeight - starSize));
                 float brightness = 0.3F + (RenderConstellation
                     .stdFlicker(ClientScheduler.getClientTick(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
-                brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
-                brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
+                brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) * 2;
+                brightness *= (1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks));
                 GL11.glColor4f(brightness, brightness, brightness, brightness);
                 drawRectDetailed(
                     guiLeft + innerOffsetX - starSize,
@@ -313,7 +313,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 currentInformation.informationMap.get(rotation).informations.clear();
                 for (Map.Entry<Point, IConstellation> entry : info.constellations.entrySet()) {
 
-                    float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+                    float rainBr = 1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
                     float widthHeight = SkyConstellationDistribution.constellationWH;
 
                     Point offset = entry.getKey();
@@ -406,7 +406,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         } else {
             brightness = 1F;
         }
-        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
         if (starBr <= 0.0F) {
             return;
         }
@@ -503,7 +503,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         if (rectArrowCW != null && rectArrowCW.contains(p)) {
             PktRotateTelescope pkt = new PktRotateTelescope(
                 true,
-                guiOwner.getWorld().provider.getDimension(),
+                guiOwner.getWorld().provider.dimensionId,
                 guiOwner.getPos());
             PacketChannel.CHANNEL.sendToServer(pkt);
             return;
@@ -511,7 +511,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
         if (rectArrowCCW != null && rectArrowCCW.contains(p)) {
             PktRotateTelescope pkt = new PktRotateTelescope(
                 false,
-                guiOwner.getWorld().provider.getDimension(),
+                guiOwner.getWorld().provider.dimensionId,
                 guiOwner.getPos());
             PacketChannel.CHANNEL.sendToServer(pkt);
         }
@@ -571,7 +571,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
     }
 
     private boolean canStartDrawing() {
-        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F;
+        return Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) >= 0.35F;
     }
 
     private void clearLines() {
@@ -634,7 +634,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; // Can't match otherwise anyway.
-            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.starRectangles;
 

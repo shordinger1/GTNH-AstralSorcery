@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.WorldClient;
 import shordinger.wrapper.net.minecraft.client.network.NetHandlerPlayClient;
 import shordinger.wrapper.net.minecraft.entity.EnumCreatureType;

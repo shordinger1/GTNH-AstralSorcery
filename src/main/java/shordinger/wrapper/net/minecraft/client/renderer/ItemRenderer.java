@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.AbstractClientPlayer;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;

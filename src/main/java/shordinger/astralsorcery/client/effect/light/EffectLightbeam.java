@@ -21,7 +21,7 @@ import shordinger.astralsorcery.client.util.SpriteLibrary;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
@@ -129,7 +129,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > distanceCapSq) return;
 
         float tr = alphaFunction.getAlpha(age, maxAge);

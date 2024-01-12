@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.renderer.entity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
@@ -106,7 +106,7 @@ public class RenderFish extends Render<EntityFishHook> {
             double d7;
 
             if ((this.renderManager.options == null || this.renderManager.options.thirdPersonView <= 0)
-                && entityplayer == Minecraft.getMinecraft().player) {
+                && entityplayer == Minecraft.getMinecraft().thePlayer) {
                 float f10 = this.renderManager.options.fovSetting;
                 f10 = f10 / 100.0F;
                 Vec3d vec3d = new Vec3d((double) k * -0.36D * (double) f10, -0.045D * (double) f10, 0.4D);

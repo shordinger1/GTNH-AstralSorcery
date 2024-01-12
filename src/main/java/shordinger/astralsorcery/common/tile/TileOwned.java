@@ -35,7 +35,7 @@ public class TileOwned extends TileEntitySynchronized {
         super.readCustomNBT(compound);
 
         if (compound.hasKey("owner")) {
-            this.ownerUUID = compound.getUniqueId("owner");
+            this.ownerUUID = UUID.fromString(compound.getString("owner"));
         }
     }
 
@@ -44,7 +44,7 @@ public class TileOwned extends TileEntitySynchronized {
         super.writeCustomNBT(compound);
 
         if (ownerUUID != null) {
-            compound.setUniqueId("owner", ownerUUID);
+            compound.setString("owner", String.valueOf(ownerUUID));
         }
     }
 

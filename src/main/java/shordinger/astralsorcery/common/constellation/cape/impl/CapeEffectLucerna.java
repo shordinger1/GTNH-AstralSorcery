@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import shordinger.astralsorcery.common.lib.Constellations;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.tileentity.TileEntity;
@@ -58,7 +58,7 @@ public class CapeEffectLucerna extends CapeArmorEffect {
 
     @SideOnly(Side.CLIENT)
     public void playClientHighlightTick(EntityPlayer player) {
-        if (player != Minecraft.getMinecraft().player) return;
+        if (player != Minecraft.getMinecraft().thePlayer) return;
 
         World w = player.getEntityWorld();
         List<EntityLivingBase> entities = w.getEntities(

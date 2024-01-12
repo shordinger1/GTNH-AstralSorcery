@@ -16,7 +16,7 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.lib.BlocksAS;
 import shordinger.astralsorcery.common.tile.TileIlluminator;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
 
@@ -37,12 +37,12 @@ public class OrbitalPropertiesIlluminator
 
     public OrbitalPropertiesIlluminator(TileIlluminator tile) {
         this.thisPos = tile.getPos();
-        this.dim = tile.getWorld().provider.getDimension();
+        this.dim = tile.getWorld().provider.dimensionId;
     }
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         return w.provider.getDimension() == dim && w.getBlockState(thisPos)
             .getBlock()
             .equals(BlocksAS.blockIlluminator);

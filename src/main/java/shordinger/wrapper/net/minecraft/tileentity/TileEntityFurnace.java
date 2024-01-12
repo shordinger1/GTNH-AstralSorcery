@@ -149,7 +149,7 @@ public class TileEntityFurnace extends TileEntityLockable implements ITickable, 
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("BurnTime", (short) this.furnaceBurnTime);
         compound.setInteger("CookTime", (short) this.cookTime);

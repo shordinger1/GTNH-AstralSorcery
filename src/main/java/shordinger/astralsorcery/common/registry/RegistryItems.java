@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
+import static shordinger.astralsorcery.common.lib.ItemsAS.*;
 
 import java.util.LinkedList;
 import java.util.List;

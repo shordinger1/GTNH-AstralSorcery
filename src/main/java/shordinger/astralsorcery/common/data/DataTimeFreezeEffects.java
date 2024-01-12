@@ -64,7 +64,7 @@ public class DataTimeFreezeEffects extends AbstractData {
     @Nullable
     public List<TimeStopEffectHelper> client_getTimeStopEffects(World world) {
         if (world.provider == null) return null;
-        return client_getTimeStopEffects(world.provider.getDimension());
+        return client_getTimeStopEffects(world.provider.dimensionId);
     }
 
     @Nullable

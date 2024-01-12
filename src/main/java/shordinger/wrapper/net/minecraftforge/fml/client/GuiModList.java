@@ -35,7 +35,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Strings;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.gui.GuiButton;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;

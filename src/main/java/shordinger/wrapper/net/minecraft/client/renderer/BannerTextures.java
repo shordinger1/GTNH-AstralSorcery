@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.LayeredColorMaskTexture;
 import shordinger.wrapper.net.minecraft.item.EnumDyeColor;
 import shordinger.wrapper.net.minecraft.tileentity.BannerPattern;

@@ -17,7 +17,7 @@ import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -216,7 +216,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
+        IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().theWorld.getWorldType());
         RenderingUtils.renderBlockSafely(world, BlockPos.ORIGIN, this.blockState, vb);
         tes.draw();
 

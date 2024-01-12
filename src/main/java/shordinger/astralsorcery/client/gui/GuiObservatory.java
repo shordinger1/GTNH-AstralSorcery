@@ -45,7 +45,7 @@ import shordinger.astralsorcery.common.tile.TileObservatory;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.EntityRenderer;
@@ -99,14 +99,14 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         this.owningPlayer = owningPlayer;
 
         Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-            .getSeedIfPresent(Minecraft.getMinecraft().world);
+            .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
         currSeed.ifPresent(this::setupInitialStars);
     }
 
     private void setupInitialStars(long seed) {
         Random rand = new Random(seed);
 
-        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / Config.dayLength);
+        int day = (int) (Minecraft.getMinecraft().theWorld.getWorldTime() / Config.dayLength);
         for (int i = 0; i < Math.abs(day); i++) {
             rand.nextLong(); // Flush
         }
@@ -164,7 +164,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w == null) return;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
@@ -177,7 +177,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
 
-        float pitch = Minecraft.getMinecraft().player.rotationPitch;
+        float pitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
         float transparency = 0F;
         if (pitch < 0F) {
             transparency = 1F;
@@ -209,7 +209,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     private void drawEffectBackground(float partialTicks, boolean canSeeSky, float transparency) {
         if (usedStars.isEmpty()) {
             Optional<Long> currSeed = ConstellationSkyHandler.getInstance()
-                .getSeedIfPresent(Minecraft.getMinecraft().world);
+                .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
             if (currSeed.isPresent()) {
                 setupInitialStars(currSeed.get());
 
@@ -226,10 +226,10 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
     private void drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Optional<Long> seed = ConstellationSkyHandler.getInstance()
-            .getSeedIfPresent(Minecraft.getMinecraft().world);
+            .getSeedIfPresent(Minecraft.getMinecraft().theWorld);
         long s = 0;
         if (seed.isPresent()) {
             s = seed.get();
@@ -300,7 +300,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         } else {
             brightness = 1F;
         }
-        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
         if (starBr <= 0.0F) {
             return;
         }
@@ -347,7 +347,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         GlStateManager.disableAlpha();
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random();
 
@@ -360,8 +360,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
             float brightness = 0.3F
                 + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15)))
                 * 0.6F;
-            brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
-            brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
+            brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * 2 * transparency;
+            brightness *= (1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks));
             GlStateManager.color(brightness, brightness, brightness, brightness);
             int size = r.nextInt(4) + 2;
             drawRect(MathHelper.floor(offsetX + stars.x), MathHelper.floor(offsetY + stars.y), size, size);
@@ -375,8 +375,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         }
         r.setSeed(lastTracked * 31);
 
-        double playerYaw = (Minecraft.getMinecraft().player.rotationYaw + 180) % 360F;
-        double playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+        double playerYaw = (Minecraft.getMinecraft().thePlayer.rotationYaw + 180) % 360F;
+        double playerPitch = Minecraft.getMinecraft().thePlayer.rotationPitch;
 
         if (playerYaw < 0) {
             playerYaw += 360F;
@@ -387,7 +387,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
         float cstSizeX = 55F;
         float cstSizeY = 35F;
 
-        float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+        float rainBr = 1F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
 
         Map<IConstellation, Map<StarLocation, Rectangle>> cstMap = new HashMap<>();
         if (handle != null && transparency > 0) {
@@ -685,8 +685,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
     }
 
     private boolean canStartDrawing() {
-        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F
-            && Minecraft.getMinecraft().world.getRainStrength(1.0F) <= 0.1F;
+        return Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) >= 0.35F
+            && Minecraft.getMinecraft().theWorld.getRainStrength(1.0F) <= 0.1F;
     }
 
     private void clearLines() {
@@ -731,7 +731,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiS
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; // Can't match otherwise anyway.
-            if (!c.canDiscover(Minecraft.getMinecraft().player, ResearchManager.clientProgress)) continue;
+            if (!c.canDiscover(Minecraft.getMinecraft().thePlayer, ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.getValue();
 

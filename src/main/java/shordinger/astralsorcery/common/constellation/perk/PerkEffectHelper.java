@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import shordinger.astralsorcery.common.util.data.TimeoutListContainer;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,8 +97,8 @@ public class PerkEffectHelper implements ITickHandler {
 
             @Override
             public void run() {
-                if (Minecraft.getMinecraft().player != null && ResearchManager.clientInitialized) {
-                    handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, false);
+                if (Minecraft.getMinecraft().thePlayer != null && ResearchManager.clientInitialized) {
+                    handlePerkModification(Minecraft.getMinecraft().thePlayer, Side.CLIENT, false);
                 } else {
                     AstralSorcery.proxy.scheduleClientside(this);
                 }

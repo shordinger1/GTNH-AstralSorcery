@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.tile.network.TileCrystalLens;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -44,7 +44,7 @@ public class ClientLightbeamHandler implements ITickHandler {
             ticksExisted = 0;
             Entity rView = Minecraft.getMinecraft()
                 .getRenderViewEntity();
-            if (rView == null) rView = Minecraft.getMinecraft().player;
+            if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
             if (rView != null) {
                 int dimId = rView.getEntityWorld().provider.getDimension();
                 DataLightConnections connections = SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS);

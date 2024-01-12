@@ -49,7 +49,7 @@ public class TreeCaptureHelper {
     @SubscribeEvent
     public void onTreeGrowth(SaplingGrowTreeEvent event) {
         LogCategory.TREE_BEACON.info(
-            () -> "Captured tree growth at " + event.getPos() + " in dim " + event.getWorld().provider.getDimension());
+            () -> "Captured tree growth at " + event.getPos() + " in dim " + event.getWorld().provider.dimensionId);
         WorldBlockPos pos = new WorldBlockPos(event.getWorld(), event.getPos());
         if (oneTimeCatches.contains(pos)) {
             LogCategory.TREE_BEACON.info(() -> "Expected growth at " + pos + " - skipping!");
@@ -152,7 +152,7 @@ public class TreeCaptureHelper {
         }
 
         public TreeWatcher(World world, BlockPos center, double watchRadius) {
-            this(world.provider.getDimension(), center, watchRadius);
+            this(world.provider.dimensionId, center, watchRadius);
         }
 
         public TreeWatcher(int dimId, BlockPos center, double watchRadius) {
@@ -162,7 +162,7 @@ public class TreeCaptureHelper {
         }
 
         public boolean watches(WorldBlockPos pos) {
-            return pos.getWorld().provider.getDimension() == dimId && center.distanceSq(pos) <= watchRadiusSq;
+            return pos.getWorld().provider.dimensionId == dimId && center.distanceSq(pos) <= watchRadiusSq;
         }
     }
 

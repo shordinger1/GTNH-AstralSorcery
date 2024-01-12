@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.item.gem.ItemPerkGem;
 import shordinger.astralsorcery.common.util.ItemUtils;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -137,11 +137,11 @@ public interface GemSlotPerk {
         if (!(this instanceof AbstractPerk)) {
             return;
         }
-        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
+        PlayerProgress prog = ResearchManager.getProgress(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (!prog.isValid()) {
             return;
         }
-        ItemStack contained = getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);
+        ItemStack contained = getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (contained.isEmpty()) {
             tooltip.add(TextFormatting.GRAY + I18n.format("perk.info.gem.empty"));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
@@ -149,7 +149,7 @@ public interface GemSlotPerk {
 
                 boolean has = !ItemUtils
                     .findItemsIndexedInPlayerInventory(
-                        Minecraft.getMinecraft().player,
+                        Minecraft.getMinecraft().thePlayer,
                         s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem
                             && !ItemPerkGem.getModifiers(s)
                             .isEmpty())

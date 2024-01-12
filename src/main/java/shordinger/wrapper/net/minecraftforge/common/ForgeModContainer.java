@@ -94,7 +94,7 @@ import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.NetworkRegistry;
 import shordinger.wrapper.net.minecraftforge.fml.common.registry.ForgeRegistries;
 import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.wrapper.net.minecraftforge.oredict.RecipeSorter;
 import shordinger.wrapper.net.minecraftforge.server.command.ForgeCommand;
 

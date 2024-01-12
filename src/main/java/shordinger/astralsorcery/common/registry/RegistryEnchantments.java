@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.enchantmentNightVision;
-import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.enchantmentScorchingHeat;
+import static shordinger.astralsorcery.common.lib.EnchantmentsAS.enchantmentNightVision;
+import static shordinger.astralsorcery.common.lib.EnchantmentsAS.enchantmentScorchingHeat;
 
 import java.util.LinkedList;
 import java.util.List;

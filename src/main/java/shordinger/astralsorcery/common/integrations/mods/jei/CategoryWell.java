@@ -17,7 +17,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import shordinger.astralsorcery.common.lib.BlocksAS;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;

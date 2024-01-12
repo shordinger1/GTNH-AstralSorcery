@@ -29,7 +29,7 @@ public class TileEntityEnchantmentTable extends TileEntity implements ITickable,
     private static final Random rand = new Random();
     private String customName;
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if (this.hasCustomName()) {

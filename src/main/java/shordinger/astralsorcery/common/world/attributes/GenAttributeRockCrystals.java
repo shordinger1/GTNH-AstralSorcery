@@ -121,7 +121,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
     private boolean isApplicableWorld(World world) {
         if (this.doIgnoreDimensionSpecifications) return true;
 
-        Integer dimId = world.provider.getDimension();
+        Integer dimId = world.provider.dimensionId;
         if (this.applicableDimensions.isEmpty()) return false;
         for (Integer dim : this.applicableDimensions) {
             if (dim.equals(dimId)) return true;

@@ -9,7 +9,7 @@
 package shordinger.astralsorcery.client.util;
 
 import shordinger.astralsorcery.AstralSorcery;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureMap;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 

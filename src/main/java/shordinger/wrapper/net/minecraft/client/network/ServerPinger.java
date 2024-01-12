@@ -29,7 +29,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.ServerAddress;
 import shordinger.wrapper.net.minecraft.client.multiplayer.ServerData;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;

@@ -16,7 +16,7 @@ import crafttweaker.mc1120.item.MCItemStack;
 import shordinger.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import shordinger.astralsorcery.common.lib.ItemsAS;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 

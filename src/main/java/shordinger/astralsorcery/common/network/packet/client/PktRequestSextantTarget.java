@@ -27,7 +27,7 @@ import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.EnumHand;
@@ -106,7 +106,7 @@ public class PktRequestSextantTarget
                                 PktRequestSextantTarget target = new PktRequestSextantTarget(
                                     to,
                                     result,
-                                    player.world.provider.getDimension());
+                                    player.world.provider.dimensionId);
                                 PacketChannel.CHANNEL.sendTo(target, player);
                                 return null;
                             }), 5, TimeUnit.SECONDS);
@@ -127,7 +127,7 @@ public class PktRequestSextantTarget
     private void handlePacketClient(PktRequestSextantTarget pkt) {
         Minecraft.getMinecraft()
             .addScheduledTask(() -> {
-                if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
+                if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) {
                     return;
                 }
                 SextantFinder.TargetObject to = SextantFinder.getByName(pkt.regNameExpected);

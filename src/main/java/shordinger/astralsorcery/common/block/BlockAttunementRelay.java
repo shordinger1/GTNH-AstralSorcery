@@ -59,7 +59,7 @@ public class BlockAttunementRelay extends BlockContainer {
         setHarvestLevel("pickaxe", 0);
         setResistance(1.0F);
         setLightLevel(0.25F);
-        setSoundType((shordinger.wrapper.net.minecraft.block.SoundType) Block.soundTypeGlass);
+        setSoundType((SoundType) Block.soundTypeGlass);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

@@ -36,7 +36,7 @@ import com.google.common.util.concurrent.SettableFuture;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreenWorking;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.DynamicTexture;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureManager;

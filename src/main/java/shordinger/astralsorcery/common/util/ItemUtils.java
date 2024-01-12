@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.util;
 
-import static hellfirepvp.astralsorcery.common.util.ItemComparator.Clause.*;
+import static shordinger.astralsorcery.common.util.ItemComparator.Clause.*;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -41,7 +41,7 @@ import shordinger.wrapper.net.minecraftforge.items.CapabilityItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandler;
 import shordinger.wrapper.net.minecraftforge.items.IItemHandlerModifiable;
 import shordinger.wrapper.net.minecraftforge.items.ItemStackHandler;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod

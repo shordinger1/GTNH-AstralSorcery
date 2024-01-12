@@ -113,7 +113,7 @@ public class CapeEffectBootes extends CapeArmorEffect {
         List<Integer> entities = new LinkedList<>();
         NBTTagList list = getData().getTagList("AS_Bootes_Entities", Constants.NBT.TAG_INT);
         for (int i = 0; i < list.tagCount(); i++) {
-            entities.add(list.getIntAt(i));
+            entities.add(list.func_150306_c(i)[i]);
         }
         return entities;
     }

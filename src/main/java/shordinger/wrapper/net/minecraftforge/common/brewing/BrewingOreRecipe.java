@@ -21,7 +21,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BrewingOreRecipe extends AbstractBrewingRecipe<List<ItemStack>> {
 

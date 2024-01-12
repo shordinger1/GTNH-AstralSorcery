@@ -22,7 +22,7 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.Gui;
 import shordinger.wrapper.net.minecraft.client.gui.GuiButton;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;

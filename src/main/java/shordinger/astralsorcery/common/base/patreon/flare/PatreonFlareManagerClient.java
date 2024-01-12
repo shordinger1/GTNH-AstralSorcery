@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.data.DataPatreonFlares;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -39,8 +39,8 @@ public class PatreonFlareManagerClient implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        World clWorld = Minecraft.getMinecraft().world;
-        EntityPlayer thisPlayer = Minecraft.getMinecraft().player;
+        World clWorld = Minecraft.getMinecraft().theWorld;
+        EntityPlayer thisPlayer = Minecraft.getMinecraft().thePlayer;
         if (clWorld == null || thisPlayer == null) return;
         int clDim = clWorld.provider.getDimension();
         Vector3 thisPlayerPos = Vector3.atEntityCenter(thisPlayer);

@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.client.util.Blending;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.entities.EntitySpectralTool;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;

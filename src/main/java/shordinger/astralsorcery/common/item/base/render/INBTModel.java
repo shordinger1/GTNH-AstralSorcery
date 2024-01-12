@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -36,7 +36,7 @@ public interface INBTModel {
     @Nullable
     @SideOnly(Side.CLIENT)
     default public EntityPlayer getCurrentClientPlayer() {
-        return Minecraft.getMinecraft().player;
+        return Minecraft.getMinecraft().thePlayer;
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableSet;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionCategoryElement;

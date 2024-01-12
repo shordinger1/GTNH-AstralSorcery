@@ -61,7 +61,7 @@ public class GatewayCache extends CachedWorldData {
         markDirty();
         CelestialGatewaySystem.instance.addPosition(world, node);
         AstralSorcery.log
-            .info("Added new gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
+            .info("Added new gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
     }
 
     public void removePosition(World world, BlockPos pos) {
@@ -69,13 +69,13 @@ public class GatewayCache extends CachedWorldData {
             markDirty();
             CelestialGatewaySystem.instance.removePosition(world, pos);
             AstralSorcery.log
-                .info("Removed gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
+                .info("Removed gateway node at: dim=" + world.provider.dimensionId + ", " + pos.toString());
         }
     }
 
     @Override
     public void onLoad(World world) {
-        AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.getDimension());
+        AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.dimensionId);
         long msStart = System.currentTimeMillis();
 
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();

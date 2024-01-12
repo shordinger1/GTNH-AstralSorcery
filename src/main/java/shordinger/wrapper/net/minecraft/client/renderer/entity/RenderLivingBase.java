@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.client.model.ModelBase;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
@@ -224,7 +224,7 @@ public abstract class RenderLivingBase<T extends EntityLivingBase> extends Rende
     protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
                                float netHeadYaw, float headPitch, float scaleFactor) {
         boolean flag = this.isVisible(entitylivingbaseIn);
-        boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().player);
+        boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
 
         if (flag || flag1) {
             if (!this.bindEntityTexture(entitylivingbaseIn)) {
@@ -465,7 +465,7 @@ public abstract class RenderLivingBase<T extends EntityLivingBase> extends Rende
     }
 
     protected boolean canRenderName(T entity) {
-        EntityPlayerSP entityplayersp = Minecraft.getMinecraft().player;
+        EntityPlayerSP entityplayersp = Minecraft.getMinecraft().thePlayer;
         boolean flag = !entity.isInvisibleToPlayer(entityplayersp);
 
         if (entity != entityplayersp) {

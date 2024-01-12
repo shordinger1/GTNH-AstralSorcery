@@ -33,11 +33,11 @@ public class StorageNetworkHandler {
     private static Map<Integer, NetworkHelper> mappingHelpers = new HashMap<>();
 
     public static NetworkHelper getHandler(World world) {
-        return mappingHelpers.computeIfAbsent(world.provider.getDimension(), id -> new NetworkHelper(world));
+        return mappingHelpers.computeIfAbsent(world.provider.dimensionId, id -> new NetworkHelper(world));
     }
 
     public static void clearHandler(World world) {
-        clearHandler(world.provider.getDimension());
+        clearHandler(world.provider.dimensionId);
     }
 
     public static void clearHandler(int dimId) {

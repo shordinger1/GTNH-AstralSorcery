@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateBossInfo;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.world.BossInfo;

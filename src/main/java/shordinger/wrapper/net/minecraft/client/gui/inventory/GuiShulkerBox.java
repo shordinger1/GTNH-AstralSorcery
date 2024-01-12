@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui.inventory;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.player.InventoryPlayer;
 import shordinger.wrapper.net.minecraft.inventory.ContainerShulkerBox;
@@ -17,7 +17,7 @@ public class GuiShulkerBox extends GuiContainer {
     private final InventoryPlayer playerInventory;
 
     public GuiShulkerBox(InventoryPlayer playerInventoryIn, IInventory inventoryIn) {
-        super(new ContainerShulkerBox(playerInventoryIn, inventoryIn, Minecraft.getMinecraft().player));
+        super(new ContainerShulkerBox(playerInventoryIn, inventoryIn, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = playerInventoryIn;
         this.inventory = inventoryIn;
         ++this.ySize;

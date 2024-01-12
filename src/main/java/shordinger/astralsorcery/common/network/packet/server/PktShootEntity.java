@@ -20,7 +20,7 @@ import shordinger.astralsorcery.client.effect.EntityComplexFX;
 import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.block.network.BlockCollectorCrystal;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -87,7 +87,7 @@ public class PktShootEntity implements IMessage, IMessageHandler<PktShootEntity,
 
     @SideOnly(Side.CLIENT)
     private static void shootEntity(PktShootEntity pkt) {
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         Entity entity = world.getEntityByID(pkt.entityId);
         if (entity != null) {
             entity.motionX = pkt.motionVector.getX();

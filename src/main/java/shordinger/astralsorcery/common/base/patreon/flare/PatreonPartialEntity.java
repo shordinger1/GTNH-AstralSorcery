@@ -86,8 +86,8 @@ public abstract class PatreonPartialEntity {
     }
 
     public boolean update(World world) {
-        boolean changed = lastTickedDim == null || lastTickedDim != world.provider.getDimension();
-        lastTickedDim = world.provider.getDimension();
+        boolean changed = lastTickedDim == null || lastTickedDim != world.provider.dimensionId;
+        lastTickedDim = world.provider.dimensionId;
 
         if (trySetMoveTarget(world)) {
             changed = true;

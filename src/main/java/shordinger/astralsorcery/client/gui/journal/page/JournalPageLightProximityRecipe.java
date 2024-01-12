@@ -28,7 +28,7 @@ import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import shordinger.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.registry.RegistryBookLookups;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.client.util.ITooltipFlag;
@@ -75,7 +75,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
                 if (r.contains(mouseX, mouseZ)) {
                     ItemStack stack = thisFrameStackFrames.get(r);
                     RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
-                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                        .tryGetPage(Minecraft.getMinecraft().thePlayer, Side.CLIENT, stack);
                     if (lookup != null) {
                         RegistryBookLookups.openLookupJournalPage(lookup);
                     }
@@ -168,7 +168,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
                     try {
                         tooltip.addAll(
                             stack.getTooltip(
-                                Minecraft.getMinecraft().player,
+                                Minecraft.getMinecraft().thePlayer,
                                 Minecraft.getMinecraft().gameSettings.advancedItemTooltips
                                     ? ITooltipFlag.TooltipFlags.ADVANCED
                                     : ITooltipFlag.TooltipFlags.NORMAL));
@@ -176,7 +176,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }
                     RegistryBookLookups.LookupInfo lookup = RegistryBookLookups
-                        .tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                        .tryGetPage(Minecraft.getMinecraft().thePlayer, Side.CLIENT, stack);
                     if (lookup != null) {
                         tooltip.add("");
                         tooltip.add(I18n.format("misc.craftInformation"));

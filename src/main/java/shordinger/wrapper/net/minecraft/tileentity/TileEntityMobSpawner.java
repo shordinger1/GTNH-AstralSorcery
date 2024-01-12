@@ -77,7 +77,7 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         this.spawnerLogic.readFromNBT(compound);
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         this.spawnerLogic.writeToNBT(compound);
         return compound;

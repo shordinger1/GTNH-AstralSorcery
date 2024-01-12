@@ -27,7 +27,7 @@ public class EventHandlerRedirect {
 
     @ASMCallHook
     public static float getSunBrightnessFactorInj(float prevBrightness, World world) {
-        if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+        if (Config.weakSkyRendersWhitelist.contains(world.provider.dimensionId)) {
             return prevBrightness;
         }
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()
@@ -48,7 +48,7 @@ public class EventHandlerRedirect {
     @ASMCallHook
     @SideOnly(Side.CLIENT)
     public static float getSunBrightnessBodyInj(float prevBrightness, World world) {
-        if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+        if (Config.weakSkyRendersWhitelist.contains(world.provider.dimensionId)) {
             return prevBrightness;
         }
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance()

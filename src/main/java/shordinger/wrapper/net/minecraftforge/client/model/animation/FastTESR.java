@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.client.model.animation;
 
 import org.lwjgl.opengl.GL11;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;

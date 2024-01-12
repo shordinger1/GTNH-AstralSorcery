@@ -600,46 +600,46 @@ public class Bootstrap {
     /**
      * Registers blocks, items, stats, etc.
      */
-    public static void register() {
-        if (!alreadyRegistered) {
-            alreadyRegistered = true;
-            if (false) // skip redirectOutputToLog, Forge already redirects stdout and stderr output to log so that they
-                // print with more context
-                redirectOutputToLog();
-            SoundEvent.registerSounds();
-            Block.registerBlocks();
-            BlockFire.init();
-            Potion.registerPotions();
-            Enchantment.registerEnchantments();
-            Item.registerItems();
-            PotionType.registerPotionTypes();
-            PotionHelper.init();
-            EntityList.init();
-            Biome.registerBiomes();
-            registerDispenserBehaviors();
-
-            if (!CraftingManager.init()) {
-                hasErrored = true;
-                LOGGER.error("Errors with built-in recipes!");
-            }
-
-            StatList.init();
-
-            if (LOGGER.isDebugEnabled()) {
-                if ((new AdvancementManager((File) null)).hasErrored()) {
-                    hasErrored = true;
-                    LOGGER.error("Errors with built-in advancements!");
-                }
-
-                if (!LootTableList.test()) {
-                    hasErrored = true;
-                    LOGGER.error("Errors with built-in loot tables");
-                }
-            }
-
-            net.minecraftforge.registries.GameData.vanillaSnapshot();
-        }
-    }
+//    public static void register() {
+//        if (!alreadyRegistered) {
+//            alreadyRegistered = true;
+//            if (false) // skip redirectOutputToLog, Forge already redirects stdout and stderr output to log so that they
+//                // print with more context
+//                redirectOutputToLog();
+//            SoundEvent.registerSounds();
+//            Block.registerBlocks();
+//            BlockFire.init();
+//            Potion.registerPotions();
+//            Enchantment.registerEnchantments();
+//            Item.registerItems();
+//            PotionType.registerPotionTypes();
+//            PotionHelper.init();
+//            EntityList.init();
+//            Biome.registerBiomes();
+//            registerDispenserBehaviors();
+//
+//            if (!CraftingManager.init()) {
+//                hasErrored = true;
+//                LOGGER.error("Errors with built-in recipes!");
+//            }
+//
+//            StatList.init();
+//
+//            if (LOGGER.isDebugEnabled()) {
+//                if ((new AdvancementManager((File) null)).hasErrored()) {
+//                    hasErrored = true;
+//                    LOGGER.error("Errors with built-in advancements!");
+//                }
+//
+//                if (!LootTableList.test()) {
+//                    hasErrored = true;
+//                    LOGGER.error("Errors with built-in loot tables");
+//                }
+//            }
+//
+//            net.minecraftforge.registries.GameData.vanillaSnapshot();
+//        }
+//    }
 
     /**
      * redirect standard streams to logger

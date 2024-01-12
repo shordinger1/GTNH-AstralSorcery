@@ -26,7 +26,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.ShootingStarExplosion;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.item.EntityItem;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.projectile.EntityThrowable;
@@ -142,7 +142,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
         float positionDist = 96F;
 
         EntityComplexFX.RenderOffsetController renderCtrl = (fx, currentRenderPos, currentMotion, pTicks) -> {
-            EntityPlayer pl = Minecraft.getMinecraft().player;
+            EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
             if (pl == null) {
                 return currentRenderPos;
             }
@@ -159,7 +159,7 @@ public class EntityShootingStar extends EntityThrowable implements EntityTechnic
                         .multiply(positionDist));
         };
         EntityComplexFX.ScaleFunction scaleFct = (fx, pos, pTicks, scaleIn) -> {
-            EntityPlayer pl = Minecraft.getMinecraft().player;
+            EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
             if (pl == null) {
                 return scaleIn;
             }

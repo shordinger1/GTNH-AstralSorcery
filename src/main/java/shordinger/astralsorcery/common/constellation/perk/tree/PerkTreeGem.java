@@ -25,7 +25,7 @@ import shordinger.astralsorcery.common.constellation.perk.AbstractPerk;
 import shordinger.astralsorcery.common.constellation.perk.tree.nodes.GemSlotPerk;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
@@ -57,7 +57,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
     public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, double x, double y,
                          double scale) {
         ItemStack stack = this.getPerk()
-            .getContainedItem(Minecraft.getMinecraft().player, Side.CLIENT);
+            .getContainedItem(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         if (!stack.isEmpty()) {
             int posX = (int) Math.round(x - (8 * scale));
             int posY = (int) Math.round(y - (8 * scale));

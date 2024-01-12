@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.data.*;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.PlayerActivityManager;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.network.NetworkManager;
 import shordinger.wrapper.net.minecraft.server.integrated.IntegratedServer;
 import shordinger.wrapper.net.minecraft.util.ChatAllowedCharacters;

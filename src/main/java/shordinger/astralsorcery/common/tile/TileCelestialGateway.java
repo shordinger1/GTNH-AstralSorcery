@@ -33,7 +33,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
@@ -68,7 +68,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         } else {
             if ((ticksExisted & 15) == 0) {
                 updateSkyState(
-                    world.provider.isNether()
+                    world.provider.isHellWorld
                         || MiscUtils.canSeeSky(this.getWorld(), this.getPos(), true, this.doesSeeSky));
             }
 
@@ -189,7 +189,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                     .registerFX(sphere);
                 clientSphere = sphere;
             }
-            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().player)
+            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().thePlayer)
                 .distance(sphereVec);
             if (clientSphere != null) {
                 if (!((CompoundEffectSphere) clientSphere).getPosition()
@@ -268,8 +268,8 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         this.doesSeeSky = compound.getBoolean("skyState");
         this.display = compound.getString("display");
 
-        if (compound.hasUniqueId("placer")) {
-            this.placedBy = compound.getUniqueId("placer");
+        if (compound.hasKey("placer")) {
+            this.placedBy = UUID.fromString(compound.getString("placer"));
         } else {
             this.placedBy = null;
         }
@@ -283,7 +283,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
         compound.setBoolean("skyState", this.doesSeeSky);
         compound.setString("display", display == null ? "" : display);
         if (this.placedBy != null) {
-            compound.setUniqueId("placer", this.placedBy);
+            compound.setString("placer", String.valueOf(this.placedBy));
         }
     }
 

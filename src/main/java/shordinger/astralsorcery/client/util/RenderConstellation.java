@@ -23,7 +23,7 @@ import shordinger.astralsorcery.common.constellation.star.StarConnection;
 import shordinger.astralsorcery.common.constellation.star.StarLocation;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
@@ -453,7 +453,7 @@ public class RenderConstellation {
                 for (StarConnection sc : c.getStarConnections()) {
                     float brightness = func.getBrightness();
                     if (applyStarBrightness) {
-                        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+                        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
                         if (starBr <= 0.23F) {
                             continue;
                         }
@@ -514,7 +514,7 @@ public class RenderConstellation {
 
             float brightness = func.getBrightness();
             if (applyStarBrightness) {
-                float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+                float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
                 if (starBr <= 0.23F) {
                     continue;
                 }

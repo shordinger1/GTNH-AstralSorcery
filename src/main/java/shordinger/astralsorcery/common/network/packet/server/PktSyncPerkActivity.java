@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import shordinger.astralsorcery.common.constellation.perk.tree.PerkTree;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -89,25 +89,21 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     @SideOnly(Side.CLIENT)
     private void handleClientPerkUpdate(PktSyncPerkActivity pkt) {
         AstralSorcery.proxy.scheduleClientside(() -> {
-            if (Minecraft.getMinecraft().player != null) {
+            if (Minecraft.getMinecraft().thePlayer != null) {
                 if (pkt.type != null) {
                     LogCategory.PERKS.info(() -> "Received perk activity packet on clientside: " + pkt.type);
                     switch (pkt.type) {
-                        case CLEARALL:
-                            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
-                            break;
-                        case UNLOCKALL:
-                            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().player);
-                            break;
-                        case DATACHANGE:
-                            PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(
-                                Minecraft.getMinecraft().player,
-                                pkt.perk,
-                                pkt.oldData,
-                                pkt.newData);
-                            break;
-                        default:
-                            break;
+                        case CLEARALL ->
+                            PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().thePlayer);
+                        case UNLOCKALL ->
+                            PerkEffectHelper.EVENT_INSTANCE.reapplyAllPerksClient(Minecraft.getMinecraft().thePlayer);
+                        case DATACHANGE -> PerkEffectHelper.EVENT_INSTANCE.notifyPerkDataChangeClient(
+                            Minecraft.getMinecraft().thePlayer,
+                            pkt.perk,
+                            pkt.oldData,
+                            pkt.newData);
+                        default -> {
+                        }
                     }
                 } else if (pkt.perk != null) {
                     LogCategory.PERKS.info(
@@ -115,7 +111,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
                             + " "
                             + (pkt.unlock ? "Application" : "Removal"));
                     PerkEffectHelper.EVENT_INSTANCE
-                        .notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
+                        .notifyPerkChange(Minecraft.getMinecraft().thePlayer, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
             }
         });

@@ -91,7 +91,7 @@ public class TileEntityDispenser extends TileEntityLockableLoot {
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if (!this.checkLootAndWrite(compound)) {

@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
 import shordinger.wrapper.net.minecraft.client.gui.GuiButton;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;

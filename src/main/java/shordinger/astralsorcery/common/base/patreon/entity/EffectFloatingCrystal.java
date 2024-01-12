@@ -23,7 +23,7 @@ import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.TextureQuery;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderHelper;
@@ -77,7 +77,7 @@ public class EffectFloatingCrystal extends EntityComplexFX {
             if (refreshFunction != null) {
                 Entity rView = Minecraft.getMinecraft()
                     .getRenderViewEntity();
-                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
                 if (rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
                     if (refreshFunction.shouldRefresh()) {
                         age = 0;

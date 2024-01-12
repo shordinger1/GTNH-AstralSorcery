@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.model;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.monster.EntityGuardian;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;

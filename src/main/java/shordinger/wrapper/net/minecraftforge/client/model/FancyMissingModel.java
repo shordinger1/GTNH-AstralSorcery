@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.BakedQuad;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ItemCameraTransforms;

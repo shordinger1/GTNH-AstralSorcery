@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.client.model.animation;
 
 import org.apache.commons.lang3.tuple.Pair;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BlockRendererDispatcher;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.IBakedModel;

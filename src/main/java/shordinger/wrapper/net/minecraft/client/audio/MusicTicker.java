@@ -4,7 +4,7 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.init.SoundEvents;
 import shordinger.wrapper.net.minecraft.util.ITickable;
 import shordinger.wrapper.net.minecraft.util.SoundEvent;

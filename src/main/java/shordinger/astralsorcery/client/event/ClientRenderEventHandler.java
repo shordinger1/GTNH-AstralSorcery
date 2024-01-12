@@ -47,7 +47,7 @@ import shordinger.astralsorcery.common.util.SoundHelper;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;
@@ -102,19 +102,19 @@ public class ClientRenderEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
-        World world = Minecraft.getMinecraft().world;
-        if (Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
+        World world = Minecraft.getMinecraft().theWorld;
+        if (Config.constellationSkyDimWhitelist.contains(world.provider.dimensionId)) {
             if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
                 world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
             }
         }
 
         playHandAndHudRenders(
-            Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND),
+            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND),
             EnumHand.MAIN_HAND,
             event.getPartialTicks());
         playHandAndHudRenders(
-            Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND),
+            Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND),
             EnumHand.OFF_HAND,
             event.getPartialTicks());
     }
@@ -154,13 +154,13 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
-            if (Minecraft.getMinecraft().player.isCreative()) { // TODO move to a more appropriate handler
+        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null) {
+            if (Minecraft.getMinecraft().thePlayer.isCreative()) { // TODO move to a more appropriate handler
                 PersistentDataManager.INSTANCE.setCreative();
             }
 
-            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
-            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND));
+            playItemEffects(Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND));
 
             tickTimeFreezeEffects();
 
@@ -211,7 +211,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void tickTimeFreezeEffects() {
-        World w = Minecraft.getMinecraft().world;
+        World w = Minecraft.getMinecraft().theWorld;
         if (w != null && w.provider != null) {
             List<TimeStopEffectHelper> effects = ((DataTimeFreezeEffects) SyncDataHolder
                 .getData(Side.CLIENT, SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).client_getTimeStopEffects(w);
@@ -264,7 +264,7 @@ public class ClientRenderEventHandler {
             }
             if (i instanceof ItemSkyResonator) {
                 ItemSkyResonator.ResonatorUpgrade upgrade = ItemSkyResonator
-                    .getCurrentUpgrade(Minecraft.getMinecraft().player, inHand);
+                    .getCurrentUpgrade(Minecraft.getMinecraft().thePlayer, inHand);
                 upgrade.playResonatorEffects();
             }
             if (i instanceof ItemHudRender) {
@@ -311,7 +311,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.disableAlpha();
                 Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
 
-                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F
+                float percFilled = Minecraft.getMinecraft().thePlayer.isCreative() ? 1F
                     : PlayerChargeHandler.INSTANCE.clientCharge;
                 double uLength = ssr.getULength() * percFilled;
 
@@ -360,7 +360,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
-            ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+            ItemStack inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.MAIN_HAND);
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -371,7 +371,7 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
-            inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
+            inHand = Minecraft.getMinecraft().thePlayer.getHeldItem(EnumHand.OFF_HAND);
             if (!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
@@ -387,7 +387,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void renderAlignmentChargeOverlay() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();

@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -286,7 +286,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         AstralSorcery.proxy.scheduleClientside(() -> {
             switch (pkt.state) {
                 case STATE_ADD:
-                    ResearchManager.recieveProgressFromServer(pkt, Minecraft.getMinecraft().player);
+                    ResearchManager.recieveProgressFromServer(pkt, Minecraft.getMinecraft().thePlayer);
                     break;
                 case STATE_WIPE:
                     ResearchManager.clientProgress = new PlayerProgress();

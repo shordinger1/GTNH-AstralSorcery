@@ -52,7 +52,7 @@ import shordinger.astralsorcery.common.util.PatternMatchHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.log.LogCategory;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
@@ -266,7 +266,7 @@ public class TileCollectorCrystal extends TileSourceBase
 
     @Override
     public int getDimensionId() {
-        return this.getWorld().provider.getDimension();
+        return this.getWorld().provider.dimensionId;
     }
 
     public boolean isPlayerMade() {
@@ -341,8 +341,8 @@ public class TileCollectorCrystal extends TileSourceBase
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasUniqueId("playerRef")) {
-            this.playerRef = compound.getUniqueId("playerRef");
+        if (compound.hasKey("playerRef")) {
+            this.playerRef = UUID.fromString(compound.getString("playerRef"));
         } else if (compound.hasKey("player") && compound.getBoolean("player")) {
             this.playerRef = DUMMY_UUID; // Legacy data conversion..
         } else {
@@ -362,7 +362,7 @@ public class TileCollectorCrystal extends TileSourceBase
         super.writeCustomNBT(compound);
 
         if (this.playerRef != null) {
-            compound.setUniqueId("playerRef", this.playerRef);
+            compound.setString("playerRef", String.valueOf(this.playerRef));
         }
         if (associatedType != null) {
             associatedType.writeToNBT(compound);

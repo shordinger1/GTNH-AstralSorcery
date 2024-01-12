@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.fml.client;
 
 import java.util.ArrayList;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.gui.Gui;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;

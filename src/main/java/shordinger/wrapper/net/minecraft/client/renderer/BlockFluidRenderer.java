@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.BlockLiquid;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.color.BlockColors;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureMap;

@@ -20,7 +20,7 @@ public class TileEntityNote extends TileEntity {
      */
     public boolean previousRedstoneState;
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setByte("note", this.note);
         compound.setBoolean("powered", this.previousRedstoneState);

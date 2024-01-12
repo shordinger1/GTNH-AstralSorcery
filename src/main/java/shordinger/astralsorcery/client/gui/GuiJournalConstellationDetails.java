@@ -40,7 +40,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.lib.RecipesAS;
 import shordinger.astralsorcery.common.lib.Sounds;
 import shordinger.astralsorcery.common.util.SoundHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
@@ -221,9 +221,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testActivePhases() {
-        if (Minecraft.getMinecraft().world == null) return;
+        if (Minecraft.getMinecraft().theWorld == null) return;
         WorldSkyHandler handler = ConstellationSkyHandler.getInstance()
-            .getWorldHandler(Minecraft.getMinecraft().world);
+            .getWorldHandler(Minecraft.getMinecraft().theWorld);
         if (handler == null) return;
         for (MoonPhase phase : this.phases) {
             List<IConstellation> active = handler.getConstellationsForMoonPhase(phase);

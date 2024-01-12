@@ -3,7 +3,7 @@ package shordinger.wrapper.net.minecraft.client.renderer.tileentity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.RenderGlobal;
@@ -19,7 +19,7 @@ public class TileEntityStructureRenderer extends TileEntitySpecialRenderer<TileE
 
     public void render(TileEntityStructure te, double x, double y, double z, float partialTicks, int destroyStage,
                        float alpha) {
-        if (Minecraft.getMinecraft().player.canUseCommandBlock() || Minecraft.getMinecraft().player.isSpectator()) {
+        if (Minecraft.getMinecraft().thePlayer.canUseCommandBlock() || Minecraft.getMinecraft().thePlayer.isSpectator()) {
             super.render(te, x, y, z, partialTicks, destroyStage, alpha);
             BlockPos blockpos = te.getPosition();
             BlockPos blockpos1 = te.getStructureSize();

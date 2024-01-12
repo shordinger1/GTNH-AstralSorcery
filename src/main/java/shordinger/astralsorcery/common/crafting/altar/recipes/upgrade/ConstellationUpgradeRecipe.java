@@ -34,7 +34,7 @@ import shordinger.astralsorcery.common.tile.TileAltar;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.OreDictAlias;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 

@@ -8,8 +8,8 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.lib.AdvancementTriggers.*;
-import static net.minecraft.advancements.CriteriaTriggers.register;
+import static shordinger.astralsorcery.common.lib.AdvancementTriggers.*;
+import static shordinger.wrapper.net.minecraft.advancements.CriteriaTriggers.register;
 
 import shordinger.astralsorcery.common.advancements.*;
 

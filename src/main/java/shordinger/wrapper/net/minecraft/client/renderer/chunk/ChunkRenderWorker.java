@@ -16,7 +16,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.RegionRenderCacheBuilder;
 import shordinger.wrapper.net.minecraft.crash.CrashReport;
 import shordinger.wrapper.net.minecraft.entity.Entity;
@@ -77,7 +77,7 @@ public class ChunkRenderWorker implements Runnable {
                 return;
             }
 
-            BlockPos blockpos = new BlockPos(Minecraft.getMinecraft().player);
+            BlockPos blockpos = new BlockPos(Minecraft.getMinecraft().thePlayer);
             BlockPos blockpos1 = generator.getRenderChunk()
                 .getPosition();
             int i = 16;

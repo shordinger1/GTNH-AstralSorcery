@@ -16,7 +16,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.client.ClientBrandRetriever;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.multiplayer.ThreadLanServerPing;
 import shordinger.wrapper.net.minecraft.command.ServerCommandManager;
 import shordinger.wrapper.net.minecraft.crash.CrashReport;

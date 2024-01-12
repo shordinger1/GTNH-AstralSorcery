@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiListExtended;
 import shordinger.wrapper.net.minecraftforge.fml.client.config.GuiConfigEntries.SelectValueEntry;
 

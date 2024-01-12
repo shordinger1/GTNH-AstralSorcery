@@ -1,6 +1,6 @@
 package shordinger.wrapper.net.minecraft.command;
 
-public class CommandException extends Exception {
+public class CommandException extends net.minecraft.command.CommandException {
 
     private final Object[] errorObjects;
 

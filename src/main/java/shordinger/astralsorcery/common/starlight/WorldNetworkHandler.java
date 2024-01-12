@@ -83,12 +83,12 @@ public class WorldNetworkHandler {
                 if (node == null) {
                     AstralSorcery.log
                         .warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.dimensionId + " at " + source.key);
                     continue;
                 }
                 if (!(node instanceof ITransmissionSource)) {
                     AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.dimensionId + " at " + source.key);
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
@@ -115,12 +115,12 @@ public class WorldNetworkHandler {
                 if (node == null) {
                     AstralSorcery.log
                         .warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.dimensionId + " at " + source.key);
                     continue;
                 }
                 if (!(node instanceof ITransmissionSource)) {
                     AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
-                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.dimensionId + " at " + source.key);
                     continue;
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;

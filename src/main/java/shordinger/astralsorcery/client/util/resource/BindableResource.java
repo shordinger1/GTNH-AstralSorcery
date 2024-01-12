@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import shordinger.astralsorcery.AstralSorcery;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.ITextureObject;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.SimpleTexture;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureUtil;

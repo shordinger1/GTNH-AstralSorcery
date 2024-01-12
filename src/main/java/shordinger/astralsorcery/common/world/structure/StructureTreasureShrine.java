@@ -89,14 +89,13 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
         if (!isApplicableWorld(world)) return false;
-        if (!isApplicableBiome(world, pos)) return false;
-        return true;
+        return isApplicableBiome(world, pos);
     }
 
     private boolean isApplicableWorld(World world) {
         if (cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
 
-        Integer dimId = world.provider.getDimension();
+        Integer dimId = world.provider.dimensionId;
         if (cfgEntry.getApplicableDimensions()
             .isEmpty()) return false;
         for (Integer dim : cfgEntry.getApplicableDimensions()) {

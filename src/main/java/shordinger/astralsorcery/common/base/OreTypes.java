@@ -24,7 +24,7 @@ import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -352,7 +352,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 AstralSorcery.log.info(
                     "Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
             } else {
-                UUID uuidCraft = compound.getUniqueId("crafterUUID");
+                UUID uuidCraft = UUID.fromString(compound.getString("crafterUUID"));
                 int tick = compound.getInteger("recipeTick");
 
                 NBTTagList tl = compound.getTagList("chalicePositions", Constants.NBT.TAG_COMPOUND);
@@ -385,7 +385,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 craftingTask.getRecipeToCraft()
                     .getUniqueRecipeId());
             compound.setInteger("recipeTick", craftingTask.getTicksCrafting());
-            compound.setUniqueId("crafterUUID", craftingTask.getPlayerCraftingUUID());
+            compound.setString("crafterUUID", craftingTask.getPlayerCraftingUUID());
             NBTTagList chalicePositions = new NBTTagList();
             for (TileChalice tc : craftingTask.getSupportingChalices()) {
                 NBTTagCompound cmp = new NBTTagCompound();

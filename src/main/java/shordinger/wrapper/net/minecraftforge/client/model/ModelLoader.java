@@ -55,7 +55,7 @@ import com.google.common.collect.Sets;
 
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BlockModelShapes;
 import shordinger.wrapper.net.minecraft.client.renderer.ItemMeshDefinition;
 import shordinger.wrapper.net.minecraft.client.renderer.ItemModelMesher;

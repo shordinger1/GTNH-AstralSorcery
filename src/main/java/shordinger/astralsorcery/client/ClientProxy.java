@@ -69,7 +69,7 @@ import shordinger.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import shordinger.astralsorcery.common.util.FileStorageUtil;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.Block;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelBakery;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import shordinger.wrapper.net.minecraft.client.renderer.color.BlockColors;

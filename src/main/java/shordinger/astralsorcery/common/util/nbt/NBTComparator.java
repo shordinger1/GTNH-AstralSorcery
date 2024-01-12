@@ -27,13 +27,13 @@ import net.minecraft.nbt.NBTTagList;
 public class NBTComparator {
 
     public static boolean contains(@Nonnull NBTTagCompound thisCompound, @Nonnull NBTTagCompound otherCompound) {
-        for (String key : thisCompound.getKeySet()) {
-            if (!otherCompound.hasKey(key, thisCompound.getTagId(key))) {
+        for (Object key : thisCompound.func_150296_c()) {
+            if (!otherCompound.hasKey((String) key, thisCompound.func_150299_b((String) key))) {
                 return false;
             }
 
-            NBTBase thisNBT = thisCompound.getTag(key);
-            NBTBase otherNBT = otherCompound.getTag(key);
+            NBTBase thisNBT = thisCompound.getTag((String) key);
+            NBTBase otherNBT = otherCompound.getTag((String) key);
             if (!compare(thisNBT, otherNBT)) {
                 return false;
             }
@@ -49,10 +49,10 @@ public class NBTComparator {
         List<Integer> matched = new ArrayList<>();
         lblMatching:
         for (int index = 0; index < base.tagCount(); index++) {
-            NBTBase thisNbt = base.get(index);
+            NBTBase thisNbt = base.getCompoundTagAt(index);
 
             for (int matchIndex = 0; matchIndex < other.tagCount(); matchIndex++) {
-                NBTBase matchNBT = other.get(matchIndex);
+                NBTBase matchNBT = other.getCompoundTagAt(matchIndex);
 
                 if (!matched.contains(matchIndex)) {
                     if (compare(thisNbt, matchNBT)) {

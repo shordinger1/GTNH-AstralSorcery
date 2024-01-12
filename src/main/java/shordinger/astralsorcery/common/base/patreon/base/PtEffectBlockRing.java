@@ -20,7 +20,7 @@ import shordinger.astralsorcery.client.util.TextureHelper;
 import shordinger.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -75,7 +75,7 @@ public class PtEffectBlockRing extends PatreonEffectHelper.PatreonEffect {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderLast(RenderWorldLastEvent event) {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
+        EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
         if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && // First person
             pl != null
             && pl.getUniqueID()

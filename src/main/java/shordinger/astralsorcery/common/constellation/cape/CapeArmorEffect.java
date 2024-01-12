@@ -17,7 +17,7 @@ import shordinger.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import shordinger.astralsorcery.common.constellation.IConstellation;
 import shordinger.astralsorcery.common.data.config.entry.ConfigEntry;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.inventory.EntityEquipmentSlot;
@@ -70,7 +70,7 @@ public abstract class CapeArmorEffect extends ConfigEntry {
 
     @SideOnly(Side.CLIENT)
     protected void playConstellationCapeSparkles(EntityPlayer pl, float strength) {
-        if (pl == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+        if (pl == Minecraft.getMinecraft().thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
             strength *= 0.1F;
         }
         if (rand.nextFloat() < strength) {

@@ -16,7 +16,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import shordinger.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;

@@ -36,7 +36,7 @@ public class TileEntityEndGateway extends TileEntityEndPortal implements ITickab
     private BlockPos exitPortal;
     private boolean exactTeleport;
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setLong("Age", this.age);
 

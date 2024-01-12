@@ -16,7 +16,7 @@ import shordinger.astralsorcery.common.constellation.perk.PlayerAttributeMap;
 import shordinger.astralsorcery.common.data.research.PlayerProgress;
 import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.util.log.LogCategory;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 
@@ -136,7 +136,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addLocalizedTooltip(Collection<String> tooltip) {
-        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().player, Side.CLIENT);
+        Collection<PerkAttributeModifier> modifiers = this.getModifiers(Minecraft.getMinecraft().thePlayer, Side.CLIENT);
         boolean addEmptyLine = !modifiers.isEmpty();
 
         if (canSeeClient()) {

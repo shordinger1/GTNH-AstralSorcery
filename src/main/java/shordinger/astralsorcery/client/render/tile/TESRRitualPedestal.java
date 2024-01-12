@@ -24,7 +24,7 @@ import shordinger.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import shordinger.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import shordinger.astralsorcery.common.tile.TileRitualPedestal;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import shordinger.wrapper.net.minecraft.item.Item;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
@@ -90,7 +90,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
         if (percRunning > 1E-4) {
             TextureSpritePlane sprite = te.getHaloEffectSprite();
             float alphaMul = ConstellationSkyHandler.getInstance()
-                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+                .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             sprite.setAlphaMultiplier(percRunning * alphaMul);
         }
     }

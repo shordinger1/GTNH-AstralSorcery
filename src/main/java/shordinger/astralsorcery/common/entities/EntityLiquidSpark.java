@@ -31,7 +31,7 @@ import shordinger.astralsorcery.common.util.ASDataSerializers;
 import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.EntityFlying;
@@ -309,7 +309,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(at, tas);
         cube.setTextureSubSizePercentage(1F / 16F)
             .setMaxAge(20 + rand.nextInt(20));
-        cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+        cube.setWorldLightCoord(Minecraft.getMinecraft().theWorld, at.toBlockPos());
         cube.setColorHandler(
             cb -> new Color(
                 stack.getFluid()

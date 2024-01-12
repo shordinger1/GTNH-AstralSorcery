@@ -30,7 +30,7 @@ import shordinger.astralsorcery.common.util.DamageSourceUtil;
 import shordinger.astralsorcery.common.util.DamageUtil;
 import shordinger.astralsorcery.common.util.ILocatable;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.EntityLiving;
 import shordinger.wrapper.net.minecraft.entity.monster.IMob;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;

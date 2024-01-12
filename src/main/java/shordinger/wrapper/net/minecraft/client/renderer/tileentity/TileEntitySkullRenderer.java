@@ -11,7 +11,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.model.ModelBase;
 import shordinger.wrapper.net.minecraft.client.model.ModelDragonHead;
 import shordinger.wrapper.net.minecraft.client.model.ModelHumanoidHead;

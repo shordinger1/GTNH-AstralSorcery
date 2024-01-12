@@ -5,7 +5,7 @@ import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import shordinger.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;

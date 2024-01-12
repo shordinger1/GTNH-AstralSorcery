@@ -142,7 +142,7 @@ public class TransmissionNetworkHelper {
         } else {
             AstralSorcery.log.warn(
                 "Placed a network tile that's not transmission/receiver or source! At: dim="
-                    + tileNetwork.getWorld().provider.getDimension()
+                    + tileNetwork.getWorld().provider.dimensionId
                     + ", pos="
                     + tileNetwork.getPos());
         }
@@ -151,7 +151,7 @@ public class TransmissionNetworkHelper {
         if (node == null) {
             AstralSorcery.log.warn(
                 "Placed a network tile that didn't produce a network node! At: dim="
-                    + tileNetwork.getWorld().provider.getDimension()
+                    + tileNetwork.getWorld().provider.dimensionId
                     + ", pos="
                     + tileNetwork.getPos());
         } else if (node.needsUpdate()) {
@@ -167,7 +167,7 @@ public class TransmissionNetworkHelper {
         if (node == null) {
             AstralSorcery.log.warn(
                 "Tried to get a network node at a TileEntity, but didn't find one! At: dim="
-                    + tileNetwork.getWorld().provider.getDimension()
+                    + tileNetwork.getWorld().provider.dimensionId
                     + ", pos="
                     + tileNetwork.getPos());
         } else {
@@ -182,7 +182,7 @@ public class TransmissionNetworkHelper {
         } else {
             AstralSorcery.log.warn(
                 "Removed a network tile that's not transmission/receiver or source! At: dim="
-                    + tileNetwork.getWorld().provider.getDimension()
+                    + tileNetwork.getWorld().provider.dimensionId
                     + ", pos="
                     + tileNetwork.getPos());
         }

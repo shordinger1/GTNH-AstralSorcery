@@ -29,7 +29,7 @@ import shordinger.astralsorcery.common.util.MiscUtils;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.struct.OreDiscoverer;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayerMP;
 import shordinger.wrapper.net.minecraft.item.Item;
@@ -104,7 +104,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     @SideOnly(Side.CLIENT)
     public static void playClientEffects(Collection<BlockPos> positions, boolean tumble) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player == null) return;
         List<IBlockState> changed = new LinkedList<>();
 
@@ -114,7 +114,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
                 itemRand.nextFloat() - itemRand.nextFloat(),
                 itemRand.nextFloat() - itemRand.nextFloat(),
                 itemRand.nextFloat() - itemRand.nextFloat());
-            IBlockState state = Minecraft.getMinecraft().world.getBlockState(at);
+            IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(at);
             if (Mods.ORESTAGES.isPresent()) {
                 if (changed.contains(state) || !ModIntegrationOreStages.canSeeOreClient(state)) {
                     changed.add(state);

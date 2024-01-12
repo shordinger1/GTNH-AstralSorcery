@@ -111,13 +111,13 @@ public class DataLightBlockEndpoints extends AbstractData {
     }
 
     public boolean doesPositionReceiveStarlightClient(World world, BlockPos pos) {
-        int dim = world.provider.getDimension();
+        int dim = world.provider.dimensionId;
         return clientPositions.containsKey(dim) && clientPositions.get(dim)
             .contains(pos);
     }
 
     public boolean doesPositionReceiveStarlightServer(World world, BlockPos pos) {
-        int dim = world.provider.getDimension();
+        int dim = world.provider.dimensionId;
         return serverPositions.containsKey(dim) && serverPositions.get(dim)
             .contains(pos);
     }

@@ -13,7 +13,7 @@ import shordinger.astralsorcery.common.crafting.helper.ShapeMap;
 import shordinger.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import shordinger.astralsorcery.common.data.DataLightBlockEndpoints;
 import shordinger.astralsorcery.common.data.SyncDataHolder;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.gui.inventory.GuiCrafting;
 import shordinger.wrapper.net.minecraft.inventory.Container;

@@ -18,7 +18,7 @@ import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.*;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -63,7 +63,7 @@ public interface IGuiRenderablePage {
         ri.zLevel = zLevel;
         RenderHelper.enableGUIStandardItemLighting();
 
-        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, stack, offsetX, offsetY);
+        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
         ri.renderItemOverlayIntoGUI(fontRenderer, stack, offsetX, offsetY, null);
 
         RenderHelper.disableStandardItemLighting();

@@ -25,7 +25,7 @@ import shordinger.wrapper.net.minecraft.block.BlockStoneSlabNew;
 import shordinger.wrapper.net.minecraft.block.BlockTallGrass;
 import shordinger.wrapper.net.minecraft.block.BlockWall;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.BakedQuad;
@@ -326,7 +326,7 @@ public class RenderItem implements IResourceManagerReloadListener {
     }
 
     public void renderItemAndEffectIntoGUI(ItemStack stack, int xPosition, int yPosition) {
-        this.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, stack, xPosition, yPosition);
+        this.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, xPosition, yPosition);
     }
 
     public void renderItemAndEffectIntoGUI(@Nullable EntityLivingBase p_184391_1_, final ItemStack p_184391_2_,
@@ -439,7 +439,7 @@ public class RenderItem implements IResourceManagerReloadListener {
                 GlStateManager.enableDepth();
             }
 
-            EntityPlayerSP entityplayersp = Minecraft.getMinecraft().player;
+            EntityPlayerSP entityplayersp = Minecraft.getMinecraft().thePlayer;
             float f3 = entityplayersp == null ? 0.0F
                 : entityplayersp.getCooldownTracker()
                 .getCooldown(

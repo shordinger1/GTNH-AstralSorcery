@@ -16,7 +16,7 @@ import shordinger.astralsorcery.common.network.PacketChannel;
 import shordinger.astralsorcery.common.tile.TileAttunementAltar;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.World;
@@ -92,10 +92,10 @@ public class PktAttunementAltarState
 
     @SideOnly(Side.CLIENT)
     private void recClient(PktAttunementAltarState message) {
-        World mcWorld = Minecraft.getMinecraft().world;
+        World mcWorld = Minecraft.getMinecraft().theWorld;
         if (mcWorld != null && mcWorld.provider.getDimension() == message.worldId
-            && Minecraft.getMinecraft().player != null
-            && Minecraft.getMinecraft().player.getEntityId() == message.entityId) {
+            && Minecraft.getMinecraft().thePlayer != null
+            && Minecraft.getMinecraft().thePlayer.getEntityId() == message.entityId) {
 
             AstralSorcery.proxy.scheduleClientside(() -> {
                 TileAttunementAltar ta = MiscUtils.getTileAt(mcWorld, message.at, TileAttunementAltar.class, true);

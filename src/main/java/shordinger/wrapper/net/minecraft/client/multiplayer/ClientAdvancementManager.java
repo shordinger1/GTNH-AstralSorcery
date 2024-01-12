@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.advancements.Advancement;
 import shordinger.wrapper.net.minecraft.advancements.AdvancementList;
 import shordinger.wrapper.net.minecraft.advancements.AdvancementProgress;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.toasts.AdvancementToast;
 import shordinger.wrapper.net.minecraft.client.network.NetHandlerPlayClient;
 import shordinger.wrapper.net.minecraft.network.play.client.CPacketSeenAdvancements;

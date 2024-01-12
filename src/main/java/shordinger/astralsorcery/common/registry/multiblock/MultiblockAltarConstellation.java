@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.registry.multiblock;
 
-import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
+import static shordinger.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.block.BlockBlackMarble;

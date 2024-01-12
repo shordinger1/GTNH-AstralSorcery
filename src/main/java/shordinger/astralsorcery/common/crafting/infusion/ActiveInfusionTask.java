@@ -58,7 +58,7 @@ public class ActiveInfusionTask {
             : MathHelper.floor(recipeToCraft.getLiquidStarlightConsumptionChance() * 400);
     }
 
-    public UUID getPlayerCraftingUUID() {
+    public String getPlayerCraftingUUID() {
         return playerCraftingUUID;
     }
 

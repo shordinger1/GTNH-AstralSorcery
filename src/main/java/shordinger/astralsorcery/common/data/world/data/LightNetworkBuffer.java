@@ -119,7 +119,7 @@ public class LightNetworkBuffer extends CachedWorldData {
         if (Config.performNetworkIntegrityCheck) {
             AstralSorcery.log.info(
                 "[LightNetworkIntegrityCheck] Performing StarlightNetwork integrity check for world "
-                    + world.provider.getDimension());
+                    + world.provider.dimensionId);
             List<IPrismTransmissionNode> invalidRemoval = new LinkedList<>();
 
             for (ChunkNetworkData data : chunkSortedData.values()) {

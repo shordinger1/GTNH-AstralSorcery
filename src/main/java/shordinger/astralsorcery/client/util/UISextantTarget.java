@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.item.tool.sextant.ItemSextant;
 import shordinger.astralsorcery.common.item.tool.sextant.SextantFinder;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +41,8 @@ import shordinger.wrapper.net.minecraft.world.World;
 public class UISextantTarget {
 
     public static void renderTargets(float pTicks) {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
-        World w = Minecraft.getMinecraft().world;
+        EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
+        World w = Minecraft.getMinecraft().theWorld;
         if (pl == null || w == null) {
             return;
         }
@@ -69,19 +69,19 @@ public class UISextantTarget {
     }
 
     private static void renderStar(BlockPos actPos, SextantFinder.TargetObject target, float pTicks) {
-        if (Minecraft.getMinecraft().world == null) {
+        if (Minecraft.getMinecraft().theWorld == null) {
             return;
         }
         Entity e = Minecraft.getMinecraft()
             .getRenderViewEntity();
         if (e == null) {
-            e = Minecraft.getMinecraft().player;
+            e = Minecraft.getMinecraft().thePlayer;
         }
         if (e == null) {
             return;
         }
         float dayMultiplier = ConstellationSkyHandler.getInstance()
-            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+            .getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
         if (dayMultiplier <= 0.1F) {
             return;
         }

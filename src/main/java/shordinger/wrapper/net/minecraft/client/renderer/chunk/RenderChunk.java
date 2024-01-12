@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.entity.EntityPlayerSP;
 import shordinger.wrapper.net.minecraft.client.renderer.BlockRendererDispatcher;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
@@ -318,7 +318,7 @@ public class RenderChunk {
     }
 
     protected double getDistanceSq() {
-        EntityPlayerSP entityplayersp = Minecraft.getMinecraft().player;
+        EntityPlayerSP entityplayersp = Minecraft.getMinecraft().thePlayer;
         double d0 = this.boundingBox.minX + 8.0D - entityplayersp.posX;
         double d1 = this.boundingBox.minY + 8.0D - entityplayersp.posY;
         double d2 = this.boundingBox.minZ + 8.0D - entityplayersp.posZ;

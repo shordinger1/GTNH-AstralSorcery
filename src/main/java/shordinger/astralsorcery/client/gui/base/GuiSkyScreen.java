@@ -13,7 +13,7 @@ import java.awt.*;
 import shordinger.astralsorcery.client.util.RenderingUtils;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.world.DimensionType;
 import shordinger.wrapper.net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public interface GuiSkyScreen {
     static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
 
     public static Tuple<Color, Color> getRBGFromTo(boolean canSeeSky, float angleTransparency, float partialTicks) {
-        World renderWorld = Minecraft.getMinecraft().world;
+        World renderWorld = Minecraft.getMinecraft().theWorld;
         if (renderWorld.provider.getDimensionType() == DimensionType.THE_END) {
             canSeeSky = false; // Only for effect rendering purposes, not functionality.
         }

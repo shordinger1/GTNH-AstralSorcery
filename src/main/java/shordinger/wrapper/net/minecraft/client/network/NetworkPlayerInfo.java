@@ -12,7 +12,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.resources.DefaultPlayerSkin;
 import shordinger.wrapper.net.minecraft.client.resources.SkinManager;
 import shordinger.wrapper.net.minecraft.network.play.server.SPacketPlayerListItem;
@@ -112,7 +112,7 @@ public class NetworkPlayerInfo {
 
     @Nullable
     public ScorePlayerTeam getPlayerTeam() {
-        return Minecraft.getMinecraft().world.getScoreboard()
+        return Minecraft.getMinecraft().theWorld.getScoreboard()
             .getPlayersTeam(
                 this.getGameProfile()
                     .getName());

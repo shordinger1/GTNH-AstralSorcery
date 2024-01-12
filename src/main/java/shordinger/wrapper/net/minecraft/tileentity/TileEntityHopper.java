@@ -57,7 +57,7 @@ public class TileEntityHopper extends TileEntityLockableLoot implements IHopper,
         this.transferCooldown = compound.getInteger("TransferCooldown");
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if (!this.checkLootAndWrite(compound)) {

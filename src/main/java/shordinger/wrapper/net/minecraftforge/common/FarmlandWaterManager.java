@@ -64,7 +64,7 @@ public class FarmlandWaterManager {
                                                                     ChunkPos... additionalChunks) {
         Preconditions.checkArgument(!world.isRemote, "Water region is only determined server-side");
         Map<ChunkPos, ChunkTicketManager<Vec3d>> ticketMap = customWaterHandler.computeIfAbsent(
-            world.provider.getDimension(),
+            world.provider.dimensionId,
             id -> new MapMaker().weakValues()
                 .makeMap());
         ChunkTicketManager<Vec3d>[] additionalTickets = new ChunkTicketManager[additionalChunks.length];
@@ -179,7 +179,7 @@ public class FarmlandWaterManager {
 
     private static ChunkTicketManager<Vec3d> getTicketManager(ChunkPos pos, World world) {
         Preconditions.checkArgument(!world.isRemote, "Water region is only determined server-side");
-        Map<ChunkPos, ChunkTicketManager<Vec3d>> ticketMap = customWaterHandler.get(world.provider.getDimension());
+        Map<ChunkPos, ChunkTicketManager<Vec3d>> ticketMap = customWaterHandler.get(world.provider.dimensionId);
         if (ticketMap == null) {
             return null;
         }

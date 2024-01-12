@@ -17,7 +17,7 @@ import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.effect.EffectHandler;
 import shordinger.astralsorcery.client.effect.light.EffectLightning;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

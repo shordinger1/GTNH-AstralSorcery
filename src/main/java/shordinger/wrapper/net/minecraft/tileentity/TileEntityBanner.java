@@ -80,7 +80,7 @@ public class TileEntityBanner extends TileEntity implements IWorldNameable {
             : new TextComponentTranslation(this.getName(), new Object[0]));
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("Base", this.baseColor.getDyeDamage());
 

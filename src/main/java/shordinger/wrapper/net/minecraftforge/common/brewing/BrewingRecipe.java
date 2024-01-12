@@ -19,7 +19,7 @@ package shordinger.wrapper.net.minecraftforge.common.brewing;
 import javax.annotation.Nonnull;
 
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class BrewingRecipe extends AbstractBrewingRecipe<ItemStack> {
 

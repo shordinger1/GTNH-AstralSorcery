@@ -8,10 +8,11 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
+import static shordinger.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
 import java.util.List;
 
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.client.gui.journal.page.*;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
@@ -41,7 +42,6 @@ import shordinger.astralsorcery.common.tile.TileBore;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod

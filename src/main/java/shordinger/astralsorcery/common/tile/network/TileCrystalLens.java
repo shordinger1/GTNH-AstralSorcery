@@ -34,7 +34,7 @@ import shordinger.astralsorcery.common.util.RaytraceAssist;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -185,7 +185,7 @@ public class TileCrystalLens extends TileTransmissionBase {
     private void playColorEffects() {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if (rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());

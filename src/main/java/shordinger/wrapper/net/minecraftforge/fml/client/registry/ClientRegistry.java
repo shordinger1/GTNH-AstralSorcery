@@ -22,7 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.Maps;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import shordinger.wrapper.net.minecraft.client.settings.KeyBinding;

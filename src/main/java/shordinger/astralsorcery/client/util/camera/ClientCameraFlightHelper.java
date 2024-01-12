@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 
 /**
@@ -180,7 +180,7 @@ public class ClientCameraFlightHelper {
 
         @Override
         public void onStopTransforming() {
-            if (stopDelegate != null && Minecraft.getMinecraft().world != null) {
+            if (stopDelegate != null && Minecraft.getMinecraft().theWorld != null) {
                 stopDelegate.onCameraFlightStop();
             }
         }

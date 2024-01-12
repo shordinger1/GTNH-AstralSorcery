@@ -283,7 +283,7 @@ public class TileEntityShulkerBox extends TileEntityLockableLoot implements ITic
         this.loadFromNbt(compound);
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         return this.saveToNbt(compound);
     }

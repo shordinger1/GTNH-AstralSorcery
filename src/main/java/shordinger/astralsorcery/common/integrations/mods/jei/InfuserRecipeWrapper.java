@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.crafting.ItemHandle;
 import shordinger.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import shordinger.astralsorcery.common.integrations.ModIntegrationJEI;
 import shordinger.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import shordinger.wrapper.net.minecraftforge.common.ForgeModContainer;
 import shordinger.wrapper.net.minecraftforge.fluids.UniversalBucket;

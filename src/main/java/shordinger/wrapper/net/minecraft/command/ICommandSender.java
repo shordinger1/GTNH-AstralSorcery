@@ -10,7 +10,7 @@ import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
 import shordinger.wrapper.net.minecraft.world.World;
 
-public interface ICommandSender {
+public interface ICommandSender extends net.minecraft.command.ICommandSender {
 
     /**
      * Get the name of this object. For players this returns their username

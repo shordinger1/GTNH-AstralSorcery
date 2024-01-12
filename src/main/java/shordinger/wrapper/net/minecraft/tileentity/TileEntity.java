@@ -2,6 +2,7 @@ package shordinger.wrapper.net.minecraft.tileentity;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,10 +14,11 @@ import shordinger.wrapper.net.minecraft.crash.CrashReportCategory;
 import shordinger.wrapper.net.minecraft.crash.ICrashReportDetail;
 import shordinger.wrapper.net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import shordinger.wrapper.net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import shordinger.wrapper.net.minecraft.util.EnumFacing;
 import shordinger.wrapper.net.minecraft.util.Mirror;
 import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.Rotation;
+import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.registry.RegistryNamespaced;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
@@ -80,8 +82,8 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
             this.capabilities.deserializeNBT(compound.getCompoundTag("ForgeCaps"));
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        return this.writeInternal(compound);
+    public void writeToNBT(NBTTagCompound compound) {
+        this.writeInternal(compound);
     }
 
     private NBTTagCompound writeInternal(NBTTagCompound compound) {
@@ -104,7 +106,7 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
     public static TileEntity create(World worldIn, NBTTagCompound compound) {
         TileEntity tileentity = null;
         String s = compound.getString("id");
-        Class<? extends TileEntity> oclass = null;
+        Class oclass = null;
 
         try {
             oclass = (Class) REGISTRY.getObject(new ResourceLocation(s));
@@ -207,7 +209,7 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
      * modded TE's, this packet comes back to you clientside in {@link #onDataPacket}
      */
     @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket() {
+    public S35PacketUpdateTileEntity getUpdatePacket() {
         return null;
     }
 
@@ -385,7 +387,7 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
      * Sometimes default render bounding box: infinite in scope. Used to control rendering on
      * {@link TileEntitySpecialRenderer}.
      */
-    public static final net.minecraft.util.math.AxisAlignedBB INFINITE_EXTENT_AABB = new net.minecraft.util.math.AxisAlignedBB(
+    public static final  AxisAlignedBB INFINITE_EXTENT_AABB = new  AxisAlignedBB(
         Double.NEGATIVE_INFINITY,
         Double.NEGATIVE_INFINITY,
         Double.NEGATIVE_INFINITY,
@@ -403,18 +405,18 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
      * @return an appropriately size {@link AxisAlignedBB} for the {@link TileEntity}
      */
     @SideOnly(Side.CLIENT)
-    public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
-        net.minecraft.util.math.AxisAlignedBB bb = INFINITE_EXTENT_AABB;
+    public  AxisAlignedBB getRenderBoundingBox() {
+         AxisAlignedBB bb = INFINITE_EXTENT_AABB;
         Block type = getBlockType();
         BlockPos pos = getPos();
         if (type == Blocks.ENCHANTING_TABLE) {
-            bb = new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 1, 1));
+            bb = new  AxisAlignedBB(pos, pos.add(1, 1, 1));
         } else if (type == Blocks.CHEST || type == Blocks.TRAPPED_CHEST) {
-            bb = new net.minecraft.util.math.AxisAlignedBB(pos.add(-1, 0, -1), pos.add(2, 2, 2));
+            bb = new  AxisAlignedBB(pos.add(-1, 0, -1), pos.add(2, 2, 2));
         } else if (type == Blocks.STRUCTURE_BLOCK) {
             bb = INFINITE_EXTENT_AABB;
         } else if (type != null && type != Blocks.BEACON) {
-            net.minecraft.util.math.AxisAlignedBB cbb = null;
+             AxisAlignedBB cbb = null;
             try {
                 cbb = world.getBlockState(getPos())
                     .getCollisionBoundingBox(world, pos)
@@ -426,7 +428,7 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
                 // So, once again in the long line of US having to accommodate BUKKIT breaking things,
                 // here it is, assume that the TE is only 1 cubic block. Problem with this is that it may
                 // cause the TileEntity renderer to error further down the line! But alas, nothing we can do.
-                cbb = new net.minecraft.util.math.AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 1, 1));
+                cbb = new AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 1, 1));
             }
             if (cbb != null) bb = cbb;
         }
@@ -498,14 +500,14 @@ public abstract class TileEntity extends net.minecraft.tileentity.TileEntity
 
     @Override
     public boolean hasCapability(Capability<?> capability,
-                                 @Nullable net.minecraft.util.EnumFacing facing) {
+                                 @Nullable EnumFacing facing) {
         return capabilities == null ? false : capabilities.hasCapability(capability, facing);
     }
 
     @Override
     @Nullable
     public <T> T getCapability(Capability<T> capability,
-                               @Nullable net.minecraft.util.EnumFacing facing) {
+                               @Nullable EnumFacing facing) {
         return capabilities == null ? null : capabilities.getCapability(capability, facing);
     }
 

@@ -13,11 +13,11 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
 import shordinger.astralsorcery.client.util.resource.AssetLibrary;
 import shordinger.astralsorcery.client.util.resource.AssetLoader;
 import shordinger.astralsorcery.client.util.resource.BindableResource;
 import shordinger.wrapper.net.minecraft.entity.EntityLivingBase;
-import shordinger.wrapper.net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

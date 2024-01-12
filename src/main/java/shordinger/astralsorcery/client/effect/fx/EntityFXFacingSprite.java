@@ -20,7 +20,7 @@ import shordinger.astralsorcery.client.util.resource.SpriteSheetResource;
 import shordinger.astralsorcery.common.data.config.Config;
 import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.entity.Entity;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
@@ -113,7 +113,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
             if (refreshFunction != null) {
                 Entity rView = Minecraft.getMinecraft()
                     .getRenderViewEntity();
-                if (rView == null) rView = Minecraft.getMinecraft().player;
+                if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
                 if (rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
                     if (refreshFunction.shouldRefresh()) {
                         age = 0;

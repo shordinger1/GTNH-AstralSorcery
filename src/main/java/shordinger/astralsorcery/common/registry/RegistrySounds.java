@@ -8,7 +8,7 @@
 
 package shordinger.astralsorcery.common.registry;
 
-import static hellfirepvp.astralsorcery.common.lib.Sounds.*;
+import static shordinger.astralsorcery.common.lib.Sounds.*;
 
 import shordinger.astralsorcery.AstralSorcery;
 import shordinger.astralsorcery.common.CommonProxy;

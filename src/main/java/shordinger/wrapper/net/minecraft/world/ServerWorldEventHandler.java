@@ -75,7 +75,7 @@ public class ServerWorldEventHandler implements IWorldEventListener {
                 y,
                 z,
                 volume > 1.0F ? (double) (16.0F * volume) : 16.0D,
-                this.world.provider.getDimension(),
+                this.world.provider.dimensionId,
                 new SPacketSoundEffect(soundIn, category, x, y, z, volume, pitch));
     }
 
@@ -104,7 +104,7 @@ public class ServerWorldEventHandler implements IWorldEventListener {
                 (double) blockPosIn.getY(),
                 (double) blockPosIn.getZ(),
                 64.0D,
-                this.world.provider.getDimension(),
+                this.world.provider.dimensionId,
                 new SPacketEffect(type, blockPosIn, data, false));
     }
 

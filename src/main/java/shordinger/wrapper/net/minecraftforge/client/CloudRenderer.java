@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.EntityRenderer;
 import shordinger.wrapper.net.minecraft.client.renderer.GLAllocation;

@@ -27,7 +27,7 @@ public class WorldProviderEnd extends WorldProvider {
     public void init() {
         this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
         NBTTagCompound nbttagcompound = this.world.getWorldInfo()
-            .getDimensionData(this.world.provider.getDimension());
+            .getDimensionData(this.world.provider.dimensionId);
         this.dragonFightManager = this.world instanceof WorldServer
             ? new DragonFightManager((WorldServer) this.world, nbttagcompound.getCompoundTag("DragonFight"))
             : null;
@@ -143,7 +143,7 @@ public class WorldProviderEnd extends WorldProvider {
         }
 
         this.world.getWorldInfo()
-            .setDimensionData(this.world.provider.getDimension(), nbttagcompound);
+            .setDimensionData(this.world.provider.dimensionId, nbttagcompound);
     }
 
     /**

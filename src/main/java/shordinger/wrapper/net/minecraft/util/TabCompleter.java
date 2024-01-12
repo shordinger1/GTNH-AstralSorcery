@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiTextField;
 import shordinger.wrapper.net.minecraft.network.play.client.CPacketTabComplete;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
@@ -69,7 +69,7 @@ public abstract class TabCompleter {
     private void requestCompletions(String prefix) {
         if (prefix.length() >= 1) {
             net.minecraftforge.client.ClientCommandHandler.instance.autoComplete(prefix);
-            Minecraft.getMinecraft().player.connection
+            Minecraft.getMinecraft().thePlayer.connection
                 .sendPacket(new CPacketTabComplete(prefix, this.getTargetBlockPos(), this.hasTargetBlock));
             this.requestedCompletions = true;
         }

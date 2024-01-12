@@ -115,7 +115,7 @@ public class TileEntityChest extends TileEntityLockableLoot implements ITickable
         }
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if (!this.checkLootAndWrite(compound)) {

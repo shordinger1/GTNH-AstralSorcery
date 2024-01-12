@@ -4,7 +4,7 @@ import org.lwjgl.input.Mouse;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.realms.RealmsClickableScrolledSelectionList;
 import shordinger.wrapper.net.minecraft.realms.Tezzelator;
 

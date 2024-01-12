@@ -17,7 +17,7 @@ import shordinger.astralsorcery.common.network.packet.ClientReplyPacket;
 import shordinger.astralsorcery.common.tile.TileTelescope;
 import shordinger.astralsorcery.common.util.ByteBufUtils;
 import shordinger.astralsorcery.common.util.MiscUtils;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.world.WorldServer;
 import shordinger.wrapper.net.minecraftforge.common.DimensionManager;
@@ -94,8 +94,8 @@ public class PktRotateTelescope
 
     @SideOnly(Side.CLIENT)
     private void applyRotation(PktRotateTelescope pkt) {
-        if (Minecraft.getMinecraft().world.provider.getDimension() == pkt.dimId) {
-            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pkt.pos, TileTelescope.class, false);
+        if (Minecraft.getMinecraft().theWorld.provider.dimensionId == pkt.dimId) {
+            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, pkt.pos, TileTelescope.class, false);
             if (tt != null) {
                 tt.setRotation(
                     pkt.isClockwise ? tt.getRotation()

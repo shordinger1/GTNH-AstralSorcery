@@ -19,7 +19,7 @@ import shordinger.astralsorcery.common.structure.array.BlockArray;
 import shordinger.astralsorcery.common.structure.array.PatternBlockArray;
 import shordinger.astralsorcery.common.tile.IMultiblockDependantTile;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.BufferBuilder;
 import shordinger.wrapper.net.minecraft.client.renderer.GlStateManager;
 import shordinger.wrapper.net.minecraft.client.renderer.Tessellator;
@@ -51,12 +51,12 @@ public class StructureMatchPreview {
 
     public void tick() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        if (pattern != null && Minecraft.getMinecraft().player != null) {
+        if (pattern != null && Minecraft.getMinecraft().thePlayer != null) {
             BlockPos at = tile.getLocationPos();
             Vec3i v = pattern.getSize();
             int maxDim = Math.max(Math.max(v.getX(), v.getY()), v.getZ());
             maxDim = Math.max(9, maxDim);
-            if (Minecraft.getMinecraft().player.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
+            if (Minecraft.getMinecraft().thePlayer.getDistance(at.getX(), at.getY(), at.getZ()) <= maxDim) {
                 resetTimeout();
                 return;
             }
@@ -71,7 +71,7 @@ public class StructureMatchPreview {
     @Nullable
     public Integer getPreviewSlice() {
         PatternBlockArray pattern = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         if (pattern == null || world == null) {
             return null;
         }
@@ -88,11 +88,11 @@ public class StructureMatchPreview {
 
     public boolean shouldBeRemoved() {
         return timeout <= 0 || tile.getRequiredStructure() == null
-            || Minecraft.getMinecraft().world == null
-            || Minecraft.getMinecraft().world.provider.getDimension()
-            != ((TileEntity) tile).getWorld().provider.getDimension()
+            || Minecraft.getMinecraft().theWorld == null
+            || Minecraft.getMinecraft().theWorld.provider.dimensionId
+            != ((TileEntity) tile).getWorld().provider.dimensionId
             || tile.getRequiredStructure()
-            .matches(Minecraft.getMinecraft().world, ((TileEntity) tile).getPos())
+            .matches(Minecraft.getMinecraft().theWorld, ((TileEntity) tile).getPos())
             || ((TileEntity) tile).isInvalid();
     }
 
@@ -105,7 +105,7 @@ public class StructureMatchPreview {
 
     public void renderPreview(float partialTicks) {
         PatternBlockArray pba = tile.getRequiredStructure();
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         Integer slice = getPreviewSlice();
         if (shouldBeRemoved() || pba == null || slice == null || world == null) {
             return;

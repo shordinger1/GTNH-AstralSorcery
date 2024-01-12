@@ -42,7 +42,7 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.renderer.*;
 import shordinger.wrapper.net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import shordinger.wrapper.net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -95,12 +95,12 @@ public class ItemArchitectWand extends ItemBlockStorage
             int found = 0;
             if (Mods.BOTANIA.isPresent()) {
                 found = ModIntegrationBotania.getItemCount(
-                    Minecraft.getMinecraft().player,
+                    Minecraft.getMinecraft().thePlayer,
                     lastCacheInstance,
                     ItemUtils.createBlockState(stack));
             } else {
                 Collection<ItemStack> stacks = ItemUtils
-                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), stack, false);
+                    .scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().thePlayer.inventory), stack, false);
                 for (ItemStack foundStack : stacks) {
                     found += foundStack.getCount();
                 }
@@ -192,7 +192,7 @@ public class ItemArchitectWand extends ItemBlockStorage
         tempOffsetY = offsetY;
         for (Map.Entry<ItemStack, Integer> entry : amountMap.entrySet()) {
             ri.renderItemAndEffectIntoGUI(
-                Minecraft.getMinecraft().player,
+                Minecraft.getMinecraft().thePlayer,
                 entry.getKey(),
                 offsetX + 5,
                 tempOffsetY + 5);
@@ -236,14 +236,14 @@ public class ItemArchitectWand extends ItemBlockStorage
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
         List<IBlockState> storedStates = Lists.newArrayList(getMappedStoredStates(stack).keySet());
         if (storedStates.isEmpty()) return;
-        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().world);
+        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().theWorld);
 
         Deque<BlockPos> placeable = filterBlocksToPlace(
-            Minecraft.getMinecraft().player,
-            Minecraft.getMinecraft().world,
+            Minecraft.getMinecraft().thePlayer,
+            Minecraft.getMinecraft().theWorld,
             architectRange);
         if (!placeable.isEmpty()) {
-            RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().player, false, true, architectRange);
+            RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().thePlayer, false, true, architectRange);
             if (rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) {
                 return;
             }
@@ -255,7 +255,7 @@ public class ItemArchitectWand extends ItemBlockStorage
             Blending.ADDITIVEDARK.applyStateManager();
             GlStateManager.disableAlpha();
             RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
-            World w = Minecraft.getMinecraft().world;
+            World w = Minecraft.getMinecraft().theWorld;
 
             TextureHelper.setActiveTextureToAtlasSprite();
             Tessellator tes = Tessellator.getInstance();
@@ -267,7 +267,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                 try {
                     potentialState = potentialState.getBlock()
                         .getStateForPlacement(
-                            Minecraft.getMinecraft().world,
+                            Minecraft.getMinecraft().theWorld,
                             pos,
                             sideHit,
                             (float) hitVec.x,
@@ -275,7 +275,7 @@ public class ItemArchitectWand extends ItemBlockStorage
                             (float) hitVec.z,
                             potentialState.getBlock()
                                 .getMetaFromState(potentialState),
-                            Minecraft.getMinecraft().player,
+                            Minecraft.getMinecraft().thePlayer,
                             hand);
                 } catch (Exception exc) {
                 }

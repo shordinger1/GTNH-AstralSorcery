@@ -13,7 +13,7 @@ import java.io.IOException;
 import shordinger.astralsorcery.client.gui.GuiJournalPerkTree;
 import shordinger.astralsorcery.client.gui.GuiJournalProgression;
 import shordinger.astralsorcery.client.gui.base.GuiWHScreen;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 
 /**
  * This class is part of the Astral Sorcery Mod

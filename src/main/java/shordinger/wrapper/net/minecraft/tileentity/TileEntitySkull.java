@@ -40,7 +40,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         sessionService = sessionServiceIn;
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setByte("SkullType", (byte) (this.skullType & 255));
         compound.setByte("Rot", (byte) (this.skullRotation & 255));

@@ -14,7 +14,7 @@ import shordinger.wrapper.net.minecraft.world.biome.BiomeProvider;
 import shordinger.wrapper.net.minecraft.world.border.WorldBorder;
 import shordinger.wrapper.net.minecraft.world.gen.IChunkGenerator;
 
-public abstract class WorldProvider {
+public abstract class WorldProvider extends net.minecraft.world.WorldProvider {
 
     public static final float[] MOON_PHASE_FACTORS = new float[]{1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     /**

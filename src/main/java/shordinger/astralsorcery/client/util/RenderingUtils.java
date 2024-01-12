@@ -26,7 +26,7 @@ import shordinger.astralsorcery.common.util.data.Tuple;
 import shordinger.astralsorcery.common.util.data.Vector3;
 import shordinger.wrapper.net.minecraft.block.Block;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.FontRenderer;
 import shordinger.wrapper.net.minecraft.client.gui.ScaledResolution;
 import shordinger.wrapper.net.minecraft.client.particle.Particle;
@@ -83,7 +83,7 @@ public class RenderingUtils {
                     double d2 = (double) pos.getZ() + ((double) l + 0.5D) / 4D;
                     Particle digging = diggingFactory.createParticle(
                         0,
-                        Minecraft.getMinecraft().world,
+                        Minecraft.getMinecraft().theWorld,
                         d0,
                         d1,
                         d2,
@@ -98,7 +98,7 @@ public class RenderingUtils {
     }
 
     public static void renderItemAsEntity(ItemStack stack, double x, double y, double z, float pTicks, int age) {
-        EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, stack);
+        EntityItem ei = new EntityItem(Minecraft.getMinecraft().theWorld, 0, 0, 0, stack);
         ei.age = age;
         ei.hoverStart = 0;
         if (itemPhysics_fieldSkipRenderHook != null) {
@@ -167,7 +167,7 @@ public class RenderingUtils {
 
     public static Particle spawnBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
         Particle digging = diggingFactory
-            .createParticle(0, Minecraft.getMinecraft().world, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
+            .createParticle(0, Minecraft.getMinecraft().theWorld, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
         Minecraft.getMinecraft().effectRenderer.addEffect(digging);
         digging.setParticleTexture(tas);
         return digging;
@@ -719,7 +719,7 @@ public class RenderingUtils {
         render.rotationPitch = (float) pitch;
         render.prevRotationPitch = (float) pitchPrev;
 
-        render = Minecraft.getMinecraft().player;
+        render = Minecraft.getMinecraft().thePlayer;
 
         render.posX = x;
         render.posY = y;
@@ -747,8 +747,8 @@ public class RenderingUtils {
 
     @Deprecated
     public static void unsafe_resetCamera() {
-        if (Minecraft.getMinecraft().player != null) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+        if (Minecraft.getMinecraft().thePlayer != null) {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             Minecraft.getMinecraft()
                 .setRenderViewEntity(player);
             double x = player.posX;
@@ -1035,7 +1035,7 @@ public class RenderingUtils {
     public static void removeStandartTranslationFromTESRMatrix(float partialTicks) {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         Entity entity = rView;
         double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
@@ -1046,7 +1046,7 @@ public class RenderingUtils {
     public static Vector3 getStandartTranslationRemovalVector(float partialTicks) {
         Entity rView = Minecraft.getMinecraft()
             .getRenderViewEntity();
-        if (rView == null) rView = Minecraft.getMinecraft().player;
+        if (rView == null) rView = Minecraft.getMinecraft().thePlayer;
         Entity entity = rView;
         double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
@@ -1222,7 +1222,7 @@ public class RenderingUtils {
         Entity e = Minecraft.getMinecraft()
             .getRenderViewEntity();
         if (e == null) {
-            e = Minecraft.getMinecraft().player;
+            e = Minecraft.getMinecraft().thePlayer;
         }
         double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
         double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
@@ -1277,7 +1277,7 @@ public class RenderingUtils {
         Entity e = Minecraft.getMinecraft()
             .getRenderViewEntity();
         if (e == null) {
-            e = Minecraft.getMinecraft().player;
+            e = Minecraft.getMinecraft().thePlayer;
         }
         double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
         double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
@@ -1336,7 +1336,7 @@ public class RenderingUtils {
         Entity e = Minecraft.getMinecraft()
             .getRenderViewEntity();
         if (e == null) {
-            e = Minecraft.getMinecraft().player;
+            e = Minecraft.getMinecraft().thePlayer;
         }
         double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
         double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;

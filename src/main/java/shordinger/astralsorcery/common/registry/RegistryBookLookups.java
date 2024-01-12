@@ -21,7 +21,7 @@ import shordinger.astralsorcery.common.data.research.ResearchManager;
 import shordinger.astralsorcery.common.data.research.ResearchNode;
 import shordinger.astralsorcery.common.data.research.ResearchProgression;
 import shordinger.astralsorcery.common.util.ItemComparator;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.entity.player.EntityPlayer;
 import shordinger.wrapper.net.minecraft.item.ItemStack;

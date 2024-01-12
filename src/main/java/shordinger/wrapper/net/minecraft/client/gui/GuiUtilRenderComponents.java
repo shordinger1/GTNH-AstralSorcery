@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
 import shordinger.wrapper.net.minecraft.util.text.TextFormatting;

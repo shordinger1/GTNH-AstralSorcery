@@ -25,6 +25,7 @@ import shordinger.wrapper.net.minecraft.util.ResourceLocation;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 import shordinger.wrapper.net.minecraft.util.text.TextComponentString;
+import shordinger.wrapper.net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -338,7 +339,7 @@ public abstract class CommandBase implements ICommand {
                 itextcomponent.appendText(" ");
             }
 
-            ITextComponent itextcomponent1 = net.minecraftforge.common.ForgeHooks.newChatWithLinks(args[i]); // Forge:
+            ITextComponent itextcomponent1 = ForgeHooks.newChatWithLinks(args[i]); // Forge:
             // links
             // for
             // messages
@@ -350,7 +351,7 @@ public abstract class CommandBase implements ICommand {
                     if (EntitySelector.isSelector(args[i])) {
                         throw new PlayerNotFoundException(
                             "commands.generic.selector.notFound",
-                            new Object[]{args[i]});
+                            args[i]);
                     }
                 } else {
                     itextcomponent1 = itextcomponent2;
@@ -391,7 +392,7 @@ public abstract class CommandBase implements ICommand {
         boolean flag = selectorArg.startsWith("~");
 
         if (flag && Double.isNaN(base)) {
-            throw new NumberInvalidException("commands.generic.num.invalid", new Object[]{base});
+            throw new NumberInvalidException("commands.generic.num.invalid", base);
         } else {
             double d0 = 0.0D;
 
@@ -415,13 +416,13 @@ public abstract class CommandBase implements ICommand {
                 if (d1 < (double) min) {
                     throw new NumberInvalidException(
                         "commands.generic.num.tooSmall",
-                        new Object[]{String.format("%.2f", d1), min});
+                        String.format("%.2f", d1), min);
                 }
 
                 if (d1 > (double) max) {
                     throw new NumberInvalidException(
                         "commands.generic.num.tooBig",
-                        new Object[]{String.format("%.2f", d1), max});
+                        String.format("%.2f", d1), max);
                 }
             }
 
@@ -438,7 +439,7 @@ public abstract class CommandBase implements ICommand {
         boolean flag = input.startsWith("~");
 
         if (flag && Double.isNaN(base)) {
-            throw new NumberInvalidException("commands.generic.num.invalid", new Object[]{base});
+            throw new NumberInvalidException("commands.generic.num.invalid", base);
         } else {
             double d0 = flag ? base : 0.0D;
 
@@ -460,13 +461,13 @@ public abstract class CommandBase implements ICommand {
                 if (d0 < (double) min) {
                     throw new NumberInvalidException(
                         "commands.generic.num.tooSmall",
-                        new Object[]{String.format("%.2f", d0), min});
+                        String.format("%.2f", d0), min);
                 }
 
                 if (d0 > (double) max) {
                     throw new NumberInvalidException(
                         "commands.generic.num.tooBig",
-                        new Object[]{String.format("%.2f", d0), max});
+                        String.format("%.2f", d0), max);
                 }
             }
 
@@ -481,10 +482,10 @@ public abstract class CommandBase implements ICommand {
      */
     public static Item getItemByText(ICommandSender sender, String id) throws NumberInvalidException {
         ResourceLocation resourcelocation = new ResourceLocation(id);
-        Item item = Item.REGISTRY.getObject(resourcelocation);
+        Item item = (Item) Item.REGISTRY.getObject(resourcelocation);
 
         if (item == null) {
-            throw new NumberInvalidException("commands.give.item.notFound", new Object[]{resourcelocation});
+            throw new NumberInvalidException("commands.give.item.notFound", resourcelocation);
         } else {
             return item;
         }
@@ -501,7 +502,7 @@ public abstract class CommandBase implements ICommand {
         if (!Block.REGISTRY.containsKey(resourcelocation)) {
             throw new NumberInvalidException("commands.give.block.notFound", new Object[]{resourcelocation});
         } else {
-            return Block.REGISTRY.getObject(resourcelocation);
+            return (Block) Block.REGISTRY.getObject(resourcelocation);
         }
     }
 

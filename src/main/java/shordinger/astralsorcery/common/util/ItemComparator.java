@@ -14,13 +14,13 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Sets;
 
+import net.minecraftforge.oredict.OreDictionary;
 import shordinger.astralsorcery.common.util.nbt.NBTComparator;
 import shordinger.wrapper.net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shordinger.wrapper.net.minecraftforge.common.util.Constants;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -90,17 +90,15 @@ public class ItemComparator {
         }
 
         if (lClauses.contains(Clause.CAPABILITIES_COMPATIBLE)) {
-            if (!thisStack.areCapsCompatible(sampleCompare)) {
-                return false;
-            }
+            return thisStack.areCapsCompatible(sampleCompare);
         }
 
         return true;
     }
 
     private static boolean isTagEmpty(NBTTagCompound compound) {
-        for (String key : compound.getKeySet()) {
-            NBTBase value = compound.getTag(key);
+        for (Object key : compound.func_150296_c()) {
+            NBTBase value = compound.getTag((String) key);
             if (value instanceof NBTTagCompound) {
                 if (!isTagEmpty((NBTTagCompound) value)) {
                     return false;
@@ -117,21 +115,11 @@ public class ItemComparator {
     }
 
     private static boolean isListEmpty(NBTTagList list) {
-        if (!list.hasNoTags()) {
-            if (list.getTagType() != Constants.NBT.TAG_LIST && list.getTagType() != Constants.NBT.TAG_COMPOUND) {
-                return false;
-            }
-            for (NBTBase element : list) {
-                if (element instanceof NBTTagCompound) {
-                    if (!isTagEmpty((NBTTagCompound) element)) {
-                        return false;
-                    }
-                } else if (element instanceof NBTTagList) {
-                    if (!isListEmpty((NBTTagList) element)) {
-                        return false;
-                    }
-                }
-            }
+        if (list.tagCount() != 0) {
+//            if (list.getTagType() != Constants.NBT.TAG_LIST && list.getTagType() != Constants.NBT.TAG_COMPOUND) {
+//                return false;
+//            }
+            return list.func_150306_c(0).length > 0;
         }
         return true;
     }

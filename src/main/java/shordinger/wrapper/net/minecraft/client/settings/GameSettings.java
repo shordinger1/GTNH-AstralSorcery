@@ -31,7 +31,7 @@ import com.google.gson.Gson;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiNewChat;
 import shordinger.wrapper.net.minecraft.client.gui.chat.NarratorChatListener;
 import shordinger.wrapper.net.minecraft.client.renderer.texture.TextureMap;

@@ -16,7 +16,7 @@
 
 package shordinger.wrapper.net.minecraftforge.client.settings;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 
 public enum KeyConflictContext implements IKeyConflictContext {

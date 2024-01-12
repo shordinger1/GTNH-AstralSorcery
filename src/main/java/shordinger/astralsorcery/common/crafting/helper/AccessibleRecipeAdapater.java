@@ -19,7 +19,7 @@ import shordinger.wrapper.net.minecraft.item.crafting.IRecipe;
 import shordinger.wrapper.net.minecraft.item.crafting.Ingredient;
 import shordinger.wrapper.net.minecraft.util.NonNullList;
 import shordinger.wrapper.net.minecraft.world.World;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod

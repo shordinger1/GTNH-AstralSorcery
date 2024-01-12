@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import shordinger.wrapper.net.minecraft.block.material.Material;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.audio.MovingSoundMinecart;
 import shordinger.wrapper.net.minecraft.client.audio.PositionedSoundRecord;
 import shordinger.wrapper.net.minecraft.client.network.NetHandlerPlayClient;

@@ -416,7 +416,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.shouldHeadBeRendered = compound.getBoolean("source");
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("blockId", Block.getIdFromBlock(this.pistonState.getBlock()));
         compound.setInteger(

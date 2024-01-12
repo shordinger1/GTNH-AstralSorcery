@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.fml.client.config;
 
 import javax.annotation.Nullable;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 
 /**
  * This class is blatantly stolen from iChunUtils with permission.

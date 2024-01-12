@@ -18,7 +18,7 @@ package shordinger.wrapper.net.minecraftforge.fml.client;
 
 import java.util.Set;
 
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraftforge.fml.client.IModGuiFactory.RuntimeOptionCategoryElement;
 import shordinger.wrapper.net.minecraftforge.fml.client.config.GuiConfig;

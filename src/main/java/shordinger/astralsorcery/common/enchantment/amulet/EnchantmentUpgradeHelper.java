@@ -46,7 +46,7 @@ import shordinger.wrapper.net.minecraft.world.World;
 import shordinger.wrapper.net.minecraftforge.common.MinecraftForge;
 import shordinger.wrapper.net.minecraftforge.fml.client.FMLClientHandler;
 import shordinger.wrapper.net.minecraftforge.fml.common.FMLCommonHandler;
-import shordinger.wrapper.net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod

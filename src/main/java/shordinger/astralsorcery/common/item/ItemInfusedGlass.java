@@ -20,7 +20,7 @@ import shordinger.astralsorcery.common.constellation.starmap.ActiveStarMap;
 import shordinger.astralsorcery.common.item.base.render.INBTModel;
 import shordinger.astralsorcery.common.registry.RegistryItems;
 import shordinger.astralsorcery.common.util.nbt.NBTHelper;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.gui.GuiScreen;
 import shordinger.wrapper.net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import shordinger.wrapper.net.minecraft.client.resources.I18n;
@@ -97,7 +97,7 @@ public class ItemInfusedGlass extends Item implements INBTModel {
             if (GuiScreen.isShiftKeyDown()) {
                 for (IConstellation c : map.getConstellations()) {
                     String out = TextFormatting.GRAY + "- " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName());
-                    if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
+                    if (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.isCreative()) {
                         out += TextFormatting.LIGHT_PURPLE + " (Creative) " + (int) (map.getPercentage(c) * 100) + "%";
                     }
                     tooltip.add(out);

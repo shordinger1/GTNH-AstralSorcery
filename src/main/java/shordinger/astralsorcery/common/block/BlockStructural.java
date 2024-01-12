@@ -20,7 +20,7 @@ import shordinger.wrapper.net.minecraft.block.properties.PropertyEnum;
 import shordinger.wrapper.net.minecraft.block.state.BlockFaceShape;
 import shordinger.wrapper.net.minecraft.block.state.BlockStateContainer;
 import shordinger.wrapper.net.minecraft.block.state.IBlockState;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.client.particle.ParticleManager;
 import shordinger.wrapper.net.minecraft.creativetab.CreativeTabs;
 import shordinger.wrapper.net.minecraft.entity.Entity;

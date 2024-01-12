@@ -47,6 +47,7 @@ import shordinger.wrapper.net.minecraft.util.SoundCategory;
 import shordinger.wrapper.net.minecraft.util.SoundEvent;
 import shordinger.wrapper.net.minecraft.util.math.AxisAlignedBB;
 import shordinger.wrapper.net.minecraft.util.math.BlockPos;
+import shordinger.wrapper.net.minecraft.util.math.ChunkPos;
 import shordinger.wrapper.net.minecraft.util.math.MathHelper;
 import shordinger.wrapper.net.minecraft.util.math.RayTraceResult;
 import shordinger.wrapper.net.minecraft.util.math.Vec3d;
@@ -62,6 +63,7 @@ import shordinger.wrapper.net.minecraft.world.storage.MapStorage;
 import shordinger.wrapper.net.minecraft.world.storage.WorldInfo;
 import shordinger.wrapper.net.minecraft.world.storage.WorldSavedData;
 import shordinger.wrapper.net.minecraft.world.storage.loot.LootTableManager;
+import shordinger.wrapper.net.minecraftforge.common.ForgeChunkManager;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import shordinger.wrapper.net.minecraftforge.common.capabilities.ICapabilityProvider;
 import shordinger.wrapper.net.minecraftforge.common.util.WorldCapabilityData;
@@ -1587,202 +1589,7 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
      * Updates (and cleans up) entities and tile entities
      */
     public void updateEntities() {
-        this.profiler.startSection("entities");
-        this.profiler.startSection("global");
-
-        for (int i = 0; i < this.weatherEffects.size(); ++i) {
-            Entity entity = this.weatherEffects.get(i);
-
-            try {
-                if (entity.updateBlocked) continue;
-                ++entity.ticksExisted;
-                entity.onUpdate();
-            } catch (Throwable throwable2) {
-                CrashReport crashreport = CrashReport.makeCrashReport(throwable2, "Ticking entity");
-                CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity being ticked");
-
-                if (entity == null) {
-                    crashreportcategory.addCrashSection("Entity", "~~NULL~~");
-                } else {
-                    entity.addEntityCrashInfo(crashreportcategory);
-                }
-
-                if (net.minecraftforge.common.ForgeModContainer.removeErroringEntities) {
-                    net.minecraftforge.fml.common.FMLLog.log.fatal("{}", crashreport.getCompleteReport());
-                    removeEntity(entity);
-                } else throw new ReportedException(crashreport);
-            }
-
-            if (entity.isDead) {
-                this.weatherEffects.remove(i--);
-            }
-        }
-
-        this.profiler.endStartSection("remove");
-        this.loadedEntityList.removeAll(this.unloadedEntityList);
-
-        for (int k = 0; k < this.unloadedEntityList.size(); ++k) {
-            Entity entity1 = this.unloadedEntityList.get(k);
-            int j = entity1.chunkCoordX;
-            int k1 = entity1.chunkCoordZ;
-
-            if (entity1.addedToChunk && this.isChunkLoaded(j, k1, true)) {
-                this.getChunkFromChunkCoords(j, k1)
-                    .removeEntity(entity1);
-            }
-        }
-
-        for (int l = 0; l < this.unloadedEntityList.size(); ++l) {
-            this.onEntityRemoved(this.unloadedEntityList.get(l));
-        }
-
-        this.unloadedEntityList.clear();
-        this.tickPlayers();
-        this.profiler.endStartSection("regular");
-
-        for (int i1 = 0; i1 < this.loadedEntityList.size(); ++i1) {
-            Entity entity2 = this.loadedEntityList.get(i1);
-            Entity entity3 = entity2.getRidingEntity();
-
-            if (entity3 != null) {
-                if (!entity3.isDead && entity3.isPassenger(entity2)) {
-                    continue;
-                }
-
-                entity2.dismountRidingEntity();
-            }
-
-            this.profiler.startSection("tick");
-
-            if (!entity2.isDead && !(entity2 instanceof EntityPlayerMP)) {
-                try {
-                    net.minecraftforge.server.timings.TimeTracker.ENTITY_UPDATE.trackStart(entity2);
-                    this.updateEntity(entity2);
-                    net.minecraftforge.server.timings.TimeTracker.ENTITY_UPDATE.trackEnd(entity2);
-                } catch (Throwable throwable1) {
-                    CrashReport crashreport1 = CrashReport.makeCrashReport(throwable1, "Ticking entity");
-                    CrashReportCategory crashreportcategory1 = crashreport1.makeCategory("Entity being ticked");
-                    entity2.addEntityCrashInfo(crashreportcategory1);
-                    if (net.minecraftforge.common.ForgeModContainer.removeErroringEntities) {
-                        net.minecraftforge.fml.common.FMLLog.log.fatal("{}", crashreport1.getCompleteReport());
-                        removeEntity(entity2);
-                    } else throw new ReportedException(crashreport1);
-                }
-            }
-
-            this.profiler.endSection();
-            this.profiler.startSection("remove");
-
-            if (entity2.isDead) {
-                int l1 = entity2.chunkCoordX;
-                int i2 = entity2.chunkCoordZ;
-
-                if (entity2.addedToChunk && this.isChunkLoaded(l1, i2, true)) {
-                    this.getChunkFromChunkCoords(l1, i2)
-                        .removeEntity(entity2);
-                }
-
-                this.loadedEntityList.remove(i1--);
-                this.onEntityRemoved(entity2);
-            }
-
-            this.profiler.endSection();
-        }
-
-        this.profiler.endStartSection("blockEntities");
-
-        this.processingLoadedTiles = true; // FML Move above remove to prevent CMEs
-
-        if (!this.tileEntitiesToBeRemoved.isEmpty()) {
-            for (Object tile : tileEntitiesToBeRemoved) {
-                ((TileEntity) tile).onChunkUnload();
-            }
-
-            // forge: faster "contains" makes this removal much more efficient
-            java.util.Set<TileEntity> remove = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
-            remove.addAll(tileEntitiesToBeRemoved);
-            this.tickableTileEntities.removeAll(remove);
-            this.loadedTileEntityList.removeAll(remove);
-            this.tileEntitiesToBeRemoved.clear();
-        }
-
-        Iterator<TileEntity> iterator = this.tickableTileEntities.iterator();
-
-        while (iterator.hasNext()) {
-            TileEntity tileentity = iterator.next();
-
-            if (!tileentity.isInvalid() && tileentity.hasWorld()) {
-                BlockPos blockpos = tileentity.getPos();
-
-                if (this.isBlockLoaded(blockpos, false) && this.worldBorder.contains(blockpos)) // Forge: Fix TE's
-                // getting an extra tick
-                // on the client
-                // side....
-                {
-                    try {
-                        this.profiler.func_194340_a(
-                            () -> {
-                                return String.valueOf((Object) TileEntity.getKey(tileentity.getClass()));
-                            });
-                        net.minecraftforge.server.timings.TimeTracker.TILE_ENTITY_UPDATE.trackStart(tileentity);
-                        ((ITickable) tileentity).update();
-                        net.minecraftforge.server.timings.TimeTracker.TILE_ENTITY_UPDATE.trackEnd(tileentity);
-                        this.profiler.endSection();
-                    } catch (Throwable throwable) {
-                        CrashReport crashreport2 = CrashReport.makeCrashReport(throwable, "Ticking block entity");
-                        CrashReportCategory crashreportcategory2 = crashreport2
-                            .makeCategory("Block entity being ticked");
-                        tileentity.addInfoToCrashReport(crashreportcategory2);
-                        if (net.minecraftforge.common.ForgeModContainer.removeErroringTileEntities) {
-                            net.minecraftforge.fml.common.FMLLog.log.fatal("{}", crashreport2.getCompleteReport());
-                            tileentity.invalidate();
-                            this.removeTileEntity(tileentity.getPos());
-                        } else throw new ReportedException(crashreport2);
-                    }
-                }
-            }
-
-            if (tileentity.isInvalid()) {
-                iterator.remove();
-                this.loadedTileEntityList.remove(tileentity);
-
-                if (this.isBlockLoaded(tileentity.getPos())) {
-                    // Forge: Bugfix: If we set the tile entity it immediately sets it in the chunk, so we could be
-                    // desyned
-                    Chunk chunk = this.getChunkFromBlockCoords(tileentity.getPos());
-                    if (chunk
-                        .getTileEntity(tileentity.getPos(), net.minecraft.world.chunk.Chunk.EnumCreateEntityType.CHECK)
-                        == tileentity) chunk.removeTileEntity(tileentity.getPos());
-                }
-            }
-        }
-
-        this.processingLoadedTiles = false;
-        this.profiler.endStartSection("pendingBlockEntities");
-
-        if (!this.addedTileEntityList.isEmpty()) {
-            for (int j1 = 0; j1 < this.addedTileEntityList.size(); ++j1) {
-                TileEntity tileentity1 = this.addedTileEntityList.get(j1);
-
-                if (!tileentity1.isInvalid()) {
-                    if (!this.loadedTileEntityList.contains(tileentity1)) {
-                        this.addTileEntity(tileentity1);
-                    }
-
-                    if (this.isBlockLoaded(tileentity1.getPos())) {
-                        Chunk chunk = this.getChunkFromBlockCoords(tileentity1.getPos());
-                        IBlockState iblockstate = chunk.getBlockState(tileentity1.getPos());
-                        chunk.addTileEntity(tileentity1.getPos(), tileentity1);
-                        this.notifyBlockUpdate(tileentity1.getPos(), iblockstate, iblockstate, 3);
-                    }
-                }
-            }
-
-            this.addedTileEntityList.clear();
-        }
-
-        this.profiler.endSection();
-        this.profiler.endSection();
+        super.updateEntities();
     }
 
     protected void tickPlayers() {
@@ -2053,68 +1860,8 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
      * handles the acceleration of an object whilst in water. Not sure if it is used elsewhere.
      */
     public boolean handleMaterialAcceleration(AxisAlignedBB bb, Material materialIn, Entity entityIn) {
-        int j2 = MathHelper.floor(bb.minX);
-        int k2 = MathHelper.ceil(bb.maxX);
-        int l2 = MathHelper.floor(bb.minY);
-        int i3 = MathHelper.ceil(bb.maxY);
-        int j3 = MathHelper.floor(bb.minZ);
-        int k3 = MathHelper.ceil(bb.maxZ);
+        return super.handleMaterialAcceleration(bb, materialIn, entityIn);
 
-        if (!this.isAreaLoaded(j2, l2, j3, k2, i3, k3, true)) {
-            return false;
-        } else {
-            boolean flag = false;
-            Vec3d vec3d = Vec3d.ZERO;
-            BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
-
-            for (int l3 = j2; l3 < k2; ++l3) {
-                for (int i4 = l2; i4 < i3; ++i4) {
-                    for (int j4 = j3; j4 < k3; ++j4) {
-                        blockpos$pooledmutableblockpos.setPos(l3, i4, j4);
-                        IBlockState iblockstate1 = this.getBlockState(blockpos$pooledmutableblockpos);
-                        Block block = iblockstate1.getBlock();
-
-                        Boolean result = block.isEntityInsideMaterial(
-                            this,
-                            blockpos$pooledmutableblockpos,
-                            iblockstate1,
-                            entityIn,
-                            (double) i3,
-                            materialIn,
-                            false);
-                        if (result != null && result == true) {
-                            // Forge: When requested call blocks modifyAcceleration method, and more importantly cause
-                            // this method to return true, which results in an entity being "inWater"
-                            flag = true;
-                            vec3d = block.modifyAcceleration(this, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                            continue;
-                        } else if (result != null && result == false) continue;
-
-                        if (iblockstate1.getMaterial() == materialIn) {
-                            double d0 = (double) ((float) (i4 + 1) - BlockLiquid.getLiquidHeightPercent(
-                                ((Integer) iblockstate1.getValue(BlockLiquid.LEVEL)).intValue()));
-
-                            if ((double) i3 >= d0) {
-                                flag = true;
-                                vec3d = block.modifyAcceleration(this, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                            }
-                        }
-                    }
-                }
-            }
-
-            blockpos$pooledmutableblockpos.release();
-
-            if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater()) {
-                vec3d = vec3d.normalize();
-                double d1 = 0.014D;
-                entityIn.motionX += vec3d.x * 0.014D;
-                entityIn.motionY += vec3d.y * 0.014D;
-                entityIn.motionZ += vec3d.z * 0.014D;
-            }
-
-            return flag;
-        }
     }
 
     /**
@@ -2312,25 +2059,7 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
     }
 
     public void removeTileEntity(BlockPos pos) {
-        TileEntity tileentity2 = this.getTileEntity(pos);
-
-        if (tileentity2 != null && this.processingLoadedTiles) {
-            tileentity2.invalidate();
-            this.addedTileEntityList.remove(tileentity2);
-            if (!(tileentity2 instanceof ITickable)) // Forge: If they are not tickable they wont be removed in the
-                // update loop.
-                this.loadedTileEntityList.remove(tileentity2);
-        } else {
-            if (tileentity2 != null) {
-                this.addedTileEntityList.remove(tileentity2);
-                this.loadedTileEntityList.remove(tileentity2);
-                this.tickableTileEntities.remove(tileentity2);
-            }
-
-            this.getChunkFromBlockCoords(pos)
-                .removeTileEntity(pos);
-        }
-        this.updateComparatorOutputLevel(pos, getBlockState(pos).getBlock()); // Notify neighbors of changes
+        super.removeTileEntity(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
@@ -2350,19 +2079,7 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
      * Checks if a block's material is opaque, and that it takes up a full cube
      */
     public boolean isBlockNormalCube(BlockPos pos, boolean _default) {
-        if (this.isOutsideBuildHeight(pos)) {
-            return false;
-        } else {
-            Chunk chunk1 = this.chunkProvider.getLoadedChunk(pos.getX() >> 4, pos.getZ() >> 4);
-
-            if (chunk1 != null && !chunk1.isEmpty()) {
-                IBlockState iblockstate1 = this.getBlockState(pos);
-                return iblockstate1.getBlock()
-                    .isNormalCube(iblockstate1, this, pos);
-            } else {
-                return _default;
-            }
-        }
+        return super.isBlockNormalCubeDefault(pos.getX(), pos.getY(), pos.getZ(), _default);
     }
 
     /**
@@ -3602,8 +3319,7 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
     }
 
     public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
-        for (int j2 = 0; j2 < this.eventListeners.size(); ++j2) {
-            IWorldEventListener iworldeventlistener = this.eventListeners.get(j2);
+        for (IWorldEventListener iworldeventlistener : this.eventListeners) {
             iworldeventlistener.sendBlockBreakProgress(breakerId, pos, progress);
         }
     }
@@ -3743,8 +3459,8 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
      *
      * @return
      */
-    public com.google.common.collect.ImmutableSetMultimap<net.minecraft.util.math.ChunkPos, net.minecraftforge.common.ForgeChunkManager.Ticket> getPersistentChunks() {
-        return net.minecraftforge.common.ForgeChunkManager.getPersistentChunksFor(this);
+    public ImmutableSetMultimap<ChunkPos, ForgeChunkManager.Ticket> getPersistentChunks() {
+        return ForgeChunkManager.getPersistentChunksFor(this);
     }
 
     public Iterator<Chunk> getPersistentChunkIterable(Iterator<Chunk> chunkIterator) {
@@ -3767,8 +3483,8 @@ public abstract class World extends net.minecraft.world.World implements IBlockA
      */
     public int countEntities(net.minecraft.entity.EnumCreatureType type, boolean forSpawnCount) {
         int count = 0;
-        for (int x = 0; x < loadedEntityList.size(); x++) {
-            if (((Entity) loadedEntityList.get(x)).isCreatureType(type, forSpawnCount)) {
+        for (Object o : loadedEntityList) {
+            if (((Entity) o).isCreatureType(type, forSpawnCount)) {
                 count++;
             }
         }

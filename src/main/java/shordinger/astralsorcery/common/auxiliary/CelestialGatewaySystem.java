@@ -90,7 +90,7 @@ public class CelestialGatewaySystem {
                 .size() == 0
                 && !world.provider.getDimensionType()
                 .shouldLoadSpawn()) {
-                DimensionManager.unloadWorld(world.provider.getDimension());
+                DimensionManager.unloadWorld(world.provider.dimensionId);
             }
         }
         startup = false;
@@ -119,7 +119,7 @@ public class CelestialGatewaySystem {
     }
 
     public List<GatewayCache.GatewayNode> getGatewaysForWorld(World world, Side side) {
-        return (side == Side.SERVER ? serverCache : clientCache).get(world.provider.getDimension());
+        return (side == Side.SERVER ? serverCache : clientCache).get(world.provider.dimensionId);
     }
 
     public Map<Integer, List<GatewayCache.GatewayNode>> getGatewayCache(Side side) {
@@ -129,7 +129,7 @@ public class CelestialGatewaySystem {
     public void addPosition(World world, GatewayCache.GatewayNode pos) {
         if (world.isRemote) return;
 
-        Integer dim = world.provider.getDimension();
+        Integer dim = world.provider.dimensionId;
         if (!serverCache.containsKey(dim)) {
             forceLoad(dim);
         }
@@ -150,7 +150,7 @@ public class CelestialGatewaySystem {
     public void removePosition(World world, BlockPos pos) {
         if (world.isRemote) return;
 
-        Integer dim = world.provider.getDimension();
+        Integer dim = world.provider.dimensionId;
         if (!serverCache.containsKey(dim)) {
             return;
         }
@@ -177,7 +177,7 @@ public class CelestialGatewaySystem {
 
     private void loadWorldCache(World world) {
         GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
-        serverCache.put(world.provider.getDimension(), cache.getGatewayPositions());
+        serverCache.put(world.provider.dimensionId, cache.getGatewayPositions());
     }
 
     public static class GatewayWorldFilter {

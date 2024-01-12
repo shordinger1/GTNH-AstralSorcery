@@ -2,7 +2,7 @@ package shordinger.wrapper.net.minecraft.client.gui.chat;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import shordinger.wrapper.net.minecraft.client.Minecraft;
+import net.minecraft.client.Minecraft;
 import shordinger.wrapper.net.minecraft.util.text.ChatType;
 import shordinger.wrapper.net.minecraft.util.text.ITextComponent;
 
